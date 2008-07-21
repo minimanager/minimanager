@@ -1,0 +1,326 @@
+<?php
+/*
+ * Project Name: MiniManager for Mangos Server
+ * Date: 17.10.2006 inital version (0.0.1a)
+ * Author: Q.SA
+ * Copyright: Q.SA
+ * Email: *****
+ * License: GNU General Public License v2(GPL)
+ */
+
+require_once("header.php");
+valid_login($action_permission['read']);
+
+//###########################################################################
+// print mail form
+function print_mail_form(){
+ global $lang_mail,$output;
+
+$to = (isset($_GET['to'])) ? $_GET['to'] : NULL;
+$type = (isset($_GET['type'])) ? $_GET['type'] :"email";
+
+$output .= "<center>
+			<form action=\"mail.php?action=send_mail\" method=\"post\" name=\"form\">
+				 <fieldset style=\"width: 770px;\">
+					<legend>{$lang_mail['mail_type']}</legend>
+					<br />
+					<table class=\"top_hidden\" style=\"width: 720px;\">
+					  <tr>
+						<td width=\"10%\">
+						<select name=\"type\">";
+						if ($type == "email") $output .= "
+							<option value=\"email\">{$lang_mail['email']}</option>
+							<option value=\"ingame_mail\">{$lang_mail['ingame_mail']}</option>";
+							else $output .= "
+								<option value=\"ingame_mail\">{$lang_mail['ingame_mail']}</option>
+								<option value=\"email\">{$lang_mail['email']}</option>";
+				$output .= "</select></td><td>";
+						makebutton($lang_mail['send'], "javascript:do_submit()",80);
+				$output .= "</td>
+						<td>{$lang_mail['recipient']}: <input type=\"text\" name=\"to\" size=\"32\" value=\"$to\" maxlength=\"225\" /></td>
+						<td>{$lang_mail['subject']}: <input type=\"text\" name=\"subject\" size=\"32\" maxlength=\"50\" /></td>
+					</tr>
+					<tr><td colspan=\"4\"><hr /></td></tr>
+					<tr>
+					 <td colspan=\"3\">{$lang_mail['group_send']}:
+						<select name=\"group_send\">
+						<optgroup label=\"{$lang_mail['both']}\">
+							<option value=\"gm_level\">{$lang_mail['gm_level']}</option>
+						</optgroup>
+						<optgroup label=\"{$lang_mail['email']}\">
+							<option value=\"locked\">{$lang_mail['locked_accouns']}</option>
+							<option value=\"banned\">{$lang_mail['banned_accounts']}</option>
+						</optgroup>
+						<optgroup label=\"{$lang_mail['ingame_mail']}\">
+							<option value=\"char_level\">{$lang_mail['char_level']}</option>
+							<option value=\"online\">{$lang_mail['online']}</option>
+						</optgroup>
+						</select>
+						<select name=\"group_sign\">
+							<option value=\"=\">=</option>
+							<option value=\"<\">&lt;</option>
+							<option value=\">\">&gt;</option>
+							<option value=\"!=\">!=</option>
+						</select>
+					<input type=\"text\" name=\"group_value\" size=\"20\" maxlength=\"40\" />
+					 </td>
+						<td>{$lang_mail['dont_use_both_groupsend_and_to']}</td>
+					</tr>
+					<tr><td colspan=\"4\"><hr /></td></tr>
+					<tr>
+						<td colspan=\"2\">{$lang_mail['attachments']}:</td>
+						<td colspan=\"2\">{$lang_mail['money']} : <input type=\"text\" name=\"money\" value=\"0\" size=\"10\" maxlength=\"10\" />
+						{$lang_mail['item']} : <input type=\"text\" name=\"att_item\" value=\"0\" size=\"10\" maxlength=\"10\" />
+						{$lang_mail['stack']} : <input type=\"text\" name=\"att_stack\" value=\"0\" size=\"10\" maxlength=\"10\" /></td>
+					</tr>
+			 </table>
+			</fieldset>
+			<fieldset style=\"width: 770px;\">
+					<legend>{$lang_mail['mail_body']}</legend>
+					<br /><textarea name=\"body\" rows=\"14\" cols=\"92\"></textarea><br />
+			</fieldset>
+			</form>
+		</center><br />";
+}
+
+
+//#############################################################################
+// Send the actual mail(s)
+function send_mail(){
+ global $lang_global, $output, $realm_db, $characters_db, $realm_id, $user_name, $from_mail, $mailer_type, $smtp_cfg;
+
+ if ( empty($_POST['body']) || empty($_POST['subject']) || empty($_POST['type']) || empty($_POST['group_sign']) || empty($_POST['group_send']) ) {
+   redirect("mail.php?error=1");
+ }
+
+ $sql = new SQL;
+ $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+ $body = $sql->quote_smart($_POST['body']);
+ $subject = $sql->quote_smart($_POST['subject']);
+
+ if(isset($_POST['to'])&&($_POST['to'] != '')) $to = $sql->quote_smart($_POST['to']);
+	else {
+			$to = 0;
+			if(!isset($_POST['group_value'])||$_POST['group_value'] === ''){
+				redirect("mail.php?error=1");
+				} else {
+						$group_value = $sql->quote_smart($_POST['group_value']);
+						$group_sign = $sql->quote_smart($_POST['group_sign']);
+						$group_send = $sql->quote_smart($_POST['group_send']);
+						}
+			}
+
+ $type = addslashes($_POST['type']);
+ $att_gold = $sql->quote_smart($_POST['money']);
+ $att_item = $sql->quote_smart($_POST['att_item']);
+ $att_stack = $sql->quote_smart($_POST['att_stack']);
+
+switch ($type) {
+case "email":
+
+ require_once("scripts/mailer/class.phpmailer.php");
+ $mail = new PHPMailer();
+		$mail->Mailer = $mailer_type;
+		if ($mailer_type == "smtp"){
+			$mail->Host = $smtp_cfg['host'];
+			$mail->Port = $smtp_cfg['port'];
+			if($smtp_cfg['user'] != '') {
+				$mail->SMTPAuth  = true;
+				$mail->Username  = $smtp_cfg['user'];
+				$mail->Password  =  $smtp_cfg['pass'];
+				}
+		}
+
+		$mail->From = $from_mail;
+		$mail->FromName = $user_name;
+		$mail->Subject = $subject;
+		$mail->IsHTML(true);
+
+		$body = str_replace("\n", "<br />", $body);
+		$body = str_replace("\r", " ", $body);
+		$body = preg_replace( "/([^\/=\"\]])((http|ftp)+(s)?:\/\/[^<>\s]+)/i", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>",  $body);
+		$body = preg_replace('/([^\/=\"\]])(www\.)(\S+)/', '\\1<a href="http://\\2\\3" target="_blank">\\2\\3</a>', $body);
+
+		$mail->Body = $body;
+		$mail->WordWrap = 50;
+
+ if($to){ //single Recipient
+	$mail->AddAddress($to);
+	if(!$mail->Send()) {
+		$mail->ClearAddresses();
+		redirect("mail.php?error=3&mail_err=".$mail->ErrorInfo);
+	} else {
+		$mail->ClearAddresses();
+		redirect("mail.php?error=2");
+		}
+
+ } elseif (isset($group_value)){ //group send
+			$sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+			$email_array = array();
+			switch ($group_send) {
+			case "gm_level":
+				$result = $sql->query("SELECT email FROM account WHERE gmlevel $group_sign '$group_value'");
+				while($user = $sql->fetch_row($result)){
+					if($user[0] != "") array_push($email_array, $user[0]);
+					}
+			break;
+
+			case "locked":
+				$result = $sql->query("SELECT email FROM account WHERE locked $group_sign '$group_value'");
+				while($user = $sql->fetch_row($result)){
+					if($user[0] != "") array_push($email_array, $user[0]);
+					}
+			break;
+
+			case "banned":
+				$que = $sql->query("SELECT id FROM account_banned");
+				while ($banned = $sql->fetch_row($que)){
+					$result = $sql->query("SELECT email FROM account WHERE id = '$banned[0]'");
+					if($sql->result($result, 0, 'email')) array_push($email_array, $sql->result($result, 0, 'email'));
+					}
+			break;
+
+			default:
+			$sql->close();
+			redirect("mail.php?error=5");
+			}
+			$sql->close();
+
+			foreach ($email_array as $mail_addr){
+				$mail->AddAddress($mail_addr);
+				if(!$mail->Send()) {
+					$mail->ClearAddresses();
+					redirect("mail.php?error=3&mail_err=".$mail->ErrorInfo);
+				} else {
+					$mail->ClearAddresses();
+					}
+
+			}
+			redirect("mail.php?error=2");
+	} else redirect("mail.php?error=1");
+
+  break;
+
+
+case "ingame_mail":
+ $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+
+ require_once("scripts/gen_lib.php");
+
+ if($to){ //single Recipient
+	$result = $sql->query("SELECT guid FROM `characters` WHERE name ='$to'");
+	if ($sql->num_rows($result) == 1) {
+		$receiver = $sql->result($result, 0, 'guid');
+
+		$result = $sql->query("SELECT guid FROM `characters` WHERE name ='$user_name'");
+
+		$sender = 0;
+		//if ($sql->num_rows($result) == 1) {
+		//	$sender = $sql->result($result, 0, 'guid');
+		//};
+		// we need the id of a character, account username is provided atm
+
+		send_ingame_mail($receiver, $sender, $subject, $body, $att_gold, $att_item, $att_stack);
+
+	} else {
+			$sql->close();
+			redirect("mail.php?error=4");
+			}
+	$sql->close();
+	redirect("mail.php?error=2");
+	break;
+} elseif(isset($group_value)){ //group send
+			$char_array = array();
+			switch ($group_send) {
+			case "gm_level":
+				$sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+				$result = $sql->query("SELECT id FROM account WHERE gmlevel $group_sign '$group_value'");
+				$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+				while($acc = $sql->fetch_row($result)){
+					$result_2 = $sql->query("SELECT guid FROM `characters` WHERE account = '$acc[0]'");
+					while($char = $sql->fetch_row($result_2)) array_push($char_array, $char[0]);
+					}
+			break;
+
+			case "online":
+				$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+				$result = $sql->query("SELECT guid FROM `characters` WHERE online $group_sign '$group_value'");
+				while($user = $sql->fetch_row($result)) array_push($char_array, $user[0]);
+			break;
+
+			case "char_level":
+				$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+				$result = $sql->query("SELECT guid FROM `characters` WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 35), ' ', -1) $group_sign '$group_value'");
+				while($user = $sql->fetch_row($result)) array_push($char_array, $user[0]);
+			break;
+
+			$sender = 0;
+					//if ($sql->num_rows($result) == 1) {
+					//	$sender = $sql->result($result, 0, 'guid');
+					//};
+					// we need the id of a character, account username is provided atm
+
+			default:
+			$sql->close();
+			redirect("mail.php?error=5");
+			}
+
+			foreach ($char_array as $receiver){
+
+				send_ingame_mail($receiver, $sender, $subject, $body, $att_gold, $att_item, $att_stack);
+			}
+			$sql->close();
+			redirect("mail.php?error=2");
+ }
+
+default:
+	redirect("mail.php?error=1");
+}
+
+}
+
+
+//########################################################################################################################
+// MAIN
+//########################################################################################################################
+$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+
+$output .= "<div class=\"top\">";
+switch ($err) {
+case 1:
+   $output .= "<h1><font class=\"error\">{$lang_global['empty_fields']}</font></h1>";
+   break;
+case 2:
+   $output .= "<h1><font class=\"error\">{$lang_mail['mail_sent']}</font></h1>";
+   break;
+case 3:
+   $mail_err = (isset($_GET['mail_err'])) ? $_GET['mail_err'] : NULL;
+   $output .= "<h1><font class=\"error\">{$lang_mail['mail_err']}: $mail_err</font></h1>";
+   break;
+case 4:
+   $output .= "<h1><font class=\"error\">{$lang_mail['no_recipient_found']}</font></h1>";
+   $output .= "{$lang_mail['use_name_or_email']}";
+   break;
+case 5:
+   $output .= "<h1><font class=\"error\">{$lang_mail['option_unavailable']}</font></h1>";
+   $output .= "{$lang_mail['use_currect_option']}";
+   break;
+default: //no error
+   $output .= "<h1>{$lang_mail['send_mail']}</h1>";
+}
+$output .= "</div>";
+
+$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+
+switch ($action) {
+case "send_mail":
+	send_mail();
+	break;
+default:
+    print_mail_form();
+}
+
+require_once("footer.php");
+?>
