@@ -11,7 +11,7 @@
  * instead of 2 supported by version of Q.SA
  */
 
-$version = "0.11";
+$version = "0.12";
 
 //---- SQL Configuration ----
 
@@ -59,7 +59,7 @@ $server = Array(	//if more than one realm used, even if they are on same system 
 			'game_port' => 8085,		//Game Server port
 			'term_type' => "SSH",		//Terminal type - ("SSH"/"Telnet")
 			'term_port' => 22,			//Terminal port
-			'rev' => "rev.5297 SD269",		//Mangos rev. used
+			'rev' => "rev. 6360",		//Mangos rev. used
 			'both_factions' => true	//Allow to see opponent faction characters. Affects only players.
 			),
 );
