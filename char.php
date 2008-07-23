@@ -158,10 +158,7 @@ function char_main()
         {
             while ($aura = $sql->fetch_row($a_results))
             {
-                if (isset($aura))
-                    $output .= "<a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_char_aura_name($aura[0])."<br />Id: $aura[0]</font>','item_tooltip')\" onmouseout=\"toolTip()\" href=\"$talent_datasite$aura[0]\"><img src=\"".get_aura_icon($aura[0])."\" width=24 height=24></a>";
-                else  
-                    $output .= ": <a href=\"$talent_datasite$aura[0]\">aura $aura[0]</a> :"; 
+                 $output .= "<a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_char_aura_name($aura[0])."<br />Id: $aura[0]</font>','item_tooltip')\" onmouseout=\"toolTip()\" href=\"$talent_datasite$aura[0]\"><img src=\"".get_aura_icon($aura[0])."\" width=24 height=24></a>";
             }
         }
 

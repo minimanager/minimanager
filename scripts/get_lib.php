@@ -912,5 +912,4 @@ function xp_to_level($lvl)
 
     return $xp;
 }
-get_icon(35022);
 ?>
