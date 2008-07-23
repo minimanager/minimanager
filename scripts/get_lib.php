@@ -11,6 +11,7 @@
 //##########################################################################################
 
 require_once("item_display_info.php");
+require_once("char_aura.php");
 
 //get name from realmlist.name
 function get_realm_name($realm_id){
@@ -753,6 +754,85 @@ function get_icon_by($displayid, $itemid)
  else return "img/INV/INV_blank_32.gif";
 }
 
+//##########################################################################################
+//get aura icon - if icon not exists in Char_AURA folder D/L it from web.
+
+function get_aura_icon($auraid)
+{
+ global $proxy_cfg, $get_icons_from_web, $char_aura;
+ if ($auraid)
+ {
+  $aura = $char_aura[$auraid[1]];
+  if ($aura && file_exists("img/Char_AURA/$aura.jpg")) return "img/Char_AURA/$aura.jpg";
+ }
+ else $aura = '';
+
+ if($get_icons_from_web)
+ {
+  $xmlfilepath="http://www.wowhead.com/?spell=";
+  $proxy = $proxy_cfg['addr'];
+  $port = $proxy_cfg['port'];
+
+  if (empty($proxy_cfg['addr'])) 
+  {
+    $proxy = "www.wowhead.com";
+    $xmlfilepath = "?spell=";
+    $port = 80;
+  }
+
+  if ($aura == '')
+  {
+    //get the icon name
+    $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
+    if (!$fp) return "img/INV/INV_blank_32.gif";
+    $out = "GET $xmlfilepath$auraid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
+    if (!empty($proxy_cfg['user'])) $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
+    $out .="Connection: Close\r\n\r\n";
+
+    $temp = "";
+    fwrite($fp, $out);
+    while ($fp && !feof($fp)) $temp .= fgets($fp, 4096);
+    fclose($fp);
+    
+    preg_match("~(Icon.create\('(.*?)')~", $temp, $temp);
+    if (!isset($temp[2])) return "img/INV/INV_blank_32.gif";
+    $aura = $temp[2];
+  }
+  $iconfilename = strtolower($aura);  
+  //get the icon itself
+  if (empty($proxy_cfg['addr'])) 
+  {
+    $proxy = "static.wowhead.com";
+    $port = 80;
+  }  
+  $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
+    if (!$fp) return "img/INV/INV_blank_32.gif";
+  $file = "http://static.wowhead.com/images/icons/medium/$iconfilename.jpg";
+  $out = "GET $file HTTP/1.0\r\nHost: static.wowhead.com\r\n";
+  if (!empty($proxy_cfg['user'])) $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
+  $out .="Connection: Close\r\n\r\n";
+  fwrite($fp, $out);
+
+  //remove header
+  while ($fp && !feof($fp))
+  {
+    $headerbuffer = fgets($fp, 4096);
+    if (urlencode($headerbuffer) == "%0D%0A") break;
+  }
+
+  if (file_exists("img/Char_AURA/$aura.jpg")) return "img/Char_AURA/$aura.jpg";
+  
+  $img_file = fopen("img/Char_AURA/$aura.jpg", 'wb');
+  while (!feof($fp)) fwrite($img_file,fgets($fp, 4096));
+  fclose($fp);
+  fclose($img_file);
+
+  if (file_exists("img/Char_AURA/$aura.jpg")) return "img/Char_AURA/$aura.jpg";
+  else return "img/INV/INV_blank_32.gif";
+ } 
+ else return "img/INV/INV_blank_32.gif";
+}
+
 
 //##########################################################################################
 //generate item border from item_template.entry
@@ -832,4 +912,5 @@ function xp_to_level($lvl)
 
     return $xp;
 }
+get_icon(35022);
 ?>

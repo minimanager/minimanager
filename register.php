@@ -14,7 +14,7 @@
 //#####################################################################################################
 function doregister(){
  global $lang_global, $realm_db, $disable_acc_creation, $limit_acc_per_ip, $valid_ip_mask,
-		$send_mail_on_creation, $create_acc_locked, $from_mail, $mailer_type, $smtp_cfg, $title;
+       $send_mail_on_creation, $create_acc_locked, $from_mail, $mailer_type, $smtp_cfg, $title, $defaultoption;
 
  if ( empty($_POST['pass']) || empty($_POST['email']) || empty($_POST['username']) ) {
    redirect("register.php?err=1");
@@ -93,7 +93,11 @@ function doregister(){
 			$sql->close();
     	 	redirect("register.php?err=3&usr=$user_name");
 	} else {
-		$tbc = (isset($_POST['tbc'])) ? $sql->quote_smart($_POST['tbc']) : 0;
+            if ( $expansion_select ) {
+            $tbc = (isset($_POST['tbc'])) ? $sql->quote_smart($_POST['tbc']) : 0;
+        } else {
+            $tbc = $defaultoption;
+        }
 
 		$result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,tbc)
  				VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$tbc)");
@@ -147,7 +151,7 @@ function doregister(){
 // PRINT FORM
 //#####################################################################################################
 function register(){
- global $lang_register, $lang_global, $output;
+ global $lang_register, $lang_global, $output, $expansion_select;
  $output .= "<center>
   <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
   <script type=\"text/javascript\">
@@ -193,8 +197,9 @@ function register(){
   	 <td valign=\"top\">{$lang_register['email']}:</td>
   	 <td><input type=\"text\" name=\"email\" size=\"45\" maxlength=\"225\" /><br />
 	 {$lang_register['use_valid_mail']}</td>
-	</tr>
-	<tr>
+      </tr>";
+  if ( $expansion_select ) {
+      $output .= "<tr>
   	 <td valign=\"top\">{$lang_register['acc_type']}:</td>
   	 <td>
 	   <select name=\"tbc\">
@@ -202,8 +207,9 @@ function register(){
 	    <option value=\"0\">{$lang_register['classic']}</option>
 	   </select>
 	  - {$lang_register['acc_type_desc']}</td>
-	</tr>
-	<tr><td colspan=\"2\"><hr /></td></tr>
+      </tr>";
+}
+      $output .= "<tr><td colspan=\"2\"><hr /></td></tr>
 	<tr>
   	 <td colspan=\"2\">{$lang_register['read_terms']}.</td>
 	</tr>
