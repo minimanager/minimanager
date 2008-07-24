@@ -91,6 +91,24 @@ $level = Array(
 		elseif ($sql->quote_smart($_GET['side']) == "a") $order_side = "AND race IN (1,3,4,7,11)";
 	} else $order_side = "";
 
+$output .= "
+  <center>
+    <div id=\"tab\">
+      <ul>
+        <li id=\"selected\">
+          <a href=\"stat.php\">
+            {$lang_stat['srv_statistics']}
+          </a>
+        </li>
+        <li>
+          <a href=\"stat_on.php\">
+            {$lang_stat['on_statistics']}
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div id=\"tab_content\">
+";
 
  $output .= "<div class=\"top\"><h1>{$lang_stat['srv_statistics']}</h1></div>";
 
@@ -197,7 +215,8 @@ $output .= "</tr>
 
  makebutton($lang_stat['reset'], "stat.php", 720);
  $output .= "</td></tr></table>
-	</center>";
+   </center>
+   </div>";
 
  $sql->close();
 

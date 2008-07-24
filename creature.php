@@ -642,8 +642,8 @@ $output .= "<div id=\"pane2\">
 		<option value=\"3\">3 - {$lang_creature['both']}</option>
 	   </select></td>
 
- <td>".makeinfocell($lang_creature['civilian'],$lang_creature['civilian_desc'])."</td>
- <td><input type=\"checkbox\" name=\"civilian\" value=\"1\" /></td>
+ <td>".makeinfocell($lang_creature['flags_extra'],$lang_creature['flags_extra_desc'])."</td>
+ <td><input type=\"text\" name=\"flags_extra\" size=\"8\" maxlength=\"11\" value=\"0\" /></td>
 </tr>
 <tr>
 	<td>".makeinfocell($lang_creature['flags'],$lang_creature['flags_desc'])."</td>
@@ -691,7 +691,7 @@ function edit() {
 
  $entry = $sql->quote_smart($_GET['entry']);
  $deplang = get_lang_id();
- $result = $sql->query("SELECT `creature_template`.`entry`,`modelid_A`,`modelid_A2`,`modelid_H`,`modelid_H2`, IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,`subname`,`minlevel`,`maxlevel`,`minhealth`,`maxhealth`,`minmana`,`maxmana`,`armor`,`faction_A`,`faction_H`,`npcflag`,`speed`,`rank`,`mindmg`,`maxdmg`,`dmgschool`,`attackpower`,`baseattacktime`,`rangeattacktime`,`flags`,`dynamicflags`,`family`,`trainer_type`,`trainer_spell`,`class`,`race`,`minrangedmg`,`maxrangedmg`,`rangedattackpower`,`type`,`civilian`,`flag1`,`lootid`,`pickpocketloot`,`skinloot`,`resistance1`,`resistance2`,`resistance3`,`resistance4`,`resistance5`,`resistance6`,`spell1`,`spell2`,`spell3`,`spell4`,`mingold`,`maxgold`,`AIName`,`MovementType`,`InhabitType`,`RacialLeader`,`RegenHealth`,`equipment_id`,`ScriptName` FROM creature_template LEFT JOIN locales_creature ON creature_template.entry = locales_creature.entry WHERE creature_template.entry = '$entry'");
+ $result = $sql->query("SELECT `creature_template`.`entry`,`modelid_A`,`modelid_A2`,`modelid_H`,`modelid_H2`, IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,`subname`,`minlevel`,`maxlevel`,`minhealth`,`maxhealth`,`minmana`,`maxmana`,`armor`,`faction_A`,`faction_H`,`npcflag`,`speed`,`rank`,`mindmg`,`maxdmg`,`dmgschool`,`attackpower`,`baseattacktime`,`rangeattacktime`,`flags`,`dynamicflags`,`family`,`trainer_type`,`trainer_spell`,`class`,`race`,`minrangedmg`,`maxrangedmg`,`rangedattackpower`,`type`,`flags_extra`,`flag1`,`lootid`,`pickpocketloot`,`skinloot`,`resistance1`,`resistance2`,`resistance3`,`resistance4`,`resistance5`,`resistance6`,`spell1`,`spell2`,`spell3`,`spell4`,`mingold`,`maxgold`,`AIName`,`MovementType`,`InhabitType`,`RacialLeader`,`RegenHealth`,`equipment_id`,`ScriptName` FROM creature_template LEFT JOIN locales_creature ON creature_template.entry = locales_creature.entry WHERE creature_template.entry = '$entry'");
 
  if ($mob = $sql->fetch_assoc($result)){
 
@@ -1210,11 +1210,8 @@ $output .= "<td>".makeinfocell($lang_creature['inhabit_type'],$lang_creature['in
 	   </select></td>";
   unset($InhabitType);
 
- if ($mob['civilian']) $civilian = "checked";
-	else $civilian = "";
-
-$output .= "<td>".makeinfocell($lang_creature['civilian'],$lang_creature['civilian_desc'])."</td>
- <td><input type=\"checkbox\" name=\"civilian\" value=\"1\" $civilian /></td>
+$output .= "<td>".makeinfocell($lang_creature['flags_extra'],$lang_creature['flags_extra_desc'])."</td>
+     <td><input type=\"text\" name=\"flags_extra\" size=\"8\" maxlength=\"11\" value=\"{$mob['flags_extra']}\" /></td>
 </tr>
 <tr>
 	<td>".makeinfocell($lang_creature['flags'],$lang_creature['flags_desc'])."</td>
@@ -1631,8 +1628,8 @@ function do_update() {
  	else $combat_reach = 0;
  if (isset($_POST['type']) && $_POST['type'] != '') $type = $sql->quote_smart($_POST['type']);
  	else $type = 0;
- if (isset($_POST['civilian']) && $_POST['civilian'] != '') $civilian = $sql->quote_smart($_POST['civilian']);
- 	else $civilian = 0;
+ if (isset($_POST['flags_extra']) && $_POST['flags_extra'] != '') $flags_extra = $sql->quote_smart($_POST['flags_extra']);
+     else $flags_extra = 0;
  if (isset($_POST['flag1']) && $_POST['flag1'] != '') $flag1 = $sql->quote_smart($_POST['flag1']);
  	else $flag1 = 0;
  if (isset($_POST['lootid']) && $_POST['lootid'] != '') $lootid = $sql->quote_smart($_POST['lootid']);
@@ -1795,13 +1792,13 @@ function do_update() {
 	maxlevel, minhealth, maxhealth, minmana, maxmana, armor, faction_A, faction_H, npcflag, speed, rank, mindmg,
 	maxdmg, dmgschool, attackpower, baseattacktime, rangeattacktime, flags, dynamicflags, family,
 	trainer_type, trainer_spell, class, race, minrangedmg, maxrangedmg, rangedattackpower,
-	type, civilian, flag1, lootid, pickpocketloot, skinloot, resistance1,
+    type, flags_extra, flag1, lootid, pickpocketloot, skinloot, resistance1,
 	resistance2, resistance3, resistance4, resistance5, resistance6, spell1, spell2, spell3, spell4,
 	mingold, maxgold, AIName, MovementType, InhabitType, RacialLeader, ScriptName) VALUES ( '$entry', '$modelid_A', '$modelid_H', '$name',
 	'$subname', '$minlevel', '$maxlevel', '$minhealth', '$maxhealth', '$minmana', '$maxmana', '$armor', '$faction_A', '$faction_A',  '$npcflag',
 	'$speed', '$rank', '$mindmg', '$maxdmg', '$dmgschool', '$attackpower', '$baseattacktime', '$rangeattacktime', '$flags',
 	'$dynamicflags', '$family', '$trainer_type', '$trainer_spell', '$class', '$race',
-	'$minrangedmg', '$maxrangedmg', '$rangedattackpower', '$type', '$civilian', '$flag1',
+    '$minrangedmg', '$maxrangedmg', '$rangedattackpower', '$type', '$flags_extra', '$flag1',
 	'$lootid', '$pickpocketloot', '$skinloot', '$resistance1', '$resistance2',
 	'$resistance3', '$resistance4', '$resistance5', '$resistance6', '$spell1', '$spell2', '$spell3', '$spell4',
 	'$mingold', '$maxgold', '$AIName', '$MovementType', '$InhabitType', '$RacialLeader', '$ScriptName' )";
@@ -1810,7 +1807,7 @@ function do_update() {
 
 	$sql_query = "UPDATE creature_template SET  ";
 
-	$result = $sql->query("SELECT `creature_template`.`entry`,`modelid_A`,`modelid_A2`,`modelid_H`,`modelid_H2`, IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,`subname`,`minlevel`,`maxlevel`,`minhealth`,`maxhealth`,`minmana`,`maxmana`,`armor`,`faction_A`,`faction_H`,`npcflag`,`speed`,`rank`,`mindmg`,`maxdmg`,`dmgschool`,`attackpower`,`baseattacktime`,`rangeattacktime`,`flags`,`dynamicflags`,`family`,`trainer_type`,`trainer_spell`,`class`,`race`,`minrangedmg`,`maxrangedmg`,`rangedattackpower`,`type`,`civilian`,`flag1`,`lootid`,`pickpocketloot`,`skinloot`,`resistance1`,`resistance2`,`resistance3`,`resistance4`,`resistance5`,`resistance6`,`spell1`,`spell2`,`spell3`,`spell4`,`mingold`,`maxgold`,`AIName`,`MovementType`,`InhabitType`,`RacialLeader`,`RegenHealth`,`equipment_id`,`ScriptName` FROM creature_template LEFT JOIN locales_creature ON creature_template.entry = locales_creature.entry WHERE creature_template.entry = '$entry'");
+    $result = $sql->query("SELECT `creature_template`.`entry`,`modelid_A`,`modelid_A2`,`modelid_H`,`modelid_H2`, IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,`subname`,`minlevel`,`maxlevel`,`minhealth`,`maxhealth`,`minmana`,`maxmana`,`armor`,`faction_A`,`faction_H`,`npcflag`,`speed`,`rank`,`mindmg`,`maxdmg`,`dmgschool`,`attackpower`,`baseattacktime`,`rangeattacktime`,`flags`,`dynamicflags`,`family`,`trainer_type`,`trainer_spell`,`class`,`race`,`minrangedmg`,`maxrangedmg`,`rangedattackpower`,`type`,`flags_extra`,`flag1`,`lootid`,`pickpocketloot`,`skinloot`,`resistance1`,`resistance2`,`resistance3`,`resistance4`,`resistance5`,`resistance6`,`spell1`,`spell2`,`spell3`,`spell4`,`mingold`,`maxgold`,`AIName`,`MovementType`,`InhabitType`,`RacialLeader`,`RegenHealth`,`equipment_id`,`ScriptName` FROM creature_template LEFT JOIN locales_creature ON creature_template.entry = locales_creature.entry WHERE creature_template.entry = '$entry'");
 	if ($mob_templ = $sql->fetch_assoc($result)){
 		if ($mob_templ['modelid_A'] != $modelid_A) $sql_query .= "modelid_A='$modelid_A',";
 		if ($mob_templ['modelid_H'] != $modelid_H) $sql_query .= "modelid_H='$modelid_H',";
@@ -1845,7 +1842,7 @@ function do_update() {
 		if ($mob_templ['maxrangedmg'] != $maxrangedmg) $sql_query .= "maxrangedmg='$maxrangedmg',";
 		if ($mob_templ['rangedattackpower'] != $rangedattackpower) $sql_query .= "rangedattackpower='$rangedattackpower',";
 		if ($mob_templ['type'] != $type) $sql_query .= "type='$type',";
-		if ($mob_templ['civilian'] != $civilian) $sql_query .= "civilian='$civilian',";
+        if ($mob_templ['flags_extra'] != $flags_extra) $sql_query .= "flags_extra='$flags_extra',";
 		if ($mob_templ['flag1'] != $flag1) $sql_query .= "flag1='$flag1',";
 		if ($mob_templ['lootid'] != $lootid) $sql_query .= "lootid='$lootid',";
 		if ($mob_templ['pickpocketloot'] != $pickpocketloot) $sql_query .= "pickpocketloot='$pickpocketloot',";
