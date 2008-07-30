@@ -752,18 +752,7 @@ $lang_ticket = array(
 	'edit_ticked' => 'Edit Ticket',
 	'ticket_updated' => 'Ticket Updated',
 	'ticket_update_err' => 'Error Updating Ticket',
-	'browse_tickets' => 'Browse Tickets',
-	'other' => 'Other',
-	'stuck' => 'Stuck',
-	'behavior' => 'Behavior',
-	'guild' => 'Guild',
-	'item' => 'Item',
-	'environmental' => 'Environmental',
-	'creep' => 'Creep',
-	'quest' => 'Quest',
-	'technical' => 'Technical',
-	'account' => 'Account',
-	'character' => 'Character'
+	'browse_tickets' => 'Browse Tickets'
 	);
 
 $lang_user = array(
