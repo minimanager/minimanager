@@ -137,7 +137,9 @@ function char_main()
             19 => array(($EQU_TABARD    ? get_item_tooltip($EQU_TABARD)    : 0), ($EQU_TABARD    ? get_icon($EQU_TABARD)    : 0),($EQU_TABARD    ? get_item_border($EQU_TABARD)    : 0))
           );
 
-
+		//ADDED:
+		$output .= "<script src=\"http://www.wowhead.com/widgets/power.js\"></script>";
+		//ENDOF ADDED
         $output .= "<center><div id=\"tab\"><ul><li id=\"selected\"><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>";
 
         if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
@@ -158,8 +160,9 @@ function char_main()
         {
             while ($aura = $sql->fetch_row($a_results))
             {
-                 $output .= "<a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_char_aura_name($aura[0])."<br />Id: $aura[0]</font>','item_tooltip')\" onmouseout=\"toolTip()\" href=\"$talent_datasite$aura[0]\"><img src=\"".get_aura_icon($aura[0])."\" width=24 height=24></a>";
-            }
+                // $output .= "<a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_char_aura_name($aura[0])."<br />Id: $aura[0]</font>','item_tooltip')\" onmouseout=\"toolTip()\" href=\"$talent_datasite$aura[0]\"><img src=\"".get_aura_icon($aura[0])."\" width=24 height=24></a>";
+				$output .= "<a style=\"padding:2px;\" href=\"$talent_datasite$aura[0]\"><img src=\"".get_aura_icon($aura[0])."\" width=24 height=24></a>";
+			}
         }
 
   $output .="</div><font class=\"bold\">$char[1] - ".get_player_race($char[2])." ".get_player_class($char[3])." (lvl {$char_data[CHAR_DATA_OFFSET_LEVEL]})</font><br />
@@ -481,7 +484,9 @@ if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name)){
       }
     }
   }
-
+//ADDED:
+$output .= "<script src=\"http://www.wowhead.com/widgets/power.js\"></script>";
+//ENDOF ADDED
 $output .= "<center>
 <div id=\"tab\">
 <ul>
@@ -713,7 +718,10 @@ function char_quest(){
     $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
     $result = $sql->query("SELECT quest,status FROM character_queststatus WHERE guid =$id AND ( status = 3 OR status = 1 ) ORDER BY status DESC");
-    $output .= "<center>
+	//ADDED:
+	$output .= "<script src=\"http://www.wowhead.com/widgets/power.js\"></script>";
+	//ENDOF ADDED
+	$output .= "<center>
     <div id=\"tab\">
     <ul>
     <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
@@ -1115,6 +1123,9 @@ if ($sql->num_rows($result) == 1){
     $char = $sql->fetch_row($result);
     $char_data = explode(' ',$char[0]);
 
+	//ADDED:
+	$output .= "<script src=\"http://www.wowhead.com/widgets/power.js\"></script>";
+	//ENDOF ADDED
     $output .= "<center>
   <div id=\"tab\">
     <ul>

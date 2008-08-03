@@ -21,7 +21,7 @@ require_once("../lang/$lang.php");
 
 require_once("../scripts/id_tab.php");
 
-if ( !ini_get('session.auto_start') ) session_start();
+if ( !ini_get('session.auto_start') ) @session_start();
 $realm_id = $_SESSION['realm_id'];
 $user_lvl = $_SESSION['user_lvl'];
 $user_id = $_SESSION['user_id'];

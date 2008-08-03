@@ -40,7 +40,12 @@ function makebutton($xtext, $xlink, $xwidth) {
 //make javascript tooltip
 function maketooltip($text, $link, $tip, $class, $target = "target=\"_self\"") {
  global $output;
- $output .="<a style=\"padding:2px;\" href=\"$link\" $target onmouseover=\"toolTip('".addslashes($tip)."','$class')\" onmouseout=\"toolTip()\">$text</a>";
+ //COMMENTED OUT SINCE WE WANT WOWHEAD TOOLTIPS ONLY
+ //$output .="<a style=\"padding:2px;\" href=\"$link\" $target onmouseover=\"toolTip('".addslashes($tip)."','$class')\" onmouseout=\"toolTip()\">$text</a>";
+
+ //ADDED:
+ $output .="<a style=\"padding:2px;\" href=\"$link\" $target>$text</a>";
+ //ENDOF ADDED
 }
 
 //##########################################################################################

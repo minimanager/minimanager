@@ -76,7 +76,6 @@ $tab_del_user_characters = Array(
     Array("character_gifts","guid"),
     Array("character_homebind","guid"),
     Array("character_instance","guid"),
-    Array("character_instance","leader"),
     Array("character_inventory","guid"),
     Array("character_pet","owner"),
     Array("character_queststatus","guid"),

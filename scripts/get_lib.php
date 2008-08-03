@@ -680,12 +680,16 @@ function get_icon($itemid) {
 function get_icon_by($displayid, $itemid)
 {
  global $proxy_cfg, $get_icons_from_web, $item_display_info;
+
  if ($displayid)
  {
   $item = $item_display_info[$displayid];
-  if ($item && file_exists("img/item_icons/$item.jpg")) return "img/item_icons/$item.jpg";
- }
- else $item = '';
+  if ($item && file_exists("img/item_icons/$item.jpg")) 
+	return "img/item_icons/$item.jpg";
+  else
+	$item = '';
+ } 
+else $item = '';
 
  if($get_icons_from_web)
  {
@@ -705,7 +709,7 @@ function get_icon_by($displayid, $itemid)
     //get the icon name
     $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
     if (!$fp) return "img/INV/INV_blank_32.gif";
-    $out = "GET $xmlfilepath$itemid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
+    $out = "GET /$xmlfilepath$itemid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
     if (!empty($proxy_cfg['user'])) $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
     $out .="Connection: Close\r\n\r\n";
 
@@ -714,12 +718,31 @@ function get_icon_by($displayid, $itemid)
     while ($fp && !feof($fp)) $temp .= fgets($fp, 4096);
     fclose($fp);
     
-    preg_match("~(Icon.create\('(.*?)')~", $temp, $temp);
-    if (!isset($temp[2])) return "img/INV/INV_blank_32.gif";
-    $item = $temp[2];
-  }
-  $iconfilename = strtolower($item);  
+	//ADDED:
+	$wowhead_string = $temp;
+	//ENDOF ADDED
+	
+	//preg_match("~(Icon.create\('(.*?)')~", $temp, $temp);
+	//foxpl regexp:
+    //preg_match("Icon.create\('([^\']*?)", $temp, $temp);
 
+	// if (!isset($temp[2])) return "img/INV/INV_blank_32.gif";
+    //$item = $temp[2];
+  }
+  //$iconfilename = strtolower($item);  
+  
+  //ADDED:
+  //GETTING ICON NAME FROM WOWHEAD STRING:
+  $temp_string1 = strstr($wowhead_string, "Icon.create(");
+  $temp_string2 = substr($temp_string1, 12, 50);
+  $temp_string3 = strtok($temp_string2, ',');
+  $temp_string4 = substr($temp_string3, 1, strlen($temp_string3) - 2);
+
+  $icon_name = $temp_string4;
+  $item = $icon_name;
+  $iconfilename = strtolower($icon_name);
+  //ENDOF ADDED
+	
   //get the icon itself
   if (empty($proxy_cfg['addr'])) 
   {
@@ -764,9 +787,11 @@ function get_aura_icon($auraid)
  {
   $aura = $char_aura[$auraid[1]];
   if ($aura && file_exists("img/Char_AURA/$aura.jpg")) return "img/Char_AURA/$aura.jpg";
+  else
+	$aura = '';
  }
- else $aura = '';
-
+ else $aura = ''; 
+ 
  if($get_icons_from_web)
  {
   $xmlfilepath="http://www.wowhead.com/?spell=";
@@ -785,7 +810,7 @@ function get_aura_icon($auraid)
     //get the icon name
     $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
     if (!$fp) return "img/INV/INV_blank_32.gif";
-    $out = "GET $xmlfilepath$auraid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
+    $out = "GET /$xmlfilepath$auraid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
     if (!empty($proxy_cfg['user'])) $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
     $out .="Connection: Close\r\n\r\n";
 
@@ -793,12 +818,32 @@ function get_aura_icon($auraid)
     fwrite($fp, $out);
     while ($fp && !feof($fp)) $temp .= fgets($fp, 4096);
     fclose($fp);
+	
+	//ADDED
+	$wowhead_string = $temp;
+	//ENDOF ADDED
     
-    preg_match("~(Icon.create\('(.*?)')~", $temp, $temp);
-    if (!isset($temp[2])) return "img/INV/INV_blank_32.gif";
-    $aura = $temp[2];
+	//preg_match("~(Icon.create\('(.*?)')~", $temp, $temp);
+	//foxpl regexp:
+    //preg_match("Icon.create\('([^\']*?)\'", $temp, $temp);
+	//    $temp = "test";
+    //if (!isset($temp[2])) return "img/INV/INV_blank_32.gif";
+    //$aura = $temp[2];
   }
-  $iconfilename = strtolower($aura);  
+  //$iconfilename = strtolower($aura); 
+
+	//ADDED:
+	//GETTING ICON NAME FROM WOWHEAD STRING:
+	$temp_string1 = strstr($wowhead_string, "Icon.create(");
+	$temp_string2 = substr($temp_string1, 12, 50);
+	$temp_string3 = strtok($temp_string2, ',');
+	$temp_string4 = substr($temp_string3, 1, strlen($temp_string3) - 2);
+	
+	$aura_icon_name = $temp_string4;
+	$aura = $aura_icon_name;
+	$iconfilename = strtolower($aura_icon_name);
+	//ENDOF ADDED
+	
   //get the icon itself
   if (empty($proxy_cfg['addr'])) 
   {
@@ -826,9 +871,9 @@ function get_aura_icon($auraid)
   while (!feof($fp)) fwrite($img_file,fgets($fp, 4096));
   fclose($fp);
   fclose($img_file);
-
   if (file_exists("img/Char_AURA/$aura.jpg")) return "img/Char_AURA/$aura.jpg";
-  else return "img/INV/INV_blank_32.gif";
+  else 
+	return "img/INV/INV_blank_32.gif";
  } 
  else return "img/INV/INV_blank_32.gif";
 }
