@@ -54,7 +54,7 @@ function browse_teams() {
 		makebutton($lang_global['search'], "javascript:do_submit()",80);
  $output .= "</td></tr></table>
 			<td align=\"right\">";
- $output .= generate_pagination("arena_team.php?action=browse_teams&amp;order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
+ $output .= generate_pagination("arenateam.php?action=browse_teams&amp;order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
  $output .= "</td></tr></table>";
 //==========================top page navigation ENDS here ========================
 
@@ -64,11 +64,11 @@ function browse_teams() {
 	<th width=\"22%\"><a href=\"arenateam.php?order_by=atname&amp;start=$start&amp;dir=$dir\">".($order_by=='atname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['arenateam_name']}</a></th>
 	<th width=\"10%\"><a href=\"arenateam.php?order_by=tot_chars&amp;start=$start&amp;dir=$dir\">".($order_by=='tot_chars' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['captain']}</a></th>
 	<th width=\"7%\"><a href=\"arenateam.php?order_by=attype&amp;start=$start&amp;dir=$dir\">".($order_by=='attype' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['type']}</a></th>
-	<th width=\"7%\"><a href=\"arenateam.php?order_by=createdate&amp;start=$start&amp;dir=$dir\">".($order_by=='members' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['members']}</a></th>
+	<th width=\"7%\"><a href=\"arenateam.php?order_by=membres&amp;start=$start&amp;dir=$dir\">".($order_by=='members' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['members']}</a></th>
 	<th width=\"7%\"><a href=\"arenateam.php?order_by=arenateam_online&amp;start=$start&amp;dir=$dir\">".($order_by=='arenateam_online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['arenateam_online']}</a></th>
-	<th width=\"7%\"><a href=\"arenateam.php?order_by=createdate&amp;start=$start&amp;dir=$dir\">".($order_by=='rating' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['rating']}</a></th>
-	<th width=\"7%\"><a href=\"arenateam.php?order_by=createdate&amp;start=$start&amp;dir=$dir\">".($order_by=='games' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['games']}</a></th>
-	<th width=\"7%\"><a href=\"arenateam.php?order_by=createdate&amp;start=$start&amp;dir=$dir\">".($order_by=='wins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['wins']}</a></th>
+	<th width=\"7%\"><a href=\"arenateam.php?order_by=rating&amp;start=$start&amp;dir=$dir\">".($order_by=='rating' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['rating']}</a></th>
+	<th width=\"7%\"><a href=\"arenateam.php?order_by=games&amp;start=$start&amp;dir=$dir\">".($order_by=='games' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['games']}</a></th>
+	<th width=\"7%\"><a href=\"arenateam.php?order_by=wins&amp;start=$start&amp;dir=$dir\">".($order_by=='wins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['wins']}</a></th>
    </tr>";
 
 while ($data = $sql->fetch_row($query))	{
