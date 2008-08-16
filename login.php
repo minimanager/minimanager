@@ -86,12 +86,9 @@ global $lang_global, $lang_login, $output, $realm_db;
 	</tr>
 	<tr align=\"left\">
 		<td><input type=\"password\" name=\"login_pass\" size=\"24\" maxlength=\"40\" /></td>
-		<td><input type=\"submit\" value=\"\" style=\"display:none\">";
+		<td><input type=\"submit\" value=\"\" style=\"display:none\" />";
 	makebutton($lang_login['login'], "javascript:dologin()",100);
- $output .= "</td>
-	</tr>";
-
- $sql = new SQL;
+	 $sql = new SQL;
  $link = $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
  $result = $sql->query("SELECT id,name FROM `realmlist` LIMIT 10");
 
@@ -109,16 +106,19 @@ global $lang_global, $lang_login, $output, $realm_db;
 		}
  $sql->close();
  
+ $output .= "</td>
+	</tr>";
+
  $output .= "<tr align=\"left\">
 		<td colspan=\"2\"><input type=\"checkbox\" name=\"remember\" value=\"1\" checked=\"checked\" /> - {$lang_login['remember_me']}</td>
 	</tr>
 	<tr><td colspan=\"2\"><hr /></td></tr>
 	<tr align=\"left\">
-		<td><a href=\"register.php\">{$lang_login['not_registrated']}</a></td>
+		<td><a href=\"form.php\">{$lang_login['not_registrated']}</a></td>
 		<td><a href=\"register.php?action=pass_recovery\">{$lang_login['pass_recovery']}</a></td>
 	</tr>
    </table>
-   <script language=\"JavaScript\">
+   <script type=\"text/javascript\">
 	<!--
 		document.form.user.focus();
 	//-->
