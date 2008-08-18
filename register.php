@@ -213,7 +213,7 @@ function register(){
 	<tr>
   	 <td colspan=\"2\">{$lang_register['read_terms']}.</td>
 	</tr>
-	<tr><td colspan=\"2\"><hr / ></td></tr>
+	<tr><td colspan=\"2\"><hr /></td></tr>
 	<tr><td>";
 
 	$terms = "<textarea rows=\'18\' cols=\'80\' readonly=\'readonly\'>";

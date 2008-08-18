@@ -4,7 +4,7 @@
  * License: GNU General Public License v2(GPL)
  */
 
-$site_encoding = "ISO-8859-1";
+$site_encoding = "utf-8";
 
 $forum_lang = Array(
 

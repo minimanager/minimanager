@@ -100,6 +100,7 @@ $itemperpage = 25;
 
 $css_template = "Sulfur"; 		//file/folder name of css tamplate to use from templates directory by default
 $language = "enUS"; 			//default site language
+$tt_lang = "www";          //wowhead tooltip language.....choices are 'fr', 'de', 'es' (for 'en' use www)
 $site_encoding = "iso-8859-1"; 	//default encoding
 
 //---- IRC Options ------
@@ -110,14 +111,14 @@ $irc_cfg = array(
 			);
 
 //---- External Links ----
-$item_datasite = "http://www.wowhead.com/?item=";
-$quest_datasite = "http://www.wowhead.com/?quest=";
-$creature_datasite = "http://www.wowhead.com/?npc=";
-$spell_datasite = "http://www.wowhead.com/?spell=";
-$skill_datasite = "http://www.wowhead.com/?spells=";
-$talent_datasite = "http://wowhead.com/?spell=";
+$item_datasite = "http://$tt_lang.wowhead.com/?item=";
+$quest_datasite = "http://$tt_lang.wowhead.com/?quest=";
+$creature_datasite = "http://$tt_lang.wowhead.com/?npc=";
+$spell_datasite = "http://$tt_lang.wowhead.com/?spell=";
+$skill_datasite = "http://$tt_lang.wowhead.com/?spells=";
+$talent_datasite = "http://$tt_lang.wowhead.com/?spell=";
 $talent_calculator_datasite = "http://www.worldofwarcraft.com/info/classes";
-$go_datasite = "http://www.wowhead.com/?object=";
+$go_datasite = "http://$tt_lang.wowhead.com/?object=";
 $get_icons_from_web = true; //wherever to get icons from the web in case they are missing in /img/INV dir.
 
 //---- Backup configuration ----

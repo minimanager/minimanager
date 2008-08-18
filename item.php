@@ -8,9 +8,9 @@
  * License: GNU General Public License v2(GPL)
  */
 require_once("header.php");
+ valid_login($action_permission['read']);
 require_once("scripts/itemset_tab.php");
 require_once("scripts/get_lib.php");
-valid_login($action_permission['read']);
 
 function makeinfocell($text,$tooltip){
  return "<a href=\"#\" onmouseover=\"toolTip('".addslashes($tooltip)."','info_tooltip')\" onmouseout=\"toolTip()\">$text</a>";
@@ -282,7 +282,7 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
  $result = $sql->query("SELECT item_template.entry,displayid,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,RequiredLevel,ItemLevel FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry $where ORDER BY item_template.entry LIMIT $sql_search_limit");
  $total_items_found = $sql->num_rows($result);
 
-  $output .= "<center>
+  $output .= "<script src=\"http://www.wowhead.com/widgets/power.js\"></script><center>
 	<table class=\"top_hidden\"></td>
        <tr><td>";
 		makebutton($lang_item_edit['new_search'], "item.php",160);
