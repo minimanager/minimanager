@@ -23,6 +23,14 @@ $version = "0.12";
 */
 $db_type = "MySQL";
 
+$mmfpm_db = Array(
+	'addr' => "127.0.0.1:3306",	//SQL server IP:port this DB located on
+	'user' => "root",			//SQL server login this DB located on
+	'pass' => "",			//SQL server pass this DB located on
+	'name' => "mmfpm",			//realmd DB name
+	'encoding' => "utf8" 		//SQL connection encoding
+	);
+
 $realm_db = Array(
 	'addr' => "127.0.0.1:3306",	//SQL server IP:port this realmd located on
 	'user' => "root",			//SQL server login this realmd located on
@@ -30,6 +38,7 @@ $realm_db = Array(
 	'name' => "realmd",			//realmd DB name
 	'encoding' => "utf8" 		//SQL connection encoding
 	);
+
 $mangos_db = Array(
 	1 => array(		//position in array must represent realmd ID
 			'id' => 1,					//Realm ID

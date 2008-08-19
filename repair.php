@@ -108,7 +108,7 @@ foreach ($characters_db as $db){
 // EXECUTE TABLE REPAIR OR OPTIMIZATION
 //##############################################################################################
 function do_repair(){
- global $lang_global, $output, $realm_db, $mangos_db;
+ global $lang_global, $output, $realm_db, $mangos_db, $characters_db;
 
  if ((!isset($_POST['repair_action']) && $_POST['repair_action'] === '') || (!isset($_POST['check'])) ) {
    redirect("repair.php?error=1");
@@ -125,13 +125,11 @@ function do_repair(){
 		$table_data = explode("~", $table);
 		if ($table_data[0] == "realm"){
 			$sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-		} else {
-			if ($table_data[0] == "mangos"){
-				$sql->connect($mangos_db[$table_data[1]]['addr'], $mangos_db[$table_data[1]]['user'], $mangos_db[$table_data[1]]['pass']);
-				} else {
-						$sql->connect($characters_db[$table_data[1]]['addr'], $characters_db[$table_data[1]]['user'], $characters_db[$table_data[1]]['pass']);
-				}
-			}
+		} elseif ($table_data[0] == "mangos"){
+			$sql->connect($mangos_db['addr'], $mangos_db['user'], $mangos_db['pass']);
+		} elseif  ($table_data[0] == "characters"){
+			$sql->connect($characters_db['addr'], $characters_db['user'], $characters_db['pass']);
+		}
 
 		 $result = $sql->query("$table_action TABLE {$table_data[2]}.`{$table_data[3]}`");
 		 $action_result = $sql->fetch_row($result);
@@ -140,8 +138,8 @@ function do_repair(){
 			else $err = $action_result[3];
 		}
 
- if ($counter) redirect("repair.php?error=2&num=$counter");
-	else redirect("repair.php?error=4&rep_err=$err");
+ if ($counter) { redirect("repair.php?error=2&num=$counter"); }
+	else { redirect("repair.php?error=4&rep_err=$err"); }
 }
 
 

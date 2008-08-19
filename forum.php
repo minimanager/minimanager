@@ -117,12 +117,12 @@ foreach($forum_skeleton as $cid => $category){
 // Forum_Index : Display the forums in categories
 // #######################################################################################################
 function forum_index(){
-	global $enablesidecheck, $forum_skeleton, $forum_lang, $user_lvl, $output, $realm_db;
+	global $enablesidecheck, $forum_skeleton, $forum_lang, $user_lvl, $output, $realm_db, $mmfpm_db;
 	if($enablesidecheck)
 	$side = get_side();
     $mysql = new SQL;
-    $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    $result = $mysql->query("SELECT `authorname`,`id`,`name`,`time`,`forum` FROM `posts` WHERE `id` IN (SELECT MAX(`id`) FROM `posts` GROUP BY `forum`) ORDER BY `forum`;");
+    $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+    $result = $mysql->query("SELECT `authorname`,`id`,`name`,`time`,`forum` FROM `forum_posts` WHERE `id` IN (SELECT MAX(`id`) FROM `forum_posts` GROUP BY `forum`) ORDER BY `forum`;");
     $lasts = array();
     if($mysql->num_rows($result) > 0){
         while($row = $mysql->fetch_row($result))
@@ -153,9 +153,9 @@ function forum_index(){
                         continue;
                 }
             }
-            $totaltopics = $mysql->query("SELECT id FROM posts WHERE forum = '$id' AND id = `topic`;");
+            $totaltopics = $mysql->query("SELECT id FROM forum_posts WHERE forum = '$id' AND id = `topic`;");
             $numtopics = $mysql->num_rows($totaltopics);
-            $totalreplies = $mysql->query("SELECT id FROM posts WHERE forum = '$id';");
+            $totalreplies = $mysql->query("SELECT id FROM forum_posts WHERE forum = '$id';");
             $numreplies = $mysql->num_rows($totalreplies);
             $output .= "<tr><td align=\"left\"><a href=\"forum.php?action=view_forum&amp;id=$id\">{$forum["name"]}</a><br />{$forum["desc"]}</td>
                         <td>{$numtopics}</td>
@@ -178,10 +178,10 @@ function forum_index(){
 //
 // #######################################################################################################
 function forum_view_forum(){
-	global $enablesidecheck, $forum_skeleton, $forum_lang, $maxqueries, $user_lvl, $output, $realm_db;
+	global $enablesidecheck, $forum_skeleton, $forum_lang, $maxqueries, $user_lvl, $output, $mmfpm_db;
 	if($enablesidecheck) $side = get_side();
 	$mysql = new SQL;
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 	if(!isset($_GET["id"]))	error($forum_lang["no_such_forum"]);
 	else $id = $mysql->quote_smart($_GET["id"]);
 	if(!isset($_GET["page"])) $page = 0;
@@ -215,8 +215,8 @@ function forum_view_forum(){
 	$start = ($maxqueries * $page);
 	$output .= "<div class=\"top\"><h1>{$forum_lang["forums"]}</h1>{$forum_lang["you_are_here"]} : <a href=\"forum.php\">{$forum_lang["forum_index"]}</a> -> <a href=\"forum.php?action=view_forum&amp;id={$id}\">{$forum["name"]}</a></div>
 				<center><table class=\"lined\">";
-	$topics = $mysql->query("SELECT id, authorid, authorname, name, annouced, sticked, closed FROM posts WHERE (forum = '$id' AND id = `topic`) OR annouced = 1 AND id = `topic` ORDER BY annouced DESC, sticked DESC, lastpost DESC LIMIT $start, $maxqueries;");
-	$result = $mysql->query("SELECT `topic` as curtopic,(SELECT count(`id`)-1 FROM posts WHERE `topic` = `curtopic`) AS replies,lastpost as curlastpost,(SELECT authorname FROM posts WHERE id = curlastpost) as authorname,(SELECT time FROM posts WHERE id = curlastpost) as time FROM `posts` WHERE (`forum` = $id AND `topic` = `id` ) OR annouced = 1;");
+	$topics = $mysql->query("SELECT id, authorid, authorname, name, annouced, sticked, closed FROM forum_posts WHERE (forum = '$id' AND id = `topic`) OR annouced = 1 AND id = `topic` ORDER BY annouced DESC, sticked DESC, lastpost DESC LIMIT $start, $maxqueries;");
+	$result = $mysql->query("SELECT `topic` as curtopic,(SELECT count(`id`)-1 FROM forum_posts WHERE `topic` = `curtopic`) AS replies,lastpost as curlastpost,(SELECT authorname FROM forum_posts WHERE id = curlastpost) as authorname,(SELECT time FROM forum_posts WHERE id = curlastpost) as time FROM `forum_posts` WHERE (`forum` = $id AND `topic` = `id` ) OR annouced = 1;");
 	$lasts = array();
 	if($mysql->num_rows($result) > 0){
 		while($row = $mysql->fetch_row($result))
@@ -250,7 +250,7 @@ function forum_view_forum(){
 							<td>{$forum_lang["last_post_by"]} {$lasts[$topic[0]][3]}, {$lasts[$topic[0]][4]}</td>
 						</tr>";
 		}
-		$totaltopics = $mysql->query("SELECT id FROM posts WHERE forum = '$id' AND id = `topic`;"); //My page system is so roxing, i can' t break this query xD
+		$totaltopics = $mysql->query("SELECT id FROM forum_posts WHERE forum = '$id' AND id = `topic`;"); //My page system is so roxing, i can' t break this query xD
 		$pages = ceil($mysql->num_rows($totaltopics)/$maxqueries);
 		$output .= "<tr><td align=\"right\" colspan=\"4\">{$forum_lang["pages"]} : ";
 		for($x = 1; $x <= $pages; $x++){
@@ -270,12 +270,12 @@ function forum_view_forum(){
 // #######################################################################################################
 function forum_view_topic(){
 
-	global $enablesidecheck, $forum_skeleton, $forum_lang, $maxqueries, $user_lvl, $user_id, $output, $realm_db, $characters_db, $realm_id;
+	global $enablesidecheck, $forum_skeleton, $forum_lang, $maxqueries, $user_lvl, $user_id, $output, $realm_db, $characters_db, $realm_id, $mmfpm_db;
 
 	if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
 	$mysql = new SQL;
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 	if(isset($_GET["id"])){
 		$id = $mysql->quote_smart($_GET["id"]);
@@ -296,9 +296,12 @@ function forum_view_topic(){
 	$start = ($maxqueries * $page);
 
 	if(!$post){
-		$posts = $mysql->query("SELECT id,authorid,authorname,forum,name,text,time,annouced,sticked,closed FROM posts WHERE topic = '$id' ORDER BY id ASC LIMIT $start, $maxqueries;");
+		$posts = $mysql->query("SELECT id,authorid,authorname,forum,name,text,time,annouced,sticked,closed FROM forum_posts WHERE topic = '$id' ORDER BY id ASC LIMIT $start, $maxqueries;");
 
 // Thx qsa for the query structure
+
+		$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
 $query = "SELECT account,name,SUBSTRING_INDEX(SUBSTRING_INDEX(data,' ', 37),' ',-1) AS gen,race,class,
 SUBSTRING_INDEX(SUBSTRING_INDEX(data,' ',35),' ',-1) AS level,(SELECT gmlevel FROM `{$realm_db['name']}`.account WHERE `{$realm_db['name']}`.account.id = `{$characters_db[$realm_id]['name']}`.characters.account) as gmlevel
 FROM `{$characters_db[$realm_id]['name']}`.characters WHERE totaltime IN ( SELECT MAX(totaltime) FROM `{$characters_db[$realm_id]['name']}`.characters WHERE account IN (";
@@ -453,9 +456,9 @@ $query .= "0) GROUP BY account);";
 					$output .= "</td></tr>";
 		}
 
-		$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+		$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
-		$totalposts = $mysql->query("SELECT id FROM posts WHERE topic = '$id';");
+		$totalposts = $mysql->query("SELECT id FROM forum_posts WHERE topic = '$id';");
 		$totalposts = $mysql->num_rows($totalposts);
 
 		$pages = ceil($totalposts/$maxqueries);
@@ -519,14 +522,14 @@ $query .= "0) GROUP BY account);";
 	else{
 		$output .= "<div class=\"top\"><h1>Stand by...</h1></div>";
 
-		$post = $mysql->query("SELECT topic, id FROM posts WHERE id = '$id'"); // Get our post id
+		$post = $mysql->query("SELECT topic, id FROM forum_posts WHERE id = '$id'"); // Get our post id
 		if($mysql->num_rows($post)==0)
 			error($forum_lang["no_such_topic"]);
 		$post = $mysql->fetch_row($post);
 		if($post[0]==$post[1])
 			redirect("forum.php?action=view_topic&id=$id");
 		$topic = $post[0];
-		$posts = $mysql->query("SELECT id FROM posts WHERE topic = '$topic';"); // Get posts in our topic
+		$posts = $mysql->query("SELECT id FROM forum_posts WHERE topic = '$topic';"); // Get posts in our topic
 		$replies = $mysql->num_rows($posts);
 		if($replies==0)
 			error($forum_lang["no_such_topic"]);
@@ -546,9 +549,9 @@ $query .= "0) GROUP BY account);";
 	// Queries : 2 with id || 2 (+2) with postid
 }
 function forum_do_edit_close(){
-	global $forum_lang, $user_lvl, $realm_db;
+	global $forum_lang, $user_lvl, $mmfpm_db;
 	$mysql = new SQL;
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 	if($user_lvl == 0)
 		error($forum_lang["no_access"]);
@@ -559,15 +562,15 @@ function forum_do_edit_close(){
 	if(!isset($_GET["state"])) error("Bad request, please mail admin and describe what you did to get this error.");
 	else $state = $mysql->quote_smart($_GET["state"]);
 
-	$mysql->query("UPDATE posts SET closed = '$state' WHERE id = '$id'");
+	$mysql->query("UPDATE forum_posts SET closed = '$state' WHERE id = '$id'");
 	$mysql->close();
 	redirect("forum.php?action=view_topic&id=$id");
 	// Queries : 1
 }
 function forum_do_edit_announce(){
-	global $forum_lang, $user_lvl, $realm_db;
+	global $forum_lang, $user_lvl, $mmfpm_db;
 	$mysql = new SQL;
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 	if($user_lvl == 0)
 		error($forum_lang["no_access"]);
@@ -578,15 +581,15 @@ function forum_do_edit_announce(){
 	if(!isset($_GET["state"])) error("Bad request, please mail admin and describe what you did to get this error.");
 	else $state = $mysql->quote_smart($_GET["state"]);
 
-	$mysql->query("UPDATE posts SET annouced = '$state' WHERE id = '$id'");
+	$mysql->query("UPDATE forum_posts SET annouced = '$state' WHERE id = '$id'");
 	$mysql->close();
 	redirect("forum.php?action=view_topic&id=$id");
 	// Queries : 1
 }
 function forum_do_edit_stick(){
-	global $forum_lang, $user_lvl, $realm_db;
+	global $forum_lang, $user_lvl, $mmfpm_db;
 	$mysql = new SQL;
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 	if($user_lvl == 0)
 		error($forum_lang["no_access"]);
@@ -597,26 +600,26 @@ function forum_do_edit_stick(){
 	if(!isset($_GET["state"])) error("Bad request, please mail admin and describe what you did to get this error.");
 	else $state = $mysql->quote_smart($_GET["state"]);
 
-	$mysql->query("UPDATE posts SET sticked = '$state' WHERE id = '$id'");
+	$mysql->query("UPDATE forum_posts SET sticked = '$state' WHERE id = '$id'");
 	$mysql->close();
 	redirect("forum.php?action=view_topic&id=$id");
 	// Queries : 1
 }
 function forum_delete_post(){
-	global $enablesidecheck, $forum_skeleton, $forum_lang, $maxqueries, $user_lvl, $user_id, $output, $realm_db;
+	global $enablesidecheck, $forum_skeleton, $forum_lang, $maxqueries, $user_lvl, $user_id, $output, $mmfpm_db;
 	$mysql = new SQL;
 
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 	if(!isset($_GET["id"])) error($forum_lang["no_such_post"]);
 	else $id = $mysql->quote_smart($_GET["id"]);
 
-	$topic = $mysql->query("SELECT id,topic,authorid,forum FROM posts WHERE id = '$id';");
+	$topic = $mysql->query("SELECT id,topic,authorid,forum FROM forum_posts WHERE id = '$id';");
 	if($mysql->num_rows($topic)==0) error($forum_lang["no_such_post"]);
 	$topic = $mysql->fetch_row($topic);
 	if($user_lvl == 0 && $topic[2] != $user_id) error($forum_lang["no_access"]);
 	$fid = $topic[3];
 
-	$topic2 = $mysql->query("SELECT name FROM posts WHERE id = '{$topic[1]}';");
+	$topic2 = $mysql->query("SELECT name FROM forum_posts WHERE id = '{$topic[1]}';");
 	$name = $mysql->fetch_row($topic2);
 
 	$cat = 0;
@@ -641,46 +644,46 @@ function forum_delete_post(){
 	// Queries : 1
 }
 function forum_do_delete_post(){
-	global $forum_lang, $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $realm_db;
+	global $forum_lang, $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $mmfpm_db;
 
 	$mysql = new SQL;
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 	if(!isset($_GET["id"])) error($forum_lang["no_such_post"]);
 	else $id = $mysql->quote_smart($_GET["id"]);
 
-	$topic = $mysql->query("SELECT id,topic,name,authorid,forum FROM posts WHERE id = '$id';");
+	$topic = $mysql->query("SELECT id,topic,name,authorid,forum FROM forum_posts WHERE id = '$id';");
 	if($mysql->num_rows($topic)==0) error($forum_lang["no_such_post"]);
 	$topic = $mysql->fetch_row($topic);
 	if($user_lvl == 0 && $topic[3] != $user_id) error($forum_lang["no_access"]);
 	$fid = $topic[4];
 
 	if($id==$topic[1]){
-		$mysql->query("DELETE FROM posts WHERE topic = '$id'");
+		$mysql->query("DELETE FROM forum_posts WHERE topic = '$id'");
 		redirect("forum.php?action=view_forum&id=$fid");
 	}
 	else
 	{
-		$mysql->query("DELETE FROM posts WHERE id = '$id'");
-		$result = $mysql->query("SELECT id FROM posts WHERE topic = '{$topic[1]}' ORDER BY id DESC LIMIT 1;"); // get last post id
+		$mysql->query("DELETE FROM forum_posts WHERE id = '$id'");
+		$result = $mysql->query("SELECT id FROM forum_posts WHERE topic = '{$topic[1]}' ORDER BY id DESC LIMIT 1;"); // get last post id
 		$lastpostid = $mysql->fetch_row($result);
 		$lastpostid = $lastpostid[0];
-		$mysql->query("UPDATE posts SET lastpost = '$lastpostid' WHERE id = '{$topic[1]}'"); // update topic' s last post id
+		$mysql->query("UPDATE forum_posts SET lastpost = '$lastpostid' WHERE id = '{$topic[1]}'"); // update topic' s last post id
 		redirect("forum.php?action=view_topic&id={$topic[1]}");
 	}
 	// Queries : 1 (if delete topic) || 4 if delete post
 }
 
 function forum_add_topic(){
-	global $enablesidecheck, $forum_lang, $forum_skeleton, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $realm_db;
+	global $enablesidecheck, $forum_lang, $forum_skeleton, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $mmfpm_db;
 
 	if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 	$mysql = new SQL;
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 	if($minfloodtime > 0)
 	{
-		$userposts = $mysql->query("SELECT time FROM posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
+		$userposts = $mysql->query("SELECT time FROM forum_posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
 		if($mysql->num_rows($userposts) != 0)
 		{
 			$mintimeb4post = $mysql->fetch_row($userposts);
@@ -765,16 +768,16 @@ function forum_add_topic(){
 	// Queries : 1
 }
 function forum_do_add_topic(){
-	global $enablesidecheck, $forum_skeleton, $forum_lang, $user_lvl, $user_name, $user_id, $realm_db, $minfloodtime;
+	global $enablesidecheck, $forum_skeleton, $forum_lang, $user_lvl, $user_name, $user_id, $mmfpm_db, $minfloodtime;
 
 	if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
 	$mysql = new SQL;
-	$mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 
 	{
-		$userposts = $mysql->query("SELECT time FROM posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
+		$userposts = $mysql->query("SELECT time FROM forum_posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
 		if($mysql->num_rows($userposts) != 0)
 		{
 			$mintimeb4post = $mysql->fetch_row($userposts);
@@ -838,9 +841,9 @@ function forum_do_add_topic(){
 
 	$time = date("m/d/y H:i:s");
 
-	$mysql->query("INSERT INTO posts (authorid, authorname, forum, name, text, time) VALUES ('$user_id', '$user_name', '$forum', '$name', '$msg', '$time');");
+	$mysql->query("INSERT INTO forum_posts (authorid, authorname, forum, name, text, time) VALUES ('$user_id', '$user_name', '$forum', '$name', '$msg', '$time');");
 	$id = $mysql->insert_id();
-	$mysql->query("UPDATE posts SET topic = '$id', lastpost = '$id' WHERE id = '$id';");
+	$mysql->query("UPDATE forum_posts SET topic = '$id', lastpost = '$id' WHERE id = '$id';");
 
 	$mysql->close();
 
@@ -848,16 +851,16 @@ function forum_do_add_topic(){
 	// Queries : 3
 }
 function forum_do_add_post(){
-	global $enablesidecheck, $forum_skeleton, $forum_lang, $minfloodtime, $user_lvl, $user_name, $user_id, $realm_db;
+	global $enablesidecheck, $forum_skeleton, $forum_lang, $minfloodtime, $user_lvl, $user_name, $user_id, $mmfpm_db;
 
 	if($enablesidecheck) $side = get_side(); // Better to use it here instead of call it many time in the loop :)
 
 	$mysql = new SQL;
-	$link = $link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 	if($minfloodtime > 0)
 	{
-		$userposts = $mysql->query("SELECT time FROM posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
+		$userposts = $mysql->query("SELECT time FROM forum_posts WHERE authorid = '$user_id' ORDER BY id DESC LIMIT 1;");
 		if($mysql->num_rows($userposts) != 0)
 		{
 			$mintimeb4post = $mysql->fetch_row($userposts);
@@ -911,15 +914,15 @@ function forum_do_add_post(){
 		error($forum_lang["msg_too_short"]);
 	}
 
-	$name = $mysql->query("SELECT name FROM posts WHERE id = '$topic';");
+	$name = $mysql->query("SELECT name FROM forum_posts WHERE id = '$topic';");
 	$name = $mysql->fetch_row($name);
 	$name = $mysql->quote_smart($name[0]);
 
 	$time = date("m/d/y H:i:s");
 
-	$mysql->query("INSERT INTO posts (authorid, authorname, forum, topic, name, text, time) VALUES ('$user_id', '$user_name', '$forum', $topic, '$name', '$msg', '$time');");
+	$mysql->query("INSERT INTO forum_posts (authorid, authorname, forum, topic, name, text, time) VALUES ('$user_id', '$user_name', '$forum', $topic, '$name', '$msg', '$time');");
 	$id = @mysql_insert_id($link);
-	$mysql->query("UPDATE posts SET lastpost = $id WHERE id = $topic;");
+	$mysql->query("UPDATE forum_posts SET lastpost = $id WHERE id = $topic;");
 
 	$mysql->close();
 
@@ -928,15 +931,15 @@ function forum_do_add_post(){
 }
 
 function forum_edit_post(){
-	global $forum_skeleton, $forum_lang, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $realm_db;
+	global $forum_skeleton, $forum_lang, $maxqueries, $minfloodtime, $user_lvl, $user_id, $output, $mmfpm_db;
 
 	$mysql = new SQL;
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 	if(!isset($_GET["id"])) error($forum_lang["no_such_post"]);
 	else $id = $mysql->quote_smart($_GET["id"]);
 
-	$post = $mysql->query("SELECT id,topic,authorid,forum,name,text FROM posts WHERE id = '$id';");
+	$post = $mysql->query("SELECT id,topic,authorid,forum,name,text FROM forum_posts WHERE id = '$id';");
 	if($mysql->num_rows($post)==0) error($forum_lang["no_such_post"]);
 	$post = $mysql->fetch_row($post);
 
@@ -1007,10 +1010,10 @@ function forum_edit_post(){
 	// Queries : 1
 }
 function forum_do_edit_post(){
-	global $forum_lang, $user_lvl, $user_name, $user_id, $realm_db;
+	global $forum_lang, $user_lvl, $user_name, $user_id, $mmfpm_db;
 
 	$mysql = new SQL;
-	$link = $link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 	if(!isset($_POST['forum'])) error($forum_lang["no_such_forum"]);
 	else $forum = $mysql->quote_smart($_POST['forum']);
@@ -1044,16 +1047,16 @@ function forum_do_edit_post(){
 	$msg = str_replace('\n', '<br />', $msg);
 //	$msg = str_replace('\r', '<br />', $msg);
 
-	$result = $mysql->query("SELECT topic FROM posts WHERE id = $post;");
+	$result = $mysql->query("SELECT topic FROM forum_posts WHERE id = $post;");
 	$topicid = $mysql->fetch_row($result);
 
-	$mysql->query("UPDATE posts SET text = '$msg' WHERE id = $post;");
+	$mysql->query("UPDATE forum_posts SET text = '$msg' WHERE id = $post;");
 
 	if($topic == 1){
-		$mysql->query("UPDATE posts SET name = '$name' WHERE topic = {$topicid[0]};");
+		$mysql->query("UPDATE forum_posts SET name = '$name' WHERE topic = {$topicid[0]};");
 	}
 
-	$result = $mysql->query("SELECT topic FROM posts WHERE id = $post;");
+	$result = $mysql->query("SELECT topic FROM forum_posts WHERE id = $post;");
 	$topicid = $mysql->fetch_row($result);
 
 	$mysql->close();
@@ -1062,14 +1065,14 @@ function forum_do_edit_post(){
 }
 
 function forum_move_topic(){
-	global $forum_skeleton, $forum_lang, $maxqueries, $user_lvl, $user_id, $output, $realm_db;
+	global $forum_skeleton, $forum_lang, $maxqueries, $user_lvl, $user_id, $output, $mmfpm_db;
 	$mysql = new SQL;
 
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 	if(!isset($_GET["id"])) error($forum_lang["no_such_topic"]);
 	else $id = $mysql->quote_smart($_GET["id"]);
 
-	$topic = $mysql->query("SELECT id,topic,authorid,forum, name FROM posts WHERE id = '$id';");
+	$topic = $mysql->query("SELECT id,topic,authorid,forum, name FROM forum_posts WHERE id = '$id';");
 	//								0	1		2		3	  4
 	if($mysql->num_rows($topic)==0) error($forum_lang["no_such_topic"]);
 	$topic = $mysql->fetch_row($topic);
@@ -1107,17 +1110,17 @@ function forum_move_topic(){
 	// Queries : 1
 }
 function forum_do_move_topic(){
-	global $forum_lang, $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $realm_db;
+	global $forum_lang, $forum_skeleton, $maxqueries, $user_lvl, $user_id, $output, $mmfpm_db;
 
 	$mysql = new SQL;
-	$link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+	$link = $mysql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 	if(!isset($_POST['forum'])) error($forum_lang["no_such_forum"]);
 	else $forum = $mysql->quote_smart($_POST['forum']);
 	if(!isset($_POST['id'])) error($forum_lang["no_such_topic"]);
 	else $id = $mysql->quote_smart($_POST['id']);
 
-	$mysql->query("UPDATE posts SET forum = '$forum' WHERE topic = '$id'"); // update topic' s last post id
+	$mysql->query("UPDATE forum_posts SET forum = '$forum' WHERE topic = '$id'"); // update topic' s last post id
 	redirect("forum.php?action=view_topic&id=$id");
 	// Queries : 1
 }

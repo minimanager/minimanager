@@ -1,5 +1,5 @@
 /*Table structure for table `posts` */
-CREATE TABLE `posts` (
+CREATE TABLE `forum_posts` (
   `id` bigint(20) unsigned NOT NULL auto_increment,
   `authorid` bigint(20) unsigned NOT NULL default '0',
   `authorname` varchar(16) NOT NULL default '',
