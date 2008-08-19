@@ -30,7 +30,7 @@ global $lang_global, $realm_db;
 
  if ($sql->num_rows($result) == 1) {
 	$id = $sql->result($result, 0, 'id');
-	$result1 = $sql->query("SELECT count(*) FROM account_banned WHERE id ='$id'");
+	$result1 = $sql->query("SELECT count(*) FROM account_banned WHERE id ='$id' AND active = '1'");
 	if ($sql->result($result1, 0)) {
 		$sql->close();
 		redirect("login.php?error=3");

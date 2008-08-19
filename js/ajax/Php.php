@@ -19,7 +19,7 @@
 
 class JsHttpRequest
 {
-    var $SCRIPT_ENCODING = "windows-1251";
+    var $SCRIPT_ENCODING = "utf-8";
     var $SCRIPT_DECODE_MODE = '';
     var $UNIQ_HASH;
     var $SCRIPT_ID;
@@ -276,14 +276,28 @@ class JsHttpRequest
 
     /**
      * Convert from UCS-2BE decimal to $toEnc.
-     */
+     */    
     function _decUcs2Decode($code, $toEnc)
     {
+    // Little speedup by using array_flip($this->_encTables) and later hash access.
+        static $flippedTable = null;
         if ($code < 128) return chr($code);
+        
         if (isset($this->_encTables[$toEnc])) {
-            $p = array_search($code, $this->_encTables[$toEnc]);
-            if ($p !== false) return chr(128 + $p);
+            if (!$flippedTable) $flippedTable = array_flip($this->_encTables[$toEnc]);
+            if (isset($flippedTable[$code])) return chr(128 + $flippedTable[$code]);
+        } else if ($toEnc == 'utf-8' || $toEnc == 'utf8') {
+            // UTF-8 conversion rules: http://www.cl.cam.ac.uk/~mgk25/unicode.html
+            if ($code < 0x800) {
+                return chr(0xC0 + ($code >> 6)) . 
+                       chr(0x80 + ($code & 0x3F));
+            } else { // if ($code <= 0xFFFF) -- it is almost always so for UCS2-BE
+                return chr(0xE0 + ($code >> 12)) .
+                       chr(0x80 + (0x3F & ($code >> 6))) .
+                       chr(0x80 + ($code & 0x3F));
+            }
         }
+        
         return "";
     }
     

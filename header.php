@@ -36,12 +36,15 @@ $output .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"h
 <head>
  <title>$title</title>
  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$site_encoding\" />
+ <meta http-equiv=\"Content-Type\" content=\"text/javascript; charset=$site_encoding\" />
  <link rel=\"stylesheet\" type=\"text/css\" href=\"templates/".$css_template."/".$css_template."_1024.css\" title=\"1024\" />
  <link rel=\"stylesheet\" type=\"text/css\" href=\"templates/".$css_template."/".$css_template."_1280.css\" title=\"1280\" />
-
  <link rel=\"SHORTCUT ICON\" href=\"img/favicon.ico\" />
- <script type=\"text/javascript\" src=\"js/general.js\"></script>
- <script type=\"text/javascript\" src=\"js/layout.js\"></script>
+ <script type=\"text/javascript\" charset=\"utf-8\"></script>
+ <script src=\"js/general.js\"></script>
+ <script src=\"js/layout.js\"></script>
+ <script src=\"$tt_scrip\"></script>
+
 <!--[if lte IE 7]>
  <style>
 	#menuwrapper, #menubar ul a {height: 1%;}

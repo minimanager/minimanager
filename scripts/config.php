@@ -110,7 +110,8 @@ $itemperpage = 25;
 $css_template = "Sulfur"; 		//file/folder name of css tamplate to use from templates directory by default
 $language = "enUS"; 			//default site language
 $tt_lang = "www";          //wowhead tooltip language.....choices are 'fr', 'de', 'es' (for 'en' use www)
-$site_encoding = "iso-8859-1"; 	//default encoding
+$site_encoding = "UTF-8"; 	//default encoding
+$timezone = "UTC";         //default timezone (use your local timezone code)
 
 //---- IRC Options ------
 $irc_cfg = array(
