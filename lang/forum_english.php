@@ -1,8 +1,10 @@
-
 <?php
 /*
- * Project Name: Forum for MiniManager
+ * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
+ * Language: English
+ * Supported Minimanager Revision: Latest (default language)
+ * Translator: 
  */
 
 $site_encoding = "utf-8";
@@ -31,7 +33,7 @@ $forum_lang = Array(
 	"last_post_by" => "Last post by",
 	"in" => "in",
 	"no_topics" => "No topics...",
-	"topics" => "Topics", //todo
+	"topics" => "Topics",
 
 	// view_forum
 	"no_such_forum" => "Bad request : No such forum",

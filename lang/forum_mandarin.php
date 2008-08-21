@@ -1,16 +1,10 @@
-
 <?php
 /*
- * Project Name: Forum for MiniManager
+ * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
- */
-
-/*
- * Project Name: MiniManager for Mangos Server
- * Author: lkou (简体中文翻译)
- * Copyright: lkou (简体中文翻译)
- * Translated For: Svn 66
- * License: GNU General Public License v2(GPL)
+ * Language: Mandarin
+ * Supported Minimanager Revision: 66
+ * Translator: lkou
  */
 
 $site_encoding = "gb2312";

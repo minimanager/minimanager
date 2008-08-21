@@ -1,33 +1,10 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
- * Date: 17.10.2006 inital version (0.0.1a)
- * Author: 龙啸天 & 情 (简体中文翻译)
- * Copyright: 龙啸天 & 情 (简体中文翻译)
- * Translated For: Ver.0.1.0c(Mar-23-2007)
- * Thanks: To gsa for this great piece of work ;)
- * Email: Www5th@Gmail.com
+ * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
- *          你可以自由使用和复制分发此文件
- *          但是请务必保留原作者以及翻译者姓名
- */
-
-/*
- * Project Name: MiniManager for Mangos Server
- * Author: AnDa (简体中文翻译)
- * Copyright: AnDa (简体中文翻译)
- * Translated For: Ver.0.1.4a(Sep.3.2007)
- * Email: anda1982123@yahoo.com.cn
- * License: GNU General Public License v2(GPL)
- */
-
-/*
- * Project Name: MiniManager for Mangos Server
- * Author: lkou (简体中文翻译)
- * Copyright: lkou (简体中文翻译)
- * Translated For: Svn 68
- * 技能没汉化，有时间再说
- * License: GNU General Public License v2(GPL)
+ * Language: Mandarin
+ * Supported Minimanager Revision: Unknown
+ * Translator: 龙啸天, lkou, AnDa
  */
 
 $site_encoding = "gb2312";

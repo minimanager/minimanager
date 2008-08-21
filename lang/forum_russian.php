@@ -1,11 +1,10 @@
 <?php
 /*
- * Project Name: Russian Translate for Forum for MiniManager
+ * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
- * Date: 24.02.2008 version 0.0.1a
- * Author: Den Wailhorn
- * Copyright: AD&Den's WoW Server
- * Email: wowemuwad@gmail.com
+ * Language: Russian
+ * Supported Minimanager Revision: Unknown
+ * Translator: Den Wailhorn
  */
 
 $site_encoding = "Windows-1251";

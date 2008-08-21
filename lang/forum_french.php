@@ -1,8 +1,10 @@
-
 <?php
 /*
- * Project Name: Forum for MiniManager
+ * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
+ * Language: French
+ * Supported Minimanager Revision: Unknown
+ * Translator: Unknown
  */
 
 $site_encoding = "utf-8";

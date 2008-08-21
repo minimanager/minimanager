@@ -1,11 +1,10 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
- * Date: 17.10.2006 inital version (0.0.1a)
- * Author: Q.SA
- * Copyright: Q.SA
- * Email: *****
- * License: GNU General Public License v2(GPL) 
+ * Project Name: MiniManager for Project Mangos
+ * License: GNU General Public License v2(GPL)
+ * Language: French
+ * Supported Minimanager Revision: Unknown
+ * Translator: fra298
  */
 
 $site_encoding = "utf-8";

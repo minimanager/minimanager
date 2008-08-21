@@ -96,9 +96,9 @@ valid_login($action_permission['read']);
 
 if (isset($_COOKIE["lang"])){
 	$forumlang = $_COOKIE["lang"];
-	if (!file_exists("lang/Forum_$forumlang.php")) $forumlang = $language;
+	if (!file_exists("lang/forum_$forumlang.php")) $forumlang = $language;
 	} else $forumlang = $language;
-require_once("lang/Forum_$forumlang.php");
+require_once("lang/forum_$forumlang.php");
 
 foreach($forum_skeleton as $cid => $category){
 	if(!isset($category["level_read"])) $forum_skeleton[$cid]["level_read"] = 0;
