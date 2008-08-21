@@ -1,0 +1,16 @@
+This is a simple forum system to Minimanager.
+
+How to install :
+
+1) Set in script/config.php Database for minimanager
+
+$mmfpm_db = Array(
+	'addr' => "127.0.0.1:3306",	//SQL server IP:port this DB located on
+	'user' => "root",			//SQL server login this DB located on
+	'pass' => "",			//SQL server pass this DB located on
+	'name' => "mmfpm",			//realmd DB name
+	'encoding' => "utf8" 		//SQL connection encoding
+	);
+
+2) Execute install_forum.sql under your minimanager db
+3) Edit script/forum.conf.php to set forums
