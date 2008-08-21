@@ -24,7 +24,7 @@ session_start();
 
 class CaptchaSecurityImages {
 
-	var $font = 'monofont.ttf';
+	var $font = './monofont.ttf';
 
 	function generateCode($characters) {
 		/* list all possible characters, similar looking characters and vowels have been removed */
@@ -38,7 +38,7 @@ class CaptchaSecurityImages {
 		return $code;
 	}
 
-	function CaptchaSecurityImages($width='350',$height='130',$characters='8') {
+	function CaptchaSecurityImages($width='350',$height='130',$characters='6') {
 		$code = $this->generateCode($characters);
 		/* font size will be 75% of the image height */
 		$font_size = $height * 0.75;

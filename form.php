@@ -1,5 +1,13 @@
 <?php 
-
+/*
+ * Project Name: MiniManager for Mangos Server
+ * Date: 17.10.2006 inital version (0.0.1a)
+ * Author: gmaze
+ * Copyright: gmaze
+ * Email: *****
+ * License: GNU General Public License v2(GPL)
+ */
+ 
 require_once("header.php");
 session_start();
 
