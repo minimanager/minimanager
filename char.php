@@ -30,6 +30,7 @@ function char_main()
     $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
     $id = $sql->quote_smart($_GET['id']);
+    if (!is_numeric($id)) $id = 0;
     
     $result = $sql->query("SELECT account, race FROM `characters` WHERE guid = $id LIMIT 1");
 

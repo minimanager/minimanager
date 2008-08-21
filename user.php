@@ -16,7 +16,7 @@ require_once("scripts/id_tab.php");
 // BROWSE USERS
 //########################################################################################################################
 function browse_users() {
- global $lang_global, $lang_user, $output, $realm_db, $itemperpage, $user_lvl, $user_name, $gm_level_arr;
+ global $lang_global, $lang_user, $output, $realm_db, $itemperpage, $user_lvl, $user_name, $gm_level_arr, $action_permission;
 
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -40,9 +40,12 @@ function browse_users() {
  $output .="<script type=\"text/javascript\" src=\"js/check.js\"></script>
 			<center><table class=\"top_hidden\">
 			<tr><td>";
+if($user_lvl >= $action_permission['update'])
+{
  makebutton($lang_user['add_acc'], "user.php?action=add_new", 124);
  makebutton($lang_user['cleanup'], "cleanup.php", 122);
  makebutton($lang_user['backup'], "backup.php", 122);
+}
  makebutton($lang_global['back'], "javascript:window.history.back()", 122);
  $output .= " </td><td align=\"right\" width=\"25%\" rowspan=\"2\">";
  $output .= generate_pagination("user.php?action=brows_user&amp;order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
@@ -80,9 +83,10 @@ function browse_users() {
 	 <input type=\"hidden\" name=\"start\" value=\"$start\" />
 	 <input type=\"hidden\" name=\"backup_op\" value=\"0\"/>
  <table class=\"lined\">
-   <tr>
-	<th width=\"1%\"><input name=\"allbox\" type=\"checkbox\" value=\"Check All\" onclick=\"CheckAll(document.form1);\" /></th>
-	<th width=\"5%\"><a href=\"user.php?order_by=id&amp;start=$start&amp;dir=$dir\">".($order_by=='id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['id']}</a></th>
+   <tr>";
+   if($user_lvl >= $action_permission['update']) $output.= "<th width=\"1%\"><input name=\"allbox\" type=\"checkbox\" value=\"Check All\" onclick=\"CheckAll(document.form1);\" /></th>";
+    else $output .= "<th width=\"1%\"></th>";
+   $output .="<th width=\"5%\"><a href=\"user.php?order_by=id&amp;start=$start&amp;dir=$dir\">".($order_by=='id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['id']}</a></th>
 	<th width=\"23%\"><a href=\"user.php?order_by=username&amp;start=$start&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['username']}</a></th>
 	<th width=\"5%\"><a href=\"user.php?order_by=gmlevel&amp;start=$start&amp;dir=$dir\">".($order_by=='gmlevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['gm_level']}</a></th>
     <th width=\"17%\"><a href=\"user.php?order_by=email&amp;start=$start&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['email']}</a></th>
@@ -98,14 +102,16 @@ function browse_users() {
 
 	if (($user_lvl >= $data[2])||($user_name == $data[1])){
    		$output .= "<tr>";
-		if ($user_lvl > $data[2]) $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
-			else $output .= "<td></td>";
+		if ($user_lvl >= $action_permission['update']) $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
+                 else $output .= "<td></td>";
    		$output .= "<td>$data[0]</td>
            	<td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a></td>
-			<td>".$gm_level_arr[$data[2]][2]."</td>
-			<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>
-			<td class=\"small\">$data[4]</td>";
-		if (($user_lvl > $data[2])||($user_name == $data[1])) $output .= "<td>$data[5]</td>";
+			<td>".$gm_level_arr[$data[2]][2]."</td>";
+                if ($user_lvl >= $action_permission['update']) $output .= "
+			<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>";
+                else $output .= "<td>***@***</td>";
+		$output .="<td class=\"small\">$data[4]</td>";
+		if (($user_lvl >= $action_permission['update'])||($user_name == $data[1])) $output .= "<td>$data[5]</td>";
 			else $output .= "<td>******</td>";
 		$output .= "<td>".(($data[6]) ? $data[6] : "-")."</td>
 			<td>".(($data[7]) ? $lang_global['yes_low'] : "-")."</td>
@@ -120,8 +126,9 @@ function browse_users() {
  $output .= "<tr><td colspan=\"12\" class=\"hidden\"><br /></td></tr>
 	<tr>
 		<td colspan=\"8\" align=\"left\" class=\"hidden\">";
+		if($user_lvl >= $action_permission['update']) {
 			makebutton($lang_user['del_selected_users'], "javascript:do_submit('form1',0)",220);
-			makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",220);
+			makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",220); }
  $output .= "</td>
       <td colspan=\"4\" align=\"right\" class=\"hidden\">{$lang_user['tot_acc']} : $all_record</td>
 	 </tr>
@@ -135,8 +142,8 @@ function browse_users() {
 //  SEARCH
 //#######################################################################################################
 function search() {
- global $lang_global, $lang_user, $output, $realm_db, $user_lvl, $user_name, $sql_search_limit, $gm_level_arr;
-
+ global $lang_global, $lang_user, $output, $realm_db, $user_lvl, $user_name, $sql_search_limit, $gm_level_arr, $action_permission;
+valid_login($action_permission['read']);
  if(!isset($_GET['search_value']) || !isset($_GET['search_by'])) redirect("user.php?error=2");
 
  $sql = new SQL;
@@ -229,22 +236,24 @@ function search() {
  while ($data = $sql->fetch_row($query)){
 
 	if (($user_lvl >= $data[2])||($user_name == $data[1])){
-		$output .= "<tr>";
-		if ($user_lvl > $data[2]) $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
-			else $output .= "<td></td>";
+   		$output .= "<tr>";
+		if ($user_lvl >= $action_permission['update']) $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
+                 else $output .= "<td></td>";
    		$output .= "<td>$data[0]</td>
            	<td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a></td>
-			<td>".$gm_level_arr[$data[2]][2]."</td>
-			<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>
-			<td class=\"small\">$data[4]</td>";
-		if (($user_lvl > $data[2])||($user_name == $data[1])) $output .= "<td>$data[5]</td>";
+			<td>".$gm_level_arr[$data[2]][2]."</td>";
+                if ($user_lvl >= $action_permission['update']) $output .= "
+			<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>";
+                else $output .= "<td>***@***</td>";
+		$output .="<td class=\"small\">$data[4]</td>";
+		if (($user_lvl >= $action_permission['update'])||($user_name == $data[1])) $output .= "<td>$data[5]</td>";
 			else $output .= "<td>******</td>";
 		$output .= "<td>".(($data[6]) ? $data[6] : "-")."</td>
 			<td>".(($data[7]) ? $lang_global['yes_low'] : "-")."</td>
 			<td class=\"small\">$data[8]</td>
 			<td>".(($data[9]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
             </tr>";
-	}else{
+	} else {
 		$output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
 			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td></tr>";
 	}
@@ -252,8 +261,9 @@ function search() {
 $output .= "<tr><td colspan=\"12\" class=\"hidden\"><br /></td></tr>
 	<tr>
 		<td colspan=\"8\" align=\"left\" class=\"hidden\">";
+		if($user_lvl >= $action_permission['update']) {
 			makebutton($lang_user['del_selected_users'], "javascript:do_submit('form1',0)",220);
-			makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",220);
+			makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",220); }
 $output .= "</td>
       <td colspan=\"4\" align=\"right\" class=\"hidden\">{$lang_user['tot_found']} : $total_found : {$lang_global['limit']} $sql_search_limit</td>
 	 </tr>
@@ -268,7 +278,8 @@ $output .= "</td>
 //  DELETE USER
 //#######################################################################################################
 function del_user() {
-global $lang_global, $lang_user, $output, $realm_db;
+global $lang_global, $lang_user, $output, $realm_db, $action_permission;
+valid_login($action_permission['delete']);
  if(isset($_GET['check'])) $check = $_GET['check'];
 	else redirect("user.php?error=1");
 
@@ -312,8 +323,8 @@ global $lang_global, $lang_user, $output, $realm_db;
 //#####################################################################################################
 function dodel_user() {
  global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,
-		$tab_del_user_characters, $tab_del_user_realmd;
-
+		$tab_del_user_characters, $tab_del_user_realmd, $action_permission;
+valid_login($action_permission['delete']);
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
@@ -353,8 +364,8 @@ function dodel_user() {
 //  DO BACKUP USER
 //#####################################################################################################
 function backup_user() {
- global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$backup_dir;
-
+ global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$backup_dir,$action_permission;
+valid_login($action_permission['insert']);
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
@@ -482,7 +493,8 @@ redirect("user.php?error=15");
 //  ADD NEW USER
 //#######################################################################################################
 function add_new() {
- global $lang_global, $lang_user, $output;
+ global $lang_global, $lang_user, $output, $action_permission;
+  valid_login($action_permission['insert']);
  $output .= "<center>
   <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
   <script type=\"text/javascript\">
@@ -544,7 +556,8 @@ function add_new() {
 // DO ADD NEW USER
 //#########################################################################################################
 function doadd_new() {
- global $lang_global, $realm_db;
+ global $lang_global, $realm_db, $action_permission;
+ valid_login($action_permission['insert']);
 
  if ( empty($_GET['new_user']) || empty($_GET['pass']) )
    redirect("user.php?action=add_new&error=4");
@@ -594,7 +607,8 @@ function doadd_new() {
 //  EDIT USER
 //###########################################################################################################
 function edit_user() {
- global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl, $user_name, $gm_level_arr;
+ global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl, $user_name, $gm_level_arr, $action_permission;
+ valid_login($action_permission['view']);
 
  if (empty($_GET['id'])) redirect("user.php?error=10");
 
@@ -639,19 +653,29 @@ function edit_user() {
         <td>$data[0]</td>
       </tr>
       <tr>
-        <td>{$lang_user['username']}</td>
-	<td><input type=\"text\" name=\"username\" size=\"43\" maxlength=\"15\" value=\"$data[1]\" /></td>
+        <td>{$lang_user['username']}</td>";
+      if($user_lvl >= $action_permission['update']) { $output .="
+	<td><input type=\"text\" name=\"username\" size=\"43\" maxlength=\"15\" value=\"$data[1]\" /></td>"; }
+      else $output.="<td>$data[1]</td>";
+   $output .= "
       </tr>
       <tr>
-        <td>{$lang_user['password']}</td>
-        <td><input type=\"text\" name=\"new_pass\" size=\"43\" maxlength=\"40\" value=\"******\" /></td>
+        <td>{$lang_user['password']}</td>";
+      if($user_lvl >= $action_permission['update']) { $output .="
+        <td><input type=\"text\" name=\"new_pass\" size=\"43\" maxlength=\"40\" value=\"******\" /></td>"; }
+      else $output.="<td>********</td>";
+   $output .= "
       </tr>
       <tr>
-        <td>{$lang_user['email']}</td>
-        <td><input type=\"text\" name=\"mail\" size=\"43\" maxlength=\"225\"value=\"$data[3]\" /></td>
+        <td>{$lang_user['email']}</td>";
+      if($user_lvl >= $action_permission['update']) { $output .="
+        <td><input type=\"text\" name=\"mail\" size=\"43\" maxlength=\"225\"value=\"$data[3]\" /></td>"; }
+      else $output.="<td>$data[3]</td>";
+   $output .= "
       </tr>
       <tr>
-        <td>{$lang_user['gm_level_long']}</td>
+        <td>{$lang_user['gm_level_long']}</td>";
+      if($user_lvl >= $action_permission['update']) { $output .="
 		<td><select name=\"gmlevel\">";
 		foreach ($gm_level_arr as $level){
 				if (($level[0] < $user_lvl)||($data[1] == $user_name)){
@@ -661,7 +685,16 @@ function edit_user() {
 					}
 				}
 		$output .= "</select>
-		</td>
+		</td>";         }
+		else 
+                
+                foreach ($gm_level_arr as $level){
+				if ($data[2] == $level[0])
+					$output .= "<td>{$level[0]}</td>";
+				}
+
+                //$output .= "<td></td>";
+		$output .="
       </tr>
       <tr>
         <td>{$lang_user['join_date']}</td>
@@ -673,34 +706,50 @@ function edit_user() {
 	$que = $sql->query("SELECT bandate, unbandate, bannedby FROM account_banned WHERE id = $id");
 	if ($sql->num_rows($que)){
 		$banned = $sql->fetch_row($que);
-		$ban_info = " - from:".date('d-m-Y G:i', $banned[0])." till:".date('d-m-Y G:i', $banned[1])."<br />by $banned[2]";
+		$ban_info = " From:".date('d-m-Y G:i', $banned[0])." till:".date('d-m-Y G:i', $banned[1])."<br />by $banned[2]";
 		$ban_checked = " checked=\"checked\"";
 	} else {
 			$ban_checked = "";
 			$ban_info = "";
 			}
- $output .= "<td><input type=\"checkbox\" name=\"banned\" value=\"1\" $ban_checked/>$ban_info</td>
+      if($user_lvl >= $action_permission['update']) {
+      $output .= "<td><input type=\"checkbox\" name=\"banned\" value=\"1\" $ban_checked/>$ban_info</td>"; }
+        else
+      $output .= "<td>$ban_info</td>";
+      $output .="
       </tr>
       <tr>
-        <td>{$lang_user['last_ip']}</td>
-        <td>$data[5]<a href=\"banned.php?action=do_add_entry&amp;entry=$data[5]&amp;bantime=3600&amp;ban_type=ip_banned\"> <- {$lang_user['ban_this_ip']}</a></td>
+        <td>{$lang_user['last_ip']}</td>";
+      if($user_lvl >= $action_permission['update']) { $output .="
+        <td>$data[5]<a href=\"banned.php?action=do_add_entry&amp;entry=$data[5]&amp;bantime=3600&amp;ban_type=ip_banned\"> <- {$lang_user['ban_this_ip']}</a></td>"; }
+      else $output .= "<td>***.***.***.***</td>";
+      $output .= "
       </tr>
-	   <td>{$lang_user['client_type']}</td>
+	   <td>{$lang_user['client_type']}</td>";
+      if($user_lvl >= $action_permission['update']) { $output .="
 		<td><select name=\"tbc\">";
- $output .= "<option value=\"0\">{$lang_user['classic']}</option>
+      $output .= "<option value=\"0\">{$lang_user['classic']}</option>
 			 <option value=\"1\" ";
 			 if ($data[10]) $output .= "selected=\"selected\" ";
 			$output .= ">{$lang_user['expansion']}</option>
 			</select>
-		</td>
+		</td>"; }
+      else $output .= "<td>{$lang_user['expansion']}</td>";
+      $output .="
       <tr>
-        <td>{$lang_user['failed_logins_long']}</td>
-	    <td><input type=\"text\" name=\"failed\" size=\"43\" maxlength=\"3\" value=\"$data[6]\" /></td>
-      </tr>
+        <td>{$lang_user['failed_logins_long']}</td>";
+      if($user_lvl >= $action_permission['update']) { $output .="
+	    <td><input type=\"text\" name=\"failed\" size=\"43\" maxlength=\"3\" value=\"$data[6]\" /></td>";}
+      else $output .= "<td>$data[6]</td>";
+ $output .="</tr>
       <tr>
         <td>{$lang_user['locked']}</td>";
 		$lock_checked = ($data[7]) ? " checked=\"checked\"" : "";
- $output .= "<td><input type=\"checkbox\" name=\"locked\" value=\"1\" $lock_checked/></td>
+     if($user_lvl >= $action_permission['update'])
+     $output .= "<td><input type=\"checkbox\" name=\"locked\" value=\"1\" $lock_checked/></td>";
+     else
+     $output .="<td></td>";
+ $output.="
       </tr>
       <tr>
         <td>{$lang_user['last_login']}</td>
@@ -739,10 +788,16 @@ function edit_user() {
 		}
 	}
 
+ 
+ if($user_lvl >= $action_permission['update'])
+ {
  $output .= "<tr><td>";
 		makebutton($lang_user['update_data'], "javascript:do_submit_data()",140);
- $output .= "</td><td>";
 		makebutton($lang_user['del_acc'], "user.php?action=del_user&amp;check%5B%5D=$id",150);
+ }
+ else
+ $output .= "<tr><td>";
+ $output .= "</td><td>";
 		makebutton($lang_global['back'], "javascript:window.history.back()",150);
  $output .= "</td></tr>
 		</table>
