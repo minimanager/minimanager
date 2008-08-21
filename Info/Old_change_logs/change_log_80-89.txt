@@ -1,0 +1,62 @@
+MINIMANAGER CHANGELOG FILE
+                                                                   
+a more comprehensive version of this changelog can be found at: http://mangos.cjb.net/forums/index.php?showforum=29
+
+############################################################################################################################################
+Revision: 89
+*
+* fixed: Repair/Optimize the Mangos & Characters tables. Thanks Dragonsys
+* implemented: config option to mmfpm DB, to not inflate mangos default DBs with (future) minimanager tables
+* modified: forum.php to use mmfpm DB config, also renamed post table to forum_post
+*
+############################################################################################################################################
+Revision: 88
+*
+* fixed: whitespace typo in register.php
+* fixed: possible access violation in item.php
+* implemented: wowheads tooltip script support
+* updated: site encoding to utf-8 to support tooltip in other languages
+*
+############################################################################################################################################
+Revision: 87
+*
+* fixed: for error checking as XHTML 1.0 Transitional. Thanks gmaze
+* implemented: Human verification To Minimanager to prevent faked signups (captcha). Thanks gmaze
+*
+############################################################################################################################################
+Revision: 86
+*
+* fixed: typo on arena teams page and wrong sorting. Thanks W@RRIOR.
+*
+############################################################################################################################################
+Revision: 85
+*
+* fixed: not being able to delete chars, compatibility issue by mangos rev 6362.
+* fixed: player map warning. Thanks Shevonar
+* modified: minimanager tooltip to use wowhead ones to items, spells, quests. BIG thanks to adamfz6.
+*
+############################################################################################################################################
+Revision: 84
+*
+* updated: ticket system and database structure has been changed with in Mangos rev.6387. Thanks Shevonar.
+* updated: ticket.php to use new permission settings.
+*
+############################################################################################################################################
+Revision: 83
+*
+* updated: Client 2.4.3 defines updates. Thanks Rilex
+* updated: 6324 And 6325 MaNGOS revs compatibility. Thanks SUPERGADGET
+* modified: stats page to remove extra menu option and add tab. Thanks xiongguoy
+*
+############################################################################################################################################
+Revision: 82
+*
+* fixed: clean up not needed parts of code. Thanks SUPERGADGET.
+*
+############################################################################################################################################
+Revision: 81
+*
+* implemented: Minimanager gets aura icons from web the same way it does with item icons.
+* implemented:Enable or disable expansion select option on registration.
+*
+############################################################################################################################################

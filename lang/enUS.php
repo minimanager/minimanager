@@ -11,7 +11,7 @@
 $site_encoding = "utf-8";
 
 $lang_global = array(
-	// ----- GENERAL ERROR CODES -----
+// ----- GENERAL ERROR CODES -----
 	'err_sql_conn_db' => 'Error - Connection to database is not established !',
 	'err_sql_open_db' => 'Error - Can\'t open the database !',
 	'err_no_result' => 'No Results.',
@@ -59,6 +59,7 @@ $lang_login = array(
 
 // ----- GUILD.PHP -----
 $lang_guild = array(
+	'my_guilds' => 'My Guilds',
 	'id' => 'ID',
 	'guild_name' => 'Guild Name',
 	'guild_leader' => 'Guild Leader',

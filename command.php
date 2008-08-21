@@ -21,7 +21,9 @@ function print_commands_form(){
   0 => array ('level0',''),
   1 => array ('level1',''),
   2 => array ('level2',''),
-  3 => array ('level3','')
+  3 => array ('level3',''),
+  4 => array ('level4',''),
+  5 => array ('level5','')
  );
 
  $sql = new SQL;
@@ -31,7 +33,7 @@ function print_commands_form(){
 
  while ($data = $sql->fetch_row($query)){
    $tmp_output = "<tr>";
-   $tmp_output .= ($user_lvl > 2) ? "<td><input type=\"checkbox\" name=\"check[$data[0]]\" value=\"$data[2]\" /></td>" : "<td></td>";
+   $tmp_output .= ($user_lvl >= 4) ? "<td><input type=\"checkbox\" name=\"check[$data[0]]\" value=\"$data[2]\" /></td>" : "<td></td>";
    $tmp_output .= "<td align=\"right\">.$data[0]</td>";
    $comm =  explode("\r\n",$data[1],2);
    $syntax = ereg_replace("[a-zA-Z ]+:* *\.".$data[0]." *", "", str_replace("/", "<br />",$comm[0]));
@@ -65,7 +67,7 @@ function print_commands_form(){
                      <th width=\"65%\">{$lang_command['description']}</th>
                    </tr>" . $levels[$i][1];
 
-	if ($user_lvl > 2) {
+	if ($user_lvl >= 4) {
 		$output .= "</table><br /><table class=\"hidden\" style=\"width: 720px;\"><td>";
 			makebutton($lang_command['change_level'], "javascript:do_submit()",280);
 		}
@@ -83,7 +85,7 @@ function print_commands_form(){
 //#######################################################################################################
 function update_commands(){
  global  $lang_global, $lang_command, $output, $user_lvl;
- valid_login($action_permission['read']);
+if ($user_lvl < 4) redirect("command.php?error=2");
 
  if(isset($_GET['check'])) $check = $_GET['check'];
 	else redirect("command.php?error=1");
@@ -129,9 +131,8 @@ function update_commands(){
 //  DO UPDATE COMMAND LEVEL
 //#######################################################################################################
 function doupdate_commands() {
- global $lang_global, $output, $mangos_db, $realm_id;
-
- valid_login($action_permission['read']);
+ global $lang_global, $output, $mangos_db, $realm_id, $user_lvl;
+  if ($user_lvl < 4) redirect("command.php?error=2");
 
  $sql = new SQL;
  $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
@@ -163,6 +164,9 @@ $output .= "<div class=\"top\">";
 switch ($err) {
 case 1:
    $output .= "<h1><font class=\"error\">{$lang_global['empty_fields']}</font></h1>";
+   break;
+case 2:
+   $output .= "<h1><font class=\"error\">{$lang_global['err_no_permission']}</font></h1>";
    break;
 default: //no error
    $output .= "<h1>{$lang_command['command_list']}</h1>";

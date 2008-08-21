@@ -1,0 +1,12 @@
+A note on GD & FreeType Library support.
+
+You must compile these options into your PHP at the time of install. 
+If you did not enable it when you installed your PHP, you must re-install PHP to enable it.
+
+To tell if you have GD/FreeType enabled:
+
+Open the included info/captcha/test.php and uncomment the code block. Save the changes.
+Open your browser and type the direct link to "info/captcha/test.php", ex: http://www.mysite.com/info/captcha/test.php
+
+You should see a page showing you your PHP configuration.
+Scroll down and look for the gd section to see if they are enabled.
