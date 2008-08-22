@@ -178,6 +178,8 @@ function search() {
 
  $search_value = $sql->quote_smart($_GET['search_value']);
  $search_by = (isset($_GET['search_by'])) ? $sql->quote_smart($_GET['search_by']) : "name";
+ $search_menu = array('name', 'guid', 'account', 'level', 'greater_level', 'guild', 'race', 'class', 'map', 'highest_rank', 'greater_rank', 'online', 'gold', 'item');
+ if (!array_key_exists($search_by, $search_menu)) $search_by = 'name';
  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "guid";
 
  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;

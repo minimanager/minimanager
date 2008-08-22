@@ -108,6 +108,8 @@ function search() {
 
  $search_value = $sql->quote_smart($_GET['search_value']);
  $search_by = $sql->quote_smart($_GET['search_by']);
+ $search_menu = array('name', 'captainguid', 'arena_team.arenateamid');
+ if (!array_key_exists($search_by, $search_menu)) $search_by = 'name';
 
  if(isset($_GET['order_by'])) $order_by = $sql->quote_smart($_GET['order_by']);
 	else $order_by = "arena_team.arenateamid";

@@ -61,4 +61,3 @@ global $lang_char_aura, $char_aura;
 	else return "Unknown";
 }
 ?>
-

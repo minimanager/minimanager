@@ -151,6 +151,8 @@ valid_login($action_permission['read']);
 
  $search_value = $sql->quote_smart($_GET['search_value']);
  $search_by = $sql->quote_smart($_GET['search_by']);
+ $search_menu = array('username', 'id', 'gmlevel', 'greater_gmlevel', 'email', 'joindate', 'last_ip', 'failed_logins', 'last_login', 'online', 'banned', 'locked', 'tbc');
+ if (!array_key_exists($search_by, $search_menu)) $search_by = 'username';
 
  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "id";
  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
