@@ -7,7 +7,7 @@
  * Translator: Larv, wbeando
  */
 
-$site_encoding = "utf-8";
+$site_encoding = "ISO-8859-1";
 
 $lang_global = array(
 	// ----- GENERAL ERROR CODES -----

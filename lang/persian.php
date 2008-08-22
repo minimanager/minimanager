@@ -7,7 +7,7 @@
  * Translator: Mobini(Fe3C)
  */
  
-$site_encoding = "UTF";
+$site_encoding = "ISO 8859-6";
 
 $lang_global = array(
 	// ----- GENERAL ERROR CODES -----

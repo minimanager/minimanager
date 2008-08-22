@@ -7,7 +7,7 @@
  * Translator: 
  */
 
-$site_encoding = "utf-8";
+$site_encoding = "UTF-8";
 
 $lang_global = array(
 // ----- GENERAL ERROR CODES -----
@@ -4079,6 +4079,9 @@ $lang_id_tab = array(
 	'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_6' => 'Aspect of the Hawk Rank 6',
 	'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_7' => 'Aspect of the Hawk Rank 7',
 	'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_8' => 'Aspect of the Hawk Rank 8',
+	'CHAR_AURA_ASPECT_OF_THE_WILD_RANK_1' => 'Aspect of the Wild Rank 1',
+	'CHAR_AURA_ASPECT_OF_THE_WILD_RANK_2' => 'Aspect of the Wild Rank 2',
+	'CHAR_AURA_ASPECT_OF_THE_WILD_RANK_3' => 'Aspect of the Wild Rank 3',
 	'CHAR_AURA_ASPECT_OF_THE_PACK' => 'Aspect of the Pack',
 	'CHAR_AURA_ASPECT_OF_THE_VIPER' => 'Aspect of the Viper',
 	'CHAR_AURA_FIND_HERBS' => 'Find Herbs',
@@ -4104,6 +4107,7 @@ $lang_id_tab = array(
 	'CHAR_AURA_SUMMON_FELSTEED' => 'Summon Felsteed',
 	'CHAR_AURA_TRACK_DEMONS' => 'Track Demons',
 	'CHAR_AURA_TRACK_BEASTS' => 'Track Beasts',
+	'CHAR_AURA_TRACK_DRAGONKIN' => 'Track Dragonkin',
 	'CHAR_AURA_TRACK_ELEMENTALS' => 'Track Elementals',
 	'CHAR_AURA_TRACK_GIANTS' => 'Track Giants',
 	'CHAR_AURA_TRACK_HIDDEN' => 'Track Hidden',

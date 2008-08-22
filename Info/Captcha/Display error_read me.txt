@@ -10,3 +10,6 @@ Open your browser and type the direct link to "info/captcha/test.php", ex: http:
 
 You should see a page showing you your PHP configuration.
 Scroll down and look for the gd section to see if they are enabled.
+
+**************************************** Recomment the code block in info/captcha/test.php ****************************************
+(This is for your security. A blank php file displays a blank page, preventing unwanted users knowing your php configuration)
