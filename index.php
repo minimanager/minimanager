@@ -138,8 +138,8 @@ if ($online)
 	<th width=\"5%\"><a href=\"index.php?order_by=race&amp;dir=$dir\"".($order_by=='race' ? " class=\"$order_dir\"" : "").">{$lang_index['race']}</a></th>
 	<th width=\"5%\"><a href=\"index.php?order_by=class&amp;dir=$dir\"".($order_by=='class' ? " class=\"$order_dir\"" : "").">{$lang_index['class']}</a></th>
 	<th width=\"5%\"><a href=\"index.php?order_by=level&amp;dir=$dir\"".($order_by=='level' ? " class=\"$order_dir\"" : "").">{$lang_index['level']}</a></th>
-      <th width=\"5%\"><a href=\"index.php?order_by=highest_rank&amp;dir=$dir\"".($order_by=='highest_rank' ? " class=\"$order_dir\"" : "").">{$lang_index['rank']}</a></th>
-	<th width=\"15%\"><a href=\"index.php?order_by=GNAME&amp;dir=$dir\"".($order_by=='GNAME' ? " class=\"$order_dir\"" : "").">Guild</a></th>
+	<th width=\"5%\"><a href=\"index.php?order_by=highest_rank&amp;dir=$dir\"".($order_by=='highest_rank' ? " class=\"$order_dir\"" : "").">{$lang_index['rank']}</a></th>
+	<th width=\"15%\"><a href=\"index.php?order_by=GNAME&amp;dir=$dir\"".($order_by=='GNAME' ? " class=\"$order_dir\"" :"").">{$lang_index['guild']}</a></th>
 	<th width=\"20%\"><a href=\"index.php?order_by=map&amp;dir=$dir\"".($order_by=='map' ? " class=\"$order_dir\"" : "").">{$lang_index['map']}</a></th>
 	<th width=\"25%\"><a href=\"index.php?order_by=zone&amp;dir=$dir\"".($order_by=='zone' ? " class=\"$order_dir\"" : "").">{$lang_index['zone']}</th>
 	</tr>";

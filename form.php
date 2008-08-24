@@ -19,11 +19,11 @@ session_start();
 
 //print the form and image
 function captcha(){
- global $output;
+ global $lang_captcha ,$output;
  
  $output .= "<center>
 	<fieldset style=\"width: 550px;\">
-	<legend>Security Image</legend>
+	<legend>{$lang_captcha['security_image']}</legend>
 	<form method=\"POST\" action=\"form.php\">
     <table cellpadding=\"3\" cellspacing=\"0\" border=\"0\">
       <tr align=\"left\"><td>
@@ -53,10 +53,10 @@ if(isset($_GET['error'])) $err = $_GET['error'];
 $output .= "<div class=\"top\">";
 switch ($err) {
 case 1:
-   $output .=  "<h1><font class=\"error\">Invalid Code!</font></h1>";
+   $output .=  "<h1><font class=\"error\">{$lang_captcha['invalid_code']}</font></h1>";
    break;
 default: //no error
-    $output .=  "<h1>Please Input the Security Code:</h1>";
+    $output .=  "<h1>{$lang_captcha['security_code']}</h1>";
 }
 $output .= "</div>";
 

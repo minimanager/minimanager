@@ -147,7 +147,8 @@ $lang_index = array(
 	'map' => 'Map',
 	'zone' => 'Zone',
 	'rank' => 'Rank',
-	'honor_kills' => 'H.K'
+      'honor_kills' => 'H.K',
+      'Guild' => 'Guild'
 	);
 
 $lang_header = array(
@@ -4199,5 +4200,11 @@ $lang_instances = array(
    	  'reset_delay' => 'Reset delay',
 	);
 
+$lang_captcha = array(
+	// ----- LOGIN.PHP -----
+	'security_image' => 'Security Image',
+	'security_code' => 'Please Input the Security Code',
+	'invalid_code' => 'Invalid Code!'
+	);
 
 ?>
