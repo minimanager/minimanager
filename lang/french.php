@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
  * Language: French
- * Supported Minimanager Revision: 96
+ * Supported Minimanager Revision: 99
  * Translator: fra298
  */
  
@@ -145,7 +145,7 @@ $lang_index = array(
   'zone' => 'Zone',
   'rank' => 'Rang',
   'honor_kills' => 'R.H.',
-  'Guild' => 'Guilde'
+  'guild' => 'Guilde'
 );
 
 $lang_header = array(
@@ -882,8 +882,10 @@ $lang_command = array(
   'command_list' => 'Commandes disponibles',
   'level0' => 'Joueur',
   'level1' => 'Modérateur',
-  'level2' => 'Game Master',
-  'level3' => 'Administrateur',
+  'level2' => 'Maître de jeu',
+  'level3' => 'Bug Tracker',
+  'level4' => 'Administrator',
+  'level5' => 'Opérateur système',
   'command' => 'Commande',
   'syntax' => 'Syntaxe',
   'description' => 'Description',
@@ -4190,9 +4192,11 @@ $lang_instances = array(
 );
 
 $lang_captcha = array(
-	// ----- LOGIN.PHP -----
+	// ----- FORM.PHP -----
 	'security_image' => 'Image de sécurité',
-	'security_code' => 'S\'il vous plait, entrez le code de sécurité',
+	'security_code' => 'Code de sécurité',
+	'imput_security_code' => 'S\'il vous plait, entrez le code de sécurité',
+	'submit' => 'Soumettre',    
 	'invalid_code' => 'Code invalide!'
 	);
 ?>

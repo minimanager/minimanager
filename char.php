@@ -363,7 +363,7 @@ $output .= "<table class=\"hidden\">
     if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name))){
       makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
   $output .= "</td><td>";
-      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
+      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
   $output .= "</td><td>";
       }
     makebutton($lang_global['back'], "javascript:window.history.back()",140);

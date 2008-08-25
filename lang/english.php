@@ -145,8 +145,8 @@ $lang_index = array(
 	'map' => 'Map',
 	'zone' => 'Zone',
 	'rank' => 'Rank',
-      'honor_kills' => 'H.K',
-      'Guild' => 'Guild'
+ 	'honor_kills' => 'H.K',
+	'guild' => 'Guild'
 	);
 
 $lang_header = array(

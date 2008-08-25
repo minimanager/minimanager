@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
  * Language: Croatian
- * Supported Minimanager Revision: 11
+ * Supported Minimanager Revision: 99
  * Translator: Zvonimir Buzanic
  */
 
@@ -146,7 +146,8 @@ $lang_index = array(
 	'map' => 'Karta',
 	'zone' => 'Zona',
 	'rank' => 'Rank',
-	'honor_kills' => 'Honor'
+	'honor_kills' => 'Honor',
+	'guild' => 'Guild'
 	);
 	
 $lang_header = array(
@@ -4199,5 +4200,13 @@ $lang_instances = array(
    	  'reset_delay' => 'Reset delay',
 	);
 
+	$lang_captcha = array(
+	// ----- FORM.PHP -----
+	'security_image' => 'Security Image',
+	'security_code' => 'Security Code',
+	'imput_security_code' => 'Please Input the Security Code',
+	'submit' => 'Submit',
+	'invalid_code' => 'Invalid Code!'
+	);
 
 ?>

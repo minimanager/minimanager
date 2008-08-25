@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
  * Language: Spanish
- * Supported Minimanager Revision: 96
+ * Supported Minimanager Revision: 99
  * Translator:  Larv, wbeando
  */
 
@@ -147,7 +147,7 @@ $lang_index = array(
 	'rank' => 'Rango',
 	'guild' => 'Clan',
     'honor_kills' => 'H.K',
-    'Guild' => 'Clan'
+    'guild' => 'Clan'
 	);
 
 $lang_header = array(
@@ -883,10 +883,12 @@ $lang_tele = array(
 $lang_command = array(
 	// ----- COMMAND.PHP -----
 	'command_list' => 'Listado de Comandos Disponibles',
-	'level0' => 'Comandos para Jugador',
-	'level1' => 'Comando para Moderador',
-	'level2' => 'Comando para GM',
-	'level3' => 'Comando para Administrador',
+	'level0' => 'Jugador',
+	'level1' => 'Moderador',
+    'level2' => 'GM',
+    'level3' => 'Bug Tracker',
+    'level4' => 'Administrador',
+    'level5' => 'Sys OP',
 	'command' => 'Comando',
 	'syntax' => 'Sintaxis',
 	'description' => 'Descripción',
@@ -4200,9 +4202,11 @@ $lang_instances = array(
 	);
 
 $lang_captcha = array(
-    // ----- LOGIN.PHP -----
+    // ----- FORM.PHP -----
     'security_image' => 'Imagen de Seguridad',
-    'security_code' => 'Por favor ingresar el código de seguridad',
+    'imput_security_code' => 'Por favor ingresar el código de seguridad',
+	'security_code' => 'Código de Seguridad',
+    'submit' => 'Enviar',
     'invalid_code' => 'Código no válido!'
     );
 
