@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
  * Language: Spanish
- * Supported Minimanager Revision: 95
+ * Supported Minimanager Revision: 96
  * Translator:  Larv, wbeando
  */
 
@@ -148,7 +148,8 @@ $lang_index = array(
 	'zone' => 'Zona',
 	'rank' => 'Rango',
 	'guild' => 'Clan',
-	'honor_kills' => 'H.K'
+    'honor_kills' => 'H.K',
+    'Guild' => 'Clan'
 	);
 
 $lang_header = array(
@@ -909,16 +910,16 @@ $lang_item_edit = array(
 	'search_results' => 'Resultados de Busqueda',
 	'edit_item' => 'Editar Item',
 	'search_items' => 'Lookup Items',
-	'update' => 'Save Item to Database',
-	'export_sql' => 'Save as SQL Script',
+	'update' => 'Guardar Item en DB',
+	'export_sql' => 'Guardar como SQL Script',
 	'item_id' => 'Item ID',
-	'err_adding_item' => 'Error Adding Item',
+	'err_adding_item' => 'Error Agregando Item',
 	'err_no_field_updated' => 'Non of the fields updated.',
-	'del_item' => 'Delete Item',
+	'del_item' => 'Eliminar Item',
 	'general_tab' => 'General',
 	'additional_tab' => 'Extra',
-	'stats_tab' => 'Stats',
-	'damage_tab' => 'Damage',
+	'stats_tab' => 'Estado',
+	'damage_tab' => 'Daño',
 	'spell_tab' => 'Hechizos',
 	'req_tab' => 'Req.',
 	'general' => 'General',
@@ -931,18 +932,18 @@ $lang_item_edit = array(
 	'item_level' => 'Nivel de Item',
 	'item_level_desc' => 'Item base level.',
 	'names' => 'Nombres',
-	'item_name' => 'Item Name',
-	'item_name_desc' => 'Item Name',
-	'description' => 'Description',
+	'item_name' => 'Nombe de Item',
+	'item_name_desc' => 'Nombre de Item',
+	'description' => 'Descripción',
 	'description_desc' => 'Brief description of this item, appears in orange at the bottom of an item label ingame.',
 	'script_name' => 'ScriptName',
 	'script_name_desc' => 'Here can be added script entries defined in core code.',
-	'class' => 'Class',
+	'class' => 'Clase',
 	'class_desc' => 'Defines the class of an item.',
-	'type' => 'Type',
-	'subclass' => 'Subclass',
+	'type' => 'Tipo',
+	'subclass' => 'Subclase',
 	'subclass_desc' => 'Defines the subclass of an item. Notice: The subclass must be related to Item Class. Some Classes do not have any subclasses.',
-	'quality' => 'Quality',
+	'quality' => 'Calidad',
 	'quality_desc' => 'The overall quality of an item.',
 	'inv_type' => 'Inv. Type',
 	'inv_type_desc' => 'Where this item can be equipped.',
@@ -1784,27 +1785,27 @@ $lang_id_tab = array(
 	'SKILL_SPEARS' => 'Lanza',
 	'SKILL_CROSSBOWS' => 'Ballesta',
 	'SKILL_WEAPON_TALENTS' => 'Talentos armas',
-	'SKILL_ENGINERING' => 'Enginering',
-	'SKILL_TAILORING' => 'Tailoring',
-	'SKILL_MINING' => 'Mining',
-	'SKILL_COOKING' => 'Cooking',
-	'SKILL_RETRIBUTION' => 'Retribution',
-	'SKILL_HERBALISM' => 'Herbalism',
+	'SKILL_ENGINERING' => 'Ingeniería',
+	'SKILL_TAILORING' => 'Sastrería',
+	'SKILL_MINING' => 'Mineria',
+	'SKILL_COOKING' => 'Cocina',
+	'SKILL_RETRIBUTION' => 'Retribución',
+	'SKILL_HERBALISM' => 'Herbalismo',
 	'SKILL_THROWN' => 'Thrown',
-	'SKILL_DAGGERS' => 'Daggers',
-	'SKILL_2H_AXES' => 'Two-Handed Axes',
-	'SKILL_ALCHEMY' => 'Alchemy',
-	'SKILL_LEATHERWORKING' => 'Leatherworking',
-	'SKILL_BLACKSMITHING' => 'Blacksmithing',
-	'SKILL_MARKSMANSHIP' => 'Marksmanship',
-	'SKILL_UNARMED' => 'Unarmed',
+	'SKILL_DAGGERS' => 'Dagas',
+	'SKILL_2H_AXES' => 'Dos-Manos Hachas',
+	'SKILL_ALCHEMY' => 'Alquimia',
+	'SKILL_LEATHERWORKING' => 'Peletería',
+	'SKILL_BLACKSMITHING' => 'Herreria',
+	'SKILL_MARKSMANSHIP' => 'Puntería',
+	'SKILL_UNARMED' => 'Desarmado',
 	'SKILL_2H_MACES' => 'Two-Handed Maces',
-	'SKILL_RIDING_TIGER' => 'Riding Tiger',
-	'SKILL_RIDING_RAM' => 'Riding Ram',
-	'SKILL_RIDING_WOLF' => 'Riding Wolf',
-	'SKILL_RIDING_HORSE' => 'Riding Horse',
+	'SKILL_RIDING_TIGER' => 'Montar Tigre',
+	'SKILL_RIDING_RAM' => 'Montar Ram',
+	'SKILL_RIDING_WOLF' => 'Montar Lobo',
+	'SKILL_RIDING_HORSE' => 'Montar Caballos',
 	'SKILL_LANG_OLD_TONGUE' => 'Language Old Tongue',
-	'SKILL_LANG_TITAN' => 'Language Titan',
+	'SKILL_LANG_TITAN' => 'Lenguaje de Titan',
 	'SKILL_LANG_DEMON_TONGUE' => 'Language Demon Tongue',
 	'SKILL_LANG_DRACONIC' => 'Language Draconic',
 	'SKILL_LANG_THALASSIAN' => 'Language  Thalassian',
@@ -4199,5 +4200,11 @@ $lang_instances = array(
    	  'reset_delay' => 'Reinicia cada',
 	);
 
+$lang_captcha = array(
+    // ----- LOGIN.PHP -----
+    'security_image' => 'Imagen de Seguridad',
+    'security_code' => 'Por favor ingresar el código de seguridad',
+    'invalid_code' => 'Código no válido!'
+    );
 
 ?>

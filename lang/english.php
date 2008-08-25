@@ -886,8 +886,10 @@ $lang_command = array(
 	'command_list' => 'Available Commands',
 	'level0' => 'Player',
 	'level1' => 'Moderator',
-	'level2' => 'GameMaster',
-	'level3' => 'Administrator',
+	'level2' => 'Game Master',
+	'level3' => 'Bug Tracker',
+	'level4' => 'Administrator',
+	'level5' => 'Sys OP',
 	'command' => 'Command',
 	'syntax' => 'Syntax',
 	'description' => 'Description',
@@ -4201,9 +4203,11 @@ $lang_instances = array(
 	);
 
 $lang_captcha = array(
-	// ----- LOGIN.PHP -----
+	// ----- FORM.PHP -----
 	'security_image' => 'Security Image',
-	'security_code' => 'Please Input the Security Code',
+	'security_code' => 'Security Code',
+	'imput_security_code' => 'Please Input the Security Code',
+	'submit' => 'Submit',
 	'invalid_code' => 'Invalid Code!'
 	);
 

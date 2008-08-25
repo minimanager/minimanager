@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
  * Language: French
- * Supported Minimanager Revision: Unknown
+ * Supported Minimanager Revision: 96
  * Translator: fra298
  */
 
@@ -146,7 +146,8 @@ $lang_index = array(
   'map' => 'Map',
   'zone' => 'Zone',
   'rank' => 'Rang',
-  'honor_kills' => 'R.H.'
+  'honor_kills' => 'R.H.',
+  'Guild' => 'Guilde'
 );
 
 $lang_header = array(
@@ -4174,19 +4175,25 @@ $lang_honor = array(
 
 $lang_events = array(
   'total' => 'Total',
-  'descr' => 'Event name',
-  'start' => 'First Starting Time',
-  'occur' => 'Occurance<br /><small>days/hours',
-  'length' => 'Length<br /><small>days/hours',
-  'events' => 'Events'
+  'descr' => 'Nom de l\'évènement',
+  'start' => 'Première date de démarrage',
+  'occur' => 'Occurance<br /><small>jour(s)/heure(s)',
+  'length' => 'Durée<br /><small>jour(s)/heure(s)',
+  'events' => 'Evènements'
 );
 
 $lang_instances = array(
   'map' => 'Map',
-	'level_min' => 'Minimum level',
-  'level_max' => 'Maximum level',
-  'max_players' => 'Maximum players',
-  'reset_delay' => 'Reset delay'
+	'level_min' => 'Niveau minimum',
+  'level_max' => 'Niveau maximum',
+  'max_players' => 'Nombre de joueurs maxi',
+  'reset_delay' => 'Temps avant reset'
 );
 
+$lang_captcha = array(
+	// ----- LOGIN.PHP -----
+	'security_image' => 'Image de sécurité',
+	'security_code' => 'S\'il vous plait, entrez le code de sécurité',
+	'invalid_code' => 'Code invalide!'
+	);
 ?>

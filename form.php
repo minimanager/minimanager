@@ -19,7 +19,7 @@ session_start();
 
 //print the form and image
 function captcha(){
- global $lang_captcha ,$output;
+ global $lang_captcha ,$lang_command ,$output;
  
  $output .= "<center>
 	<fieldset style=\"width: 550px;\">
@@ -28,9 +28,9 @@ function captcha(){
     <table cellpadding=\"3\" cellspacing=\"0\" border=\"0\">
       <tr align=\"left\"><td>
 				<img src=\"captcha/CaptchaSecurityImages.php?width=300&height=80&characters=6\" /><br /><br />
-				<center><div class=\"large\">Security Code:
+				<center><div class=\"large\">{$lang_captcha['security_code']}:
 				<input id=\"security_code\" name=\"security_code\" type=\"text\" size=\"24\" /></div></center><br />
-				<center><input type=\"submit\" name=\"submit\" value=\"Submit\" onmouseover=\"this.className='mouseover'\" onmouseout=\"this.className=''\" /></center>
+				<center><input type=\"submit\" name=\"submit\" value=\"{$lang_captcha['submit']}\" onmouseover=\"this.className='mouseover'\" onmouseout=\"this.className=''\" /></center>
       </td></table></form></fieldset><br /><br /></center>";
 }
 
@@ -56,7 +56,7 @@ case 1:
    $output .=  "<h1><font class=\"error\">{$lang_captcha['invalid_code']}</font></h1>";
    break;
 default: //no error
-    $output .=  "<h1>{$lang_captcha['security_code']}</h1>";
+    $output .=  "<h1>{$lang_captcha['imput_security_code']}</h1>";
 }
 $output .= "</div>";
 
