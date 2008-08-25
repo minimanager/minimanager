@@ -7,8 +7,6 @@
  * Translator: 
  */
 
-$site_encoding = "UTF-8";
-
 $lang_global = array(
 // ----- GENERAL ERROR CODES -----
 	'err_sql_conn_db' => 'Error - Connection to database is not established !',
@@ -1350,6 +1348,7 @@ $lang_creature = array(
 	'creature_template' => 'Creature template ID',
 	'all_related_data' => 'All related data will be erased as well.',
 	'add_new_mob_templ' => 'Add new creature Template',
+	'add_new_success' => 'Creature Successfully Added',
 	'edit_mob_templ' => 'Edit Creature Template',
 	'err_adding_new' => 'Error Adding New Creature',
 	'err_no_fields_updated' => 'Non of the fields updated.',

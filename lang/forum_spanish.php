@@ -18,10 +18,10 @@ $forum_lang = Array(
 	"bold" => "Negrita",
 	"italic" => "Cursiva",
 	"underline" => "Subrayado",
-	"code" => "Código",
+	"code" => "CÃ³digo",
 	"quote" => "Cuota",
 	"quote2" => "Cuota con nombre",
-	"wrote" => "escribió",
+	"wrote" => "escribiÃ³",
 	"color" => "Color",
 	"media" => "Media",
 	"YouTube" => "YouTube",
@@ -29,8 +29,8 @@ $forum_lang = Array(
 	// forum_index
 	"forums" => "Foro",
 	"forum_index" => "Indice de Foro",
-	"you_are_here" => "Estas aquí",
-	"last_post_by" => "Último mensaje de",
+	"you_are_here" => "Estas aquÃ­",
+	"last_post_by" => "Ãšltimo mensaje de",
 	"in" => "en",
 	"no_topics" => "Sin temas ...",
 	"topics" => "Temas",
@@ -41,12 +41,12 @@ $forum_lang = Array(
 	"new_topic" => "Nuevo Tema",
 	"annoucement" => "Anuncios",
 	"sticky" => "Adherido",
-	"pages" => "Páginas",
-	"title" => "Título del Tema",
+	"pages" => "PÃ¡ginas",
+	"title" => "TÃ­tulo del Tema",
 	"author" => "Autor",
-	"pages" => "Páginas",
+	"pages" => "PÃ¡ginas",
 	"replies" => "Respuestas",
-	"last_post" => "Último ",
+	"last_post" => "Ãšltimo ",
 	"closed" => "Cerrado",
 
 	// view_topic
@@ -68,8 +68,8 @@ $forum_lang = Array(
 	"normal" => "Normal",
 
 	// delete_post
-	"delete_topic" => "¿Está seguro de que desea eliminar este tema y todos sus sub-mensajes?",
-	"delete_post" => "¿Está seguro de que desea eliminar este mensaje?",
+	"delete_topic" => "Â¿EstÃ¡ seguro de que desea eliminar este tema y todos sus sub-mensajes?",
+	"delete_post" => "Â¿EstÃ¡ seguro de que desea eliminar este mensaje?",
 	"back" => "Atras",
 	"confirm" => "Confirmar",
 
@@ -80,12 +80,12 @@ $forum_lang = Array(
 	// do_add_topic
 	"name_too_long" => "Nombre del Tema demasiado largo!",
 	"name_too_short" => "Nombre Tema demasiado corto!",
-	"msg_too_short" => "¡Mensaje demasiado corto!",
+	"msg_too_short" => "Â¡Mensaje demasiado corto!",
 
 	// edit_post
 	"no_such_post" => "Solicitud Erronea: No hay ese mensaje",
 
 	// move_topic
-	"where" => "¿Dónde quieres mover este tema?",
+	"where" => "Â¿DÃ³nde quieres mover este tema?",
 );
 ?>

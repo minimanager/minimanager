@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -8,9 +8,6 @@
  */
 
 // odkomentiraj iducu liniju ako se ne prikazuju dobro hrvatska slova
-// $site_encoding = "iso-8859-2";
-
-$site_encoding = "UTF-8";
 
 $lang_global = array(
 	// ----- GENERAL ERROR CODES -----
@@ -1353,6 +1350,7 @@ $lang_creature = array(
 	'err_adding_new' => 'Error Adding New Creature',
 	'err_no_fields_updated' => 'Non of the fields updated.',
 	'search_creatures' => 'Search Creatures',
+	'add_new_success' => 'Creature Successfully Added',
 	'custom_search' => 'Custom Filter',
 	'pickpocketloot_tmpl_id' => 'Pickpocket Loot Template ID',
 	'skinning_loot_tmpl_id' => 'Skinning Loot Template ID',

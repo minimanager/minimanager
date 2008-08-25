@@ -1802,6 +1802,8 @@ function do_update() {
 	'$lootid', '$pickpocketloot', '$skinloot', '$resistance1', '$resistance2',
 	'$resistance3', '$resistance4', '$resistance5', '$resistance6', '$spell1', '$spell2', '$spell3', '$spell4',
 	'$mingold', '$maxgold', '$AIName', '$MovementType', '$InhabitType', '$RacialLeader', '$ScriptName' )";
+	
+	 redirect("creature.php?error=7");
 
  } elseif ($_POST['opp_type'] == "edit"){
 
@@ -2076,6 +2078,9 @@ case 5:
    break;
 case 6:
    $output .= "<h1><font class=\"error\">{$lang_creature['err_no_fields_updated']}</font></h1>";
+   break;
+case 7:
+   $output .= "<h1><font class=\"error\">{$lang_creature['add_new_success']}</font></h1>";
    break;
 default: //no error
     $output .= "<h1>{$lang_creature['search_creatures']}</h1>";

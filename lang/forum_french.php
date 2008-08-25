@@ -23,17 +23,17 @@ $forum_lang = Array(
 "code2" => "Code avec titre",
 "quote" => "Citation",
 "quote2" => "Citation avec nom",
-"wrote" => "a écrit",
+"wrote" => "a Ã©crit",
 "color" => "Couleur",
 "Alignement" => "Alignement:",
-"justifyleft" => "Alignement à gauche",
-"justifyright" => "Alignement à droite",
+"justifyleft" => "Alignement Ã  gauche",
+"justifyright" => "Alignement Ã  droite",
 "center" => "Centrer",
 
 // forum_index
 "forums" => "Forums",
 "forum_index" => "Page d'accueil",
-"you_are_here" => "Vous êtes ici",
+"you_are_here" => "Vous Ãªtes ici",
 "last_post_by" => "Dernier envoi par",
 "in" => "dans",
 "no_topics" => "Sans sujet...",
@@ -41,7 +41,7 @@ $forum_lang = Array(
 
 // view_forum
 "no_such_forum" => "Mauvaise requete : Pas dans un tel forum",
-"no_access" => "Mauvaise requete : Vous n'avez pas acces à ces données",
+"no_access" => "Mauvaise requete : Vous n'avez pas acces Ã  ces donnÃ©es",
 "new_topic" => "Nouveau sujet",
 "annoucement" => "Annonce",
 "sticky" => "Postit",
@@ -49,9 +49,9 @@ $forum_lang = Array(
 "title" => "Titre du sujet",
 "author" => "Auteur",
 "pages" => "Pages",
-"replies" => "Réponses",
+"replies" => "RÃ©ponses",
 "last_post" => "Dernier envoi",
-"closed" => "Fermé",
+"closed" => "FermÃ©",
 
 // view_topic
 "no_such_topic" => "Mauvaise requete : Pas de tels sujets",
@@ -65,8 +65,8 @@ $forum_lang = Array(
 "delete" => "Supprimer",
 "post" => "Envoyer",
 "open" => "Ouvrir",
-"close" => "Fermé",
-"quick_reply" => "Réponse rapide",
+"close" => "FermÃ©",
+"quick_reply" => "RÃ©ponse rapide",
 "down" => "Bas",
 "up" => "Haut",
 "normal" => "Normale",
@@ -88,7 +88,7 @@ $forum_lang = Array(
 
 // add_topic
 "topic_name" => "Nom du sujet",
-"please_wait" => "Attendre svp $minfloodtime secondes avant de poster à nouveau.",
+"please_wait" => "Attendre svp $minfloodtime secondes avant de poster Ã  nouveau.",
 
 // do_add_topic
 "name_too_long" => "Nom du sujet trop long!",

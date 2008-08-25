@@ -7,7 +7,7 @@ unset($output);
 <br />
 <div id="body_buttom">
 <table class="table_buttom">
-	<tr>
+	<center><tr>
 	<td class="table_buttom_left"></td>
 	<td class="table_buttom_middle">
 		<?php 
@@ -28,7 +28,7 @@ unset($output);
 		</p>
 	</td>
 	<td class="table_buttom_right"></td>
-	</tr>
+	</tr></center>
 	</table>
 	<br />
   </div>

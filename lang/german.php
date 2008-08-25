@@ -7,8 +7,6 @@
  * Translator: konqi, Shevonar, mrbungle
  */
 
-$site_encoding = "utf-8";
-
 $lang_global = array(
 	// ----- GENERAL ERROR CODES -----
 	'err_sql_conn_db' => 'Fehler - Keiner Verbindung zur Datenbank !',
@@ -35,7 +33,7 @@ $lang_global = array(
 	'no' => 'NEIN',
 	'no_low' => 'Nein',
 	'are_you_sure' => 'BIST DU SICHER?',
-	'will_be_erased' => 'Wird unwiederruflich aus der Datenbank gelöscht!',
+	'will_be_erased' => 'Wird unwiederruflich aus der Datenbank gelÃ¶scht!',
 	'unlinked' => 'Unverlinked'
 );
 
@@ -102,7 +100,7 @@ $lang_register = array(
 	'email' => 'E-mail',
 	'use_valid_mail' => 'Bitte versichere dich, dass du eine g&uuml;ltige E-mail-Adresse benutzt.',
 	'create_acc_button' => 'Account erstellen',
-	'diff_pass_entered' => 'Die Passwörter müssen übereinstimmen.', //Popup-Fenster mit "noramlen" Umlauten!
+	'diff_pass_entered' => 'Die PasswÃ¶rter mÃ¼ssen Ã¼bereinstimmen.', //Popup-Fenster mit "noramlen" Umlauten!
 	'already_exist' => 'Existiert bereits',
 	'acc_reg_closed' => 'Pech gehabt, die Accounterstellung ist zur Zeit deaktiviert.',
 	'wrong_pass_username_size' => 'L&auml;nge von Benutzername/Passwort muss zwischen 4 und 15 Buchstaben liegen!',
@@ -492,7 +490,7 @@ $lang_item = array(
 	'socket_yellow' => 'Gelber Sockel',
 	'socket_blue' => 'Blauer Sockel',
 	'rating_by' => 'um',
-	'improves' => 'Erhöht',
+	'improves' => 'ErhÃ¶ht',
 	'DEFENCE_RATING' => 'Defence', // <---- TODO
 	'DODGE_RATING' => 'Dodge', // <---- TODO
 	'PARRY_RATING' => 'Parry', // <---- TODO
@@ -725,7 +723,7 @@ $lang_realm = array(
 	'test_server' => 'Testserver', // TODO: check
 	'qa_server' => 'QA Server', // TODO: check	
 	'others' => 'Andere',
-	'conf_from_file' => '** Dieser Realm scheint keine ordentlichen Einstellungen in der config.php zu haben.<br />&Uuml;berprüfen Sie die Einstellungen, bevor Sie CMS benutzen.',
+	'conf_from_file' => '** Dieser Realm scheint keine ordentlichen Einstellungen in der config.php zu haben.<br />&Uuml;berprÃ¼fen Sie die Einstellungen, bevor Sie CMS benutzen.',
 	'offline' => 'Offline',
 	'status' => 'Status'
 	);
@@ -1350,6 +1348,7 @@ $lang_creature = array( //TODO
 	'err_adding_new' => 'Error Adding New Creature',
 	'err_no_fields_updated' => 'Non of the fields updated.',
 	'search_creatures' => 'Search Creatures',
+	'add_new_success' => 'Creature Successfully Added',
 	'custom_search' => 'Custom Filter',
 	'pickpocketloot_tmpl_id' => 'Pickpocket Loot Template ID',
 	'skinning_loot_tmpl_id' => 'Skinning Loot Template ID',

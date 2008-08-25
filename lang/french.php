@@ -6,9 +6,7 @@
  * Supported Minimanager Revision: 96
  * Translator: fra298
  */
-
-$site_encoding = "utf-8";
-
+ 
 $lang_global = array(
 // ----- GENERAL ERROR CODES -----
   'err_sql_conn_db' => 'Erreur - Non connecté au serveur SQL !',
@@ -1350,6 +1348,7 @@ $lang_creature = array(
   'err_adding_new' => 'Erreur à l\'ajout d\'un nouveau modèle de Game Object',
   'err_no_fields_updated' => 'Erreur : Aucun champ mis à jour',
   'search_creatures' => 'Chercher Créatures',
+	'add_new_success' => 'Creature Successfully Added',
   'custom_search' => 'Filtre personnalisé',
   'pickpocketloot_tmpl_id' => 'ID de modèle de Loot de Pickpocket',
   'skinning_loot_tmpl_id' => 'ID de modèle de Loot de Dépeçage',

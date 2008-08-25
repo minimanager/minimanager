@@ -110,7 +110,6 @@ $itemperpage = 25;
 $css_template = "Sulfur"; 		//file/folder name of css tamplate to use from templates directory by default
 $language = "english"; 			//default site language
 $tt_lang = "www";          //wowhead tooltip language.....choices are 'fr', 'de', 'es' (for 'en' use www)
-$site_encoding = "UTF-8"; 	//default encoding
 $timezone = "UTC";         //default timezone (use your local timezone code)
 
 //---- IRC Options ------
@@ -172,9 +171,9 @@ $menu_array = Array(
 	  array("ticket.php", 'tickets',1,0,0,0),
 	  array("ahstats.php", 'auctionhouse',0,0,0,0),
 	  array("events.php", 'events',0,0,0,0),
-	  array("realm.php", 'realm',3,0,0,0),
+	  array("realm.php", 'realm',0,0,0,0),
 	  array("motd.php", 'add_motd',1,0,0,0),
-	  array("mail.php", 'mail',3,0,0,0),
+	  array("mail.php", 'mail',1,0,0,0),
 	  array("irc.php", 'irc',0,0,0,0),
 	  array("instances.php", 'instances',0,0,0,0),
 	  ),
