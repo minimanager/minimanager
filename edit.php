@@ -123,7 +123,7 @@ function edit_user() {
 				while (($file = readdir($dh)) != false){
 					$lang = explode('.', $file);
 					if(isset($lang[1]) && $lang[1] == 'php'){
-					   if (($file != 'Forum_enUS.php')&&($file != 'Forum_zhCN.php')&&($file != 'Forum_frFR.php')&&($file != 'Forum_deDE.php')&&($file != 'Forum_Italiano.php')){
+					   if ((substr($file,0,6) != 'forum_') ){
 					     $output .= "<option value=\"{$lang[0]}\"";
 					     if (isset($_COOKIE["lang"]) && ($_COOKIE["lang"] == $lang[0])) $output .= " selected=\"selected\" ";
 					     $output .= ">{$lang[0]}</option>";

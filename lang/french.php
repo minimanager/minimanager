@@ -34,7 +34,17 @@ $lang_global = array(
   'no_low' => 'non',
   'are_you_sure' => 'ETES-VOUS SUR ?',
   'will_be_erased' => 'et tous ses personnages seront supprimés de la base de données!',
-  'unlinked' => 'Unlinked'
+  'unlinked' => 'Unlinked',
+	'language_select' => 'Select Language',
+	'language_0' => 'English',
+	'language_1' => 'Korean',
+	'language_2' => 'French',
+	'language_3' => 'German',
+	'language_4' => 'Chinese',
+	'language_5' => 'Taiwanese',
+	'language_6' => 'Spanish',
+	'language_7' => 'Mexican',
+	'language_8' => 'Russian'
 );
 
 $lang_login = array(
@@ -1430,7 +1440,10 @@ $lang_creature = array(
   'equip_info' => 'Equip Info',
   'equip_info1_desc' => 'Ce champ contrôle aussi bien l\'animation, la manière de toucher que le bruit que l\'item fait.',
   'equip_info2_desc' => 'Ce champ contrôle aussi bien l\'animation, la manière de toucher que le bruit que l\'item fait.',
-  'equip_info3_desc' => 'Ce champ contrôle aussi bien l\'animation, la manière de toucher que le bruit que l\'item fait.'
+  'equip_info3_desc' => 'Ce champ contrôle aussi bien l\'animation, la manière de toucher que le bruit que l\'item fait.',
+	'heroic' => 'Heroic Spawn ID',
+	'heroic_desc' => 'A heroic id is used when a creature has a different template for instances in normal and heroic mode. The one with the heroic_entry is the one used in the normal mode. A zero values means, this template is used for normal and heroic mode, or only heroic mode, if another creature point with its heroic_entry to this creature.',
+	'locales' => 'Localisation'
 );
 
 $lang_game_object = array(

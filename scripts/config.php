@@ -130,6 +130,17 @@ $talent_calculator_datasite = "http://www.worldofwarcraft.com/info/classes";
 $go_datasite = "http://$tt_lang.wowhead.com/?object=";
 $get_icons_from_web = true; //wherever to get icons from the web in case they are missing in /img/INV dir.
 
+//---- Active Translations
+
+// 0 = English/Default; 1 = Korean; 2 = French; 4 = German; 8 = Chinese; 16 = Taiwanese; 32 = Spanish; 64 = Mexican; 128 = Russian
+// Prototype for search options
+// Show only on language search option active translations entries (locales_XXX)
+// Example (use flag values by adding the values) : Korean (1) + German (4) + Russian (64) = 69
+
+// NOTE : Righ now only for Creature.php
+$locales_search_option = 0;  // No search option, don't use locales_XXX for search
+
+
 //---- Backup configuration ----
 $backup_dir = "./backup";  //make sure webserver have the permission to write/read it!
 
@@ -180,7 +191,7 @@ $menu_array = Array(
 	),
 	array("#", 'db', array(
 	  array("item.php", 'items',1,0,0,0),
-	  array("creature.php", 'creatures',1,0,0,0),
+	  array("creature.php", 'creatures',1,2,2,2),                // view, update, insert, delete enabled
 	  array("game_object.php", 'game_object',1,0,0,0),
 	  array("tele.php", 'teleports',1,0,0,0),
 	  array("command.php", 'command',0,0,0,0),

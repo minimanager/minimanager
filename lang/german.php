@@ -34,7 +34,17 @@ $lang_global = array(
 	'no_low' => 'Nein',
 	'are_you_sure' => 'BIST DU SICHER?',
 	'will_be_erased' => 'Wird unwiederruflich aus der Datenbank gelöscht!',
-	'unlinked' => 'Unverlinked'
+	'unlinked' => 'Unverlinked',
+	'language_select' => 'W&auml;hle Sprache',
+	'language_0' => 'Englisch',
+	'language_1' => 'Koreanisch',
+	'language_2' => 'Franz&ouml;sisch',
+	'language_3' => 'Deutsch',
+	'language_4' => 'Chinesisch',
+	'language_5' => 'Taiwanesisch',
+	'language_6' => 'Spanisch',
+	'language_7' => 'Mexikanisch',
+	'language_8' => 'Russisch'
 );
 
 $lang_login = array(
@@ -1428,7 +1438,10 @@ $lang_creature = array( //TODO
 	'equip_info' => 'Equip Info',
 	'equip_info1_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes.',
 	'equip_info2_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes',
-	'equip_info3_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes'
+	'equip_info3_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes',
+	'heroic' => 'Heroische Spawn ID',
+	'heroic_desc' => 'Heroische IDs werden vergeben, wenn eine Kreature fu&uml;r Instanzen im normalen und im hoerischen Modus unterschiedliche Vorlagen benutzt. Wird heroic_entry gesetzt, so wird diese Kreatur nur im normalen Modus benutzt. Ein Wert von 0 bedeutet, die Kreatur wird in beiden Fa&uml;llen benutzt, es sei denn eine andere Vorlage zeigt mit seinem heroic_entry Eintrag auf diese Kreatur.',
+	'locales' => 'Lokalisierung'
 	);
 
 $lang_game_object = array( //TODO

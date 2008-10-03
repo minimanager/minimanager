@@ -34,7 +34,17 @@ $lang_global = array(
 	'no_low' => 'No',
 	'are_you_sure' => '¿Estás seguro?',
 	'will_be_erased' => 'Si se elimina sera irrecuperable de la BD!',
-	'unlinked' => 'Unlinked'
+	'unlinked' => 'Unlinked',
+	'language_select' => 'Select Language',
+	'language_0' => 'English',
+	'language_1' => 'Korean',
+	'language_2' => 'French',
+	'language_3' => 'German',
+	'language_4' => 'Chinese',
+	'language_5' => 'Taiwanese',
+	'language_6' => 'Spanish',
+	'language_7' => 'Mexican',
+	'language_8' => 'Russian'
 );
 
 $lang_login = array(
@@ -1433,7 +1443,8 @@ $lang_creature = array(
 	'equip_info' => 'Equip Info',
 	'equip_info1_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes.',
 	'equip_info2_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes',
-	'equip_info3_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes'
+	'equip_info3_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes',
+	'locales' => 'Localisation'
 	);
 
 $lang_game_object = array(

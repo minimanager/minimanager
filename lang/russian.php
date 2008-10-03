@@ -36,7 +36,17 @@ $lang_global = array(
 	'no_low' => 'Íåò',
 	'are_you_sure' => 'ÒÎ×ÍÎ?',
 	'will_be_erased' => 'Ïîëíîñòüþ óäàëÿåòñÿ èç áàçû äàííûõ!',
-	'unlinked' => 'íå ïðèâÿçàíî'
+	'unlinked' => 'íå ïðèâÿçàíî',
+	'language_select' => 'Select Language',
+	'language_0' => 'English',
+	'language_1' => 'Korean',
+	'language_2' => 'French',
+	'language_3' => 'German',
+	'language_4' => 'Chinese',
+	'language_5' => 'Taiwanese',
+	'language_6' => 'Spanish',
+	'language_7' => 'Mexican',
+	'language_8' => 'Russian'
 );
 
 $lang_spells = array(
@@ -1462,7 +1472,11 @@ $lang_creature = array(
 	'equip_info' => 'Îïèñàíèå ñíàðÿæåíèÿ',
 	'equip_info1_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes.',
 	'equip_info2_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes',
-	'equip_info3_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes'
+	'equip_info3_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes',
+	'heroic' => 'Heroic Spawn ID',
+'heroic_desc' => 'A heroic id is used when a creature has a different template for instances in normal and heroic mode. The one with the heroic_entry is the one used in the normal mode. A zero values means, this template is used for normal and heroic mode, or only heroic mode, if another creature point with its heroic_entry to this creature.',
+	'locales' => 'Localisation'
+	
 	);
 
 $lang_game_object = array(

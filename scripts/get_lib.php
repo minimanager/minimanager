@@ -53,8 +53,8 @@ function get_lang_id() {
 	# 4 = Chinese
 	# 5 = Taiwanese
 	# 6 = Spanish
-	# 7 = Russian
-	# 8 = Unknown
+	# 7 = Spanish Mexico
+	# 8 = Russian
 	# 9 = Unknown
 	# 10 = Unknown
 	# 11 = Unknown
@@ -65,20 +65,33 @@ function get_lang_id() {
 	global $language;
 	if (isset($_COOKIE["lang"])) $language=$_COOKIE["lang"];
 
+// 0 = English/Default; 1 = Korean; 2 = French; 4 = German; 8 = Chinese; 16 = Taiwanese; 32 = Spanish; 64 = Russian
 	switch ($language) {
-			case 'frBE':
-			case 'frFR':
+			
+			case 'korean':
+			return 1;
+			break;
+			case 'french':
 			return 2;
 			break;
-			case 'deDE':
+			case 'german':
 			return 3;
 			break;
-			case 'esAR':
+			case 'chinese':
+			return 4;
+			break;
+			case 'taiwanese':
+			return 5;
+			break;
+			case 'spanish':
 			return 6;
 			break;
-			case 'ruRU':
+			case 'mexican':
 			return 7;
-			break;
+			break;		
+			case 'russian':
+			return 8;
+			break;			
 			default:
 			return 0;
 			break;

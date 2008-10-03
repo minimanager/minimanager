@@ -32,7 +32,17 @@ $lang_global = array(
 	'no_low' => 'Nao',
 	'are_you_sure' => 'VOCE TEM CERTEZA?',
 	'will_be_erased' => 'Nao pode ser recuperado apos apagado do BD!',
-	'unlinked' => 'Sem link'
+	'unlinked' => 'Sem link',
+	'language_select' => 'Select Language',
+	'language_0' => 'English',
+	'language_1' => 'Korean',
+	'language_2' => 'French',
+	'language_3' => 'German',
+	'language_4' => 'Chinese',
+	'language_5' => 'Taiwanese',
+	'language_6' => 'Spanish',
+	'language_7' => 'Mexican',
+	'language_8' => 'Russian'
 );
 
 $lang_login = array(
@@ -1386,7 +1396,10 @@ $lang_creature = array( //TODO :Translate entire array
 	'RacialLeader' => 'Racial Leader',
 	'RacialLeader_desc' => 'Set to 1 if the creature is Racial Leader',
 	'dmgschool' => 'Damage School',
-	'dmgschool_desc' => 'The school of damage will be used by this mob'
+	'dmgschool_desc' => 'The school of damage will be used by this mob',
+	'heroic' => 'Heroic Spawn ID',
+	'heroic_desc' => 'A heroic id is used when a creature has a different template for instances in normal and heroic mode. The one with the heroic_entry is the one used in the normal mode. A zero values means, this template is used for normal and heroic mode, or only heroic mode, if another creature point with its heroic_entry to this creature.',
+	'locales' => 'Localisation'
 	);
 
 $lang_game_object = array( //TODO:
