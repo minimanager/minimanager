@@ -52,6 +52,7 @@ $fact_id = Array(
   934 => array("The Scryers","Shattrath City",7,62,255,1024,512,0,0,-3500,3500,0),
   1011 => array("Lower City","Shattrath City",7,69,32767,0,0,0,0,0,0,0),
   1031 => array("Sha'tari Skyguard","Shattrath City",7,72,1791,0,0,0,0,0,0,0),
+  1077 => array("Shattered Sun Offensive","Shattrath City",7,73,1791,0,0,0,0,0,0,0),
   
   87 => array("Bloodsail Buccaneers","Other",8,0,1791,0,0,0,-6500,0,0,0),
   92 => array("Gelkis Clan Centaur","Other",8,2,1791,0,0,0,2000,0,0,0),

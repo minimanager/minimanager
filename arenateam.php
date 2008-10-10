@@ -210,24 +210,32 @@ function view_team() {
 
  $arenateam_id = $sql->quote_smart($_GET['id']);
 
- $query = $sql->query("SELECT arenateamid, name FROM arena_team WHERE arenateamid = '$arenateam_id'");
+ $query = $sql->query("SELECT arenateamid, name, type FROM arena_team WHERE arenateamid = '$arenateam_id'");
  $arenateam_data = $sql->fetch_row($query);
 
  $query = $sql->query("SELECT arenateamid, rating, games, wins, played, wins2, rank FROM arena_team_stats WHERE arenateamid = '$arenateam_id'");
   $arenateamstats_data = $sql->fetch_row($query);
 
+ $rating_offset = 1550;
+ if ($arenateam_data[2] == 3)
+ $rating_offset += 6;
+ else if ($arenateam_data[2] == 5)
+ $rating_offset += 12;
+
  $members = $sql->query("SELECT arena_team_member.guid,`characters`.name,
-						`characters`.name, SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', 35), ' ', -1) AS level,
+						SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', $rating_offset), ' ', -1) AS personal_rating,
+						SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', 35), ' ', -1) AS level,
 						arena_team_member.played_week, arena_team_member.wons_week, arena_team_member.played_season, arena_team_member.wons_season
 						FROM arena_team_member,`characters`
-						LEFT JOIN arena_team_member k1 ON k1.`guid`=`characters`.`guid`
-						WHERE arena_team_member.arenateamid = '$arenateam_id' AND arena_team_member.guid=`characters`.guid");
+						LEFT JOIN arena_team_member k1 ON k1.`guid`=`characters`.`guid` AND k1.`arenateamid`='$arenateam_id'
+						WHERE arena_team_member.arenateamid = '$arenateam_id' AND arena_team_member.guid=`characters`.guid
+						ORDER BY `characters`.`name`");
 
  $total_members = $sql->num_rows($members);
- $losses_week = $arenateamstats_data[4]-$arenateamstats_data[3];
- $winperc_week = ($arenateamstats_data[4]/$arenateamstats_data[3]) * 100;
- $losses_season = $arenateamstats_data[6]-$arenateamstats_data[5];
- $winperc_season = ($arenateamstats_data[6]/$arenateamstats_data[5]) * 100;
+ $losses_week = $arenateamstats_data[2]-$arenateamstats_data[3];
+ $winperc_week = round((10000 * $arenateamstats_data[3]) / $arenateamstats_data[2]) / 100;
+ $losses_season = $arenateamstats_data[4]-$arenateamstats_data[5];
+ $winperc_season = round((10000 * $arenateamstats_data[5]) / $arenateamstats_data[4]) / 100;
 
 $output .= "<script type=\"text/javascript\">
 	answerbox.btn_ok='{$lang_global['yes_low']}';
@@ -235,32 +243,32 @@ $output .= "<script type=\"text/javascript\">
  </script>
  <center>
  <fieldset style=\"width: 950px;\">
-	<legend>{$lang_arenateam['arenateam']}</legend>
+	<legend>{$lang_arenateam['arenateam']} ({$arenateam_data[2]}v{$arenateam_data[2]})</legend>
  <table class=\"lined\" style=\"width: 910px;\">
   <tr class=\"bold\">
-    <td colspan=\"11\">$arenateam_data[1]</td>
+    <td colspan=\"13\">$arenateam_data[1]</td>
   </tr>
    <tr>
-          <td colspan=\"11\">{$lang_arenateam['tot_members']}: $arenateamstats_data[2]</td>
+        <td colspan=\"13\">{$lang_arenateam['tot_members']}: $total_members</td>
     </tr>
 	<tr>
-		<td colspan=\"3\">{$lang_arenateam['this_week']}</td>
-	    <td colspan=\"2\">{$lang_arenateam['games_played']} : $arenateamstats_data[3]</td>
-	    <td colspan=\"2\">{$lang_arenateam['games_won']} : $arenateamstats_data[4]</td>
+        <td colspan=\"4\">{$lang_arenateam['this_week']}</td>
+        <td colspan=\"2\">{$lang_arenateam['games_played']} : $arenateamstats_data[2]</td>
+        <td colspan=\"2\">{$lang_arenateam['games_won']} : $arenateamstats_data[3]</td>
         <td colspan=\"2\">{$lang_arenateam['games_lost']} : $losses_week</td>
-        <td colspan=\"2\">{$lang_arenateam['ratio']} : $winperc_week %</td>
+        <td colspan=\"3\">{$lang_arenateam['ratio']} : $winperc_week %</td>
     </tr>
     <tr>
-		<td colspan=\"3\">{$lang_arenateam['this_season']}</td>
-	    <td colspan=\"2\">{$lang_arenateam['games_played']} : $arenateamstats_data[5]</td>
-	    <td colspan=\"2\">{$lang_arenateam['games_won']} : $arenateamstats_data[6]</td>
+        <td colspan=\"4\">{$lang_arenateam['this_season']}</td>
+        <td colspan=\"2\">{$lang_arenateam['games_played']} : $arenateamstats_data[4]</td>
+        <td colspan=\"2\">{$lang_arenateam['games_won']} : $arenateamstats_data[5]</td>
         <td colspan=\"2\">{$lang_arenateam['games_lost']} : $losses_season</td>
-        <td colspan=\"2\">{$lang_arenateam['ratio']} : $winperc_season %</td>
+        <td colspan=\"3\">{$lang_arenateam['ratio']} : $winperc_season %</td>
     </tr>
-  <tr>
-     <td colspan=\"11\">{$lang_arenateam['standings']} {$arenateamstats_data[7]} ( {$arenateamstats_data[2]})</td>
-  </tr>
-  <tr>";
+	<tr>
+		<td colspan=\"13\">{$lang_arenateam['standings']} {$arenateamstats_data[6]} ({$arenateamstats_data[1]})</td>
+	</tr>
+	<tr>";
     if ($user_lvl > 2){
     $output .= " <th width=\"3%\">{$lang_arenateam['remove']}</th>";
        }
@@ -268,44 +276,27 @@ $output .= "<script type=\"text/javascript\">
 	<th width=\"21%\">{$lang_arenateam['name']}</th>
     <th width=\"3%\">Race</th>
 	<th width=\"3%\">Class</th>
-	<th width=\"3%\">{$lang_arenateam['level']}</th>
-	<th width=\"15%\">Last Login (Days)</th>
+	<th width=\"8%\">Personal Rating</th>
+	<th width=\"7%\">Last Login (Days)</th>
 	<th width=\"3%\">Online</th>
-	<th width=\"12%\">{$lang_arenateam['played_week']}</th>
-	<th width=\"12%\">{$lang_arenateam['wons_week']}</th>
-	<th width=\"12%\">{$lang_arenateam['played_season']}</th>
-	<th width=\"12%\">{$lang_arenateam['wons_season']}</th>
+	<th width=\"9%\">{$lang_arenateam['played_week']}</th>
+	<th width=\"9%\">{$lang_arenateam['wons_week']}</th>
+	<th width=\"8%\">Win %</th>
+	<th width=\"9%\">{$lang_arenateam['played_season']}</th>
+	<th width=\"9%\">{$lang_arenateam['wons_season']}</th>
+	<th width=\"8%\">Win %</th>
 
   </tr>";
 
  while ($member = $sql->fetch_row($members)){
 
-	$query = $sql->query("SELECT `race`,`class`,`online`, `account`, `logout_time`, SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', 35), ' ', -1) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(36+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE `name` = '$member[1]';");
+	$query = $sql->query("SELECT `race`,`class`,`online`, `account`, `logout_time`, SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', 35), ' ', -1) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(36+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE `guid` = '$member[0]';");
 
 	$online = $sql->fetch_row($query);
 	$accid = $online[3];
 	$llogin = count_days($online[4], time());
 
     $level = $online[5];
-
-    if($level < 10)
-      $lev = '<font color="#FFFFFF">'.$level.'</font>';
-    else if($level < 20)
-      $lev = '<font color="#858585">'.$level.'</font>';
-    else if($level < 30)
-      $lev = '<font color="#339900">'.$level.'</font>';
-    else if($level < 40)
-      $lev = '<font color="#3300CC">'.$level.'</font>';
-    else if($level < 50)
-      $lev = '<font color="#C552FF">'.$level.'</font>';
-    else if($level < 60)
-      $lev = '<font color="#FF8000">'.$level.'</font>';
-    else if($level < 70)
-      $lev = '<font color="#FFF280">'.$level.'</font>';  
-    else if($level < 80)
-      $lev = '<font color="#FF0000">'.$level.'</font>';  
-    else
-      $lev = '<font color="#000000">'.$level.'</font>';
 
     if($llogin < 1)
       $lastlogin = '<font color="#009900">'.$llogin.'</font>';
@@ -324,18 +315,22 @@ $output .= "<script type=\"text/javascript\">
 
    		$output .= " <tr>";
 		if ($user_lvl > 2){
-		$output .= " <td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$member[2]}</font><br />{$lang_global['are_you_sure']}', 'arenateam.php?action=rem_char_from_team&amp;id=$member[0]&amp;arenateam_id=$arenateam_id');\" style=\"cursor:pointer;\" /></td>";
+		$output .= " <td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$member[1]}</font><br />{$lang_global['are_you_sure']}', 'arenateam.php?action=rem_char_from_team&amp;id=$member[0]&amp;arenateam_id=$arenateam_id');\" style=\"cursor:pointer;\" /></td>";
 		}
+		$ww_pct = round((10000 * $member[5]) / $member[4]) / 100;
+		$ws_pct = round((10000 * $member[7]) / $member[6]) / 100;
 		$output .= " <td><a href=\"char.php?id=$member[0]\">$member[1]</a></td>
 		<td><img src='img/c_icons/{$online[0]}-{$online[6]}.gif' onmousemove='toolTip(\"".get_player_race($online[0])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		<td><img src='img/c_icons/{$online[1]}.gif' onmousemove='toolTip(\"".get_player_class($online[1])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-		<td>$lev</td>
+		<td>$member[2]</td>
 		<td>$lastlogin</td>
 		<td>".(($online[2]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
 		<td>$member[4]</td>
 		<td>$member[5]</td>
+		<td>$ww_pct %</td>
 		<td>$member[6]</td>
 		<td>$member[7]</td>
+		<td>$ws_pct %</td>
 	</tr>";
 }
 
