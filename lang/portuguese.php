@@ -751,7 +751,7 @@ $lang_user = array(
 	'backup' => 'Backup',
 	'by_name' => 'Por Nome',
 	'by_id' => 'Por ID',
-	'by_tbc' => 'by TBC Acc.', //TODO
+	'by_expansion' => 'by TBC Acc.', //TODO
 	'by_gm_level' => '= GM Level',
 	'greater_gm_level' => '< GM Level',
 	'by_email' => 'Por Email',
@@ -812,7 +812,7 @@ $lang_user = array(
 	'browse_acc' => 'Ver Contas',
 	'you_have_no_permission_to_set_gmlvl' => 'Voce nao tem permissao para setar GM Level',
 	//TODO
-	'tbc_account' => 'TBC Account',
+	'expansion_account' => 'TBC Account',
 	'client_type' => 'Client Type',
 	'classic' => 'Classic',
 	'expansion' => 'Expansion'

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -770,7 +770,7 @@ $lang_user = array(
 	'cleanup' => 'Počisti',
 	'backup' => 'Backup',
 	'by_name' => 'po Imenu',
-	'by_tbc' => 'po TBC računu',
+	'by_expansion' => 'po TBC računu',
 	'by_id' => 'po IDu',
 	'by_gm_level' => '= GM Level',
 	'greater_gm_level' => '< GM Level',
@@ -831,7 +831,7 @@ $lang_user = array(
 	'you_have_no_permission' => 'You have No Permission to Edit this Data',
 	'browse_acc' => 'Pregled računa',
 	'you_have_no_permission_to_set_gmlvl' => 'You have No Permission to Set this GM Level',
-	'tbc_account' => 'TBC račun',
+	'expansion_account' => 'TBC račun',
 	'client_type' => 'Klijent',
 	'classic' => 'Klasični WOW',
 	'expansion' => 'Ekspanzija'

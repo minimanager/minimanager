@@ -106,7 +106,11 @@ if ($online)
 	$order_dir = ($dir) ? "ASC" : "DESC";
 	$dir = ($dir) ? 0 : 1;
 
-	$result = $sql->query("SELECT count(*) FROM `characters` WHERE `online`= 1");
+	if ($gm_online_count == "1") {
+		$result = $sql->query("SELECT count(*) FROM `characters` WHERE `online`= 1");
+	} else {
+		$result = $sql->query("SELECT count(*) FROM `characters` WHERE `online`= 1 AND `gmstate` != 3");
+	}
 	$total_online = $sql->result($result, 0);
     
     $order_side = "";
@@ -122,6 +126,7 @@ if ($online)
 
 	require_once("scripts/defines.php");
     
+            if ($gm_online == '1') {
 	$result = $sql->query("SELECT guid,name,race,class,zone,map,
             CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
             CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
@@ -129,6 +134,16 @@ if ($online)
             CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
             mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(36+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
             FROM `characters` WHERE `online`= 1 $order_side ORDER BY $order_by $order_dir");
+             FROM `characters` WHERE `online`= 1 $order_side ORDER BY $order_by $order_dir");
+            } else {
+	$result = $sql->query("SELECT guid,name,race,class,zone,map,
+            CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
+            CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
+            account,
+            CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
+            mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(36+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+                        FROM `characters` WHERE `online`= 1 AND `gmstate` != 3 $order_side ORDER BY $order_by $order_dir");
+            }
 
 	$output .= "
 	<font class=\"bold\">{$lang_index['tot_users_online']} : $total_online</font><br /><br />

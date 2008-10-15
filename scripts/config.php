@@ -111,6 +111,8 @@ $css_template = "Sulfur"; 		//file/folder name of css tamplate to use from templ
 $language = "english"; 			//default site language
 $tt_lang = "www";          //wowhead tooltip language.....choices are 'fr', 'de', 'es' (for 'en' use www)
 $timezone = "UTC";         //default timezone (use your local timezone code)
+$gm_online = "1";         //display GM Characters in the Online Character List (1 = enable, 0 = disable)
+$gm_online_count = "1";         //include GM Characters in the Online User Count (1 = enable, 0 = disable)
 
 //---- IRC Options ------
 $irc_cfg = array(

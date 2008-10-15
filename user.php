@@ -70,7 +70,7 @@ if($user_lvl >= $action_permission['update'])
 		<option value=\"online\">{$lang_user['by_online']}</option>
 		<option value=\"banned\">{$lang_user['by_banned']}</option>
 		<option value=\"locked\">{$lang_user['by_locked']}</option>
-		<option value=\"tbc\">{$lang_user['by_tbc']}</option>
+		<option value=\"expansion\">{$lang_user['by_expansion']}</option>
 	   </select></form></td>
 	   <td>";
 		makebutton($lang_global['search'], "javascript:do_submit()",80);
@@ -151,7 +151,7 @@ valid_login($action_permission['read']);
 
  $search_value = $sql->quote_smart($_GET['search_value']);
  $search_by = $sql->quote_smart($_GET['search_by']);
- $search_menu = array('username', 'id', 'gmlevel', 'greater_gmlevel', 'email', 'joindate', 'last_ip', 'failed_logins', 'last_login', 'online', 'banned', 'locked', 'tbc');
+ $search_menu = array('username', 'id', 'gmlevel', 'greater_gmlevel', 'email', 'joindate', 'last_ip', 'failed_logins', 'last_login', 'online', 'banned', 'locked', 'expansion');
  if (!in_array($search_by, $search_menu)) $search_by = 'username';
 
  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "id";
@@ -210,7 +210,7 @@ valid_login($action_permission['read']);
 		<option value=\"online\">{$lang_user['by_online']}</option>
 		<option value=\"banned\">{$lang_user['by_banned']}</option>
 		<option value=\"locked\">{$lang_user['by_locked']}</option>
-		<option value=\"tbc\">{$lang_user['by_tbc']}</option>
+		<option value=\"expansion\">{$lang_user['by_expansion']}</option>
 	   </select></form></td><td>";
 	   makebutton($lang_global['search'], "javascript:do_submit()",80);
  $output .= "</td></tr>
@@ -540,8 +540,8 @@ function add_new() {
         <td><input type=\"checkbox\" name=\"new_locked\" value=\"1\" /></td>
      </tr>
 	 <tr>
-        <td>{$lang_user['tbc_account']}</td>
-        <td><input type=\"checkbox\" name=\"new_tbc\" value=\"1\" checked=\"checked\" /></td>
+        <td>{$lang_user['expansion_account']}</td>
+        <td><input type=\"checkbox\" name=\"new_expansion\" value=\"1\" checked=\"checked\" /></td>
      </tr>
      <tr><td>";
 			makebutton($lang_user['create_acc'], "javascript:do_submit_data()",120);
@@ -594,10 +594,10 @@ function doadd_new() {
 	$new_mail = (isset($_GET['new_mail'])) ? $sql->quote_smart(trim($_GET['new_mail'])) : NULL;
 
 	$locked = (isset($_GET['new_locked'])) ? $sql->quote_smart($_GET['new_locked']) : 0;
-	$tbc = (isset($_GET['new_tbc'])) ? $sql->quote_smart($_GET['new_tbc']) : 0;
+	$expansion = (isset($_GET['new_expansion'])) ? $sql->quote_smart($_GET['new_expansion']) : 0;
 
-	$result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,tbc)
-								VALUES ('$new_user','$pass',0 ,'$new_mail',now() ,'$last_ip',0, $locked ,NULL, 0, $tbc)");
+	$result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
+								VALUES ('$new_user','$pass',0 ,'$new_mail',now() ,'$last_ip',0, $locked ,NULL, 0, $expansion)");
 	$sql->close();
 
 	if ($result) redirect("user.php?error=5");
@@ -619,7 +619,7 @@ function edit_user() {
 
  $id = $sql->quote_smart($_GET['id']);
 
- $result = $sql->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,tbc FROM account WHERE id = '$id'");
+ $result = $sql->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion FROM account WHERE id = '$id'");
  $data = $sql->fetch_row($result);
 
  if ($sql->num_rows($result)){
@@ -729,7 +729,7 @@ function edit_user() {
       </tr>
 	   <td>{$lang_user['client_type']}</td>";
       if($user_lvl >= $action_permission['update']) { $output .="
-		<td><select name=\"tbc\">";
+		<td><select name=\"expansion\">";
       $output .= "<option value=\"0\">{$lang_user['classic']}</option>
 			 <option value=\"1\" ";
 			 if ($data[10]) $output .= "selected=\"selected\" ";
@@ -830,7 +830,7 @@ function doedit_user() {
  $mail = (isset($_POST['mail']) && $_POST['mail'] != '') ? $sql->quote_smart($_POST['mail']) : "";
  $failed = (isset($_POST['failed'])) ? $sql->quote_smart($_POST['failed']) : 0;
  $gmlevel = (isset($_POST['gmlevel'])) ? $sql->quote_smart($_POST['gmlevel']) : 0;
- $tbc = (isset($_POST['tbc'])) ? $sql->quote_smart($_POST['tbc']) : 1;
+ $expansion = (isset($_POST['expansion'])) ? $sql->quote_smart($_POST['expansion']) : 1;
  $banned = (isset($_POST['banned'])) ? $sql->quote_smart($_POST['banned']) : 0;
  $locked = (isset($_POST['locked'])) ? $sql->quote_smart($_POST['locked']) : 0;
 
@@ -867,7 +867,7 @@ function doedit_user() {
 							   VALUES ($id, ".time().",".(time()+(365*24*3600)).",'$user_name','none', 1)");
 		 }
 
- $sql->query("UPDATE account SET email='$mail', $user_pass_change failed_logins='$failed',locked='$locked',gmlevel='$gmlevel',tbc='$tbc' WHERE id=$id");
+ $sql->query("UPDATE account SET email='$mail', $user_pass_change failed_logins='$failed',locked='$locked',gmlevel='$gmlevel',expansion='$expansion' WHERE id=$id");
 
  $sql->close();
  redirect("user.php?action=edit_user&error=13&id=$id");

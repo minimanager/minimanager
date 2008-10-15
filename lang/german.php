@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -768,7 +768,7 @@ $lang_user = array(
 	'cleanup' => 'Aufr&auml;men',
 	'backup' => 'Backup',
 	'by_name' => 'nach Name',
-	'by_tbc' => 'nach TBC Acc.',
+	'by_expansion' => 'nach TBC Acc.',
 	'by_id' => 'nach ID',
 	'by_gm_level' => '= GM Level',
 	'greater_gm_level' => '< GM Level',
@@ -829,7 +829,7 @@ $lang_user = array(
 	'you_have_no_permission' => 'Du hast keine Berechtigung diese Daten zu &auml;ndern',
 	'browse_acc' => 'Accounts durchsuchen',
 	'you_have_no_permission_to_set_gmlvl' => 'Du hast keine Berechtigung um diese GM-Level zu setzen',
-	'tbc_account' => 'TBC Account',
+	'expansion_account' => 'TBC Account',
 	'client_type' => 'Clienttyp',
 	'classic' => 'Classic',
 	'expansion' => 'Erweiterung'

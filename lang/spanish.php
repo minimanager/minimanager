@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -771,7 +771,7 @@ $lang_user = array(
 	'cleanup' => 'Limpiar',
 	'backup' => 'Copia de Seg.',
 	'by_name' => 'Por Nombre',
-	'by_tbc' => 'por Cuenta TBC.',
+	'by_expansion' => 'por Cuenta TBC.',
 	'by_id' => 'por ID',
 	'by_gm_level' => '= Nivel GM',
 	'greater_gm_level' => '< Nivel GM',
@@ -832,7 +832,7 @@ $lang_user = array(
 	'you_have_no_permission' => 'No tiene permiso para editar estos Datos',
 	'browse_acc' => 'Explorador de Cuentas',
 	'you_have_no_permission_to_set_gmlvl' => 'No tiene Ningún Permiso de Poner este Nivel GM',
-	'tbc_account' => 'Cuenta TBC',
+	'expansion_account' => 'Cuenta TBC',
 	'client_type' => 'Tipo de clientes',
 	'classic' => 'WOW Clasico',
 	'expansion' => 'WOW TBC Expansión'

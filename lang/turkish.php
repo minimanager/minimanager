@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -750,7 +750,7 @@ $lang_user = array(
 	'backup' => 'Yedek Al',
 	'by_name' => 'Hesap Adý',
 	'by_id' => 'ID',
-	'by_tbc' => 'TBC',
+	'by_expansion' => 'TBC',
 	'by_gm_level' => '= Yetki Seviyesi',
 	'greater_gm_level' => '< Yetki Seviyesi',
 	'by_email' => 'E-Posta',
@@ -811,7 +811,7 @@ $lang_user = array(
 	'browse_acc' => 'Hesaplara Gözat',
 	'you_have_no_permission_to_set_gmlvl' => 'Yetki Seviyesi belirlemek için yetkiniz yok',
 	//TODO
-	'tbc_account' => 'TBC Account',
+	'expansion_account' => 'TBC Account',
 	'client_type' => 'Client Type',
 	'classic' => 'Classic',
 	'expansion' => 'Expansion'

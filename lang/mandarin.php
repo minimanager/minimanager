@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -757,7 +757,7 @@ $lang_user = array(
 	'cleanup' => 'Çå³ý',
 	'backup' => '±¸·Ý',
 	'by_name' => '°´Ãû³Æ',
-	'by_tbc' => '°´TBCÕË»§.',
+	'by_expansion' => '°´TBCÕË»§.',
 	'by_id' => '°´ID',
 	'by_gm_level' => 'GMµÈ¼¶',
 	'greater_gm_level' => 'GMµÈ¼¶',
@@ -818,7 +818,7 @@ $lang_user = array(
 	'you_have_no_permission' => 'ÄãÃ»ÓÐÈ¨Àû±à¼­Õâ¸öÊý¾Ý',
 	'browse_acc' => 'ä¯ÀÀÕÊºÅ',
 	'you_have_no_permission_to_set_gmlvl' => 'ÄãÃ»ÓÐÈ¨ÏÞÉèÖÃGMµÈ¼¶',
-	'tbc_account' => 'TBCÕË»§',
+	'expansion_account' => 'TBCÕË»§',
 	'client_type' => '¿Í»§¶ËÀàÐÍ',
 	'classic' => 'ÆÕÍ¨',
 	'expansion' => '×ÊÁÏÆ¬'

@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -804,7 +804,7 @@ $lang_user = array(
 	'backup' => 'Ðåçåðâèðîâàíèå',
 	'by_name' => 'ïî èìåíè',
 	'by_id' => 'ïî ID',
-	'by_tbc' => 'ïî àêêó TBC',
+	'by_expansion' => 'ïî àêêó TBC',
 	'by_gm_level' => '= ÃÌ-óðîâåíü',
 	'greater_gm_level' => '< ÃÌ-óðîâåíü',
 	'by_email' => 'ïî ïî÷òå',
@@ -864,7 +864,7 @@ $lang_user = array(
 	'you_have_no_permission' => 'Ó âàñ íåò ðàçðåøåíèÿ íà èçìåíåíèå ýòèõ äàííûõ',
 	'browse_acc' => 'Ïðîñìîòð àêêàóíòîâ',
 	'you_have_no_permission_to_set_gmlvl' => 'Ó âàñ íåò äîñòóïà ïðèñâàèâàòü ýòîò óðîâåíü ÃÌ',
-	'tbc_account' => 'Àêêàóíò WoW-TBC',
+	'expansion_account' => 'Àêêàóíò WoW-TBC',
 	'client_type' => 'Òèï êëèåíòà',
 	'classic' => 'WoW',
 	'expansion' => 'WoW-TBC'

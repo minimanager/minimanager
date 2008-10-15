@@ -31,12 +31,12 @@ function send_ingame_mail($to, $from, $subject, $body, $gold = 0, $item = 0, $st
          $has_items = 1;
     }
 
-    $result = $sql_0->query("INSERT INTO mail (id,messageType,sender,receiver,subject,itemTextId,has_items,expire_time,deliver_time,money,cod,checked)
-	    VALUES ($mail_id, 0, '$from', '$to', '$subject', '$item_page_id', '$has_items', '".(time() + (30*24*3600))."','".(time()+5)."', '$gold', 0, 0)");
+    $result = $sql_0->query("INSERT INTO mail (id,messageType,stationery,mailTemplateId,sender,receiver,subject,itemTextId,has_items,expire_time,deliver_time,money,cod,checked)
+	    VALUES ($mail_id, 0, 61, 0, '$from', '$to', '$subject', '$item_page_id', '$has_items', '".(time() + (30*24*3600))."','".(time()+5)."', '$gold', 0, 0)");
 
  	if ($has_items) {
-		$result = $sql_0->query("INSERT INTO mail_items (mail_id,item_guid,item_template)
-		       VALUES ($mail_id, '$item_guid', '$item')");
+		$result = $sql_0->query("INSERT INTO mail_items (mail_id,item_guid,item_template,receiver)
+		       VALUES ($mail_id, '$item_guid', '$item', '$to')");
 	}
 
 	if ($result) {

@@ -94,13 +94,13 @@ function doregister(){
     	 	redirect("register.php?err=3&usr=$user_name");
 	} else {
             if ( $expansion_select ) {
-            $tbc = (isset($_POST['tbc'])) ? $sql->quote_smart($_POST['tbc']) : 0;
+            $expansion = (isset($_POST['expansion'])) ? $sql->quote_smart($_POST['expansion']) : 0;
         } else {
-            $tbc = $defaultoption;
+            $expansion = $defaultoption;
         }
 
-		$result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,tbc)
- 				VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$tbc)");
+		$result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
+ 				VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$expansion)");
 		$sql->close();
 
 		setcookie ("terms", "", time() - 3600);
@@ -202,7 +202,7 @@ function register(){
       $output .= "<tr>
   	 <td valign=\"top\">{$lang_register['acc_type']}:</td>
   	 <td>
-	   <select name=\"tbc\">
+	   <select name=\"expansion\">
 	    <option value=\"1\">{$lang_register['expansion']}</option>
 	    <option value=\"0\">{$lang_register['classic']}</option>
 	   </select>

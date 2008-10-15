@@ -768,7 +768,7 @@ $lang_user = array(
   'cleanup' => 'Purger',
   'backup' => 'Sauvegarde',
   'by_name' => 'par Nom',
-  'by_tbc' => 'par compte TBC',
+  'by_expansion' => 'par compte Expansion.',
   'by_id' => 'par id d\'équipe d\'Arène',
   'by_gm_level' => '= Niveau de GM',
   'greater_gm_level' => '< Niveau de GM',
@@ -829,7 +829,7 @@ $lang_user = array(
   'you_have_no_permission' => 'Vous n\'avez pas la permission d\'éditer ces données',
   'browse_acc' => 'Liste des comptes',
   'you_have_no_permission_to_set_gmlvl' => 'Vous n\'avez pas la permissions pour mettre ce niveau de GM',
-  'tbc_account' => 'Compte TBC',
+  'expansion_account' => 'Compte Expansion',
   'client_type' => 'Type de client',
   'classic' => 'Classique',
   'expansion' => 'Expansion'

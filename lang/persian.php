@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -745,7 +745,7 @@ $lang_user = array(
 	'cleanup' => 'پاکسازی',
 	'backup' => 'پشتیبان گیری',
 	'by_name' => 'با اسم',
-	'by_tbc' => 'با نوع اکانت',
+	'by_expansion' => 'با نوع اکانت',
 	'by_id' => 'با کد',
 	'by_gm_level' => '= سطح مسئولیت',
 	'greater_gm_level' => '< سطح مسئولیت',
@@ -806,7 +806,7 @@ $lang_user = array(
 	'you_have_no_permission' => 'شما مجاز به تغییر اطلاعات نیستید',
 	'browse_acc' => 'جستجو در اکانت ها',
 	'you_have_no_permission_to_set_gmlvl' => 'شما مجاز به تغییر سطح مسئولین نیستید',
-	'tbc_account' => 'TBC Account',
+	'expansion_account' => 'TBC Account',
 	'client_type' => 'نوع کلاینت',
 	'classic' => 'Classic',
 	'expansion' => 'Expansion'

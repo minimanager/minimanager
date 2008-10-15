@@ -21,7 +21,7 @@ function edit_user() {
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
- $result = $sql->query("SELECT email,gmlevel,joindate,tbc FROM account WHERE username ='$user_name'");
+ $result = $sql->query("SELECT email,gmlevel,joindate,expansion FROM account WHERE username ='$user_name'");
 
  if ($acc = $sql->fetch_row($result)) {
   require_once("scripts/id_tab.php");
@@ -63,7 +63,7 @@ function edit_user() {
 	  <tr>
 	  <td >{$lang_edit['client_type']}:</td>
   	 <td>
-	   <select name=\"tbc\">
+	   <select name=\"expansion\">
 	    <option value=\"1\" ";
 		if($acc[3]) $output .= "selected=\"selected\"";
 		$output .= ">{$lang_edit['expansion']}</option>
@@ -181,7 +181,7 @@ function edit_user() {
 function doedit_user() {
  global $realm_db, $user_name;
 
- if ( (!isset($_POST['pass'])||$_POST['pass'] === '') || (!isset($_POST['mail'])||$_POST['mail'] === '') ||(!isset($_POST['tbc'])||$_POST['tbc'] === '') )
+ if ( (!isset($_POST['pass'])||$_POST['pass'] === '') || (!isset($_POST['mail'])||$_POST['mail'] === '') ||(!isset($_POST['expansion'])||$_POST['expansion'] === '') )
 	redirect("edit.php?error=1");
 
  $sql = new SQL;
@@ -189,13 +189,13 @@ function doedit_user() {
 
  $new_pass = ($sql->quote_smart($_POST['pass']) != sha1(strtoupper($user_name).":******")) ? "sha_pass_hash='".$sql->quote_smart($_POST['pass'])."', " : "";
  $new_mail = $sql->quote_smart(trim($_POST['mail']));
- $new_tbc = $sql->quote_smart(trim($_POST['tbc']));
+ $new_expansion = $sql->quote_smart(trim($_POST['expansion']));
 
  //make sure the mail is valid mail format
  require_once("scripts/valid_lib.php");
  if ((!is_email($new_mail))||(strlen($new_mail)  > 224)) redirect("edit.php?error=2");
 
- $sql->query("UPDATE account SET email='$new_mail', $new_pass tbc='$new_tbc' WHERE username = '$user_name'");
+ $sql->query("UPDATE account SET email='$new_mail', $new_pass expansion='$new_expansion' WHERE username = '$user_name'");
 
  if ($sql->affected_rows()) {
 	$sql->close();

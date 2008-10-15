@@ -770,7 +770,7 @@ $lang_user = array(
 	'cleanup' => 'CleanUp',
 	'backup' => 'Backup',
 	'by_name' => 'by Name',
-	'by_tbc' => 'by TBC Acc.',
+	'by_expansion' => 'by Expansion Acc.',
 	'by_id' => 'by ID',
 	'by_gm_level' => '= GM Level',
 	'greater_gm_level' => '< GM Level',
@@ -831,7 +831,7 @@ $lang_user = array(
 	'you_have_no_permission' => 'You have No Permission to Edit this Data',
 	'browse_acc' => 'Browse Accounts',
 	'you_have_no_permission_to_set_gmlvl' => 'You have No Permission to Set this GM Level',
-	'tbc_account' => 'TBC Account',
+	'expansion_account' => 'Expansion Account',
 	'client_type' => 'Client Type',
 	'classic' => 'Classic',
 	'expansion' => 'Expansion'
