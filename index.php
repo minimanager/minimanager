@@ -134,7 +134,6 @@ if ($online)
             CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
             mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(36+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
             FROM `characters` WHERE `online`= 1 $order_side ORDER BY $order_by $order_dir");
-             FROM `characters` WHERE `online`= 1 $order_side ORDER BY $order_by $order_dir");
             } else {
 	$result = $sql->query("SELECT guid,name,race,class,zone,map,
             CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
