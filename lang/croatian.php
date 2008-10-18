@@ -788,6 +788,7 @@ $lang_user = array(
 	'email' => 'Mail',
 	'join_date' => 'Datum pristupa',
 	'banned' => 'Ban',
+	'banned_reason' => 'Ban Reason',
 	'ip' => 'IP',
 	'failed_logins' => 'F.Login',
 	'locked' => 'Zaključan',

@@ -705,7 +705,7 @@ function edit_user() {
       <tr>
         <td>{$lang_user['banned']}</td>";
 
-	$que = $sql->query("SELECT bandate, unbandate, bannedby FROM account_banned WHERE id = $id");
+	$que = $sql->query("SELECT bandate, unbandate, bannedby, banreason FROM account_banned WHERE id = $id");
 	if ($sql->num_rows($que)){
 		$banned = $sql->fetch_row($que);
 		$ban_info = " From:".date('d-m-Y G:i', $banned[0])." till:".date('d-m-Y G:i', $banned[1])."<br />by $banned[2]";
@@ -727,6 +727,12 @@ function edit_user() {
       else $output .= "<td>***.***.***.***</td>";
       $output .= "
       </tr>
+      <tr>
+        <td>{$lang_user['banned_reason']}</td>";
+      if($user_lvl >= $action_permission['update']) { $output .="
+	    <td><input type=\"text\" name=\"banreason\" size=\"43\" maxlength=\"255\" value=\"$banned[3]\" /></td>";}
+      else $output .= "<td>$banned[3]</td>";
+ $output .="</tr>
 	   <td>{$lang_user['client_type']}</td>";
       if($user_lvl >= $action_permission['update']) { $output .="
 		<td><select name=\"expansion\">";
@@ -824,6 +830,7 @@ function doedit_user() {
 
  $id = $sql->quote_smart($_POST['id']);
  $username = $sql->quote_smart($_POST['username']);
+ $banreason = $sql->quote_smart($_POST['banreason']);
  $pass = $sql->quote_smart($_POST['pass']);
  $user_pass_change = ($pass != sha1(strtoupper($username).":******")) ? "username='$username',sha_pass_hash='$pass'," : "";
 
@@ -864,7 +871,7 @@ function doedit_user() {
 			$result = $sql->query("SELECT count(*) FROM account_banned WHERE id = '$id'");
 			if(!$sql->result($result, 0))
 				$sql->query("INSERT INTO account_banned (id, bandate, unbandate, bannedby, banreason, active)
-							   VALUES ($id, ".time().",".(time()+(365*24*3600)).",'$user_name','none', 1)");
+							   VALUES ($id, ".time().",".(time()+(365*24*3600)).",'$user_name','$banreason', 1)");
 		 }
 
  $sql->query("UPDATE account SET email='$mail', $user_pass_change failed_logins='$failed',locked='$locked',gmlevel='$gmlevel',expansion='$expansion' WHERE id=$id");

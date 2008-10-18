@@ -763,6 +763,7 @@ $lang_user = array(
 	'email' => 'نامه',
 	'join_date' => 'تاریخ ورود',
 	'banned' => 'توقیف',
+	'banned_reason' => 'Ban Reason',
 	'ip' => 'آی پی',
 	'failed_logins' => 'اشکال اتصال',
 	'locked' => 'قفل شده',

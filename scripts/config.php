@@ -113,6 +113,7 @@ $tt_lang = "www";          //wowhead tooltip language.....choices are 'fr', 'de'
 $timezone = "UTC";         //default timezone (use your local timezone code)
 $gm_online = "1";         //display GM Characters in the Online Character List (1 = enable, 0 = disable)
 $gm_online_count = "1";         //include GM Characters in the Online User Count (1 = enable, 0 = disable)
+$motd_display_poster = "1";         //display the poserter info in the MOTD (1 = enable, 0 = disable)
 
 //---- IRC Options ------
 $irc_cfg = array(

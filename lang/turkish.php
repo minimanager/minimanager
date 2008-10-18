@@ -767,6 +767,7 @@ $lang_user = array(
 	'email' => 'Posta',
 	'join_date' => 'Üyelik Tarihi',
 	'banned' => 'Yasak',
+	'banned_reason' => 'Ban Reason',
 	'ip' => 'IP',
 	'failed_logins' => 'B.Giriþ',
 	'locked' => 'Kilit',

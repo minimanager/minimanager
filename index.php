@@ -85,8 +85,8 @@ if($all_record)
 {
 	$result = $sql->query("SELECT id, type, content FROM bugreport ORDER BY id DESC LIMIT $start, 3");
 	while($post = $sql->fetch_row($result)){
-		$output .= "<tr><td align=\"left\" class=\"large\"><blockquote>".bbcode2html($post[2])."</blockquote></td></tr>
-					<tr><td align=\"right\">$post[1] ";
+		$output .= "<tr><td align=\"left\" class=\"large\"><blockquote>".bbcode2html($post[2])."</blockquote></td></tr>";
+		if ($motd_display_poster == 1) { $output .= "<tr><td align=\"right\">$post[1] "; } else { $output .= "<tr><td align=\"right\"> "; }
 		if ($user_lvl > 0) $output .= "<img src=\"img/cross.png\" width=\"12\" height=\"12\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$post[0]}</font><br />{$lang_global['are_you_sure']}', del_motd + $post[0]);\" style=\"cursor:pointer;\" />
 			<a href=\"motd.php?action=edit_motd&amp;id=$post[0]\"><img src=\"img/edit.png\" width=\"14\" height=\"14\" /></a>";
 		$output .= "</th></tr>
@@ -109,7 +109,7 @@ if ($online)
 	if ($gm_online_count == "1") {
 		$result = $sql->query("SELECT count(*) FROM `characters` WHERE `online`= 1");
 	} else {
-		$result = $sql->query("SELECT count(*) FROM `characters` WHERE `online`= 1 AND `gmstate` != 3");
+		$result = $sql->query("SELECT count(*) FROM `characters` WHERE `online`= 1 AND `gmstate`= 0 OR `gmstate`= 4");
 	}
 	$total_online = $sql->result($result, 0);
     
@@ -141,7 +141,7 @@ if ($online)
             account,
             CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
             mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(36+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
-                        FROM `characters` WHERE `online`= 1 AND `gmstate` != 3 $order_side ORDER BY $order_by $order_dir");
+            FROM `characters` WHERE `online`= 1 AND `gmstate`= 0 OR `gmstate`= 4 $order_side ORDER BY $order_by $order_dir");
             }
 
 	$output .= "

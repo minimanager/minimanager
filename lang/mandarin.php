@@ -775,6 +775,7 @@ $lang_user = array(
 	'email' => 'ÓÊ¼þ',
 	'join_date' => '¼ÓÈëÈÕÆÚ',
 	'banned' => '·â',
+	'banned_reason' => 'Ban Reason',
 	'ip' => 'IP',
 	'failed_logins' => 'µÇÂ½Ê§°Ü´ÎÊý',
 	'locked' => 'Ëø¶¨',

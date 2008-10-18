@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -786,6 +786,7 @@ $lang_user = array(
   'email' => 'Email',
   'join_date' => 'Date d\'inscription',
   'banned' => 'Ban',
+  'banned_reason' => 'Ban Reason',
   'ip' => 'IP',
   'failed_logins' => 'Conn. échouées',
   'locked' => 'Bloqué',
