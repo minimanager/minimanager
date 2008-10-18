@@ -109,7 +109,7 @@ if ($online)
 	if ($gm_online_count == "1") {
 		$result = $sql->query("SELECT count(*) FROM `characters` WHERE `online`= 1");
 	} else {
-		$result = $sql->query("SELECT count(*) FROM `characters` WHERE `online`= 1 AND `gmstate`= 0 OR `gmstate`= 4");
+		$result = $sql->query("SELECT count(*) FROM `characters` WHERE `online`= 1 AND `gmstate`& 1 = 0");
 	}
 	$total_online = $sql->result($result, 0);
     
@@ -141,7 +141,7 @@ if ($online)
             account,
             CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
             mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(36+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
-            FROM `characters` WHERE `online`= 1 AND `gmstate`= 0 OR `gmstate`= 4 $order_side ORDER BY $order_by $order_dir");
+            FROM `characters` WHERE `online`= 1 AND `gmstate`& 1 = 0 $order_side ORDER BY $order_by $order_dir");
             }
 
 	$output .= "
