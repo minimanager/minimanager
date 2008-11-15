@@ -12,9 +12,9 @@ $time_start = microtime(true);
 
 if ( !ini_get('session.auto_start') ) session_start();
 
-require_once("scripts/config.php");
+require_once("./scripts/config.php");
 if($debug) $tot_queries = 0;
-require_once("scripts/db_layer.php");
+require_once("./scripts/db_layer.php");
 
 if (isset($_COOKIE["lang"])){
 	$lang = $_COOKIE["lang"];
@@ -26,17 +26,17 @@ if (isset($_COOKIE["css_template"])){
 		if (is_file("templates/".$_COOKIE["css_template"]."/".$_COOKIE["css_template"]."_1024.css")) $css_template = $_COOKIE["css_template"];
 	}
 
-require_once("lang/$lang.php");
-require_once("scripts/global_lib.php");
-require_once("scripts/id_tab.php");
+require_once("./lang/$lang.php");
+require_once("./scripts/global_lib.php");
+require_once("./scripts/id_tab.php");
 
 //application/xhtml+xml
 $output .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">
 <head>
  <title>$title</title>
- <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />
- <meta http-equiv=\"Content-Type\" content=\"text/javascript; charset=utf-8\" />
+ <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$site_encoding\" />
+ <meta http-equiv=\"Content-Type\" content=\"text/javascript; charset=$site_encoding\" />
  <link rel=\"stylesheet\" type=\"text/css\" href=\"templates/".$css_template."/".$css_template."_1024.css\" title=\"1024\" />
  <link rel=\"stylesheet\" type=\"text/css\" href=\"templates/".$css_template."/".$css_template."_1280.css\" title=\"1280\" />
  <link rel=\"SHORTCUT ICON\" href=\"img/favicon.ico\" />
