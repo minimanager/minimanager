@@ -24,28 +24,40 @@ if (test_port($server[$realm_id]['addr'],$server[$realm_id]['game_port']))
     $query = $sql->query("SELECT `starttime` FROM `uptime` ORDER BY `starttime` DESC LIMIT 1");
     $getuptime = mysql_fetch_row($query);
     $uptimetime = time() - $getuptime[0];
-    $uptime = array
-        (
-            'd' => $uptimetime / 86400 % 7,
-            'h' => $uptimetime / 3600 % 24,
-            'm' => $uptimetime / 60 % 60,
-            's' => $uptimetime / 1 % 60,
-         );
+
+function format_uptime($seconds) {
+  $secs = intval($seconds % 60);
+  $mins = intval($seconds / 60 % 60);
+  $hours = intval($seconds / 3600 % 24);
+  $days = intval($seconds / 86400);
+  
+  if ($days > 0) {
+    $uptimeString .= $days;
+    $uptimeString .= (($days == 1) ? " day" : " days");
+  }
+  if ($hours > 0) {
+    $uptimeString .= (($days > 0) ? ", " : "") . $hours;
+    $uptimeString .= (($hours == 1) ? " hour" : " hours");
+  }
+  if ($mins > 0) {
+    $uptimeString .= (($days > 0 || $hours > 0) ? ", " : "") . $mins;
+    $uptimeString .= (($mins == 1) ? " minute" : " minutes");
+  }
+  if ($secs > 0) {
+    $uptimeString .= (($days > 0 || $hours > 0 || $mins > 0) ? ", " : "") . $secs;
+    $uptimeString .= (($secs == 1) ? " second" : " seconds");
+  }
+  return $uptimeString;
+}
+
+$staticUptime = "{$lang_index['realm']} ".get_realm_name($realm_id)." {$lang_index['online']} for ".format_uptime($uptimetime);
 
     if ($uptime['d'] < 2) $sd = ""; else $sd = "s"; 
     if ($uptime['h'] < 2) $sh = ""; else $sh = "s"; 
     if ($uptime['m'] < 2) $sm = ""; else $sm = "s"; 
     if ($uptime['s'] < 2) $ss = ""; else $ss = "s"; 
 
-    if ($uptime['d'] > 0) 
-        $output .= "<h1><font color=\"#55aa55\">{$lang_index['realm']} ".get_realm_name($realm_id)." {$lang_index['online']} for " . $uptime['d'] . " day$sd " .  $uptime['h'] . " hour$sh " .  $uptime['m'] . " minute$sm and  " .  $uptime['s'] . " second$ss.</font></h1>";
-    else 
-    {
-        if ($uptime['h'] > 0) 
-            $output .= "<h1><font color=\"#55aa55\">{$lang_index['realm']} ".get_realm_name($realm_id)." {$lang_index['online']} for " .  $uptime['h'] . " hour$sh " .  $uptime['m'] . " minute$sm and  " .  $uptime['s'] . " second$ss.</font></h1>";
-        else 
-            $output .= "<h1><font color=\"#55aa55\">{$lang_index['realm']} ".get_realm_name($realm_id)." {$lang_index['online']} for " .  $uptime['m'] . " minute$sm and  " .  $uptime['s'] . " second$ss.</font></h1>";
-    }
+$output .= "<div id=\"uptime\"><h1><font color=\"#55aa55\">".$staticUptime."</font></h1></div>";
 
     $online = true;
 } 
