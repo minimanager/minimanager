@@ -131,7 +131,7 @@ LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` c2 ON `c2`.`guid`
 			$value = $g."<img src=\"./img/gold.gif\" /> ".$s."<img src=\"./img/silver.gif\" /> ".$c."<img src=\"./img/copper.gif\" /> ";
 			break;
 			case 2:
-			$value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip('".addslashes(get_item_tooltip($rows[1]))."','item_tooltip')\" onmouseout=\"toolTip()\"><img src=\"".get_icon($rows[1])."\" class=\"icon_border_0\" alt=\"$value\"><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</img></a>";
+			$value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip,'item_tooltip')\"><img src=\"".get_icon($rows[1])."\" class=\"icon_border_0\" alt=\"$value\"><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</img></a>";
 			break;
 			case 0:
 			$value = "<b>".((!empty($rows[9])) ? "<font color=".$sidecolor[$rows[9]].">$value</font>" : "N/A")."</b>";
@@ -310,7 +310,7 @@ $result = $sql->query("SELECT `characters`.`name` AS `seller`, `auctionhouse`.`i
 			$value = $g."<img src=\"./img/gold.gif\" /> ".$s."<img src=\"./img/silver.gif\" /> ".$c."<img src=\"./img/copper.gif\" /> ";
 			break;
 			case 2:
-			$value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip('".addslashes(get_item_tooltip($rows[1]))."','item_tooltip')\" onmouseout=\"toolTip()\"><img src=\"".get_icon($rows[1])."\" class=\"icon_border_0\" alt=\"$value\"><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</img></a>";
+			$value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip,'item_tooltip')\"><img src=\"".get_icon($rows[1])."\" class=\"icon_border_0\" alt=\"$value\"><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</img></a>";
 			break;
 			case 0:
 			$value = "<b>".((!empty($rows[9])) ? "<font color=".$sidecolor[$rows[9]].">$value</font>" : "N/A")."</b>";
