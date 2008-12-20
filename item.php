@@ -84,10 +84,10 @@ function output_dmgtype_options($dmg_type_offset){
 //  PRINT  ITEM SEARCH FORM
 //########################################################################################################################
 function search() {
- global $lang_global, $lang_item, $lang_item_edit, $lang_id_tab, $output, $mangos_db, $realm_id, $itemset_id;
+ global $lang_global, $lang_item, $lang_item_edit, $lang_id_tab, $output, $world_db, $realm_id, $itemset_id;
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $result = $sql->query("SELECT count(*) FROM item_template");
  $tot_items = $sql->result($result, 0);
@@ -227,7 +227,7 @@ $output .= "</select></td>
 // SHOW SEARCH RESULTS
 //########################################################################################################################
 function do_search() {
- global $lang_global, $lang_item, $lang_item_edit, $output, $mangos_db, $realm_id, $item_datasite, $sql_search_limit;
+ global $lang_global, $lang_item, $lang_item_edit, $output, $world_db, $realm_id, $item_datasite, $sql_search_limit;
  $deplang = get_lang_id();
  if(($_POST['class'] == "-1")&&($_POST['Quality'] == "-1")&&($_POST['InventoryType'] == "-1")&&($_POST['bonding'] == "-1")
 	&&(!isset($_POST['entry'])||$_POST['entry'] === '')&&(!isset($_POST['name'])||$_POST['name'] === '')&&(!isset($_POST['displayid'])||$_POST['displayid'] === '')&&(!isset($_POST['RequiredLevel'])||$_POST['RequiredLevel'] === '')
@@ -237,7 +237,7 @@ function do_search() {
 	redirect("item.php?error=1");
 
 $sql = new SQL;
-$sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+$sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
 $class = $sql->quote_smart($_POST['class']);
 $Quality = $sql->quote_smart($_POST['Quality']);
@@ -1182,13 +1182,13 @@ $output .= "<div id=\"pane7\">
 // EDIT ITEM FORM
 //########################################################################################################################
 function edit() {
- global $lang_global, $lang_item_templ, $lang_item, $lang_item_edit, $output, $mangos_db, $realm_id, 
+ global $lang_global, $lang_item_templ, $lang_item, $lang_item_edit, $output, $world_db, $realm_id, 
 		$item_datasite, $lang_id_tab, $quest_datasite;
 
  if (!isset($_GET['entry'])) redirect("item.php?error=1");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  
  $entry = $sql->quote_smart($_GET['entry']);
  $deplang = get_lang_id();
@@ -2308,13 +2308,13 @@ $output .= "</div>
 //DO UPDATE ITEM
 //########################################################################################################################
 function do_update() {
- global $mangos_db, $realm_id;
+ global $world_db, $realm_id;
 
  if (!isset($_POST['type']) || $_POST['type'] === '') redirect("item.php?error=1");
  if (!isset($_POST['entry']) || $_POST['entry'] === '') redirect("item.php?error=1");
  
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $entry = $sql->quote_smart($_POST['entry']);
  if (isset($_POST['class']) && $_POST['class'] != '') $class = $sql->quote_smart($_POST['class']);
@@ -2885,13 +2885,13 @@ global $lang_global, $lang_item_edit, $output;
 //  DO DELETE ITEM
 //########################################################################################################################
 function do_delete() {
- global $mangos_db, $realm_id;
+ global $world_db, $realm_id;
 
  if(isset($_GET['entry'])) $entry = $_GET['entry'];
 	else redirect("item.php?error=1");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $result = $sql->query("DELETE FROM item_template WHERE entry = '$entry'");
 

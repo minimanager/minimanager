@@ -39,7 +39,7 @@ $realm_db = Array(
 	'encoding' => "utf8" 		//SQL connection encoding
 	);
 
-$mangos_db = Array(
+$world_db = Array(
 	1 => array(		//position in array must represent realmd ID
 			'id' => 1,					//Realm ID
 			'addr' => "127.0.0.1:3306",	//SQL server IP:port this DB located on
@@ -63,7 +63,7 @@ $characters_db = Array(
 
 //---- Game Server Configuration ----
 $server = Array(	//if more than one realm used, even if they are on same system new subarray MUST be added.
-	1 => array(		//position in array must represent realmd ID, same as in $mangos_db
+	1 => array(		//position in array must represent realmd ID, same as in $world_db
 			'addr' => "127.0.0.1",		//Game Server IP - Must be external address
 			'game_port' => 8085,		//Game Server port
 			'term_type' => "SSH",		//Terminal type - ("SSH"/"Telnet")

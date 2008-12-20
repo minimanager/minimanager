@@ -15,7 +15,7 @@ valid_login($action_permission['read']);
 // PRINT REPAIR/OPTIMIZE FORM
 //##############################################################################################
 function repair_form(){
- global $lang_global, $lang_repair, $output, $realm_db, $realm_id, $mangos_db, $characters_db;
+ global $lang_global, $lang_repair, $output, $realm_db, $realm_id, $world_db, $characters_db;
 
  $output .= "<center>
 		<fieldset class=\"tquarter_frame\">
@@ -60,7 +60,7 @@ function repair_form(){
             </tr>";
 }
 
- foreach ($mangos_db as $db){
+ foreach ($world_db as $db){
 	$output .= "<tr class=\"large_bold\"><td colspan=\"3\" class=\"hidden\" align=\"left\">{$db['name']} Tables :</td></tr>";
 
 	$sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
@@ -108,7 +108,7 @@ foreach ($characters_db as $db){
 // EXECUTE TABLE REPAIR OR OPTIMIZATION
 //##############################################################################################
 function do_repair(){
- global $lang_global, $output, $realm_db, $mangos_db, $characters_db;
+ global $lang_global, $output, $realm_db, $world_db, $characters_db;
 
  if ((!isset($_POST['repair_action']) && $_POST['repair_action'] === '') || (!isset($_POST['check'])) ) {
    redirect("repair.php?error=1");
@@ -126,7 +126,7 @@ function do_repair(){
 		if ($table_data[0] == "realm"){
 			$sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 		} elseif ($table_data[0] == "mangos"){
-			$sql->connect($mangos_db['addr'], $mangos_db['user'], $mangos_db['pass']);
+			$sql->connect($world_db['addr'], $world_db['user'], $world_db['pass']);
 		} elseif  ($table_data[0] == "characters"){
 			$sql->connect($characters_db['addr'], $characters_db['user'], $characters_db['pass']);
 		}

@@ -52,12 +52,12 @@ function makeinfocell($text,$tooltip){
 //  PRINT  ITEM SEARCH FORM
 //########################################################################################################################
 function search() {
- global $locales_search_option, $lang_global, $lang_creature, $output, $mangos_db, $realm_id, $creature_type;
+ global $locales_search_option, $lang_global, $lang_creature, $output, $world_db, $realm_id, $creature_type;
 
  include_once("./scripts/language_select.php");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
      
  $result = $sql->query("SELECT count(*) FROM creature_template");
  $tot_items = $sql->result($result, 0);
@@ -215,12 +215,12 @@ $output .= "</td></tr>
 // SHOW SEARCH RESULTS
 //########################################################################################################################
 function do_search() {
- global $lang_global, $lang_creature, $output, $mangos_db, $realm_id, $creature_datasite, $sql_search_limit,
+ global $lang_global, $lang_creature, $output, $world_db, $realm_id, $creature_datasite, $sql_search_limit,
 		$creature_type, $creature_npcflag, $language;
 
 
 $sql = new SQL;
-$sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+$sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
 $where = '';
 
@@ -362,14 +362,14 @@ else
 // EDIT CREATURE FORM
 //########################################################################################################################
 function do_insert_update($do_insert) {
- global $lang_global, $lang_creature, $output, $mangos_db, $realm_id, $creature_datasite,$item_datasite,
+ global $lang_global, $lang_creature, $output, $world_db, $realm_id, $creature_datasite,$item_datasite,
 		$quest_datasite, $lang_id_tab, $spell_datasite, $lang_item,$language, $action_permission, $user_lvl, $locales_search_option;
 
  require_once("./scripts/get_lib.php");
 
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
 
  // entry only needed on update
@@ -1350,7 +1350,7 @@ else {
 //########################################################################################################################
 
 function do_update() {
- global $mangos_db, $realm_id, $action_permission, $user_lvl, $locales_search_option ;
+ global $world_db, $realm_id, $action_permission, $user_lvl, $locales_search_option ;
  
  // on update, use replace.. and else insert 
   if ($_POST['insert'] == "1") {
@@ -1370,7 +1370,7 @@ function do_update() {
  if (!isset($_POST['entry']) || $_POST['entry'] === '') redirect("creature.php?error=1");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $entry = $sql->quote_smart($_POST['entry']);
 	 if (isset($_POST['heroic_entry']) && $_POST['heroic_entry'] != '') $modelid_A = $sql->quote_smart($_POST['heroic_entry']);
@@ -1757,7 +1757,7 @@ global $lang_global, $lang_creature, $output, $user_lvl, $action_permission;
 //  DO DELETE CREATURE TEMPLATE
 //########################################################################################################################
 function do_delete() {
- global $mangos_db, $realm_id, $user_lvl, $action_permission;
+ global $world_db, $realm_id, $user_lvl, $action_permission;
  
  if ($user_lvl < $action_permission['delete'] ) redirect("creature.php?error=9");
 
@@ -1765,7 +1765,7 @@ function do_delete() {
 	else redirect("creature.php?error=1");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
   $result = $sql->query("SELECT guid FROM creature WHERE id = '$entry'");
   while ($guid = $sql->fetch_row($result)){
@@ -1789,7 +1789,7 @@ function do_delete() {
 //   DELETE ALL CREATURE SPAWNS
 //########################################################################################################################
 function delete_spwn() {
- global $mangos_db, $realm_id, $user_lvl, $action_permission;
+ global $world_db, $realm_id, $user_lvl, $action_permission;
  
  if ($user_lvl < $action_permission['delete'] ) redirect("creature.php?error=9");
 
@@ -1797,7 +1797,7 @@ function delete_spwn() {
 	else redirect("creature.php?error=1");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $result = $sql->query("SELECT guid FROM creature WHERE id = '$entry'");
  while ($guid = $sql->fetch_row($result)){

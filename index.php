@@ -15,7 +15,7 @@ require_once("scripts/get_lib.php");
 require_once("scripts/bbcode_lib.php");
 
 $sql = new SQL;
-$sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+$sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
 $output .= "<div class=\"top\">";
 
@@ -68,7 +68,7 @@ else
 }
 
 //  This retrieves the actual database version from the database itself,  instead of hardcoding it into a string
-$sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+$sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 $query_db_version = $sql->query("SELECT version FROM db_version");
 $db_rev = $sql->result($query_db_version, 0);
 $output .= "Mangos: {$server[$realm_id]['rev']} Using DB: $db_rev</div>";

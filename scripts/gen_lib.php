@@ -52,7 +52,7 @@ function send_ingame_mail($to, $from, $subject, $body, $gold = 0, $item = 0, $st
 //##########################################################################################
 //GENERATE ITEM_NSTANCE ENTRY
 function gen_item_instance($owner, $item_id, $stack){
- global $lang_global, $characters_db, $realm_id, $mangos_db;
+ global $lang_global, $characters_db, $realm_id, $world_db;
 
  $sql_1 = new SQL;
  $sql_1->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -61,7 +61,7 @@ function gen_item_instance($owner, $item_id, $stack){
  $guid = $sql_1->result($result, 0) + 1;
 
  $result = $sql_1->query("SELECT flags,stackable,MaxDurability,spellcharges_1,spellcharges_2,
-							spellcharges_3,spellcharges_4,spellcharges_5 FROM `".$mangos_db[$realm_id]['name']."`.`item_template`
+							spellcharges_3,spellcharges_4,spellcharges_5 FROM `".$world_db[$realm_id]['name']."`.`item_template`
 							WHERE entry = '$item_id'");
  $item_template = $sql_1->fetch_row($result);
 

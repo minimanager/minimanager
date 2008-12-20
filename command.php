@@ -15,7 +15,7 @@ include("header.php");
 // PRINT COMMAND FORM
 //#######################################################################################
 function print_commands_form(){
- global $lang_command, $output, $mangos_db, $user_lvl, $realm_id;
+ global $lang_command, $output, $world_db, $user_lvl, $realm_id;
 
  $levels = array(
   0 => array ('level0',''),
@@ -27,7 +27,7 @@ function print_commands_form(){
  );
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $query = $sql->query("SELECT name,help,`security` FROM command WHERE `security` <= $user_lvl");
 
@@ -139,11 +139,11 @@ if ($user_lvl < 4) redirect("command.php?error=2");
 //  DO UPDATE COMMAND LEVEL
 //#######################################################################################################
 function doupdate_commands() {
- global $lang_global, $output, $mangos_db, $realm_id, $user_lvl;
+ global $lang_global, $output, $world_db, $realm_id, $user_lvl;
   if ($user_lvl < 4) redirect("command.php?error=2");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  if(isset($_GET['change'])) $change = $sql->quote_smart($_GET['change']);
  else redirect("command.php?error=1");
 

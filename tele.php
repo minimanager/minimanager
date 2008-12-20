@@ -16,10 +16,10 @@ require_once("scripts/id_tab.php");
 // BROWSE TELEPORT LOCATIONS
 //########################################################################################################################
 function browse_tele() {
- global $lang_tele, $lang_global, $output, $mangos_db, $realm_id, $itemperpage;
+ global $lang_tele, $lang_global, $output, $world_db, $realm_id, $itemperpage;
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  
  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "id";
@@ -99,12 +99,12 @@ while ($data = $sql->fetch_row($query)){
 //  SEARCH
 //########################################################################################################################
 function search() {
- global $lang_tele, $lang_global, $output, $mangos_db, $realm_id, $sql_search_limit;
+ global $lang_tele, $lang_global, $output, $world_db, $realm_id, $sql_search_limit;
 
  if(empty($_GET['search_value']) || empty($_GET['search_by'])) redirect("guild.php?error=2");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  
  $search_value = $sql->quote_smart($_GET['search_value']);
  $search_by = $sql->quote_smart($_GET['search_by']);
@@ -180,10 +180,10 @@ while ($data = $sql->fetch_row($query)){
 // DO DELETE TELE FROM LIST
 //########################################################################################################################
 function del_tele() {
- global $mangos_db, $realm_id;
+ global $world_db, $realm_id;
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  
  if(isset($_GET['id'])) $id = $sql->quote_smart($_GET['id']);
 	else redirect("Location: tele.php?error=1");
@@ -209,10 +209,10 @@ function del_tele() {
 //  EDIT   TELE
 //########################################################################################################################
 function edit_tele() {
- global  $lang_tele, $lang_global, $output, $mangos_db, $realm_id, $map_id;
+ global  $lang_tele, $lang_global, $output, $world_db, $realm_id, $map_id;
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  
  if(isset($_GET['id'])) $id = $sql->quote_smart($_GET['id']);
 	else redirect("tele.php?error=1");
@@ -289,14 +289,14 @@ $output .= "</td></tr>
 //  DO EDIT TELE LOCATION
 //########################################################################################################################
 function do_edit_tele() {
- global $mangos_db, $realm_id;
+ global $world_db, $realm_id;
 
  if( empty($_GET['id']) || !isset($_GET['new_name']) || !isset($_GET['new_map']) || !isset($_GET['new_x'])
  || !isset($_GET['new_y'])|| !isset($_GET['new_z'])|| !isset($_GET['new_orientation']))
   redirect("tele.php?error=1");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  
  $id = $sql->quote_smart($_GET['id']);
  $new_name = $sql->quote_smart($_GET['new_name']);
@@ -374,14 +374,14 @@ $output .= "</td></tr>
 //  DO ADD  TELE LOCATION
 //########################################################################################################################
 function do_add_tele() {
- global $mangos_db, $realm_id;
+ global $world_db, $realm_id;
 
  if( !isset($_GET['name']) || !isset($_GET['map']) || !isset($_GET['x'])
  || !isset($_GET['y'])|| !isset($_GET['z'])|| !isset($_GET['orientation']))
   redirect("tele.php?error=1");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $name = $sql->quote_smart($_GET['name']);
  $map = $sql->quote_smart($_GET['map']);

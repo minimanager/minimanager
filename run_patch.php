@@ -15,7 +15,7 @@ valid_login($action_permission['read']);
 // DO UPLOAD/SUBMIT PATCH
 //#####################################################################################################
 function print_upload(){
- global $lang_run_patch, $lang_global, $backup_dir, $output, $realm_db, $mangos_db, $realm_id, $characters_db;
+ global $lang_run_patch, $lang_global, $backup_dir, $output, $realm_db, $world_db, $realm_id, $characters_db;
 
 if (isset($_FILES["uploaded_file"]["name"])){
  if ($_FILES["uploaded_file"]["type"] != "application/octet-stream" && $_FILES["uploaded_file"]["type"] != "text/plain") error("{$lang_run_patch['run_sql_file_only']}<br />". $_FILES["uploaded_file"]["type"]);
@@ -45,7 +45,7 @@ if (isset($_FILES["uploaded_file"]["name"])){
 				 <td align=\"left\">{$lang_run_patch['run_rules']}</td>
 				 <td align=\"right\">{$lang_run_patch['select_db']}:
 				 <select name=\"use_db\">";
-	 foreach ($mangos_db as $db) $output .= "<option value=\"{$db['name']}\">{$db['name']}</option>";
+	 foreach ($world_db as $db) $output .= "<option value=\"{$db['name']}\">{$db['name']}</option>";
 	 foreach ($characters_db as $db) $output .= "<option value=\"{$db['name']}\">{$db['name']}</option>";
 	 $output .= "<option value=\"{$realm_db['name']}\">{$realm_db['name']}</option>
 				 </select>
@@ -63,7 +63,7 @@ if (isset($_FILES["uploaded_file"]["name"])){
 // DO Run the Query line by line
 //#####################################################################################################
 function do_run_patch(){
- global $lang_run_patch, $lang_global, $output, $mangos_db, $realm_db, $characters_db;
+ global $lang_run_patch, $lang_global, $output, $world_db, $realm_db, $characters_db;
 
  if ( empty($_POST['query']) || empty($_POST['use_db']) ) redirect("run_patch.php?error=1");
 
@@ -75,7 +75,7 @@ function do_run_patch(){
 
  if ($use_db == $realm_db['name']) $sql->db($realm_db['name']);
 	else {
-		foreach ($mangos_db as $db)
+		foreach ($world_db as $db)
 			if ($use_db == $db['name']) $sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
 		foreach ($characters_db as $db)
 			if ($use_db == $db['name']) $sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);

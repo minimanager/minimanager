@@ -71,7 +71,7 @@ $level = Array(
  $query = $sql->query("SELECT count(*) FROM `characters`");
  $total_chars = $sql->result($query,0);
 
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  $query = $sql->query("SELECT AVG(uptime)/60,MAX(uptime)/60,(100*SUM(uptime)/(UNIX_TIMESTAMP()-MIN(starttime))) FROM uptime");
  $uptime = $sql->fetch_row($query);
 

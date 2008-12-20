@@ -21,7 +21,7 @@ require_once("scripts/char_aura.php");
 //########################################################################################################################
 function char_main() 
 {
-    global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$mangos_db,
+    global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
         $user_name, $item_datasite, $server, $user_id, $char_aura, $talent_datasite;
 
     if (empty($_GET['id'])) error($lang_global['empty_fields']);
@@ -391,7 +391,7 @@ $sql->close();
 // SHOW INV. AND BANK ITEMS
 //########################################################################################################################
 function char_inv() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$mangos_db,
+ global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
     $user_name,$item_datasite;
 
 if (empty($_GET['id'])) error($lang_global['empty_fields']);
@@ -450,7 +450,7 @@ if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name)){
       if($slot[1] < 23) // SLOT 19 TO 22 (Bags)
       {
         $bag_id[$slot[2]] = ($slot[1]-18);
-				$equiped_bag_id[$slot[1]-18] = array($slot[3], $sql->result($sql->query("SELECT ContainerSlots FROM `".$mangos_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
+				$equiped_bag_id[$slot[1]-18] = array($slot[3], $sql->result($sql->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
       }
       elseif($slot[1] < 39) // SLOT 23 TO 38 (BackPack)
       {
@@ -465,7 +465,7 @@ if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name)){
       elseif($slot[1] < 74) // SLOT 67 TO 73 (Bank Bags)
       {
         $bank_bag_id[$slot[2]] = ($slot[1]-66);
-        $equip_bnk_bag_id[$slot[1]-66] = array($slot[3], $sql->result($sql->query("SELECT ContainerSlots FROM `".$mangos_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
+        $equip_bnk_bag_id[$slot[1]-66] = array($slot[3], $sql->result($sql->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
       }
     }
     else
@@ -694,7 +694,7 @@ $sql->close();
 // SHOW CHARACTERS QUESTS
 //########################################################################################################################
 function char_quest(){
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$mangos_db,
+ global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
     $user_name, $quest_datasite, $language;
 
  if (empty($_GET['id'])) error($lang_global['empty_fields']);
@@ -749,7 +749,7 @@ function char_quest(){
     if ($sql->num_rows($result)){
     while ($quest = $sql->fetch_row($result)){
       $deplang = get_lang_id();
-      $query1 = $sql->query("SELECT QuestLevel,IFNULL(".($deplang<>0?"title_loc$deplang":"NULL").",`title`) as Title FROM `".$mangos_db[$realm_id]['name']."`.`quest_template` LEFT JOIN `".$mangos_db[$realm_id]['name']."`.`locales_quest` ON `quest_template`.`entry` = `locales_quest`.`entry` WHERE `quest_template`.`entry` ='$quest[0]'");
+      $query1 = $sql->query("SELECT QuestLevel,IFNULL(".($deplang<>0?"title_loc$deplang":"NULL").",`title`) as Title FROM `".$world_db[$realm_id]['name']."`.`quest_template` LEFT JOIN `".$world_db[$realm_id]['name']."`.`locales_quest` ON `quest_template`.`entry` = `locales_quest`.`entry` WHERE `quest_template`.`entry` ='$quest[0]'");
       $quest_info = $sql->fetch_row($query1);
       if($quest[1]==1)
       array_push($quests_1, array($quest[0], $quest_info[0], $quest_info[1]));
@@ -812,7 +812,7 @@ function char_quest(){
 // SHOW CHAR REPUTATION
 //########################################################################################################################
 function char_rep() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$mangos_db,
+ global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
     $user_name, $fact_id, $reputation_rank_length, $reputation_cap, $reputation_bottom, $reputation_rank, $MIN_REPUTATION_RANK, $MAX_REPUTATION_RANK;
 
 if (empty($_GET['id'])) error($lang_global['empty_fields']);
@@ -936,7 +936,7 @@ $sql->close();
 // SHOW CHARACTERS SKILLS
 //########################################################################################################################
 function char_skill() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$mangos_db,
+ global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
     $user_name, $skill_datasite;
 
 if (empty($_GET['id'])) error($lang_global['empty_fields']);
@@ -1098,7 +1098,7 @@ $sql->close();
 // SHOW CHARACTER TALENTS
 //########################################################################################################################
 function char_talent() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$mangos_db,
+ global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
         $user_name, $talent_datasite, $talent_calculator_datasite;
 
 if (empty($_GET['id'])) error($lang_global['empty_fields']);
@@ -1227,7 +1227,7 @@ $sql->close();
 // SHOW CHARACTER PETS
 //########################################################################################################################^M
 function char_pets() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$mangos_db,
+ global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
         $user_name, $pet_ability, $talent_datasite;
 
 if (empty($_GET['id'])) error($lang_global['empty_fields']);

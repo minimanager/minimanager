@@ -60,10 +60,10 @@ function makeinfocell($text,$tooltip){
 //  PRINT GO SEARCH FORM
 //########################################################################################################################
 function search() {
- global $lang_global, $lang_game_object, $output, $mangos_db, $realm_id, $go_type;
+ global $lang_global, $lang_game_object, $output, $world_db, $realm_id, $go_type;
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $result = $sql->query("SELECT count(*) FROM gameobject_template");
  $tot_go = $sql->result($result, 0);
@@ -123,7 +123,7 @@ $output .= "</td></tr>
 // SHOW SEARCH RESULTS
 //########################################################################################################################
 function do_search() {
- global $lang_global, $lang_game_object, $output, $mangos_db, $realm_id, $go_datasite, $sql_search_limit,
+ global $lang_global, $lang_game_object, $output, $world_db, $realm_id, $go_datasite, $sql_search_limit,
 		$go_type;
  	require_once("./scripts/get_lib.php");
  	$deplang = get_lang_id();
@@ -135,7 +135,7 @@ function do_search() {
 	}
 
 $sql = new SQL;
-$sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+$sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
 if ($_POST['entry'] != '') $entry = $sql->quote_smart($_POST['entry']);
 if ($_POST['name'] != '') $name = $sql->quote_smart($_POST['name']);
@@ -359,13 +359,13 @@ $output .= "<div id=\"pane1\"><br /><br />
 // EDIT GO FORM
 //########################################################################################################################
 function edit() {
- global $lang_global, $lang_game_object, $output, $mangos_db, $realm_id, $item_datasite, $go_datasite,
+ global $lang_global, $lang_game_object, $output, $world_db, $realm_id, $item_datasite, $go_datasite,
 		$go_type, $quest_datasite;
 
  if (!isset($_GET['entry'])) redirect("game_object.php?error=1");
 	
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  
  $entry = $sql->quote_smart($_GET['entry']);
  require_once("./scripts/get_lib.php");
@@ -647,13 +647,13 @@ $output .= "<tr class=\"large_bold\" align=\"left\"><td colspan=\"2\" class=\"hi
 //DO UPDATE GO TEMPLATE
 //########################################################################################################################
 function do_update() {
- global $mangos_db, $realm_id;
+ global $world_db, $realm_id;
 
  if (!isset($_POST['opp_type']) || $_POST['opp_type'] === '') redirect("game_object.php?error=1");
  if (!isset($_POST['entry']) || $_POST['entry'] === '') redirect("game_object.php?error=1");
  
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $entry = $sql->quote_smart($_POST['entry']);
  if (isset($_POST['type']) && $_POST['type'] != '') $type = $sql->quote_smart($_POST['type']);
@@ -891,13 +891,13 @@ global $lang_global, $lang_game_object, $output;
 //  DO DELETE GO TEMPLATE
 //########################################################################################################################
 function do_delete() {
- global $mangos_db, $realm_id;
+ global $world_db, $realm_id;
 
  if(isset($_GET['entry'])) $entry = $_GET['entry'];
 	else redirect("game_object.php?error=1");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $result = $sql->query("SELECT guid FROM gameobject WHERE id = '$entry'");
  while ($guid = $sql->fetch_row($result)){
@@ -917,13 +917,13 @@ function do_delete() {
 //   DELETE ALL GO SPAWNS
 //########################################################################################################################
 function delete_spwn() {
- global $mangos_db, $realm_id;
+ global $world_db, $realm_id;
 
  if(isset($_GET['entry'])) $entry = $_GET['entry'];
 	else redirect("game_object.php?error=1");
 
  $sql = new SQL;
- $sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+ $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  $sql->query("DELETE FROM gameobject WHERE id = '$entry'");
  $sql->close();
  redirect("game_object.php?action=edit&entry=$entry&error=4");

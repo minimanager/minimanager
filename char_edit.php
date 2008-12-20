@@ -231,7 +231,7 @@ $sql->close();
 //########################################################################################################################
 function do_edit_char() {
  global $lang_global, $lang_char, $output, $realm_db, 
-		$characters_db, $realm_id, $user_lvl , $mangos_db;
+		$characters_db, $realm_id, $user_lvl , $world_db;
 		
 if ( empty($_GET['id']) || empty($_GET['name']) ) error($lang_global['empty_fields']);
 
@@ -416,7 +416,7 @@ if ($sql->num_rows($result)){
 	$data = implode(" ",$char_data);
 
 	if ($tp_to){
-		$query = $sql->query("SELECT map, position_x, position_y, position_z, orientation FROM `".$mangos_db[$realm_id]['name']."`.`game_tele` WHERE LOWER(name) = '".strtolower($tp_to)."'");
+		$query = $sql->query("SELECT map, position_x, position_y, position_z, orientation FROM `".$world_db[$realm_id]['name']."`.`game_tele` WHERE LOWER(name) = '".strtolower($tp_to)."'");
 		$tele = $sql->fetch_row($query);
 		if($tele) $teleport = "map='$tele[0]', position_x='$tele[1]', position_y='$tele[2]', position_z='$tele[3]', orientation='$tele[4]',";
 			else error($lang_char['no_tp_location']);

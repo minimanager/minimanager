@@ -16,7 +16,7 @@ require_once("scripts/get_lib.php");
 // BROWSE AUCTIONS
 //########################################################################################################################
 function browse_auctions() {
- global $lang_auctionhouse, $lang_global, $lang_item, $output, $characters_db, $realm_id, $mangos_db,
+ global $lang_auctionhouse, $lang_global, $lang_item, $output, $characters_db, $realm_id, $world_db,
 		$itemperpage, $item_datasite, $server, $user_lvl, $user_id;
 
  $red = "#DD5047";
@@ -46,7 +46,7 @@ function browse_auctions() {
  
  $result = $sql->query("SELECT `characters`.`name` AS `seller`, `auctionhouse`.`item_template` AS `itemid`, `item_template`.`name` AS `itemname`, `auctionhouse`.`buyoutprice` AS `buyout`,
  `auctionhouse`.`time`-unix_timestamp(), `c2`.`name` AS `encherisseur`, `auctionhouse`.`lastbid`, `auctionhouse`.`startbid`, SUBSTRING_INDEX(SUBSTRING_INDEX(`item_instance`.`data`, ' ',15), ' ',-1) AS qty, `characters`.`race` AS seller_race, `c2`.`race` AS buyer_race
- FROM `".$characters_db[$realm_id]['name']."`.`characters` , `".$characters_db[$realm_id]['name']."`.`item_instance` , `".$mangos_db[$realm_id]['name']."`.`item_template` , `".$characters_db[$realm_id]['name']."`.`auctionhouse`
+ FROM `".$characters_db[$realm_id]['name']."`.`characters` , `".$characters_db[$realm_id]['name']."`.`item_instance` , `".$world_db[$realm_id]['name']."`.`item_template` , `".$characters_db[$realm_id]['name']."`.`auctionhouse`
 LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` c2 ON `c2`.`guid`=`auctionhouse`.`buyguid`
  WHERE `auctionhouse`.`itemowner`=`characters`.`guid` AND `auctionhouse`.`item_template`=`item_template`.`entry` AND `auctionhouse`.`itemguid`=`item_instance`.`guid`
  $order_side ORDER BY `auctionhouse`.`$order_by` $order_dir LIMIT $start, $itemperpage");
@@ -152,7 +152,7 @@ LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` c2 ON `c2`.`guid`
 // SEARCH AUCTIONS
 //########################################################################################################################
 function search_auctions() {
- global $lang_auctionhouse, $lang_global, $lang_item, $output, $characters_db, $realm_id, $mangos_db,
+ global $lang_auctionhouse, $lang_global, $lang_item, $output, $characters_db, $realm_id, $world_db,
 
 		$itemperpage, $item_datasite, $server, $user_lvl, $user_id, $sql_search_limit;
 
@@ -199,7 +199,7 @@ function search_auctions() {
 		if ($search_class >= 0) $item_prefix .= "AND class = '$search_class' ";
 		if ($search_quality >= 0) $item_prefix .= "AND Quality = '$search_quality' ";
 
-		$result = $sql->query("SELECT entry FROM `".$mangos_db[$realm_id]['name']."`.`item_template` WHERE name LIKE '%$search_value%' $item_prefix");
+		$result = $sql->query("SELECT entry FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE name LIKE '%$search_value%' $item_prefix");
 		$search_filter = "AND auctionhouse.item_template IN(0";
 		while ($item = $sql->fetch_row($result)) $search_filter .= ", $item[0]";
 		$search_filter .= ")";
@@ -228,7 +228,7 @@ function search_auctions() {
 
 $result = $sql->query("SELECT `characters`.`name` AS `seller`, `auctionhouse`.`item_template` AS `itemid`, `item_template`.`name` AS `itemname`, `auctionhouse`.`buyoutprice` AS `buyout`,
  `auctionhouse`.`time`-unix_timestamp(), `c2`.`name` AS `encherisseur`, `auctionhouse`.`lastbid`, `auctionhouse`.`startbid`, SUBSTRING_INDEX(SUBSTRING_INDEX(`item_instance`.`data`, ' ',15), ' ',-1) AS qty, `characters`.`race` AS seller_race, `c2`.`race` AS buyer_race
- FROM `".$characters_db[$realm_id]['name']."`.`characters` , `".$characters_db[$realm_id]['name']."`.`item_instance` , `".$mangos_db[$realm_id]['name']."`.`item_template` , `".$characters_db[$realm_id]['name']."`.`auctionhouse` LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` c2 ON `c2`.`guid`=`auctionhouse`.`buyguid`
+ FROM `".$characters_db[$realm_id]['name']."`.`characters` , `".$characters_db[$realm_id]['name']."`.`item_instance` , `".$world_db[$realm_id]['name']."`.`item_template` , `".$characters_db[$realm_id]['name']."`.`auctionhouse` LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` c2 ON `c2`.`guid`=`auctionhouse`.`buyguid`
  WHERE `auctionhouse`.`itemowner`=`characters`.`guid` AND `auctionhouse`.`item_template`=`item_template`.`entry` AND `auctionhouse`.`itemguid`=`item_instance`.`guid` $search_filter
  $order_side ORDER BY `auctionhouse`.`$order_by` $order_dir LIMIT $sql_search_limit");
  $tot_found = $sql->num_rows($result);

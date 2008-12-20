@@ -30,9 +30,9 @@ function get_realm_name($realm_id){
 //get displayid of item
 function get_displayid($itemid)
 {
-  global $lang_global,  $realm_id, $mangos_db;
+  global $lang_global,  $realm_id, $world_db;
   $sql_0 = new SQL;
-  $sql_0->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+  $sql_0->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
   $result = $sql_0->query("SELECT `displayid` FROM `item_template` WHERE `entry` = $itemid");
   if ($result)
     $displayid = $sql_0->result($result, 0);
@@ -101,10 +101,10 @@ function get_lang_id() {
 //##########################################################################################
 //get item name from item_template.entry
 function get_item_name($item_id){
- global $lang_global, $mangos_db, $realm_id;
+ global $lang_global, $world_db, $realm_id;
  if($item_id){
 	$sql_1 = new SQL;
-	$sql_1->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+	$sql_1->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
 	$deplang = get_lang_id();
 	$result = $sql_1->query("SELECT IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry WHERE item_template.entry = '$item_id'");
@@ -119,10 +119,10 @@ function get_item_name($item_id){
 //##########################################################################################
 //generate item tooltip from item_template.entry
 function get_item_tooltip($item_id){
- global $lang_global, $lang_item, $lang_id_tab, $mangos_db, $realm_id, $itemset_id, $language;
+ global $lang_global, $lang_item, $lang_id_tab, $world_db, $realm_id, $itemset_id, $language;
  if($item_id){
 	$sql_1 = new SQL;
-	$sql_1->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+	$sql_1->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
 	$deplang = get_lang_id();
 	$result_1 = $sql_1->query("SELECT stat_type1,stat_value1,stat_type2,stat_value2,stat_type3,stat_value3,stat_type4,
@@ -895,10 +895,10 @@ function get_aura_icon($auraid)
 //##########################################################################################
 //generate item border from item_template.entry
 function get_item_border($item_id){
-	global $lang_global, $lang_id_tab, $mangos_db, $realm_id, $itemset_id;
+	global $lang_global, $lang_id_tab, $world_db, $realm_id, $itemset_id;
 	if($item_id){
 		$sql_2 = new SQL;
-		$sql_2->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+		$sql_2->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
 		$result_2 = $sql_2->query("SELECT Quality FROM item_template WHERE entry = '$item_id'");
 		$iborder = ($sql_2->num_rows($result_2) == 1) ? $sql_2->result($result_2, 0,"Quality"): "Quality: $iborder Not Found" ;
