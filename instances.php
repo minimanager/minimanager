@@ -7,10 +7,10 @@ valid_login($action_permission['read']);
 /*--------------------------------------------------*/
 
 function do_search() {
- global $lang_instances, $lang_global, $output, $mangos_db, $realm_id;
+ global $lang_instances, $lang_global, $output, $world_db, $realm_id;
 
 $sql = new SQL;
-$sql->connect($mangos_db[$realm_id]['addr'], $mangos_db[$realm_id]['user'], $mangos_db[$realm_id]['pass'], $mangos_db[$realm_id]['name']);
+$sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) :"levelMin";

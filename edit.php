@@ -64,9 +64,12 @@ function edit_user() {
 	  <td >{$lang_edit['client_type']}:</td>
   	 <td>
 	   <select name=\"expansion\">
+	    <option value=\"2\" ";
+		if(!$acc[3]) $output .= "selected=\"selected\"";
+		$output .= ">{$lang_edit['wotlk']}</option>
 	    <option value=\"1\" ";
-		if($acc[3]) $output .= "selected=\"selected\"";
-		$output .= ">{$lang_edit['expansion']}</option>
+		if(!$acc[3]) $output .= "selected=\"selected\"";
+		$output .= ">{$lang_edit['tbc']}</option>
 	    <option value=\"0\" ";
 		if(!$acc[3]) $output .= "selected=\"selected\"";
 		$output .= ">{$lang_edit['classic']}</option>

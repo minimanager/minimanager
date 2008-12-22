@@ -203,7 +203,8 @@ function register(){
   	 <td valign=\"top\">{$lang_register['acc_type']}:</td>
   	 <td>
 	   <select name=\"expansion\">
-	    <option value=\"1\">{$lang_register['expansion']}</option>
+	    <option value=\"2\">{$lang_register['wotlk']}</option>
+	    <option value=\"1\">{$lang_register['tbc']}</option>
 	    <option value=\"0\">{$lang_register['classic']}</option>
 	   </select>
 	  - {$lang_register['acc_type_desc']}</td>

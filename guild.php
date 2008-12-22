@@ -262,7 +262,7 @@ $dir = ($dir) ? 0 : 1;
     <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_guild['online']}</a></th>
   </tr>";
 
- $members = $sql->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass, SUBSTRING_INDEX(SUBSTRING_INDEX(c.`data`, ' ', 35), ' ', -1) AS clevel, gm.rank AS mrank, (SELECT rname FROM guild_rank WHERE guildid ='$guild_id' AND rid = mrank+1) AS rname, gm.Pnote, gm.OFFnote, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',37),' ',-1) as unsigned) ),8,'0'),4,1) as gender, c.`online` as conline, c.`account`, c.`logout_time` as clogout
+ $members = $sql->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass, SUBSTRING_INDEX(SUBSTRING_INDEX(c.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS clevel, gm.rank AS mrank, (SELECT rname FROM guild_rank WHERE guildid ='$guild_id' AND rid = mrank+1) AS rname, gm.Pnote, gm.OFFnote, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, c.`online` as conline, c.`account`, c.`logout_time` as clogout
                          FROM guild_member as gm
                          left outer join characters as c on c.guid = gm.guid
                          WHERE gm.guildid = '$guild_id'

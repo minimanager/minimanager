@@ -9,12 +9,18 @@
  */
 
 $gm_level_arr = Array(
-	0 => array(0,"Player","-"),
+	0 => array(0,"Player",""),
 	1 => array(1,"Moderator","Mod"),
 	2 => array(2,"Gamemaster","GM"),
 	3 => array(3,"BugTracker","BT"),
-	4 => array(4,"Admin","ADM"),
-	5 => array(5,"Sys OP","SYS")
+	4 => array(4,"Admin","Admin"),
+	5 => array(5,"SysOp","SysOp")
+);
+
+$exp_lvl_arr = Array(
+	0 => array(0,"Classic",""),
+	1 => array(1,"The Burning Crusade","TBC"),
+	2 => array(2,"Wrath of the Lich King","WotLK")
 );
 
 function get_gm_level($id){
@@ -25,256 +31,50 @@ function get_gm_level($id){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //get map name by its id
-//covered up to 2.0.6
-$map_id = Array(
-	0 => array(0,$lang_id_tab['azeroths']),
-	1 => array(1,$lang_id_tab['kalimdor']),
-	13 => array(13,$lang_id_tab['test_zone']),
-	17 => array(17,$lang_id_tab['kalidar']),
-	30 => array(30,$lang_id_tab['alterac_valley']),
-	33 => array(33,$lang_id_tab['shadowfang_keep_instance']),
-	34 => array(34,$lang_id_tab['the_stockade_instance']),
-	35 => array(35,$lang_id_tab['stormwind_prison']),
-	36 => array(36,$lang_id_tab['deadmines_instance']),
-	37 => array(37,$lang_id_tab['plains_of_snow']),
-	43 => array(43,$lang_id_tab['wailing_caverns_instance']),
-	44 => array(44,$lang_id_tab['monastery_interior']),
-	47 => array(47,$lang_id_tab['razorfen_kraul_instance']),
-	48 => array(48,$lang_id_tab['blackfathom_deeps_instance']),
-	70 => array(70,$lang_id_tab['uldaman_instance']),
-	90 => array(90,$lang_id_tab['gnomeregan_instance']),
-	109 => array(109,$lang_id_tab['sunken_temple_instance']),
-	129 => array(129,$lang_id_tab['razorfen_downs_instance']),
-	150 => array(150,$lang_id_tab['outland']),
-	169 => array(169,$lang_id_tab['emerald_forest']),
-	189 => array(189,$lang_id_tab['scarlet_monastery_instance']),
-	209 => array(209,$lang_id_tab['zul_farrak_instance']),
-	229 => array(229,$lang_id_tab['blackrock_spire_instance']),
-	230 => array(230,$lang_id_tab['blackrock_depths_instance']),
-	249 => array(249,$lang_id_tab['onyxia_s_lair_instance']),
-	269 => array(269,$lang_id_tab['cot_black_morass']),
-	289 => array(289,$lang_id_tab['scholomance_instance']),
-	309 => array(309,$lang_id_tab['zul_gurub_instance']),
-	329 => array(329,$lang_id_tab['stratholme_instance']),
-	349 => array(349,$lang_id_tab['maraudon_instance']),
-	369 => array(369,$lang_id_tab['deeprun_tram']),
-	389 => array(389,$lang_id_tab['ragefire_chasm_instance']),
-	409 => array(409,$lang_id_tab['the_molten_core_instance']),
-	429 => array(429,$lang_id_tab['dire_maul_instance']),
-	449 => array(449,$lang_id_tab['alliance_pvp_barracks']),
-	450 => array(450,$lang_id_tab['horde_pvp_barracks']),
-	451 => array(451,$lang_id_tab['development_land']),
-	469 => array(469,$lang_id_tab['blackwing_lair_instance']),
-	489 => array(489,$lang_id_tab['warsong_gulch']),
-	509 => array(509,$lang_id_tab['ruins_of_ahn_qiraj_instance']),
-	529 => array(529,$lang_id_tab['arathi_basin']),
-	530 => array(530,$lang_id_tab['outland']),
-	531 => array(531,$lang_id_tab['temple_of_ahn_qiraj_instance']),
-	532 => array(532,$lang_id_tab['karazahn']),
-	533 => array(533,$lang_id_tab['naxxramas_instance']),
-	534 => array(534,$lang_id_tab['cot_hyjal_past']),
-	540 => array(540,$lang_id_tab['hellfire_military']),
-	542 => array(542,$lang_id_tab['hellfire_demon']),
-	543 => array(543,$lang_id_tab['hellfire_rampart']),
-	544 => array(544,$lang_id_tab['hellfire_raid']),
-	545 => array(545,$lang_id_tab['coilfang_pumping']),
-	546 => array(546,$lang_id_tab['coilfang_marsh']),
-	547 => array(547,$lang_id_tab['coilfang_draenei']),
-	548 => array(548,$lang_id_tab['coilfang_raid']),
-	550 => array(550,$lang_id_tab['tempest_keep_raid']),
-	552 => array(552,$lang_id_tab['tempest_keep_arcane']),
-	553 => array(553,$lang_id_tab['tempest_keep_atrium']),
-	554 => array(554,$lang_id_tab['tempest_keep_factory']),
-	555 => array(555,$lang_id_tab['auchindoun_shadow']),
-	556 => array(556,$lang_id_tab['auchindoun_arakkoa']),
-	557 => array(557,$lang_id_tab['auchindoun_ethereal']),
-	558 => array(558,$lang_id_tab['auchindoun_draenei']),
-	559 => array(559,$lang_id_tab['nagrand_arena']),
-	560 => array(560,$lang_id_tab['cot_hillsbrad_past']),
-	562 => array(562,$lang_id_tab['blades_edge_arena']),
-	564 => array(564,$lang_id_tab['black_temple']),
-	565 => array(565,$lang_id_tab['gruuls_lair']),
-	566 => array(566,$lang_id_tab['netherstorm_arena']),
-	568 => array(568,$lang_id_tab['zulaman']),
-	571 => array(571,$lang_id_tab['northrend']),
-	574 => array(574,$lang_id_tab['utgarde_keep']),
-	575 => array(575,$lang_id_tab['utgarde_pinnacle']),
-	576 => array(576,$lang_id_tab['nexus']),
-	578 => array(578,$lang_id_tab['oculus']),
-	580 => array(580,$lang_id_tab['sunwell_plateau']),
-	585 => array(585,$lang_id_tab['magisters_terrace']),
-	595 => array(595,$lang_id_tab['cot_stratholme_past']),
-	599 => array(599,$lang_id_tab['halls_of_stone']),
-	600 => array(600,$lang_id_tab['draktheron_keep']),
-	601 => array(601,$lang_id_tab['azjol_nerub']),
-	602 => array(602,$lang_id_tab['halls_of_lightning']),
-	603 => array(603,$lang_id_tab['ulduar']),
-	604 => array(604,$lang_id_tab['gundrak'])
-	
-	
-);
-
 function get_map_name($id){
-global $lang_id_tab, $map_id;
-	if( isset($map_id[$id])) return $map_id[$id][1];
-		else return($lang_id_tab['unknown']);
+ global $mmfpm_db;
+        $sql = new SQL;
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+		$map_name = $sql->fetch_row($sql->query("SELECT `name01` FROM `map` WHERE `id`={$id}"));
+
+ $sql->close();
+ 		return $map_name[0];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//get zone name by its id
+function get_zone_name($id){
+ global $mmfpm_db;
+        $sql = new SQL;
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+		$zone_name = $sql->fetch_row($sql->query("SELECT `field_3` FROM `worldmaparea` WHERE `field_2`={$id}"));
+
+ $sql->close();
+ return $zone_name[0];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //get player class by its id
-function get_player_class($class_id){
-global $lang_id_tab;
-switch ($class_id) {
-case 1:
-   return($lang_id_tab['warrior']);
-   break;
-case 2:
-   return($lang_id_tab['paladin']);
-   break;
-case 3:
-   return($lang_id_tab['hunter']);
-   break;
-case 4:
-   return($lang_id_tab['rogue']);
-   break;
-case 5:
-   return($lang_id_tab['priest']);
-   break;
-case 6:
-   return($lang_id_tab['death_knight']);
-   break;
-case 7:
-   return($lang_id_tab['shaman']);
-   break;
-case 8:
-   return($lang_id_tab['mage']);
-   break;
-case 9:
-   return($lang_id_tab['warlock']);
-   break;
-case 11:
-   return($lang_id_tab['druid']);
-   break;
-default:
-    return($lang_id_tab['unknown']);
- }
+function get_player_class($id){
+ global $mmfpm_db;
+        $sql = new SQL;
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+		$class_name = $sql->fetch_row($sql->query("SELECT `field_4` FROM `chrclasses` WHERE `id`={$id}"));
+
+ $sql->close();
+ return $class_name[0];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 //get player race by its id
-function get_player_race($race_id){
-global $lang_id_tab;
-switch ($race_id) {
-case 1:
-   return($lang_id_tab['human']);
-   break;
-case 2:
-   return($lang_id_tab['orc']);
-   break;
-case 3:
-   return($lang_id_tab['dwarf']);
-   break;
-case 4:
-   return($lang_id_tab['nightelf']);
-   break;
-case 5:
-   return($lang_id_tab['undead']);
-   break;
-case 6:
-   return($lang_id_tab['tauren']);
-   break;
-case 7:
-   return($lang_id_tab['gnome']);
-   break;
-case 8:
-   return($lang_id_tab['troll']);
-   break;
-case 9:
-   return($lang_id_tab['goblin']);
-   break;
-case 10:
-   return($lang_id_tab['bloodelf']);
-   break;
-case 11:
-   return($lang_id_tab['draenei']);
-   break;
-default:
-    return($lang_id_tab['unknown']);
- }
-}
+function get_player_race($id){
+ global $mmfpm_db;
+        $sql = new SQL;
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+		$race_name = $sql->fetch_row($sql->query("SELECT `field_12` FROM `chrraces` WHERE `id`={$id}"));
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-//get zone name by mapid and players x,y
-$zone_id = Array(
- //Azeroth
-	1497 => Array($lang_id_tab['undercity'],1497),
-	1537 => Array($lang_id_tab['ironforge'],1537),
-	1519 => Array($lang_id_tab['stormwind_city'],1519),
-	3 => Array($lang_id_tab['badlands'],3),
-	11 => Array($lang_id_tab['wetlands'],11),
-	33 => Array($lang_id_tab['stranglethorn_vale'],33),
-	44 => Array($lang_id_tab['redridge_mountains'],44),
-	38 => Array($lang_id_tab['loch_modan'],38),
-	10 => Array($lang_id_tab['duskwood'],10),
-	41 => Array($lang_id_tab['deadwind_pass'],41),
-	12 => Array($lang_id_tab['elwynn_forest'],12),
-	46 => Array($lang_id_tab['burning_steppes'],46),
-	51 => Array($lang_id_tab['searing_gorge'],51),
-	1 => Array($lang_id_tab['dun_morogh'],1),
-	47 => Array($lang_id_tab['the_hinterlands'],47),
-	40 => Array($lang_id_tab['westfall'],40),
-	267 => Array($lang_id_tab['hillsbrad_foothills'],267),
-	139 => Array($lang_id_tab['eastern_plaguelands'],139),
-	28 => Array($lang_id_tab['western_plaguelands'],28),
-	130 => Array($lang_id_tab['silverpine_forest'],130),
-	85 => Array($lang_id_tab['tirisfal_glades'],85),
-	4 => Array($lang_id_tab['blasted_lands'],4),
-	8 => Array($lang_id_tab['swamp_of_sorrows'],8),
-	45 => Array($lang_id_tab['arathi_highlands'],45),
-	36 => Array($lang_id_tab['alterac_mountains'],36),
- //Kalimdor
-	1657 => Array($lang_id_tab['darnassus'],1657),
-	1638 => Array($lang_id_tab['thunder_bluff'],1638),
-	1637 => Array($lang_id_tab['orgrimmar'],1637),
-	493 => Array($lang_id_tab['moonglade'],493),
-	1377 => Array($lang_id_tab['silithus'],1377),
-	618 => Array($lang_id_tab['winterspring'],618),
-	490 => Array($lang_id_tab['un_goro_crater'],490),
-	361 => Array($lang_id_tab['felwood'],361),
-	16 => Array($lang_id_tab['azshara'],16),
-	440 => Array($lang_id_tab['tanaris'],440),
-	15 => Array($lang_id_tab['dustwallow_marsh'],15),
-	215 => Array($lang_id_tab['mulgore'],215),
-	357 => Array($lang_id_tab['feralas'],357),
-	405 => Array($lang_id_tab['desolace'],405),
-	400 => Array($lang_id_tab['thousand_needles'],400),
-	14 => Array($lang_id_tab['durotar'],14),
-	331 => Array($lang_id_tab['ashenvale'],331),
-	148 => Array($lang_id_tab['darkshore'],148),
-	141 => Array($lang_id_tab['teldrassil'],141),
-	406 => Array($lang_id_tab['stonetalon_mountains'],406),
-	17 => Array($lang_id_tab['the_barrens'],17),
- //Outland
-	3703 => Array($lang_id_tab['shattrath_city'],3703),
-	3487 => Array($lang_id_tab['silvermoon_city'],3487),
-	3523 => Array($lang_id_tab['netherstorm'],3523),
-	3519 => Array($lang_id_tab['terokkar_forest'],3519),
-	3518 => Array($lang_id_tab['nagrand'],3518),
-	3525 => Array($lang_id_tab['bloodmyst_isle'],3525),
-	3522 => Array($lang_id_tab['blades_edge_mountains'],3522),
-	3520 => Array($lang_id_tab['shadowmoon_valley'],3520),
-	3557 => Array($lang_id_tab['the_exodar'],3557),
-	3521 => Array($lang_id_tab['zangarmarsh'],3521),
-	3483 => Array($lang_id_tab['hellfire_peninsula'],3483),
-	3524 => Array($lang_id_tab['azuremyst_isle'],3524),
-	3433 => Array($lang_id_tab['ghostlands'],3433),
-	3430 => Array($lang_id_tab['eversong_woods'],3430)
- 	);
-
-function get_zone_name($id){
- global $zone_id;
-	if( isset($zone_id[$id])) return $zone_id[$id][0];
-		else return(" ");
+ $sql->close();
+ return $race_name[0];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -376,6 +176,18 @@ function get_skill_name($id){
 global $lang_id_tab, $skill_id;
 	if( isset($skill_id[$id])) return $skill_id[$id][1];
 		else return 0;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+//get achievement name by its id
+function get_achievement_name($id){
+ global $mmfpm_db;
+        $sql = new SQL;
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+		$achievement_name = $sql->fetch_row($sql->query("SELECT `name01` FROM `achievement` WHERE `id`={$id}"));
+
+ $sql->close();
+ return $achievement_name[0];
 }
 
 $user_level = array(

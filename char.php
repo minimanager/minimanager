@@ -64,7 +64,7 @@ function char_main()
         if ($user_lvl >= $owner_gmlvl && (($side_v == $side_p) || !$side_v))
         {
 
-        $result = $sql->query("SELECT data,name,race,class,zone,map,online,totaltime, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(36+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id");
+        $result = $sql->query("SELECT data,name,race,class,zone,map,online,totaltime, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id");
         $char = $sql->fetch_row($result);
         $char_data = explode(' ',$char[0]);
 
@@ -144,6 +144,7 @@ function char_main()
         {  
             $output .= "<li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
             <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
             <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
             <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
             <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
@@ -414,7 +415,7 @@ if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name)){
 
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $result = $sql->query("SELECT name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1), SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1), mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(36+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id");
+  $result = $sql->query("SELECT name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1), SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1), mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id");
 
   $char = $sql->fetch_row($result);
 
@@ -490,6 +491,7 @@ $output .= "<center><div id=\"tab\">
   <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
   <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
   <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+  <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
   <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
   <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
   <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
@@ -727,6 +729,7 @@ function char_quest(){
     <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
     <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+    <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
@@ -809,6 +812,92 @@ function char_quest(){
 
 
 //########################################################################################################################
+// SHOW CHARACTERS ACHIEVEMENTS
+//########################################################################################################################
+function char_achievements(){
+ global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
+    $user_name, $quest_datasite, $language;
+
+ if (empty($_GET['id'])) error($lang_global['empty_fields']);
+
+ $sql = new SQL;
+ $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+
+ $id = $sql->quote_smart($_GET['id']);
+ $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : 1;
+ $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 0;
+ $dir = ($dir) ? 0 : 1;
+ $result = $sql->query("SELECT account,name,race,class FROM `characters` WHERE guid = $id LIMIT 1");
+
+ if ($sql->num_rows($result)){
+  $char = $sql->fetch_row($result);
+
+  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+  $owner_gmlvl  = $sql->result($result, 0, 'gmlevel');
+  $owner_name    = $sql->result($result, 0, 'username');
+
+  if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name)){
+
+	$output .= "<center>
+    <div id=\"tab\">
+    <ul>
+    <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
+    <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
+    <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+    <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
+    <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
+    <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
+    <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
+    if( get_player_class($char[3]) == 'Hunter' ) { $output .= "    <li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>"; }
+    $output .= "</ul>
+    </div>
+    <div id=\"tab_content\">
+    <font class=\"bold\">$char[1] - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />
+
+    <table class=\"lined\" style=\"width: 550px;\">
+    <tr>";
+    $output .= "<th width=\"78%\">{$lang_char['achievement_title']}</th>
+      <th width=\"22%\">{$lang_char['achievement_date']}</th>";
+
+    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+    $result = $sql->query("SELECT achievement,date FROM character_achievement WHERE guid =$id");
+while ($data = $sql->fetch_row($result)){
+	$output .="<tr>
+		<td align=\"left\"><a href=\"http://www.wowhead.com/?achievement=".$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a></td>
+		<td>".date("n-j-o", $data['1'])."</td>
+	</tr>";
+}
+    $output .= "</table></div><br />
+    <table class=\"hidden\">
+          <tr><td>";
+    if ($user_lvl > $owner_gmlvl){
+      makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+  $output .= "</td><td>";
+      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+  $output .= "</td><td>";
+      }
+    if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name))){
+      makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+  $output .= "</td><td>";
+      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
+  $output .= "</td><td>";
+      }
+    makebutton($lang_global['back'], "javascript:window.history.back()",140);
+ $output .= "</td></tr>
+        </table><br /></center>";
+  }
+  else
+  {
+    $sql->close();
+    error($lang_char['no_permission']);
+  }
+ }
+ else error($lang_char['no_char_found']);
+ $sql->close();
+}
+
+//########################################################################################################################
 // SHOW CHAR REPUTATION
 //########################################################################################################################
 function char_rep() {
@@ -842,6 +931,7 @@ if ($sql->num_rows($result)){
   <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+    <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
     <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
@@ -972,6 +1062,7 @@ if ($sql->num_rows($result) == 1){
     <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+    <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
     <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
@@ -1139,6 +1230,7 @@ if ($sql->num_rows($result) == 1){
         <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
         <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
         <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+        <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
         <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
         <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
         <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
@@ -1154,6 +1246,7 @@ if ($sql->num_rows($result) == 1){
         ."<th align=left>{$lang_char['talent_name']}</th>
     </tr>";
 
+    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
     $result = $sql->query("SELECT spell FROM `character_spell` WHERE guid = $id AND active = 1");
 
     if ($sql->num_rows($result)){
@@ -1258,6 +1351,7 @@ if ($sql->num_rows($result) == 1){
         <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
         <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
         <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+        <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
         <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
     <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>
@@ -1351,6 +1445,9 @@ case "char_inv":
    break;
 case "char_quest":
    char_quest();
+   break;
+case "char_achievements":
+   char_achievements();
    break;
 case "char_rep":
    char_rep();

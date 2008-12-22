@@ -11,12 +11,13 @@
 require_once("header.php");
 valid_login($action_permission['read']);
 require_once("scripts/id_tab.php");
+require_once("scripts/defines.php");
 
 //########################################################################################################################
 // BROWSE USERS
 //########################################################################################################################
 function browse_users() {
- global $lang_global, $lang_user, $output, $realm_db, $itemperpage, $user_lvl, $user_name, $gm_level_arr, $action_permission;
+ global $lang_global, $lang_user, $output, $realm_db, $itemperpage, $user_lvl, $user_name, $gm_level_arr, $exp_lvl_arr, $action_permission;
 
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -32,7 +33,7 @@ function browse_users() {
  $query_1 = $sql->query("SELECT count(*) FROM account");
  $all_record = $sql->result($query_1,0);
 
- $query = $sql->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online
+ $query = $sql->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
 		FROM account ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
  $this_page = $sql->num_rows($query);
 
@@ -89,7 +90,8 @@ if($user_lvl >= $action_permission['update'])
    $output .="<th width=\"5%\"><a href=\"user.php?order_by=id&amp;start=$start&amp;dir=$dir\">".($order_by=='id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['id']}</a></th>
 	<th width=\"23%\"><a href=\"user.php?order_by=username&amp;start=$start&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['username']}</a></th>
 	<th width=\"5%\"><a href=\"user.php?order_by=gmlevel&amp;start=$start&amp;dir=$dir\">".($order_by=='gmlevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['gm_level']}</a></th>
-    <th width=\"17%\"><a href=\"user.php?order_by=email&amp;start=$start&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['email']}</a></th>
+	<th width=\"5%\"><a href=\"user.php?order_by=expansion&amp;start=$start&amp;dir=$dir\">".($order_by=='expansion' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."EXP</a></th>
+	<th width=\"17%\"><a href=\"user.php?order_by=email&amp;start=$start&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['email']}</a></th>
 	<th width=\"14%\"><a href=\"user.php?order_by=joindate&amp;start=$start&amp;dir=$dir\">".($order_by=='joindate' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['join_date']}</a></th>
 	<th width=\"10%\"><a href=\"user.php?order_by=last_ip&amp;start=$start&amp;dir=$dir\">".($order_by=='last_ip' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['ip']}</a></th>
 	<th width=\"5%\"><a href=\"user.php?order_by=failed_logins&amp;start=$start&amp;dir=$dir\">".($order_by=='failed_logins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['failed_logins']}</a></th>
@@ -106,7 +108,8 @@ if($user_lvl >= $action_permission['update'])
                  else $output .= "<td></td>";
    		$output .= "<td>$data[0]</td>
            	<td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a></td>
-			<td>".$gm_level_arr[$data[2]][2]."</td>";
+			<td>".$gm_level_arr[$data[2]][2]."</td>
+			<td>".$exp_lvl_arr[$data[10]][2]."</td>";
                 if ($user_lvl >= $action_permission['update']) $output .= "
 			<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>";
                 else $output .= "<td>***@***</td>";
@@ -732,18 +735,21 @@ function edit_user() {
       if($user_lvl >= $action_permission['update']) { $output .="
 	    <td><input type=\"text\" name=\"banreason\" size=\"43\" maxlength=\"255\" value=\"$banned[3]\" /></td>";}
       else $output .= "<td>$banned[3]</td>";
- $output .="</tr>
+ $output .="</tr><tr>
 	   <td>{$lang_user['client_type']}</td>";
       if($user_lvl >= $action_permission['update']) { $output .="
 		<td><select name=\"expansion\">";
       $output .= "<option value=\"0\">{$lang_user['classic']}</option>
 			 <option value=\"1\" ";
-			 if ($data[10]) $output .= "selected=\"selected\" ";
-			$output .= ">{$lang_user['expansion']}</option>
+			 if ($data[10] == 1) $output .= "selected=\"selected\" ";
+			$output .= ">{$lang_user['tbc']}</option>
+			 <option value=\"2\" ";
+			 if ($data[10] ==2) $output .= "selected=\"selected\" ";
+			$output .= ">{$lang_user['wotlk']}</option>
 			</select>
 		</td>"; }
-      else $output .= "<td>{$lang_user['expansion']}</td>";
-      $output .="
+      else $output .= "<td>{$lang_user['classic']}</td>";
+      $output .="</tr>
       <tr>
         <td>{$lang_user['failed_logins_long']}</td>";
       if($user_lvl >= $action_permission['update']) { $output .="
@@ -787,7 +793,7 @@ function edit_user() {
 
 	//if there is any chars to display
 	if ($chars_on_realm){
-		$char_array = $sql->query("SELECT guid,name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 35), ' ', -1) FROM `characters` WHERE account = $id");
+		$char_array = $sql->query("SELECT guid,name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) FROM `characters` WHERE account = $id");
 		while ($char = $sql->fetch_array($char_array)){
 			$output .= "<tr>
 			<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'---></td>
