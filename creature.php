@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
+ * Project Name: MiniManager for MaNGOS Server
  * Date: 17.10.2006 inital version (0.0.1a)
  * Author: Q.SA
  * Copyright: Q.SA
@@ -177,6 +177,7 @@ function search() {
 	
 	</tr><tr>
 	
+
 		<td>{$lang_creature['spell']}:</td>
 		<td><input type=\"text\" size=\"10\" maxlength=\"11\" name=\"spell\" /></td>  	
 	  <td>{$lang_creature['script_name']}</td>
@@ -377,14 +378,14 @@ function do_insert_update($do_insert) {
    if (!isset($_GET['entry']) ) redirect("creature.php?error=1");
    
    $entry   = (preg_match("/^[[:digit:]]{1,15}$/", $_GET['entry']))   ? $sql->quote_smart($_GET['entry'])   : redirect("creature.php?error=8");   
-   $result = $sql->query("SELECT `entry`, `heroic_entry`, `modelid_A`, `modelid_A2`, `modelid_H`, `modelid_H2`, `name`,`subname`, `IconName`, `minlevel`, `maxlevel`, `minhealth`, `maxhealth`, `minmana`, `maxmana`, `armor`,`faction_A`, `faction_H`, `npcflag`, `speed`,`scale`,`rank`,`mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `baseattacktime`, `rangeattacktime`, `flags`,`dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `class`,`race`,`minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`,`flag1`,`lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `PetSpellDataId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `RacialLeader`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName` FROM creature_template WHERE entry = '$entry'");
+   $result = $sql->query("SELECT `entry`, `heroic_entry`, `modelid_A`, `modelid_A2`, `modelid_H`, `modelid_H2`, `name`,`subname`, `IconName`, `minlevel`, `maxlevel`, `minhealth`, `maxhealth`, `minmana`, `maxmana`, `armor`,`faction_A`, `faction_H`, `npcflag`, `speed`,`scale`,`rank`,`mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `baseattacktime`, `rangeattacktime`, `unit_flags`,`dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `class`,`race`,`minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`,`type_flags`,`lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `PetSpellDataId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `RacialLeader`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName` FROM creature_template WHERE entry = '$entry'");
  }
  else {
 	
  	// get new free id
   $result = $sql->query("SELECT max(entry)+1 as newentry from creature_template");
  	$entry  = $sql->result($result, 0, 'newentry');
- 	$result = $sql->query("SELECT $entry as `entry`, 0 as `heroic_entry`, 0 as `modelid_A`, 0 as `modelid_A2`, 0 as `modelid_H`, 0 as `modelid_H2`, 'new creature' as`name`,'' as `subname`, '' as `IconName`, 1 as `minlevel`, 1 as `maxlevel`, 1 as `minhealth`, 1 as `maxhealth`, 0 as `minmana`, 0 as `maxmana`, 0 as `armor`,0 as `faction_A`, 0 as `faction_H`, 0 as `npcflag`, 1 as `speed`, 1 as `scale`,0 as `rank`, 1 as `mindmg`, 1 as `maxdmg`, 0 as `dmgschool`, 0 as `attackpower`, 2000 as `baseattacktime`, 0 as `rangeattacktime`, 0 as `flags`,0 as `dynamicflags`, 0 as `family`, 0 as `trainer_type`, 0 as `trainer_spell`, 0 as `class`,0 as `race`,0 as `minrangedmg`, 0 as `maxrangedmg`, 0 as `rangedattackpower`, 0 as `type`,0 as `flag1`,0 as `lootid`, 0 as `pickpocketloot`, 0 as `skinloot`, 0 as `resistance1`, 0 as `resistance2`, 0 as `resistance3`, 0 as `resistance4`, 0 as `resistance5`, 0 as `resistance6`, 0 as`spell1`, 0 as`spell2`, 0 as `spell3`, 0 as `spell4`, 0 as `PetSpellDataId`, 100 as `mingold`, 250 as `maxgold`, '' as `AIName`, 0 as `MovementType`, 1 as `InhabitType`, 0 as `RacialLeader`, 1 as `RegenHealth`, 0 as `equipment_id`, 0 as `mechanic_immune_mask`, 0 as `flags_extra`, '' as `ScriptName`");
+ 	$result = $sql->query("SELECT $entry as `entry`, 0 as `heroic_entry`, 0 as `modelid_A`, 0 as `modelid_A2`, 0 as `modelid_H`, 0 as `modelid_H2`, 'new creature' as`name`,'' as `subname`, '' as `IconName`, 1 as `minlevel`, 1 as `maxlevel`, 1 as `minhealth`, 1 as `maxhealth`, 0 as `minmana`, 0 as `maxmana`, 0 as `armor`,0 as `faction_A`, 0 as `faction_H`, 0 as `npcflag`, 1 as `speed`, 1 as `scale`,0 as `rank`, 1 as `mindmg`, 1 as `maxdmg`, 0 as `dmgschool`, 0 as `attackpower`, 2000 as `baseattacktime`, 0 as `rangeattacktime`, 0 as `unit_flags`,0 as `dynamicflags`, 0 as `family`, 0 as `trainer_type`, 0 as `trainer_spell`, 0 as `class`,0 as `race`,0 as `minrangedmg`, 0 as `maxrangedmg`, 0 as `rangedattackpower`, 0 as `type`,0 as `type_flags`,0 as `lootid`, 0 as `pickpocketloot`, 0 as `skinloot`, 0 as `resistance1`, 0 as `resistance2`, 0 as `resistance3`, 0 as `resistance4`, 0 as `resistance5`, 0 as `resistance6`, 0 as`spell1`, 0 as`spell2`, 0 as `spell3`, 0 as `spell4`, 0 as `PetSpellDataId`, 100 as `mingold`, 250 as `maxgold`, '' as `AIName`, 0 as `MovementType`, 1 as `InhabitType`, 0 as `RacialLeader`, 1 as `RegenHealth`, 0 as `equipment_id`, 0 as `mechanic_immune_mask`, 0 as `flags_extra`, '' as `ScriptName`");
  	// use id for new creature_template
  }
 
@@ -917,14 +918,14 @@ $output .= "<td>".makeinfocell($lang_creature['flags_extra'],$lang_creature['fla
      <td><input type=\"text\" name=\"flags_extra\" size=\"8\" maxlength=\"11\" value=\"{$mob['flags_extra']}\" /></td>
 </tr>
 <tr>
-	<td>".makeinfocell($lang_creature['flags'],$lang_creature['flags_desc'])."</td>
-	<td><input type=\"text\" name=\"flags\" size=\"8\" maxlength=\"11\" value=\"{$mob['flags']}\" /></td>
+	<td>".makeinfocell($lang_creature['unit_flags'],$lang_creature['flags_desc'])."</td>
+	<td><input type=\"text\" name=\"unit_flags\" size=\"8\" maxlength=\"11\" value=\"{$mob['unit_flags']}\" /></td>
 
 	<td>".makeinfocell($lang_creature['dynamic_flags'],$lang_creature['dynamic_flags_desc'])."</td>
 	<td><input type=\"text\" name=\"dynamicflags\" size=\"8\" maxlength=\"11\" value=\"{$mob['dynamicflags']}\" /></td>
 
 	<td>".makeinfocell($lang_creature['flag_1'],$lang_creature['flag_1_desc'])."</td>
-	<td><input type=\"text\" name=\"flag1\" size=\"8\" maxlength=\"11\" value=\"{$mob['flag1']}\" /></td>
+	<td><input type=\"text\" name=\"type_flags\" size=\"8\" maxlength=\"11\" value=\"{$mob['type_flags']}\" /></td>
 </tr>
 
 	 </table><br /><br />
@@ -1419,8 +1420,8 @@ function do_update() {
 	 	else $baseattacktime = 0;
 	 if (isset($_POST['rangeattacktime']) && $_POST['rangeattacktime'] != '') $rangeattacktime = $sql->quote_smart($_POST['rangeattacktime']);
 	 	else $rangeattacktime = 0;
-	 if (isset($_POST['flags']) && $_POST['flags'] != '') $flags = $sql->quote_smart($_POST['flags']);
-	 	else $flags = 0;
+	 if (isset($_POST['unit_flags']) && $_POST['unit_flags'] != '') $unit_flags = $sql->quote_smart($_POST['unit_flags']);
+	 	else $unit_flags = 0;
 	 if (isset($_POST['dynamicflags']) && $_POST['dynamicflags'] != '') $dynamicflags = $sql->quote_smart($_POST['dynamicflags']);
 	 	else $dynamicflags = 0;
 	 if (isset($_POST['family']) && $_POST['family'] != '') $family = $sql->quote_smart($_POST['family']);
@@ -1445,8 +1446,8 @@ function do_update() {
 	 	else $type = 0;
 	 if (isset($_POST['flags_extra']) && $_POST['flags_extra'] != '') $flags_extra = $sql->quote_smart($_POST['flags_extra']);
 	     else $flags_extra = 0;
-	 if (isset($_POST['flag1']) && $_POST['flag1'] != '') $flag1 = $sql->quote_smart($_POST['flag1']);
-	 	else $flag1 = 0;
+	 if (isset($_POST['type_flags']) && $_POST['type_flags'] != '') $type_flags = $sql->quote_smart($_POST['type_flags']);
+	 	else $type_flags = 0;
 	 if (isset($_POST['lootid']) && $_POST['lootid'] != '') $lootid = $sql->quote_smart($_POST['lootid']);
 		 else $lootid = 0;
 	 if (isset($_POST['pickpocketloot']) && $_POST['pickpocketloot'] != '') $pickpocketloot = $sql->quote_smart($_POST['pickpocketloot']);
@@ -1619,15 +1620,15 @@ function do_update() {
   // insert or update creature	
 	$sql_query = "{$db_action_creature} INTO creature_template ( entry, heroic_entry, modelid_A, modelid_H, name, subname, minlevel,
 	              maxlevel, minhealth, maxhealth, minmana, maxmana, armor, faction_A, faction_H, npcflag, speed, rank, mindmg,
-	              maxdmg, dmgschool, attackpower, baseattacktime, rangeattacktime, flags, dynamicflags, family,
+	              maxdmg, dmgschool, attackpower, baseattacktime, rangeattacktime, unit_flags, dynamicflags, family,
 	              trainer_type, trainer_spell, class, race, minrangedmg, maxrangedmg, rangedattackpower,
-                type, flags_extra, flag1, lootid, pickpocketloot, skinloot, resistance1,
+                type, flags_extra, type_flags, lootid, pickpocketloot, skinloot, resistance1,
 	              resistance2, resistance3, resistance4, resistance5, resistance6, spell1, spell2, spell3, spell4,
 	              mingold, maxgold, AIName, MovementType, InhabitType, RacialLeader, ScriptName) VALUES ( '$entry', '$heroic_entry', '$modelid_A', '$modelid_H', '$name',
 	              '$subname', '$minlevel', '$maxlevel', '$minhealth', '$maxhealth', '$minmana', '$maxmana', '$armor', '$faction_A', '$faction_A',  '$npcflag',
-	              '$speed', '$rank', '$mindmg', '$maxdmg', '$dmgschool', '$attackpower', '$baseattacktime', '$rangeattacktime', '$flags',
+	              '$speed', '$rank', '$mindmg', '$maxdmg', '$dmgschool', '$attackpower', '$baseattacktime', '$rangeattacktime', '$unit_flags',
 	              '$dynamicflags', '$family', '$trainer_type', '$trainer_spell', '$class', '$race',
-                '$minrangedmg', '$maxrangedmg', '$rangedattackpower', '$type', '$flags_extra', '$flag1',
+                '$minrangedmg', '$maxrangedmg', '$rangedattackpower', '$type', '$flags_extra', '$type_flags',
 	              '$lootid', '$pickpocketloot', '$skinloot', '$resistance1', '$resistance2',
 	              '$resistance3', '$resistance4', '$resistance5', '$resistance6', '$spell1', '$spell2', '$spell3', '$spell4',
 	              '$mingold', '$maxgold', '$AIName', '$MovementType', '$InhabitType', '$RacialLeader', '$ScriptName' );\n";
@@ -1735,6 +1736,7 @@ global $lang_global, $lang_creature, $output, $user_lvl, $action_permission;
  
  if ($user_lvl < $action_permission['delete'] ) redirect("creature.php?error=9");
  
+
  if(isset($_GET['entry'])) $entry = $_GET['entry'];
 	else redirect("creature.php?error=1");
 
