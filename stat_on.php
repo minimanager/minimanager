@@ -9,31 +9,33 @@
  */
 
 require_once("header.php");
+require_once("scripts/defines.php");
 valid_login($action_permission['read']);
 
 $race = Array(
-	1 => array(1,$lang_id_tab['human'],"",""),
-	2 => array(2,$lang_id_tab['orc'],"",""),
-	3 => array(3,$lang_id_tab['dwarf'],"",""),
-	4 => array(4,$lang_id_tab['nightelf'],"",""),
-	5 => array(5,$lang_id_tab['undead'],"",""),
-	6 => array(6,$lang_id_tab['tauren'],"",""),
-	7 => array(7,$lang_id_tab['gnome'],"",""),
-	8 => array(8,$lang_id_tab['troll'],"",""),
-	10 => array(10,$lang_id_tab['bloodelf'],"",""),
-	11 => array(11,$lang_id_tab['draenei'],"","")
+	1 => array(1,Human,"",""),
+	2 => array(2,Orc,"",""),
+	3 => array(3,Dwarf,"",""),
+	4 => array(4,Nightelf,"",""),
+	5 => array(5,Undead,"",""),
+	6 => array(6,Tauren,"",""),
+	7 => array(7,Gnome,"",""),
+	8 => array(8,Troll,"",""),
+	10 => array(10,Bloodelf,"",""),
+	11 => array(11,Draenei,"","")
 );
 
 $class = Array(
-	1 => array(1,$lang_id_tab['warrior'],"",""),
-	2 => array(2,$lang_id_tab['paladin'],"",""),
-	3 => array(3,$lang_id_tab['hunter'],"",""),
-	4 => array(4,$lang_id_tab['rogue'],"",""),
-	5 => array(5,$lang_id_tab['priest'],"",""),
-	7 => array(7,$lang_id_tab['shaman'],"",""),
-	8 => array(8,$lang_id_tab['mage'],"",""),
-	9 => array(9,$lang_id_tab['warlock'],"",""),
-	11 => array(11,$lang_id_tab['druid'],"","")
+	1 => array(1,Warrior,"",""),
+	2 => array(2,Paladin,"",""),
+	3 => array(3,Hunter,"",""),
+	4 => array(4,Rogue,"",""),
+	5 => array(5,Priest,"",""),
+	6 => array(6,'Death Knight',"",""),
+	7 => array(7,Shaman,"",""),
+	8 => array(8,Mage,"",""),
+	9 => array(9,Warlock,"",""),
+	11 => array(11,Druid,"","")
 );
 
 $level = Array(
@@ -44,7 +46,8 @@ $level = Array(
 	5 => array(5,40,49,"",""),
 	6 => array(6,50,59,"",""),
 	7 => array(7,60,69,"",""),
-	8 => array(8,70,70,"","")
+	8 => array(8,70,79,"",""),
+	9 => array(9,80,80,"","")
 );
 
  $sql = new SQL;
@@ -61,7 +64,7 @@ $level = Array(
  if(isset($_GET['level'])){
 	$lvl_min = $sql->quote_smart($_GET['level']);
 	$lvl_max = $lvl_min + 4;
-	$order_level = "AND SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 35), ' ', -1) >= $lvl_min AND SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 35), ' ', -1) <= $lvl_max";
+	$order_level = "AND SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) >= $lvl_min AND SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) <= $lvl_max";
 	} else $order_level = "";
 
  if(isset($_GET['side'])) {
@@ -150,7 +153,7 @@ foreach ($class as $id){
     <tr>";
 	foreach ($class as $id){
 		$height = ($class[$id[0]][3])*4;
-		$output .= "<td><a href=\"stat_on.php?class={$id[0]}\" class=\"graph_link\">{$class[$id[0]][3]}%<img src=\"./templates/$css_template/column.gif\" width=\"77\" height=\"$height\" alt=\"{$class[$id[0]][2]}\" /></a></td>";
+		$output .= "<td><a href=\"stat_on.php?class={$id[0]}\" class=\"graph_link\">{$class[$id[0]][3]}%<img src=\"./templates/$css_template/column.gif\" width=\"69\" height=\"$height\" alt=\"{$class[$id[0]][2]}\" /></a></td>";
 		}
 $output .= "</tr><tr>";
 	foreach ($class as $id){
@@ -163,8 +166,8 @@ $output .= "</tr>
 
 // LEVEL
 foreach ($level as $id){
-		$query = $sql->query("SELECT count(guid) FROM `characters` WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 35), ' ', -1) >= $id[1]
-								AND SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 35), ' ', -1) <= $id[2] $order_race $order_class $order_side AND `online`= 1");
+		$query = $sql->query("SELECT count(guid) FROM `characters` WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) >= $id[1]
+								AND SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) <= $id[2] $order_race $order_class $order_side AND `online`= 1");
 		$level[$id[0]][3] = $sql->result($query,0);
 		$level[$id[0]][4] = round((($level[$id[0]][3])*100)/$total_chars,1);
  }
@@ -174,7 +177,7 @@ foreach ($level as $id){
     <tr>";
 	foreach ($level as $id){
 		$height = ($level[$id[0]][4])*4;
-		$output .= "<td><a href=\"stat_on.php?level={$id[1]}\" class=\"graph_link\">{$level[$id[0]][4]}%<img src=\"./templates/$css_template/column.gif\" width=\"85\" height=\"$height\" alt=\"{$level[$id[0]][3]}\" /></a></td>";
+		$output .= "<td><a href=\"stat_on.php?level={$id[1]}\" class=\"graph_link\">{$level[$id[0]][4]}%<img src=\"./templates/$css_template/column.gif\" width=\"77\" height=\"$height\" alt=\"{$level[$id[0]][3]}\" /></a></td>";
 		}
 $output .= "</tr><tr>";
 	foreach ($level as $id){
