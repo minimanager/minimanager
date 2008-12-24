@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
+ * Project Name: MiniManager for MaNGOS Server
  * Date: 17.10.2006 inital version (0.0.1a)
  * Author: Q.SA
  * Copyright: Q.SA
@@ -15,13 +15,17 @@ valid_login($action_permission['read']);
 // EDIT USER
 //##############################################################################################################
 function edit_user() {
- global $lang_edit, $lang_global, $output, $realm_db, $characters_db, $realm_id, $user_name, $user_id,
+ global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
 		$lang_id_tab, $gm_level_arr;
-
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
  $result = $sql->query("SELECT email,gmlevel,joindate,expansion FROM account WHERE username ='$user_name'");
+
+ $refguid = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = '$user_id';"));
+ $refguid = $refguid[0];
+ $referred_by = mysql_fetch_row(mysql_query("SELECT `name` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `guid` = '$refguid';"));
+ $referred_by = $referred_by[0];
 
  if ($acc = $sql->fetch_row($result)) {
   require_once("scripts/id_tab.php");
@@ -55,8 +59,22 @@ function edit_user() {
       <tr>
         <td>{$lang_edit['mail']}</td>
         <td><input type=\"text\" name=\"mail\" size=\"43\" maxlength=\"225\" value=\"$acc[0]\" /></td>
-      </tr>
-	  <tr>
+      </tr>";
+if($referred_by !=NULL)
+{ $output .= "
+     <tr>
+        <td>{$lang_edit['invited_by']}:</td>
+        <td>$referred_by</td></tr>
+      </tr>";
+}
+else
+{ $output .= "
+     <tr>
+        <td>{$lang_edit['invited_by']}:</td>
+        <td><input type=\"text\" name=\"referredby\" size=\"43\" maxlength=\"12\" value=\"$referred_by\" /></td></tr>
+      </tr>";
+}
+     $output .= "<tr>
         <td>{$lang_edit['gm_level']}</td>
         <td>".get_gm_level($acc[1])." ( $acc[1] )</td>
       </tr>
@@ -105,7 +123,6 @@ function edit_user() {
  $output .= "<tr><td>";
 		makebutton($lang_edit['update'], "javascript:do_submit_data()",140);
  $output .= "</td><td>";
-		makebutton($lang_edit['del_acc'], "edit.php?action=delete_user",150);
 		makebutton($lang_global['back'], "javascript:window.history.back()",150);
  $output .= "</td></tr>
     	</table>
@@ -177,12 +194,12 @@ function edit_user() {
  $sql->close();
 }
 
-
 //#############################################################################################################
 //  DO EDIT USER
 //#############################################################################################################
 function doedit_user() {
- global $realm_db, $user_name;
+ global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
+		$lang_id_tab, $gm_level_arr;
 
  if ( (!isset($_POST['pass'])||$_POST['pass'] === '') || (!isset($_POST['mail'])||$_POST['mail'] === '') ||(!isset($_POST['expansion'])||$_POST['expansion'] === '') )
 	redirect("edit.php?error=1");
@@ -201,45 +218,41 @@ function doedit_user() {
  $sql->query("UPDATE account SET email='$new_mail', $new_pass expansion='$new_expansion' WHERE username = '$user_name'");
 
  if ($sql->affected_rows()) {
+	doupdate_referral($mmfpm_db, $user_id);
 	$sql->close();
 	redirect("edit.php?error=3");
     } else {
+		doupdate_referral($mmfpm_db, $user_id);
 		$sql->close();
 		redirect("edit.php?error=4");
 	}
 }
+function doupdate_referral($mmfpm_db, $user_id) {
+ global $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id;
+ $result = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = '$user_id';"));
+ $result = $result[0];
+ if ($result == NULL)
+  {
+   $referredby = $_POST['referredby'];
+   $referred_by = mysql_fetch_row(mysql_query("SELECT `guid` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `name` = '$referredby';"));
+   $referred_by = $referred_by[0];
 
-
-//###############################################################################################################
-// DELETE USER
-//###############################################################################################################
-function delete_user() {
- global $lang_edit, $lang_global, $output, $user_name;
-
- $output .= "<center><h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />
-			<font class=\"bold\">{$lang_edit['username']} : '$user_name' {$lang_edit['will_be_erased']}</font><br /><br />
-			<table class=\"hidden\">
-			<tr><td>";
-				makebutton($lang_global['yes'], "edit.php?action=dodelete_user",120);
-				makebutton($lang_global['no'], "edit.php",120);
- $output .= "</td></tr>
-        </table></center><br />";
+   if ($referred_by != NULL)
+    {
+     $result = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `id` = (SELECT `account` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `guid`='$referred_by');"));
+     $result = $result[0];
+     if ($result != NULL)
+      {
+       if ($result != $user_id)
+        {
+         mysql_query("INSERT INTO `$mmfpm_db[name]`.`point_system_invites` (`PlayersAccount`, `InvitedBy`, `InviterAccount`) VALUES ('$user_id', '$referred_by', '$result');");
+         redirect("edit.php?error=3");
+        }
+      }
+      else redirect("edit.php?error=4");
+     }
+   }
 }
-
-
-//###############################################################################################################
-// DO DELETE  USER
-//###############################################################################################################
-function dodelete_user() {
- global $realm_db, $characters_db, $realm_id, $user_id, $tab_del_user_characters, $tab_del_user_realmd;
-
- require_once("./scripts/del_lib.php");
- list($flag,$del_char) = del_acc($user_id);
-
- if ($flag) include("logout.php");
-	else redirect("edit.php?error=5");
-}
-
 
 //###############################################################################################################
 // SET DEFAULT INTERFACE LANGUAGE
@@ -300,12 +313,6 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 switch ($action) {
 case "doedit_user":
 	doedit_user();
-	break;
-case "delete_user":
-	delete_user();
-	break;
-case "dodelete_user":
- 	dodelete_user();
 	break;
 case "lang_set":
  	lang_set();

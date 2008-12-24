@@ -635,7 +635,8 @@ $lang_edit = array(
 	'classic' => 'Classic',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
-	'tot_chars' => 'Total Characters'
+	'tot_chars' => 'Total Characters',
+	'invited_by' => 'Invited By'
 	);
 
 
