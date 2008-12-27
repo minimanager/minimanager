@@ -8,14 +8,20 @@
  * License: GNU General Public License v2(GPL)
  */
  require_once("header.php");
+ session_start();
 
 //#####################################################################################################
 // DO REGISTER
 //#####################################################################################################
 function doregister(){
- global $lang_global, $realm_db, $disable_acc_creation, $limit_acc_per_ip, $valid_ip_mask,
+ require_once("./scripts/config.php");
+ global $lang_global, $mmfpm_db, $characters_db, $realm_db, $realm_id, $disable_acc_creation, $limit_acc_per_ip, $valid_ip_mask,
        $send_mail_on_creation, $create_acc_locked, $from_mail, $mailer_type, $smtp_cfg, $title, $defaultoption;
 
+ if (($_POST['security_code']) != ($_SESSION['security_code'])) {
+   redirect("register.php?err=13");
+ }	
+ 
  if ( empty($_POST['pass']) || empty($_POST['email']) || empty($_POST['username']) ) {
    redirect("register.php?err=1");
  }
@@ -85,8 +91,15 @@ function doregister(){
 			$sql->close();
     	 	redirect("register.php?err=8&usr=$last_ip");
 	}
-
+	//Email check
 	$result = $sql->query("SELECT username,email FROM account WHERE username='$user_name' OR email='$mail' $per_ip");
+	if ($sql->num_rows($result) > 1){
+	        $sql->close();
+			redirect("register.php?err=14");
+	}
+    //UserName Check
+	//$result = $sql->query("SELECT username,email FROM account WHERE username='$user_name' OR email='$mail' $per_ip");
+    $result = $sql->query("SELECT username FROM account WHERE username='$user_name'");
 
 	//there is already someone with same user/mail
 	if ($sql->num_rows($result)){
@@ -101,6 +114,26 @@ function doregister(){
 
 		$result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
  				VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$expansion)");
+		$user_id = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `username` = '$user_name';"));
+		$user_id = $user_id[0];
+		$referredby = $_POST['referredby'];
+
+ 		$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+
+ 		$referred_by = mysql_fetch_row(mysql_query("SELECT `guid` FROM `characters` WHERE `name` = '$referredby';"));
+ 		$referred_by = $referred_by[0];
+		   if ($referred_by != NULL)
+		    {
+			$result = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `id` = (SELECT `account` FROM `characters` WHERE `guid`='$referred_by');"));
+     			$result = $result[0];
+			if($result != $NULL)
+			{
+			  if ($result != $user_id)
+			   {
+		  	     mysql_query("INSERT INTO `$mmfpm_db[name]`.`point_system_invites` (`PlayersAccount`, `InvitedBy`, `InviterAccount`) VALUES ('$user_id', '$referred_by', '$result');");
+			   }
+			} else { redirect("register.php?err=15"); }
+		    }
 		$sql->close();
 
 		setcookie ("terms", "", time() - 3600);
@@ -143,7 +176,7 @@ function doregister(){
 			$mailer->ClearAddresses();
 		}
 
-		if ($result) redirect("login.php");
+		if ($result) redirect("login.php?error=6");
  		}
 }
 
@@ -151,7 +184,8 @@ function doregister(){
 // PRINT FORM
 //#####################################################################################################
 function register(){
- global $lang_register, $lang_global, $output, $expansion_select;
+ global $lang_register, $lang_global, $output, $expansion_select, $lang_captcha ,$lang_command;
+$referred_by = $_GET['ref'];
  $output .= "<center>
   <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
   <script type=\"text/javascript\">
@@ -197,7 +231,20 @@ function register(){
   	 <td valign=\"top\">{$lang_register['email']}:</td>
   	 <td><input type=\"text\" name=\"email\" size=\"45\" maxlength=\"225\" /><br />
 	 {$lang_register['use_valid_mail']}</td>
-      </tr>";
+      </tr>
+	<tr>
+  	 <td valign=\"top\">{$lang_register['invited_by']}:</td>
+  	 <td><input type=\"text\" name=\"referredby\" value=\"$referred_by\" size=\"45\" maxlength=\"12\" /><br />
+	 {$lang_register['invited_info']}</td>
+      </tr>
+	  <tr><td></td>
+	  <td><img src=\"captcha/CaptchaSecurityImages.php?width=300&height=80&characters=6\" /><br /><br /></td>
+	  </tr>
+	  <tr>
+	  <td valign=\"top\">{$lang_captcha['security_code']}:</td>
+	  <td><input type=\"text\" name=\"security_code\" size=\"45\" /><br />
+	  </td>
+	  </tr>";
   if ( $expansion_select ) {
       $output .= "<tr>
   	 <td valign=\"top\">{$lang_register['acc_type']}:</td>
@@ -404,6 +451,15 @@ case 11:
    break;
 case 12:
    $output .= "<h1><font class=\"error\">{$lang_register['recovery_mail_sent']}</font></h1>";
+   break;
+case 13:
+    $output .= "<h1><font class=\"error\">{$lang_captcha['invalid_code']}</font></h1>";
+   break;
+case 14:
+    $output .= "<h1><font class=\"error\">This email has 2 accounts already.<br />No more accounts can be created for this email address.</font></h1>";
+   break;
+case 15:
+    $output .= "<h1><font class=\"error\">Unfortunately the specified character was not found in our database.<br />please ensure you have entered a valid character name.</font></h1>";
    break;
 default:
    $output .= "<h1><font class=\"error\">{$lang_register['fill_all_fields']}</font></h1>";

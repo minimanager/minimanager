@@ -114,7 +114,7 @@ global $lang_global, $lang_login, $output, $realm_db;
 	</tr>
 	<tr><td colspan=\"2\"><hr /></td></tr>
 	<tr align=\"left\">
-		<td><a href=\"form.php\">{$lang_login['not_registrated']}</a></td>
+		<td><a href=\"register.php\">{$lang_login['not_registrated']}</a></td>
 		<td><a href=\"register.php?action=pass_recovery\">{$lang_login['pass_recovery']}</a></td>
 	</tr>
    </table>
@@ -191,6 +191,9 @@ case 3:
    break;
 case 5:
    $output .=  "<h1><font class=\"error\">{$lang_login['no_permision']}</font></h1>";
+   break;
+case 6:
+   $output .=  "<h1><font class=\"error\">{$lang_login['after_registration']}</font></h1>";
    break;
 default: //no error
     $output .=  "<h1>{$lang_login['enter_valid_logon']}</h1>";

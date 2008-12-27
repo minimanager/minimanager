@@ -61,7 +61,8 @@ $lang_login = array(
 	'enter_valid_logon' => 'Please enter valid Username and Password:',
 	'select_realm' => 'Select Realm',
 	'remember_me' => 'Remember Me',
-	'pass_recovery' => 'Lost Password?'
+	'pass_recovery' => 'Lost Password?',
+	'after_registration' => 'Your account creation was successful!'
 	);
 
 // ----- GUILD.PHP -----
@@ -138,7 +139,9 @@ $lang_register = array(
 	'error_terms' => 'Terms of Service were Not Accepted',
 	'i_agree' => 'I Agree',
 	'i_dont_agree' => 'I Do Not Agree',
-	'pass_too_long' => 'The password you have entered exceeds the maximum allowed length'
+	'pass_too_long' => 'The password you have entered exceeds the maximum allowed length',
+	'invited_by' => 'Invited By',
+	'invited_info' => 'Please write the player who invited you to register here..'
 	);
 
 $lang_index = array(
