@@ -290,7 +290,7 @@ $output .= "<script type=\"text/javascript\">
 
  while ($member = $sql->fetch_row($members)){
 
-	$query = $sql->query("SELECT `race`,`class`,`online`, `account`, `logout_time`, SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', (CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE `guid` = '$member[0]';");
+	$query = $sql->query("SELECT `race`,`class`,`online`, `account`, `logout_time`, SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', (CHAR_DATA_OFFSET_LEVEL+1), ' ', -1) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE `guid` = '$member[0]';");
 
 	$online = $sql->fetch_row($query);
 	$accid = $online[3];
