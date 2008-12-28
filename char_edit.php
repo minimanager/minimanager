@@ -37,6 +37,7 @@ if ($sql->num_rows($result)){
 	$query = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$owner_acc_id'");
 	$owner_gmlvl = $sql->result($query, 0, 'gmlevel');
 	$owner_name = $sql->result($query, 0, 'username');
+	$owner_check = $sql->result($query, 0, 'username');
 
  if ($user_lvl >= $owner_gmlvl){
 	$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -82,6 +83,9 @@ $output .= "<center>
 </tr>
 <tr>
  <td colspan=\"8\">".get_map_name($char[9])." - ".get_zone_name($char[12])."</td>
+</tr>
+<tr>
+ <td colspan=\"8\">{$lang_char['username']}: <input type=\"text\" name=\"owner_name\" size=\"20\" maxlength=\"25\" value=\"$owner_name\" /> | {$lang_char['acc_id']}: $owner_acc_id</td>
 </tr>
 <tr>
  <td colspan=\"8\">{$lang_char['guild']}: $guild_name | {$lang_char['rank']}: $guild_rank</td>
@@ -232,7 +236,7 @@ $sql->close();
 function do_edit_char() {
  global $lang_global, $lang_char, $output, $realm_db, 
 		$characters_db, $realm_id, $user_lvl , $world_db;
-		
+
 if ( empty($_GET['id']) || empty($_GET['name']) ) error($lang_global['empty_fields']);
 
 $sql = new SQL;
@@ -250,7 +254,16 @@ if ($sql->num_rows($result)){
 	$sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 	$query = $sql->query("SELECT gmlevel FROM account WHERE id ='$owner_acc_id'");
 	$owner_gmlvl = $sql->result($query, 0, 'gmlevel');
-
+	$new_owner_name = $_GET['owner_name'];
+	$query = $sql->query("SELECT id FROM account WHERE username ='$new_owner_name'");
+	$new_owner_acc_id = $sql->result($query, 0, 'id');
+		if ($owner_acc_id != $new_owner_acc_id)  {
+		$max_players = $sql->query("SELECT numchars FROM realmcharacters WHERE acctid ='$new_owner_acc_id'");
+		$max_players = $max_players[0];
+			if($max_players >= 9)
+		$result = $sql->query("UPDATE `{$characters_db[$realm_id]['name']}`.`characters` SET account = $new_owner_acc_id WHERE guid = '$id'");	
+			else redirect("char_edit.php?action=edit_char&id=$id&error=5");
+	}
   if ($user_lvl > $owner_gmlvl){
 
 	if(isset($_GET['check'])) $check = $sql->quote_smart($_GET['check']);
@@ -458,6 +471,9 @@ case 3:
    break;
 case 4:
    $output .= "<h1><font class=\"error\">{$lang_char['update_err']}</font></h1>";
+   break;
+case 5:
+   $output .= "<h1><font class=\"error\">{$lang_char['max_acc']}</font></h1>";
    break;
 default: //no error
     $output .= "<h1>{$lang_char['edit_char']}</h1><br />{$lang_char['check_to_delete']}";

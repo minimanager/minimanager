@@ -283,6 +283,8 @@ $lang_char = array(
 	// ----- CHAR.PHP -----
 	'online' =>'Online',
 	'offline' => 'Offline',
+	'username' => 'Username',
+	'acc_id' => 'Account ID',
 	'guild_leader' => 'Guild Leader',
 	'guild' => 'Guild',
 	'rank' => 'Rank',
@@ -350,6 +352,7 @@ $lang_char = array(
 	'inv_bank' => 'Inventory and Bank items',
 	'location' => 'Location',
 	'move_to' => 'Teleport to (.tele location name)',
+	'max_acc' => 'The account you are trying to move this character to has the max ammount of players in it.',
 	'no_tp_location' => 'No teleport location found using provided name.',
 	'achievements' => 'Achievements',
 	'achievement_id' => 'ID',
