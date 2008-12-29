@@ -260,7 +260,7 @@ if ($sql->num_rows($result)){
 		if ($owner_acc_id != $new_owner_acc_id)  {
 		$max_players = $sql->query("SELECT numchars FROM realmcharacters WHERE acctid ='$new_owner_acc_id'");
 		$max_players = $max_players[0];
-			if($max_players >= 9)
+			if($max_players <= 9)
 		$result = $sql->query("UPDATE `{$characters_db[$realm_id]['name']}`.`characters` SET account = $new_owner_acc_id WHERE guid = '$id'");	
 			else redirect("char_edit.php?action=edit_char&id=$id&error=5");
 	}
