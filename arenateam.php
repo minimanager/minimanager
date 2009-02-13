@@ -11,6 +11,7 @@
 require_once("header.php");
 valid_login($action_permission['read']);
 require_once("scripts/id_tab.php");
+require_once("scripts/defines.php");
 //########################################################################################################################
 // BROWSE ARENA TEAMS
 //########################################################################################################################
@@ -224,7 +225,7 @@ function view_team() {
 
  $members = $sql->query("SELECT arena_team_member.guid,`characters`.name,
 						SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', $rating_offset), ' ', -1) AS personal_rating,
-						SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', 35), ' ', -1) AS level,
+						CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
 						arena_team_member.played_week, arena_team_member.wons_week, arena_team_member.played_season, arena_team_member.wons_season
 						FROM arena_team_member,`characters`
 						LEFT JOIN arena_team_member k1 ON k1.`guid`=`characters`.`guid` AND k1.`arenateamid`='$arenateam_id'
@@ -290,7 +291,11 @@ $output .= "<script type=\"text/javascript\">
 
  while ($member = $sql->fetch_row($members)){
 
-	$query = $sql->query("SELECT `race`,`class`,`online`, `account`, `logout_time`, SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', (CHAR_DATA_OFFSET_LEVEL+1), ' ', -1) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE `guid` = '$member[0]';");
+	$query = $sql->query("SELECT `race`,`class`,`online`, `account`, `logout_time`, 
+					CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, 
+					mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender 
+					FROM `characters` 
+					WHERE `guid` = '$member[0]';");
 
 	$online = $sql->fetch_row($query);
 	$accid = $online[3];

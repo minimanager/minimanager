@@ -223,6 +223,8 @@ $order_dir = ($dir) ? "ASC" : "DESC";
 $dir = ($dir) ? 0 : 1;
 //==========================$_GET and SECURE end========================
 
+require_once("scripts/defines.php");
+
  $query = $sql->query("SELECT guildid, name, info, MOTD, createdate, (select count(*) from guild_member where guildid = '$guild_id') as mtotal, (select count(*) from guild_member where guildid = '$guild_id' and guid in (select guid from characters where online = 1)) as monline FROM guild WHERE guildid = '$guild_id'");
  $guild_data = $sql->fetch_row($query);
 
@@ -262,12 +264,18 @@ $dir = ($dir) ? 0 : 1;
     <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_guild['online']}</a></th>
   </tr>";
 
- $members = $sql->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass, SUBSTRING_INDEX(SUBSTRING_INDEX(c.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS clevel, gm.rank AS mrank, (SELECT rname FROM guild_rank WHERE guildid ='$guild_id' AND rid = mrank+1) AS rname, gm.Pnote, gm.OFFnote, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, c.`online` as conline, c.`account`, c.`logout_time` as clogout
-                         FROM guild_member as gm
-                         left outer join characters as c on c.guid = gm.guid
-                         WHERE gm.guildid = '$guild_id'
-                         ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-                                               
+ $members = $sql->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass, 
+						CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(c.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS clevel, 
+						gm.rank AS mrank, 
+						(SELECT rname FROM guild_rank WHERE guildid ='$guild_id' AND rid = mrank+1) AS rname, 
+						gm.Pnote, gm.OFFnote, 
+						mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, 
+						c.`online` as conline, c.`account`, c.`logout_time` as clogout
+                        FROM guild_member as gm
+                        left outer join characters as c on c.guid = gm.guid
+                        WHERE gm.guildid = '$guild_id'
+                        ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
  while ($member = $sql->fetch_row($members)){
 
