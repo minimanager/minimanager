@@ -326,8 +326,8 @@ require_once("scripts/defines.php");
   
   
   $output .= ($user_lvl < $owner_gmlvl ) ? "<td>$member[1]</td>" : "<td><a href=\"char.php?id=$member[0]\">$member[1]</a></td>"; 
-  $output .= "<td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".get_player_race($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-						  <td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".get_player_class($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+  $output .= "<td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif'></td>
+						  <td><img src='img/c_icons/{$member[3]}.gif'></td>
 						  <td>$lev</td>
 						  <td>$member[6] ($member[5])</td>
 						  <td>$member[7]</td>

@@ -95,7 +95,10 @@ function char_main()
         $crit = round($crit[1],2);
         $range_crit = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_RANGE_CRIT]));
         $range_crit = round($range_crit[1],2);
-
+		  $rage = round($char_data[CHAR_DATA_OFFSET_RAGE] / 10);
+		  $maxrage = round($char_data[CHAR_DATA_OFFSET_MAX_RAGE] / 10);
+		  
+			  
         $EQU_HEAD = $char_data[CHAR_DATA_OFFSET_EQU_HEAD];
         $EQU_NECK = $char_data[CHAR_DATA_OFFSET_EQU_NECK];
         $EQU_SHOULDER = $char_data[CHAR_DATA_OFFSET_EQU_SHOULDER];
@@ -198,11 +201,56 @@ $output .= "</td>
       <div class=\"gradient_p\">{$lang_item['health']}:</div>
       <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_HEALTH]}</div>
     </td>
-      <td class=\"half_line\" colspan=\"2\" align=\"center\" width=\"50%\">
-      <div class=\"gradient_p\">{$lang_item['mana']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_MANA]}</div>
+      <td class=\"half_line\" colspan=\"2\" align=\"center\" width=\"50%\">";
+      
+    if (get_player_class($char[3]) == 'Druid' ) {  
+      
+      $output .= "<div class=\"gradient_p\">{$lang_item['mana']}:</div>
+      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_MAX_MANA]}</div></br>
+      <div class=\"gradient_p\">{$lang_item['rage']}:</div>
+      <div class=\"gradient_pp\">{$rage}/{$maxrage}</div></br>
+      <div class=\"gradient_p\">{$lang_item['energy']}:</div>
+      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_ENERGY]}/{$char_data[CHAR_DATA_OFFSET_MAX_ENERGY]}</div>
     </td>
     <td>";
+    }
+     
+    if (get_player_class($char[3]) == 'Rogue' ) {  
+      
+      $output .= "<div class=\"gradient_p\">{$lang_item['energy']}:</div>
+      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_ENERGY]}/{$char_data[CHAR_DATA_OFFSET_MAX_ENERGY]}</div>
+    </td>
+    <td>";
+    }
+    
+	if (get_player_class($char[3]) == 'Warrior' ) {  
+      
+      $output .= "<div class=\"gradient_p\">{$lang_item['rage']}:</div>
+      <div class=\"gradient_pp\">{$rage}/{$maxrage}</div>
+    </td>
+    <td>";
+    }
+   
+	if (get_player_class($char[3]) == 'Death Knight' ) {  
+      // Don't know if FOCUS is the right one need to verify with Death Knight player.
+      $output .= "<div class=\"gradient_p\">{$lang_item['runic']}:</div>
+      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_FOCUS]}/{$char_data[CHAR_DATA_OFFSET_MAX_FOCUS]}</div>
+    </td>
+    <td>";
+    }
+           
+   if (get_player_class($char[3]) == 'Mage' || 
+    get_player_class($char[3]) == 'Warlock' || 
+    get_player_class($char[3]) == 'Paladin' || 
+    get_player_class($char[3]) == 'Priest' || 
+    get_player_class($char[3]) == 'Hunter' || 
+    get_player_class($char[3]) == 'Shaman'   ) {  
+      
+      $output .= "<div class=\"gradient_p\">{$lang_item['mana']}:</div>
+      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_MAX_MANA]}</div>
+    </td>
+    <td>";
+    }
     if (!empty($equiped_items[7][1])) $output .= maketooltip("<img src=\"{$equiped_items[7][1]}\" class=\"{$equiped_items[7][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_LEGS]}", $equiped_items[7][0], "item_tooltip", "target=\"_blank\"");
       else $output .= "<img src=\"img/Char_INV/INV_empty_legs.png\" class=\"icon_border_0\" alt=\"\" />";
 $output .= "</td>
@@ -280,16 +328,18 @@ $output .= "</td>
 $output .= "</td>
     <td class=\"half_line\" colspan=\"2\" rowspan=\"2\" align=\"center\">
       <div class=\"gradient_p\">
-        {$lang_char['exp']}:<br />
+        {$lang_char['expertise']}:<br />
         {$lang_char['block']}:<br />
         {$lang_char['dodge']}:<br />
-        {$lang_char['parry']}:
+        {$lang_char['parry']}:<br />
+		  {$lang_char['resilience']}:
       </div>
       <div class=\"gradient_pp\">
-        {$char_data[CHAR_DATA_OFFSET_EXP]}<br />
-        $block%<br />
+        {$char_data[CHAR_DATA_OFFSET_EXPERTISE]}<br />
+		  $block%<br />
         $dodge%<br />
-        $parry%
+        $parry%<br />
+        {$char_data[CHAR_DATA_OFFSET_RESILIENCE]}  
       </div>
     </td>
     <td class=\"half_line\" colspan=\"2\" rowspan=\"2\" align=\"center\">
@@ -1343,7 +1393,7 @@ if ($sql->num_rows($result) == 1){
 
     $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-    $result = $sql->query("SELECT id,level,exp,loyaltypoints,loyalty,trainpoint,name,curhappiness,TeachSpelldata FROM `character_pet` WHERE owner = $id");
+    $result = $sql->query("SELECT id,level,exp,talentpoints,name,curhappiness,teachspelldata FROM `character_pet` WHERE owner = $id");
 
       $output .= "<center>
       <div id=\"tab\">

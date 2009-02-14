@@ -120,10 +120,11 @@ function doregister(){
 		$sql->close();
  		$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
- 		$referred_by = mysql_fetch_row(mysql_query("SELECT `guid` FROM `characters` WHERE `name` = '$referredby';"));
- 		$referred_by = $referred_by[0];
-		   if ($referred_by != NULL)
+ 		   if ($referred_by != NULL)
 		    {
+	$referred_by = mysql_fetch_row(mysql_query("SELECT `guid` FROM `characters` WHERE `name` = '$referredby';"));
+ 		$referred_by = $referred_by[0];
+	
 			$result = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `id` = (SELECT `account` FROM `characters` WHERE `guid`='$referred_by');"));
      			$result = $result[0];
 			if($result != $NULL)

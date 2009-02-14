@@ -26,7 +26,7 @@ $db_type = "MySQL";
 $mmfpm_db = Array(
 	'addr' => "127.0.0.1:3306",	//SQL server IP:port this DB located on
 	'user' => "root",			//SQL server login this DB located on
-	'pass' => "",			//SQL server pass this DB located on
+	'pass' => "x",			//SQL server pass this DB located on
 	'name' => "mmfpm",			//realmd DB name
 	'encoding' => "utf8" 		//SQL connection encoding
 	);
@@ -34,7 +34,7 @@ $mmfpm_db = Array(
 $realm_db = Array(
 	'addr' => "127.0.0.1:3306",	//SQL server IP:port this realmd located on
 	'user' => "root",			//SQL server login this realmd located on
-	'pass' => "",			//SQL server pass this realmd located on
+	'pass' => "x",			//SQL server pass this realmd located on
 	'name' => "realmd",			//realmd DB name
 	'encoding' => "utf8" 		//SQL connection encoding
 	);
@@ -44,7 +44,7 @@ $world_db = Array(
 			'id' => 1,					//Realm ID
 			'addr' => "127.0.0.1:3306",	//SQL server IP:port this DB located on
 			'user' => "root",			//SQL server login this DB located on
-			'pass' => "",			//SQL server pass this DB located on
+			'pass' => "x",			//SQL server pass this DB located on
 			'name' => "mangos",			//World Database name
 			'encoding' => "utf8" 		//SQL connection encoding
 			),
@@ -55,7 +55,7 @@ $characters_db = Array(
 			'id' => 1,					//Realm ID
 			'addr' => "127.0.0.1:3306",	//SQL server IP:port this DB located on
 			'user' => "root",			//SQL server login this DB located on
-			'pass' => "",			//SQL server pass this DB located on
+			'pass' => "x",			//SQL server pass this DB located on
 			'name' => "characters",			//Character Database name
 			'encoding' => "utf8", 		//SQL connection encoding
 			),          //NOTE: THIS USER MUST HAVE AT LEAST READ ACCESS ON THE WORLD DATABASE
@@ -91,11 +91,12 @@ $smtp_cfg = array(
 $disable_acc_creation = false; 	//true = Do not allow new accounts to be created
 $expansion_select = true; //true = Shows option to select expansion or classic False = no option(TBC) enabled by default
 $defaultoption = 2; //if the above is false then set what the default option will be (1 = TBC, 0 = Classic)
-$enable_captcha = true; //false = no security image check (enable for protection against 'bot' registrations)
+$enable_captcha = false; //false = no security image check (enable for protection against 'bot' registrations)
 $send_mail_on_creation = false; //true = send mail at account creation.
 $create_acc_locked = 0; 		//if set to '1' newly created accounts will be made locked to 0.0.0.0 IP disallowing user to login.
 $validate_mail_host = false;  	//actualy make sure the mail host provided in email is valid/accessible host.
 $limit_acc_per_ip = false; 		//true = limit to one account per IP
+$simple_register = false;		//Sets the registration to a simple form. Name, Password, Expansion and Email.
 /* this option will limit account creation to users from selected net range(s).
 *  allow all => empty array
 * e.g: "120-122.55.255-0.255-0", */
@@ -104,7 +105,7 @@ $valid_ip_mask = array(
 				);
 
 //---- Layout configuration ----
-$title = "MiniManager for MaNgOs srv.";
+$title = "BANSHEE";
 $itemperpage = 25;
 
 $css_template = "Sulfur"; 		//file/folder name of css tamplate to use from templates directory by default
@@ -131,7 +132,7 @@ $skill_datasite = "http://$tt_lang.wowhead.com/?spells=";
 $talent_datasite = "http://$tt_lang.wowhead.com/?spell=";
 $talent_calculator_datasite = "http://www.worldofwarcraft.com/info/classes";
 $go_datasite = "http://$tt_lang.wowhead.com/?object=";
-$get_icons_from_web = true; //wherever to get icons from the web in case they are missing in /img/INV dir.
+$get_icons_from_web = false; //wherever to get icons from the web in case they are missing in /img/INV dir.
 
 //---- Active Translations
 

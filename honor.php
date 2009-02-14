@@ -91,8 +91,8 @@ $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `gui
 
   	$output .= " <tr>
 			 <td><a href=\"char.php?id=$char[0]\">$char[1]</a></td>
-		 	 <td><img src='img/c_icons/{$char[2]}-{$char[7]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+		 	 <td><img src='img/c_icons/{$char[2]}-{$char[7]}.gif'></td>
+		  	 <td><img src='img/c_icons/{$char[3]}.gif'></td>
 			 <td>$lev</td>
 			 <td>$char[4]</td>
 		     <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
@@ -166,8 +166,8 @@ $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `gui
 
   	$output .= " <tr>
 			 <td><a href=\"char.php?id=$char[0]\">$char[1]</a></td>
-		 	 <td><img src='img/c_icons/{$char[2]}-{$char[7]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+		 	 <td><img src='img/c_icons/{$char[2]}-{$char[7]}.gif'></td>
+		  	 <td><img src='img/c_icons/{$char[3]}.gif'></td>
 			 <td>$lev</td>
 			 <td>$char[4]</td>
 		     <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
