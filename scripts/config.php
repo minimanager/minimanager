@@ -26,7 +26,7 @@ $db_type = "MySQL";
 $mmfpm_db = Array(
 	'addr' => "127.0.0.1:3306",	//SQL server IP:port this DB located on
 	'user' => "root",			//SQL server login this DB located on
-	'pass' => "x",			//SQL server pass this DB located on
+	'pass' => "",			//SQL server pass this DB located on
 	'name' => "mmfpm",			//realmd DB name
 	'encoding' => "utf8" 		//SQL connection encoding
 	);
@@ -34,7 +34,7 @@ $mmfpm_db = Array(
 $realm_db = Array(
 	'addr' => "127.0.0.1:3306",	//SQL server IP:port this realmd located on
 	'user' => "root",			//SQL server login this realmd located on
-	'pass' => "x",			//SQL server pass this realmd located on
+	'pass' => "",			//SQL server pass this realmd located on
 	'name' => "realmd",			//realmd DB name
 	'encoding' => "utf8" 		//SQL connection encoding
 	);
@@ -44,7 +44,7 @@ $world_db = Array(
 			'id' => 1,					//Realm ID
 			'addr' => "127.0.0.1:3306",	//SQL server IP:port this DB located on
 			'user' => "root",			//SQL server login this DB located on
-			'pass' => "x",			//SQL server pass this DB located on
+			'pass' => "",			//SQL server pass this DB located on
 			'name' => "mangos",			//World Database name
 			'encoding' => "utf8" 		//SQL connection encoding
 			),
@@ -55,7 +55,7 @@ $characters_db = Array(
 			'id' => 1,					//Realm ID
 			'addr' => "127.0.0.1:3306",	//SQL server IP:port this DB located on
 			'user' => "root",			//SQL server login this DB located on
-			'pass' => "x",			//SQL server pass this DB located on
+			'pass' => "",			//SQL server pass this DB located on
 			'name' => "characters",			//Character Database name
 			'encoding' => "utf8", 		//SQL connection encoding
 			),          //NOTE: THIS USER MUST HAVE AT LEAST READ ACCESS ON THE WORLD DATABASE
@@ -68,7 +68,7 @@ $server = Array(	//if more than one realm used, even if they are on same system 
 			'game_port' => 8085,		//Game Server port
 			'term_type' => "SSH",		//Terminal type - ("SSH"/"Telnet")
 			'term_port' => 22,			//Terminal port
-			'rev' => "rev. 6360",		//Mangos rev. used
+			'rev' => "rev. 7252",		//Mangos rev. used
 			'both_factions' => true	//Allow to see opponent faction characters. Affects only players.
 			),
 );
@@ -105,7 +105,7 @@ $valid_ip_mask = array(
 				);
 
 //---- Layout configuration ----
-$title = "BANSHEE";
+$title = "MiniManager for MaNgOs srv.";
 $itemperpage = 25;
 
 $css_template = "Sulfur"; 		//file/folder name of css tamplate to use from templates directory by default
