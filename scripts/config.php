@@ -105,7 +105,7 @@ $valid_ip_mask = array(
 				);
 
 //---- Layout configuration ----
-$title = "MiniManager for MaNgOs srv.";
+$title = "BANSHEE";
 $itemperpage = 25;
 
 $css_template = "Sulfur"; 		//file/folder name of css tamplate to use from templates directory by default
@@ -132,7 +132,7 @@ $skill_datasite = "http://$tt_lang.wowhead.com/?spells=";
 $talent_datasite = "http://$tt_lang.wowhead.com/?spell=";
 $talent_calculator_datasite = "http://www.worldofwarcraft.com/info/classes";
 $go_datasite = "http://$tt_lang.wowhead.com/?object=";
-$get_icons_from_web = false; //wherever to get icons from the web in case they are missing in /img/INV dir.
+$get_icons_from_web = true; //wherever to get icons from the web in case they are missing in /img/INV dir.
 
 //---- Active Translations
 
@@ -177,7 +177,7 @@ $menu_array = Array(
 	  array("banned.php", 'banned_list',1,0,0,0),
 	  array("cleanup.php", 'cleanup',3,0,0,0),
 	  array("stat.php", 'statistics',0,0,0,0),
-	  array("javascript:void(0);\" onclick=\"window.open('./pomm/pomm.php', 'pomm', 'Toolbar=0, Location=0, Directories=0, Status=0, Menubar=0, Scrollbar=0, Resizable=0, Copyhistory=1, Width=784, Height=525')", 'player_map',0,0,0,0),
+	  array("javascript:void(0);\" onclick=\"window.open('./pomm/pomm.php', 'pomm', 'Toolbar=0, Location=0, Directories=0, Status=0, Menubar=0, Scrollbar=0, Resizable=0, Copyhistory=1, Width=966, Height=732')", 'player_map',0,0,0,0),
 	  ),
 	),
 	array("#", 'tools', array(
