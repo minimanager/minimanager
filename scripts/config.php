@@ -105,7 +105,7 @@ $valid_ip_mask = array(
 				);
 
 //---- Layout configuration ----
-$title = "BANSHEE";
+$title = "MiniManage for MaNGOS Server";
 $itemperpage = 25;
 
 $css_template = "Sulfur"; 		//file/folder name of css tamplate to use from templates directory by default

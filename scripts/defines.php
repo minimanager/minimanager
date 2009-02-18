@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Trinity Server
+ * Project Name: MiniManager for MaNGOS Server
  * Date: 17.10.2006 inital version (0.0.1a)
  * Author: Q.SA
  * Copyright: Q.SA
