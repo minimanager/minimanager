@@ -161,7 +161,7 @@ input {
 	margin-left: 2px;
 }
 input[type="text"],input[type="password"]{
-	background:#a2a2a;
+	background:#2a2a2a;
 }
 input[type="text"]:hover, input[type="password"]:hover {
     background:#2c2c2c;
@@ -282,11 +282,20 @@ table.lined {
 	text-align: center;
 }
 
-table.lined, table.lined td, table.lined td.head, table.lined td.hidden{
+table.lined, table.lined td, table.lined td.hidden{
 	border-bottom: 1px solid  #383838;
 	border-top: 1px solid  #383838;
 	padding: 5px;
 }
+table.lined td.head{
+	border-bottom: 3px solid  #383838;
+	border-top: 3px solid  #383838;
+	padding: 5px;
+	padding-top: 20px;
+	padding-bottom: 2px;
+	font-weight:bold;
+}
+
 table.lined, table.lined tr, table.lined tr.hidden{
 	border-left: 1px solid  #383838;
 	border-right: 1px solid  #383838;
@@ -313,7 +322,7 @@ tr td div.gradient_p,div.gradient_pp{
 }
 tr td div.gradient_p{
 	background-color:#444;
-	width: 130px;
+	width: 150px;
 }
 tr td div.gradient_pp{
 	background-color:#333;
