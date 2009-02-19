@@ -193,8 +193,8 @@ function ANSWERBOX() {
     if(!this.obj) this.init();
 
     var t = '<table class="' + this.classname + '"><tr><th colspan=2>'+((this.btn_icon)?'<img src="'+ this.btn_icon +'" width="48" height="48" alt="" align="absmiddle" />':'')+ this.text +'</th></tr>'
-		+ '<tr align="center"><td><a class="button" style="width:120px;" href="' + action + '" type="wrn">' + this.btn_ok + '</a></td>'
-		+ '<td><a class="button" style="width:120px;" href="#" onclick="answerbox.hide()" type="def">' + this.btn_cancel + '</a></td></tr></table>';
+		+ '<tr align="center"><td><a class="button" style="width:120px;" href="' + action + '" type="def">' + this.btn_ok + '</a></td>'
+		+ '<td><a class="button" style="width:120px;" href="#" onclick="answerbox.hide()" type="wrn">' + this.btn_cancel + '</a></td></tr></table>';
 
     if(DOM || IE) this.obj.innerHTML = t;
     if(DOM){

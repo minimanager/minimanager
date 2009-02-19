@@ -98,7 +98,7 @@ global $lang_global, $lang_login, $output, $realm_db;
 			 <select name=\"realm\">";
 			 
 	while ($realm = $sql->fetch_row($result))
-		$output .= "<option value=\"$realm[0]\">$realm[1]</option>";
+		$output .= "<option value=\"$realm[0]\">".htmlentities($realm[1])."</option>";
 
 	$output .= "</select></td></tr>";
 	} else {

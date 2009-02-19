@@ -10,7 +10,7 @@
 
 require_once("header.php");
 valid_login($action_permission['read']);
-require_once("scripts/id_tab.php");
+
 //########################################################################################################################
 // BROWSE GUILDS
 //########################################################################################################################
@@ -63,7 +63,7 @@ if ($query_myGuild)
     $output .= ($user_lvl < $owner_gmlvl ) ? "<td>$data[3]</td>" : "<td><a href=\"char.php?id=$data[2]\">$data[3]</a></td>";
     $output .= "<td><img src=\"img/".($data[4]==0 ? "alliance" : "horde")."_small.gif\" /></td>
       <td>$data[5]/$data[6]</td>
-      <td>$data[7] ...</td>
+      <td>".htmlentities($data[7])." ...</td>
       <td class=\"small\">$data[8]</td>
       </tr>";
    }
@@ -240,8 +240,8 @@ require_once("scripts/defines.php");
   <tr class=\"bold\"><td>$guild_data[1]</td></tr>
   <tr><td><b>{$lang_guild['create_date']}:</b><br>$guild_data[4]</td></tr>";
   
-  if ($guild_data[2] != '') $output .= "<tr><td><b>{$lang_guild['info']}:</b><br>$guild_data[2]</td></tr>";
-  if ($guild_data[3] != '') $output .= "<tr><td><b>{$lang_guild['motd']}:</b><br>$guild_data[3]</td></tr>";
+  if ($guild_data[2] != '') $output .= "<tr><td><b>{$lang_guild['info']}:</b><br>".htmlentities($guild_data[2],ENT_QUOTES)."</td></tr>";
+  if ($guild_data[3] != '') $output .= "<tr><td><b>{$lang_guild['motd']}:</b><br>".htmlentities($guild_data[3],ENT_QUOTES)."</td></tr>";
   
   $output .="<tr><td><b>{$lang_guild['tot_m_online']}:</b><br>$guild_data[6] / $guild_data[5]</td></tr>
              </table></td></tr><td>
@@ -250,7 +250,7 @@ require_once("scripts/defines.php");
              
              <tr><td><table class=\"lined\"><tr>";
     
-   if ($user_lvl >= 4 || $inguild || $amIguildleader) $output .= " <th width=\"3%\">{$lang_guild['remove']}</th>";
+   $output .= " <th width=\"3%\">{$lang_guild['remove']}</th>";
        
     $output .= "
     <th width=\"21%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=cname&amp;start=$start&amp;dir=$dir\">".($order_by=='cname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_guild['name']}</a></th>
@@ -325,13 +325,13 @@ require_once("scripts/defines.php");
      " <td></td>";
   
   
-  $output .= ($user_lvl < $owner_gmlvl ) ? "<td>$member[1]</td>" : "<td><a href=\"char.php?id=$member[0]\">$member[1]</a></td>"; 
-  $output .= "<td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif'></td>
-						  <td><img src='img/c_icons/{$member[3]}.gif'></td>
+  $output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($member[1])."</td>" : "<td><a href=\"char.php?id=$member[0]\">".htmlentities($member[1])."</a></td>"; 
+  $output .= "<td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".get_player_race($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()'/></td>
+						  <td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".get_player_class($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()'/></td>
 						  <td>$lev</td>
-						  <td>$member[6] ($member[5])</td>
-						  <td>$member[7]</td>
-						  <td>$member[8]</td>
+						  <td>".htmlentities($member[6])." (".$member[5].")</td>
+						  <td>".htmlentities($member[7])."</td>
+						  <td>".htmlentities($member[8])."</td>
 						  <td>$lastlogin</td>
 						  <td>".(($member[10]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
 						  </tr>";

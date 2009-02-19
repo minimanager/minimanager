@@ -50,7 +50,7 @@ function format_uptime($seconds) {
   return $uptimeString;
 }
 
-$staticUptime = "{$lang_index['realm']} ".get_realm_name($realm_id)." {$lang_index['online']} for ".format_uptime($uptimetime);
+$staticUptime = "{$lang_index['realm']} <em>".htmlentities(get_realm_name($realm_id))."</em> {$lang_index['online']} for ".format_uptime($uptimetime);
 
     if ($uptime['d'] < 2) $sd = ""; else $sd = "s"; 
     if ($uptime['h'] < 2) $sh = ""; else $sh = "s"; 
@@ -63,7 +63,7 @@ $output .= "<div id=\"uptime\"><h1><font color=\"#55aa55\">".$staticUptime."</fo
 } 
 else 
 {
-    $output .= "<h1><font class=\"error\">{$lang_index['realm']} ".get_realm_name($realm_id)." {$lang_index['offline_or_let_high']}</font></h1>";
+    $output .= "<h1><font class=\"error\">{$lang_index['realm']} <em>".htmlentities(get_realm_name($realm_id))."</em> {$lang_index['offline_or_let_high']}</font></h1>";
 	$online = false;
 }
 
@@ -157,7 +157,7 @@ if ($online)
             }
 
 	$output .= "
-	<font class=\"bold\">{$lang_index['tot_users_online']} : $total_online</font><br /><br />
+	<font class=\"bold\">{$lang_index['tot_users_online']}: $total_online</font><br /><br />
 	<table class=\"lined\">
 	<tr>
 	<th width=\"20%\"><a href=\"index.php?order_by=name&amp;dir=$dir\"".($order_by=='name' ? " class=\"$order_dir\"" : "").">{$lang_index['name']}</a></th>
@@ -207,7 +207,7 @@ if ($online)
       $lev = '<font color="#000000">'.$level.'</font>';
 
 		$output .= "<tr>
-		 <td><a href=\"char.php?id=$char[0]\"><span onmousemove='toolTip(\"".get_player_user_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>$char[1]</span></a></td>
+		 <td><a href=\"char.php?id=$char[0]\"><span onmousemove='toolTip(\"".get_player_user_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>".htmlentities($char[1])."</span></a></td>
          <td><img src='img/c_icons/{$char[2]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		 <td>$lev</td>

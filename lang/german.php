@@ -9,8 +9,8 @@
 
 $lang_global = array(
 	// ----- GENERAL ERROR CODES -----
-	'err_sql_conn_db' => 'Fehler - Keiner Verbindung zur Datenbank !',
-	'err_sql_open_db' => 'Fehler - Kann Datenbank nicht &ouml;ffnen !',
+	'err_sql_conn_db' => 'Fehler - Keiner Verbindung zur Datenbank!',
+	'err_sql_open_db' => 'Fehler - Kann Datenbank nicht &ouml;ffnen!',
 	'err_no_result' => 'Keine Ergebnisse.',
 	'err_no_user' => 'Keine Benutzer gefunden!',
 	'err_no_records_found' => 'Keine Eintr&auml;ge gefunden!',
@@ -58,8 +58,8 @@ $lang_login = array(
 	'banned_acc' => 'Account gebannt, Bitte Serveradministrator kontaktieren',
 	'locked_acc' => 'Account gesperrt, Bitte Serveradministrator kontaktieren',
 	'no_permision' => 'Du hast KEINE Berechtigung auf die angeforderten Daten zuzugreifen',
-	'enter_valid_logon' => 'Bitte g&uuml;tigen Benutzername und Passwort eingeben:',
-	'select_realm' => 'W&auml;hle Realm',
+	'enter_valid_logon' => 'Bitte einen g&uuml;ltigen Benutzernamen und ein g&uuml;ltiges Passwort eingeben:',
+	'select_realm' => 'W&auml;hle einen Realm',
 	'remember_me' => 'Eingeloggt bleiben',
 	'pass_recovery' => 'Passwort vergessen?'
 	);
@@ -67,35 +67,35 @@ $lang_login = array(
 // ----- GUILD.PHP -----
 $lang_guild = array(
 	'id' => 'ID',
-	'guild_name' => 'Gilden Name',
-	'guild_leader' => 'Gilden Anf&uuml;hrer',
+	'guild_name' => 'Gildenname',
+	'guild_leader' => 'Gildenanf&uuml;hrer',
 	'guild_faction' => 'Fraktion',
 	'tot_members' => 'Mitglieder insgesammt',
-	'tot_m_online' => 'Mitglieder Online',
+	'tot_m_online' => 'Mitglieder online',
 	'remove' => 'L&ouml;.',
-	'guild_motd' => 'Gilden MOTD',
+	'guild_motd' => 'Gilden-MoTD',
 	'create_date' => 'Erstellunsdatum',	
 	'by_name' =>'nach Name',
-	'by_guild_leader' => 'nach Anf&uuml;hrer Name',
+	'by_guild_leader' => 'nach Anf&uuml;hrer',
 	'by_id' => 'nach ID',
-	'tot_guilds' => 'Gilden gesammt',
+	'tot_guilds' => 'Gilden insgesamt',
 	'guild' => 'Gilde',
 	'info' => 'Info',
-	'motd' => 'MOTD',
+	'motd' => 'MoTD',
 	'name' => 'Name',
 	'race' => 'Rasse',
 	'class' => 'Klasse',
 	'level' => 'Level',
 	'rank' => 'Rang',
-	'pnote' => 'Spieler Notiz',
+	'pnote' => 'Spielernotiz',
 	'offnote' => 'Notiz',
-	'online' => 'Online',
-	'llogin' => 'Letzter Login (Tages)',
+	'online' => 'online',
+	'llogin' => 'Letzter Login (Tage)',
 	'del_guild' => 'L&ouml;sche Gilde',
-	'guild_id' => 'Gilden ID',
-	'guild_search_result' => 'Gilden Suchergebnis',
+	'guild_id' => 'Gilden-ID',
+	'guild_search_result' => 'Gilden-Suchergebnis',
 	'show_guilds' => 'Zeige alle Gilden',
-	'browse_guilds' => 'Gilden durchsuche'
+	'browse_guilds' => 'Gilden durchsuchen'
 	);
 	
 	
@@ -103,58 +103,61 @@ $lang_register = array(
 	// ----- REGISTER.PHP -----
 	'create_acc' =>'Accounterstellung',
 	'username' => 'Benutzername',
-	'use_eng_chars_limited_len' => 'Nur Buchstaben und Zahlen benutzen (keine Umlaute, Sonderzeichen, usw.).<br />Min. L&auml;nge 4 | Max. L&auml;nge 14.',
+	'use_eng_chars_limited_len' => 'Nur Buchstaben und Zahlen benutzen (keine Umlaute oder Sonderzeichen). Minimale L&auml;nge: 4 | Maximale L&auml;nge: 14',
 	'password' => 'Passwort',
 	'confirm_password' => 'Passwort best&auml;tigen',
-	'min_pass_len' => 'Min. L&auml;nge 4 | Max. L&auml;nge 25.',
-	'email' => 'E-mail',
-	'use_valid_mail' => 'Bitte versichere dich, dass du eine g&uuml;ltige E-mail-Adresse benutzt.',
+	'min_pass_len' => 'Minimale L&auml;nge 4 | Maximale L&auml;nge 25',
+	'email' => 'E-Mail',
+	'use_valid_mail' => 'Bitte versichere dich, dass du eine g&uuml;ltige E-Mail-Adresse eingibst.',
 	'create_acc_button' => 'Account erstellen',
 	'diff_pass_entered' => 'Die Passwörter müssen übereinstimmen.', //Popup-Fenster mit "noramlen" Umlauten!
-	'already_exist' => 'Existiert bereits',
+	'already_exist' => 'existiert bereits',
 	'acc_reg_closed' => 'Pech gehabt, die Accounterstellung ist zur Zeit deaktiviert.',
-	'wrong_pass_username_size' => 'L&auml;nge von Benutzername/Passwort muss zwischen 4 und 15 Buchstaben liegen!',
-	'bad_chars_used' => 'Benutzername darf nur [A-Z][a-z][0-9] enthalten!',
-	'invalid_email' => 'Bitte eine G&Uuml;LTIGE E-mail-Adresse angeben!',
-	'banned_ip' => 'Deine IP Addresse ist gebannt',
-	'contact_serv_admin' => 'Kontaktiere Serveradministrator.',
-	'users_ip_range' => 'Benutzer von IP-Bereich',
+	'wrong_pass_username_size' => 'Du hast die L&auml;nge des Benutzernamens / des Passworts nicht beachtet!',
+	'bad_chars_used' => 'Der Benutzername darf nur Buchstaben und Zahlen enthalten!',
+	'invalid_email' => 'Bitte eine G&Uuml;LTIGE E-Mail-Adresse angeben!',
+	'banned_ip' => 'Deine IP-Addresse ist gebannt.',
+	'contact_serv_admin' => 'Kontaktiere den Serveradministrator.',
+	'users_ip_range' => 'Benutzer im IP-Bereich',
 	'cannot_create_acc' => 'k&ouml;nnen keine Accounts erstellen.',
 	'fill_all_fields' => 'Bitte alle Felder ausf&uuml;llen.',
-	'acc_type' => 'Accounttyp',
-	'acc_type_desc' => 'Der Typ des Clients der gebraucht wird.',
-	'classic' => 'Classic',
-	'expansion' => 'Erweiterung',
+	'acc_type' => 'Spieltyp',
+	'acc_type_desc' => 'Welches Addon m&ouml;chtest du aktivieren? Du kannst diese Option sp&auml;ter jederzeit &auml;ndern.',
+	'classic' => 'Klassisch',
+	'tbc' => 'TBC',
+	'wotlk' => 'WotLK',
 	'recover_acc_password' => 'Passwortwiederherstellung f&uuml;r einen Account',
-	'user_pass_rec_desc' => 'Bitte gebe den Benutzernamen an mit dem du dich registriert hast.',
-	'mail_pass_rec_desc' => 'Bitte gehe sicher, dass du die selbe Emailadresse verwendest, wie bei deiner Anmeldung.',
+	'user_pass_rec_desc' => 'Bitte gib den Benutzernamen an mit dem du dich registriert hast.',
+	'mail_pass_rec_desc' => 'Versichere dich, dass du die selbe E-Mail-Adresse wie bei deiner Anmeldung verwendest.',
 	'recover_pass' => 'Passwort wiederherstellen',
-	'user_mail_not_found' => 'Die angegebene Kombination aus Accountname und Emailadresse wurde nicht gefunden.',
-	'recovery_mail_sent' => 'Email zur Wiederherstellung des Passwortes wurde versandt',
-	'read_terms' => 'Please make sure to read, understand and accept the terms of usage under which this account will be created',
-	'terms' => 'Terms of Service',
-	'error_terms' => 'Terms of Service were Not Accepted',
+	'user_mail_not_found' => 'Die angegebene Kombination aus Accountname und E-Mail-Adresse wurde nicht gefunden.',
+	'recovery_mail_sent' => 'E-Mail zur Wiederherstellung des Passwortes wurde versandt.',
+	'read_terms' => 'Lese, verstehe und akzeptiere bitte die Nutzungsbedingungen, unter denen du deinen Account erstellst',
+	'terms' => 'Nutzungsbedingungen',
+	'error_terms' => 'Nutzungsbedingungen wurden nicht akzeptiert!',
 	'i_agree' => 'Ich bin einverstanden',
 	'i_dont_agree' => 'Ich bin nicht einverstanden',
-	'pass_too_long' => 'Das angegebene Passwort &uuml;berschreitet die maximal erlaube L&auml;nge'
+	'pass_too_long' => 'Das angegebene Passwort &uuml;berschreitet die maximal erlaube L&auml;nge',
+	'invited_by' => 'Geworben von',
+	'invited_info' => 'Wenn dich ein anderer Spieler geworben hat, gib hier seinen Accountnamen an.'
 	);
 
 $lang_index = array(
 	// ----- INDEX.PHP -----
 	'realm' =>'Realm',
-	'online' => 'Online',
-	'offline_or_let_high' => 'Offline oder Latenz zu hoch',
+	'online' => 'online',
+	'offline_or_let_high' => 'offline oder Latenz zu hoch',
 	'add_motd' => 'Nachricht des Tages hinzuf&uuml;gen',
 	'delete' => 'L&ouml;schen',
-	'tot_users_online' => 'Gesamt Spieler Online',
+	'tot_users_online' => 'Spieler online',
 	'name' => 'Name',
 	'race' => 'Rasse',
 	'class' => 'Klasse',
 	'level' => 'Level',
-	'map' => 'Karte',
+	'map' => 'Map',
 	'zone' => 'Zone',
 	'rank' => 'Rang',
-	'honor_kills' => 'E.R'
+	'honor_kills' => 'Kills'
 	);
 
 $lang_header = array(
@@ -175,7 +178,7 @@ $lang_header = array(
 	'realm' => 'Realm',
 	'add_motd' => 'MOTD hinzuf&uuml;gen',
 	'mail' => 'Nachrichten',
-	'my_acc' => 'Mein Account',
+	'my_acc' => 'Profil',
 	'edit_my_acc' => 'Meine Daten &auml;ndern',
 	'logout' => 'Abmelden',
 	'menu' => 'Men&uuml;',
@@ -193,7 +196,7 @@ $lang_header = array(
 	'honor' => 'Ehre-Rangliste',
 	'auctionhouse' => 'Auktionshaus',
 	'events' => 'Ereignisse',
-	'statistics_on' => 'Online Statistiken',
+	'statistics_on' => 'Online-Statistiken',
 	'instances' => 'Instanz-Informationen'
 	);
 
@@ -540,8 +543,8 @@ $lang_char_list = array(
 	'by_race_id' => 'Rassen ID',
 	'by_class_id' => 'Klassen ID',
 	'by_map_id' => 'nach Karten ID',
-	'by_honor_kills' => '= E.Rang',
-	'greater_honor_kills' => '&lt; E.Rang',
+	'by_honor_kills' => '= Rang',
+	'greater_honor_kills' => '&lt; Rang',
 	'by_online' => 'Onlinestatus',
 	'id' => 'ID',
 	'char_name' => 'Charakter Name',
@@ -551,7 +554,7 @@ $lang_char_list = array(
 	'level' => 'Level',
 	'map' => 'Karte',
 	'zone' => 'Zone',
-	'honor_kills' => 'E.R',
+	'honor_kills' => 'Kills',
 	'online' => 'Online',
 	'del_selected_chars' => 'Markierte(n) Charakter(e) l&ouml;schen',
 	'tot_chars' => 'Charaktere Gesamt',
@@ -624,9 +627,11 @@ $lang_edit = array(
 	'language' => 'Sprache',
 	'save' => 'Speichern',
 	'client_type' => 'Spiel-Typ',
-	'classic' => 'Classic',
-	'expansion' => 'Erweiterung',
-	'tot_chars' => 'Gesamtanzahl der Charaktere'
+	'classic' => 'Klassisch',
+	'tbc' => 'TBC',
+	'wotlk' => 'WotLK',
+	'tot_chars' => 'Gesamtanzahl der Charaktere',
+	'invited_by' => 'Geworben von'
 	);
 
 
@@ -4207,5 +4212,13 @@ $lang_instances = array(
    	  'reset_delay' => 'R&uuml;cksetz-Zeitraum',
 	);
 
+$lang_captcha = array(
+	// ----- FORM.PHP -----
+	'security_image' => 'Captcha',
+	'security_code' => 'Sicherheitscode',
+	'imput_security_code' => 'Bitte gib den Sicherheitscode ein.',
+	'submit' => 'Absenden',
+	'invalid_code' => 'Der Code ist ung&uuml;ltig!'
+	);
 	
 ?>

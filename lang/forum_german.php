@@ -28,21 +28,21 @@ $forum_lang = Array(
 
 	// forum_index
 	"forums" => "Forum",
-	"forum_index" => "Forum &Uuml;bersicht",
-	"you_are_here" => "Sie sind hier",
+	"forum_index" => "Foren&uuml;bersicht",
+	"you_are_here" => "Du bist hier",
 	"last_post_by" => "Letzter Beitrag von",
 	"in" => "in", // no use
-	"no_topics" => "Keine Themen...",
-	"topics" => "Themen",
+	"no_topics" => "Keine Threads...",
+	"topics" => "Threads",
 
 	// view_forum
-	"no_such_forum" => "Bad request : Kein solches Forum",
-	"no_access" => "Bad request : Sie haben keinen Zugang zu diesem Inhalt",
+	"no_such_forum" => "Fehler: Kein solches Forum",
+	"no_access" => "Fehler: Du hast keinen Zugang zu diesem Inhalt",
 	"new_topic" => "Neues Thema",
 	"annoucement" => "Ank&uuml;ndigung",
 	"sticky" => "Wichtig",
 	"pages" => "Seiten",
-	"title" => "Thema Titel",
+	"title" => "Threadtitel",
 	"author" => "Author",
 	"pages" => "Seiten", // double
 	"replies" => "Antworten",
@@ -50,7 +50,7 @@ $forum_lang = Array(
 	"closed" => "Geschlossen",
 
 	// view_topic
-	"no_such_topic" => "Bad request : Kein solches Thema",
+	"no_such_topic" => "Fehler: Kein solcher Thread",
 	"info" => "Info",
 	"text" => "Text",
 	"yes" => "Ja",
@@ -62,30 +62,30 @@ $forum_lang = Array(
 	"post" => "Posten",
 	"open" => "&Ouml;ffnen",
 	"close" => "Schlie&szlig;en",
-	"quick_reply" => "Schnell Antworten Formular",
-	"down" => "Nach Unten",
-	"up" => "Nach Oben",
+	"quick_reply" => "Schnelle Antwort:",
+	"down" => "Nach unten",
+	"up" => "Nach oben",
 	"normal" => "Normal",
 
 	// delete_post
-	"delete_topic" => "M&ouml;chten Sie wirklich dieses Thema und alle Beitr&auml;ge darin l&ouml;schen?",
-	"delete_post" => "Wollen Sie diesen Beitrag wirklich l&ouml;schen?",
+	"delete_topic" => "M&ouml;chtest du wirklich diesen Thread und alle Beitr&auml;ge darin l&ouml;schen?",
+	"delete_post" => "Willst du diesen Beitrag wirklich l&ouml;schen?",
 	"back" => "Zur&uuml;ck",
 	"confirm" => "Best&auml;tigen",
 
 	// add_topic
-	"topic_name" => "Thema Name",
-	"please_wait" => "Bitte warten Sie $minfloodtime Sekunden, bevor Sie wieder posten.",
+	"topic_name" => "Threadtitel",
+	"please_wait" => "Bitte warte $minfloodtime Sekunden, bevor du wieder postst.",
 
 	// do_add_topic
-	"name_too_long" => "Thema Name zu lang!",
-	"name_too_short" => "Thema Name zu kurz!",
+	"name_too_long" => "Der Threadtitel ist zu lang!",
+	"name_too_short" => "Der Threadtitel ist zu kurz!",
 	"msg_too_short" => "Zu kurze Nachricht!",
 
 	// edit_post
-	"no_such_post" => "Bad request : Kein solcher Beitrag",
+	"no_such_post" => "Fehler: Kein solcher Beitrag",
 
 	// move_topic
-	"where" => "Wohin wollen Sie dieses Thema verschieben?",
+	"where" => "Wohin willst du diesen Thread verschieben?",
 );
 ?>

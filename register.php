@@ -114,27 +114,23 @@ function doregister(){
 
 		$result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
  				VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$expansion)");
-		$user_id = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `username` = '$user_name';"));
+		$user_id = mysql_fetch_row(mysql_query("SELECT `id` FROM `".$realm_db["name"]."`.`account` WHERE `username` = UPPER('$user_name');"));
 		$user_id = $user_id[0];
 		$referredby = $_POST['referredby'];
-		$sql->close();
- 		$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+		//$sql->close();
+ 		//$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
- 		   if ($referred_by != NULL)
-		    {
-	$referred_by = mysql_fetch_row(mysql_query("SELECT `guid` FROM `characters` WHERE `name` = '$referredby';"));
+ 		$referred_by = mysql_fetch_row(mysql_query("SELECT `id` FROM `account` WHERE `username` = UPPER('$referredby');"));
+
  		$referred_by = $referred_by[0];
-	
-			$result = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `id` = (SELECT `account` FROM `characters` WHERE `guid`='$referred_by');"));
-     			$result = $result[0];
-			if($result != $NULL)
-			{
-			  if ($result != $user_id)
-			   {
-		  	     mysql_query("INSERT INTO `$mmfpm_db[name]`.`point_system_invites` (`PlayersAccount`, `InvitedBy`, `InviterAccount`) VALUES ('$user_id', '$referred_by', '$result');");
-			   }
-			} else { redirect("register.php?err=15"); }
-		    }
+		if ($referred_by != NULL){
+			//$result = mysql_fetch_row(mysql_query("SELECT `id` FROM `".$realm_db["name"]."`.`account` WHERE `id` = (SELECT `account` FROM `characters` WHERE `guid`='$referred_by');"));
+     		//	$result = $result[0];
+			//if($result != NULL)
+			//{
+			if ($referred_by != $user_id)
+		  	     mysql_query("INSERT INTO `".$mmfpm_db["name"]."`.`point_system_invites` (`PlayersAccount`, `InviterAccount`) VALUES ('$user_id', '$referred_by');");
+		}else redirect("register.php?err=15");
 		$sql->close();
 
 		setcookie ("terms", "", time() - 3600);
@@ -424,7 +420,7 @@ case 2:
    $output .= "<h1><font class=\"error\">{$lang_register['diff_pass_entered']}</font></h1>";
    break;
 case 3:
-   $output .= "<h1><font class=\"error\">{$lang_register['username']} $usr {$lang_register['already_exist']}<br />Or other User registered with same email/IP</font></h1>";
+   $output .= "<h1><font class=\"error\">{$lang_register['username']} $usr {$lang_register['already_exist']}<br />oder es gibt bereits einen Account mit dieser E-Mail!</font></h1>";
    break;
 case 4:
    $output .= "<h1><font class=\"error\">{$lang_register['acc_reg_closed']}</font></h1>";

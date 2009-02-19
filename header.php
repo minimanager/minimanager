@@ -30,6 +30,8 @@ require_once("./lang/$lang.php");
 require_once("./scripts/global_lib.php");
 require_once("./scripts/id_tab.php");
 
+header("Content-Type: text/html; charset=".$site_encoding);
+
 //application/xhtml+xml
 $output .= "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
 <html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">
@@ -142,7 +144,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
 			if ($sql->num_rows($result) > 1){
 				while ($realm = $sql->fetch_row($result)){
 					$set = ($realm[0] == $realm_id) ? ">" : "";
-					$output .= "<li><a href=\"realm.php?action=set_def_realm&amp;id=$realm[0]&amp;url={$_SERVER['PHP_SELF']}\">$set $realm[1]</a></li>";
+					$output .= "<li><a href=\"realm.php?action=set_def_realm&amp;id=$realm[0]&amp;url={$_SERVER['PHP_SELF']}\">".htmlentities($set." ".$realm[1])."</a></li>";
 					}
 				$output .= "<li><a href=\"#\">-------------------</a></li>";
 				}

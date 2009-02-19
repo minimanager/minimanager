@@ -30,7 +30,7 @@ $mmfpm_db = Array(
 	'name' => "mmfpm",			//realmd DB name
 	'encoding' => "utf8" 		//SQL connection encoding
 	);
-
+	
 $realm_db = Array(
 	'addr' => "127.0.0.1:3306",	//SQL server IP:port this realmd located on
 	'user' => "root",			//SQL server login this realmd located on
@@ -105,7 +105,7 @@ $valid_ip_mask = array(
 				);
 
 //---- Layout configuration ----
-$title = "MiniManage for MaNGOS Server";
+$title = "MiniManager for MaNGOS Server";
 $itemperpage = 25;
 
 $css_template = "Sulfur"; 		//file/folder name of css tamplate to use from templates directory by default
@@ -143,6 +143,7 @@ $get_icons_from_web = true; //wherever to get icons from the web in case they ar
 
 // NOTE : Righ now only for Creature.php
 $locales_search_option = 0;  // No search option, don't use locales_XXX for search
+$site_encoding = "utf-8"; // used charset
 
 
 //---- Backup configuration ----

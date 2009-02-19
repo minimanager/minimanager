@@ -133,7 +133,7 @@ function browse_chars() {
 			$output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$char[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
 			else $output .= "<td></td>";
 			$output .= "<td>$char[0]</td>
-			<td><a href=\"char.php?id=$char[0]\">$char[1]</a></td>
+			<td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
 			<td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$char[2]\">$owner_acc_name</a></td>
 			<td><img src='img/c_icons/{$char[3]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 			<td><img src='img/c_icons/{$char[4]}.gif' onmousemove='toolTip(\"".get_player_class($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>

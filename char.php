@@ -153,7 +153,7 @@ function char_main()
             <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
             if (get_player_class($char[3]) == 'Hunter' ) { $output .= "  <li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>"; }
         }
-        $output .= "</ul></div><div id=\"tab_content\"><table class=\"lined\" style=\"width: 580px;\">
+        $output .= "</ul></div><div id=\"tab_content\"><table class=\"lined\" style=\"width: 610px;\">
             <tr><td colspan=\"6\"><div><img src=".get_image_dir($char_data[CHAR_DATA_OFFSET_LEVEL],$char[8],$char[2],$char[3],0)."></div><div>";
 
         $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -167,8 +167,8 @@ function char_main()
 			}
         }
 
-  $output .="</div><font class=\"bold\">$char[1] - ".get_player_race($char[2])." ".get_player_class($char[3])." (lvl {$char_data[CHAR_DATA_OFFSET_LEVEL]})</font><br />
-  {$lang_char['guild']}: $guild_name | {$lang_char['rank']}: $guild_rank<br />$online</td></tr>
+  $output .="</div><font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])." (lvl {$char_data[CHAR_DATA_OFFSET_LEVEL]})</font><br />
+  {$lang_char['guild']}: $guild_name | {$lang_char['rank']}: ".htmlentities($guild_rank)."<br />$online</td></tr>
   <tr>
     <td width=\"6%\">";
     if (!empty($equiped_items[1][1])) $output .= maketooltip("<img src=\"{$equiped_items[1][1]}\" class=\"{$equiped_items[1][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_HEAD]}", $equiped_items[1][0], "item_tooltip", "target=\"_blank\"");
@@ -202,55 +202,35 @@ $output .= "</td>
       <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_HEALTH]}</div>
     </td>
       <td class=\"half_line\" colspan=\"2\" align=\"center\" width=\"50%\">";
-      
-    if (get_player_class($char[3]) == 'Druid' ) {  
-      
+	  
+    if ($char[3] == 11) { //druid
       $output .= "<div class=\"gradient_p\">{$lang_item['mana']}:</div>
       <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_MAX_MANA]}</div></br>
       <div class=\"gradient_p\">{$lang_item['rage']}:</div>
       <div class=\"gradient_pp\">{$rage}/{$maxrage}</div></br>
       <div class=\"gradient_p\">{$lang_item['energy']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_ENERGY]}/{$char_data[CHAR_DATA_OFFSET_MAX_ENERGY]}</div>
-    </td>
-    <td>";
-    }
-     
-    if (get_player_class($char[3]) == 'Rogue' ) {  
-      
+      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_ENERGY]}/{$char_data[CHAR_DATA_OFFSET_MAX_ENERGY]}</div>";
+	}elseif ($char[3] == 4) { //rogue
       $output .= "<div class=\"gradient_p\">{$lang_item['energy']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_ENERGY]}/{$char_data[CHAR_DATA_OFFSET_MAX_ENERGY]}</div>
-    </td>
-    <td>";
-    }
-    
-	if (get_player_class($char[3]) == 'Warrior' ) {  
-      
+      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_ENERGY]}/{$char_data[CHAR_DATA_OFFSET_MAX_ENERGY]}</div>";
+	}elseif ($char[3] == 1) { //warrior
       $output .= "<div class=\"gradient_p\">{$lang_item['rage']}:</div>
-      <div class=\"gradient_pp\">{$rage}/{$maxrage}</div>
-    </td>
-    <td>";
-    }
-   
-	if (get_player_class($char[3]) == 'Death Knight' ) {  
+      <div class=\"gradient_pp\">{$rage}/{$maxrage}</div>";
+    }elseif ($char[3] == 6) {  //death knight
       // Don't know if FOCUS is the right one need to verify with Death Knight player.
       $output .= "<div class=\"gradient_p\">{$lang_item['runic']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_FOCUS]}/{$char_data[CHAR_DATA_OFFSET_MAX_FOCUS]}</div>
-    </td>
-    <td>";
-    }
-           
-   if (get_player_class($char[3]) == 'Mage' || 
-    get_player_class($char[3]) == 'Warlock' || 
-    get_player_class($char[3]) == 'Paladin' || 
-    get_player_class($char[3]) == 'Priest' || 
-    get_player_class($char[3]) == 'Hunter' || 
-    get_player_class($char[3]) == 'Shaman'   ) {  
-      
+      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_FOCUS]}/{$char_data[CHAR_DATA_OFFSET_MAX_FOCUS]}</div>";
+    }elseif ($char[3] == 8 || //mage
+    $char[3] == 9 || //warlock
+    $char[3] == 2 || //paladin
+    $char[3] == 5 || //priest
+    $char[3] == 3 || //hunter
+    $char[3] == 7) { //shaman
       $output .= "<div class=\"gradient_p\">{$lang_item['mana']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_MAX_MANA]}</div>
-    </td>
-    <td>";
+      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_MAX_MANA]}</div>";
     }
+	$output .= "</td><td>";
+	
     if (!empty($equiped_items[7][1])) $output .= maketooltip("<img src=\"{$equiped_items[7][1]}\" class=\"{$equiped_items[7][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_LEGS]}", $equiped_items[7][0], "item_tooltip", "target=\"_blank\"");
       else $output .= "<img src=\"img/Char_INV/INV_empty_legs.png\" class=\"icon_border_0\" alt=\"\" />";
 $output .= "</td>
@@ -552,7 +532,7 @@ $output .= "</ul>
 <div id=\"tab_content\">
  <img src=".get_image_dir($char[4],$char[5],$char[1],$char[2],0)." />
  <br \>
- <font class=\"bold\">$char[0] - ".get_player_race($char[1])." ".get_player_class($char[2])." (lvl {$char[4]})
+ <font class=\"bold\">".htmlentities($char[0])." - ".get_player_race($char[1])." ".get_player_class($char[2])." (lvl {$char[4]})
  <br \>
  <br \>
 
@@ -1185,7 +1165,7 @@ if ($sql->num_rows($result) == 1){
         </tr>";
   }
 
- if(count($prof_1_array)) $output .= "<tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['professions']} 1º</th></tr>";
+ if(count($prof_1_array)) $output .= "<tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['professions']} 1&ordm;</th></tr>";
  foreach ($prof_1_array as $data){
   $max = ($data[2]<76 ? 75 : ($data[2]<151 ? 150 : ($data[2]<226 ? 225 : ($data[2]<301 ? 300 : ($data[2]<351 ? 350 : ($data[2]<376 ? 375 : 385))))));
   $output .= "<tr>"
@@ -1196,7 +1176,7 @@ if ($sql->num_rows($result) == 1){
           </td>
         </tr>";
  }
- if(count($prof_2_array)) $output .= "<tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['professions']} 2º</th></tr>";
+ if(count($prof_2_array)) $output .= "<tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['professions']} 2&ordm;</th></tr>";
  foreach ($prof_2_array as $data){
   $max = ($data[2]<76 ? 75 : ($data[2]<151 ? 150 : ($data[2]<226 ? 225 : ($data[2]<301 ? 300 : ($data[2]<351 ? 350 : ($data[2]<376 ? 375 : 385))))));
   $output .= "<tr>"
