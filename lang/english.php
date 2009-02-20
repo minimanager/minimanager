@@ -140,8 +140,10 @@ $lang_register = array(
 	'i_agree' => 'I Agree',
 	'i_dont_agree' => 'I Do Not Agree',
 	'pass_too_long' => 'The password you have entered exceeds the maximum allowed length',
-	'invited_by' => 'Invited By',
-	'invited_info' => 'Please write the player who invited you to register here..'
+	'invited_by' => 'Invited by',
+	'invited_info' => 'Please write the account name of the player who invited you to register here.',
+	'email_address_used' => 'This email has an account already.<br/>No more accounts can be created for this email address.',
+	'referrer_not_found' => 'Unfortunately the specified account was not found in our database.<br/>Please ensure you have entered a valid account name or leave the &quot;Invited by&quot;-field blank.',
 	);
 
 $lang_index = array(

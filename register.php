@@ -78,39 +78,37 @@ function doregister(){
 
 	//make sure the mail is valid mail format
 	$mail = $sql->quote_smart(trim($_POST['email']));
-	if ((!is_email($mail))||(strlen($mail)  > 224)) {
-			$sql->close();
-     		redirect("register.php?err=7");
-   		}
+	if ((!is_email($mail))||(strlen($mail) > 224)) {
+		$sql->close();
+     	redirect("register.php?err=7");
+   	}
 
 	$per_ip = ($limit_acc_per_ip) ? "OR last_ip='$last_ip'" : "";
 
 	$result = $sql->query("SELECT ip FROM ip_banned WHERE ip = '$last_ip'");
 	//IP is in ban list
 	if ($sql->num_rows($result)){
-			$sql->close();
-    	 	redirect("register.php?err=8&usr=$last_ip");
+		$sql->close();
+    	redirect("register.php?err=8&usr=$last_ip");
 	}
 	//Email check
 	$result = $sql->query("SELECT username,email FROM account WHERE username='$user_name' OR email='$mail' $per_ip");
-	if ($sql->num_rows($result) > 1){
-	        $sql->close();
-			redirect("register.php?err=14");
+	if ($sql->num_rows($result)){
+		$sql->close();
+		redirect("register.php?err=14");
 	}
     //UserName Check
 	//$result = $sql->query("SELECT username,email FROM account WHERE username='$user_name' OR email='$mail' $per_ip");
     $result = $sql->query("SELECT username FROM account WHERE username='$user_name'");
 
-	//there is already someone with same user/mail
+	//there is already someone with same account name
 	if ($sql->num_rows($result)){
-			$sql->close();
-    	 	redirect("register.php?err=3&usr=$user_name");
-	} else {
-            if ( $expansion_select ) {
-            $expansion = (isset($_POST['expansion'])) ? $sql->quote_smart($_POST['expansion']) : 0;
-        } else {
-            $expansion = $defaultoption;
-        }
+		$sql->close();
+    	redirect("register.php?err=3&usr=$user_name");
+	}else{
+    	if ($expansion_select)
+			$expansion = (isset($_POST['expansion'])) ? $sql->quote_smart($_POST['expansion']) : 0;
+        else $expansion = $defaultoption;
 
 		$result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
  				VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$expansion)");
@@ -420,7 +418,7 @@ case 2:
    $output .= "<h1><font class=\"error\">{$lang_register['diff_pass_entered']}</font></h1>";
    break;
 case 3:
-   $output .= "<h1><font class=\"error\">{$lang_register['username']} $usr {$lang_register['already_exist']}<br />oder es gibt bereits einen Account mit dieser E-Mail!</font></h1>";
+   $output .= "<h1><font class=\"error\">{$lang_register['username']} $usr {$lang_register['already_exist']}</font></h1>";
    break;
 case 4:
    $output .= "<h1><font class=\"error\">{$lang_register['acc_reg_closed']}</font></h1>";
@@ -453,10 +451,10 @@ case 13:
     $output .= "<h1><font class=\"error\">{$lang_captcha['invalid_code']}</font></h1>";
    break;
 case 14:
-    $output .= "<h1><font class=\"error\">This email has 2 accounts already.<br />No more accounts can be created for this email address.</font></h1>";
+    $output .= "<h1><font class=\"error\">{$lang_register['email_address_used']}</font></h1>";
    break;
 case 15:
-    $output .= "<h1><font class=\"error\">Unfortunately the specified character was not found in our database.<br />please ensure you have entered a valid character name.</font></h1>";
+    $output .= "<h1><font class=\"error\">{$lang_register['referrer_not_found']}</font></h1>";
    break;
 default:
    $output .= "<h1><font class=\"error\">{$lang_register['fill_all_fields']}</font></h1>";

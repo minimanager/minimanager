@@ -79,7 +79,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
 	$user_lvl = $_SESSION['user_lvl'];
 	$user_name = $_SESSION['uname'];
 	$user_id = $_SESSION['user_id'];
-	$realm_id = (isset($_GET['r_id'])) ? addslashes($_GET['r_id']) : $_SESSION['realm_id'];
+	$realm_id = (isset($_GET['r_id'])) ? (int)$_GET['r_id'] : $_SESSION['realm_id'];
 	
 	$user_lvl_name = get_gm_level($user_lvl); 
 	

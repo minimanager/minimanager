@@ -767,7 +767,7 @@ function char_quest(){
     $output .= "</ul>
     </div>
     <div id=\"tab_content\">
-    <font class=\"bold\">$char[1] - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />
+    <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />
 
     <table class=\"lined\" style=\"width: 550px;\">
     <tr>";
@@ -796,7 +796,7 @@ function char_quest(){
       $output .= "<tr>";
       if($user_lvl) $output .= "<td>$data[0]</td>";
       $output .= "<td>($data[1])</td>
-      <td align=\"left\"><a href=\"$quest_datasite$data[0]\" target=\"_blank\">$data[2]</a></td>
+      <td align=\"left\"><a href=\"$quest_datasite$data[0]\" target=\"_blank\">".htmlentities($data[2])."</a></td>
       <td><img src=\"img/aff_qst.png\" width=\"14\" height=\"14\" /></td></tr>";
     }
 
@@ -805,7 +805,7 @@ function char_quest(){
       $output .= "<tr>";
       if($user_lvl) $output .= "<td>$data[0]</td>";
       $output .= "<td>($data[1])</td>
-      <td align=\"left\"><a href=\"$quest_datasite$data[0]\" target=\"_blank\">$data[2]</a></td>
+      <td align=\"left\"><a href=\"$quest_datasite$data[0]\" target=\"_blank\">".htmlentities($data[2])."</a></td>
       <td><img src=\"img/aff_tick.png\" width=\"14\" height=\"14\" /></td></tr>";
     }
 
@@ -883,7 +883,7 @@ function char_achievements(){
     $output .= "</ul>
     </div>
     <div id=\"tab_content\">
-    <font class=\"bold\">$char[1] - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />
+    <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />
 
     <table class=\"lined\" style=\"width: 550px;\">
     <tr>";
@@ -969,7 +969,7 @@ if ($sql->num_rows($result)){
  $output .= " </ul>
  </div>
  <div id=\"tab_content\">
-  <font class=\"bold\">$char[1] - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />";
+  <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />";
 
  require_once("scripts/fact_tab.php");
 
@@ -1100,7 +1100,7 @@ if ($sql->num_rows($result) == 1){
   $output .= " </ul>
   </div>
   <div id=\"tab_content\">
-  <font class=\"bold\">$char[1] - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />
+  <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />
 
   <table class=\"lined\" style=\"width: 600px;\">
   <tr>
@@ -1268,7 +1268,7 @@ if ($sql->num_rows($result) == 1){
     $output .= "  </ul>
     </div>
     <div id=\"tab_content\">
-    <font class=\"bold\">$char[1] - ".get_player_race($char[2])." ".get_player_class($char[3])." <br /><br /> ".get_player_class($char[3])." Talents </font><br /><br />
+    <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])." <br /><br /> ".get_player_class($char[3])." Talents </font><br /><br />
 
     <table class=\"lined\" style=\"width: 550px;\">
     <tr>"

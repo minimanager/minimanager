@@ -15,7 +15,6 @@ ob_start("ob_gzhandler");
 */
 
 require_once "pomm_conf.php";
-require_once "func.php";
 require_once "lang_".$lang.".php";
 
 if (test_realm()) $point=$img_base."realm_on.gif"; else $point=$img_base."realm_off.gif";
@@ -664,7 +663,7 @@ function show(data)
       if(in_array(data[i].map, maps_array))
       {
         mpoints[n].faction = faction;
-        mpoints[point_count].single_text = data[i].zone+'<br\>'+data[i].level+' lvl<br\>'+char+'&nbsp;<img src=\'<?php echo $img_base ?>'+data[i].cl+'.gif\' style=\'float:center\' border=0 width=18 height=18\><br\>'+race_name[data[i].race]+'<br/>'+class_name[data[i].cl]+'<br/>';
+        mpoints[point_count].single_text = data[i].zone+'<br\>Level '+data[i].level+'<br\>'+char+'&nbsp;<img src=\'<?php echo $img_base ?>'+data[i].cl+'.gif\' style=\'float:center\' border=0 width=18 height=18\><br\>'+race_name[data[i].race]+'<br/>'+class_name[data[i].cl]+'<br/>';
         mpoints[point_count].x = pos.x;
         mpoints[point_count].y = pos.y;
       }
@@ -723,10 +722,10 @@ function show(data)
     total_players_count[1] += horde_count[i];
   }
 
-  document.getElementById("server_info").innerHTML='\'<?php echo $realm_name ?>\' online: <b style="color: rgb(100,100,100);" onMouseMove="tip(\'<tr\><td\><img src=\\\'<?php echo $img_base ?>hordeicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(210,50,30);\\\'\>Horde:</b\> <b\>'+total_players_count[1]+'</b\></td\></tr\><tr\><td\><img src=\\\'<?php echo $img_base ?>allianceicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(0,150,190);\\\'\>Alliance:</b\> <b\>'+total_players_count[0]+'</b\></td\></tr\>\',2,false);" onMouseOut="h_tip();">Total</b> '+eval(total_players_count[0]+total_players_count[1])+'';
+  document.getElementById("server_info").innerHTML='<?php echo $realm_name ?> - online: <b style="color: rgb(100,100,100);" onMouseMove="tip(\'<tr\><td\><img src=\\\'<?php echo $img_base ?>hordeicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(210,50,30);\\\'\>Horde:</b\> <b\>'+total_players_count[1]+'</b\></td\></tr\><tr\><td\><img src=\\\'<?php echo $img_base ?>allianceicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(0,150,190);\\\'\>Alliance:</b\> <b\>'+total_players_count[0]+'</b\></td\></tr\>\',2,false);" onMouseOut="h_tip();">Total</b> '+eval(total_players_count[0]+total_players_count[1])+'';
   for(i = 0; i < maps_count; i++)
   {
-    document.getElementById("server_info").innerHTML += '&nbsp;<b style="color: rgb(160,160,20); cursor:pointer;" onClick="switchworld('+i+');" onMouseMove="tip(\'<tr\><td\><img src=\\\'<?php echo $img_base ?>hordeicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(210,50,30);\\\'\>Horde:</b\> <b\>'+horde_count[i]+'</b\></td\></tr\><tr\><td\><img src=\\\'<?php echo $img_base ?>allianceicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(0,150,190);\\\'\>Alliance:</b\> <b\>'+alliance_count[i]+'</b\></td\></tr\>\',2,false);" onMouseOut="h_tip();">'+maps_name_array[i]+'</b\> '+players_count[i]+'';
+    document.getElementById("server_info").innerHTML += ' - <b style="color: rgb(160,160,20); cursor:pointer;" onClick="switchworld('+i+');" onMouseMove="tip(\'<tr\><td\><img src=\\\'<?php echo $img_base ?>hordeicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(210,50,30);\\\'\>Horde:</b\> <b\>'+horde_count[i]+'</b\></td\></tr\><tr\><td\><img src=\\\'<?php echo $img_base ?>allianceicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(0,150,190);\\\'\>Alliance:</b\> <b\>'+alliance_count[i]+'</b\></td\></tr\>\',2,false);" onMouseOut="h_tip();">'+maps_name_array[i]+'</b\> '+players_count[i]+'';
   }
 }
 
@@ -848,7 +847,7 @@ function load_data()
       show(req.responseJS.online);
     }
   }
-  req.open('GET', 'pomm_play.php', true);
+  req.open('GET', 'pomm_play.php?realmid=<?=$realmid;?>', true);
   req.send({ });
 }
 

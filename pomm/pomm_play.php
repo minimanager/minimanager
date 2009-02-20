@@ -14,7 +14,6 @@
 */
 
 require_once "pomm_conf.php";
-require_once "func.php";
 require_once "lang_".$lang.".php";
 
 $mangos_db = new DBLayer($host, $user, $password, $db);
