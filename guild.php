@@ -249,7 +249,8 @@ require_once("scripts/defines.php");
              <div align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start)."</div>
              
              <tr><td><table class=\"lined\"><tr>";
-    
+   
+   // if ($user_lvl >= 4 || $inguild || $amIguildleader) $output .= " <th width=\"3%\">{$lang_guild['remove']}</th>"; <-- we don't need this one, it breaks the table sometimes
    $output .= " <th width=\"3%\">{$lang_guild['remove']}</th>";
        
     $output .= "
