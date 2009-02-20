@@ -13,6 +13,12 @@
 	2006-2009 Modified by killdozer.
 */
 
+// use Minimanager configuration
+require_once "func.php";
+require_once "../scripts/config.php";
+$realmid = (int)$_GET["realmid"];
+$server_arr = $server;
+
 // points located on these maps(do not modify it)
 $maps_for_points = "0,1,530,571,609";
 
@@ -21,9 +27,6 @@ $maps_names = "'Azeroth','Outland','Northrend'";
 
 // count of maps
 $maps_count = count(explode(',',$maps_names));
-
-// realm name
-$realm_name = 'MANGOS';
 
 // database coding(do not modify it)
 $database_encoding = 'utf8';
@@ -49,10 +52,10 @@ $time_to_show_maxonline = 10000;
 $img_base = "img/";
 
 // Server adress (for realm status)
-$server = 'localhost';
+$server = $server_arr[$realmid]["addr"];
 
 // Server port (for realm statust) 8085 or 3724
-$port = 8085;
+$port = $server_arr[$realmid]["game_port"];
 
 // Update time (seconds), 0 - not update.
 $time= "120";
@@ -74,17 +77,24 @@ $UNIT_FIELD_LEVEL   = 53;
 $PLAYER_FLAGS   = 150;
 
 //DB connect options		
-$host='localhost';				// HOST for characters database
-$user='root';					// USER for characters database
-$password='';				// PASS for characters database
-$db='characters';				// NAME of characters database
-$hostw='localhost';				// HOST for world database
-$userw='root';					// USER for world database
-$passwordw='';				// PASS for world database
-$dbw='mangos';					// NAME of world database
-$hostr='localhost';				// HOST for realm database
-$userr='root';					// USER for realm database
-$passwordr='';				// PASS for realm database
-$dbr='realmd';					// NAME of realm database
+$host = $characters_db[$realmid]["addr"];				// HOST for characters database
+$user = $characters_db[$realmid]["user"];					// USER for characters database
+$password = $characters_db[$realmid]["pass"];				// PASS for characters database
+$db = $characters_db[$realmid]["name"];				// NAME of characters database
 
+$hostw = $world_db[$realmid]["addr"];				// HOST for world database
+$userw = $world_db[$realmid]["user"];					// USER for world database
+$passwordw = $world_db[$realmid]["pass"];				// PASS for world database
+$dbw = $world_db[$realmid]["name"];					// NAME of world database
+
+$hostr = $realm_db["addr"];				// HOST for realm database
+$userr = $realm_db["user"];					// USER for realm database
+$passwordr = $realm_db["pass"];				// PASS for realm database
+$dbr = $realm_db["name"];					// NAME of realm database
+
+// realm name
+$realm_db = new DBLayer($hostr, $userr, $passwordr, $dbr);
+$query = $realm_db->query("SELECT name FROM realmlist WHERE id = ".$realmid);
+$realm_name = $realm_db->fetch_assoc($query);
+$realm_name = htmlentities($realm_name["name"]);
 ?>
