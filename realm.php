@@ -42,7 +42,6 @@ $timezone_type = Array(
 // SHOW REALMS
 //####################################################################################################
 function show_realm() {
-valid_login(5);
  global $lang_global, $lang_realm, $output, $realm_db, $user_name, $server, $realm_id, $icon_type, $timezone_type;
 
  $sql = new SQL;
@@ -364,4 +363,4 @@ default:
 }
 
 require_once("footer.php");
-?>
+?>

@@ -168,52 +168,51 @@ $proxy_cfg = Array(
 // --   If not set or lower, higher permission from lower rights overwrite higher permission  ( Example : VIEW = 5, UDDATE = 0 >> UPDATE = 5)
 
 $menu_array = Array(
-  array("index.php", 'main', array()),
-	array("#", 'users', array(
-	  array("user.php", 'accounts',1,0,0,0),
-	  array("char_list.php", 'characters',1,0,0,0),
-	  array("guild.php", 'guilds',0,0,0,0),
+  array("index.php", 'main', array(
+	  array("ahstats.php", 'auctionhouse',0,0,0,0),
+	  array("command.php", 'command',0,0,0,0),
 	  array("arenateam.php", 'arena_teams',0,0,0,0),
+	  array("guild.php", 'guilds',0,0,0,0),
 	  array("honor.php", 'honor',0,0,0,0),
-	  array("banned.php", 'banned_list',1,0,0,0),
-	  array("cleanup.php", 'cleanup',3,0,0,0),
 	  array("stat.php", 'statistics',0,0,0,0),
+	  array("events.php", 'events',0,0,0,0),
+	  array("instances.php", 'instances',0,0,0,0),
+	  array("top100.php", 'top100',0,0,0,0),
 	  array("javascript:void(0);\" onclick=\"window.open('./pomm/pomm.php', 'pomm', 'Toolbar=0, Location=0, Directories=0, Status=0, Menubar=0, Scrollbar=0, Resizable=0, Copyhistory=1, Width=966, Height=732')", 'player_map',0,0,0,0),
 	  ),
 	),
 	array("#", 'tools', array(
+	  array("user.php", 'accounts',1,0,0,0),
+	  array("char_list.php", 'characters',1,0,0,0),
+	  array("banned.php", 'banned_list',1,0,0,0),
+	  array("mail.php", 'mail',3,0,0,0),
+	  array("ticket.php", 'tickets',1,0,0,0),
+	  array("tele.php", 'teleports',1,0,0,0),
+	  array("cleanup.php", 'cleanup',3,0,0,0),
 	  array("ssh.php", 'ssh_line',3,0,0,0),
 	  array("run_patch.php", 'run_sql_patch',3,0,0,0),
-	  array("ticket.php", 'tickets',1,0,0,0),
-	  array("ahstats.php", 'auctionhouse',0,0,0,0),
-	  array("events.php", 'events',0,0,0,0),
-	  array("realm.php", 'realm',3,0,0,0),
+	  array("realm.php", 'realm',5,0,0,0),
 	  array("motd.php", 'add_motd',1,0,0,0),
-	  array("mail.php", 'mail',3,0,0,0),
 	  array("irc.php", 'irc',0,0,0,0),
-	  array("instances.php", 'instances',0,0,0,0),
 	  ),
 	),
 	array("#", 'db', array(
-	  array("item.php", 'items',1,0,0,0),
-	  array("creature.php", 'creatures',1,2,2,2),                // view, update, insert, delete enabled
-	  array("game_object.php", 'game_object',1,0,0,0),
-	  array("tele.php", 'teleports',1,0,0,0),
-	  array("command.php", 'command',0,0,0,0),
+	  array("item.php", 'items',2,0,0,0),
+	  array("creature.php", 'creatures',2,2,2,2),                // view, update, insert, delete enabled
+	  array("game_object.php", 'game_object',2,0,0,0),
 	  array("backup.php", 'backup',3,0,0,0),
 	  array("repair.php", 'repair',3,0,0,0),
 	  ),
 	),
-	array("#", 'forums', array(
-	  array("forum.php", 'forums',0,0,0,0),
-    array("javascript:void(0);\" onclick=\"window.open('./forum.html', 'forum')", 'forums',0,0,0,0),
+	array("forum.php", 'forums', array(
+//	  array("forum.php", 'forums',0,0,0,0),
+//	  array("javascript:void(0);\" onclick=\"window.open('./forum.html', 'forum')", 'forums',0,0,0,0),
 	  ),
 	),
 	array("#", 'invisible', array(
-	  array("char.php", 'character',0,0,0,0),
-	  array("char_edit.php", 'char_edit',1,0,0,0),
-	  array("edit.php", 'MyAccount',0,0,0,0),
-	  array("index.php, 'Startpage'",0,0,0,0),
+	  ),
+	),
+	array("#", 'invisible', array(
 	  ),
 	),
 );

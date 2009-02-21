@@ -7,6 +7,8 @@
  * Translator: 
  */
 
+$site_encoding = "utf-8";
+
 $lang_global = array(
 // ----- GENERAL ERROR CODES -----
 	'err_sql_conn_db' => 'Error - Connection to database is not established !',
@@ -168,7 +170,6 @@ $lang_index = array(
 $lang_header = array(
 	// ----- HEADER.PHP -----
 	'main' =>'Main',
-	'users' => 'Users',
 	'accounts' => 'Accounts',
 	'characters' => 'Characters',
 	'guilds' => 'Guilds',
@@ -202,7 +203,8 @@ $lang_header = array(
 	'auctionhouse' => 'Auction House',
 	'events' => 'Events',
 	'statistics_on' => 'Online Statistics',
-	'instances' => 'Instance information'
+	'instances' => 'Instances',
+	'top100' => 'TOP 100'
 	);
 
 $lang_footer = array(
@@ -3981,6 +3983,21 @@ $lang_captcha = array(
 	'imput_security_code' => 'Please Input the Security Code',
 	'submit' => 'Submit',
 	'invalid_code' => 'Invalid Code!'
+	);
+
+$lang_top = array(
+	'name' => 'Name',
+	'race' => 'Race',
+	'class' => 'Class',
+	'level' => 'Level',
+	'guild' => 'Guild',
+	'money' => 'Money',
+	'rank' => 'Rank',
+	'honor_points' => 'Honor',
+	'kills' => 'Name',
+	'arena_points' => 'Arena',
+	'time_played' => 'Time Played',
+	'online' => 'Online'
 	);
 
 ?>

@@ -23,8 +23,8 @@ if (test_port($server[$realm_id]['addr'],$server[$realm_id]['game_port']))
 {
     $query = $sql->query("SELECT `starttime` FROM `uptime` ORDER BY `starttime` DESC LIMIT 1");
     $getuptime = mysql_fetch_row($query);
-    $uptimetime = time() - $getuptime[0];
-
+    $uptimetime = (time()+date(Z)) - $getuptime[0];
+	
 function format_uptime($seconds) {
   $secs = intval($seconds % 60);
   $mins = intval($seconds / 60 % 60);
