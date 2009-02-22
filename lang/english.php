@@ -4,7 +4,7 @@
  * License: GNU General Public License v2(GPL)
  * Language: English
  * Supported Minimanager Revision: Latest (default language)
- * Translator: 
+ * Translator:
  */
 
 $site_encoding = "utf-8";
@@ -78,7 +78,7 @@ $lang_guild = array(
 	'tot_m_online' => 'Online Members',
 	'remove' => 'Rem.',
 	'guild_motd' => 'Guild MOTD',
-	'create_date' => 'Create Date',	
+	'create_date' => 'Create Date',
 	'by_name' =>'by name',
 	'by_guild_leader' => 'by leader name',
 	'by_id' => 'by id',
@@ -101,7 +101,6 @@ $lang_guild = array(
 	'show_guilds' => 'Show all Guilds',
 	'browse_guilds' => 'Browse Guilds'
 	);
-
 
 $lang_register = array(
 	// ----- REGISTER.PHP -----
@@ -163,7 +162,7 @@ $lang_index = array(
 	'map' => 'Map',
 	'zone' => 'Zone',
 	'rank' => 'Rank',
- 	'honor_kills' => 'H.K',
+	'honor_kills' => 'H.K',
 	'guild' => 'Guild'
 	);
 
@@ -653,7 +652,6 @@ $lang_edit = array(
 	'tot_chars' => 'Total Characters',
 	'invited_by' => 'Invited By'
 	);
-
 
 $lang_mail = array(
 	// ----- MAIL.PHP -----
@@ -1348,8 +1346,8 @@ $lang_creature = array(
 	'walk' => 'Walk',
 	'swim' => 'Swim',
 	'both' => 'Both',
-      'flags_extra' => 'Flags Extra',
-      'flags_extra_desc' => 'TODO:',
+	'flags_extra' => 'Flags Extra',
+	'flags_extra_desc' => 'TODO:',
 	'flags' => 'Flags',
 	'flags_desc' => 'TODO:',
 	'dynamic_flags' => 'Dynamic Flags',
@@ -1583,22 +1581,21 @@ $lang_game_object = array(
 	'datas' => 'Additional Datas',
 	'data' => 'Data',
 	'data_desc' => 'Data fields specific for different type field values. Each type has unique fields.<br />For more informaton visit https://svn.mangosproject.org/trac /MaNGOS/wiki/Database /gameobject_template'
-
 );
 
 $lang_auctionhouse = array(
 	// ----- AHSTATS.PHP -----
-      'auctionhouse' => 'Auction House',
-      'seller' => 'Seller',
-      'item' => 'Item',
-      'buyoutprice' => 'Buyout price',
-      'timeleft' => 'Time Left',
-      'buyer' => 'Buyer',
-      'lastbid' => 'Last Bid',
-      'firstbid' => 'First Bid',
-      'dayshortcut' => 'D',
-      'hourshortcut' => 'H',
-      'mnshortcut' => 'mn',
+	'auctionhouse' => 'Auction House',
+	'seller' => 'Seller',
+	'item' => 'Item',
+	'buyoutprice' => 'Buyout price',
+	'timeleft' => 'Time Left',
+	'buyer' => 'Buyer',
+	'lastbid' => 'Last Bid',
+	'firstbid' => 'First Bid',
+	'dayshortcut' => 'D',
+	'hourshortcut' => 'H',
+	'mnshortcut' => 'mn',
 	'total_auctions' => 'Total Auctions',
 	'search_results' => 'Search Results',
 	'auction_over' => 'Auction Over',
@@ -3688,7 +3685,7 @@ $lang_id_tab = array(
 	'Marshal' => 'Marshal',
 	'Field_Marshal' => 'Field Marshal',
 	'Grand_Marshal' => 'Grand Marshal',
-    	'Scout' => 'Scout',
+	'Scout' => 'Scout',
 	'Grunt' => 'Grunt',
 	'Senior_Sergeant' => 'Senior Sergeant',
 	'First_Sergeant' => 'First Sergeant',
@@ -3909,9 +3906,9 @@ $lang_arenateam = array(
 	'type' => 'Type',
 	'arenateam_online' => 'Members online',
 	'create_date' => '...',
-      '2' => '2 VS 2',
-      '3' => '3 VS 3',
-      '5' => '5 VS 5',
+	'2' => '2 VS 2',
+	'3' => '3 VS 3',
+	'5' => '5 VS 5',
 	'err_no_members_found' => 'No Members Found!',
 	'err_no_team_found' => 'No Arena Teams Found!',
 	'del_team' => 'Delete Arena Team',
@@ -3923,9 +3920,9 @@ $lang_arenateam = array(
 	'games' => 'Games played',
 	'rating' => 'Rating',
 	'wins' => 'Games won',
-   	'remove' => 'Remove',
+	'remove' => 'Remove',
 	'name' => 'Name',
-      'level' => 'Level',
+	'level' => 'Level',
 	'played_week' => 'Games played this week',
 	'wons_week' => 'Games won this week',
 	'played_season' => 'Games played this season',
@@ -3938,12 +3935,12 @@ $lang_arenateam = array(
 	'ratio'=> 'Win Percentage',
 	'this_week' => 'This week',
 	'this_season' => 'This season',
- 	'standings' => 'Standing :',
+	'standings' => 'Standing :',
 	'tot_found' => 'Total Found',
 	'arenateam' => 'Arena Team'
 	);
 
-	$lang_honor = array(
+$lang_honor = array(
 	// ----- HONOR.PHP -----
 	'allied' => 'Alliance',
 	'horde' => 'Horde',
@@ -3954,26 +3951,24 @@ $lang_arenateam = array(
 	'level' => 'Level',
 	'honor points' => 'Honor Points',
 	'honor' => 'Rank',
-    'guild' => 'Guild'
-
+	'guild' => 'Guild'
 	);
 
 $lang_events = array(
-      'total' => 'Total',
-      'descr' => 'Event name',
-      'start' => 'First Starting Time',
-      'occur' => 'Occurance<br><small>days/hours',
-      'length' => 'Length<br><small>days/hours',
-      'events' => 'Events'
+	'total' => 'Total',
+	'descr' => 'Event name',
+	'start' => 'First Starting Time',
+	'occur' => 'Occurance<br><small>days/hours',
+	'length' => 'Length<br><small>days/hours',
+	'events' => 'Events'
 	);
 
-
 $lang_instances = array(
-      'map' => 'Map',
-	  'level_min' => 'Minimum level',
-   	  'level_max' => 'Maximum level',
-   	  'max_players' => 'Maximum players',
-   	  'reset_delay' => 'Reset delay',
+	'map' => 'Map',
+	'level_min' => 'Minimum level',
+	'level_max' => 'Maximum level',
+	'max_players' => 'Maximum players',
+	'reset_delay' => 'Reset delay',
 	);
 
 $lang_captcha = array(
