@@ -213,6 +213,10 @@ $menu_array = Array(
 	  ),
 	),
 	array("#", 'invisible', array(
+	  array("char.php", 'character',0,0,0,0),
+	  array("char_edit.php", 'char_edit',1,0,0,0),
+	  array("edit.php", 'MyAccount',0,0,0,0),
+	  array("index.php", 'Startpage',0,0,0,0),
 	  ),
 	),
 );
