@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -45,11 +45,11 @@ $lang_global = array(
 	'language_6' => 'Spanish',
 	'language_7' => 'Mexican',
 	'language_8' => 'Russian'
-);
+	);
 
 $lang_login = array(
 	// ----- LOGIN.PHP -----
-	'login' =>'Giriþ Yap',
+	'login' => 'Giriþ Yap',
 	'username' => 'Kullanýcý Adý',
 	'password' => 'Þifre',
 	'not_registrated' => 'Kayýtlý deðil misiniz?',
@@ -64,8 +64,9 @@ $lang_login = array(
 	'pass_recovery' => 'Þifremi Unuttum',
 	'after_registration' => 'Your account creation was successful!'
 	);
-// ----- GUILD.PHP -----
+
 $lang_guild = array(
+	// ----- GUILD.PHP -----
 	'my_guilds' => 'My Guilds',
 	'id' => 'ID',
 	'guild_name' => 'Guild Name',
@@ -76,7 +77,7 @@ $lang_guild = array(
 	'remove' => 'Rem.',
 	'guild_motd' => 'Guild MOTD',
 	'create_date' => 'Create Date',
-	'by_name' =>'by name',
+	'by_name' => 'by name',
 	'by_guild_leader' => 'by leader name',
 	'by_id' => 'by id',
 	'tot_guilds' => 'Total Guilds',
@@ -101,7 +102,7 @@ $lang_guild = array(
 
 $lang_register = array(
 	// ----- REGISTER.PHP -----
-	'create_acc' =>'Hesap Oluþtur',
+	'create_acc' => 'Hesap Oluþtur',
 	'username' => 'Kullanýcý Adý',
 	'use_eng_chars_limited_len' => 'Türkçe (çöþýðüÇÖÞÝÐÜ) ve Özel (+-*/\?=%& gibi) Karakter Kullanmayýn<br />Kullanýcý Adý Uzunluðu En Az 4 En Çok 14 Karakter Olabilir',
 	'password' => 'Þifre',
@@ -124,7 +125,6 @@ $lang_register = array(
 	'acc_type' => 'Hesap Türü',
 	'acc_type_desc' => 'Kullanýlacak oyun türü.',
 	'classic' => 'Classic',
-	'expansion' => 'Expansion',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'recover_acc_password' => 'Hesap Þifresi Gönder',
@@ -148,7 +148,7 @@ $lang_register = array(
 
 $lang_index = array(
 	// ----- INDEX.PHP -----
-	'realm' =>'Sunucu',
+	'realm' => 'Sunucu',
 	'online' => 'Açýk',
 	'offline_or_let_high' => 'Kapalý veya Çok Lag Var',
 	'add_motd' => 'Günün Mesajý Ekle',
@@ -167,7 +167,7 @@ $lang_index = array(
 
 $lang_header = array(
 	// ----- HEADER.PHP -----
-	'main' =>'Ana Menü',
+	'main' => 'Ana Menü',
 	'accounts' => 'Hesaplar',
 	'characters' => 'Karakterler',
 	'guilds' => 'Guild Listesi',
@@ -229,7 +229,7 @@ $lang_repair = array(
 
 $lang_backup = array(
 	// ----- BACKUP.PHP -----
-	'backup_options' =>'Yedek Seçenekleri',
+	'backup_options' => 'Yedek Seçenekleri',
 	'select_option' => 'Yedekleme türü seç',
 	'save' => 'Kaydet',
 	'load' => 'Yükle',
@@ -259,7 +259,7 @@ $lang_backup = array(
 
 $lang_banned = array( //TODO
 	// ----- BANNED.PHP -----
-	'add_to_banned' =>'Add to Banned Lists',
+	'add_to_banned' => 'Add to Banned Lists',
 	'tot_banned' => 'Total Banned',
 	'ip_acc' => 'Ip / Account',
 	'will_be_removed_from_banned' => 'Will be removed from Banned List',
@@ -283,7 +283,7 @@ $lang_banned = array( //TODO
 
 $lang_char = array(
 	// ----- CHAR.PHP -----
-	'online' =>'Açýk',
+	'online' => 'Açýk',
 	'offline' => 'Kapalý',
 	'username' => 'Username',
 	'acc_id' => 'Account ID',
@@ -309,7 +309,7 @@ $lang_char = array(
 	'gold' => 'Para',
 	'tot_paly_time' => 'Toplam Oynadýðý Süre',
 	'chars_acc' => 'Karakter\'in Hesabý',
-	'send_mail' =>'OyunÝçi Posta Gönder',
+	'send_mail' => 'OyunÝçi Posta Gönder',
 	'del_char' => 'Karakter Sil',
 	'no_char_found' => 'Karakter Bulunamadý!',
 	'char_sheet' => 'Karakter',
@@ -332,7 +332,7 @@ $lang_char = array(
 	'talent_id' => 'ID',
 	'talent_name' => 'Talent Name',
 	'talent_value' => 'Value',
-	// --- $skill_rank_array ---
+	// --- skill_rank_array ---
 	'apprentice' => 'Apprentice', //TODO: Translate
 	'journeyman' => 'Journeyman', //TODO: Translate
 	'expert' => 'Expert', //TODO: Translate
@@ -547,11 +547,11 @@ $lang_item = array(
 	'CA_RATING' => 'Crit Avoid',
 	'RESILIENCE_RATING' => 'Resistance',
 	'HASTE_RATING' => 'Haste'
-);
+	);
 
 $lang_char_list = array(
 	// ----- CHAR_LIST.PHP -----
-	'cleanup' =>'Temizle',
+	'cleanup' => 'Temizle',
 	'by_name' => 'Karakter Adý',
 	'by_id' => 'ID',
 	'by_account' => 'Hesap Adý',
@@ -591,7 +591,7 @@ $lang_char_list = array(
 
 $lang_cleanup = array(
 	// ----- CLEANUP.PHP -----
-	'cleanup_options' =>'Temizleme Seçenekleri',
+	'cleanup_options' => 'Temizleme Seçenekleri',
 	'clean_chars' => 'Karakterleri Temizle',
 	'char_level' => 'Karakter Level\'i',
 	'tot_play_time' => 'Toplam Oynama Zamaný (sn)',
@@ -622,7 +622,7 @@ $lang_cleanup = array(
 
 $lang_edit = array(
 	// ----- EDIT.PHP -----
-	'edit_acc' =>'Hesap Düzenle',
+	'edit_acc' => 'Hesap Düzenle',
 	'id' => 'ID',
 	'username' => 'Kullanýcý Adý',
 	'password' => 'Þifre',
@@ -647,7 +647,6 @@ $lang_edit = array(
 	  //TODO
 	'client_type' => 'Client Type',
 	'classic' => 'Classic',
-	'expansion' => 'Expansion',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'tot_chars' => 'Total Characters',
@@ -756,7 +755,7 @@ $lang_realm = array(
 	'china' => 'China',
 	'test_server' => 'Test Server',
 	'qa_server' => 'QA Server',
-	'spanish' => 'Spanish',
+	'others' => 'Others',
 	'conf_from_file' => '** This realm appear not to have proper configuration in config.php file.<br />Make sure to properly configure it before using under CMS.',
 	'offline' => 'Offline',
 	'status' => 'Status'
@@ -764,7 +763,7 @@ $lang_realm = array(
 
 $lang_ticket = array(
 	// ----- TICKET.PHP -----
-	'id' =>'ID',
+	'id' => 'ID',
 	'sender' => 'Gönderen',
 	'ticket_text' => 'Ticket Metni',
 	'category' => 'Kategori',
@@ -792,7 +791,6 @@ $lang_user = array(
 	'cleanup' => 'Temizlik Yap',
 	'backup' => 'Yedek Al',
 	'by_name' => 'Hesap Adý',
-
 	'by_expansion' => 'TBC',
 	'by_id' => 'ID',
 	'by_gm_level' => '= Yetki Seviyesi',
@@ -859,7 +857,6 @@ $lang_user = array(
 	'expansion_account' => 'TBC Account',
 	'client_type' => 'Client Type',
 	'classic' => 'Classic',
-	'expansion' => 'Expansion',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK'
 	);
@@ -886,7 +883,7 @@ $lang_stat = array(
 	'uptime_prec' => ' Uptime percentage since first run',
 	'unique_ip' => 'Unique IPs last 24 Hour',
 	'on_statistics' => 'Online Statistics'
-);
+	);
 
 $lang_tele = array(
 	// ----- TELE.PHP -----
@@ -914,7 +911,7 @@ $lang_tele = array(
 	'tele_locations' => 'Teleport Konumlarý',
 	'add_new' => 'Yeni Ekle',
 	'add_new_tele' => 'Yeni Teleport Konumu Ekle'
-);
+	);
 
 $lang_command = array(
 	// ----- COMMAND.PHP -----
@@ -1169,7 +1166,7 @@ $lang_item_edit = array(
 	'condition_value1_desc' => 'Condition Value 1 flag',
 	'condition_value2' => 'Condition Value 2',
 	'condition_value2_desc' => 'Condition Value 2 flag',
-);
+	);
 
 $lang_creature = array(
 	// ----- CREATURE.PHP -----
@@ -1350,8 +1347,6 @@ $lang_creature = array(
 	'walk' => 'Walk',
 	'swim' => 'Swim',
 	'both' => 'Both',
-	'civilian' => 'Civilian',
-	'civilian_desc' => 'If is this NPC civilian or not.',
 	'flags_extra' => 'Flags Extra',
 	'flags_extra_desc' => 'TODO:',
 	'flags' => 'Flags',
@@ -1587,7 +1582,7 @@ $lang_game_object = array( //TODO:
 	'datas' => 'Additional Datas',
 	'data' => 'Data',
 	'data_desc' => 'Data fields specific for different type field values. Each type has unique fields.<br />For more informaton visit https://svn.mangosproject.org/trac /MaNGOS/wiki/Database /gameobject_template'
-);
+	);
 
 $lang_auctionhouse = array( //TODO
 	// ----- AHSTATS.PHP -----
@@ -1611,9 +1606,10 @@ $lang_auctionhouse = array( //TODO
 	'seller_name' => 'Seller Name',
 	'buyer_name' => 'Buyer Name',
 	'tot_found' => 'Total Items Found'
-);
+	);
 
 $lang_id_tab = array(
+	// ----- ID_TAB.PHP -----
 	'TALENT_STARLIGHT_WRATH_1' => 'Starlight Wrath Rank 1',
 	'TALENT_STARLIGHT_WRATH_2' => 'Starlight Wrath Rank 2',
 	'TALENT_STARLIGHT_WRATH_3' => 'Starlight Wrath Rank 3',
@@ -3676,7 +3672,7 @@ $lang_id_tab = array(
 	'Alliance' => 'Alliance',
 	'Horde' => 'Horde',
 	//------char rankings------
-	'None'=> 'None',
+	'None' => 'None',
 	'Private' => 'Private',
 	'Corporal' => 'Corporal',
 	'Sergeant' => 'Sergeant',
@@ -3842,7 +3838,7 @@ $lang_id_tab = array(
 	'PET_ABILITY_THUNDERSTOMP_RANK_3' => 'Thunderstomp Rank 3',
 	'PET_ABILITY_THUNDERSTOMP_RANK_4' => 'Thunderstomp Rank 4',
 	'PET_ABILITY_WARP' => 'Warp',
-	//character auras
+	// ----- character auras -----
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_1' => 'Arcane Intellect Rank 1',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_2' => 'Arcane Intellect Rank 2',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_3' => 'Arcane Intellect Rank 3',
@@ -3899,9 +3895,10 @@ $lang_id_tab = array(
 	'CHAR_AURA_TRUESHOT_AURA_RANK_3' => 'Trueshot Aura Rank 3',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Trueshot Aura Rank 4',
 	);
+
 $lang_arenateam = array(
 	// ----- ARENATEAM.PHP -----
-	'by_name' =>'by Name',
+	'by_name' => 'by Name',
 	'by_team_leader' => 'by Arena Team Leader',
 	'by_id' => 'by Arena Team Id',
 	'id' => 'Id',
@@ -3934,16 +3931,17 @@ $lang_arenateam = array(
 	'wons_season' => 'Games won this season',
 	'arenateams' => 'Arena Teams',
 	'del_team' => 'Delete Arena Team',
-	'games_played'=> 'Played',
-	'games_won'=> 'Won',
-	'games_lost'=> 'Lost',
-	'ratio'=> 'Win Percentage',
+	'games_played' => 'Played',
+	'games_won' => 'Won',
+	'games_lost' => 'Lost',
+	'ratio' => 'Win Percentage',
 	'this_week' => 'This week',
 	'this_season' => 'This season',
 	'standings' => 'Standing :',
 	'tot_found' => 'Total Found',
 	'arenateam' => 'Arena Team'
 	);
+
 $lang_honor = array(
 	// ----- HONOR.PHP -----
 	'allied' => 'Alliance',
@@ -3957,7 +3955,9 @@ $lang_honor = array(
 	'honor' => 'Rank',
 	'guild' => 'Guild'
 	);
+
 $lang_events = array(
+	// ----- EVENTS.PHP -----
 	'total' => 'Total',
 	'descr' => 'Event name',
 	'start' => 'First Starting Time',
@@ -3965,13 +3965,16 @@ $lang_events = array(
 	'length' => 'Length<br><small>days/hours',
 	'events' => 'Events'
 	);
+
 $lang_instances = array(
+	// ----- INSTANCES.PHP -----
 	'map' => 'Map',
 	'level_min' => 'Minimum level',
 	'level_max' => 'Maximum level',
 	'max_players' => 'Maximum players',
 	'reset_delay' => 'Reset delay',
 	);
+
 $lang_captcha = array(
 	// ----- FORM.PHP -----
 	'security_image' => 'Security Image',
@@ -3980,7 +3983,9 @@ $lang_captcha = array(
 	'submit' => 'Submit',
 	'invalid_code' => 'Invalid Code!'
 	);
+
 $lang_top = array(
+	// ----- TOP100.PHP -----
 	'name' => 'Name',
 	'race' => 'Race',
 	'class' => 'Class',
@@ -3994,4 +3999,5 @@ $lang_top = array(
 	'time_played' => 'Time Played',
 	'online' => 'Online'
 	);
+
 ?>

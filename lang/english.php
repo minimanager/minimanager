@@ -10,7 +10,7 @@
 $site_encoding = "utf-8";
 
 $lang_global = array(
-// ----- GENERAL ERROR CODES -----
+	// ----- GENERAL ERROR CODES -----
 	'err_sql_conn_db' => 'Error - Connection to database is not established !',
 	'err_sql_open_db' => 'Error - Can\'t open the database !',
 	'err_no_result' => 'No Results.',
@@ -47,11 +47,11 @@ $lang_global = array(
 	'language_6' => 'Spanish',
 	'language_7' => 'Mexican',
 	'language_8' => 'Russian'
-);
+	);
 
 $lang_login = array(
 	// ----- LOGIN.PHP -----
-	'login' =>'Login',
+	'login' => 'Login',
 	'username' => 'Username',
 	'password' => 'Password',
 	'not_registrated' => 'Not registered?',
@@ -67,8 +67,8 @@ $lang_login = array(
 	'after_registration' => 'Your account creation was successful!'
 	);
 
-// ----- GUILD.PHP -----
 $lang_guild = array(
+	// ----- GUILD.PHP -----
 	'my_guilds' => 'My Guilds',
 	'id' => 'ID',
 	'guild_name' => 'Guild Name',
@@ -79,7 +79,7 @@ $lang_guild = array(
 	'remove' => 'Rem.',
 	'guild_motd' => 'Guild MOTD',
 	'create_date' => 'Create Date',
-	'by_name' =>'by name',
+	'by_name' => 'by name',
 	'by_guild_leader' => 'by leader name',
 	'by_id' => 'by id',
 	'tot_guilds' => 'Total Guilds',
@@ -104,7 +104,7 @@ $lang_guild = array(
 
 $lang_register = array(
 	// ----- REGISTER.PHP -----
-	'create_acc' =>'Create Account',
+	'create_acc' => 'Create Account',
 	'username' => 'Username',
 	'use_eng_chars_limited_len' => 'Use English characters and numbers Only.<br />Min. Length 4 | Max. Length 14.',
 	'password' => 'Password',
@@ -149,7 +149,7 @@ $lang_register = array(
 
 $lang_index = array(
 	// ----- INDEX.PHP -----
-	'realm' =>'Realm',
+	'realm' => 'Realm',
 	'online' => 'Online',
 	'offline_or_let_high' => 'Offline or Latency too High',
 	'add_motd' => 'Add Message of the Day',
@@ -168,7 +168,7 @@ $lang_index = array(
 
 $lang_header = array(
 	// ----- HEADER.PHP -----
-	'main' =>'Main',
+	'main' => 'Main',
 	'accounts' => 'Accounts',
 	'characters' => 'Characters',
 	'guilds' => 'Guilds',
@@ -230,7 +230,7 @@ $lang_repair = array(
 
 $lang_backup = array(
 	// ----- BACKUP.PHP -----
-	'backup_options' =>'Backup Options',
+	'backup_options' => 'Backup Options',
 	'select_option' => 'Select backup opton',
 	'save' => 'Save',
 	'load' => 'Load',
@@ -260,7 +260,7 @@ $lang_backup = array(
 
 $lang_banned = array(
 	// ----- BANNED.PHP -----
-	'add_to_banned' =>'Add to Banned Lists',
+	'add_to_banned' => 'Add to Banned Lists',
 	'tot_banned' => 'Total Banned',
 	'ip_acc' => 'Ip / Account',
 	'will_be_removed_from_banned' => 'Will be removed from Banned List',
@@ -284,7 +284,7 @@ $lang_banned = array(
 
 $lang_char = array(
 	// ----- CHAR.PHP -----
-	'online' =>'Online',
+	'online' => 'Online',
 	'offline' => 'Offline',
 	'username' => 'Username',
 	'acc_id' => 'Account ID',
@@ -310,7 +310,7 @@ $lang_char = array(
 	'gold' => 'Gold',
 	'tot_paly_time' => 'Total Time Played',
 	'chars_acc' => 'Char\'s Account',
-	'send_mail' =>'Send InGame Mail',
+	'send_mail' => 'Send InGame Mail',
 	'del_char' => 'Delete Character',
 	'no_char_found' => 'No Character Found!',
 	'char_sheet' => 'Character Sheet',
@@ -333,7 +333,7 @@ $lang_char = array(
 	'talent_id' => 'ID',
 	'talent_name' => 'Talent Name',
 	'talent_value' => 'Value',
-	// --- $skill_rank_array ---
+	// --- skill_rank_array ---
 	'apprentice' => 'Apprentice',
 	'journeyman' => 'Journeyman',
 	'expert' => 'Expert',
@@ -548,11 +548,11 @@ $lang_item = array(
 	'CA_RATING' => 'Crit Avoid',
 	'RESILIENCE_RATING' => 'Resistance',
 	'HASTE_RATING' => 'Haste'
-);
+	);
 
 $lang_char_list = array(
 	// ----- CHAR_LIST.PHP -----
-	'cleanup' =>'CleanUp',
+	'cleanup' => 'CleanUp',
 	'by_name' => 'by Name',
 	'by_id' => 'by id',
 	'by_account' => 'by Account',
@@ -592,7 +592,7 @@ $lang_char_list = array(
 
 $lang_cleanup = array(
 	// ----- CLEANUP.PHP -----
-	'cleanup_options' =>'CleanUp Options',
+	'cleanup_options' => 'CleanUp Options',
 	'clean_chars' => 'Clean Characters',
 	'char_level' => 'Character Level',
 	'tot_play_time' => 'Total Play Time (sec)',
@@ -623,7 +623,7 @@ $lang_cleanup = array(
 
 $lang_edit = array(
 	// ----- EDIT.PHP -----
-	'edit_acc' =>'Edit Your Account',
+	'edit_acc' => 'Edit Your Account',
 	'id' => 'ID',
 	'username' => 'Username',
 	'password' => 'Password',
@@ -755,7 +755,7 @@ $lang_realm = array(
 	'china' => 'China',
 	'test_server' => 'Test Server',
 	'qa_server' => 'QA Server',
-	'spanish' => 'Spanish',
+	'others' => 'Others',
 	'conf_from_file' => '** This realm appear not to have proper configuration in config.php file.<br />Make sure to properly configure it before using under CMS.',
 	'offline' => 'Offline',
 	'status' => 'Status'
@@ -763,7 +763,7 @@ $lang_realm = array(
 
 $lang_ticket = array(
 	// ----- TICKET.PHP -----
-	'id' =>'ID',
+	'id' => 'ID',
 	'sender' => 'Sender',
 	'ticket_text' => 'Ticket Text',
 	'category' => 'Category',
@@ -882,7 +882,7 @@ $lang_stat = array(
 	'uptime_prec' => ' Uptime percentage since first run',
 	'unique_ip' => 'Unique IPs last 24 Hour',
 	'on_statistics' => 'Online Statistics'
-);
+	);
 
 $lang_tele = array(
 	// ----- TELE.PHP -----
@@ -910,7 +910,7 @@ $lang_tele = array(
 	'tele_locations' => 'Teleport Locations',
 	'add_new' => 'Add New',
 	'add_new_tele' => 'Add New Teleport Location'
-);
+	);
 
 $lang_command = array(
 	// ----- COMMAND.PHP -----
@@ -1165,7 +1165,7 @@ $lang_item_edit = array(
 	'condition_value1_desc' => 'Condition Value 1 flag',
 	'condition_value2' => 'Condition Value 2',
 	'condition_value2_desc' => 'Condition Value 2 flag',
-);
+	);
 
 $lang_creature = array(
 	// ----- CREATURE.PHP -----
@@ -1581,7 +1581,7 @@ $lang_game_object = array(
 	'datas' => 'Additional Datas',
 	'data' => 'Data',
 	'data_desc' => 'Data fields specific for different type field values. Each type has unique fields.<br />For more informaton visit https://svn.mangosproject.org/trac /MaNGOS/wiki/Database /gameobject_template'
-);
+	);
 
 $lang_auctionhouse = array(
 	// ----- AHSTATS.PHP -----
@@ -1605,9 +1605,10 @@ $lang_auctionhouse = array(
 	'seller_name' => 'Seller Name',
 	'buyer_name' => 'Buyer Name',
 	'tot_found' => 'Total Items Found'
-);
+	);
 
 $lang_id_tab = array(
+	// ----- ID_TAB.PHP -----
 	'TALENT_STARLIGHT_WRATH_1' => 'Starlight Wrath Rank 1',
 	'TALENT_STARLIGHT_WRATH_2' => 'Starlight Wrath Rank 2',
 	'TALENT_STARLIGHT_WRATH_3' => 'Starlight Wrath Rank 3',
@@ -3670,7 +3671,7 @@ $lang_id_tab = array(
 	'Alliance' => 'Alliance',
 	'Horde' => 'Horde',
 	//------char rankings------
-	'None'=> 'None',
+	'None' => 'None',
 	'Private' => 'Private',
 	'Corporal' => 'Corporal',
 	'Sergeant' => 'Sergeant',
@@ -3836,7 +3837,7 @@ $lang_id_tab = array(
 	'PET_ABILITY_THUNDERSTOMP_RANK_3' => 'Thunderstomp Rank 3',
 	'PET_ABILITY_THUNDERSTOMP_RANK_4' => 'Thunderstomp Rank 4',
 	'PET_ABILITY_WARP' => 'Warp',
-	//character auras
+	// ----- character auras -----
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_1' => 'Arcane Intellect Rank 1',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_2' => 'Arcane Intellect Rank 2',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_3' => 'Arcane Intellect Rank 3',
@@ -3896,7 +3897,7 @@ $lang_id_tab = array(
 
 $lang_arenateam = array(
 	// ----- ARENATEAM.PHP -----
-	'by_name' =>'by Name',
+	'by_name' => 'by Name',
 	'by_team_leader' => 'by Arena Team Leader',
 	'by_id' => 'by Arena Team Id',
 	'id' => 'Id',
@@ -3929,10 +3930,10 @@ $lang_arenateam = array(
 	'wons_season' => 'Games won this season',
 	'arenateams' => 'Arena Teams',
 	'del_team' => 'Delete Arena Team',
-	'games_played'=> 'Played',
-	'games_won'=> 'Won',
-	'games_lost'=> 'Lost',
-	'ratio'=> 'Win Percentage',
+	'games_played' => 'Played',
+	'games_won' => 'Won',
+	'games_lost' => 'Lost',
+	'ratio' => 'Win Percentage',
 	'this_week' => 'This week',
 	'this_season' => 'This season',
 	'standings' => 'Standing :',
@@ -3955,6 +3956,7 @@ $lang_honor = array(
 	);
 
 $lang_events = array(
+	// ----- EVENTS.PHP -----
 	'total' => 'Total',
 	'descr' => 'Event name',
 	'start' => 'First Starting Time',
@@ -3964,6 +3966,7 @@ $lang_events = array(
 	);
 
 $lang_instances = array(
+	// ----- INSTANCES.PHP -----
 	'map' => 'Map',
 	'level_min' => 'Minimum level',
 	'level_max' => 'Maximum level',
@@ -3981,6 +3984,7 @@ $lang_captcha = array(
 	);
 
 $lang_top = array(
+	// ----- TOP100.PHP -----
 	'name' => 'Name',
 	'race' => 'Race',
 	'class' => 'Class',

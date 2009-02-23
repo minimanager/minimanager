@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -8,7 +8,7 @@
  */
 
 $lang_global = array(
-// ----- GENERAL ERROR CODES -----
+	// ----- GENERAL ERROR CODES -----
 	'err_sql_conn_db' => 'Erreur - Non connecté au serveur SQL !',
 	'err_sql_open_db' => 'Erreur - ne peut pas ouvrir la base de donnée !',
 	'err_no_result' => 'Aucun résultat.',
@@ -17,7 +17,7 @@ $lang_global = array(
 	'err_no_search_passed' => 'Aucun paramêtre de recherche.',
 	'err_invalid_input' => 'Entrée invalide',
 	'err_no_permission' => 'Vous n\'avez pas les permissions pour accéder ou éditer cette donnée',
-// ------ GENERAL -----
+	// ------ GENERAL -----
 	'empty_fields' => 'Certains champs ne sont pas remplis',
 	'search' => '+ Recherche +',
 	'limit' => 'limite',
@@ -25,7 +25,7 @@ $lang_global = array(
 	'go_back' => 'Retour',
 	'home' => 'Accueil',
 	'none' => 'Aucun',
-	'delete' => 'Effacer le Realm',
+	'delete' => 'Effacer le Royaume',
 	'delete_short' => 'Del.',
 	'edit' => 'Editer',
 	'yes' => 'OUI',
@@ -45,10 +45,10 @@ $lang_global = array(
 	'language_6' => 'Spanish',
 	'language_7' => 'Mexican',
 	'language_8' => 'Russian'
-);
+	);
 
 $lang_login = array(
-// ----- LOGIN.PHP -----
+	// ----- LOGIN.PHP -----
 	'login' => 'Connexion',
 	'username' => 'Nom',
 	'password' => 'Mot de passe',
@@ -62,11 +62,11 @@ $lang_login = array(
 	'select_realm' => 'Royaume',
 	'remember_me' => 'Se rappeler de moi',
 	'pass_recovery' => 'Mot de passe perdu ?',
-	'after_registration' => 'Your account creation was successful!'
-);
+	'after_registration' => 'Votre compte a été crée avec succès!'
+	);
 
-// ----- GUILD.PHP -----
 $lang_guild = array(
+	// ----- GUILD.PHP -----
 	'my_guild' => 'Ma Guilde',
 	'id' => 'ID',
 	'guild_name' => 'Nom de la guilde',
@@ -77,7 +77,7 @@ $lang_guild = array(
 	'remove' => 'Supp.',
 	'guild_motd' => 'MOTD de la guilde',
 	'create_date' => 'Date de création',
-	'by_name' =>'par nom',
+	'by_name' => 'par nom',
 	'by_guild_leader' => 'par maître de guilde',
 	'by_id' => 'par id',
 	'tot_guilds' => 'Nombre total de guildes',
@@ -97,17 +97,17 @@ $lang_guild = array(
 	'guild_id' => 'Id de guilde',
 	'guild_search_result' => 'Résultats de recherche de guildes',
 	'show_guilds' => 'Afficher toutes les guildes',
-	'browse_guilds' => 'Browse Guilds'
-);
+	'browse_guilds' => 'Parcourir les guildes'
+	);
 
 $lang_register = array(
-// ----- REGISTER.PHP -----
+	// ----- REGISTER.PHP -----
 	'create_acc' => 'Créer un compte',
 	'username' => 'Nom',
 	'use_eng_chars_limited_len' => 'Utilisez uniquement des caractères anglais.<br />Pas d\'accents ni de caractères spéciaux.<br />La longueur doit être comprise entre 4 et 14 caractères.',
 	'password' => 'Mot de passe',
 	'confirm_password' => 'Confirmez le<br />mot de passe',
-	'min_pass_len' => 'La longueur doit être comprise entre 4 et 14 caractères.',
+	'min_pass_len' => 'La longueur doit être comprise entre 4 et 25 caractères.',
 	'email' => 'Email',
 	'use_valid_mail' => 'Assurer vous d\'utiliser une adresse email valide.',
 	'create_acc_button' => 'Créer un compte',
@@ -125,7 +125,6 @@ $lang_register = array(
 	'acc_type' => 'Type de compte',
 	'acc_type_desc' => 'Le type de client sera utilisé',
 	'classic' => 'Classique',
-	'expansion' => 'Expansion',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'recover_acc_password' => 'Récupérer le mot de passe du compte',
@@ -139,20 +138,20 @@ $lang_register = array(
 	'error_terms' => 'Conditions de Services non acceptées',
 	'i_agree' => 'Accepter',
 	'i_dont_agree' => 'Je refuse',
-	'pass_too_long' => 'The password you have entered exceeds the maximum allowed length',
-	'invited_by' => 'Invited by',
-	'invited_info' => 'Please write the account name of the player who invited you to register here.',
-	'email_address_used' => 'This email has an account already.<br/>No more accounts can be created for this email address.',
-	'referrer_not_found' => 'Unfortunately the specified account was not found in our database.<br/>Please ensure you have entered a valid account name or leave the &quot;Invited by&quot;-field blank.',
-);
+	'pass_too_long' => 'Le mot de passe que vous avez entré dépasse la longueur maximale autorisée',
+	'invited_by' => 'Invité par',
+	'invited_info' => 'S\'il vous plait, inscrivez le nom du compte du joueur qui vous a invité à vous inscrire ici.',
+	'email_address_used' => 'Cet email possède déjà un compte.<br/>Aucun compte supplémentaire ne sera créé pour cette adresse.',
+	'referrer_not_found' => 'Malheureusement le compte spécifié n\'a pas été trouvé dans notre base de données.<br/>S\'il vous plait assurez vous d\'avoir entré un nom de compte valide ou laissez le champ &quot;Invité par&quot;-field vide.',
+	);
 
 $lang_index = array(
-// ----- INDEX.PHP -----
-	'realm' => 'Realm',
+	// ----- INDEX.PHP -----
+	'realm' => 'Royaume',
 	'online' => 'En ligne',
 	'offline_or_let_high' => 'Hors ligne ou latence trop élevée',
 	'add_motd' => 'Ajouter le message du jour',
-	'delete' => 'Effacer le Realm',
+	'delete' => 'Effacer le Royaume',
 	'tot_users_online' => 'Utilisateurs en ligne',
 	'name' => 'Nom',
 	'race' => 'Race',
@@ -163,12 +162,11 @@ $lang_index = array(
 	'rank' => 'Rang',
 	'honor_kills' => 'R.H.',
 	'guild' => 'Guilde'
-);
+	);
 
 $lang_header = array(
-// ----- HEADER.PHP -----
+	// ----- HEADER.PHP -----
 	'main' => 'Portail',
-	'users' => 'Utilisateurs',
 	'accounts' => 'Comptes',
 	'characters' => 'Personnages',
 	'guilds' => 'Guildes',
@@ -180,7 +178,7 @@ $lang_header = array(
 	'run_sql_patch' => 'Lancer un patch SQL',
 	'backup' => 'Sauvegarde',
 	'tickets' => 'Tickets',
-	'realm' => 'Realm',
+	'realm' => 'Royaume',
 	'add_motd' => 'Ajouter le message du jour',
 	'mail' => 'Email',
 	'my_acc' => 'Mon compte',
@@ -204,16 +202,16 @@ $lang_header = array(
 	'statistics_on' => 'Statistiques en ligne',
 	'instances' => 'Informations sur les instances',
 	'top100' => 'TOP 100'
-);
+	);
 
 $lang_footer = array(
-// -----FOOTER.PHP -----
+	// -----FOOTER.PHP -----
 	'bugs_to_admin' => 'Problèmes et bugs :',
 	'site_admin' => 'Administrateur du site'
-);
+	);
 
 $lang_repair = array(
-// ----- REPAIR.PHP -----
+	// ----- REPAIR.PHP -----
 	'repair_optimize' => 'Réparer / Optimiser Tables',
 	'repair' => 'Réparer',
 	'optimize' => 'Optimiser',
@@ -226,10 +224,10 @@ $lang_repair = array(
 	'tables' => 'Tables',
 	'select_tables' => 'Choisir les tables sur lesquelles les opérations doivent se porter.',
 	'repair_error' => 'Erreur'
-);
+	);
 
 $lang_backup = array(
-// ----- BACKUP.PHP -----
+	// ----- BACKUP.PHP -----
 	'backup_options' => 'Options de backup',
 	'select_option' => 'Choississez les options de backup',
 	'save' => 'Sauver',
@@ -256,10 +254,10 @@ $lang_backup = array(
 	'que_executed' => 'Requêtes exécutées avec succès',
 	'tables_to_save' => 'Les tables suivantes seront sauvées',
 	'save_all_realms' => 'Sauver les données de tous les royaumes'
-);
+	);
 
 $lang_banned = array(
-// ----- BANNED.PHP -----
+	// ----- BANNED.PHP -----
 	'add_to_banned' => 'Ajouté à la liste des bannis',
 	'tot_banned' => 'Total Bannis',
 	'ip_acc' => 'IP / Compte',
@@ -280,10 +278,10 @@ $lang_banned = array(
 	'ban_time' => 'Banni pour quantité de (heures)',
 	'entry' => 'Entry',
 	'acc_not_found' => 'Compte non trouvé'
-);
+	);
 
 $lang_char = array(
-// ----- CHAR.PHP -----
+	// ----- CHAR.PHP -----
 	'online' => 'En ligne',
 	'offline' => 'Hors Ligne',
 	'username' => 'Username',
@@ -333,7 +331,7 @@ $lang_char = array(
 	'talent_id' => 'ID',
 	'talent_name' => 'Nom du Talent',
 	'talent_value' => 'Valeur',
-// --- skill_rank_array ---
+	// --- skill_rank_array ---
 	'apprentice' => 'Apprenti',
 	'journeyman' => 'Compagnon',
 	'expert' => 'Expert',
@@ -341,7 +339,7 @@ $lang_char = array(
 	'master' => 'Maître',
 	'inherent' => 'Inherent',
 	'wise' => 'Sage',
-// ---- edit_char.php ----
+	// ---- edit_char.php ----
 	'update' => 'Sauver l\'Item dans la DB',
 	'edit_char' => 'Editer les données du personnage',
 	'edit_button' => 'Editer les données',
@@ -357,17 +355,17 @@ $lang_char = array(
 	'inv_bank' => 'Objet de l\'inventaire et de la banque',
 	'location' => 'Emplacement',
 	'move_to' => 'Téleporter vers (.tele location name)',
-	'max_acc' => 'The account you are trying to move this character to has the max ammount of players in it.',
+	'max_acc' => 'Le compte vers lequel vous essayez de déplacer ce personnage a atteint le nombre de personnages maximum autorisé.',
 	'no_tp_location' => 'Aucun emplacement de téléport trouvé avec ce nom.',
-	'achievements' => 'Achievements',
+	'achievements' => 'Hauts Faits',
 	'achievement_id' => 'ID',
-	'achievement_title' => 'Achievement Title',
+	'achievement_title' => 'Haut Fait',
 	'achievement_date' => 'Date',
-	'no_com_achievements' => 'No Achievements Completed'
-);
+	'no_com_achievements' => 'Aucun Haut Fait accompli'
+	);
 
 $lang_item = array(
-// ----- ITEM TOOLTIP -----
+	// ----- ITEM TOOLTIP -----
 	'head' => 'Tête',
 	'gloves' => 'Gant',
 	'neck' => 'Cou',
@@ -472,7 +470,7 @@ $lang_item = array(
 	'none' => 'Aucun',
 	'other' => 'Autre',
 	'damage' => 'Dommage',
-	'speed' => 'Speed',
+	'speed' => 'Vitesse',
 	'holy_dmg' => 'Dommage sacré',
 	'fire_dmg' => 'Dommage Feu',
 	'nature_dmg' => 'Dommage Nature',
@@ -487,7 +485,7 @@ $lang_item = array(
 	'mana' => 'Mana',
 	'energy' => 'Energy',
 	'rage' => 'Rage',
-	'runic' => 'Runic Power',
+	'runic' => 'Puissance Runique',
 	'res_arcane' => 'Rés. Arcane',
 	'res_holy' => 'Rés. Sacré',
 	'res_fire' => 'Rés. Feu',
@@ -548,10 +546,10 @@ $lang_item = array(
 	'CA_RATING' => 'Critique évité',
 	'RESILIENCE_RATING' => 'Résistance',
 	'HASTE_RATING' => 'Vitesse'
-);
+	);
 
 $lang_char_list = array(
-// ----- CHAR_LIST.PHP -----
+	// ----- CHAR_LIST.PHP -----
 	'cleanup' => 'Purger',
 	'by_name' => 'par Nom',
 	'by_id' => 'par id d\'équipe d\'Arène',
@@ -588,10 +586,10 @@ $lang_char_list = array(
 	'browse_chars' => 'Liste des personnages',
 	'chars_gold' => '&lt; Or (C)',
 	'by_item' => 'par ID d\'Objet'
-);
+	);
 
 $lang_cleanup = array(
-// ----- CLEANUP.PHP -----
+	// ----- CLEANUP.PHP -----
 	'cleanup_options' => 'Options de nettoyage',
 	'clean_chars' => 'Purger les personnages',
 	'char_level' => 'Niveau de personnage',
@@ -619,10 +617,10 @@ $lang_cleanup = array(
 	'clean_db' => 'Purger la DB',
 	'arenateams_deleted' => 'Equipe(s) d\'arène effacée!',
 	'no_arenateams_del' => 'Aucune équipe(s) d\'arène effacée'
-);
+	);
 
 $lang_edit = array(
-// ----- EDIT.PHP -----
+	// ----- EDIT.PHP -----
 	'edit_acc' => 'Editer le compte',
 	'id' => 'Id',
 	'username' => 'Nom',
@@ -647,15 +645,14 @@ $lang_edit = array(
 	'save' => 'Sauver',
 	'client_type' => 'Type de client',
 	'classic' => 'Classique',
-	'expansion' => 'Expansion',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'tot_chars' => 'Nombre total de personnages',
-	'invited_by' => 'Invited By'
-);
+	'invited_by' => 'Invité par'
+	);
 
 $lang_mail = array(
-// ----- MAIL.PHP -----
+	// ----- MAIL.PHP -----
 	'mail_type' => 'Mail Type',
 	'mail_options' => 'Mail Options',
 	'email' => 'Email',
@@ -683,18 +680,18 @@ $lang_mail = array(
 	'option_unavailable' => 'Vous ne pouvez pas utiliser cette option avec la configuration actuelle.',
 	'use_currect_option' => 'Certaines options de l\'envoi de groupe ne peuvent être utilisées que lors d\'envoi dans le jeu ou par mail mais ps les deux en même temps.',
 	'send_mail' => 'Envoyer l\'email'
-);
+	);
 
 $lang_motd = array(
-// ----- MOTD.PHP -----
+	// ----- MOTD.PHP -----
 	'post_motd' => 'Envoyer le message du jour',
 	'post_rules' => 'Attention: la longueur est limitée à 255 caractères.<br />Les tags HTML sont utilisables.',
 	'err_max_len' => 'Taille limite dépassée',
 	'add_motd' => 'Ajouter le message du jour'
-);
+	);
 
 $lang_run_patch = array(
-// -----RUN_PATCH.PHP -----
+	// -----RUN_PATCH.PHP -----
 	'err_in_line' => 'Erreur de syntaxe SQL à la ligne n° ',
 	'run_sql_file_only' => 'N\'exécutez que des .sql ou .qbquery',
 	'file_not_found' => 'Fichier non trouvé !',
@@ -707,16 +704,16 @@ $lang_run_patch = array(
 	'query_executed' => 'requêtes SQL exécutées avec succès.',
 	'no_query_found' => 'Pas de résultats retournés / Pas de requêtes trouvées.',
 	'run_patch' => 'Exécuter le patch SQL'
-);
+	);
 
 $lang_ssh = array(
-// ----- SSH.PHP -----
+	// ----- SSH.PHP -----
 	'server_offline' => 'Le serveur SSH/Telnet semble hors ligne!',
 	'config_server_properly' => 'Vérifiez que vous avez configuré le serveur SSH/Telnet correctement, et qu\'il est actuellement actif'
-);
+	);
 
 $lang_realm = array(
-// ----- REALM.PHP -----
+	// ----- REALM.PHP -----
 	'add_realm' => 'Ajouter un royaume',
 	'tot_realms' => 'Nombre total de royaumes',
 	'name' => 'Nom',
@@ -735,7 +732,7 @@ $lang_realm = array(
 	'realm_data' => 'Données du royaume',
 	'online' => 'En ligne',
 	'tot_char' => 'Total de personnages',
-	'delete' => 'Effacer le Realm',
+	'delete' => 'Effacer le royaume',
 	'normal' => 'Normal',
 	'pvp' => 'PVP',
 	'rp' => 'RP',
@@ -756,14 +753,14 @@ $lang_realm = array(
 	'china' => 'Chinois',
 	'test_server' => 'Serveur de test',
 	'qa_server' => 'QA Server',
-	'spanish' => 'Espagnol',
+	'others' => 'Others',
 	'conf_from_file' => '** Ce monde ne semble pas avoir une configuration correcte dans le fichier config.php.<br />Soyez certain de le configurer correctement avant d\'utiliser sous CMS.',
 	'offline' => 'Hors Ligne',
 	'status' => 'Status'
-);
+	);
 
 $lang_ticket = array(
-// ----- TICKET.PHP -----
+	// ----- TICKET.PHP -----
 	'id' => 'Id',
 	'sender' => 'Rédacteur',
 	'ticket_text' => 'Texte',
@@ -784,10 +781,10 @@ $lang_ticket = array(
 	'ticket_updated' => 'Ticket mis à jour',
 	'ticket_update_err' => 'Erreur lors de la mise à jour du ticket',
 	'browse_tickets' => 'Liste des tickets',
-);
+	);
 
 $lang_user = array(
-// ----- USER.PHP -----
+	// ----- USER.PHP -----
 	'add_acc' => 'Nouveau compte',
 	'cleanup' => 'Purger',
 	'backup' => 'Sauvegarde',
@@ -857,13 +854,12 @@ $lang_user = array(
 	'expansion_account' => 'Compte Expansion',
 	'client_type' => 'Type de client',
 	'classic' => 'Classique',
-	'expansion' => 'Expansion',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK'
-);
+	);
 
 $lang_stat = array(
-// ----- STAT.PHP -----
+	// ----- STAT.PHP -----
 	'srv_statistics' => 'Statistiques Serveur',
 	'general_info' => 'Information Générale',
 	'tot_accounts' => 'Total Comptes',
@@ -884,10 +880,10 @@ $lang_stat = array(
 	'uptime_prec' => ' Pourcentage d\'Uptime depuis le premier lancement',
 	'unique_ip' => 'IPs Unique pour les dernières 24H',
 	'on_statistics' => 'Statistiques en ligne'
-);
+	);
 
 $lang_tele = array(
-// ----- TELE.PHP -----
+	// ----- TELE.PHP -----
 	'loc_name' => 'Nom de l\'emplacement',
 	'loc_id' => 'ID d\'Emplacement',
 	'on_map' => 'Sur la carte ID',
@@ -912,10 +908,10 @@ $lang_tele = array(
 	'tele_locations' => 'Emplacements de Téléport',
 	'add_new' => 'Ajoute nouveau',
 	'add_new_tele' => 'Ajouter un nouvel emplacement de Téléport'
-);
+	);
 
 $lang_command = array(
-// ----- COMMAND.PHP -----
+	// ----- COMMAND.PHP -----
 	'command_list' => 'Commandes disponibles',
 	'level0' => 'Joueur',
 	'level1' => 'Modérateur',
@@ -928,10 +924,10 @@ $lang_command = array(
 	'description' => 'Description',
 	'change_level' => 'Changer le niveau des commandes cochées',
 	'save' => 'Sauver'
-);
+	);
 
 $lang_item_edit = array(
-// ----- ITEM.PHP -----
+	// ----- ITEM.PHP -----
 	'search_item' => 'Recherche d\'objets',
 	'model_id' => 'Modèle ID',
 	'all' => 'Tout',
@@ -1025,9 +1021,9 @@ $lang_item_edit = array(
 	'max_durability' => 'Durabilité Max',
 	'max_durability_desc' => 'Durabilité d\'un item.',
 	'other' => 'Autre',
-	'max_count' => 'Max. Count',
+	'max_count' => 'Qté Maxi',
 	'max_count_desc' => 'Qté Maxi de drop.',
-	'stackable' => 'Stackable',
+	'stackable' => 'Empilable',
 	'stackable_desc' => 'Quantité d\'item qu\'un joueur peut transporter dans le même emplacement.',
 	'page_text' => 'PageText',
 	'page_text_desc' => 'ID d\'un TEXT de la table item_text, texte pour un livre ou une lettre par exemple. L\'item aura un curseur en forme de loupe et dévoilera son contenu en faisant un clique droit dessus.',
@@ -1167,10 +1163,10 @@ $lang_item_edit = array(
 	'condition_value1_desc' => 'Flag Condition Valeur 1',
 	'condition_value2' => 'Condition Valeur 2',
 	'condition_value2_desc' => 'Flag Condition Valeur 2'
-);
+	);
 
 $lang_creature = array(
-// ----- CREATURE.PHP -----
+	// ----- CREATURE.PHP -----
 	'none' => 'Aucun',
 	'custom' => 'Personnalisé',
 	'gossip' => 'Rumeur',
@@ -1348,8 +1344,8 @@ $lang_creature = array(
 	'walk' => 'Marche',
 	'swim' => 'Nage',
 	'both' => 'Les deux',
-	'civilian' => 'Civilian',
-	'civilian_desc' => 'Si ce NPC est civil ou non.',
+	'flags_extra' => 'Flags Extra',
+	'flags_extra_desc' => 'TODO:',
 	'flags' => 'Flags',
 	'flags_desc' => 'A FAIRE :',
 	'dynamic_flags' => 'Flags Dynamic',
@@ -1471,10 +1467,10 @@ $lang_creature = array(
 	'heroic' => 'Heroic Spawn ID',
 	'heroic_desc' => 'A heroic id is used when a creature has a different template for instances in normal and heroic mode. The one with the heroic_entry is the one used in the normal mode. A zero values means, this template is used for normal and heroic mode, or only heroic mode, if another creature point with its heroic_entry to this creature.',
 	'locales' => 'Localisation'
-);
+	);
 
 $lang_game_object = array(
-// ----- GAME_OBJECT.PHP -----
+	// ----- GAME_OBJECT.PHP -----
 	'unknown' => 'Inconnu',
 	'custom_search' => 'Filtre personnalisé',
 	'search' => '+ Recherche +',
@@ -1583,10 +1579,10 @@ $lang_game_object = array(
 	'datas' => 'Données complémentaires',
 	'data' => 'Donnée',
 	'data_desc' => 'Champs spécifiques pour des valeurs de champs de type différent. Chaque type a un champ unique.<br />Pour plus d\'infos, visitez https://svn.mangosproject.org/trac /MaNGOS/wiki/Database /gameobject_template'
-);
+	);
 
 $lang_auctionhouse = array(
-// ----- AHSTATS.PHP -----
+	// ----- AHSTATS.PHP -----
 	'auctionhouse' => 'Hôtel des ventes',
 	'seller' => 'Vendeur',
 	'item' => 'Item',
@@ -1607,9 +1603,10 @@ $lang_auctionhouse = array(
 	'seller_name' => 'Nom du vendeur',
 	'buyer_name' => 'Nom de l\'acheteur',
 	'tot_found' => 'Total trouvé'
-);
+	);
 
 $lang_id_tab = array(
+	// ----- ID_TAB.PHP -----
 	'TALENT_STARLIGHT_WRATH_1' => 'Colère stellaire Rang 1',
 	'TALENT_STARLIGHT_WRATH_2' => 'Colère stellaire Rang 2',
 	'TALENT_STARLIGHT_WRATH_3' => 'Colère stellaire Rang 3',
@@ -3342,7 +3339,7 @@ $lang_id_tab = array(
 	'TALENT_VITALITY_4' => 'Vitalité Rang 4',
 	'TALENT_VITALITY_5' => 'Vitalité Rang 5',
 	'TALENT_DEVASTATE' => 'Dévaster',
-//------ ItemSets -----
+	//------ ItemSets -----
 	'Set699' => 'Les Double Lames d\'Azzinoth',
 	'Set696' => 'Vague guerrière de grand seigneur de guerre',
 	'Set695' => 'Vague guerrière de connétable',
@@ -3661,17 +3658,17 @@ $lang_id_tab = array(
 	'Set65' => 'Baiser de l\'araignée',
 	'Set41' => 'Armes de Dal\'Rend',
 	'Set1' => 'Le Gladiateur',
-// ------ user levels ------
+	// ------ user levels ------
 	'Player' => 'Joueur',
 	'Moderator' => 'Moderateur',
 	'Game_Master' => 'GM',
 	'BugTracker' => 'Traqueur de Bugs',
 	'Administrator' => 'Administrateur',
 	'SysOP' => 'Opérateur Système',
-// ------ factions ------
+	// ------ factions ------
 	'Alliance' => 'Alliance',
 	'Horde' => 'Horde',
-// ------ char rankings ------
+	// ------ char rankings ------
 	'None' => 'Aucun',
 	'Private' => 'Soldat',
 	'Corporal' => 'Caporal',
@@ -3700,7 +3697,7 @@ $lang_id_tab = array(
 	'General' => 'Général',
 	'Warlord' => 'Seigneur de Guerre',
 	'High_Warlord' => 'Grand Seigneur de Guerre',
-// ------ pet abilities ------
+	// ------ pet abilities ------
 	'PET_ABILITY_ARCANE_RESIST_RANK_1' => 'Résistance aux arcanes Rang 1',
 	'PET_ABILITY_ARCANE_RESIST_RANK_2' => 'Résistance aux arcanes Rang 2',
 	'PET_ABILITY_ARCANE_RESIST_RANK_3' => 'Résistance aux arcanes Rang 3',
@@ -3838,7 +3835,7 @@ $lang_id_tab = array(
 	'PET_ABILITY_THUNDERSTOMP_RANK_3' => 'Grondeterre Rang 3',
 	'PET_ABILITY_THUNDERSTOMP_RANK_4' => 'Grondeterre Rang 4',
 	'PET_ABILITY_WARP' => 'Distortion',
-// ----- character auras -----
+	// ----- character auras -----
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_1' => 'Intelligence des arcanes Rang 1',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_2' => 'Intelligence des arcanes Rang 2',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_3' => 'Intelligence des arcanes Rang 3',
@@ -3884,7 +3881,7 @@ $lang_id_tab = array(
 	'CHAR_AURA_SUMMON_FELSTEED' => 'invocation d\'un Palefroi Corrompu',
 	'CHAR_AURA_TRACK_DEMONS' => 'Détection des Demons',
 	'CHAR_AURA_TRACK_BEASTS' => 'Détection des Betes',
-	'CHAR_AURA_TRACK_ELEMENTALS' => 'Détection des élémentairs',
+	'CHAR_AURA_TRACK_DRAGONKIN' => 'Track Dragonkin',
 	'CHAR_AURA_TRACK_ELEMENTALS' => 'Track Elementals', //TODO
 	'CHAR_AURA_TRACK_GIANTS' => 'Détéction des Geants',
 	'CHAR_AURA_TRACK_HIDDEN' => 'Detection de l\'invisibilité',
@@ -3893,11 +3890,11 @@ $lang_id_tab = array(
 	'CHAR_AURA_TRUESHOT_AURA_RANK_1' => 'Aura de précision Rang 1',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_2' => 'Aura de précision Rang 2',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_3' => 'Aura de précision Rang 3',
-	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Aura de précision Rang 4'
-);
+	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Aura de précision Rang 4',
+	);
 
 $lang_arenateam = array(
-// ----- ARENATEAM.PHP -----
+	// ----- ARENATEAM.PHP -----
 	'by_name' => 'par Nom',
 	'by_team_leader' => 'par Leader',
 	'by_id' => 'par id d\'équipe d\'Arène',
@@ -3940,10 +3937,10 @@ $lang_arenateam = array(
 	'standings' => 'Classement :',
 	'tot_found' => 'Total trouvé',
 	'arenateam' => 'Equipe d\'Arène'
-);
+	);
 
 $lang_honor = array(
-// ----- HONOR.PHP -----
+	// ----- HONOR.PHP -----
 	'allied' => 'Alliance',
 	'horde' => 'Horde',
 	'browse_honor' => 'Aperçu Honneur',
@@ -3954,24 +3951,26 @@ $lang_honor = array(
 	'honor points' => 'Points d\'Honneur',
 	'honor' => 'Rang',
 	'guild' => 'Guilde'
-);
+	);
 
 $lang_events = array(
+	// ----- EVENTS.PHP -----
 	'total' => 'Total',
 	'descr' => 'Nom de l\'évènement',
 	'start' => 'Première date de démarrage',
 	'occur' => 'Occurance<br /><small>jour(s)/heure(s)',
 	'length' => 'Durée<br /><small>jour(s)/heure(s)',
 	'events' => 'Evènements'
-);
+	);
 
 $lang_instances = array(
+	// ----- INSTANCES.PHP -----
 	'map' => 'Map',
 	'level_min' => 'Niveau minimum',
 	'level_max' => 'Niveau maximum',
 	'max_players' => 'Nombre de joueurs maxi',
 	'reset_delay' => 'Temps avant reset'
-);
+	);
 
 $lang_captcha = array(
 	// ----- FORM.PHP -----
@@ -3980,20 +3979,22 @@ $lang_captcha = array(
 	'imput_security_code' => 'S\'il vous plait, entrez le code de sécurité',
 	'submit' => 'Soumettre',
 	'invalid_code' => 'Code invalide!'
-);
+	);
+
 $lang_top = array(
-	'name' => 'Name',
+	// ----- TOP100.PHP -----
+	'name' => 'Nom',
 	'race' => 'Race',
-	'class' => 'Class',
+	'class' => 'Classe',
 	'level' => 'Level',
-	'guild' => 'Guild',
-	'money' => 'Money',
-	'rank' => 'Rank',
-	'honor_points' => 'Honor',
+	'guild' => 'Guilde',
+	'money' => 'Argent',
+	'rank' => 'Rang',
+	'honor_points' => 'Honneur',
 	'kills' => 'Name',
-	'arena_points' => 'Arena',
-	'time_played' => 'Time Played',
-	'online' => 'Online'
+	'arena_points' => 'Points d\'arène',
+	'time_played' => 'Temps de jeu',
+	'online' => 'En ligne'
 	);
 
 ?>

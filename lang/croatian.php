@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -47,11 +47,11 @@ $lang_global = array(
 	'language_6' => 'Spanish',
 	'language_7' => 'Mexican',
 	'language_8' => 'Russian'
-);
+	);
 
 $lang_login = array(
 	// ----- LOGIN.PHP -----
-	'login' =>'Logiranje',
+	'login' => 'Logiranje',
 	'username' => 'Korisnik',
 	'password' => 'Šifra',
 	'not_registrated' => 'Nisi registriran?',
@@ -67,8 +67,8 @@ $lang_login = array(
 	'after_registration' => 'Your account creation was successful!' //TODO
 	);
 	
-	// ----- GUILD.PHP -----
 $lang_guild = array(
+	// ----- GUILD.PHP -----
 	'my_guilds' => 'My Guilds',
 	'id' => 'ID',
 	'guild_name' => 'Guild Name',
@@ -79,7 +79,7 @@ $lang_guild = array(
 	'remove' => 'Rem.',
 	'guild_motd' => 'Guild MOTD',
 	'create_date' => 'Create Date',	
-	'by_name' =>'by name',
+	'by_name' => 'by name',
 	'by_guild_leader' => 'by leader name',
 	'by_id' => 'by id',
 	'tot_guilds' => 'Total Guilds',
@@ -104,7 +104,7 @@ $lang_guild = array(
 	
 $lang_register = array(
 	// ----- REGISTER.PHP -----
-	'create_acc' =>'Kreiraj račun',
+	'create_acc' => 'Kreiraj račun',
 	'username' => 'Korisnik',
 	'use_eng_chars_limited_len' => 'Koristi samo Engleska slova i brojeve.<br />Min. duljina 4 | Maks. duljina 14.',
 	'password' => 'Šifra',
@@ -127,7 +127,6 @@ $lang_register = array(
 	'acc_type' => 'Vrsta računa',
 	'acc_type_desc' => 'Vrsta klijenta koji koristite.',
 	'classic' => 'Klasični WOW',
-	'expansion' => 'TBC ekspanzija',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'recover_acc_password' => 'Zaboravio sam šifru',
@@ -150,7 +149,7 @@ $lang_register = array(
 	
 $lang_index = array(
 	// ----- INDEX.PHP -----
-	'realm' =>'Svijet',
+	'realm' => 'Svijet',
 	'online' => 'Online',
 	'offline_or_let_high' => 'Server je ugašen ili je brzina veze prespora',
 	'add_motd' => 'Dodaj poruku',
@@ -169,7 +168,7 @@ $lang_index = array(
 	
 $lang_header = array(
 	// ----- HEADER.PHP -----
-	'main' =>'Početna',
+	'main' => 'Početna',
 	'accounts' => 'Računi',
 	'characters' => 'Likovi',
 	'guilds' => 'Guilde',
@@ -231,7 +230,7 @@ $lang_repair = array(
 	
 $lang_backup = array(
 	// ----- BACKUP.PHP -----
-	'backup_options' =>'Backup Options',
+	'backup_options' => 'Backup Options',
 	'select_option' => 'Select backup opton',
 	'save' => 'Save',
 	'load' => 'Load',
@@ -261,7 +260,7 @@ $lang_backup = array(
 	
 $lang_banned = array(
 	// ----- BANNED.PHP -----
-	'add_to_banned' =>'Dodaj u ban listu',
+	'add_to_banned' => 'Dodaj u ban listu',
 	'tot_banned' => 'Ukupno banirano',
 	'ip_acc' => 'IP / Račun',
 	'will_be_removed_from_banned' => 'Biti će maknuti iz ban liste',
@@ -285,7 +284,7 @@ $lang_banned = array(
 	
 $lang_char = array(
 	// ----- CHAR.PHP -----
-	'online' =>'Online',
+	'online' => 'Online',
 	'offline' => 'Offline',
 	'username' => 'Username',
 	'acc_id' => 'Account ID',
@@ -311,7 +310,7 @@ $lang_char = array(
 	'gold' => 'Zlato',
 	'tot_paly_time' => 'Ukupno vrijeme',
 	'chars_acc' => 'Račun lika',
-	'send_mail' =>'Pošalji Poštu unutar igre',
+	'send_mail' => 'Pošalji Poštu unutar igre',
 	'del_char' => 'Obriši lika',
 	'no_char_found' => 'Nema pronađenih likova!',
 	'char_sheet' => 'Character Sheet',
@@ -549,11 +548,11 @@ $lang_item = array(
 	'CA_RATING' => 'Crit Avoid',
 	'RESILIENCE_RATING' => 'Resistance',
 	'HASTE_RATING' => 'Haste'
-);
+	);
 
 $lang_char_list = array(
 	// ----- CHAR_LIST.PHP -----
-	'cleanup' =>'Počisti',
+	'cleanup' => 'Počisti',
 	'by_name' => 'po Imenu',
 	'by_id' => 'po IDu',
 	'by_account' => 'po Računu',
@@ -593,7 +592,7 @@ $lang_char_list = array(
 	
 $lang_cleanup = array(
 	// ----- CLEANUP.PHP -----
-	'cleanup_options' =>'Opcije brisanja',
+	'cleanup_options' => 'Opcije brisanja',
 	'clean_chars' => 'Obriši likove',
 	'char_level' => 'Level lika',
 	'tot_play_time' => 'Ukupno vrijeme online (sec)',
@@ -624,7 +623,7 @@ $lang_cleanup = array(
 	
 $lang_edit = array(
 	// ----- EDIT.PHP -----
-	'edit_acc' =>'Editiraj račun',
+	'edit_acc' => 'Editiraj račun',
 	'id' => 'ID',
 	'username' => 'Korisnik',
 	'password' => 'Šifra',
@@ -648,7 +647,6 @@ $lang_edit = array(
 	'save' => 'Spremi',
 	'client_type' => 'Vrsta klijenta',
 	'classic' => 'Klasični WOW',
-	'expansion' => 'TBC Ekspanzija',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'tot_chars' => 'Ukupno likova',
@@ -749,7 +747,7 @@ $lang_realm = array(
 	'tournament' => 'Tournament',
 	'korea' => 'Korea',
 	'english' => 'Engleski',
-	'deutsch' => 'Njamački',
+	'german' => 'Njamački',
 	'french' => 'French',
 	'spanish' => 'Spanish',
 	'russian' => 'Russian',
@@ -757,7 +755,7 @@ $lang_realm = array(
 	'china' => 'China',
 	'test_server' => 'Test Server',
 	'qa_server' => 'QA Server',
-	'spanish' => 'Španjolski',
+	'other' => 'Other',
 	'conf_from_file' => '** This realm appear not to have proper configuration in config.php file.<br />Make sure to properly configure it before using under CMS.',
 	'offline' => 'Offline',
 	'status' => 'Status'
@@ -765,7 +763,7 @@ $lang_realm = array(
 	
 $lang_ticket = array(
 	// ----- TICKET.PHP -----
-	'id' =>'ID',
+	'id' => 'ID',
 	'sender' => 'Sender',
 	'ticket_text' => 'Ticket Text',
 	'category' => 'Category',
@@ -858,7 +856,6 @@ $lang_user = array(
 	'expansion_account' => 'TBC račun',
 	'client_type' => 'Klijent',
 	'classic' => 'Klasični WOW',
-	'expansion' => 'Ekspanzija',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK'
 	);
@@ -885,7 +882,7 @@ $lang_stat = array(
 	'uptime_prec' => ' Uptime percentage since first run',
 	'unique_ip' => 'Unique IPs last 24 Hour',
 	'on_statistics' => 'Online Statistics'
-);
+	);
 
 $lang_tele = array(
 	// ----- TELE.PHP -----
@@ -913,7 +910,7 @@ $lang_tele = array(
 	'tele_locations' => 'Teleport Locations',
 	'add_new' => 'Add New',
 	'add_new_tele' => 'Add New Teleport Location'
-);
+	);
 
 $lang_command = array(
 	// ----- COMMAND.PHP -----
@@ -1168,7 +1165,7 @@ $lang_item_edit = array(
 	'condition_value1_desc' => 'Condition Value 1 flag',
 	'condition_value2' => 'Condition Value 2',
 	'condition_value2_desc' => 'Condition Value 2 flag',
-);
+	);
 
 $lang_creature = array(
 	// ----- CREATURE.PHP -----
@@ -1584,8 +1581,7 @@ $lang_game_object = array(
 	'datas' => 'Additional Datas',
 	'data' => 'Data',
 	'data_desc' => 'Data fields specific for different type field values. Each type has unique fields.<br />For more informaton visit https://svn.mangosproject.org/trac /MaNGOS/wiki/Database /gameobject_template'
-
-);
+	);
 
 $lang_auctionhouse = array(
 	// ----- AHSTATS.PHP -----
@@ -1594,9 +1590,9 @@ $lang_auctionhouse = array(
 	'item' => 'Item',
 	'buyoutprice' => 'Buyout price',
 	'timeleft' => 'Time Left',
- 	'buyer' => 'Buyer',
+	'buyer' => 'Buyer',
 	'lastbid' => 'Last Bid',
- 	'firstbid' => 'First Bid',
+	'firstbid' => 'First Bid',
 	'dayshortcut' => 'D',
 	'hourshortcut' => 'H',
 	'mnshortcut' => 'mn',
@@ -1609,9 +1605,10 @@ $lang_auctionhouse = array(
 	'seller_name' => 'Seller Name',
 	'buyer_name' => 'Buyer Name',
 	'tot_found' => 'Total Items Found'
-);
+	);
 
 $lang_id_tab = array(
+	// ----- ID_TAB.PHP -----
 	'TALENT_STARLIGHT_WRATH_1' => 'Starlight Wrath Rank 1',
 	'TALENT_STARLIGHT_WRATH_2' => 'Starlight Wrath Rank 2',
 	'TALENT_STARLIGHT_WRATH_3' => 'Starlight Wrath Rank 3',
@@ -3674,7 +3671,7 @@ $lang_id_tab = array(
 	'Alliance' => 'Alliance',
 	'Horde' => 'Horde',
 	//------char rankings------
-	'None'=> 'None',
+	'None' => 'None',
 	'Private' => 'Private',
 	'Corporal' => 'Corporal',
 	'Sergeant' => 'Sergeant',
@@ -3689,7 +3686,7 @@ $lang_id_tab = array(
 	'Marshal' => 'Marshal',
 	'Field_Marshal' => 'Field Marshal',
 	'Grand_Marshal' => 'Grand Marshal',
-    	'Scout' => 'Scout',
+	'Scout' => 'Scout',
 	'Grunt' => 'Grunt',
 	'Senior_Sergeant' => 'Senior Sergeant',
 	'First_Sergeant' => 'First Sergeant',
@@ -3895,12 +3892,12 @@ $lang_id_tab = array(
 	'CHAR_AURA_TRUESHOT_AURA_RANK_1' => 'Trueshot Aura Rank 1',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_2' => 'Trueshot Aura Rank 2',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_3' => 'Trueshot Aura Rank 3',
-	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Trueshot Aura Rank 4'
+	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Trueshot Aura Rank 4',
 	);
 
 $lang_arenateam = array(
 	// ----- ARENATEAM.PHP -----
-	'by_name' =>'by Name',
+	'by_name' => 'by Name',
 	'by_team_leader' => 'by Arena Team Leader',
 	'by_id' => 'by Arena Team Id',
 	'id' => 'Id',
@@ -3924,7 +3921,7 @@ $lang_arenateam = array(
 	'games' => 'Games played',
 	'rating' => 'Rating',
 	'wins' => 'Games won',
-   	'remove' => 'Remove',
+	'remove' => 'Remove',
 	'name' => 'Name',
 	'level' => 'Level',
 	'played_week' => 'Games played this week',
@@ -3933,13 +3930,13 @@ $lang_arenateam = array(
 	'wons_season' => 'Games won this season',
 	'arenateams' => 'Arena Teams',
 	'del_team' => 'Delete Arena Team',
-	'games_played'=> 'Played',
-	'games_won'=> 'Won',
-	'games_lost'=> 'Lost',
-	'ratio'=> 'Win Percentage',
+	'games_played' => 'Played',
+	'games_won' => 'Won',
+	'games_lost' => 'Lost',
+	'ratio' => 'Win Percentage',
 	'this_week' => 'This week',
 	'this_season' => 'This season',
- 	'standings' => 'Standing :',
+	'standings' => 'Standing :',
 	'tot_found' => 'Total Found',
 	'arenateam' => 'Arena Team'
 	);
@@ -3959,6 +3956,7 @@ $lang_arenateam = array(
 	);
 
 $lang_events = array(
+	// ----- EVENTS.PHP -----
 	'total' => 'Total',
 	'descr' => 'Event name',
 	'start' => 'First Starting Time',
@@ -3968,6 +3966,7 @@ $lang_events = array(
 	);
 
 $lang_instances = array(
+	// ----- INSTANCES.PHP -----
 	'map' => 'Mapa',
 	'level_min' => 'Minimum level',
 	'level_max' => 'Maximum level',
@@ -3985,6 +3984,7 @@ $lang_instances = array(
 	);
 
 $lang_top = array(
+	// ----- TOP100.PHP -----
 	'name' => 'Name',
 	'race' => 'Race',
 	'class' => 'Class',

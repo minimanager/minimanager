@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -45,11 +45,11 @@ $lang_global = array(
 	'language_6' => 'Spanish',
 	'language_7' => 'Mexican',
 	'language_8' => 'Russian'
-);
+	);
 
 $lang_login = array(
 	// ----- LOGIN.PHP -----
-	'login' =>'Logg inn',
+	'login' => 'Logg inn',
 	'username' => 'Brukernavn',
 	'password' => 'Passord',
 	'not_registrated' => 'Ikke registrert?',
@@ -64,8 +64,8 @@ $lang_login = array(
 	'pass_recovery' => 'Lost Password?', //TODO
 	'after_registration' => 'Your account creation was successful!'
 	);
-// ----- GUILD.PHP -----
 $lang_guild = array(
+	// ----- GUILD.PHP -----
 	'my_guilds' => 'My Guilds',
 	'id' => 'ID',
 	'guild_name' => 'Guild Name',
@@ -76,7 +76,7 @@ $lang_guild = array(
 	'remove' => 'Rem.',
 	'guild_motd' => 'Guild MOTD',
 	'create_date' => 'Create Date',
-	'by_name' =>'by name',
+	'by_name' => 'by name',
 	'by_guild_leader' => 'by leader name',
 	'by_id' => 'by id',
 	'tot_guilds' => 'Total Guilds',
@@ -101,7 +101,7 @@ $lang_guild = array(
 
 $lang_register = array(
 	// ----- REGISTER.PHP -----
-	'create_acc' =>'Registrer',
+	'create_acc' => 'Registrer',
 	'username' => 'Brukernavn',
 	'use_eng_chars_limited_len' => 'Bruk kun Engelske tegn og nummer.<br />Min. Lengde 4 | Max. Lengde 14.',
 	'password' => 'Passord',
@@ -124,7 +124,6 @@ $lang_register = array(
 	'acc_type' => 'Account Type', //TODO
 	'acc_type_desc' => 'The type of Client will be used.', //TODO
 	'classic' => 'Classic',
-	'expansion' => 'Expansion',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'recover_acc_password' => 'Recover Account\'s Password', //TODO
@@ -148,7 +147,7 @@ $lang_register = array(
 
 $lang_index = array(
 	// ----- INDEX.PHP -----
-	'realm' =>'Realm:',
+	'realm' => 'Realm:',
 	'online' => 'er Online',
 	'offline_or_let_high' => 'Offline eller pingen er for høy',
 	'add_motd' => 'Legg til melding for dagen',
@@ -167,7 +166,7 @@ $lang_index = array(
 
 $lang_header = array(
 	// ----- HEADER.PHP -----
-	'main' =>'Hoved',
+	'main' => 'Hoved',
 	'accounts' => 'Kontoer',
 	'characters' => 'Personer',
 	'guilds' => 'Guild',
@@ -229,7 +228,7 @@ $lang_repair = array(
 
 $lang_backup = array(
 	// ----- BACKUP.PHP -----
-	'backup_options' =>'Sikkerhetskopi innstillinger',
+	'backup_options' => 'Sikkerhetskopi innstillinger',
 	'select_option' => 'Velg sikkerhetskopi innstilling',
 	'save' => 'Lagre',
 	'load' => 'Last',
@@ -259,7 +258,7 @@ $lang_backup = array(
 
 $lang_banned = array( //TODO
 	// ----- BANNED.PHP -----
-	'add_to_banned' =>'Add to Banned Lists',
+	'add_to_banned' => 'Add to Banned Lists',
 	'tot_banned' => 'Total Banned',
 	'ip_acc' => 'Ip / Account',
 	'will_be_removed_from_banned' => 'Will be removed from Banned List',
@@ -283,7 +282,7 @@ $lang_banned = array( //TODO
 
 $lang_char = array(
 	// ----- CHAR.PHP -----
-	'online' =>'Pålogget',
+	'online' => 'Pålogget',
 	'offline' => 'Avlogget',
 	'username' => 'Username',
 	'acc_id' => 'Account ID',
@@ -309,7 +308,7 @@ $lang_char = array(
 	'gold' => 'Gull',
 	'tot_paly_time' => 'Total Tid spillt',
 	'chars_acc' => 'Char\'s Account',
-	'send_mail' =>'Send InGame Mail',
+	'send_mail' => 'Send InGame Mail',
 	'del_char' => 'Slett person',
 	'no_char_found' => 'Ingen person funnet!',
 	'char_sheet' => 'Spiller info',
@@ -417,8 +416,8 @@ $lang_item = array(
 	'off_misc' => 'Off (Misc)',
 	'thrown' => 'Thrown',
 	'consumable' => 'Consumable',
-	'arrows' => 'Projectile - Arrows',
-	'bullets' => 'Projectile - Bullets',
+	'arrows' => 'Arrows',
+	'bullets' => 'Bullets',
 	'projectile' => 'Projectile',
 	'trade_goods' => 'Trade Goods',
 	'parts' => 'Parts',
@@ -472,12 +471,12 @@ $lang_item = array(
 	'other' => 'Other',
 	'damage' => 'Damage',
 	'speed' => 'Speed',
-	'holy_dmg' => 'Holy Damage',
-	'fire_dmg' => 'Fire Damage',
-	'nature_dmg' => 'Nature Damage',
-	'frost_dmg' => 'Frost Damage',
-	'shadow_dmg' => 'Shadow Damage',
-	'arcane_dmg' => 'Arcane Damage',
+	'holy_dmg' => 'Holy',
+	'fire_dmg' => 'Fire',
+	'nature_dmg' => 'Nature',
+	'frost_dmg' => 'Frost',
+	'shadow_dmg' => 'Shadow',
+	'arcane_dmg' => 'Arcane',
 	'physical_dmg' => 'Physical',
 	'lvl_req' => 'Requires Level',
 	'item_set' => 'Item Set',
@@ -487,12 +486,12 @@ $lang_item = array(
 	'energy' => 'Energy',
 	'rage' => 'Rage',
 	'runic' => 'Runic Power',
-	'res_arcane' => 'Arcane Resistance',
-	'res_holy' => 'Holy Resistance',
-	'res_fire' => 'Fire Resistance',
-	'res_nature' => 'Nature Resistance',
-	'res_frost' => 'Frost Resistance',
-	'res_shadow' => 'Shadow Resistance',
+	'res_arcane' => 'Arcane Resist',
+	'res_holy' => 'Holy Resist',
+	'res_fire' => 'Fire Resist',
+	'res_nature' => 'Nature Resist',
+	'res_frost' => 'Frost Resist',
+	'res_shadow' => 'Shadow Resist',
 	'strength' => 'Strength',
 	'agility' => 'Agility',
 	'stamina' => 'Stamina',
@@ -548,11 +547,11 @@ $lang_item = array(
 	'CA_RATING' => 'Crit Avoid',
 	'RESILIENCE_RATING' => 'Resistance',
 	'HASTE_RATING' => 'Haste'
-);
+	);
 
 $lang_char_list = array(
 	// ----- CHAR_LIST.PHP -----
-	'cleanup' =>'Opprydding',
+	'cleanup' => 'Opprydding',
 	'by_name' => 'ved navn',
 	'by_id' => 'ved id',
 	'by_account' => 'ved konto',
@@ -592,7 +591,7 @@ $lang_char_list = array(
 
 $lang_cleanup = array(
 	// ----- CLEANUP.PHP -----
-	'cleanup_options' =>'Opprydnings alternativer',
+	'cleanup_options' => 'Opprydnings alternativer',
 	'clean_chars' => 'Rydd personer',
 	'char_level' => 'Person level',
 	'tot_play_time' => 'Totalt spilletid (sec)',
@@ -623,7 +622,7 @@ $lang_cleanup = array(
 
 $lang_edit = array(
 	// ----- EDIT.PHP -----
-	'edit_acc' =>'Endre konto',
+	'edit_acc' => 'Endre konto',
 	'id' => 'ID',
 	'username' => 'Brukernavn',
 	'password' => 'Passord',
@@ -648,7 +647,6 @@ $lang_edit = array(
 	  //TODO
 	'client_type' => 'Client Type',
 	'classic' => 'Classic',
-	'expansion' => 'Expansion',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'tot_chars' => 'Total Characters',
@@ -749,7 +747,7 @@ $lang_realm = array(
 	'tournament' => 'Tournament',
 	'korea' => 'Korea',
 	'english' => 'Engelsk',
-	'deutsch' => 'Tysk',
+	'german' => 'Tysk',
 	'french' => 'Fransk',
 	'spanish' => 'Spanish',
 	'russian' => 'Russian',
@@ -757,7 +755,7 @@ $lang_realm = array(
 	'china' => 'China',
 	'test_server' => 'Test Server',
 	'qa_server' => 'QA Server',
-	'spanish' => 'Spanish',
+	'others' => 'Others',
 	'conf_from_file' => '** This realm appear not to have proper configuration in config.php file.<br />Make sure to properly configure it before using under CMS.',
 	'offline' => 'Offline',
 	'status' => 'Status'
@@ -765,7 +763,7 @@ $lang_realm = array(
 
 $lang_ticket = array(
 	// ----- TICKET.PHP -----
-	'id' =>'ID',
+	'id' => 'ID',
 	'sender' => 'Sender',
 	'ticket_text' => 'Ticket Tekst',
 	'category' => 'Kategori',
@@ -859,7 +857,6 @@ $lang_user = array(
 	'expansion_account' => 'TBC Account',
 	'client_type' => 'Client Type',
 	'classic' => 'Classic',
-	'expansion' => 'Expansion',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK'
 	);
@@ -886,7 +883,7 @@ $lang_stat = array(
 	'uptime_prec' => ' Uptime percentage since first run',
 	'unique_ip' => 'Unique IPs last 24 Hour',
 	'on_statistics' => 'Online Statistics'
-);
+	);
 
 $lang_tele = array(
 	// ----- TELE.PHP -----
@@ -914,7 +911,7 @@ $lang_tele = array(
 	'tele_locations' => 'Teleport plassering',
 	'add_new' => 'Legg til ny',
 	'add_new_tele' => 'Legg til ny teleport plassering'
-);
+	);
 
 $lang_command = array(
 	// ----- COMMAND.PHP -----
@@ -1170,7 +1167,7 @@ $lang_item_edit = array( //TODO :Translate entire array
 	'condition_value1_desc' => 'Condition Value 1 flag',
 	'condition_value2' => 'Condition Value 2',
 	'condition_value2_desc' => 'Condition Value 2 flag',
-);
+	);
 
 $lang_creature = array( //TODO :Translate entire array
 	// ----- CREATURE.PHP -----
@@ -1351,8 +1348,6 @@ $lang_creature = array( //TODO :Translate entire array
 	'walk' => 'Walk',
 	'swim' => 'Swim',
 	'both' => 'Both',
-	'civilian' => 'Civilian',
-	'civilian_desc' => 'If is this NPC civilian or not.',
 	'flags_extra' => 'Flags Extra',
 	'flags_extra_desc' => 'TODO:',
 	'flags' => 'Flags',
@@ -1588,7 +1583,7 @@ $lang_game_object = array( //TODO:
 	'datas' => 'Additional Datas',
 	'data' => 'Data',
 	'data_desc' => 'Data fields specific for different type field values. Each type has unique fields.<br />For more informaton visit https://svn.mangosproject.org/trac /MaNGOS/wiki/Database /gameobject_template'
-);
+	);
 
 $lang_auctionhouse = array( //TODO
 	// ----- AHSTATS.PHP -----
@@ -1612,9 +1607,10 @@ $lang_auctionhouse = array( //TODO
 	'seller_name' => 'Seller Name',
 	'buyer_name' => 'Buyer Name',
 	'tot_found' => 'Total Items Found'
-);
+	);
 
 $lang_id_tab = array(
+	// ----- ID_TAB.PHP -----
 	'TALENT_STARLIGHT_WRATH_1' => 'Starlight Wrath Rank 1',
 	'TALENT_STARLIGHT_WRATH_2' => 'Starlight Wrath Rank 2',
 	'TALENT_STARLIGHT_WRATH_3' => 'Starlight Wrath Rank 3',
@@ -3677,7 +3673,7 @@ $lang_id_tab = array(
 	'Alliance' => 'Alliance',
 	'Horde' => 'Horde',
 	//------char rankings------
-	'None'=> 'None',
+	'None' => 'None',
 	'Private' => 'Private',
 	'Corporal' => 'Corporal',
 	'Sergeant' => 'Sergeant',
@@ -3843,7 +3839,7 @@ $lang_id_tab = array(
 	'PET_ABILITY_THUNDERSTOMP_RANK_3' => 'Thunderstomp Rank 3',
 	'PET_ABILITY_THUNDERSTOMP_RANK_4' => 'Thunderstomp Rank 4',
 	'PET_ABILITY_WARP' => 'Warp',
-	//character auras
+	// ----- character auras -----
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_1' => 'Arcane Intellect Rank 1',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_2' => 'Arcane Intellect Rank 2',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_3' => 'Arcane Intellect Rank 3',
@@ -3900,9 +3896,10 @@ $lang_id_tab = array(
 	'CHAR_AURA_TRUESHOT_AURA_RANK_3' => 'Trueshot Aura Rank 3',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Trueshot Aura Rank 4',
 	);
+
 $lang_arenateam = array(
 	// ----- ARENATEAM.PHP -----
-	'by_name' =>'by Name',
+	'by_name' => 'by Name',
 	'by_team_leader' => 'by Arena Team Leader',
 	'by_id' => 'by Arena Team Id',
 	'id' => 'Id',
@@ -3935,16 +3932,17 @@ $lang_arenateam = array(
 	'wons_season' => 'Games won this season',
 	'arenateams' => 'Arena Teams',
 	'del_team' => 'Delete Arena Team',
-	'games_played'=> 'Played',
-	'games_won'=> 'Won',
-	'games_lost'=> 'Lost',
-	'ratio'=> 'Win Percentage',
+	'games_played' => 'Played',
+	'games_won' => 'Won',
+	'games_lost' => 'Lost',
+	'ratio' => 'Win Percentage',
 	'this_week' => 'This week',
 	'this_season' => 'This season',
 	'standings' => 'Standing :',
 	'tot_found' => 'Total Found',
 	'arenateam' => 'Arena Team'
 	);
+
 $lang_honor = array(
 	// ----- HONOR.PHP -----
 	'allied' => 'Alliance',
@@ -3958,7 +3956,9 @@ $lang_honor = array(
 	'honor' => 'Rank',
 	'guild' => 'Guild'
 	);
+
 $lang_events = array(
+	// ----- EVENTS.PHP -----
 	'total' => 'Total',
 	'descr' => 'Event name',
 	'start' => 'First Starting Time',
@@ -3966,13 +3966,16 @@ $lang_events = array(
 	'length' => 'Length<br><small>days/hours',
 	'events' => 'Events'
 	);
+
 $lang_instances = array(
+	// ----- INSTANCES.PHP -----
 	'map' => 'Map',
 	'level_min' => 'Minimum level',
 	'level_max' => 'Maximum level',
 	'max_players' => 'Maximum players',
 	'reset_delay' => 'Reset delay',
 	);
+
 $lang_captcha = array(
 	// ----- FORM.PHP -----
 	'security_image' => 'Security Image',
@@ -3981,7 +3984,9 @@ $lang_captcha = array(
 	'submit' => 'Submit',
 	'invalid_code' => 'Invalid Code!'
 	);
+
 $lang_top = array(
+	// ----- TOP100.PHP -----
 	'name' => 'Name',
 	'race' => 'Race',
 	'class' => 'Class',
@@ -3995,4 +4000,5 @@ $lang_top = array(
 	'time_played' => 'Time Played',
 	'online' => 'Online'
 	);
+
 ?>

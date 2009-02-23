@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -45,11 +45,11 @@ $lang_global = array(
 	'language_6' => 'Spanish',
 	'language_7' => 'Mexican',
 	'language_8' => 'Russian'
-);
+	);
 
 $lang_login = array(
 	// ----- LOGIN.PHP ----- Pagina Login
-	'login' =>'Login',
+	'login' => 'Login',
 	'username' => 'Nome Utente',
 	'password' => 'Password',
 	'not_registrated' => 'Non sei registrato?',
@@ -65,8 +65,8 @@ $lang_login = array(
 	'after_registration' => 'Your account creation was successful!'
 	);
 
-// ----- GUILD.PHP -----
 $lang_guild = array(
+	// ----- GUILD.PHP -----
 	'my_guilds' => 'My Guilds',
 	'id' => 'ID',
 	'guild_name' => 'Guild Name',
@@ -77,7 +77,7 @@ $lang_guild = array(
 	'remove' => 'Rem.',
 	'guild_motd' => 'Guild MOTD',
 	'create_date' => 'Create Date',
-	'by_name' =>'by name',
+	'by_name' => 'by name',
 	'by_guild_leader' => 'by leader name',
 	'by_id' => 'by id',
 	'tot_guilds' => 'Total Guilds',
@@ -102,7 +102,7 @@ $lang_guild = array(
 
 $lang_register = array(
 	// ----- REGISTER.PHP ----- Pagina Registrazione
-	'create_acc' =>'Crea Account',
+	'create_acc' => 'Crea Account',
 	'username' => 'Nome Utente',
 	'use_eng_chars_limited_len' => 'Caratteri permessi: "az" - "09".<br />Lunghezza min. 4 | Lunghezza max. 14.',
 	'password' => 'Password',
@@ -148,7 +148,7 @@ $lang_register = array(
 
 $lang_index = array(
 	// ----- INDEX.PHP -----
-	'realm' =>'Reame',
+	'realm' => 'Reame',
 	'online' => 'Connesso',
 	'offline_or_let_high' => 'Disconesso o Ritardo elevato',
 	'add_motd' => 'Aggiungi "Messaggio del Giorno"',
@@ -167,7 +167,7 @@ $lang_index = array(
 
 $lang_header = array(
 	// ----- HEADER.PHP -----
-	'main' =>'Index',
+	'main' => 'Index',
 	'accounts' => 'Accounts',
 	'characters' => 'Personaggi',
 	'guilds' => 'Gilde',
@@ -230,7 +230,7 @@ $lang_repair = array(
 
 $lang_backup = array(
 	// ----- BACKUP.PHP -----
-	'backup_options' =>'Opzioni Backup',
+	'backup_options' => 'Opzioni Backup',
 	'select_option' => 'Seleziona Opzioni Backup',
 	'save' => 'Salva',
 	'load' => 'Carica',
@@ -260,7 +260,7 @@ $lang_backup = array(
 
 $lang_banned = array(
 	// ----- BANNED.PHP -----
-	'add_to_banned' =>'Aggiungi alla Lista',
+	'add_to_banned' => 'Aggiungi alla Lista',
 	'tot_banned' => 'Totale Bannati',
 	'ip_acc' => 'Ip / Account',
 	'will_be_removed_from_banned' => 'Verrà rimosso dalla Lista Ban',
@@ -284,7 +284,7 @@ $lang_banned = array(
 
 $lang_char = array(
 	// ----- CHAR.PHP -----
-	'online' =>'Connessi',
+	'online' => 'Connessi',
 	'offline' => 'Disconnessi',
 	'username' => 'Username',
 	'acc_id' => 'Account ID',
@@ -310,7 +310,7 @@ $lang_char = array(
 	'gold' => 'Oro',
 	'tot_paly_time' => 'Tempo Totale Giocato',
 	'chars_acc' => 'Account Personaggio',
-	'send_mail' =>'Invia una mail nel gioco',
+	'send_mail' => 'Invia una mail nel gioco',
 	'del_char' => 'Cancella Personaggio',
 	'no_char_found' => 'Nessun Personaggio Trovato!',
 	'char_sheet' => 'Scheda Personaggio',
@@ -333,7 +333,7 @@ $lang_char = array(
 	'talent_id' => 'ID',
 	'talent_name' => 'Talent Name',
 	'talent_value' => 'Value',
-	// --- $skill_rank_array ---
+	// --- skill_rank_array ---
 	'apprentice' => 'Apprendista',
 	'journeyman' => 'Maniscalco',
 	'expert' => 'Esperto',
@@ -548,11 +548,11 @@ $lang_item = array(
 	'CA_RATING' => 'Incremento Critico',
 	'RESILIENCE_RATING' => 'Resistenza',
 	'HASTE_RATING' => 'Velocità'
-);
+	);
 
 $lang_char_list = array(
 	// ----- CHAR_LIST.PHP -----
-	'cleanup' =>'Pulisci',
+	'cleanup' => 'Pulisci',
 	'by_name' => 'per nome',
 	'by_id' => 'per ID',
 	'by_account' => 'per Account',
@@ -592,7 +592,7 @@ $lang_char_list = array(
 
 $lang_cleanup = array(
 	// ----- CLEANUP.PHP -----
-	'cleanup_options' =>'Opzioni Pulizia',
+	'cleanup_options' => 'Opzioni Pulizia',
 	'clean_chars' => 'Pulisci Personaggi',
 	'char_level' => 'Livello Personaggio',
 	'tot_play_time' => 'Tempo totale giocato (sec)',
@@ -623,7 +623,7 @@ $lang_cleanup = array(
 
 $lang_edit = array(
 	// ----- EDIT.PHP -----
-	'edit_acc' =>'Modifica il tuo Account',
+	'edit_acc' => 'Modifica il tuo Account',
 	'id' => 'ID',
 	'username' => 'Nome Utente',
 	'password' => 'Password',
@@ -647,7 +647,6 @@ $lang_edit = array(
 	'save' => 'Salva',
 	'client_type' => 'Tipo Client',
 	'classic' => 'Originale',
-	'expansion' => 'Espansione',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'tot_chars' => 'Totale Personaggi',
@@ -756,7 +755,7 @@ $lang_realm = array(
 	'china' => 'China',
 	'test_server' => 'Test Server',
 	'qa_server' => 'QA Server',
-	'spanish' => 'Spanish',
+	'others' => 'Others',
 	'conf_from_file' => '** Questo reame probabilmente non possiede un\'appropriata configurazione nel file config.php.<br />Assicurati di configurarlo correttamente prima di usare il CMS.',
 	'offline' => 'Offline',
 	'status' => 'Stato'
@@ -764,7 +763,7 @@ $lang_realm = array(
 
 $lang_ticket = array(
 	// ----- TICKET.PHP -----
-	'id' =>'ID',
+	'id' => 'ID',
 	'sender' => 'Mittente',
 	'ticket_text' => 'Testo tcket',
 	'category' => 'Categoria',
@@ -857,7 +856,6 @@ $lang_user = array(
 	'expansion_account' => 'Account TBC',
 	'client_type' => 'Tipo Client',
 	'classic' => 'Originale',
-	'expansion' => 'Espansione',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK'
 	);
@@ -884,7 +882,7 @@ $lang_stat = array(
 	'uptime_prec' => 'Percentuale tempo online dalla prima apertura',
 	'unique_ip' => 'Unici IPS delle ultime 24 ore',
 	'on_statistics' => 'Online Statistics'
-);
+	);
 
 $lang_tele = array(
 	// ----- TELE.PHP -----
@@ -912,7 +910,7 @@ $lang_tele = array(
 	'tele_locations' => 'Teletrasporti',
 	'add_new' => 'Aggiungi',
 	'add_new_tele' => 'Aggiungi nuova locazione teletrasporto'
-);
+	);
 
 $lang_command = array(
 	// ----- COMMAND.PHP -----
@@ -1167,7 +1165,7 @@ $lang_item_edit = array(
 	'condition_value1_desc' => 'Condition Value 1 flag',
 	'condition_value2' => 'Condition Value 2',
 	'condition_value2_desc' => 'Condition Value 2 flag',
-);
+	);
 
 $lang_creature = array(
 	// ----- CREATURE.PHP -----
@@ -1583,7 +1581,7 @@ $lang_game_object = array(
 	'datas' => 'Additional Datas',
 	'data' => 'Data',
 	'data_desc' => 'Data fields specific for different type field values. Each type has unique fields.<br />For more informaton visit https://svn.mangosproject.org/trac /MaNGOS/wiki/Database /gameobject_template'
-);
+	);
 
 $lang_auctionhouse = array(
 	// ----- AHSTATS.PHP -----
@@ -1610,6 +1608,7 @@ $lang_auctionhouse = array(
 );
 
 $lang_id_tab = array(
+	// ----- ID_TAB.PHP -----
 	'TALENT_STARLIGHT_WRATH_1' => 'Starlight Wrath Rank 1',
 	'TALENT_STARLIGHT_WRATH_2' => 'Starlight Wrath Rank 2',
 	'TALENT_STARLIGHT_WRATH_3' => 'Starlight Wrath Rank 3',
@@ -3672,7 +3671,7 @@ $lang_id_tab = array(
 	'Alliance' => 'Alleanza',
 	'Horde' => 'Orda',
 	//------char rankings------
-	'None'=> 'None',
+	'None' => 'None',
 	'Private' => 'Private',
 	'Corporal' => 'Corporal',
 	'Sergeant' => 'Sergeant',
@@ -3838,7 +3837,7 @@ $lang_id_tab = array(
 	'PET_ABILITY_THUNDERSTOMP_RANK_3' => 'Thunderstomp Rank 3',
 	'PET_ABILITY_THUNDERSTOMP_RANK_4' => 'Thunderstomp Rank 4',
 	'PET_ABILITY_WARP' => 'Warp',
-	//character auras
+	// ----- character auras -----
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_1' => 'Arcane Intellect Rank 1',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_2' => 'Arcane Intellect Rank 2',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_3' => 'Arcane Intellect Rank 3',
@@ -3893,12 +3892,12 @@ $lang_id_tab = array(
 	'CHAR_AURA_TRUESHOT_AURA_RANK_1' => 'Trueshot Aura Rank 1',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_2' => 'Trueshot Aura Rank 2',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_3' => 'Trueshot Aura Rank 3',
-	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Trueshot Aura Rank 4'
+	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Trueshot Aura Rank 4',
 	);
 
 $lang_arenateam = array(
 	// ----- ARENATEAM.PHP -----
-	'by_name' =>'per Nome',
+	'by_name' => 'per Nome',
 	'by_team_leader' => 'per leader Team Arena',
 	'by_id' => 'per ID Team Arena',
 	'id' => 'Id',
@@ -3931,10 +3930,10 @@ $lang_arenateam = array(
 	'wons_season' => 'Battaglie vinte in questa stagione',
 	'arenateams' => 'Teams Arena',
 	'del_team' => 'Cancella Team Arena',
-	'games_played'=> 'Giocate',
-	'games_won'=> 'Vittorie',
-	'games_lost'=> 'Sconfitte',
-	'ratio'=> '% Vittorie',
+	'games_played' => 'Giocate',
+	'games_won' => 'Vittorie',
+	'games_lost' => 'Sconfitte',
+	'ratio' => '% Vittorie',
 	'this_week' => 'Questa settimana',
 	'this_season' => 'Questa stagione',
 	'standings' => 'In attesa :',
@@ -3957,6 +3956,7 @@ $lang_arenateam = array(
 	);
 
 $lang_events = array(
+	// ----- EVENTS.PHP -----
 	'total' => 'Totale',
 	'descr' => 'Nome Evento',
 	'start' => 'Apertura Server',
@@ -3966,6 +3966,7 @@ $lang_events = array(
 	);
 
 $lang_instances = array(
+	// ----- INSTANCES.PHP -----
 	'map' => 'Map',
 	'level_min' => 'Minimum level',
 	'level_max' => 'Maximum level',
@@ -3981,7 +3982,9 @@ $lang_captcha = array(
 	'submit' => 'Submit',
 	'invalid_code' => 'Invalid Code!'
 	);
+
 $lang_top = array(
+	// ----- TOP100.PHP -----
 	'name' => 'Name',
 	'race' => 'Race',
 	'class' => 'Class',

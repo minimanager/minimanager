@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
@@ -45,11 +45,11 @@ $lang_global = array(
 	'language_6' => 'Spanish',
 	'language_7' => 'Mexican',
 	'language_8' => 'Russian'
-);
+	);
 
 $lang_login = array(
 	// ----- LOGIN.PHP -----
-	'login' =>'Inicio de sesión',
+	'login' => 'Inicio de sesión',
 	'username' => 'Nombre de Usuario',
 	'password' => 'Contraseña',
 	'not_registrated' => 'Creación de cuentas',
@@ -65,8 +65,8 @@ $lang_login = array(
 	'after_registration' => 'Your account creation was successful!'
 	);
 
-// ----- GUILD.PHP -----
 $lang_guild = array(
+	// ----- GUILD.PHP -----
 	'my_guilds' => 'Mis Clanes',
 	'id' => 'ID',
 	'guild_name' => 'Nombre de Clan',
@@ -77,7 +77,7 @@ $lang_guild = array(
 	'remove' => 'Rem.',
 	'guild_motd' => 'Mensaje Del Dia para el Clan',
 	'create_date' => 'Fecha de Fundación',
-	'by_name' =>'por nombre',
+	'by_name' => 'por nombre',
 	'by_guild_leader' => 'por lider de clan',
 	'by_id' => 'por id',
 	'tot_guilds' => 'Total de Clanes',
@@ -100,10 +100,9 @@ $lang_guild = array(
 	'browse_guilds' => 'Explorador de Clanes'
 	);
 
-
 $lang_register = array(
 	// ----- REGISTER.PHP -----
-	'create_acc' =>'Registro de Cuenta',
+	'create_acc' => 'Registro de Cuenta',
 	'username' => 'Nombre de usuario',
 	'use_eng_chars_limited_len' => 'Use caracteres y números en ingles.<br/> Min. 4 caracteres|Máx. 14 caracteres.',
 	'password' => 'Contraseña',
@@ -126,7 +125,6 @@ $lang_register = array(
 	'acc_type' => 'Tipo de Cuenta',
 	'acc_type_desc' => 'El tipo de cliente que sera usado.',
 	'classic' => 'WOW Clasico',
-	'expansion' => 'WOW TBC Expansión',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'recover_acc_password' => 'Recuperar la contraseña de la cuenta',
@@ -149,7 +147,7 @@ $lang_register = array(
 
 $lang_index = array(
 	// ----- INDEX.PHP -----
-	'realm' =>'Reino',
+	'realm' => 'Reino',
 	'online' => 'Conectado',
 	'offline_or_let_high' => 'Fuera de línea o de latencia demasiado alta',
 	'add_motd' => 'Añadir Mensaje del Día',
@@ -168,7 +166,7 @@ $lang_index = array(
 
 $lang_header = array(
 	// ----- HEADER.PHP -----
-	'main' =>'Inicio',
+	'main' => 'Inicio',
 	'accounts' => 'Cuentas',
 	'characters' => 'Personajes',
 	'guilds' => 'Clanes',
@@ -230,7 +228,7 @@ $lang_repair = array(
 
 $lang_backup = array(
 	// ----- BACKUP.PHP -----
-	'backup_options' =>'Opciones de copia de seguridad',
+	'backup_options' => 'Opciones de copia de seguridad',
 	'select_option' => 'Seleccione las opciones de copia de seguridad',
 	'save' => 'Guardar',
 	'load' => 'Cargar',
@@ -260,7 +258,7 @@ $lang_backup = array(
 
 $lang_banned = array(
 	// ----- BANNED.PHP -----
-	'add_to_banned' =>'Añadir a listas Baneado',
+	'add_to_banned' => 'Añadir a listas Baneado',
 	'tot_banned' => 'Total de Baneados',
 	'ip_acc' => 'Ip / Cuenta',
 	'will_be_removed_from_banned' => 'Se eliminará la lista de baneados',
@@ -284,7 +282,7 @@ $lang_banned = array(
 
 $lang_char = array(
 	// ----- CHAR.PHP -----
-	'online' =>'En línea',
+	'online' => 'En línea',
 	'offline' => 'Fuera de línea',
 	'username' => 'Username',
 	'acc_id' => 'Account ID',
@@ -310,7 +308,7 @@ $lang_char = array(
 	'gold' => 'Oro',
 	'tot_paly_time' => 'El tiempo total jugado',
 	'chars_acc' => 'Cuenta',
-	'send_mail' =>'Enviar correo en Juego',
+	'send_mail' => 'Enviar correo en Juego',
 	'del_char' => 'Eliminar Personaje',
 	'no_char_found' => 'No se encontro personaje!',
 	'char_sheet' => 'Perfil',
@@ -548,11 +546,11 @@ $lang_item = array(
 	'CA_RATING' => 'Crit Avoid',
 	'RESILIENCE_RATING' => 'Resistencia',
 	'HASTE_RATING' => 'Haste'
-);
+	);
 
 $lang_char_list = array(
 	// ----- CHAR_LIST.PHP -----
-	'cleanup' =>'Limpiar',
+	'cleanup' => 'Limpiar',
 	'by_name' => 'por nombre',
 	'by_id' => 'por id',
 	'by_account' => 'por cuenta',
@@ -592,7 +590,7 @@ $lang_char_list = array(
 
 $lang_cleanup = array(
 	// ----- CLEANUP.PHP -----
-	'cleanup_options' =>'Opciones de Limpieza',
+	'cleanup_options' => 'Opciones de Limpieza',
 	'clean_chars' => 'Limpiar Personajes',
 	'char_level' => 'Nivel de personaje',
 	'tot_play_time' => 'Total de tiempo jugado (seg.)',
@@ -623,7 +621,7 @@ $lang_cleanup = array(
 
 $lang_edit = array(
 	// ----- EDIT.PHP -----
-	'edit_acc' =>'Editar su cuenta',
+	'edit_acc' => 'Editar su cuenta',
 	'id' => 'ID',
 	'username' => 'Nombre de Usuario',
 	'password' => 'Contraseña',
@@ -647,13 +645,11 @@ $lang_edit = array(
 	'save' => 'Guardar',
 	'client_type' => 'Tipo de Cliente',
 	'classic' => 'WOW Clasico',
-	'expansion' => 'WOW TBC Expansión',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'tot_chars' => 'Total de Personajes',
 	'invited_by' => 'Invited By'
 	);
-
 
 $lang_mail = array(
 	// ----- MAIL.PHP -----
@@ -757,7 +753,7 @@ $lang_realm = array(
 	'china' => 'China',
 	'test_server' => 'Test Server',
 	'qa_server' => 'QA Server',
-	'spanish' => 'Spanish',
+	'others' => 'Others',
 	'conf_from_file' => '** Este reino no parece tener la configuración adecuada en el archivo config.php. <br /> Asegúrese de configurar correctamente antes de usar el marco de la CMS.',
 	'offline' => 'Desconectado',
 	'status' => 'Estado'
@@ -765,7 +761,7 @@ $lang_realm = array(
 
 $lang_ticket = array(
 	// ----- TICKET.PHP -----
-	'id' =>'ID',
+	'id' => 'ID',
 	'sender' => 'Remitente',
 	'ticket_text' => 'Texto de Boleto',
 	'category' => 'Categoria',
@@ -858,7 +854,6 @@ $lang_user = array(
 	'expansion_account' => 'Cuenta TBC',
 	'client_type' => 'Tipo de clientes',
 	'classic' => 'WOW Clasico',
-	'expansion' => 'WOW TBC Expansión',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK'
 	);
@@ -885,7 +880,7 @@ $lang_stat = array(
 	'uptime_prec' => ' Porcentaje de Actividad desde que se inicio',
 	'unique_ip' => 'Ips unicos en las ultimas 24 Horas',
 	'on_statistics' => 'Estadísticas en línea'
-);
+	);
 
 $lang_tele = array(
 	// ----- TELE.PHP -----
@@ -913,7 +908,7 @@ $lang_tele = array(
 	'tele_locations' => 'Lugares a Transportarse',
 	'add_new' => 'Añadir Nuevo',
 	'add_new_tele' => 'Añadir Nueva Lugar a Transportarse'
-);
+	);
 
 $lang_command = array(
 	// ----- COMMAND.PHP -----
@@ -1168,7 +1163,7 @@ $lang_item_edit = array(
 	'condition_value1_desc' => 'Condition Value 1 flag',
 	'condition_value2' => 'Condition Value 2',
 	'condition_value2_desc' => 'Condition Value 2 flag',
-);
+	);
 
 $lang_creature = array(
 	// ----- CREATURE.PHP -----
@@ -1584,8 +1579,7 @@ $lang_game_object = array(
 	'datas' => 'Additional Datas',
 	'data' => 'Data',
 	'data_desc' => 'Data fields specific for different type field values. Each type has unique fields.<br />For more informaton visit https://svn.mangosproject.org/trac /MaNGOS/wiki/Database /gameobject_template'
-
-);
+	);
 
 $lang_auctionhouse = array(
 	// ----- AHSTATS.PHP -----
@@ -1609,9 +1603,10 @@ $lang_auctionhouse = array(
 	'seller_name' => 'Nombre del Vendedor',
 	'buyer_name' => 'Nombre del Comprador',
 	'tot_found' => 'Total de Items Encontrados'
-);
+	);
 
 $lang_id_tab = array(
+	// ----- ID_TAB.PHP -----
 	'TALENT_STARLIGHT_WRATH_1' => 'Starlight Wrath Rank 1',
 	'TALENT_STARLIGHT_WRATH_2' => 'Starlight Wrath Rank 2',
 	'TALENT_STARLIGHT_WRATH_3' => 'Starlight Wrath Rank 3',
@@ -3674,7 +3669,7 @@ $lang_id_tab = array(
 	'Alliance' => 'Alianza',
 	'Horde' => 'Horda',
 	//------char rankings------
-	'None'=> 'Nada',
+	'None' => 'Nada',
 	'Private' => 'Soldado',
 	'Corporal' => 'Cabo',
 	'Sergeant' => 'Sargento',
@@ -3840,7 +3835,7 @@ $lang_id_tab = array(
 	'PET_ABILITY_THUNDERSTOMP_RANK_3' => 'Thunderstomp Rank 3',
 	'PET_ABILITY_THUNDERSTOMP_RANK_4' => 'Thunderstomp Rank 4',
 	'PET_ABILITY_WARP' => 'Warp',
-	//character auras
+	// ----- character auras -----
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_1' => 'Arcane Intellect Rank 1',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_2' => 'Arcane Intellect Rank 2',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_3' => 'Arcane Intellect Rank 3',
@@ -3895,13 +3890,13 @@ $lang_id_tab = array(
 	'CHAR_AURA_TRUESHOT_AURA_RANK_1' => 'Trueshot Aura Rank 1',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_2' => 'Trueshot Aura Rank 2',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_3' => 'Trueshot Aura Rank 3',
-	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Trueshot Aura Rank 4'
+	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Trueshot Aura Rank 4',
 	);
 
 
 $lang_arenateam = array(
 	// ----- ARENATEAM.PHP -----
-	'by_name' =>'por Nombre',
+	'by_name' => 'por Nombre',
 	'by_team_leader' => 'por Lider de Equipo',
 	'by_id' => 'por ID de Equipo de Arena',
 	'id' => 'Id',
@@ -3934,10 +3929,10 @@ $lang_arenateam = array(
 	'wons_season' => 'Juegos Ganados esta temporada',
 	'arenateams' => 'Equipos de Arena',
 	'del_team' => 'Eliminar Equipo',
-	'games_played'=> 'Jugadas',
-	'games_won'=> 'Ganadas',
-	'games_lost'=> 'Perdida',
-	'ratio'=> 'Porcentaje de Victorias',
+	'games_played' => 'Jugadas',
+	'games_won' => 'Ganadas',
+	'games_lost' => 'Perdida',
+	'ratio' => 'Porcentaje de Victorias',
 	'this_week' => 'Esta Semana',
 	'this_season' => 'Esta Temporada',
 	'standings' => 'Esperando :',
@@ -3960,6 +3955,7 @@ $lang_arenateam = array(
 	);
 
 $lang_events = array(
+	// ----- EVENTS.PHP -----
 	'total' => 'Total',
 	'descr' => 'Nombre de Evento',
 	'start' => 'Inicia el',
@@ -3969,6 +3965,7 @@ $lang_events = array(
 	);
 
 $lang_instances = array(
+	// ----- INSTANCES.PHP -----
 	'map' => 'Mapa',
 	'level_min' => 'Nivel Minimo',
 	'level_max' => 'Nivel Maximo',
@@ -3986,6 +3983,7 @@ $lang_captcha = array(
 	);
 
 $lang_top = array(
+	// ----- TOP100.PHP -----
 	'name' => 'Name',
 	'race' => 'Race',
 	'class' => 'Class',
