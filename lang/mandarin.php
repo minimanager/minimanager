@@ -168,6 +168,7 @@ $lang_index = array(
 $lang_header = array(
 	// ----- HEADER.PHP -----
 	'main' =>'ÍøÕ¾Ö÷Ò³',
+	'users' => 'Íæ¼Ò²Ëµ¥',
 	'accounts' => 'Íæ¼ÒÕÊºÅ',
 	'characters' => 'ÈËÎï½ÇÉ«',
 	'guilds' => 'ÓÎÏ·¹«»á',

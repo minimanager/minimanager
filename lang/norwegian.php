@@ -167,6 +167,7 @@ $lang_index = array(
 $lang_header = array(
 	// ----- HEADER.PHP -----
 	'main' => 'Hoved',
+	'users' => 'Brukere',
 	'accounts' => 'Kontoer',
 	'characters' => 'Personer',
 	'guilds' => 'Guild',

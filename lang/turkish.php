@@ -168,6 +168,7 @@ $lang_index = array(
 $lang_header = array(
 	// ----- HEADER.PHP -----
 	'main' => 'Ana Menü',
+	'users' => 'Kullanýcýlar',
 	'accounts' => 'Hesaplar',
 	'characters' => 'Karakterler',
 	'guilds' => 'Guild Listesi',
