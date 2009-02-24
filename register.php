@@ -231,8 +231,9 @@ $referred_by = $_GET['ref'];
   	 <td valign=\"top\">{$lang_register['invited_by']}:</td>
   	 <td><input type=\"text\" name=\"referredby\" value=\"$referred_by\" size=\"45\" maxlength=\"12\" /><br />
 	 {$lang_register['invited_info']}</td>
-      </tr>
-	  <tr><td></td>
+      </tr>";
+  if ( $enable_captcha ) {
+      $output .= "<tr><td></td>
 	  <td><img src=\"captcha/CaptchaSecurityImages.php?width=300&height=80&characters=6\" /><br /><br /></td>
 	  </tr>
 	  <tr>
@@ -240,6 +241,7 @@ $referred_by = $_GET['ref'];
 	  <td><input type=\"text\" name=\"security_code\" size=\"45\" /><br />
 	  </td>
 	  </tr>";
+}
   if ( $expansion_select ) {
       $output .= "<tr>
   	 <td valign=\"top\">{$lang_register['acc_type']}:</td>

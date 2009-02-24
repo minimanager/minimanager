@@ -10,6 +10,7 @@
 
 require_once("header.php");
 valid_login($action_permission['read']);
+require_once("scripts/defines.php");
 
 //##############################################################################################################
 // EDIT USER
@@ -106,7 +107,7 @@ else
       </tr>";
 
 	$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-	$result = $sql->query("SELECT guid,name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 35), ' ', -1) FROM `characters` WHERE account = $user_id");
+	$result = $sql->query("SELECT guid,name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) FROM `characters` WHERE account = $user_id");
 
 	$output .= "<tr>
         <td>{$lang_edit['characters']}</td>
