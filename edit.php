@@ -228,32 +228,6 @@ function doedit_user() {
 		redirect("edit.php?error=4");
 	}
 }
-function doupdate_referral($mmfpm_db, $user_id) {
- global $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id;
- $result = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = '$user_id';"));
- $result = $result[0];
- if ($result == NULL)
-  {
-   $referredby = $_POST['referredby'];
-   $referred_by = mysql_fetch_row(mysql_query("SELECT `guid` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `name` = '$referredby';"));
-   $referred_by = $referred_by[0];
-
-   if ($referred_by != NULL)
-    {
-     $result = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `id` = (SELECT `account` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `guid`='$referred_by');"));
-     $result = $result[0];
-     if ($result != NULL)
-      {
-       if ($result != $user_id)
-        {
-         mysql_query("INSERT INTO `$mmfpm_db[name]`.`point_system_invites` (`PlayersAccount`, `InvitedBy`, `InviterAccount`) VALUES ('$user_id', '$referred_by', '$result');");
-         redirect("edit.php?error=3");
-        }
-      }
-      else redirect("edit.php?error=4");
-     }
-   }
-}
 
 //###############################################################################################################
 // SET DEFAULT INTERFACE LANGUAGE

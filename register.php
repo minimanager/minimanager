@@ -15,7 +15,7 @@
 //#####################################################################################################
 function doregister(){
  require_once("./scripts/config.php");
- global $lang_global, $mmfpm_db, $characters_db, $realm_db, $realm_id, $disable_acc_creation, $limit_acc_per_ip, $valid_ip_mask,
+ global $lang_global, $characters_db, $realm_db, $realm_id, $disable_acc_creation, $limit_acc_per_ip, $valid_ip_mask,
        $send_mail_on_creation, $create_acc_locked, $from_mail, $mailer_type, $smtp_cfg, $title, $defaultoption;
 
  if (($_POST['security_code']) != ($_SESSION['security_code'])) {
@@ -97,9 +97,6 @@ function doregister(){
 		$sql->close();
 		redirect("register.php?err=14");
 	}
-    //UserName Check
-	//$result = $sql->query("SELECT username,email FROM account WHERE username='$user_name' OR email='$mail' $per_ip");
-    $result = $sql->query("SELECT username FROM account WHERE username='$user_name'");
 
 	//there is already someone with same account name
 	if ($sql->num_rows($result)){
@@ -112,23 +109,6 @@ function doregister(){
 
 		$result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
  				VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$expansion)");
-		$user_id = mysql_fetch_row(mysql_query("SELECT `id` FROM `".$realm_db["name"]."`.`account` WHERE `username` = UPPER('$user_name');"));
-		$user_id = $user_id[0];
-		$referredby = $_POST['referredby'];
-		//$sql->close();
- 		//$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-
- 		$referred_by = mysql_fetch_row(mysql_query("SELECT `id` FROM `account` WHERE `username` = UPPER('$referredby');"));
-
- 		$referred_by = $referred_by[0];
-		if ($referred_by != NULL){
-			//$result = mysql_fetch_row(mysql_query("SELECT `id` FROM `".$realm_db["name"]."`.`account` WHERE `id` = (SELECT `account` FROM `characters` WHERE `guid`='$referred_by');"));
-     		//	$result = $result[0];
-			//if($result != NULL)
-			//{
-			if ($referred_by != $user_id)
-		  	     mysql_query("INSERT INTO `".$mmfpm_db["name"]."`.`point_system_invites` (`PlayersAccount`, `InviterAccount`) VALUES ('$user_id', '$referred_by');");
-		}else redirect("register.php?err=15");
 		$sql->close();
 
 		setcookie ("terms", "", time() - 3600);
@@ -180,7 +160,7 @@ function doregister(){
 //#####################################################################################################
 function register(){
  global $lang_register, $lang_global, $output, $expansion_select, $lang_captcha ,$lang_command;
-$referred_by = $_GET['ref'];
+
  $output .= "<center>
   <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
   <script type=\"text/javascript\">
@@ -226,11 +206,6 @@ $referred_by = $_GET['ref'];
   	 <td valign=\"top\">{$lang_register['email']}:</td>
   	 <td><input type=\"text\" name=\"email\" size=\"45\" maxlength=\"225\" /><br />
 	 {$lang_register['use_valid_mail']}</td>
-      </tr>
-	<tr>
-  	 <td valign=\"top\">{$lang_register['invited_by']}:</td>
-  	 <td><input type=\"text\" name=\"referredby\" value=\"$referred_by\" size=\"45\" maxlength=\"12\" /><br />
-	 {$lang_register['invited_info']}</td>
       </tr>";
   if ( $enable_captcha ) {
       $output .= "<tr><td></td>
@@ -454,9 +429,6 @@ case 13:
    break;
 case 14:
     $output .= "<h1><font class=\"error\">{$lang_register['email_address_used']}</font></h1>";
-   break;
-case 15:
-    $output .= "<h1><font class=\"error\">{$lang_register['referrer_not_found']}</font></h1>";
    break;
 default:
    $output .= "<h1><font class=\"error\">{$lang_register['fill_all_fields']}</font></h1>";
