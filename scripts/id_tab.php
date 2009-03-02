@@ -162,18 +162,17 @@ $CHAR_RANK = array(
 );
 
 $CHAR_RACE = array(
-	1 => array($lang_id_tab['human'], 0),
-	2 => array($lang_id_tab['orc'], 1),
-	3 => array($lang_id_tab['dwarf'],  0),
-	4 => array($lang_id_tab['nightelf'], 0),
-	5 => array($lang_id_tab['undead'], 1),
-	6 => array($lang_id_tab['tauren'], 1),
-	7 => array($lang_id_tab['gnome'],  0),
-	8 => array($lang_id_tab['troll'], 1),
-	10 => array($lang_id_tab['bloodelf'], 1),
-	11 => array($lang_id_tab['draenei'],  0)
+	1 => array('human', 0),
+	2 => array('orc', 1),
+	3 => array('dwarf', 0),
+	4 => array('nightelf', 0),
+	5 => array('undead', 1),
+	6 => array('tauren', 1),
+	7 => array('gnome', 0),
+	8 => array('troll', 1),
+	10 => array('bloodelf', 1),
+	11 => array('draenei', 0)
 );
-
 
 function pvp_ranks($honor=0, $faction=0){
     $rank = '0'.$faction;

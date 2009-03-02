@@ -170,7 +170,6 @@ $proxy_cfg = Array(
 $menu_array = Array(
   array("index.php", 'main', array(
 	  array("ahstats.php", 'auctionhouse',0,0,0,0),
-	  array("command.php", 'command',0,0,0,0),
 	  array("arenateam.php", 'arena_teams',0,0,0,0),
 	  array("guild.php", 'guilds',0,0,0,0),
 	  array("honor.php", 'honor',0,0,0,0),
@@ -184,6 +183,7 @@ $menu_array = Array(
 	array("#", 'tools', array(
 	  array("user.php", 'accounts',1,0,0,0),
 	  array("char_list.php", 'characters',1,0,0,0),
+	  array("command.php", 'command',0,0,0,0),
 	  array("banned.php", 'banned_list',1,0,0,0),
 	  array("mail.php", 'mail',3,0,0,0),
 	  array("ticket.php", 'tickets',1,0,0,0),
@@ -205,14 +205,14 @@ $menu_array = Array(
 	  ),
 	),
 	array("forum.php", 'forums', array(
-//	  array("forum.php", 'forums',0,0,0,0),
-//	  array("javascript:void(0);\" onclick=\"window.open('./forum.html', 'forum')", 'forums',0,0,0,0),
 	  ),
 	),
 	array("#", 'invisible', array(
 	  ),
 	),
 	array("#", 'invisible', array(
+	  array("forum.php", 'forums',0,0,0,0),
+	  array("javascript:void(0);\" onclick=\"window.open('./forum.html', 'forum')", 'forums',0,0,0,0),
 	  array("char.php", 'character',0,0,0,0),
 	  array("char_edit.php", 'char_edit',1,0,0,0),
 	  array("edit.php", 'MyAccount',0,0,0,0),
