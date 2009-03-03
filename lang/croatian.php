@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
  * Language: Croatian
- * Supported Minimanager Revision: 99
+ * Supported Minimanager Revision: 174
  * Translator: Zvonimir Buzanic
  */
 
@@ -169,6 +169,7 @@ $lang_index = array(
 $lang_header = array(
 	// ----- HEADER.PHP -----
 	'main' => 'Početna',
+	'users' => 'Users',
 	'accounts' => 'Računi',
 	'characters' => 'Likovi',
 	'guilds' => 'Guilde',
@@ -3837,7 +3838,7 @@ $lang_id_tab = array(
 	'PET_ABILITY_THUNDERSTOMP_RANK_3' => 'Thunderstomp Rank 3',
 	'PET_ABILITY_THUNDERSTOMP_RANK_4' => 'Thunderstomp Rank 4',
 	'PET_ABILITY_WARP' => 'Warp',
-	//character auras
+	// ----- character auras -----
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_1' => 'Arcane Intellect Rank 1',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_2' => 'Arcane Intellect Rank 2',
 	'CHAR_AURA_ARCANE_INTELLECT_RANK_3' => 'Arcane Intellect Rank 3',
@@ -3993,7 +3994,7 @@ $lang_top = array(
 	'money' => 'Money',
 	'rank' => 'Rank',
 	'honor_points' => 'Honor',
-	'kills' => 'Name',
+	'kills' => 'Kills',
 	'arena_points' => 'Arena',
 	'time_played' => 'Time Played',
 	'online' => 'Online'

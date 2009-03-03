@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
  * Language: Norwegian
- * Supported Minimanager Revision: Unknown
+ * Supported Minimanager Revision: 174
  * Translator: Vagi
  */
 
@@ -64,6 +64,7 @@ $lang_login = array(
 	'pass_recovery' => 'Lost Password?', //TODO
 	'after_registration' => 'Your account creation was successful!'
 	);
+
 $lang_guild = array(
 	// ----- GUILD.PHP -----
 	'my_guilds' => 'My Guilds',
@@ -3996,7 +3997,7 @@ $lang_top = array(
 	'money' => 'Money',
 	'rank' => 'Rank',
 	'honor_points' => 'Honor',
-	'kills' => 'Name',
+	'kills' => 'Kills',
 	'arena_points' => 'Arena',
 	'time_played' => 'Time Played',
 	'online' => 'Online'

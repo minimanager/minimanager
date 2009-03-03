@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
  * Language: French
- * Supported Minimanager Revision: 99
+ * Supported Minimanager Revision: 174
  * Translator: fra298
  */
 
@@ -3992,7 +3992,7 @@ $lang_top = array(
 	'money' => 'Argent',
 	'rank' => 'Rang',
 	'honor_points' => 'Honneur',
-	'kills' => 'Name',
+	'kills' => 'Kills',
 	'arena_points' => 'Points d\'arène',
 	'time_played' => 'Temps de jeu',
 	'online' => 'En ligne'

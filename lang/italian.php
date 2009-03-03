@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
  * Language: Italian
- * Supported Minimanager Revision: Unknown
+ * Supported Minimanager Revision: 174
  * Translator: ~kaos~
  */
 
@@ -125,7 +125,6 @@ $lang_register = array(
 	'acc_type' => 'Tipo di Account',
 	'acc_type_desc' => 'Il tipo di client presente nel tuo computer.<br /><li><small> Seleziona "Originale" se sul tuo computer hai installato unicamente World of Warcraft.<br /><li>Seleziona "Espansione" se, insieme a World of Warcraft, hai installato anche The Burning Crusade.</small>',
 	'classic' => 'Originale',
-	'expansion' => 'Espansione',
 	'tbc' => 'TBC',
 	'wotlk' => 'WOTLK',
 	'recover_acc_password' => 'Recupera la Password dell\'account.',
@@ -3994,7 +3993,7 @@ $lang_top = array(
 	'money' => 'Money',
 	'rank' => 'Rank',
 	'honor_points' => 'Honor',
-	'kills' => 'Name',
+	'kills' => 'Kills',
 	'arena_points' => 'Arena',
 	'time_played' => 'Time Played',
 	'online' => 'Online'

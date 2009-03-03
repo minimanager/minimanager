@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos
  * License: GNU General Public License v2(GPL)
  * Language: Portuguese
- * Supported Minimanager Revision: Unknown
+ * Supported Minimanager Revision: 174
  * Translator: Mastercwb
  */
 
@@ -333,7 +333,7 @@ $lang_char = array(
 	'talent_id' => 'ID',
 	'talent_name' => 'Talent Name',
 	'talent_value' => 'Value',
-	// --- $skill_rank_array ---
+	// --- skill_rank_array ---
 	'apprentice' => 'Apprentice', //TODO: Translate
 	'journeyman' => 'Journeyman', //TODO: Translate
 	'expert' => 'Expert', //TODO: Translate
@@ -3996,7 +3996,7 @@ $lang_top = array(
 	'money' => 'Money',
 	'rank' => 'Rank',
 	'honor_points' => 'Honor',
-	'kills' => 'Name',
+	'kills' => 'Kills',
 	'arena_points' => 'Arena',
 	'time_played' => 'Time Played',
 	'online' => 'Online'

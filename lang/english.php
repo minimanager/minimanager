@@ -7,7 +7,6 @@
  * Translator:
  */
 
-$site_encoding = "utf-8";
 
 $lang_global = array(
 	// ----- GENERAL ERROR CODES -----
