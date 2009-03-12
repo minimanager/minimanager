@@ -7,14 +7,14 @@ valid_login(0);
 
 $sql = new SQL;
 $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
- 
+
 $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
 $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) :"honor";
 $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
 $order_dir = ($dir) ? "DESC" : "DESC";
 $dir = ($dir) ? 0 : 1;
 
-$result = $sql->query("SELECT guid, name, race, class, account, totaltime, online, 
+$result = $sql->query("SELECT guid, name, race, class, account, totaltime, online,
 		CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS honor,
 		CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS kills,
 		CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
@@ -90,18 +90,18 @@ for ($i=1; $i<=$total_found; $i++){
     else if($level < 60)
       $lev = '<font color="#FF8000">'.$level.'</font>';
     else if($level < 70)
-      $lev = '<font color="#FFF280">'.$level.'</font>';  
+      $lev = '<font color="#FFF280">'.$level.'</font>';
     else if($level < 80)
-      $lev = '<font color="#FF0000">'.$level.'</font>';  
+      $lev = '<font color="#FF0000">'.$level.'</font>';
     else
       $lev = '<font color="#000000">'.$level.'</font>';
 
 	$output .= "<tr valign=top>
-		<td><a href=\"char.php?id=$char[0]\"><span onmousemove='toolTip(\"".get_player_user_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>$char[1]</span></a></td>
+		<td><a href=\"char.php?id=$char[0]\"><span onmousemove='toolTip(\"".get_player_user_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>".htmlentities($char[1])."</span></a></td>
         <td><img src='img/c_icons/{$char[2]}-{$char[12]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		<td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		<td>$lev</td>
-		<td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[11]\">$guild_name[0]</a></td>
+		<td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[11]\">".htmlentities($guild_name[0])."</a></td>
 		<td>$money</td>
 		<td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[7])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[7],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
    	    <td>$char[7]</td>

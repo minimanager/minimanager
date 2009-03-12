@@ -118,7 +118,7 @@ LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` c2 ON `c2`.`guid`
 			$value = ($value >= 0)? (floor($value / 86400).$lang_auctionhouse['dayshortcut']." ". floor(($value % 86400)/3600).$lang_auctionhouse['hourshortcut']." ".floor((($value % 86400)%3600)/60).$lang_auctionhouse['mnshortcut']) : $lang_auctionhouse['auction_over'];
 			break;
 			case 5:
-			$value = "<b>".((!empty($rows[10])) ? "<font color=".$sidecolor[$rows[10]].">$value</font>" : "N/A")."</b>";
+			$value = "<b>".((!empty($rows[10])) ? "<font color=".$sidecolor[$rows[10]].">".htmlentities($value)."</font>" : "N/A")."</b>";
 			break;
 			case 7:
 			case 6:
@@ -134,7 +134,7 @@ LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` c2 ON `c2`.`guid`
 			$value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip,'item_tooltip')\"><img src=\"".get_icon($rows[1])."\" class=\"icon_border_0\" alt=\"$value\"><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</img></a>";
 			break;
 			case 0:
-			$value = "<b>".((!empty($rows[9])) ? "<font color=".$sidecolor[$rows[9]].">$value</font>" : "N/A")."</b>";
+			$value = "<b>".((!empty($rows[9])) ? "<font color=".$sidecolor[$rows[9]].">".htmlentities($value)."</font>" : "N/A")."</b>";
 			break;
 		}
 		if (!in_array($row,$hiddencols)) $output .= "<td><center>".$value."</center></td>";
@@ -297,7 +297,7 @@ $result = $sql->query("SELECT `characters`.`name` AS `seller`, `auctionhouse`.`i
 			$value = ($value >= 0)? (floor($value / 86400).$lang_auctionhouse['dayshortcut']." ". floor(($value % 86400)/3600).$lang_auctionhouse['hourshortcut']." ".floor((($value % 86400)%3600)/60).$lang_auctionhouse['mnshortcut']) : $lang_auctionhouse['auction_over'];
 			break;
 			case 5:
-			$value = "<b>".((!empty($rows[10])) ? "<font color=".$sidecolor[$rows[10]].">$value</font>" : "N/A")."</b>";
+			$value = "<b>".((!empty($rows[10])) ? "<font color=".$sidecolor[$rows[10]].">".htmlentities($value)."</font>" : "N/A")."</b>";
 			break;
 			case 7:
 			case 6:
@@ -313,7 +313,7 @@ $result = $sql->query("SELECT `characters`.`name` AS `seller`, `auctionhouse`.`i
 			$value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip,'item_tooltip')\"><img src=\"".get_icon($rows[1])."\" class=\"icon_border_0\" alt=\"$value\"><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</img></a>";
 			break;
 			case 0:
-			$value = "<b>".((!empty($rows[9])) ? "<font color=".$sidecolor[$rows[9]].">$value</font>" : "N/A")."</b>";
+			$value = "<b>".((!empty($rows[9])) ? "<font color=".$sidecolor[$rows[9]].">".htmlentities($value)."</font>" : "N/A")."</b>";
 			break;
 		}
 		if (!in_array($row,$hiddencols)) $output .= "<td><center>".$value."</center></td>";

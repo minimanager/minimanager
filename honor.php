@@ -90,13 +90,13 @@ $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `gui
       $lev = '<font color="#000000">'.$level.'</font>';
 
   	$output .= " <tr>
-			 <td><a href=\"char.php?id=$char[0]\">$char[1]</a></td>
+			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
 		 	 <td><img src='img/c_icons/{$char[2]}-{$char[7]}.gif'></td>
 		  	 <td><img src='img/c_icons/{$char[3]}.gif'></td>
 			 <td>$lev</td>
 			 <td>$char[4]</td>
 		     <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
-			 <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[6]\">$guild_name[0]</a></td>
+			 <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[6]\">".htmlentities($guild_name[0])."</a></td>
  			 </tr>";
 }
 
@@ -165,13 +165,13 @@ $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `gui
       $lev = '<font color="#000000">'.$level.'</font>';
 
   	$output .= " <tr>
-			 <td><a href=\"char.php?id=$char[0]\">$char[1]</a></td>
+			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
 		 	 <td><img src='img/c_icons/{$char[2]}-{$char[7]}.gif'></td>
 		  	 <td><img src='img/c_icons/{$char[3]}.gif'></td>
 			 <td>$lev</td>
 			 <td>$char[4]</td>
 		     <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
-			 <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[6]\">$guild_name[0]</a></td>
+			 <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[6]\">".htmlentities($guild_name[0])."</a></td>
 			 </tr>";
 }
 

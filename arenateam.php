@@ -79,8 +79,8 @@ while ($data = $sql->fetch_row($query))	{
 
    	$output .= "<tr>
 			 <td>$data[0]</td>
-			 <td><a href=\"arenateam.php?action=view_team&amp;error=3&amp;id=$data[0]\">$data[1]</a></td>
-			 <td><a href=\"char.php?id=$data[2]\">$data[4]</a></td>
+			 <td><a href=\"arenateam.php?action=view_team&amp;error=3&amp;id=$data[0]\">".htmlentities($data[1])."</a></td>
+			 <td><a href=\"char.php?id=$data[2]\">".htmlentities($data[4])."</a></td>
 			 <td>{$lang_arenateam[$data[3]]}</td>
 			 <td>$data[5]</td>
 			 <td>$arenateam_online</td>
@@ -171,8 +171,8 @@ while ($data = $sql->fetch_row($query))	{
 
    	$output .= "<tr>
 			 <td>$data[0]</td>
-			 <td><a href=\"arenateam.php?action=view_team&amp;error=3&amp;id=$data[0]\">$data[1]</a></td>
-			 <td><a href=\"char.php?id=$data[2]\">$data[4]</a></td>
+			 <td><a href=\"arenateam.php?action=view_team&amp;error=3&amp;id=$data[0]\">".htmlentities($data[1])."</a></td>
+			 <td><a href=\"char.php?id=$data[2]\">".htmlentities($data[4])."</a></td>
 			 <td>{$lang_arenateam[$data[3]]}</td>
 			 <td>$data[5]</td>
 			 <td>$arenateam_online</td>
@@ -247,7 +247,7 @@ $output .= "<script type=\"text/javascript\">
 	<legend>{$lang_arenateam['arenateam']} ({$arenateam_data[2]}v{$arenateam_data[2]})</legend>
  <table class=\"lined\" style=\"width: 910px;\">
   <tr class=\"bold\">
-    <td colspan=\"13\">$arenateam_data[1]</td>
+    <td colspan=\"13\">".htmlentities($arenateam_data[1])."</td>
   </tr>
    <tr>
         <td colspan=\"13\">{$lang_arenateam['tot_members']}: $total_members</td>
@@ -324,7 +324,7 @@ $output .= "<script type=\"text/javascript\">
 		}
 		$ww_pct = round((10000 * $member[5]) / $member[4]) / 100;
 		$ws_pct = round((10000 * $member[7]) / $member[6]) / 100;
-		$output .= " <td><a href=\"char.php?id=$member[0]\">$member[1]</a></td>
+		$output .= " <td><a href=\"char.php?id=$member[0]\">".htmlentities($member[1])."</a></td>
 		<td><img src='img/c_icons/{$online[0]}-{$online[6]}.gif' onmousemove='toolTip(\"".get_player_race($online[0])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		<td><img src='img/c_icons/{$online[1]}.gif' onmousemove='toolTip(\"".get_player_class($online[1])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		<td>$member[2]</td>

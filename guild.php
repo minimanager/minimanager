@@ -60,7 +60,7 @@ if ($query_myGuild)
     $output .= "<tr>
       <td>$data[0]</td>
       <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$data[0]\">$data[1]</a></td>";
-    $output .= ($user_lvl < $owner_gmlvl ) ? "<td>$data[3]</td>" : "<td><a href=\"char.php?id=$data[2]\">$data[3]</a></td>";
+    $output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($data[3])."</td>" : "<td><a href=\"char.php?id=$data[2]\">".htmlentities($data[3])."</a></td>";
     $output .= "<td><img src=\"img/".($data[4]==0 ? "alliance" : "horde")."_small.gif\" /></td>
       <td>$data[5]/$data[6]</td>
       <td>".htmlentities($data[7])." ...</td>
@@ -155,11 +155,11 @@ while ($data = $sql->fetch_row($query)) {
     $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
 
     $output .= "<tr><td>$data[0]</td>";    
-    $output .= ($user_lvl >= 1) ? "<td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$data[0]\">$data[1]</td>" : "<td>$data[1]</td>";
-    $output .= ($user_lvl < $owner_gmlvl ) ? "<td>$data[3]</td>" : "<td><a href=\"char.php?id=$data[2]\">$data[3]</a></td>";
+    $output .= ($user_lvl >= 1) ? "<td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$data[0]\">".htmlentities($data[1])."</td>" : "<td>".htmlentities($data[1])."</td>";
+    $output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($data[3])."</td>" : "<td><a href=\"char.php?id=$data[2]\">".htmlentities($data[3])."</a></td>";
     $output .= "<td><img src=\"img/".($data[4]==0 ? "alliance" : "horde")."_small.gif\" /></td>
                <td>$data[5]</td>
-               <td class=\"small\">$data[6]</td>
+               <td class=\"small\">".htmlentities($data[6])."</td>
                </tr>";
 }
 
@@ -237,7 +237,7 @@ require_once("scripts/defines.php");
  <legend>{$lang_guild['guild']}</legend> 
  <table class=\"hidden\" style=\"width: 100%;\"><tr><td>
   <table class=\"lined\">
-  <tr class=\"bold\"><td>$guild_data[1]</td></tr>
+  <tr class=\"bold\"><td>".htmlentities($guild_data[1])."</td></tr>
   <tr><td><b>{$lang_guild['create_date']}:</b><br>$guild_data[4]</td></tr>";
   
   if ($guild_data[2] != '') $output .= "<tr><td><b>{$lang_guild['info']}:</b><br>".htmlentities($guild_data[2],ENT_QUOTES)."</td></tr>";
