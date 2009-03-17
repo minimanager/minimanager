@@ -325,16 +325,16 @@ require_once("scripts/defines.php");
      " <td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$member[1]}</font><br />{$lang_global['are_you_sure']}', 'guild.php?action=rem_char_from_guild&amp;id=$member[0]&amp;guld_id=$guild_id');\" style=\"cursor:pointer;\" /></td>" :
      " <td></td>";
 
-  $output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($member[1])."</td>" : "<td><a href=\"char.php?id=$member[0]\">".htmlentities($member[1])."</a></td>";
-  $output .= "<td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif'></td>
-						  <td><img src='img/c_icons/{$member[3]}.gif'></td>
-						  <td>$lev</td>
-						  <td>".htmlentities($member[6])." (".$member[5].")</td>
-						  <td>".htmlentities($member[7])."</td>
-						  <td>".htmlentities($member[8])."</td>
-						  <td>$lastlogin</td>
-						  <td>".(($member[10]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
-						  </tr>";
+	$output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($member[1])."</td>" : "<td><a href=\"char.php?id=$member[0]\">".htmlentities($member[1])."</a></td>";
+	$output .= "<td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".get_player_race($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()'/></td>
+					<td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".get_player_class($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()'/></td>
+					<td>$lev</td>
+					<td>".htmlentities($member[6])." (".$member[5].")</td>
+					<td>".htmlentities($member[7])."</td>
+					<td>".htmlentities($member[8])."</td>
+					<td>$lastlogin</td>
+					<td>".(($member[10]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
+				</tr>";
 }
 
 
