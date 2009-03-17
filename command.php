@@ -43,7 +43,7 @@ function print_commands_form(){
 		$syntax = $comm[0];
 		$description = isset($comm[1]) ? $comm[1] : " ";
 		}
-   $tmp_output .=  "<td>$syntax</td><td>$description</td></tr>";
+   $tmp_output .=  "<td>".htmlentities($syntax)."</td><td>".htmlentities($description)."</td></tr>";
    $levels[$data[2]][1] .= $tmp_output;
  }
 

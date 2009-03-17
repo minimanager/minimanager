@@ -47,7 +47,7 @@ valid_login($action_permission['read']);
 
 function get_go_type($flag){
  global $lang_game_object, $go_type;
- 
+
  if (isset($go_type[$flag])) return $go_type[$flag][1];
 	else return $lang_game_object['unknown'];
 }
@@ -152,11 +152,11 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
  if(isset($entry)) $where .= "AND gameobject_template.entry = '$entry' ";
  if(isset($name)) $where .= "AND IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) LIKE '%$name%' ";
  if(isset($type)) $where .= "AND type = '$type' ";
- if(isset($ScriptName)) $where .= "AND ScriptName LIKE '%$ScriptName%' "; 
+ if(isset($ScriptName)) $where .= "AND ScriptName LIKE '%$ScriptName%' ";
  if(isset($displayId)) $where .= "AND displayId = '$displayId' ";
  if(isset($faction)) $where .= "AND faction = '$faction' ";
  if(isset($flags)) $where .= "AND flags = '$flags' ";
- 
+
  if($where == "WHERE gameobject_template.entry > 0 ") redirect("game_object.php?error=1");
  $result = $sql->query("SELECT gameobject_template.entry, type, displayId, IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name, faction FROM gameobject_template LEFT JOIN locales_gameobject ON gameobject_template.entry = locales_gameobject.entry $where ORDER BY gameobject_template.entry LIMIT $sql_search_limit");
  $total_found = $sql->num_rows($result);
@@ -183,7 +183,7 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
 
   $output .= "<tr>
 				<td><a href=\"$go_datasite$go[0]\" target=\"_blank\">$go[0]</a></td>
-				<td><a href=\"game_object.php?action=edit&amp;entry=$go[0]&amp;error=4\">$go[3]</a></td>
+				<td><a href=\"game_object.php?action=edit&amp;entry=$go[0]&amp;error=4\">".htmlentities($go[3])."</a></td>
 				<td>".get_go_type($go[1])."</td>
 				<td>$go[2]</td>
 				<td>$go[4]</td>
@@ -207,7 +207,7 @@ function add_new() {
 		<form method=\"post\" action=\"game_object.php?action=do_update\" name=\"form1\">
 		<input type=\"hidden\" name=\"backup_op\" value=\"0\"/>
 		<input type=\"hidden\" name=\"opp_type\" value=\"add_new\"/>
-		
+
 <div class=\"jtab-container\" id=\"container\">
   <ul class=\"jtabs\">
     <li><a href=\"#\" onclick=\"return showPane('pane1', this)\" id=\"tab1\">{$lang_game_object['general']}</a></li>
@@ -221,10 +221,10 @@ $output .= "<div id=\"pane1\"><br /><br />
 <tr>
  <td>".makeinfocell($lang_game_object['entry'],$lang_game_object['entry_desc'])."</td>
  <td><input type=\"text\" name=\"entry\" size=\"10\" maxlength=\"20\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['name'],$lang_game_object['name_desc'])."</td>
  <td ><input type=\"text\" name=\"name\" size=\"25\" maxlength=\"100\" value=\"G.O.\" /></td>
- 
+
   <td>".makeinfocell($lang_game_object['faction'],$lang_game_object['faction_desc'])."</td>
  <td><input type=\"text\" name=\"faction\" size=\"10\" maxlength=\"4\" value=\"0\" /></td>
 </tr>
@@ -240,35 +240,35 @@ $output .= "<div id=\"pane1\"><br /><br />
 <tr>
  <td>".makeinfocell($lang_game_object['flags'],$lang_game_object['flags_desc'])."</td>
  <td><input type=\"text\" name=\"flags\" size=\"10\" maxlength=\"4\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['size'],$lang_game_object['size_desc'])."</td>
  <td><input type=\"text\" name=\"size\" size=\"10\" maxlength=\"25\" value=\"1\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['script_name'],$lang_game_object['ScriptName_desc'])."</td>
  <td><input type=\"text\" name=\"ScriptName\" size=\"10\" maxlength=\"100\" value=\"\" /></td>
-</tr> 
+</tr>
 
 <tr class=\"large_bold\"><td colspan=\"6\" class=\"hidden\" align=\"left\">{$lang_game_object['data']}:</td></tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 0",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data0\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 1",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data1\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 2",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data2\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
-</tr> 
+</tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 3",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data3\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 4",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data4\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 5",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data5\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
-</tr> 
+</tr>
 </table>
 <br /><br />
 </div>
@@ -280,60 +280,60 @@ $output .= "<div id=\"pane1\"><br /><br />
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 6",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data6\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 7",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data7\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 8",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data8\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
-</tr> 
+</tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 9",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data9\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 10",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data10\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 11",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data11\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
-</tr> 
+</tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 12",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data12\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 13",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data13\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 14",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data14\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
 </tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 15",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data15\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 16",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data16\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 17",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data17\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
 </tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 18",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data18\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 19",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data19\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 20",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data20\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
 </tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 21",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data21\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 22",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data22\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 23",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data23\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
 </tr>
@@ -363,10 +363,10 @@ function edit() {
 		$go_type, $quest_datasite;
 
  if (!isset($_GET['entry'])) redirect("game_object.php?error=1");
-	
+
  $sql = new SQL;
  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
- 
+
  $entry = $sql->quote_smart($_GET['entry']);
  require_once("./scripts/get_lib.php");
  $deplang = get_lang_id();
@@ -397,10 +397,10 @@ if ($go['type'] == 3) $output .= "<li><a href=\"#\" onclick=\"return showPane('p
 <tr>
  <td>".makeinfocell($lang_game_object['entry'],$lang_game_object['entry_desc'])."</td>
  <td><a href=\"$go_datasite{$go['entry']}\" target=\"_blank\">{$go['entry']}</a></td>
- 
+
  <td>".makeinfocell($lang_game_object['name'],$lang_game_object['name_desc'])."</td>
  <td ><input type=\"text\" name=\"name\" size=\"25\" maxlength=\"100\" value=\"{$go['name']}\" /></td>
- 
+
   <td>".makeinfocell($lang_game_object['faction'],$lang_game_object['faction_desc'])."</td>
  <td><input type=\"text\" name=\"faction\" size=\"10\" maxlength=\"4\" value=\"{$go['faction']}\" /></td>
 </tr>
@@ -420,32 +420,32 @@ if ($go['type'] == 3) $output .= "<li><a href=\"#\" onclick=\"return showPane('p
 <tr>
  <td>".makeinfocell($lang_game_object['flags'],$lang_game_object['flags_desc'])."</td>
  <td><input type=\"text\" name=\"flags\" size=\"10\" maxlength=\"4\" value=\"{$go['flags']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['size'],$lang_game_object['size_desc'])."</td>
  <td><input type=\"text\" name=\"size\" size=\"10\" maxlength=\"25\" value=\"{$go['size']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['script_name'],$lang_game_object['ScriptName_desc'])."</td>
  <td><input type=\"text\" name=\"ScriptName\" size=\"10\" maxlength=\"100\" value=\"{$go['ScriptName']}\" /></td>
-</tr> 
+</tr>
 
 <tr class=\"large_bold\"><td colspan=\"6\" class=\"hidden\" align=\"left\">{$lang_game_object['data']}:</td></tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 0",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data0\" size=\"10\" maxlength=\"11\" value=\"{$go['data0']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 1",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data1\" size=\"10\" maxlength=\"11\" value=\"{$go['data1']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 2",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data2\" size=\"10\" maxlength=\"11\" value=\"{$go['data2']}\" /></td>
-</tr> 
+</tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 3",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data3\" size=\"10\" maxlength=\"11\" value=\"{$go['data3']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 4",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data4\" size=\"10\" maxlength=\"11\" value=\"{$go['data4']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 5",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data5\" size=\"10\" maxlength=\"11\" value=\"{$go['data5']}\" /></td>
 </tr>
@@ -464,60 +464,60 @@ $output .= "<tr><td colspan=\"6\">{$lang_game_object['go_swapned']} : ".$sql->re
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 6",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data6\" size=\"10\" maxlength=\"11\" value=\"{$go['data6']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 7",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data7\" size=\"10\" maxlength=\"11\" value=\"{$go['data7']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 8",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data8\" size=\"10\" maxlength=\"11\" value=\"{$go['data8']}\" /></td>
-</tr> 
+</tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 9",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data9\" size=\"10\" maxlength=\"11\" value=\"{$go['data9']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 10",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data10\" size=\"10\" maxlength=\"11\" value=\"{$go['data10']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 11",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data11\" size=\"10\" maxlength=\"11\" value=\"{$go['data11']}\" /></td>
-</tr> 
+</tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 12",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data12\" size=\"10\" maxlength=\"11\" value=\"{$go['data12']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 13",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data13\" size=\"10\" maxlength=\"11\" value=\"{$go['data13']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 14",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data14\" size=\"10\" maxlength=\"11\" value=\"{$go['data14']}\" /></td>
 </tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 15",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data15\" size=\"10\" maxlength=\"11\" value=\"{$go['data15']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 16",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data16\" size=\"10\" maxlength=\"11\" value=\"{$go['data16']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 17",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data17\" size=\"10\" maxlength=\"11\" value=\"{$go['data17']}\" /></td>
 </tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 18",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data18\" size=\"10\" maxlength=\"11\" value=\"{$go['data18']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 19",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data19\" size=\"10\" maxlength=\"11\" value=\"{$go['data19']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 20",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data20\" size=\"10\" maxlength=\"11\" value=\"{$go['data20']}\" /></td>
 </tr>
 <tr>
  <td>".makeinfocell($lang_game_object['data']." 21",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data21\" size=\"10\" maxlength=\"11\" value=\"{$go['data21']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 22",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data22\" size=\"10\" maxlength=\"11\" value=\"{$go['data22']}\" /></td>
- 
+
  <td>".makeinfocell($lang_game_object['data']." 23",$lang_game_object['data_desc'])."</td>
  <td><input type=\"text\" name=\"data23\" size=\"10\" maxlength=\"11\" value=\"{$go['data23']}\" /></td>
 </tr>
@@ -543,7 +543,7 @@ $output .= "<div id=\"pane3\">
 		$output .= "<td>";
 		$output .= maketooltip("<img src=\"".get_icon($item[0])."\" class=\"icon_border\" alt=\"\" />", "$item_datasite$item[0]", "$tooltip", "item_tooltip", "target=\"_blank\"");
 		$output .= "<br /><input type=\"checkbox\" name=\"del_loot_items[]\" value=\"$item[0]\" /></td>";
-		
+
 		if ($cel_counter >= 16) {
 			$cel_counter = 0;
 			$output .= "</tr><tr>";
@@ -589,7 +589,7 @@ $output .= "<div id=\"pane4\">
 	while ($quest = $sql->fetch_row($result1)){
 		$query1 = $sql->query("SELECT QuestLevel, IFNULL(".($deplang<>0?"title_loc$deplang":"NULL").",`title`) as Title FROM quest_template LEFT JOIN locales_quest ON quest_template.entry = locales_quest.entry WHERE quest_template.entry ='$quest[0]'");
 		$quest_templ = $sql->fetch_row($query1);
-		
+
 		$output .= "<tr><td width=\"5%\"><input type=\"checkbox\" name=\"del_questrelation[]\" value=\"$quest[0]\" /></td>
 					<td width=\"95%\" align=\"left\"><a class=\"tooltip\" href=\"$quest_datasite$quest[0]\" target=\"_blank\">({$quest_templ[0]}) $quest_templ[1]</a></td></tr>";
 	};
@@ -604,13 +604,13 @@ $output .= "<tr class=\"large_bold\" align=\"left\"><td colspan=\"2\" class=\"hi
 	while ($quest = $sql->fetch_row($result1)){
 		$query1 = $sql->query("SELECT QuestLevel, IFNULL(".($deplang<>0?"title_loc$deplang":"NULL").",`title`) as Title FROM quest_template LEFT JOIN locales_quest ON quest_template.entry = locales_quest.entry WHERE quest_template.entry ='$quest[0]'");
 		$quest_templ = $sql->fetch_row($query1);
-		
+
 		$output .= "<tr><td width=\"5%\"><input type=\"checkbox\" name=\"del_involvedrelation[]\" value=\"$quest[0]\" /></td>
 				<td width=\"95%\" align=\"left\"><a class=\"tooltip\" href=\"$quest_datasite$quest[0]\" target=\"_blank\">({$quest_templ[0]}) $quest_templ[1]</a></td></tr>";
 	};
 
 $output .= "<tr class=\"large_bold\" align=\"left\"><td colspan=\"2\" class=\"hidden\">{$lang_game_object['add_ends_quests']}:</td></tr>
-	<tr><td colspan=\"2\" align=\"left\">".makeinfocell($lang_game_object['quest_id'],$lang_game_object['quest_id_desc'])." : 
+	<tr><td colspan=\"2\" align=\"left\">".makeinfocell($lang_game_object['quest_id'],$lang_game_object['quest_id_desc'])." :
 		<input type=\"text\" name=\"involvedrelation\" size=\"8\" maxlength=\"8\" value=\"\" /></td></tr>
 
 </table><br />{$lang_game_object['check_to_delete']}<br /><br />
@@ -639,7 +639,7 @@ $output .= "<tr class=\"large_bold\" align=\"left\"><td colspan=\"2\" class=\"hi
 		$sql->close();
 		error($lang_game_object['tmpl_not_found']);
 		exit();
-		} 
+		}
 }
 
 
@@ -651,7 +651,7 @@ function do_update() {
 
  if (!isset($_POST['opp_type']) || $_POST['opp_type'] === '') redirect("game_object.php?error=1");
  if (!isset($_POST['entry']) || $_POST['entry'] === '') redirect("game_object.php?error=1");
- 
+
  $sql = new SQL;
  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
@@ -737,7 +737,7 @@ function do_update() {
 		else $item = 0;
 	if (isset($_POST['del_loot_items']) && $_POST['del_loot_items'] != '') $del_loot_items = $sql->quote_smart($_POST['del_loot_items']);
 		else $del_loot_items = NULL;
-	
+
 	if (isset($_POST['involvedrelation']) && $_POST['involvedrelation'] != '') $involvedrelation = $sql->quote_smart($_POST['involvedrelation']);
 		else $involvedrelation = 0;
 	if (isset($_POST['del_involvedrelation']) && $_POST['del_involvedrelation'] != '') $del_involvedrelation = $sql->quote_smart($_POST['del_involvedrelation']);
@@ -746,11 +746,11 @@ function do_update() {
 		else $questrelation = 0;
 	if (isset($_POST['del_questrelation']) && $_POST['del_questrelation'] != '') $del_questrelation = $sql->quote_smart($_POST['del_questrelation']);
 		else $del_questrelation = NULL;
-	
+
   if ($_POST['opp_type'] == "add_new"){
 	$sql_query = "INSERT INTO gameobject_template ( entry, type, displayId, name, faction, flags, size, data0, data1,
 	data2, data3, data4, data5, data6, data7, data8, data9, data10, data11, data12, data13,
-	data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, ScriptName ) 
+	data14, data15, data16, data17, data18, data19, data20, data21, data22, data23, ScriptName )
 	VALUES ( '$entry', '$type', '$displayId', '$name', '$faction', '$flags', '$size', '$data0', '$data1',
 	'$data2', '$data3', '$data4', '$data5', '$data6', '$data7', '$data8', '$data9', '$data10', '$data11',
 	'$data12', '$data13', '$data14', '$data15', '$data16', '$data17', '$data18', '$data19', '$data20',
@@ -821,7 +821,7 @@ function do_update() {
 	if ($questrelation){
 	$sql_query .= "INSERT INTO gameobject_questrelation (id, quest) VALUES ($entry,$questrelation);\n";
 	}
-	
+
 	if ($involvedrelation){
 	$sql_query .= "INSERT INTO gameobject_involvedrelation (id, quest) VALUES ($entry,$involvedrelation);\n";
 	}
@@ -835,7 +835,7 @@ function do_update() {
 	foreach($del_involvedrelation as $quest_id)
 		$sql_query .= "DELETE FROM gameobject_involvedrelation WHERE id = $entry AND quest = $quest_id;\n";
 	}
-	
+
 
  } else {
 		$sql->close();
@@ -861,7 +861,7 @@ function do_update() {
 
  if ($result) redirect("game_object.php?action=edit&entry=$entry&error=4");
 	else redirect("game_object.php");
- 
+
 }
 
 
@@ -907,12 +907,12 @@ function do_delete() {
  $sql->query("DELETE FROM gameobject_questrelation WHERE id = '$entry'");
  $sql->query("DELETE FROM gameobject_loot_template WHERE entry = '$data1'");
  $sql->query("DELETE FROM gameobject_template WHERE entry = '$entry'");
- 
+
  $sql->close();
  redirect("game_object.php");
  }
 
- 
+
 //########################################################################################################################
 //   DELETE ALL GO SPAWNS
 //########################################################################################################################

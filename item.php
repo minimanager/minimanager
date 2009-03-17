@@ -18,14 +18,14 @@ function makeinfocell($text,$tooltip){
 
 function output_status_options($stat_type_offset){
  global $lang_item, $output;
- 
+
  $stat_type = array( 0 => "", 1 => "", 3 => "", 4 => "", 5 => "", 6 => "", 7 => "",12 => "",
 				13 => "",14 => "",15 => "",16 => "",17 => "",18 => "",19 => "",20 => "",21 => "",22 => "",
 				23 => "",24 => "",25 => "",26 => "",27 => "",28 => "",29 => "",30 => "",31 => "",32 => "",
 				33 => "",34 => "",35 => "",36 => "");
  if (!$stat_type_offset) $stat_type_offset = 0;
  $stat_type[$stat_type_offset] = " selected=\"selected\" ";
-	
+
  $output .= "<option value=\"0\" {$stat_type[0]}>0: {$lang_item['mana']}</option>
 		<option value=\"1\" {$stat_type[1]}>1: {$lang_item['health']}</option>
 		<option value=\"3\" {$stat_type[3]}>3: {$lang_item['agility']}</option>
@@ -58,17 +58,17 @@ function output_status_options($stat_type_offset){
 		<option value=\"34\" {$stat_type[34]}>34: {$lang_item['CA_RATING']}</option>
 		<option value=\"35\" {$stat_type[35]}>35: {$lang_item['RESILIENCE_RATING']}</option>
 		<option value=\"36\" {$stat_type[36]}>36: {$lang_item['HASTE_RATING']}</option>";
-		
+
  return;
 }
 
 function output_dmgtype_options($dmg_type_offset){
  global $lang_item, $output;
- 
+
  $dmg_type  = array( 0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "", 6 => "");
  if (!$dmg_type_offset) $dmg_type_offset = 0;
  $dmg_type[$dmg_type_offset] = " selected=\"selected\" ";
- 
+
  $output .= "<option value=\"0\" {$dmg_type[0]}>0: {$lang_item['physical_dmg']}</option>
 		<option value=\"1\" {$dmg_type[1]}>1: {$lang_item['holy_dmg']}</option>
 		<option value=\"2\" {$dmg_type[2]}>2: {$lang_item['fire_dmg']}</option>
@@ -76,10 +76,10 @@ function output_dmgtype_options($dmg_type_offset){
 		<option value=\"4\" {$dmg_type[4]}>4: {$lang_item['frost_dmg']}</option>
 		<option value=\"5\" {$dmg_type[5]}>5: {$lang_item['shadow_dmg']}</option>
 		<option value=\"6\" {$dmg_type[6]}>6: {$lang_item['arcane_dmg']}</option>";
-		
+
  return;
 }
-	
+
 //########################################################################################################################
 //  PRINT  ITEM SEARCH FORM
 //########################################################################################################################
@@ -92,12 +92,12 @@ function search() {
  $result = $sql->query("SELECT count(*) FROM item_template");
  $tot_items = $sql->result($result, 0);
  $sql->close();
- 
+
  $output .= "<center>
  <fieldset class=\"full_frame\">
 	<legend>{$lang_item_edit['search_item']}</legend><br />
 	<form action=\"item.php?action=do_search&amp;error=2\" method=\"post\" name=\"form\">
-	
+
 	<table class=\"hidden\">
 	<tr>
 		<td>{$lang_item_edit['entry']}:</td>
@@ -183,7 +183,7 @@ function search() {
 	<tr>
 		<td>{$lang_item_edit['item_level']}:</td>
 		<td><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"ItemLevel\" /></td>
-		
+
 		<td>{$lang_item_edit['item_set']}:</td>
 	  <td colspan=\"3\"><select name=\"itemset\">
 		<option value=\"\">{$lang_item_edit['all']}</option>";
@@ -268,12 +268,12 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
  if(isset($name)) $where .= "AND IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) LIKE '%$name%' ";
  if(isset($displayid)) $where .= "AND displayid = '$displayid' ";
  if(isset($RequiredLevel)) $where .= "AND RequiredLevel = '$RequiredLevel' ";
- 
+
  if(isset($spellid_1)) $where .= "AND (spellid_1 = '$spellid_1' OR spellid_2 = '$spellid_1' OR spellid_3 = '$spellid_1' OR spellid_4 = '$spellid_1' OR spellid_5 = '$spellid_1') ";
  if(isset($spellid_2)) $where .= "AND (spellid_1 = '$spellid_2' OR spellid_2 = '$spellid_2' OR spellid_3 = '$spellid_2' OR spellid_4 = '$spellid_2' OR spellid_5 = '$spellid_2') ";
  if(isset($spellid_3)) $where .= "AND (spellid_1 = '$spellid_3' OR spellid_2 = '$spellid_3' OR spellid_3 = '$spellid_3' OR spellid_4 = '$spellid_3' OR spellid_5 = '$spellid_3') ";
  if(isset($spellid_4)) $where .= "AND (spellid_1 = '$spellid_4' OR spellid_2 = '$spellid_4' OR spellid_3 = '$spellid_4' OR spellid_4 = '$spellid_4' OR spellid_5 = '$spellid_4') ";
- 
+
  if(isset($ItemLevel)) $where .= "AND ItemLevel = '$ItemLevel' ";
  if(isset($itemset)) $where .= "AND itemset = '$itemset' ";
  if(isset($Flags)) $where .= "AND Flags = '$Flags' ";
@@ -289,9 +289,9 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
   $output .= "</td>
      <td align=\"right\">{$lang_item_edit['items_found']} : $total_items_found : {$lang_global['limit']} $sql_search_limit</td>
 	 </tr></table>";
-	 
+
   $output .= "<table class=\"lined\">
-   <tr> 
+   <tr>
 	<th width=\"15%\">{$lang_item_edit['entry']}</th>
 	<th width=\"10%\">{$lang_item_edit['display_id']}</th>
 	<th width=\"55%\">{$lang_item_edit['item_name']}</th>
@@ -301,7 +301,7 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
 
  for ($i=1; $i<=$total_items_found; $i++){
   $item = $sql->fetch_row($result);
-  
+
   $tooltip = get_item_tooltip($item[0]);
 
   $output .= "<tr>
@@ -309,7 +309,7 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
 				<td>";
   $output .= maketooltip("<img src=\"".get_icon($item[0])."\" class=\"icon_border\" alt=\"\" />", "$item_datasite$item[0]", "$tooltip", "item_tooltip", "target=\"_blank\"");
   $output .="</td>
-				<td><a href=\"item.php?action=edit&amp;entry=$item[0]&amp;error=4\">$item[2]</a></td>
+				<td><a href=\"item.php?action=edit&amp;entry=$item[0]&amp;error=4\">".htmlentities($item[2])."</a></td>
 				<td>$item[3]</td>
 				<td>$item[4]</td>
 			</tr>";
@@ -332,7 +332,7 @@ function add_new() {
 		<form method=\"post\" action=\"item.php?action=do_update\" name=\"form1\">
 		<input type=\"hidden\" name=\"backup_op\" value=\"0\"/>
 		<input type=\"hidden\" name=\"type\" value=\"add_new\"/>
-		
+
 <div class=\"jtab-container\" id=\"container\">
   <ul class=\"jtabs\">
     <li><a href=\"#\" onclick=\"return showPane('pane1', this)\" id=\"tab1\">{$lang_item_edit['general_tab']}</a></li>
@@ -352,10 +352,10 @@ $output .= "<div id=\"pane1\">
 <tr>
  <td>".makeinfocell($lang_item_edit['entry'],$lang_item_edit['entry_desc'])."</td>
  <td><input type=\"text\" name=\"entry\" size=\"8\" maxlength=\"11\" value=\"\" /></td>
- 
+
  <td>".makeinfocell($lang_item_edit['display_id'],$lang_item_edit['display_id_desc'])."</td>
  <td><input type=\"text\" name=\"displayid\" size=\"8\" maxlength=\"11\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_item_edit['req_level'],$lang_item_edit['req_level_desc'])."</td>
  <td><input type=\"text\" name=\"RequiredLevel\" size=\"8\" maxlength=\"4\" value=\"0\" /></td>
 
@@ -367,7 +367,7 @@ $output .= "<div id=\"pane1\">
 <tr>
  <td>".makeinfocell($lang_item_edit['item_name'],$lang_item_edit['item_name_desc'])."</td>
  <td colspan=\"3\"><input type=\"text\" name=\"name\" size=\"30\" maxlength=\"225\" value=\"item_name\" /></td>
- 
+
  <td>".makeinfocell($lang_item_edit['script_name'],$lang_item_edit['script_name_desc'])."</td>
  <td colspan=\"3\"><input type=\"text\" name=\"ScriptName\" size=\"30\" maxlength=\"100\" value=\"internalitemhandler\" /></td>
 </tr>
@@ -494,7 +494,7 @@ $output .= "<div id=\"pane1\">
 		<option value=\"5\">5 - {$lang_item['legendary']}</option>
 		<option value=\"6\">6 - {$lang_item['artifact']}</option>
 	   </select></td>
-	  
+
 <td>".makeinfocell($lang_item_edit['inv_type'],$lang_item_edit['inv_type_desc'])."</td>
 	  <td colspan=\"2\"><select name=\"InventoryType\">
 		<option value=\"0\">0 - {$lang_item['other']}</option>
@@ -525,14 +525,14 @@ $output .= "<div id=\"pane1\">
 		<option value=\"25\">25 - {$lang_item['thrown']}</option>
 		<option value=\"26\">26 - {$lang_item['rifle']}</option>
 	   </select></td>
-	   
+
 	   <td>".makeinfocell($lang_item_edit['flags'],$lang_item_edit['flags_desc'])."</td>
 	   <td><input type=\"text\" name=\"Flags\" size=\"10\" maxlength=\"30\" value=\"0\" /></td>
 	   </tr>
 	   <tr>
 	   <td>".makeinfocell($lang_item_edit['item_set'],$lang_item_edit['item_set_desc'])."</td>
 	   <td><input type=\"text\" name=\"itemset\" size=\"10\" maxlength=\"30\" value=\"0\" /></td>
-	   
+
 <td>".makeinfocell($lang_item_edit['bonding'],$lang_item_edit['bonding_desc'])."</td>
 	 <td colspan=\"3\"><select name=\"bonding\">
 		<option value=\"0\">0 - {$lang_item['no_bind']}</option>
@@ -545,7 +545,7 @@ $output .= "<div id=\"pane1\">
 
 <td>".makeinfocell($lang_item_edit['start_quest'],$lang_item_edit['start_quest_desc'])."</td>
 <td><input type=\"text\" name=\"startquest\" size=\"10\" maxlength=\"30\" value=\"0\" /></td>
-	   
+
 </tr>
 </table>
 <br />{$lang_item_edit['short_rules_desc']}<br /><br />
@@ -557,23 +557,23 @@ $output .= "<div id=\"pane2\">
 	<tr>
 	 <td>".makeinfocell($lang_item_edit['buy_count'],$lang_item_edit['buy_count_desc'])."</td>
 	 <td><input type=\"text\" name=\"BuyCount\" size=\"8\" maxlength=\"3\" value=\"1\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['buy_price'],$lang_item_edit['buy_price_desc'])."</td>
 	 <td><input type=\"text\" name=\"BuyPrice\" size=\"8\" maxlength=\"30\" value=\"0\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['sell_price'],$lang_item_edit['sell_price_desc'])."</td>
 	 <td><input type=\"text\" name=\"SellPrice\" size=\"8\" maxlength=\"30\" value=\"0\" /></td>
-   <td></td><td></td>   
+   <td></td><td></td>
 	</tr>
 
 	<tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['container']}:</td></tr>
 	<tr>
 	<td>".makeinfocell($lang_item_edit['max_count'],$lang_item_edit['max_count_desc'])."</td>
 	 <td><input type=\"text\" name=\"maxcount\" size=\"8\" maxlength=\"5\" value=\"0\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['stackable'],$lang_item_edit['stackable_desc'])."</td>
 	 <td><input type=\"text\" name=\"stackable\" size=\"8\" maxlength=\"5\" value=\"1\" /></td>
-	 
+
 	<td>".makeinfocell($lang_item_edit['bag_family'],$lang_item_edit['bag_family_desc'])."</td>
 	 <td><select name=\"BagFamily\">
 		<option value=\"0\">0 - {$lang_item['none']}</option>
@@ -591,7 +591,7 @@ $output .= "<div id=\"pane2\">
 	<td><input type=\"text\" name=\"ContainerSlots\" size=\"6\" maxlength=\"3\" value=\"0\" /></td>
 	</tr>
 	<tr>
-	
+
 	<tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['materials']}:</td></tr>
 	<tr>
 	<td>".makeinfocell($lang_item_edit['material'],$lang_item_edit['material_desc'])."</td>
@@ -607,7 +607,7 @@ $output .= "<div id=\"pane2\">
 		<option value=\"7\">7 - {$lang_item_edit['cloth']}</option>
 		<option value=\"8\">8 - {$lang_item_edit['leather']}</option>
 	   </select></td>
-	   
+
 	<td>".makeinfocell($lang_item_edit['page_material'],$lang_item_edit['page_material_desc'])."</td>
 	 <td colspan=\"2\"><select name=\"PageMaterial\">
 		<option value=\"0\">0 - {$lang_item_edit['none']}</option>
@@ -620,13 +620,13 @@ $output .= "<div id=\"pane2\">
 
 <td>".makeinfocell($lang_item_edit['max_durability'],$lang_item_edit['max_durability_desc'])."</td>
 <td><input type=\"text\" name=\"MaxDurability\" size=\"8\" maxlength=\"30\" value=\"10\" /></td>
-</tr>	
+</tr>
 
 <tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['RandomProperty']}:</td></tr>
 <tr>
 	 <td colspan=\"2\">".makeinfocell($lang_item_edit['RandomProperty'],$lang_item_edit['RandomProperty_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"RandomProperty\" size=\"8\" maxlength=\"30\" value=\"0\" /></td>
-	
+
 	 <td colspan=\"2\">".makeinfocell($lang_item_edit['RandomSuffix'],$lang_item_edit['RandomSuffix_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"RandomSuffix\" size=\"8\" maxlength=\"10\" value=\"0\" /></td>
 </tr>
@@ -634,13 +634,13 @@ $output .= "<div id=\"pane2\">
 
 <tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['other']}:</td></tr>
 	<tr>
-	
+
 	 <td>".makeinfocell($lang_item_edit['area'],$lang_item_edit['area_desc'])."</td>
 	 <td><input type=\"text\" name=\"area\" size=\"8\" maxlength=\"10\" value=\"0\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['map'],$lang_item_edit['map_desc'])."</td>
 	 <td><input type=\"text\" name=\"Map\" size=\"8\" maxlength=\"10\" value=\"0\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['page_text'],$lang_item_edit['page_text_desc'])."</td>
 	 <td><input type=\"text\" name=\"PageText\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
 
@@ -654,9 +654,9 @@ $output .= "<div id=\"pane2\">
 
 	 <td colspan=\"2\">".makeinfocell($lang_item_edit['req_skill_disenchant'],$lang_item_edit['req_skill_disenchant_desc'])."</td>
 	 <td><input type=\"text\" name=\"RequiredDisenchantSkill\" size=\"10\" maxlength=\"10\" value=\"-1\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['lock_id'],$lang_item_edit['lock_id_desc'])."</td>
-	 <td><input type=\"text\" name=\"lockid\" size=\"8\" maxlength=\"30\" value=\"0\" /></td>  
+	 <td><input type=\"text\" name=\"lockid\" size=\"8\" maxlength=\"30\" value=\"0\" /></td>
     </tr>
 	<tr>
 	 <td>".makeinfocell($lang_item_edit['lang_id'],$lang_item_edit['lang_id_desc'])."</td>
@@ -675,7 +675,7 @@ $output .= "<div id=\"pane2\">
 		<option value=\"13\">13 - Gnomish</option>
 		<option value=\"14\">14 - Troll</option>
 		<option value=\"33\">33 - Gutterspeak</option>
-	   </select></td>	
+	   </select></td>
 
 	   <td>".makeinfocell($lang_item_edit['sheath'],$lang_item_edit['sheath_desc'])."</td>
 	 <td colspan=\"2\"><select name=\"sheath\">
@@ -687,7 +687,7 @@ $output .= "<div id=\"pane2\">
 		<option value=\"5\">5 - {$lang_item['rod']}</option>
 		<option value=\"7\">7 - {$lang_item['off_hand']}</option>
 	   </select></td>
-	   
+
 	 <td>".makeinfocell($lang_item_edit['totem_category'],$lang_item_edit['totem_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"TotemCategory\" size=\"8\" maxlength=\"10\" value=\"0\" /></td>
  </tr>
@@ -813,7 +813,7 @@ $output .= "<div id=\"pane4\">
 <tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['weapon_properties']}:</td></tr>
 <tr>
 <td>".makeinfocell($lang_item_edit['delay'],$lang_item_edit['delay_desc'])."</td>
- <td colspan=\"2\"><input type=\"text\" name=\"delay\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>	   
+ <td colspan=\"2\"><input type=\"text\" name=\"delay\" size=\"10\" maxlength=\"11\" value=\"0\" /></td>
 
  <td>".makeinfocell($lang_item_edit['ranged_mod'],$lang_item_edit['ranged_mod_desc'])."</td>
  <td colspan=\"2\"><input type=\"text\" name=\"RangedModRange\" size=\"10\" maxlength=\"40\" value=\"0\" /></td>
@@ -821,7 +821,7 @@ $output .= "<div id=\"pane4\">
 <tr>
  <td>".makeinfocell($lang_item_edit['armor_dmg_mod'],$lang_item_edit['armor_dmg_mod_desc'])."</td>
  <td colspan=\"2\"><input type=\"text\" name=\"ArmorDamageModifier\" size=\"10\" maxlength=\"40\" value=\"0\" /></td>
- 
+
  <td>".makeinfocell($lang_item_edit['ammo_type'],$lang_item_edit['ammo_type_desc'])."</td>
  <td colspan=\"2\"><select name=\"ammo_type\">
 	<option value=\"0\">0 - {$lang_item['none']}</option>
@@ -883,7 +883,7 @@ $output .= "</select></td>
 </tr>
 
 </table><br /><br />
-    </div>"; 
+    </div>";
 
 $output .= "<div id=\"pane5\">
      <br /><br /><table class=\"lined\" style=\"width: 720px;\">
@@ -891,7 +891,7 @@ $output .= "<div id=\"pane5\">
 	 <td colspan=\"2\">{$lang_item_edit['item_spell']} 1</td>
 	 <td>".makeinfocell($lang_item_edit['spell_id'],$lang_item_edit['spell_id_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellid_1\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit['spell_trigger_desc'])."</td>
 	 <td><select name=\"spelltrigger_1\">
 		<option value=\"0\">0: {$lang_item['spell_use']}</option>
@@ -905,13 +905,13 @@ $output .= "<div id=\"pane5\">
 <tr>
 	 <td>".makeinfocell($lang_item_edit['spell_cooldown'],$lang_item_edit['spell_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcooldown_1\" size=\"6\" maxlength=\"30\" value=\"-1\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_category'],$lang_item_edit['spell_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategory_1\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['spell_category_cooldown'],$lang_item_edit['spell_category_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategorycooldown_1\" size=\"6\" maxlength=\"30\" value=\"-1\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['ppm_rate'],$lang_item_edit['ppm_rate_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellppmRate_1\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
 </tr>
@@ -920,7 +920,7 @@ $output .= "<div id=\"pane5\">
 	 <td colspan=\"2\">{$lang_item_edit['item_spell']} 2</td>
 	 <td>".makeinfocell($lang_item_edit['spell_id'],$lang_item_edit['spell_id_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellid_2\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit['spell_trigger_desc'])."</td>
 	 <td><select name=\"spelltrigger_2\">
 		<option value=\"0\">0: {$lang_item['spell_use']}</option>
@@ -934,13 +934,13 @@ $output .= "<div id=\"pane5\">
 <tr>
 	 <td>".makeinfocell($lang_item_edit['spell_cooldown'],$lang_item_edit['spell_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcooldown_2\" size=\"6\" maxlength=\"30\" value=\"-1\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_category'],$lang_item_edit['spell_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategory_2\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['spell_category_cooldown'],$lang_item_edit['spell_category_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategorycooldown_2\" size=\"6\" maxlength=\"30\" value=\"-1\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['ppm_rate'],$lang_item_edit['ppm_rate_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellppmRate_2\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
 </tr>
@@ -949,7 +949,7 @@ $output .= "<div id=\"pane5\">
 	 <td colspan=\"2\">{$lang_item_edit['item_spell']} 3</td>
 	 <td>".makeinfocell($lang_item_edit['spell_id'],$lang_item_edit['spell_id_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellid_3\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit['spell_trigger_desc'])."</td>
 	 <td><select name=\"spelltrigger_3\">
 		<option value=\"0\">0: {$lang_item['spell_use']}</option>
@@ -963,13 +963,13 @@ $output .= "<div id=\"pane5\">
 <tr>
 	 <td>".makeinfocell($lang_item_edit['spell_cooldown'],$lang_item_edit['spell_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcooldown_3\" size=\"6\" maxlength=\"30\" value=\"-1\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_category'],$lang_item_edit['spell_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategory_3\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['spell_category_cooldown'],$lang_item_edit['spell_category_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategorycooldown_3\" size=\"6\" maxlength=\"30\" value=\"-1\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['ppm_rate'],$lang_item_edit['ppm_rate_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellppmRate_3\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
 </tr>
@@ -978,7 +978,7 @@ $output .= "<div id=\"pane5\">
 	 <td colspan=\"2\">{$lang_item_edit['item_spell']} 4</td>
 	 <td>".makeinfocell($lang_item_edit['spell_id'],$lang_item_edit['spell_id_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellid_4\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit['spell_trigger_desc'])."</td>
 	 <td><select name=\"spelltrigger_4\">
 		<option value=\"0\">0: {$lang_item['spell_use']}</option>
@@ -992,13 +992,13 @@ $output .= "<div id=\"pane5\">
 <tr>
 	 <td>".makeinfocell($lang_item_edit['spell_cooldown'],$lang_item_edit['spell_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcooldown_4\" size=\"6\" maxlength=\"30\" value=\"-1\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_category'],$lang_item_edit['spell_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategory_4\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['spell_category_cooldown'],$lang_item_edit['spell_category_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategorycooldown_4\" size=\"6\" maxlength=\"30\" value=\"-1\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['ppm_rate'],$lang_item_edit['ppm_rate_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellppmRate_4\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
 </tr>
@@ -1007,7 +1007,7 @@ $output .= "<div id=\"pane5\">
 	 <td colspan=\"2\">{$lang_item_edit['item_spell']} 5</td>
 	 <td>".makeinfocell($lang_item_edit['spell_id'],$lang_item_edit['spell_id_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellid_5\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit['spell_trigger_desc'])."</td>
 	 <td><select name=\"spelltrigger_5\">
 		<option value=\"0\">0: {$lang_item['spell_use']}</option>
@@ -1021,13 +1021,13 @@ $output .= "<div id=\"pane5\">
 <tr>
 	 <td>".makeinfocell($lang_item_edit['spell_cooldown'],$lang_item_edit['spell_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcooldown_5\" size=\"6\" maxlength=\"30\" value=\"-1\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_category'],$lang_item_edit['spell_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategory_5\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['spell_category_cooldown'],$lang_item_edit['spell_category_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategorycooldown_5\" size=\"6\" maxlength=\"30\" value=\"-1\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['ppm_rate'],$lang_item_edit['ppm_rate_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellppmRate_5\" size=\"6\" maxlength=\"30\" value=\"0\" /></td>
  </tr>
@@ -1066,26 +1066,26 @@ $output .= "<div id=\"pane6\">
 		<option value=\"256\">256 - {$lang_id_tab['draenei']}</option>
 		<option value=\"512\">512 - {$lang_id_tab['bloodelf']}</option>
 	   </select></td>
-	      
+
 </tr>
 <tr>
 	 <td>".makeinfocell($lang_item_edit['req_skill'],$lang_item_edit['req_skill_desc'])."</td>
 	 <td><input type=\"text\" name=\"RequiredSkill\" size=\"15\" maxlength=\"30\" value=\"0\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['req_skill_rank'],$lang_item_edit['req_skill_rank_desc'])."</td>
 	 <td><input type=\"text\" name=\"RequiredSkillRank\" size=\"15\" maxlength=\"30\" value=\"0\" /></td>
 </tr>
 <tr>
 	 <td>".makeinfocell($lang_item_edit['req_spell'],$lang_item_edit['req_spell_desc'])."</td>
 	 <td><input type=\"text\" name=\"requiredspell\" size=\"15\" maxlength=\"30\" value=\"0\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['req_honor_rank'],$lang_item_edit['req_honor_rank_desc'])."</td>
 	 <td><input type=\"text\" name=\"requiredhonorrank\" size=\"15\" maxlength=\"30\" value=\"0\" /></td>
 </tr>
 <tr>
 	 <td>".makeinfocell($lang_item_edit['req_rep_faction'],$lang_item_edit['req_rep_faction_desc'])."</td>
 	 <td><input type=\"text\" name=\"RequiredReputationFaction\" size=\"15\" maxlength=\"30\" value=\"0\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['req_rep_rank'],$lang_item_edit['req_rep_rank_desc'])."</td>
 	    <td><select name=\"RequiredReputationRank\">
 		<option value=\"0\">0 - {$lang_item_edit['hated']}</option>
@@ -1118,7 +1118,7 @@ $output .= "<div id=\"pane7\">
 		<option value=\"4\">4: {$lang_item['socket_yellow']}</option>
 		<option value=\"8\">8: {$lang_item['socket_blue']}</option>
 	  </select></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['socket_content']." 1",$lang_item_edit['socket_content_desc'])."</td>
 	 <td><input type=\"text\" name=\"socketContent_1\" size=\"15\" maxlength=\"10\" value=\"0\" /></td>
 </tr>
@@ -1131,7 +1131,7 @@ $output .= "<div id=\"pane7\">
 		<option value=\"4\">4: {$lang_item['socket_yellow']}</option>
 		<option value=\"8\">8: {$lang_item['socket_blue']}</option>
 	  </select></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['socket_content']." 2",$lang_item_edit['socket_content_desc'])."</td>
 	 <td><input type=\"text\" name=\"socketContent_2\" size=\"15\" maxlength=\"10\" value=\"0\" /></td>
 </tr>
@@ -1144,7 +1144,7 @@ $output .= "<div id=\"pane7\">
 		<option value=\"4\">4: {$lang_item['socket_yellow']}</option>
 		<option value=\"8\">8: {$lang_item['socket_blue']}</option>
 	  </select></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['socket_content']." 3",$lang_item_edit['socket_content_desc'])."</td>
 	 <td><input type=\"text\" name=\"socketContent_3\" size=\"15\" maxlength=\"10\" value=\"0\" /></td>
 </tr>
@@ -1152,7 +1152,7 @@ $output .= "<div id=\"pane7\">
 <tr>
 	 <td>".makeinfocell($lang_item_edit['socket_bonus'],$lang_item_edit['socket_bonus_desc'])."</td>
 	 <td><input type=\"text\" name=\"socketBonus\" size=\"15\" maxlength=\"10\" value=\"0\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['gem_properties'],$lang_item_edit['gem_properties_desc'])."</td>
 	 <td><input type=\"text\" name=\"GemProperties\" size=\"15\" maxlength=\"10\" value=\"0\" /></td>
 </tr>
@@ -1182,14 +1182,14 @@ $output .= "<div id=\"pane7\">
 // EDIT ITEM FORM
 //########################################################################################################################
 function edit() {
- global $lang_global, $lang_item_templ, $lang_item, $lang_item_edit, $output, $world_db, $realm_id, 
+ global $lang_global, $lang_item_templ, $lang_item, $lang_item_edit, $output, $world_db, $realm_id,
 		$item_datasite, $lang_id_tab, $quest_datasite;
 
  if (!isset($_GET['entry'])) redirect("item.php?error=1");
 
  $sql = new SQL;
  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
- 
+
  $entry = $sql->quote_smart($_GET['entry']);
  $deplang = get_lang_id();
  $result = $sql->query("SELECT `item_template`.`entry`,`class`,`subclass`,`unk0`,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,`displayid`,`Quality`,`Flags`,`BuyCount`,`BuyPrice`,`SellPrice`,`InventoryType`,`AllowableClass`,`AllowableRace`,`ItemLevel`,`RequiredLevel`,`RequiredSkill`,`RequiredSkillRank`,`requiredspell`,`requiredhonorrank`,`RequiredCityRank`,`RequiredReputationFaction`,`RequiredReputationRank`,`maxcount`,`stackable`,`ContainerSlots`,`stat_type1`,`stat_value1`,`stat_type2`,`stat_value2`,`stat_type3`,`stat_value3`,`stat_type4`,`stat_value4`,`stat_type5`,`stat_value5`,`stat_type6`,`stat_value6`,`stat_type7`,`stat_value7`,`stat_type8`,`stat_value8`,`stat_type9`,`stat_value9`,`stat_type10`,`stat_value10`,`dmg_min1`,`dmg_max1`,`dmg_type1`,`dmg_min2`,`dmg_max2`,`dmg_type2`,`dmg_min3`,`dmg_max3`,`dmg_type3`,`dmg_min4`,`dmg_max4`,`dmg_type4`,`dmg_min5`,`dmg_max5`,`dmg_type5`,`armor`,`holy_res`,`fire_res`,`nature_res`,`frost_res`,`shadow_res`,`arcane_res`,`delay`,`ammo_type`,`RangedModRange`,`spellid_1`,`spelltrigger_1`,`spellcharges_1`,`spellppmRate_1`,`spellcooldown_1`,`spellcategory_1`,`spellcategorycooldown_1`,`spellid_2`,`spelltrigger_2`,`spellcharges_2`,`spellppmRate_2`,`spellcooldown_2`,`spellcategory_2`,`spellcategorycooldown_2`,`spellid_3`,`spelltrigger_3`,`spellcharges_3`,`spellppmRate_3`,`spellcooldown_3`,`spellcategory_3`,`spellcategorycooldown_3`,`spellid_4`,`spelltrigger_4`,`spellcharges_4`,`spellppmRate_4`,`spellcooldown_4`,`spellcategory_4`,`spellcategorycooldown_4`,`spellid_5`,`spelltrigger_5`,`spellcharges_5`,`spellppmRate_5`,`spellcooldown_5`,`spellcategory_5`,`spellcategorycooldown_5`,`bonding`,`description`,`PageText`,`LanguageID`,`PageMaterial`,`startquest`,`lockid`,`Material`,`sheath`,`RandomProperty`,`RandomSuffix`,`block`,`itemset`,`MaxDurability`,`area`,`Map`,`BagFamily`,`TotemCategory`,`socketColor_1`,`socketContent_1`,`socketColor_2`,`socketContent_2`,`socketColor_3`,`socketContent_3`,`socketBonus`,`GemProperties`,`RequiredDisenchantSkill`,`ArmorDamageModifier`,`ScriptName`,`DisenchantID`,`FoodType`,`minMoneyLoot`,`maxMoneyLoot` FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry WHERE item_template.entry = '$entry'");
@@ -1206,7 +1206,7 @@ function edit() {
 		<input type=\"hidden\" name=\"backup_op\" value=\"0\"/>
 		<input type=\"hidden\" name=\"type\" value=\"edit\"/>
 		<input type=\"hidden\" name=\"entry\" value=\"$entry\"/>
-		
+
 <div class=\"jtab-container\" id=\"container\">
   <ul class=\"jtabs\">
     <li><a href=\"#\" onclick=\"return showPane('pane1', this)\" id=\"tab1\">{$lang_item_edit['general_tab']}</a></li>
@@ -1221,7 +1221,7 @@ function edit() {
 $output .= "</ul>
   <div class=\"jtab-panes\">";
 
-   
+
 $output .= "<div id=\"pane1\">
 		<br /><br />
 <table class=\"lined\" style=\"width: 720px;\">
@@ -1233,10 +1233,10 @@ $output .= "<div id=\"pane1\">
  $output .= "</td>
  <td>".makeinfocell($lang_item_edit['display_id'],$lang_item_edit['display_id_desc'])."</td>
  <td><input type=\"text\" name=\"displayid\" size=\"8\" maxlength=\"11\" value=\"{$item['displayid']}\" /></td>
- 
+
  <td>".makeinfocell($lang_item_edit['req_level'],$lang_item_edit['req_level_desc'])."</td>
  <td><input type=\"text\" name=\"RequiredLevel\" size=\"8\" maxlength=\"4\" value=\"{$item['RequiredLevel']}\" /></td>
- 
+
  <td>".makeinfocell($lang_item_edit['item_level'],$lang_item_edit['item_level_desc'])."</td>
  <td><input type=\"text\" name=\"ItemLevel\" size=\"8\" maxlength=\"4\" value=\"{$item['ItemLevel']}\" /></td>
 </tr>
@@ -1258,7 +1258,7 @@ $output .= "<div id=\"pane1\">
 
 <tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['type']}:</td></tr>
 	 <tr>";
-	 
+
  $class = array( 0 => "", 1 => "", 2 => "", 4 => "", 5 => "", 6 => "", 7 => "", 9 => "", 11 => "", 12 => "", 13 => "",
 	14 => "",15 => "" );
  $class[$item['class']] = " selected=\"selected\" ";
@@ -1280,11 +1280,11 @@ $output .= "<td>".makeinfocell($lang_item_edit['class'],$lang_item_edit['class_d
 		<option value=\"15\" {$class[15]}>15 - {$lang_item['misc_short']}</option>
 	   </select></td>";
  unset($class);
-	   
+
  $subclass = array(
 	0 => array(0 => "", 3 => "", 4 => "", 5 => "", 6 => "", 7 => ""),
 	1 => array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "", 6 => ""),
-	2 => array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "", 10 => "", 
+	2 => array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "", 10 => "",
 			11 => "", 12 => "", 13 => "", 14 => "", 15 => "", 16 => "", 17 => "", 18 => "", 19 => "", 20 => ""),
 	4 => array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "", 9 => ""),
 	6 => array(2 => "", 3 => ""),
@@ -1293,7 +1293,7 @@ $output .= "<td>".makeinfocell($lang_item_edit['class'],$lang_item_edit['class_d
 	11 => array(2 => "", 3 => ""),
 	13 => array(0 => "", 1 => "")
 	);
- $subclass[$item['class']][$item['subclass']] = " selected=\"selected\" ";	   
+ $subclass[$item['class']][$item['subclass']] = " selected=\"selected\" ";
 
 $output .= "<td>".makeinfocell($lang_item_edit['subclass'],$lang_item_edit['subclass_desc'])."</td>
 	<td colspan=\"3\"><select name=\"subclass\">
@@ -1397,7 +1397,7 @@ $output .= "<td>".makeinfocell($lang_item_edit['quality'],$lang_item_edit['quali
 		<option value=\"6\" {$quality[6]}>6 - {$lang_item['artifact']}</option>
 	   </select></td>";
  unset($quality);
- 
+
 $inv_type = array( 0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "", 9 => "", 10 => "", 11 => "", 12 => "",
 	13 => "", 14 => "", 15 => "", 16 => "", 17 => "", 18 => "", 19 => "", 20 => "", 21 => "", 22 => "", 23 => "",
 	24 => "", 25 => "", 26 => "");
@@ -1433,19 +1433,19 @@ $output .= "<td>".makeinfocell($lang_item_edit['inv_type'],$lang_item_edit['inv_
 		<option value=\"25\" {$inv_type[25]}>25 - {$lang_item['thrown']}</option>
 		<option value=\"26\" {$inv_type[26]}>26 - {$lang_item['rifle']}</option>
 	   </select></td>
-	   
+
 	   <td>".makeinfocell($lang_item_edit['flags'],$lang_item_edit['flags_desc'])."</td>
 	   <td><input type=\"text\" name=\"Flags\" size=\"10\" maxlength=\"30\" value=\"{$item['Flags']}\" /></td>
 	   </tr>
-	  
+
 	   <tr>
 	   <td>".makeinfocell($lang_item_edit['item_set'],$lang_item_edit['item_set_desc'])."</td>
 	   <td><input type=\"text\" name=\"itemset\" size=\"10\" maxlength=\"30\" value=\"{$item['itemset']}\" /></td>";
- unset($inv_type);	
-	
+ unset($inv_type);
+
 $bonding = array( 0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "" );
-$bonding[$item['bonding']] = " selected=\"selected\" ";  
-		
+$bonding[$item['bonding']] = " selected=\"selected\" ";
+
 $output .= "<td>".makeinfocell($lang_item_edit['bonding'],$lang_item_edit['bonding_desc'])."</td>
 	 <td colspan=\"3\"><select name=\"bonding\">
 		<option value=\"0\" {$bonding[0]}>0 - {$lang_item['no_bind']}</option>
@@ -1458,12 +1458,12 @@ $output .= "<td>".makeinfocell($lang_item_edit['bonding'],$lang_item_edit['bondi
 
 <td>".makeinfocell($lang_item_edit['start_quest'],$lang_item_edit['start_quest_desc'])."</td>
 <td><input type=\"text\" name=\"startquest\" size=\"10\" maxlength=\"30\" value=\"{$item['startquest']}\" /></td>
-	   
+
 </tr>
 </table>
 <br />{$lang_item_edit['short_rules_desc']}<br /><br />
 </div>";
- unset($bonding);	 
+ unset($bonding);
 
 $output .= "<div id=\"pane2\">
 	<br /><br /><table class=\"lined\" style=\"width: 720px;\">
@@ -1471,10 +1471,10 @@ $output .= "<div id=\"pane2\">
 	<tr>
 	 <td>".makeinfocell($lang_item_edit['buy_count'],$lang_item_edit['buy_count_desc'])."</td>
 	 <td><input type=\"text\" name=\"BuyCount\" size=\"8\" maxlength=\"3\" value=\"{$item['BuyCount']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['buy_price'],$lang_item_edit['buy_price_desc'])."</td>
 	 <td><input type=\"text\" name=\"BuyPrice\" size=\"8\" maxlength=\"30\" value=\"{$item['BuyPrice']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['sell_price'],$lang_item_edit['sell_price_desc'])."</td>
 	 <td><input type=\"text\" name=\"SellPrice\" size=\"8\" maxlength=\"30\" value=\"{$item['SellPrice']}\" /></td>
    <td></td><td></td>
@@ -1485,15 +1485,15 @@ $output .= "<div id=\"pane2\">
 
 		<td>".makeinfocell($lang_item_edit['max_count'],$lang_item_edit['max_count_desc'])."</td>
 		<td><input type=\"text\" name=\"maxcount\" size=\"6\" maxlength=\"5\" value=\"{$item['maxcount']}\" /></td>
-	 
+
 		<td>".makeinfocell($lang_item_edit['stackable'],$lang_item_edit['stackable_desc'])."</td>
 		<td><input type=\"text\" name=\"stackable\" size=\"6\" maxlength=\"5\" value=\"{$item['stackable']}\" /></td>
-	 
+
 		<td>".makeinfocell($lang_item_edit['bag_family'],$lang_item_edit['bag_family_desc'])."</td>";
-	
+
 $bagfamily = array( 0 => "", 1 => "", 2 => "", 3 => "", 6 => "", 7 => "", 8 => "", 9 => "", 10 => "", 12 => "" );
 $bagfamily[$item['BagFamily']] = " selected=\"selected\" ";
-	
+
 $output .= "<td><select name=\"BagFamily\">
 		<option value=\"0\" {$bagfamily[0]}>0 - {$lang_item['none']}</option>
 		<option value=\"1\" {$bagfamily[1]}>1 - {$lang_item['arrows']}</option>
@@ -1510,13 +1510,13 @@ $output .= "<td><select name=\"BagFamily\">
 	<td><input type=\"text\" name=\"ContainerSlots\" size=\"10\" maxlength=\"3\" value=\"{$item['ContainerSlots']}\" /></td>
 	</tr>
 	<tr>
-	
+
 	<tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['materials']}:</td></tr>";
  unset($bagfamily);
- 
+
 $Material = array( -1 => "", 0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "", 6 => "", 7 => "", 8 => "");
 $Material[$item['Material']] = " selected=\"selected\" ";
-	
+
 $output .= "<tr>
 	<td>".makeinfocell($lang_item_edit['material'],$lang_item_edit['material_desc'])."</td>
 	 <td colspan=\"2\"><select name=\"Material\">
@@ -1532,10 +1532,10 @@ $output .= "<tr>
 		<option value=\"8\" {$Material[8]}>8 - {$lang_item_edit['leather']}</option>
 	   </select></td>";
  unset($Material);
- 
+
 $PageMaterial = array( 0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "");
 $PageMaterial[$item['PageMaterial']] = " selected=\"selected\" ";
-	   
+
 $output .= "<td>".makeinfocell($lang_item_edit['page_material'],$lang_item_edit['page_material_desc'])."</td>
 	 <td colspan=\"2\"><select name=\"PageMaterial\">
 		<option value=\"0\" {$PageMaterial[0]}>0 - {$lang_item_edit['none']}</option>
@@ -1549,13 +1549,13 @@ $output .= "<td>".makeinfocell($lang_item_edit['page_material'],$lang_item_edit[
 
 $output .= "<td>".makeinfocell($lang_item_edit['max_durability'],$lang_item_edit['max_durability_desc'])."</td>
 	<td><input type=\"text\" name=\"MaxDurability\" size=\"8\" maxlength=\"30\" value=\"{$item['MaxDurability']}\" /></td>
-</tr>	
+</tr>
 
 <tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['RandomProperty']}:</td></tr>
 <tr>
 	 <td colspan=\"2\">".makeinfocell($lang_item_edit['RandomProperty'],$lang_item_edit['RandomProperty_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"RandomProperty\" size=\"8\" maxlength=\"30\" value=\"{$item['RandomProperty']}\" /></td>
- 
+
 	 <td colspan=\"2\">".makeinfocell($lang_item_edit['RandomSuffix'],$lang_item_edit['RandomSuffix_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"RandomSuffix\" size=\"8\" maxlength=\"10\" value=\"{$item['RandomSuffix']}\" /></td>
 </tr>
@@ -1565,10 +1565,10 @@ $output .= "<td>".makeinfocell($lang_item_edit['max_durability'],$lang_item_edit
 	<tr>
 	 <td>".makeinfocell($lang_item_edit['area'],$lang_item_edit['area_desc'])."</td>
 	 <td><input type=\"text\" name=\"area\" size=\"8\" maxlength=\"10\" value=\"{$item['area']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['map'],$lang_item_edit['map_desc'])."</td>
 	 <td><input type=\"text\" name=\"Map\" size=\"8\" maxlength=\"10\" value=\"{$item['Map']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['page_text'],$lang_item_edit['page_text_desc'])."</td>
 	 <td><input type=\"text\" name=\"PageText\" size=\"6\" maxlength=\"30\" value=\"{$item['PageText']}\" /></td>
 
@@ -1583,12 +1583,12 @@ $output .= "<td>".makeinfocell($lang_item_edit['max_durability'],$lang_item_edit
 
 	 <td colspan=\"2\">".makeinfocell($lang_item_edit['req_skill_disenchant'],$lang_item_edit['req_skill_disenchant_desc'])."</td>
 	 <td><input type=\"text\" name=\"RequiredDisenchantSkill\" size=\"10\" maxlength=\"10\" value=\"{$item['RequiredDisenchantSkill']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['lock_id'],$lang_item_edit['lock_id_desc'])."</td>
-	 <td><input type=\"text\" name=\"lockid\" size=\"8\" maxlength=\"30\" value=\"{$item['lockid']}\" /></td>  
+	 <td><input type=\"text\" name=\"lockid\" size=\"8\" maxlength=\"30\" value=\"{$item['lockid']}\" /></td>
 	</tr>";
-	
-	
+
+
 $LanguageID = array( 0 => "", 1 => "", 2 => "", 3 => "", 6 => "", 7 => "", 8 => "", 9 => "", 10 => "", 11 => "",
 					 12 => "", 13 => "", 14 => "", 33 => "");
 $LanguageID[$item['LanguageID']] = " selected=\"selected\" ";
@@ -1612,10 +1612,10 @@ $output .= "<tr>
 		<option value=\"33\" {$LanguageID[33]}>33 - Gutterspeak</option>
 	   </select></td>";
    unset($LanguageID);
-   
+
 $sheath = array( 0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "", 7 => "");
 $sheath[$item['sheath']] = " selected=\"selected\" ";
-	   
+
 $output .= "<td>".makeinfocell($lang_item_edit['sheath'],$lang_item_edit['sheath_desc'])."</td>
 	 <td colspan=\"2\"><select name=\"sheath\">
 		<option value=\"0\" {$sheath[0]}>0 - {$lang_item_edit['other']}</option>
@@ -1626,20 +1626,20 @@ $output .= "<td>".makeinfocell($lang_item_edit['sheath'],$lang_item_edit['sheath
 		<option value=\"5\" {$sheath[5]}>5 - {$lang_item['rod']}</option>
 		<option value=\"7\" {$sheath[7]}>7 - {$lang_item['off_hand']}</option>
 	   </select></td>
-	   
+
 	 <td>".makeinfocell($lang_item_edit['totem_category'],$lang_item_edit['totem_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"TotemCategory\" size=\"8\" maxlength=\"10\" value=\"{$item['TotemCategory']}\" /></td>
 	</tr>
 
 	 </table><br /><br />
     </div>";
- unset($sheath);   
+ unset($sheath);
 
 $output .= "<div id=\"pane3\">
 	 <br /><br /><table class=\"lined\" style=\"width: 720px;\">
 	<tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['stats']}:</td></tr>
 	<tr>
-	
+
 	<td>".makeinfocell($lang_item_edit['stat_type']." 1",$lang_item_edit['stat_type_desc'])."</td>
 	 <td><select name=\"stat_type1\">";
 		output_status_options($item['stat_type1']);
@@ -1707,33 +1707,33 @@ $output .= "</select></td>
 
 	 <td><input type=\"text\" name=\"stat_value10\" size=\"10\" maxlength=\"6\" value=\"{$item['stat_value10']}\" /></td>
 	</tr>
-	
+
 	<tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['resis_armor']}:</td></tr>
 	 <tr>
 	 <td colspan=\"2\">".makeinfocell($lang_item['armor'],$lang_item_edit['armor_desc'])."</td>
 	 <td><input type=\"text\" name=\"armor\" size=\"10\" maxlength=\"30\" value=\"{$item['armor']}\" /></td>
-	 
+
 	 <td colspan=\"2\">".makeinfocell($lang_item['block'],$lang_item_edit['block_desc'])."</td>
 	 <td><input type=\"text\" name=\"block\" size=\"10\" maxlength=\"30\" value=\"{$item['block']}\" /></td>
 	 </tr>
 	 <tr>
 	 <td colspan=\"2\">".makeinfocell($lang_item['res_holy'],$lang_item_edit['res_holy_desc'])."</td>
 	 <td><input type=\"text\" name=\"holy_res\" size=\"10\" maxlength=\"30\" value=\"{$item['holy_res']}\" /></td>
-	 
+
 	 <td colspan=\"2\">".makeinfocell($lang_item['res_fire'],$lang_item_edit['res_fire_desc'])."</td>
 	 <td><input type=\"text\" name=\"fire_res\" size=\"10\" maxlength=\"30\" value=\"{$item['fire_res']}\" /></td>
 	 </tr>
 	 <tr>
 	 <td colspan=\"2\">".makeinfocell($lang_item['res_nature'],$lang_item_edit['res_nature_desc'])."</td>
 	 <td><input type=\"text\" name=\"nature_res\" size=\"10\" maxlength=\"30\" value=\"{$item['nature_res']}\" /></td>
-	 
+
 	 <td colspan=\"2\">".makeinfocell($lang_item['res_frost'],$lang_item_edit['res_frost_desc'])."</td>
 	 <td><input type=\"text\" name=\"frost_res\" size=\"10\" maxlength=\"30\" value=\"{$item['frost_res']}\" /></td>
 	 </tr>
 	 <tr>
 	 <td colspan=\"2\">".makeinfocell($lang_item['res_shadow'],$lang_item_edit['res_shadow_desc'])."</td>
 	 <td><input type=\"text\" name=\"shadow_res\" size=\"10\" maxlength=\"30\" value=\"{$item['shadow_res']}\" /></td>
-	 
+
 	 <td colspan=\"2\">".makeinfocell($lang_item['res_arcane'],$lang_item_edit['res_arcane_desc'])."</td>
 	 <td><input type=\"text\" name=\"arcane_res\" size=\"10\" maxlength=\"30\" value=\"{$item['arcane_res']}\" /></td>
 	 </tr>
@@ -1746,7 +1746,7 @@ $output .= "<div id=\"pane4\">
 	<tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['weapon_properties']}:</td></tr>
 <tr>
  <td>".makeinfocell($lang_item_edit['delay'],$lang_item_edit['delay_desc'])."</td>
- <td colspan=\"2\"><input type=\"text\" name=\"delay\" size=\"10\" maxlength=\"11\" value=\"{$item['delay']}\" /></td>	   
+ <td colspan=\"2\"><input type=\"text\" name=\"delay\" size=\"10\" maxlength=\"11\" value=\"{$item['delay']}\" /></td>
 
  <td>".makeinfocell($lang_item_edit['ranged_mod'],$lang_item_edit['ranged_mod_desc'])."</td>
  <td colspan=\"2\"><input type=\"text\" name=\"RangedModRange\" size=\"10\" maxlength=\"40\" value=\"{$item['RangedModRange']}\" /></td>
@@ -1768,7 +1768,7 @@ $output .= "<td>".makeinfocell($lang_item_edit['ammo_type'],$lang_item_edit['amm
 <tr class=\"large_bold\"><td colspan=\"8\" class=\"hidden\" align=\"left\">{$lang_item_edit['weapon_damage']}:</td></tr>
 <tr>";
  unset($ammo_type);
- 
+
 $output .= "<td>".makeinfocell($lang_item_edit['damage_type']." 1",$lang_item_edit['damage_type_desc'])."</td>
 	 <td colspan=\"2\"><select name=\"dmg_type1\">";
 	 output_dmgtype_options($item['dmg_type1']);
@@ -1829,7 +1829,7 @@ $output .= "<div id=\"pane5\">
 
 $spelltrigger_1  = array( 0 => "", 1 => "", 2 => "", 4 => "");
 $spelltrigger_1 [$item['spelltrigger_1']] = " selected=\"selected\" ";
-	 
+
 $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit['spell_trigger_desc'])."</td>
 	 <td><select name=\"spelltrigger_1\">
 		<option value=\"0\" {$spelltrigger_1[0]}>0: {$lang_item['spell_use']}</option>
@@ -1843,13 +1843,13 @@ $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit[
 <tr>
 	 <td>".makeinfocell($lang_item_edit['spell_cooldown'],$lang_item_edit['spell_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcooldown_1\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcooldown_1']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_category'],$lang_item_edit['spell_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategory_1\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcategory_1']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['spell_category_cooldown'],$lang_item_edit['spell_category_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategorycooldown_1\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcategorycooldown_1']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['ppm_rate'],$lang_item_edit['ppm_rate_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellppmRate_1\" size=\"6\" maxlength=\"30\" value=\"{$item['spellppmRate_1']}\" /></td>
 </tr>
@@ -1859,10 +1859,10 @@ $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit[
 	 <td>".makeinfocell($lang_item_edit['spell_id'],$lang_item_edit['spell_id_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellid_2\" size=\"6\" maxlength=\"30\" value=\"{$item['spellid_2']}\" /></td>";
  unset($spelltrigger_1);
- 
+
 $spelltrigger_2  = array( 0 => "", 1 => "", 2 => "", 4 => "");
 $spelltrigger_2 [$item['spelltrigger_2']] = " selected=\"selected\" ";
-	 
+
 $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit['spell_trigger_desc'])."</td>
 	 <td><select name=\"spelltrigger_2\">
 		<option value=\"0\" {$spelltrigger_2[0]}>0: {$lang_item['spell_use']}</option>
@@ -1876,13 +1876,13 @@ $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit[
 <tr>
 	 <td>".makeinfocell($lang_item_edit['spell_cooldown'],$lang_item_edit['spell_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcooldown_2\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcooldown_2']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_category'],$lang_item_edit['spell_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategory_2\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcategory_2']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['spell_category_cooldown'],$lang_item_edit['spell_category_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategorycooldown_2\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcategorycooldown_2']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['ppm_rate'],$lang_item_edit['ppm_rate_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellppmRate_2\" size=\"6\" maxlength=\"30\" value=\"{$item['spellppmRate_2']}\" /></td>
 </tr>
@@ -1892,10 +1892,10 @@ $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit[
 	 <td>".makeinfocell($lang_item_edit['spell_id'],$lang_item_edit['spell_id_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellid_3\" size=\"6\" maxlength=\"30\" value=\"{$item['spellid_3']}\" /></td>";
  unset($spelltrigger_2);
- 
+
 $spelltrigger_3  = array( 0 => "", 1 => "", 2 => "", 4 => "");
 $spelltrigger_3 [$item['spelltrigger_3']] = " selected=\"selected\" ";
-	 
+
 $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit['spell_trigger_desc'])."</td>
 	 <td><select name=\"spelltrigger_3\">
 		<option value=\"0\" {$spelltrigger_3[0]}>0: {$lang_item['spell_use']}</option>
@@ -1909,13 +1909,13 @@ $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit[
 <tr>
 	 <td>".makeinfocell($lang_item_edit['spell_cooldown'],$lang_item_edit['spell_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcooldown_3\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcooldown_3']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_category'],$lang_item_edit['spell_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategory_3\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcategory_3']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['spell_category_cooldown'],$lang_item_edit['spell_category_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategorycooldown_3\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcategorycooldown_3']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['ppm_rate'],$lang_item_edit['ppm_rate_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellppmRate_3\" size=\"6\" maxlength=\"30\" value=\"{$item['spellppmRate_3']}\" /></td>
 </tr>
@@ -1925,10 +1925,10 @@ $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit[
 	 <td>".makeinfocell($lang_item_edit['spell_id'],$lang_item_edit['spell_id_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellid_4\" size=\"6\" maxlength=\"30\" value=\"{$item['spellid_4']}\" /></td>";
  unset($spelltrigger_3);
- 
+
 $spelltrigger_4  = array( 0 => "", 1 => "", 2 => "", 4 => "");
 $spelltrigger_4 [$item['spelltrigger_4']] = " selected=\"selected\" ";
-	 
+
 $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit['spell_trigger_desc'])."</td>
 	 <td><select name=\"spelltrigger_4\">
 		<option value=\"0\" {$spelltrigger_4[0]}>0: {$lang_item['spell_use']}</option>
@@ -1942,13 +1942,13 @@ $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit[
 <tr>
 	 <td>".makeinfocell($lang_item_edit['spell_cooldown'],$lang_item_edit['spell_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcooldown_4\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcooldown_4']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_category'],$lang_item_edit['spell_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategory_4\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcategory_4']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['spell_category_cooldown'],$lang_item_edit['spell_category_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategorycooldown_4\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcategorycooldown_4']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['ppm_rate'],$lang_item_edit['ppm_rate_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellppmRate_4\" size=\"6\" maxlength=\"30\" value=\"{$item['spellppmRate_4']}\" /></td>
 </tr>
@@ -1958,10 +1958,10 @@ $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit[
 	 <td>".makeinfocell($lang_item_edit['spell_id'],$lang_item_edit['spell_id_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellid_5\" size=\"6\" maxlength=\"30\" value=\"{$item['spellid_5']}\" /></td>";
  unset($spelltrigger_4);
- 
+
 $spelltrigger_5  = array( 0 => "", 1 => "", 2 => "", 4 => "");
 $spelltrigger_5 [$item['spelltrigger_5']] = " selected=\"selected\" ";
-	 
+
 $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit['spell_trigger_desc'])."</td>
 	 <td><select name=\"spelltrigger_5\">
 		<option value=\"0\" {$spelltrigger_5[0]}>0: {$lang_item['spell_use']}</option>
@@ -1975,13 +1975,13 @@ $output .= "<td>".makeinfocell($lang_item_edit['spell_trigger'],$lang_item_edit[
 <tr>
 	 <td>".makeinfocell($lang_item_edit['spell_cooldown'],$lang_item_edit['spell_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcooldown_5\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcooldown_5']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['spell_category'],$lang_item_edit['spell_category_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategory_5\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcategory_5']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['spell_category_cooldown'],$lang_item_edit['spell_category_cooldown_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellcategorycooldown_5\" size=\"6\" maxlength=\"30\" value=\"{$item['spellcategorycooldown_5']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_item_edit['ppm_rate'],$lang_item_edit['ppm_rate_desc'])."</td>
 	 <td><input type=\"text\" name=\"spellppmRate_5\" size=\"6\" maxlength=\"30\" value=\"{$item['spellppmRate_5']}\" /></td>
 </tr>
@@ -2027,10 +2027,10 @@ $output .= "<td>".makeinfocell($lang_item_edit['allow_class'],$lang_item_edit['a
 		<option value=\"1024\" {$AllowableClass[1024]}>1024 - {$lang_id_tab['druid']}</option>
 	   </select></td>";
  unset($AllowableClass);
- 
+
 $AllowableRace  = array( -1 => "", 1 => "", 2 => "", 4 => "", 8 => "", 16 => "", 32 => "", 64 => "", 128 => "",
 						 256 => "", 512 => "");
-				 
+
 if($item['AllowableRace'] == -1) $AllowableRace[-1] = " selected=\"selected\" ";
 else {
 	if ($item['AllowableRace'] & 1) $AllowableRace[1] = " selected=\"selected\" ";
@@ -2044,7 +2044,7 @@ else {
 	if ($item['AllowableRace'] & 256) $AllowableRace[256] = " selected=\"selected\" ";
 	if ($item['AllowableRace'] & 512) $AllowableRace[512] = " selected=\"selected\" ";
   }
- 
+
 $output .= "<td>".makeinfocell($lang_item_edit['allow_race'],$lang_item_edit['allow_race_desc'])."</td>
    <td><select multiple=\"multiple\" name=\"AllowableRace[]\" size=\"5\">
 		<option value=\"-1\" {$AllowableRace[-1]}>-1 - {$lang_item_edit['all']}</option>
@@ -2058,19 +2058,19 @@ $output .= "<td>".makeinfocell($lang_item_edit['allow_race'],$lang_item_edit['al
 		<option value=\"128\" {$AllowableRace[128]}>128 - {$lang_id_tab['troll']}</option>
 		<option value=\"256\" {$AllowableRace[256]}>256 - {$lang_id_tab['draenei']}</option>
 		<option value=\"512\" {$AllowableRace[512]}>512 - {$lang_id_tab['bloodelf']}</option>
-	   </select></td>    
+	   </select></td>
 </tr>
 <tr>
 	 <td>".makeinfocell($lang_item_edit['req_skill'],$lang_item_edit['req_skill_desc'])."</td>
 	 <td><input type=\"text\" name=\"RequiredSkill\" size=\"15\" maxlength=\"30\" value=\"{$item['RequiredSkill']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['req_skill_rank'],$lang_item_edit['req_skill_rank_desc'])."</td>
 	 <td><input type=\"text\" name=\"RequiredSkillRank\" size=\"15\" maxlength=\"30\" value=\"{$item['RequiredSkillRank']}\" /></td>
 </tr>
 <tr>
 	 <td>".makeinfocell($lang_item_edit['req_spell'],$lang_item_edit['req_spell_desc'])."</td>
 	 <td><input type=\"text\" name=\"requiredspell\" size=\"15\" maxlength=\"30\" value=\"{$item['requiredspell']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['req_honor_rank'],$lang_item_edit['req_honor_rank_desc'])."</td>
 	 <td><input type=\"text\" name=\"requiredhonorrank\" size=\"15\" maxlength=\"30\" value=\"{$item['requiredhonorrank']}\" /></td>
 </tr>
@@ -2078,10 +2078,10 @@ $output .= "<td>".makeinfocell($lang_item_edit['allow_race'],$lang_item_edit['al
 	 <td>".makeinfocell($lang_item_edit['req_rep_faction'],$lang_item_edit['req_rep_faction_desc'])."</td>
 	 <td><input type=\"text\" name=\"RequiredReputationFaction\" size=\"15\" maxlength=\"30\" value=\"{$item['RequiredReputationFaction']}\" /></td>";
  unset($AllowableRace);
- 
+
 $RequiredReputationRank  = array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5=> "", 6 => "", 7 => "");
 $RequiredReputationRank [$item['RequiredReputationRank']] = " selected=\"selected\" ";
- 	 
+
 $output .= "<td>".makeinfocell($lang_item_edit['req_rep_rank'],$lang_item_edit['req_rep_rank_desc'])."</td>
 	    <td><select name=\"RequiredReputationRank\">
 		<option value=\"0\" {$RequiredReputationRank[0]}>0 - {$lang_item_edit['hated']}</option>
@@ -2102,7 +2102,7 @@ $output .= "<td>".makeinfocell($lang_item_edit['req_rep_rank'],$lang_item_edit['
    </table><br /><br />
     </div>";
  unset($RequiredReputationRank);
- 
+
 $output .= "<div id=\"pane7\">
     <br /><br /><table class=\"lined\" style=\"width: 720px;\">
 <tr>";
@@ -2123,7 +2123,7 @@ $output .= "<td>".makeinfocell($lang_item_edit['socket_color']." 1",$lang_item_e
 </tr>
 <tr>";
  unset($socketColor_1);
- 
+
 $socketColor_2  = array(0 => "", 1 => "", 2 => "", 4 => "", 8=> "");
 $socketColor_2 [$item['socketColor_2']] = " selected=\"selected\" ";
 
@@ -2135,13 +2135,13 @@ $output .= "<td>".makeinfocell($lang_item_edit['socket_color']." 2",$lang_item_e
 				<option value=\"4\" {$socketColor_2[4]}>4: {$lang_item['socket_yellow']}</option>
 				<option value=\"8\" {$socketColor_2[8]}>8: {$lang_item['socket_blue']}</option>
 			</select></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['socket_content']." 2",$lang_item_edit['socket_content_desc'])."</td>
 	 <td><input type=\"text\" name=\"socketContent_2\" size=\"15\" maxlength=\"10\" value=\"{$item['socketContent_2']}\" /></td>
 </tr>
 <tr>";
  unset($socketColor_2);
- 
+
 $socketColor_3  = array(0 => "", 1 => "", 2 => "", 4 => "", 8=> "");
 $socketColor_3 [$item['socketColor_3']] = " selected=\"selected\" ";
 
@@ -2153,7 +2153,7 @@ $output .= "<td>".makeinfocell($lang_item_edit['socket_color']." 3",$lang_item_e
 				<option value=\"4\" {$socketColor_3[4]}>4: {$lang_item['socket_yellow']}</option>
 				<option value=\"8\" {$socketColor_3[8]}>8: {$lang_item['socket_blue']}</option>
 			</select></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['socket_content']." 3",$lang_item_edit['socket_content_desc'])."</td>
 	 <td><input type=\"text\" name=\"socketContent_3\" size=\"15\" maxlength=\"10\" value=\"{$item['socketContent_3']}\" /></td>
 </tr>
@@ -2161,7 +2161,7 @@ $output .= "<td>".makeinfocell($lang_item_edit['socket_color']." 3",$lang_item_e
 <tr>
 	 <td>".makeinfocell($lang_item_edit['socket_bonus'],$lang_item_edit['socket_bonus_desc'])."</td>
 	 <td><input type=\"text\" name=\"socketBonus\" size=\"15\" maxlength=\"10\" value=\"{$item['socketBonus']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_item_edit['gem_properties'],$lang_item_edit['gem_properties_desc'])."</td>
 	 <td><input type=\"text\" name=\"GemProperties\" size=\"15\" maxlength=\"10\" value=\"{$item['GemProperties']}\" /></td>
 </tr>
@@ -2172,7 +2172,7 @@ $output .= "<td>".makeinfocell($lang_item_edit['socket_color']." 3",$lang_item_e
 $output .= "<div id=\"pane8\">
     <br /><br /><table class=\"lined\" style=\"width: 720px;\">
 	<tr class=\"large_bold\"><td colspan=\"4\" class=\"hidden\" align=\"left\">{$lang_item_edit['dropped_by']}: {$lang_item_edit['top_x']}</td></tr>
-	<tr> 
+	<tr>
 		<th width=\"35%\">{$lang_item_edit['mob_name']}</th>
 		<th width=\"15%\">{$lang_item_edit['mob_level']}</th>
 		<th width=\"25%\">{$lang_item_edit['mob_drop_chance']}</th>
@@ -2212,7 +2212,7 @@ $result2 = $sql->query("SELECT creature_template.entry,IFNULL(".($deplang<>0?"na
 
 $result2 = $sql->query("SELECT quest_template.entry,IFNULL(".($deplang<>0?"title_loc$deplang":"NULL").",`title`) as title,QuestLevel FROM quest_template LEFT JOIN locales_quest ON quest_template.entry = locales_quest.entry WHERE ( RewChoiceItemId1 = {$item['entry']} OR RewChoiceItemId2 = {$item['entry']} OR
 							RewChoiceItemId3 = {$item['entry']} OR RewChoiceItemId4 = {$item['entry']} OR RewChoiceItemId5 = {$item['entry']} OR RewChoiceItemId6 = {$item['entry']} )
-							ORDER BY QuestLevel DESC");					
+							ORDER BY QuestLevel DESC");
  if ($sql->num_rows($result2)){
 	$output .= "<tr class=\"large_bold\"><td colspan=\"4\" class=\"hidden\" align=\"left\">{$lang_item_edit['reward_from_quest']}:</td></tr>";
 	while ($quest = $sql->fetch_row($result2)){
@@ -2239,7 +2239,7 @@ $output .= "</tr></table><br /><br />
 		$output .= "<td>";
 		$output .= maketooltip("<img src=\"".get_icon($item[0])."\" class=\"icon_border\" alt=\"\" />", "$item_datasite$item[0]", $tooltip, "item_tooltip");
 		$output .= "<br /><input type=\"checkbox\" name=\"del_de_items[]\" value=\"$item[0]\" /></td>";
-		
+
 		if ($cel_counter >= 16) {
 			$cel_counter = 0;
 			$output .= "</tr><tr>";
@@ -2293,14 +2293,14 @@ $output .= "</div>
 			 makebutton($lang_item_edit['search_items'], "item.php",180);
  $output .= "</td></tr>
         </table></center>";
- 
+
 
  $sql->close();
  } else {
 		$sql->close();
 		error($lang_item_edit['item_not_found']);
 		exit();
-		} 
+		}
 }
 
 
@@ -2312,7 +2312,7 @@ function do_update() {
 
  if (!isset($_POST['type']) || $_POST['type'] === '') redirect("item.php?error=1");
  if (!isset($_POST['entry']) || $_POST['entry'] === '') redirect("item.php?error=1");
- 
+
  $sql = new SQL;
  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
@@ -2342,7 +2342,7 @@ function do_update() {
  if (isset($_POST['AllowableRace'])) $AllowableRace = $sql->quote_smart($_POST['AllowableRace']);
 	else $AllowableRace = -1;
  if (isset($_POST['ItemLevel']) && $_POST['ItemLevel'] != '') $ItemLevel = $sql->quote_smart($_POST['ItemLevel']);
-	else $ItemLevel = 1; 
+	else $ItemLevel = 1;
  if (isset($_POST['RequiredLevel']) && $_POST['RequiredLevel'] != '') $RequiredLevel = $sql->quote_smart($_POST['RequiredLevel']);
 	else $RequiredLevel = 0;
  if (isset($_POST['RequiredSkill']) && $_POST['RequiredSkill'] != '') $RequiredSkill = $sql->quote_smart($_POST['RequiredSkill']);
@@ -2607,7 +2607,7 @@ function do_update() {
 	if (isset($_POST['del_de_items']) && $_POST['del_de_items'] != '') $del_de_items = $sql->quote_smart($_POST['del_de_items']);
 		else $del_de_items = NULL;
 
-		
+
 	$tmp = 0;
 	if ($AllowableClass[0] != -1){
 	for ($t=0; $t<count($AllowableClass); $t++){
@@ -2626,7 +2626,7 @@ function do_update() {
 	}
 	if ($tmp) $AllowableClass = $tmp;
 		else $AllowableClass = -1;
-	
+
 	$tmp = 0;
 	if ($AllowableRace[0] != -1){
 	for ($t=0; $t<count($AllowableRace); $t++){
@@ -2665,14 +2665,14 @@ function do_update() {
 	'$spellcharges_5', '$spellppmRate_5', '$spellcooldown_5', '$spellcategory_5', '$spellcategorycooldown_5', '$bonding', '$description', '$PageText', '$LanguageID', '$PageMaterial', '$startquest', '$lockid', '$Material', '$sheath', '$RandomProperty', '$block',
 	'$itemset', '$MaxDurability', '$area', '$BagFamily', '$Map', '$ScriptName', '$DisenchantID', '$RequiredDisenchantSkill','$ArmorDamageModifier','$unk0','$RandomSuffix', '$TotemCategory', '$socketColor_1', '$socketContent_1', '$socketColor_2',
 	'$socketContent_2', '$socketColor_3', '$socketContent_3', '$socketBonus', '$GemProperties')";
- 
+
  } elseif ($_POST['type'] == "edit"){
 
 	$sql_query = "UPDATE item_template SET  ";
- 
+
 	$result = $sql->query("SELECT `item_template`.`entry`,`class`,`subclass`,`unk0`,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,`displayid`,`Quality`,`Flags`,`BuyCount`,`BuyPrice`,`SellPrice`,`InventoryType`,`AllowableClass`,`AllowableRace`,`ItemLevel`,`RequiredLevel`,`RequiredSkill`,`RequiredSkillRank`,`requiredspell`,`requiredhonorrank`,`RequiredCityRank`,`RequiredReputationFaction`,`RequiredReputationRank`,`maxcount`,`stackable`,`ContainerSlots`,`stat_type1`,`stat_value1`,`stat_type2`,`stat_value2`,`stat_type3`,`stat_value3`,`stat_type4`,`stat_value4`,`stat_type5`,`stat_value5`,`stat_type6`,`stat_value6`,`stat_type7`,`stat_value7`,`stat_type8`,`stat_value8`,`stat_type9`,`stat_value9`,`stat_type10`,`stat_value10`,`dmg_min1`,`dmg_max1`,`dmg_type1`,`dmg_min2`,`dmg_max2`,`dmg_type2`,`dmg_min3`,`dmg_max3`,`dmg_type3`,`dmg_min4`,`dmg_max4`,`dmg_type4`,`dmg_min5`,`dmg_max5`,`dmg_type5`,`armor`,`holy_res`,`fire_res`,`nature_res`,`frost_res`,`shadow_res`,`arcane_res`,`delay`,`ammo_type`,`RangedModRange`,`spellid_1`,`spelltrigger_1`,`spellcharges_1`,`spellppmRate_1`,`spellcooldown_1`,`spellcategory_1`,`spellcategorycooldown_1`,`spellid_2`,`spelltrigger_2`,`spellcharges_2`,`spellppmRate_2`,`spellcooldown_2`,`spellcategory_2`,`spellcategorycooldown_2`,`spellid_3`,`spelltrigger_3`,`spellcharges_3`,`spellppmRate_3`,`spellcooldown_3`,`spellcategory_3`,`spellcategorycooldown_3`,`spellid_4`,`spelltrigger_4`,`spellcharges_4`,`spellppmRate_4`,`spellcooldown_4`,`spellcategory_4`,`spellcategorycooldown_4`,`spellid_5`,`spelltrigger_5`,`spellcharges_5`,`spellppmRate_5`,`spellcooldown_5`,`spellcategory_5`,`spellcategorycooldown_5`,`bonding`,`description`,`PageText`,`LanguageID`,`PageMaterial`,`startquest`,`lockid`,`Material`,`sheath`,`RandomProperty`,`RandomSuffix`,`block`,`itemset`,`MaxDurability`,`area`,`Map`,`BagFamily`,`TotemCategory`,`socketColor_1`,`socketContent_1`,`socketColor_2`,`socketContent_2`,`socketColor_3`,`socketContent_3`,`socketBonus`,`GemProperties`,`RequiredDisenchantSkill`,`ArmorDamageModifier`,`ScriptName`,`DisenchantID`,`FoodType`,`minMoneyLoot`,`maxMoneyLoot` FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry WHERE item_template.entry = '$entry'");
 	if ($item_templ = $sql->fetch_assoc($result)){
- 
+
 		if ($item_templ['class'] != $class) $sql_query .= "class='$class',";
 		if ($item_templ['subclass'] != $subclass) $sql_query .= "subclass='$subclass',";
 		if ($item_templ['name'] != $name) $sql_query .= "name='$name',";
@@ -2737,7 +2737,7 @@ function do_update() {
 		if ($item_templ['fire_res'] != $fire_res) $sql_query .= "fire_res='$fire_res',";
 		if ($item_templ['nature_res'] != $nature_res) $sql_query .= "nature_res='$nature_res',";
 		if ($item_templ['frost_res'] != $frost_res) $sql_query .= "frost_res='$frost_res',";
-		if ($item_templ['shadow_res'] != $shadow_res) $sql_query .= "shadow_res='$shadow_res',";		
+		if ($item_templ['shadow_res'] != $shadow_res) $sql_query .= "shadow_res='$shadow_res',";
 		if ($item_templ['arcane_res'] != $arcane_res) $sql_query .= "arcane_res='$arcane_res',";
 		if ($item_templ['delay'] != $delay) $sql_query .= "delay='$delay',";
 		if ($item_templ['ammo_type'] != $ammo_type) $sql_query .= "ammo_type='$ammo_type',";
@@ -2748,8 +2748,8 @@ function do_update() {
 		if ($item_templ['spellppmRate_1'] != $spellppmRate_1) $sql_query .= "spellppmRate_1='$spellppmRate_1',";
 		if ($item_templ['spellcooldown_1'] != $spellcooldown_1) $sql_query .= "spellcooldown_1='$spellcooldown_1',";
 		if ($item_templ['spellcategory_1'] != $spellcategory_1) $sql_query .= "spellcategory_1='$spellcategory_1',";
-		if ($item_templ['spellcategorycooldown_1'] != $spellcategorycooldown_1) $sql_query .= "spellcategorycooldown_1='$spellcategorycooldown_1',";	
-		if ($item_templ['spellid_2'] != $spellid_2) $sql_query .= "spellid_2='$spellid_2',";	
+		if ($item_templ['spellcategorycooldown_1'] != $spellcategorycooldown_1) $sql_query .= "spellcategorycooldown_1='$spellcategorycooldown_1',";
+		if ($item_templ['spellid_2'] != $spellid_2) $sql_query .= "spellid_2='$spellid_2',";
 		if ($item_templ['spelltrigger_2'] != $spelltrigger_2) $sql_query .= "spelltrigger_2='$spelltrigger_2',";
 		if ($item_templ['spellcharges_2'] != $spellcharges_2) $sql_query .= "spellcharges_2='$spellcharges_2',";
 		if ($item_templ['spellppmRate_2'] != $spellppmRate_2) $sql_query .= "spellppmRate_2='$spellppmRate_2',";
@@ -2762,7 +2762,7 @@ function do_update() {
 		if ($item_templ['spellppmRate_3'] != $spellppmRate_3) $sql_query .= "spellppmRate_3='$spellppmRate_3',";
 		if ($item_templ['spellcooldown_3'] != $spellcooldown_3) $sql_query .= "spellcooldown_3='$spellcooldown_3',";
 		if ($item_templ['spellcategory_3'] != $spellcategory_3) $sql_query .= "spellcategory_3='$spellcategory_3',";
-		if ($item_templ['spellcategorycooldown_3'] != $spellcategorycooldown_3) $sql_query .= "spellcategorycooldown_3='$spellcategorycooldown_3',";	
+		if ($item_templ['spellcategorycooldown_3'] != $spellcategorycooldown_3) $sql_query .= "spellcategorycooldown_3='$spellcategorycooldown_3',";
 		if ($item_templ['spellid_4'] != $spellid_4) $sql_query .= "spellid_4='$spellid_4',";
 		if ($item_templ['spelltrigger_4'] != $spelltrigger_4) $sql_query .= "spelltrigger_4='$spelltrigger_4',";
 		if ($item_templ['spellcharges_4'] != $spellcharges_4) $sql_query .= "spellcharges_4='$spellcharges_4',";
@@ -2775,22 +2775,22 @@ function do_update() {
 		if ($item_templ['spellcharges_5'] != $spellcharges_5) $sql_query .= "spellcharges_5='$spellcharges_5',";
 		if ($item_templ['spellppmRate_5'] != $spellppmRate_5) $sql_query .= "spellppmRate_5='$spellppmRate_5',";
 		if ($item_templ['spellcooldown_5'] != $spellcooldown_5) $sql_query .= "spellcooldown_5='$spellcooldown_5',";
-		if ($item_templ['spellcategory_5'] != $spellcategory_5) $sql_query .= "spellcategory_5='$spellcategory_5',";	
+		if ($item_templ['spellcategory_5'] != $spellcategory_5) $sql_query .= "spellcategory_5='$spellcategory_5',";
 		if ($item_templ['spellcategorycooldown_5'] != $spellcategorycooldown_5) $sql_query .= "spellcategorycooldown_5='$spellcategorycooldown_5',";
 		if ($item_templ['bonding'] != $bonding) $sql_query .= "bonding='$bonding',";
 		if ($item_templ['description'] != $description) $sql_query .= "description='$description',";
 		if ($item_templ['PageText'] != $PageText) $sql_query .= "PageText='$PageText',";
-		if ($item_templ['LanguageID'] != $LanguageID) $sql_query .= "LanguageID='$LanguageID',";	
+		if ($item_templ['LanguageID'] != $LanguageID) $sql_query .= "LanguageID='$LanguageID',";
 		if ($item_templ['PageMaterial'] != $PageMaterial) $sql_query .= "PageMaterial='$PageMaterial',";
 		if ($item_templ['startquest'] != $startquest) $sql_query .= "startquest='$startquest',";
 		if ($item_templ['lockid'] != $lockid) $sql_query .= "lockid='$lockid',";
 		if ($item_templ['Material'] != $Material) $sql_query .= "Material='$Material',";
-		if ($item_templ['sheath'] != $sheath) $sql_query .= "sheath='$sheath',";	
+		if ($item_templ['sheath'] != $sheath) $sql_query .= "sheath='$sheath',";
 		if ($item_templ['RandomProperty'] != $RandomProperty) $sql_query .= "RandomProperty='$RandomProperty',";
 		if ($item_templ['block'] != $block) $sql_query .= "block='$block',";
 		if ($item_templ['itemset'] != $itemset) $sql_query .= "itemset='$itemset',";
 		if ($item_templ['MaxDurability'] != $MaxDurability) $sql_query .= "MaxDurability='$MaxDurability',";
-		if ($item_templ['area'] != $area) $sql_query .= "area='$area',";	
+		if ($item_templ['area'] != $area) $sql_query .= "area='$area',";
 		if ($item_templ['BagFamily'] != $BagFamily) $sql_query .= "BagFamily='$BagFamily',";
 		if ($item_templ['Map'] != $Map) $sql_query .= "Map='$Map',";
 		if ($item_templ['ScriptName'] != $ScriptName) $sql_query .= "ScriptName='$ScriptName',";
@@ -2821,7 +2821,7 @@ function do_update() {
 					$sql_query .= " WHERE entry = '$entry';\n";
 					} else $sql_query = "";
 		}
-		
+
 		if ($de_item){
 			$sql_query .= "INSERT INTO disenchant_loot_template (entry, item, ChanceOrQuestChance, `groupid`, mincountOrRef, maxcount, lootcondition, condition_value1, condition_value2)
 					VALUES ($DisenchantID,$de_item,'$de_ChanceOrQuestChance', '$de_groupid' ,$de_mincountOrRef ,$de_maxcount ,$de_lootcondition ,$de_condition_value1 ,$de_condition_value2);\n";
@@ -2853,9 +2853,9 @@ function do_update() {
 		$sql->close();
 		}
 
- if ($result) redirect("item.php?action=edit&entry=$entry&error=4");	
+ if ($result) redirect("item.php?action=edit&entry=$entry&error=4");
 	else redirect("item.php");
- 
+
 }
 
 

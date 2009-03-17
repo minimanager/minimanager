@@ -58,7 +58,7 @@ function search() {
 
  $sql = new SQL;
  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
-     
+
  $result = $sql->query("SELECT count(*) FROM creature_template");
  $tot_items = $sql->result($result, 0);
  $sql->close();
@@ -97,7 +97,7 @@ function search() {
 		  foreach ($creature_type as $flag) $output .= "<option value=\"{$flag[0]}\">{$flag[1]}</option>";
       $output .= "</select>
     </td>
-	
+
 	</tr><tr>
 	  <td>{$lang_creature['type']}:</td>
 	<td>
@@ -137,9 +137,9 @@ function search() {
 			<option value=\"268435456\">{$lang_creature['guard']}</option>
 		</select>
   </td>
-    
+
 	</tr><tr>
-	
+
 	 <td>{$lang_creature['family']}:</td>
 	 <td><select name=\"family\">
 	  <option value=\"\">- {$lang_creature['select']} -</option>
@@ -174,12 +174,12 @@ function search() {
 	 </td>
 	 <td>{$lang_creature['loot_id']}</td>
 	 <td><input type=\"text\" size=\"10\" maxlength=\"10\" name=\"lootid\" /></td>
-	
+
 	</tr><tr>
-	
+
 
 		<td>{$lang_creature['spell']}:</td>
-		<td><input type=\"text\" size=\"10\" maxlength=\"11\" name=\"spell\" /></td>  	
+		<td><input type=\"text\" size=\"10\" maxlength=\"11\" name=\"spell\" /></td>
 	  <td>{$lang_creature['script_name']}</td>
 	  <td><input type=\"text\" size=\"25\" maxlength=\"50\" name=\"ScriptName\" /></td>
 	</tr>
@@ -187,9 +187,9 @@ function search() {
 		<td>{$lang_creature['custom_search']}:</td>
 		<td colspan=\"2\"><input type=\"text\" size=\"25\" maxlength=\"50\" name=\"custom_search\" /></td>
 		<td>&nbsp</td>
-		
+
 		</tr><tr>
-		
+
      <td>{$lang_global['language_select']}:</td>
 		 <td>".generate_language_selectbox()."
 		 </td><td>&nbsp;</td><td>
@@ -237,53 +237,53 @@ if ($_POST['npcflag'] != '') {
   $npcflag = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['npcflag'])) ? $sql->quote_smart($_POST['npcflag']) : redirect("creature.php?error=8");
   $where .= "ct.npcflag = '$npcflag' ";
 }
-else if ($_POST['type'] != '') {   
+else if ($_POST['type'] != '') {
   $type    = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['type']))    ? $sql->quote_smart($_POST['type'])    : redirect("creature.php?error=8");
   $where .= "ct.type = '$type' ";
-  
+
 }
-else if ($_POST['rank'] != '') {   
+else if ($_POST['rank'] != '') {
   $rank    = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['rank']))    ? $sql->quote_smart($_POST['rank'])    : redirect("creature.php?error=8");
   $where .= "ct.rank = '$rank' ";
-} 
-else if  ($_POST['family'] != '') { 
+}
+else if  ($_POST['family'] != '') {
   $family  = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['family']))  ? $sql->quote_smart($_POST['family'])  : redirect("creature.php?error=8");
   $where .= "ct.family = '$family' ";
 }
-else if ($_POST['entry'] != '') {  
+else if ($_POST['entry'] != '') {
   $entry   = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['entry']))   ? $sql->quote_smart($_POST['entry'])   : redirect("creature.php?error=8");
   $where .= "ct.entry = '$entry' ";
 }
-else if ($_POST['name'] != '') {   
+else if ($_POST['name'] != '') {
   $name    = (preg_match('/^[\t\v\b\f\a\n\r\\\"\? <>[](){}_=+-|!@#$%^&*~`.,\0]{1,30}$/', $_POST['name']))  ?  "test" : $sql->quote_smart($_POST['name']);
-  
+
   if ($loc_language)
     $where .= "lc.name_loc{$loc_language} LIKE '%$name%' ";
   else
     $where .= "ct.`name`LIKE '%$name%' ";
-  
+
 }
-else if ($_POST['level'] != '') {  
+else if ($_POST['level'] != '') {
   $level   = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['level']))   ? $sql->quote_smart($_POST['level'])   : redirect("creature.php?error=8");
   $where .= "ct.minlevel <= $level AND ct.maxlevel >= $level ";
 }
-else if ($_POST['health'] != '') { 
+else if ($_POST['health'] != '') {
   $health  = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['health']))  ? $sql->quote_smart($_POST['health'])  : redirect("creature.php?error=8");
   $where .= "ct.minhealth <= $health AND ct.maxhealth >= $health ";
 }
-else if ($_POST['faction_A'] != '') { 
+else if ($_POST['faction_A'] != '') {
   $faction_A = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['faction_A'])) ? $sql->quote_smart($_POST['faction_A']) : redirect("creature.php?error=8");
   $where .= "ct.faction_A = '$faction_A' ";
 }
-else if ($_POST['faction_H'] != '') { 
+else if ($_POST['faction_H'] != '') {
   $faction_H = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['faction_H'])) ? $sql->quote_smart($_POST['faction_H']) : redirect("creature.php?error=8");
   $where .= "ct.faction_H = '$faction_H' ";
 }
-else if ($_POST['spell'] != '') {  
+else if ($_POST['spell'] != '') {
   $spell   = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['spell']))   ? $sql->quote_smart($_POST['spell'])   : redirect("creature.php?error=8");
   $where .= "(ct.spell1 = '$spell' OR ct.spell2 = '$spell' OR ct.spell3 = '$spell' OR ct.spell4 = '$spell') ";
 }
-else if ($_POST['lootid'] != '') { 
+else if ($_POST['lootid'] != '') {
   $lootid  = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['lootid']))  ? $sql->quote_smart($_POST['lootid'])  : redirect("creature.php?error=8");
   $where .= "ct.lootid = '$lootid' ";
 }
@@ -291,7 +291,7 @@ else if ($_POST['ScriptName'] != '') {
   $ScriptName = (preg_match("/^[_[:alpha:]]{1,32}$/", $_POST['ScriptName'])) ? $sql->quote_smart($_POST['ScriptName']) : "mob_generic";
   $where .= "ct.ScriptName LIKE '%$ScriptName%' ";
 }
-else if ($_POST['heroic'] != '') { 
+else if ($_POST['heroic'] != '') {
   $heroic  = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['heroic']))  ? $sql->quote_smart($_POST['heroic'])  : redirect("creature.php?error=8");
   $where .= "ct.heroic_entry = '$heroic'";
 }
@@ -308,13 +308,13 @@ if ($where == '') redirect("creature.php?error=1");
 
 
 if ($loc_language)
-  $db_query = "SELECT ct.entry, ct.name, ct.maxlevel, ct.maxhealth, ct.rank, ct.npcflag, lc.name_loc{$loc_language} FROM creature_template ct 
+  $db_query = "SELECT ct.entry, ct.name, ct.maxlevel, ct.maxhealth, ct.rank, ct.npcflag, lc.name_loc{$loc_language} FROM creature_template ct
                LEFT OUTER JOIN locales_creature lc on lc.entry = ct.entry
                WHERE {$where} ORDER BY ct.entry LIMIT 100";
 else
   $db_query = "SELECT ct.entry, ct.name, ct.maxlevel, ct.maxhealth, ct.rank, ct.npcflag FROM creature_template ct WHERE {$where} ORDER BY ct.entry LIMIT 100";
- 
- 
+
+
  $result = $sql->query($db_query);
  $total_found = $sql->num_rows($result);
 
@@ -341,12 +341,12 @@ else
 
   $output .= "<tr>
 				      <td><a href=\"$creature_datasite$creature[0]\" target=\"_blank\">$creature[0]</a></td>";
-				      
-  if ($loc_language)				      
-	  $output .= "<td><a href=\"creature.php?action=edit&amp;entry=$creature[0]&amp;error=4\">{$creature[6]} ( {$creature[1]} )</a></td>";
+
+  if ($loc_language)
+	  $output .= "<td><a href=\"creature.php?action=edit&amp;entry=$creature[0]&amp;error=4\">".htmlentities($creature[6])." ( {$creature[1]} )</a></td>";
 	else
 	  $output .= "<td><a href=\"creature.php?action=edit&amp;entry=$creature[0]&amp;error=4\">$creature[1]</a></td>";
-	  
+
 	$output .= "<td>$creature[2]</td>
 	      			<td>$creature[3]</td>
 				      <td>{$creature_type[$creature[4]][1]}</td>
@@ -376,12 +376,12 @@ function do_insert_update($do_insert) {
  // entry only needed on update
  if (!$do_insert) {
    if (!isset($_GET['entry']) ) redirect("creature.php?error=1");
-   
-   $entry   = (preg_match("/^[[:digit:]]{1,15}$/", $_GET['entry']))   ? $sql->quote_smart($_GET['entry'])   : redirect("creature.php?error=8");   
+
+   $entry   = (preg_match("/^[[:digit:]]{1,15}$/", $_GET['entry']))   ? $sql->quote_smart($_GET['entry'])   : redirect("creature.php?error=8");
    $result = $sql->query("SELECT `entry`, `heroic_entry`, `modelid_A`, `modelid_A2`, `modelid_H`, `modelid_H2`, `name`,`subname`, `IconName`, `minlevel`, `maxlevel`, `minhealth`, `maxhealth`, `minmana`, `maxmana`, `armor`,`faction_A`, `faction_H`, `npcflag`, `speed`,`scale`,`rank`,`mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `baseattacktime`, `rangeattacktime`, `unit_flags`,`dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `class`,`race`,`minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`,`type_flags`,`lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `PetSpellDataId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `RacialLeader`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName` FROM creature_template WHERE entry = '$entry'");
  }
  else {
-	
+
  	// get new free id
   $result = $sql->query("SELECT max(entry)+1 as newentry from creature_template");
  	$entry  = $sql->result($result, 0, 'newentry');
@@ -446,7 +446,7 @@ if ($mob['pickpocketloot']) {
 	$output .= "<li><a href=\"#\" onclick=\"return showPane('pane10', this)\">{$lang_creature['pickpocket_loot']}</a></li>";
 }
   if ($locales_search_option != 0) $output .= "<li><a href=\"#\" onclick=\"return showPane('pane11', this)\">{$lang_creature['locales']}</a></li>";
-  
+
   $output .= "</ul>
               <div class=\"jtab-panes\">";
 
@@ -935,32 +935,32 @@ $output .= "<td>".makeinfocell($lang_creature['flags_extra'],$lang_creature['fla
 /  LOCALES
 *****************/
 if ($locales_search_option != 0) {
-	
+
 	if ($do_insert)
 	  $result_loc = $sql->query("SELECT '' as `name_loc1`, '' as `name_loc2`, '' as `name_loc3`, '' as `name_loc4`, '' as `name_loc5`, '' as `name_loc6`, '' as `name_loc7`, '' as `name_loc8`, '' as `subname_loc1`, '' as `subname_loc2`, '' as `subname_loc3`, '' as `subname_loc4`, '' as `subname_loc5`, '' as `subname_loc6`, '' as `subname_loc7`, '' as `subname_loc8`");
 	else  // update
 	  $result_loc = $sql->query("SELECT `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `name_loc7`, `name_loc8`, `subname_loc1`, `subname_loc2`, `subname_loc3`, `subname_loc4`, `subname_loc5`, `subname_loc6`, `subname_loc7`, `subname_loc8` FROM `locales_creature` WHERE `entry` = '$entry'");
-	
-	
+
+
 	$loc = $sql->fetch_assoc($result_loc);
-	
+
 	$output .= "<div id=\"pane11\">
 		<br /><br /><table class=\"lined\" style=\"width: 720px;\">
-			
+
 	<tr class=\"large_bold\"><td colspan=\"6\" class=\"hidden\" align=\"left\">{$lang_global['language_1']}:</td></tr>
 	<tr>
 	 <td>".makeinfocell($lang_creature['name'],$lang_creature['name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"name_loc1\" size=\"24\" maxlength=\"128\" value=\"{$loc['name_loc1']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_creature['sub_name'],$lang_creature['sub_name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"subname_loc1\" size=\"24\" maxlength=\"64\" value=\"{$loc['subname_loc1']}\" /></td>
 	</tr>
-	
+
 	<tr class=\"large_bold\"><td colspan=\"6\" class=\"hidden\" align=\"left\">{$lang_global['language_2']}:</td></tr>
 	<tr>
 	 <td>".makeinfocell($lang_creature['name'],$lang_creature['name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"name_loc2\" size=\"24\" maxlength=\"64\" value=\"{$loc['name_loc2']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_creature['sub_name'],$lang_creature['sub_name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"subname_loc2\" size=\"24\" maxlength=\"64\" value=\"{$loc['subname_loc2']}\" /></td>
 	</tr>
@@ -968,7 +968,7 @@ if ($locales_search_option != 0) {
 	<tr>
 	 <td>".makeinfocell($lang_creature['name'],$lang_creature['name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"name_loc3\" size=\"24\" maxlength=\"64\" value=\"{$loc['name_loc3']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_creature['sub_name'],$lang_creature['sub_name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"subname_loc3\" size=\"24\" maxlength=\"64\" value=\"{$loc['subname_loc3']}\" /></td>
 	</tr>
@@ -976,7 +976,7 @@ if ($locales_search_option != 0) {
 	<tr>
 	 <td>".makeinfocell($lang_creature['name'],$lang_creature['name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"name_loc4\" size=\"24\" maxlength=\"64\" value=\"{$loc['name_loc4']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_creature['sub_name'],$lang_creature['sub_name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"subname_loc4\" size=\"24\" maxlength=\"64\" value=\"{$loc['subname_loc4']}\" /></td>
 	</tr>
@@ -984,7 +984,7 @@ if ($locales_search_option != 0) {
 	<tr>
 	 <td>".makeinfocell($lang_creature['name'],$lang_creature['name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"name_loc5\" size=\"24\" maxlength=\"64\" value=\"{$loc['name_loc5']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_creature['sub_name'],$lang_creature['sub_name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"subname_loc5\" size=\"24\" maxlength=\"64\" value=\"{$loc['subname_loc5']}\" /></td>
 	</tr>
@@ -992,7 +992,7 @@ if ($locales_search_option != 0) {
 	<tr>
 	 <td>".makeinfocell($lang_creature['name'],$lang_creature['name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"name_loc6\" size=\"24\" maxlength=\"64\" value=\"{$loc['name_loc6']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_creature['sub_name'],$lang_creature['sub_name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"subname_loc6\" size=\"24\" maxlength=\"64\" value=\"{$loc['subname_loc6']}\" /></td>
 	</tr>
@@ -1000,7 +1000,7 @@ if ($locales_search_option != 0) {
 	<tr>
 	 <td>".makeinfocell($lang_creature['name'],$lang_creature['name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"name_loc7\" size=\"24\" maxlength=\"64\" value=\"{$loc['name_loc7']}\" /></td>
-	
+
 	 <td>".makeinfocell($lang_creature['sub_name'],$lang_creature['sub_name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"subname_loc7\" size=\"24\" maxlength=\"64\" value=\"{$loc['subname_loc7']}\" /></td>
 	</tr>
@@ -1008,7 +1008,7 @@ if ($locales_search_option != 0) {
 	<tr>
 	 <td>".makeinfocell($lang_creature['name'],$lang_creature['name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"name_loc8\" size=\"24\" maxlength=\"64\" value=\"{$loc['name_loc8']}\" /></td>
-	 
+
 	 <td>".makeinfocell($lang_creature['sub_name'],$lang_creature['sub_name_desc'])."</td>
 	 <td colspan=\"2\"><input type=\"text\" name=\"subname_loc8\" size=\"24\" maxlength=\"64\" value=\"{$loc['subname_loc8']}\" /></td>
 	</tr>
@@ -1320,14 +1320,14 @@ $output .= "</div>
 <script type=\"text/javascript\">setupPanes(\"container\", \"tab1\")</script>
 <table class=\"hidden\">
           <tr><td>";
- 
+
 if($do_insert) {
 	if ($user_lvl >= $action_permission['insert'] && $do_insert) makebutton($lang_creature['save_to_db'], "javascript:do_submit('form1',0)",180);
 }
 else {
 	if ($user_lvl >= $action_permission['insert']) makebutton($lang_creature['save_to_db'], "javascript:do_submit('form1',0)",180);
 	if ($user_lvl >= $action_permission['delete']) makebutton($lang_creature['del_creature'], "creature.php?action=delete&amp;entry=$entry",180);
-  if ($user_lvl >= $action_permission['delete']) makebutton($lang_creature['del_spawns'], "creature.php?action=delete_spwn&amp;entry=$entry",180);	
+  if ($user_lvl >= $action_permission['delete']) makebutton($lang_creature['del_spawns'], "creature.php?action=delete_spwn&amp;entry=$entry",180);
 }
 
   // scripts/export should be okay without permission check
@@ -1352,20 +1352,20 @@ else {
 
 function do_update() {
  global $world_db, $realm_id, $action_permission, $user_lvl, $locales_search_option ;
- 
- // on update, use replace.. and else insert 
+
+ // on update, use replace.. and else insert
   if ($_POST['insert'] == "1") {
   	if (  $user_lvl < $action_permission['insert'] ) redirect("creature.php?error=9");
   	$db_action_creature = "INSERT";
   }
   else {
   	if (  $user_lvl < $action_permission['update'] ) redirect("creature.php?error=9");
-    $db_action_creature = "REPLACE"; 
+    $db_action_creature = "REPLACE";
   }
-  if ( ($del_trainer_spell || $del_loot_items || $del_skin_items || $del_pp_items || $del_questrelation || $del_involvedrelation || $del_vendor_item ) 
-       && $user_lvl < $action_permission['delete'] ) 
+  if ( ($del_trainer_spell || $del_loot_items || $del_skin_items || $del_pp_items || $del_questrelation || $del_involvedrelation || $del_vendor_item )
+       && $user_lvl < $action_permission['delete'] )
          redirect("creature.php?error=9");
- 
+
  $deplang = get_lang_id();
 
  if (!isset($_POST['entry']) || $_POST['entry'] === '') redirect("creature.php?error=1");
@@ -1582,21 +1582,21 @@ function do_update() {
 		else $reqlevel = 0;
 	if (isset($_POST['del_trainer_spell']) && $_POST['del_trainer_spell'] != '') $del_trainer_spell = $sql->quote_smart($_POST['del_trainer_spell']);
 		else $del_trainer_spell = NULL;
- 
+
  if ($locales_search_option != 0) {
   // locales
   for ($lc = 1; $lc<9; $lc++) {
     if (isset($_POST['name_loc'.$lc]) && $_POST['name_loc'.$lc] != '' && !preg_match('/^[\t\v\b\f\a\n\r\\\"\? <>[](){}_=+-|!@#$%^&*~`.,\0]{1,30}$/', $_POST['name_loc'.$lc])) {
-    	 $name_loc[$lc] = $sql->quote_smart($_POST['name_loc'.$lc]);	
+    	 $name_loc[$lc] = $sql->quote_smart($_POST['name_loc'.$lc]);
     }
-		else $name_loc[$lc] = '';	
+		else $name_loc[$lc] = '';
 		if (isset($_POST['subname_loc'.$lc]) && $_POST['subname_loc'.$lc] != '' && !preg_match('/^[\t\v\b\f\a\n\r\\\"\? <>[](){}_=+-|!@#$%^&*~`.,\0]{1,30}$/', $_POST['subname_loc'.$lc])) {
-			 $subname_loc[$lc] = $sql->quote_smart($_POST['subname_loc'.$lc]);		
+			 $subname_loc[$lc] = $sql->quote_smart($_POST['subname_loc'.$lc]);
 	  }
-		else $subname_loc[$lc] = '';	
+		else $subname_loc[$lc] = '';
   }
-}	
-	
+}
+
 	$tmp = 0;
 	for ($t = 0; $t < count($npcflag); $t++){
 		if ($npcflag[$t] & 1) $tmp = $tmp + 1;
@@ -1616,8 +1616,8 @@ function do_update() {
 		if ($npcflag[$t] & 268435456) $tmp = $tmp + 268435456;
 		}
 	$npcflag = ($tmp) ? $tmp : 0;
-  	
-  // insert or update creature	
+
+  // insert or update creature
 	$sql_query = "{$db_action_creature} INTO creature_template ( entry, heroic_entry, modelid_A, modelid_H, name, subname, minlevel,
 	              maxlevel, minhealth, maxhealth, minmana, maxmana, armor, faction_A, faction_H, npcflag, speed, rank, mindmg,
 	              maxdmg, dmgschool, attackpower, baseattacktime, rangeattacktime, unit_flags, dynamicflags, family,
@@ -1632,7 +1632,7 @@ function do_update() {
 	              '$lootid', '$pickpocketloot', '$skinloot', '$resistance1', '$resistance2',
 	              '$resistance3', '$resistance4', '$resistance5', '$resistance6', '$spell1', '$spell2', '$spell3', '$spell4',
 	              '$mingold', '$maxgold', '$AIName', '$MovementType', '$InhabitType', '$RacialLeader', '$ScriptName' );\n";
-	
+
 
 	if ($trainer_spell){
 	$sql_query .= "{$db_action_creature} INTO npc_trainer (entry, spell, spellcost, reqskill, reqskillvalue, reqlevel)
@@ -1701,7 +1701,7 @@ function do_update() {
 	$sql_query .= "{$db_action_creature} INTO npc_vendor (entry, item, maxcount, incrtime, ExtendedCost)
 			VALUES ($entry,$vendor_item,$vendor_maxcount,$vendor_incrtime,$vendor_extended_cost);\n";
 	}
-	
+
 	if ($locales_search_option != 0){
 	  if ($name_loc) {
 	  	$sql_query .= "{$db_action_creature} INTO locales_creature (`entry`,  `name_loc1`, `name_loc2`, `name_loc3`, `name_loc4`, `name_loc5`, `name_loc6`, `name_loc7`, `name_loc8`, `subname_loc1`, `subname_loc2`, `subname_loc3`, `subname_loc4`, `subname_loc5`, `subname_loc6`, `subname_loc7`, `subname_loc8`) VALUES
@@ -1733,9 +1733,9 @@ function do_update() {
 //#######################################################################################################
 function delete() {
 global $lang_global, $lang_creature, $output, $user_lvl, $action_permission;
- 
+
  if ($user_lvl < $action_permission['delete'] ) redirect("creature.php?error=9");
- 
+
 
  if(isset($_GET['entry'])) $entry = $_GET['entry'];
 	else redirect("creature.php?error=1");
@@ -1760,7 +1760,7 @@ global $lang_global, $lang_creature, $output, $user_lvl, $action_permission;
 //########################################################################################################################
 function do_delete() {
  global $world_db, $realm_id, $user_lvl, $action_permission;
- 
+
  if ($user_lvl < $action_permission['delete'] ) redirect("creature.php?error=9");
 
  if(isset($_GET['entry'])) $entry = $_GET['entry'];
@@ -1792,7 +1792,7 @@ function do_delete() {
 //########################################################################################################################
 function delete_spwn() {
  global $world_db, $realm_id, $user_lvl, $action_permission;
- 
+
  if ($user_lvl < $action_permission['delete'] ) redirect("creature.php?error=9");
 
  if(isset($_GET['entry'])) $entry = $_GET['entry'];
@@ -1842,10 +1842,10 @@ case 7:
    break;
 case 8:
    $output .= "<h1><font class=\"error\">{$lang_global['err_invalid_input']}</font></h1>";
-   break;   
+   break;
 case 9:
    $output .= "<h1><font class=\"error\">{$lang_global['err_no_permission']}</font></h1>";
-   break;  
+   break;
 default: //no error
     $output .= "<h1>{$lang_creature['search_creatures']}</h1>";
 }
