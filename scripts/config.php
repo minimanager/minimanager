@@ -118,10 +118,10 @@ $motd_display_poster = "1";         //display the poserter info in the MOTD (1 =
 
 //---- IRC Options ------
 $irc_cfg = array(
-			'server' => "mangos.cjb.net",	//irc server
-			'port' => 6667,					//port
-			'channel' => "minimanager"				//channel
-			);
+	'server' => "mangos.cjb.net",	//irc server
+	'port' => 6667,					//port
+	'channel' => "minimanager"		//channel
+);
 
 //---- External Links ----
 $item_datasite = "http://$tt_lang.wowhead.com/?item=";
@@ -177,7 +177,7 @@ $menu_array = Array(
 	  array("events.php", 'events',0,0,0,0),
 	  array("instances.php", 'instances',0,0,0,0),
 	  array("top100.php", 'top100',0,0,0,0),
-	  array("javascript:void(0);\" onclick=\"window.open('./pomm/pomm.php?realmid=".$_SESSION['realm_id']."', 'pomm', 'Toolbar=0, Location=0, Directories=0, Status=0, Menubar=0, Scrollbar=0, Resizable=0, Copyhistory=1, Width=966, Height=732')", 'player_map',0,0,0,0),
+      array("javascript:void(0);\" onclick=\"window.open('./pomm/pomm.php?realmid=".(empty($_SESSION)?"":$_SESSION['realm_id'])."', 'pomm', 'Toolbar=0, Location=0, Directories=0, Status=0, Menubar=0, Scrollbar=0, Resizable=0, Copyhistory=1, Width=966, Height=732')", 'player_map',0,0,0,0),
 	  ),
 	),
 	array("#", 'tools', array(
