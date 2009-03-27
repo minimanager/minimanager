@@ -12,7 +12,7 @@ INSTALLATION:
 Just extract and place inside one of your website folders.
 Naturally you will need webserver supports PHP 4.3 and up.
 Make sure you have sessions setup correctly in your php.ini file.
-Under "scripts" directory you will find "config.php" file - Edit it - its content is self-explanatory.
+Under "scripts" directory you will find "config.php.dist" file - Rename it to "config.php" and edit it - its content is self-explanatory.
 Import from /SQL/*.sql to Database set in $mmfpm_db from /script/config.php
 If you have issues with proper item icon display edit /scripts/get_lib.php line 619 - set correct
 proxy address if used, and make sure the INV directory is set to R/W permission for webserver.
