@@ -562,7 +562,13 @@ function add_new() {
      </tr>
 	 <tr>
         <td>{$lang_user['expansion_account']}</td>
-        <td><input type=\"checkbox\" name=\"new_expansion\" value=\"1\" checked=\"checked\" /></td>
+  	 <td>
+	   <select name=\"new_expansion\">
+	    <option value=\"2\">{$lang_user['wotlk']}</option>
+	    <option value=\"1\">{$lang_user['tbc']}</option>
+	    <option value=\"0\">{$lang_user['classic']}</option>
+	   </select>
+	 </td>
      </tr>
      <tr><td>";
 			makebutton($lang_user['create_acc'], "javascript:do_submit_data()",120);
