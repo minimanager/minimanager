@@ -37,6 +37,7 @@ $lang_global = array(
 	'are_you_sure' => 'DA LI SI SIGURAN?',
 	'will_be_erased' => 'Biti će nepovratno pobrisano iz BAZE!',
 	'unlinked' => 'Nema linka',
+	'country' => 'Country',
 	'language_select' => 'Select Language',
 	'language_0' => 'English',
 	'language_1' => 'Korean',

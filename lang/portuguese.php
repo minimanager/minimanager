@@ -35,6 +35,7 @@ $lang_global = array(
 	'are_you_sure' => 'VOCE TEM CERTEZA?',
 	'will_be_erased' => 'Nao pode ser recuperado apos apagado do BD!',
 	'unlinked' => 'Sem link',
+	'country' => 'Pais',
 	'language_select' => 'Select Language',
 	'language_0' => 'English',
 	'language_1' => 'Korean',

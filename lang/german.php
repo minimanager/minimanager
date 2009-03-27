@@ -36,6 +36,7 @@ $lang_global = array(
 	'are_you_sure' => 'BIST DU SICHER?',
 	'will_be_erased' => 'Wird unwiederruflich aus der Datenbank gelöscht!',
 	'unlinked' => 'Unverlinked',
+	'country' => 'Country',
 	'language_select' => 'W&auml;hle Sprache',
 	'language_0' => 'Englisch',
 	'language_1' => 'Koreanisch',

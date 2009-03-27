@@ -35,6 +35,7 @@ $lang_global = array(
 	'are_you_sure' => 'ÒÎ×ÍÎ?',
 	'will_be_erased' => 'Ïîëíîñòüþ óäàëÿåòñÿ èç áàçû äàííûõ!',
 	'unlinked' => 'íå ïðèâÿçàíî',
+	'country' => 'Country',
 	'language_select' => 'Select Language',
 	'language_0' => 'English',
 	'language_1' => 'Korean',

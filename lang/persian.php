@@ -35,6 +35,7 @@ $lang_global = array(
 	'are_you_sure' => 'آیا مطمئن هستید؟',
 	'will_be_erased' => 'این اقدام غیر قابل بازگشت است',
 	'unlinked' => 'بدون لینک',
+	'country' => 'Country',
 	'language_select' => 'Select Language',
 	'language_0' => 'English',
 	'language_1' => 'Korean',

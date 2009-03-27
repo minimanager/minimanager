@@ -17,7 +17,7 @@ require_once("scripts/defines.php");
 //  BROWSE  CHARS
 //########################################################################################################################
 function browse_chars() {
- global $lang_char_list, $lang_global, $output, $realm_db, $characters_db, $realm_id, $itemperpage,
+ global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
 		$user_lvl,$user_name;
 
  $sql = new SQL;
@@ -87,13 +87,14 @@ function browse_chars() {
 	<th width=\"5%\"><a href=\"char_list.php?order_by=guid&amp;start=$start&amp;dir=$dir\">".($order_by=='guid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['id']}</a></th>
 	<th width=\"15%\"><a href=\"char_list.php?order_by=name&amp;start=$start&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['char_name']}</a></th>
 	<th width=\"15%\"><a href=\"char_list.php?order_by=account&amp;start=$start&amp;dir=$dir\">".($order_by=='account' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['account']}</a></th>
-    <th width=\"7%\"><a href=\"char_list.php?order_by=race&amp;start=$start&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['race']}</a></th>
-	<th width=\"6%\"><a href=\"char_list.php?order_by=class&amp;start=$start&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['class']}</a></th>
+    <th width=\"5%\"><a href=\"char_list.php?order_by=race&amp;start=$start&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['race']}</a></th>
+	<th width=\"5%\"><a href=\"char_list.php?order_by=class&amp;start=$start&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['class']}</a></th>
 	<th width=\"5%\"><a href=\"char_list.php?order_by=level&amp;start=$start&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['level']}</a></th>
 	<th width=\"15%\"><a href=\"char_list.php?order_by=map&amp;start=$start&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['map']}</a></th>
-	<th width=\"17%\">{$lang_char_list['zone']}</th>
+	<th width=\"15%\">{$lang_char_list['zone']}</th>
 	<th width=\"5%\"><a href=\"char_list.php?order_by=highest_rank&amp;start=$start&amp;dir=$dir\">".($order_by=='highest_rank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['honor_kills']}</a></th>
 	<th width=\"5%\"><a href=\"char_list.php?order_by=online&amp;start=$start&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['online']}</a></th>
+	<th width=\"5%\">{$lang_global['country']}</th>
   </tr>";
 
  $looping = ($this_page < $itemperpage) ? $this_page : $itemperpage;
@@ -127,6 +128,15 @@ function browse_chars() {
     else
       $lev = '<font color="#000000">'.$level.'</font>';
 
+        $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+		$loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[2]';");
+		$location = $sql->fetch_row($loc);
+		$ip = $location[0];
+
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+		$country = $sql->fetch_row($nation);
+
 	if (($user_lvl >= $owner_gmlvl)||($owner_acc_name == $user_name)){
 		 $output .= "<tr>";
 		 if (($user_lvl > $owner_gmlvl)||($owner_acc_name == $user_name))
@@ -142,10 +152,11 @@ function browse_chars() {
 			<td>".get_zone_name($char[5])."</td>
 			<td>$char[7]</td>
 			<td>".(($char[8]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
+			<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
             </tr>";
 	}else{
 		 $output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
-			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>***</td></tr>";
+			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>***</td><td>*</td></tr>";
 		 }
  }
 
@@ -167,7 +178,7 @@ function browse_chars() {
 //  SEARCH
 //########################################################################################################################
 function search() {
- global $lang_char_list, $lang_global, $output, $realm_db, $characters_db, $realm_id, $itemperpage,
+ global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
 		$user_lvl, $user_name, $sql_search_limit;
 
  if(!isset($_GET['search_value'])) redirect("char_list.php?error=2");
@@ -346,13 +357,14 @@ case "greater_level":
 	<th width=\"5%\><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=guid&amp;dir=$dir\">".($order_by=='guid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['id']}</a></th>
 	<th width=\"15%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['char_name']}</a></th>
 	<th width=\"15%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=account&amp;dir=$dir\">".($order_by=='account' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['account']}</a></th>
-    <th width=\"7%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['race']}</a></th>
-	<th width=\"6%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['class']}</a></th>
+    <th width=\"5%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['race']}</a></th>
+	<th width=\"5%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['class']}</a></th>
 	<th width=\"5%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['level']}</a></th>
-	<th width=\"17%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['map']}</a></th>
+	<th width=\"15%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['map']}</a></th>
 	<th width=\"15%\">{$lang_char_list['zone']}</th>
 	<th width=\"5%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=highest_rank&amp;dir=$dir\">".($order_by=='highest_rank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['honor_kills']}</a></th>
 	<th width=\"5%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['online']}</a></th>
+	<th width=\"5%\">{$lang_global['country']}</th>
   </tr>";
 
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -384,6 +396,15 @@ case "greater_level":
     else
       $lev = '<font color="#000000">'.$level.'</font>';
 
+        $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+		$loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[2]';");
+		$location = $sql->fetch_row($loc);
+		$ip = $location[0];
+
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+		$country = $sql->fetch_row($nation);
+
   if (($user_lvl >= $owner_gmlvl)||($owner_acc_name == $user_name)){
 		 $output .= "<tr>";
 		 if (($user_lvl > $owner_gmlvl)||($owner_acc_name == $user_name))$output .= "
@@ -400,10 +421,11 @@ case "greater_level":
 		<td>".get_zone_name($char[5])."</td>
 		<td>$char[7]</td>
 		<td>".(($char[8]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
+		<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
        </tr>";
 	}else{
 		 $output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
-			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>***</td></tr>";
+			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>***</td><td>*</td></tr>";
 		}
 }
 

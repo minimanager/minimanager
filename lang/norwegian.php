@@ -35,6 +35,7 @@ $lang_global = array(
 	'are_you_sure' => 'ER DU SIKKER?',
 	'will_be_erased' => 'Vil vli slettet og ikke mulig å gjennopprette fra databasen!',
 	'unlinked' => 'Ingen link',
+	'country' => 'Country',
 	'language_select' => 'Select Language',
 	'language_0' => 'English',
 	'language_1' => 'Korean',

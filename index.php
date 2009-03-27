@@ -23,7 +23,7 @@ if (test_port($server[$realm_id]['addr'],$server[$realm_id]['game_port']))
 {
     $query = $sql->query("SELECT `starttime` FROM `uptime` ORDER BY `starttime` DESC LIMIT 1");
     $getuptime = mysql_fetch_row($query);
-    $uptimetime = (time()+date(Z)) - $getuptime[0];
+    $uptimetime = (time()) - $getuptime[0];
 	
 function format_uptime($seconds) {
   $secs = intval($seconds % 60);
@@ -160,7 +160,7 @@ if ($online)
 	<font class=\"bold\">{$lang_index['tot_users_online']}: $total_online</font><br /><br />
 	<table class=\"lined\">
 	<tr>
-	<th width=\"20%\"><a href=\"index.php?order_by=name&amp;dir=$dir\"".($order_by=='name' ? " class=\"$order_dir\"" : "").">{$lang_index['name']}</a></th>
+	<th width=\"15%\"><a href=\"index.php?order_by=name&amp;dir=$dir\"".($order_by=='name' ? " class=\"$order_dir\"" : "").">{$lang_index['name']}</a></th>
 	<th width=\"5%\"><a href=\"index.php?order_by=race&amp;dir=$dir\"".($order_by=='race' ? " class=\"$order_dir\"" : "").">{$lang_index['race']}</a></th>
 	<th width=\"5%\"><a href=\"index.php?order_by=class&amp;dir=$dir\"".($order_by=='class' ? " class=\"$order_dir\"" : "").">{$lang_index['class']}</a></th>
 	<th width=\"5%\"><a href=\"index.php?order_by=level&amp;dir=$dir\"".($order_by=='level' ? " class=\"$order_dir\"" : "").">{$lang_index['level']}</a></th>
@@ -168,6 +168,7 @@ if ($online)
 	<th width=\"15%\"><a href=\"index.php?order_by=GNAME&amp;dir=$dir\"".($order_by=='GNAME' ? " class=\"$order_dir\"" :"").">{$lang_index['guild']}</a></th>
 	<th width=\"20%\"><a href=\"index.php?order_by=map&amp;dir=$dir\"".($order_by=='map' ? " class=\"$order_dir\"" : "").">{$lang_index['map']}</a></th>
 	<th width=\"25%\"><a href=\"index.php?order_by=zone&amp;dir=$dir\"".($order_by=='zone' ? " class=\"$order_dir\"" : "").">{$lang_index['zone']}</th>
+	<th width=\"5%\">{$lang_global['country']}</th>
 	</tr>";
 
 	require_once("scripts/id_tab.php");
@@ -206,6 +207,15 @@ if ($online)
     else
       $lev = '<font color="#000000">'.$level.'</font>';
 
+        $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+		$loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$accid';");
+		$location = $sql->fetch_row($loc);
+		$ip = $location[0];
+
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+		$country = $sql->fetch_row($nation);
+
 		$output .= "<tr>
 		 <td><a href=\"char.php?id=$char[0]\"><span onmousemove='toolTip(\"".get_player_user_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>".htmlentities($char[1])."</span></a></td>
          <td><img src='img/c_icons/{$char[2]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
@@ -215,6 +225,7 @@ if ($online)
 		 <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[9]\">$guild_name[0]</a></td>
  		 <td>".get_map_name($char[5])."</td>
 		 <td>".get_zone_name($char[4])."</td>
+ 		 <td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
          </tr>";
 	}
    $output .= "</table><br /></center>";

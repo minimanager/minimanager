@@ -35,6 +35,7 @@ $lang_global = array(
 	'are_you_sure' => 'ETES-VOUS SUR ?',
 	'will_be_erased' => 'et tous ses personnages seront supprimés de la base de données!',
 	'unlinked' => 'Unlinked',
+	'country' => 'Country',
 	'language_select' => 'Select Language',
 	'language_0' => 'English',
 	'language_1' => 'Korean',

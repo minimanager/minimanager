@@ -17,7 +17,7 @@ require_once("scripts/defines.php");
 // BROWSE USERS
 //########################################################################################################################
 function browse_users() {
- global $lang_global, $lang_user, $output, $realm_db, $itemperpage, $user_lvl, $user_name, $gm_level_arr, $exp_lvl_arr, $action_permission;
+ global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name, $gm_level_arr, $exp_lvl_arr, $action_permission;
 
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -36,6 +36,7 @@ function browse_users() {
  $query = $sql->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
 		FROM account ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
  $this_page = $sql->num_rows($query);
+
 
 //==========================top tage navigaion starts here========================
  $output .="<script type=\"text/javascript\" src=\"js/check.js\"></script>
@@ -88,19 +89,27 @@ if($user_lvl >= $action_permission['update'])
    if($user_lvl >= $action_permission['update']) $output.= "<th width=\"1%\"><input name=\"allbox\" type=\"checkbox\" value=\"Check All\" onclick=\"CheckAll(document.form1);\" /></th>";
     else $output .= "<th width=\"1%\"></th>";
    $output .="<th width=\"5%\"><a href=\"user.php?order_by=id&amp;start=$start&amp;dir=$dir\">".($order_by=='id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['id']}</a></th>
-	<th width=\"23%\"><a href=\"user.php?order_by=username&amp;start=$start&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['username']}</a></th>
+	<th width=\"21%\"><a href=\"user.php?order_by=username&amp;start=$start&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['username']}</a></th>
 	<th width=\"5%\"><a href=\"user.php?order_by=gmlevel&amp;start=$start&amp;dir=$dir\">".($order_by=='gmlevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['gm_level']}</a></th>
 	<th width=\"5%\"><a href=\"user.php?order_by=expansion&amp;start=$start&amp;dir=$dir\">".($order_by=='expansion' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."EXP</a></th>
-	<th width=\"17%\"><a href=\"user.php?order_by=email&amp;start=$start&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['email']}</a></th>
+	<th width=\"16%\"><a href=\"user.php?order_by=email&amp;start=$start&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['email']}</a></th>
 	<th width=\"14%\"><a href=\"user.php?order_by=joindate&amp;start=$start&amp;dir=$dir\">".($order_by=='joindate' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['join_date']}</a></th>
 	<th width=\"10%\"><a href=\"user.php?order_by=last_ip&amp;start=$start&amp;dir=$dir\">".($order_by=='last_ip' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['ip']}</a></th>
 	<th width=\"5%\"><a href=\"user.php?order_by=failed_logins&amp;start=$start&amp;dir=$dir\">".($order_by=='failed_logins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['failed_logins']}</a></th>
 	<th width=\"3%\"><a href=\"user.php?order_by=locked&amp;start=$start&amp;dir=$dir\">".($order_by=='locked' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['locked']}</a></th>
 	<th width=\"14%\"><a href=\"user.php?order_by=last_login&amp;start=$start&amp;dir=$dir\">".($order_by=='last_login' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['last_login']}</a></th>
 	<th width=\"3%\"><a href=\"user.php?order_by=online&amp;start=$start&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['online']}</a></th>
+	<th width=\"3%\">{$lang_global['country']}</th>
    </tr>";
 
  while ($data = $sql->fetch_row($query)){
+
+
+		$ip = $data[5];
+
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+		$country = $sql->fetch_row($nation);
 
 	if (($user_lvl >= $data[2])||($user_name == $data[1])){
    		$output .= "<tr>";
@@ -120,10 +129,11 @@ if($user_lvl >= $action_permission['update'])
 			<td>".(($data[7]) ? $lang_global['yes_low'] : "-")."</td>
 			<td class=\"small\">$data[8]</td>
 			<td>".(($data[9]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
+ 			<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
             </tr>";
 	} else {
 		$output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
-			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td></tr>";
+			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td><td>*</td></tr>";
 	}
 }
  $output .= "<tr><td colspan=\"12\" class=\"hidden\"><br /></td></tr>
@@ -145,7 +155,7 @@ if($user_lvl >= $action_permission['update'])
 //  SEARCH
 //#######################################################################################################
 function search() {
- global $lang_global, $lang_user, $output, $realm_db, $user_lvl, $user_name, $sql_search_limit, $gm_level_arr, $action_permission;
+ global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $user_lvl, $user_name, $sql_search_limit, $gm_level_arr, $action_permission;
 valid_login($action_permission['read']);
  if(!isset($_GET['search_value']) || !isset($_GET['search_by'])) redirect("user.php?error=2");
 
@@ -227,18 +237,25 @@ valid_login($action_permission['read']);
    <tr>
 	<th width=\"1%\"><input name=\"allbox\" type=\"checkbox\" value=\"Check All\" onclick=\"CheckAll(document.form1);\" /></th>
 	<th width=\"5%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=id&amp;dir=$dir\">".($order_by=='id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['id']}</a></th>
-	<th width=\"23%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=username&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['username']}</a></th>
+	<th width=\"21%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=username&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['username']}</a></th>
 	<th width=\"5%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=gmlevel&amp;dir=$dir\">".($order_by=='gmlevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['gm_level']}</a></th>
-    <th width=\"17%\><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=email&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['email']}</a></th>
+    <th width=\"16%\><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=email&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['email']}</a></th>
 	<th width=\"14%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=joindate&amp;dir=$dir\">".($order_by=='joindate' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['join_date']}</a></th>
 	<th width=\"10%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=last_ip&amp;dir=$dir\">".($order_by=='last_ip' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['ip']}</a></th>
 	<th width=\"5%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=failed_logins&amp;dir=$dir\">".($order_by=='failed_logins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['failed_logins']}</a></th>
 	<th width=\"3%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=locked&amp;dir=$dir\">".($order_by=='locked' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['locked']}</a></th>
 	<th width=\"14%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=last_login&amp;dir=$dir\">".($order_by=='last_login' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['last_login']}</a></th>
 	<th width=\"3%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['online']}</a></th>
+	<th width=\"3%\">{$lang_global['country']}</th>
    </tr>";
 
  while ($data = $sql->fetch_row($query)){
+
+		$ip = $data[5];
+
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+		$country = $sql->fetch_row($nation);
 
 	if (($user_lvl >= $data[2])||($user_name == $data[1])){
    		$output .= "<tr>";
@@ -257,10 +274,11 @@ valid_login($action_permission['read']);
 			<td>".(($data[7]) ? $lang_global['yes_low'] : "-")."</td>
 			<td class=\"small\">$data[8]</td>
 			<td>".(($data[9]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
+ 			<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
             </tr>";
 	} else {
 		$output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
-			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td></tr>";
+			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td><td>*</td></tr>";
 	}
 }
 $output .= "<tr><td colspan=\"12\" class=\"hidden\"><br /></td></tr>

@@ -21,7 +21,7 @@ require_once("scripts/char_aura.php");
 //########################################################################################################################
 function char_main() 
 {
-    global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
+    global $lang_global, $lang_char, $lang_item, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_lvl,$world_db,
         $user_name, $item_datasite, $server, $user_id, $char_aura, $talent_datasite;
 
     if (empty($_GET['id'])) error($lang_global['empty_fields']);
@@ -64,7 +64,7 @@ function char_main()
         if ($user_lvl >= $owner_gmlvl && (($side_v == $side_p) || !$side_v))
         {
 
-        $result = $sql->query("SELECT data,name,race,class,zone,map,online,totaltime, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id");
+        $result = $sql->query("SELECT data,name,race,class,zone,map,online,totaltime, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, account FROM `characters` WHERE guid = $id");
         $char = $sql->fetch_row($result);
         $char_data = explode(' ',$char[0]);
 
@@ -167,8 +167,17 @@ function char_main()
 			}
         }
 
+        $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+		$loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[9]';");
+		$location = $sql->fetch_row($loc);
+		$ip = $location[0];
+
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+		$country = $sql->fetch_row($nation);
+
   $output .="</div><font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])." (lvl {$char_data[CHAR_DATA_OFFSET_LEVEL]})</font><br />
-  {$lang_char['guild']}: $guild_name | {$lang_char['rank']}: ".htmlentities($guild_rank)."<br />$online</td></tr>
+  {$lang_char['guild']}: $guild_name | {$lang_char['rank']}: ".htmlentities($guild_rank)."<br />".(($char[6]) ? "<img src=\"img/up.gif\" onmousemove='toolTip(\"Online\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "<img src=\"img/down.gif\" onmousemove='toolTip(\"Offline\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />")." - ".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")." </td></tr>
   <tr>
     <td width=\"6%\">";
     if (!empty($equiped_items[1][1])) $output .= maketooltip("<img src=\"{$equiped_items[1][1]}\" class=\"{$equiped_items[1][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_HEAD]}", $equiped_items[1][0], "item_tooltip", "target=\"_blank\"");
@@ -1426,7 +1435,7 @@ if ($sql->num_rows($result) == 1){
         while ($ability = $sql->fetch_row($ability_results)){
               if( isset($pet_ability[$ability[0]]) )
               {
-                  $output .= "<a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_pet_ability_name($ability[0])."<br />Training Points: ".get_pet_ability_trainvalue($ability[0])."<br />Id: $ability[0]</font>','item_tooltip')\" onmouseout=\"toolTip()\" href=\"$talent_datasite$ability[0]\"><img src=\"img/pet/".get_pet_ability_image($ability[0])."\"></a>";
+                  $output .= "<a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_pet_ability_name($ability[0])."<br />Training Points: ".get_pet_ability_trainvalue($ability[0])."<br />Id: $ability[0]</font>','item_tooltip')\" onmouseout=\"toolTip()\" ><img src=\"img/pet/".get_pet_ability_image($ability[0])."\"></a>";
               }
           }
     }

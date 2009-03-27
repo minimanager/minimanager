@@ -35,6 +35,7 @@ $lang_global = array(
 	'are_you_sure' => '¿Estás seguro?',
 	'will_be_erased' => 'Si se elimina sera irrecuperable de la BD!',
 	'unlinked' => 'Unlinked',
+	'country' => 'Country',
 	'language_select' => 'Select Language',
 	'language_0' => 'English',
 	'language_1' => 'Korean',

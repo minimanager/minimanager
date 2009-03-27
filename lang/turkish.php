@@ -35,6 +35,7 @@ $lang_global = array(
 	'are_you_sure' => 'EMÝN MÝSÝNÝZ?',
 	'will_be_erased' => 'Geri dönüþ mümkün olmaksýzýn silinecek!',
 	'unlinked' => 'Baðlý deðil',
+	'country' => 'Country',
 	'language_select' => 'Select Language',
 	'language_0' => 'English',
 	'language_1' => 'Korean',
