@@ -15,15 +15,15 @@ require_once("scripts/get_lib.php");
 require_once("scripts/bbcode_lib.php");
 
 $sql = new SQL;
-$sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+$sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
 $output .= "<div class=\"top\">";
 
 if (test_port($server[$realm_id]['addr'],$server[$realm_id]['game_port'])) 
 {
-    $query = $sql->query("SELECT `starttime` FROM `uptime` ORDER BY `starttime` DESC LIMIT 1");
+    $query = $sql->query("SELECT `starttime` FROM `uptime` WHERE `realmid` = $realm_id ORDER BY `starttime` DESC LIMIT 1");
     $getuptime = mysql_fetch_row($query);
-    $uptimetime = (time()) - $getuptime[0];
+    $uptimetime = time() - $getuptime[0];
 	
 function format_uptime($seconds) {
   $secs = intval($seconds % 60);

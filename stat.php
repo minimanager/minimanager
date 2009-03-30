@@ -67,8 +67,8 @@ $level = Array(
  $query = $sql->query("SELECT count(*) FROM `characters`");
  $total_chars = $sql->result($query,0);
 
- $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
- $query = $sql->query("SELECT AVG(uptime)/60,MAX(uptime)/60,(100*SUM(uptime)/(UNIX_TIMESTAMP()-MIN(starttime))) FROM uptime");
+ $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+ $query = $sql->query("SELECT AVG(uptime)/60,MAX(uptime)/60,(100*SUM(uptime)/(UNIX_TIMESTAMP()-MIN(starttime))) FROM uptime WHERE `realmid` = $realm_id");
  $uptime = $sql->fetch_row($query);
 
  if ($total_chars){
