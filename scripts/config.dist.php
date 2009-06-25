@@ -90,7 +90,7 @@ $smtp_cfg = array(
 //---- New account creation Options ----
 $disable_acc_creation = false; 	//true = Do not allow new accounts to be created
 $expansion_select = true; //true = Shows option to select expansion or classic False = no option(TBC) enabled by default
-$defaultoption = 2; //if the above is false then set what the default option will be (1 = TBC, 0 = Classic)
+$defaultoption = 2; //if the above is false then set what the default option will be (2 = WOTLK, 1 = TBC, 0 = Classic)
 $enable_captcha = false; //false = no security image check (enable for protection against 'bot' registrations)
 $send_mail_on_creation = false; //true = send mail at account creation.
 $create_acc_locked = 0; 		//if set to '1' newly created accounts will be made locked to 0.0.0.0 IP disallowing user to login.

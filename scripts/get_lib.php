@@ -130,7 +130,7 @@ function get_item_tooltip($item_id){
 		stat_value8,stat_type9,stat_value9,stat_type10,stat_value10,armor,holy_res,fire_res,nature_res,
 		frost_res,arcane_res,shadow_res,spellid_1,spellid_2,spellid_3,spellid_4,spellid_5,
 		IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",name),class,subclass,Quality,RequiredLevel,dmg_min1,dmg_max1,dmg_type1,dmg_min2,dmg_max2,dmg_type2,
-		dmg_min3,dmg_max3,dmg_type3,dmg_min4,dmg_max4,dmg_type4,dmg_min5,dmg_max5,dmg_type5,delay,bonding,
+		delay,bonding,
 		description,itemset,item_template.entry,InventoryType,ItemLevel,displayid,maxcount,spelltrigger_1,spelltrigger_2,
 		spelltrigger_3,spelltrigger_4,spelltrigger_5,ContainerSlots,spellcharges_1,spellcharges_2,spellcharges_3
 		spellcharges_4,spellcharges_5,AllowableClass,socketColor_1,socketColor_2,socketColor_3,RandomProperty,RandomSuffix

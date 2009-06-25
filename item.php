@@ -852,36 +852,6 @@ $output .= "</select></td>
 	 <td colspan=\"4\"><input type=\"text\" name=\"dmg_min2\" size=\"8\" maxlength=\"45\" value=\"0\" /> - <input type=\"text\" name=\"dmg_max2\" size=\"8\" maxlength=\"45\" value=\"0\" /></td>
 
 </tr>
-<tr>
-	 <td>".makeinfocell($lang_item_edit['damage_type']." 3",$lang_item_edit['damage_type_desc'])."</td>
-	 <td colspan=\"2\"><select name=\"dmg_type3\">";
-	 output_dmgtype_options(NULL);
-$output .= "</select></td>
-
-	 <td>".makeinfocell($lang_item_edit['dmg_min_max'],$lang_item_edit['dmg_min_max_desc'])."</td>
-	 <td colspan=\"4\"><input type=\"text\" name=\"dmg_min3\" size=\"8\" maxlength=\"45\" value=\"0\" /> - <input type=\"text\" name=\"dmg_max3\" size=\"8\" maxlength=\"45\" value=\"0\" /></td>
-
-</tr>
-<tr>
-	 <td>".makeinfocell($lang_item_edit['damage_type']." 4",$lang_item_edit['damage_type_desc'])."</td>
-	 <td colspan=\"2\"><select name=\"dmg_type4\">";
-	 output_dmgtype_options(NULL);
-$output .= "</select></td>
-
-	 <td>".makeinfocell($lang_item_edit['dmg_min_max'],$lang_item_edit['dmg_min_max_desc'])."</td>
-	 <td colspan=\"4\"><input type=\"text\" name=\"dmg_min4\" size=\"8\" maxlength=\"45\" value=\"0\" /> - <input type=\"text\" name=\"dmg_max4\" size=\"8\" maxlength=\"45\" value=\"0\" /></td>
-
-</tr>
-<tr>
-	 <td>".makeinfocell($lang_item_edit['damage_type']." 5",$lang_item_edit['damage_type_desc'])."</td>
-	 <td colspan=\"2\"><select name=\"dmg_type5\">";
-	 output_dmgtype_options(NULL);
-$output .= "</select></td>
-
-	 <td>".makeinfocell($lang_item_edit['dmg_min_max'],$lang_item_edit['dmg_min_max_desc'])."</td>
-	 <td colspan=\"4\"><input type=\"text\" name=\"dmg_min5\" size=\"8\" maxlength=\"45\" value=\"0\" /> - <input type=\"text\" name=\"dmg_max5\" size=\"8\" maxlength=\"45\" value=\"0\" /></td>
-</tr>
-
 </table><br /><br />
     </div>";
 
@@ -1192,7 +1162,7 @@ function edit() {
 
  $entry = $sql->quote_smart($_GET['entry']);
  $deplang = get_lang_id();
- $result = $sql->query("SELECT `item_template`.`entry`,`class`,`subclass`,`unk0`,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,`displayid`,`Quality`,`Flags`,`BuyCount`,`BuyPrice`,`SellPrice`,`InventoryType`,`AllowableClass`,`AllowableRace`,`ItemLevel`,`RequiredLevel`,`RequiredSkill`,`RequiredSkillRank`,`requiredspell`,`requiredhonorrank`,`RequiredCityRank`,`RequiredReputationFaction`,`RequiredReputationRank`,`maxcount`,`stackable`,`ContainerSlots`,`stat_type1`,`stat_value1`,`stat_type2`,`stat_value2`,`stat_type3`,`stat_value3`,`stat_type4`,`stat_value4`,`stat_type5`,`stat_value5`,`stat_type6`,`stat_value6`,`stat_type7`,`stat_value7`,`stat_type8`,`stat_value8`,`stat_type9`,`stat_value9`,`stat_type10`,`stat_value10`,`dmg_min1`,`dmg_max1`,`dmg_type1`,`dmg_min2`,`dmg_max2`,`dmg_type2`,`dmg_min3`,`dmg_max3`,`dmg_type3`,`dmg_min4`,`dmg_max4`,`dmg_type4`,`dmg_min5`,`dmg_max5`,`dmg_type5`,`armor`,`holy_res`,`fire_res`,`nature_res`,`frost_res`,`shadow_res`,`arcane_res`,`delay`,`ammo_type`,`RangedModRange`,`spellid_1`,`spelltrigger_1`,`spellcharges_1`,`spellppmRate_1`,`spellcooldown_1`,`spellcategory_1`,`spellcategorycooldown_1`,`spellid_2`,`spelltrigger_2`,`spellcharges_2`,`spellppmRate_2`,`spellcooldown_2`,`spellcategory_2`,`spellcategorycooldown_2`,`spellid_3`,`spelltrigger_3`,`spellcharges_3`,`spellppmRate_3`,`spellcooldown_3`,`spellcategory_3`,`spellcategorycooldown_3`,`spellid_4`,`spelltrigger_4`,`spellcharges_4`,`spellppmRate_4`,`spellcooldown_4`,`spellcategory_4`,`spellcategorycooldown_4`,`spellid_5`,`spelltrigger_5`,`spellcharges_5`,`spellppmRate_5`,`spellcooldown_5`,`spellcategory_5`,`spellcategorycooldown_5`,`bonding`,`description`,`PageText`,`LanguageID`,`PageMaterial`,`startquest`,`lockid`,`Material`,`sheath`,`RandomProperty`,`RandomSuffix`,`block`,`itemset`,`MaxDurability`,`area`,`Map`,`BagFamily`,`TotemCategory`,`socketColor_1`,`socketContent_1`,`socketColor_2`,`socketContent_2`,`socketColor_3`,`socketContent_3`,`socketBonus`,`GemProperties`,`RequiredDisenchantSkill`,`ArmorDamageModifier`,`ScriptName`,`DisenchantID`,`FoodType`,`minMoneyLoot`,`maxMoneyLoot` FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry WHERE item_template.entry = '$entry'");
+ $result = $sql->query("SELECT `item_template`.`entry`,`class`,`subclass`,`unk0`,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,`displayid`,`Quality`,`Flags`,`BuyCount`,`BuyPrice`,`SellPrice`,`InventoryType`,`AllowableClass`,`AllowableRace`,`ItemLevel`,`RequiredLevel`,`RequiredSkill`,`RequiredSkillRank`,`requiredspell`,`requiredhonorrank`,`RequiredCityRank`,`RequiredReputationFaction`,`RequiredReputationRank`,`maxcount`,`stackable`,`ContainerSlots`,`stat_type1`,`stat_value1`,`stat_type2`,`stat_value2`,`stat_type3`,`stat_value3`,`stat_type4`,`stat_value4`,`stat_type5`,`stat_value5`,`stat_type6`,`stat_value6`,`stat_type7`,`stat_value7`,`stat_type8`,`stat_value8`,`stat_type9`,`stat_value9`,`stat_type10`,`stat_value10`,`dmg_min1`,`dmg_max1`,`dmg_type1`,`dmg_min2`,`dmg_max2`,`dmg_type2`,`armor`,`holy_res`,`fire_res`,`nature_res`,`frost_res`,`shadow_res`,`arcane_res`,`delay`,`ammo_type`,`RangedModRange`,`spellid_1`,`spelltrigger_1`,`spellcharges_1`,`spellppmRate_1`,`spellcooldown_1`,`spellcategory_1`,`spellcategorycooldown_1`,`spellid_2`,`spelltrigger_2`,`spellcharges_2`,`spellppmRate_2`,`spellcooldown_2`,`spellcategory_2`,`spellcategorycooldown_2`,`spellid_3`,`spelltrigger_3`,`spellcharges_3`,`spellppmRate_3`,`spellcooldown_3`,`spellcategory_3`,`spellcategorycooldown_3`,`spellid_4`,`spelltrigger_4`,`spellcharges_4`,`spellppmRate_4`,`spellcooldown_4`,`spellcategory_4`,`spellcategorycooldown_4`,`spellid_5`,`spelltrigger_5`,`spellcharges_5`,`spellppmRate_5`,`spellcooldown_5`,`spellcategory_5`,`spellcategorycooldown_5`,`bonding`,`description`,`PageText`,`LanguageID`,`PageMaterial`,`startquest`,`lockid`,`Material`,`sheath`,`RandomProperty`,`RandomSuffix`,`block`,`itemset`,`MaxDurability`,`area`,`Map`,`BagFamily`,`TotemCategory`,`socketColor_1`,`socketContent_1`,`socketColor_2`,`socketContent_2`,`socketColor_3`,`socketContent_3`,`socketBonus`,`GemProperties`,`RequiredDisenchantSkill`,`ArmorDamageModifier`,`ScriptName`,`DisenchantID`,`FoodType`,`minMoneyLoot`,`maxMoneyLoot` FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry WHERE item_template.entry = '$entry'");
 
  if ($result){
 	$item = $sql->fetch_assoc($result);
@@ -1788,35 +1758,6 @@ $output .= "</select></td>
 	 <td colspan=\"4\"><input type=\"text\" name=\"dmg_min2\" size=\"8\" maxlength=\"45\" value=\"{$item['dmg_min2']}\" /> - <input type=\"text\" name=\"dmg_max2\" size=\"8\" maxlength=\"45\" value=\"{$item['dmg_max2']}\" /></td>
 
 </tr>
-<tr>
-	<td>".makeinfocell($lang_item_edit['damage_type']." 3",$lang_item_edit['damage_type_desc'])."</td>
-	 <td colspan=\"2\"><select name=\"dmg_type3\">";
-	 output_dmgtype_options($item['dmg_type3']);
-$output .= "</select></td>
-
-	 <td>".makeinfocell($lang_item_edit['dmg_min_max'],$lang_item_edit['dmg_min_max_desc'])."</td>
-	 <td colspan=\"4\"><input type=\"text\" name=\"dmg_min3\" size=\"8\" maxlength=\"45\" value=\"{$item['dmg_min3']}\" /> - <input type=\"text\" name=\"dmg_max3\" size=\"8\" maxlength=\"45\" value=\"{$item['dmg_max3']}\" /></td>
-</tr>
-<tr>
-	<td>".makeinfocell($lang_item_edit['damage_type']." 4",$lang_item_edit['damage_type_desc'])."</td>
-	 <td colspan=\"2\"><select name=\"dmg_type4\">";
-	 output_dmgtype_options($item['dmg_type4']);
-$output .= "</select></td>
-
-	 <td>".makeinfocell($lang_item_edit['dmg_min_max'],$lang_item_edit['dmg_min_max_desc'])."</td>
-	 <td colspan=\"4\"><input type=\"text\" name=\"dmg_min4\" size=\"8\" maxlength=\"45\" value=\"{$item['dmg_min4']}\" /> - <input type=\"text\" name=\"dmg_max4\" size=\"8\" maxlength=\"45\" value=\"{$item['dmg_max4']}\" /></td>
-
-</tr>
-<tr>
-	<td>".makeinfocell($lang_item_edit['damage_type']." 5",$lang_item_edit['damage_type_desc'])."</td>
-	 <td colspan=\"2\"><select name=\"dmg_type5\">";
-	 output_dmgtype_options($item['dmg_type5']);
-$output .= "</select></td>
-
-	 <td>".makeinfocell($lang_item_edit['dmg_min_max'],$lang_item_edit['dmg_min_max_desc'])."</td>
-	 <td colspan=\"4\"><input type=\"text\" name=\"dmg_min5\" size=\"8\" maxlength=\"45\" value=\"{$item['dmg_min5']}\" /> - <input type=\"text\" name=\"dmg_max5\" size=\"8\" maxlength=\"45\" value=\"{$item['dmg_max5']}\" /></td>
-</tr>
-
 </table><br /><br />
     </div>";
 
@@ -2417,24 +2358,6 @@ function do_update() {
  	else $dmg_max2 = 0;
  if (isset($_POST['dmg_type2']) && $_POST['dmg_type2'] != '') $dmg_type2 = $sql->quote_smart($_POST['dmg_type2']);
  	else $dmg_type2 = 0;
- if (isset($_POST['dmg_min3']) && $_POST['dmg_min3'] != '') $dmg_min3 = $sql->quote_smart($_POST['dmg_min3']);
- 	else $dmg_min3 = 0;
- if (isset($_POST['dmg_max3']) && $_POST['dmg_max3'] != '') $dmg_max3 = $sql->quote_smart($_POST['dmg_max3']);
- 	else $dmg_max3 = 0;
- if (isset($_POST['dmg_type3']) && $_POST['dmg_type3'] != '') $dmg_type3 = $sql->quote_smart($_POST['dmg_type3']);
- 	else $dmg_type3 = 0;
- if (isset($_POST['dmg_min4']) && $_POST['dmg_min4'] != '') $dmg_min4 = $sql->quote_smart($_POST['dmg_min4']);
- 	else $dmg_min4 = 0;
- if (isset($_POST['dmg_max4']) && $_POST['dmg_max4'] != '') $dmg_max4 = $sql->quote_smart($_POST['dmg_max4']);
- 	else $dmg_max4 = 0;
- if (isset($_POST['dmg_type4']) && $_POST['dmg_type4'] != '') $dmg_type4 = $sql->quote_smart($_POST['dmg_type4']);
-	else $dmg_type4 = 0;
- if (isset($_POST['dmg_min5']) && $_POST['dmg_min5'] != '') $dmg_min5 = $sql->quote_smart($_POST['dmg_min5']);
-	else $dmg_min5 = 0;
- if (isset($_POST['dmg_max5']) && $_POST['dmg_max5'] != '') $dmg_max5 = $sql->quote_smart($_POST['dmg_max5']);
-	else $dmg_max5 = 0;
- if (isset($_POST['dmg_type5']) && $_POST['dmg_type5'] != '') $dmg_type5 = $sql->quote_smart($_POST['dmg_type5']);
-	else $dmg_type5 = 0;
  if (isset($_POST['armor']) && $_POST['armor'] != '') $armor = $sql->quote_smart($_POST['armor']);
 	else $armor = 0;
  if (isset($_POST['holy_res']) && $_POST['holy_res'] != '') $holy_res = $sql->quote_smart($_POST['holy_res']);
@@ -2649,8 +2572,8 @@ function do_update() {
 	$sql_query = "INSERT INTO item_template (entry, class, subclass, name,displayid, Quality, Flags, BuyCount, BuyPrice, SellPrice, InventoryType, AllowableClass, AllowableRace, ItemLevel,
 	RequiredLevel, RequiredSkill, RequiredSkillRank, requiredspell, requiredhonorrank, RequiredCityRank, RequiredReputationFaction, RequiredReputationRank, maxcount, stackable, ContainerSlots, stat_type1,
 	stat_value1, stat_type2, stat_value2, stat_type3, stat_value3, stat_type4, stat_value4, stat_type5, stat_value5, stat_type6, stat_value6, stat_type7, stat_value7, stat_type8, stat_value8, stat_type9,
-	stat_value9, stat_type10, stat_value10, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2, dmg_min3, dmg_max3, dmg_type3, dmg_min4, dmg_max4, dmg_type4, dmg_min5, dmg_max5, dmg_type5, armor,
-	holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, delay, ammo_type, RangedModRange, spellid_1, spelltrigger_1, spellcharges_1, spellppmRate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1,
+  stat_value9, stat_type10, stat_value10, dmg_min1, dmg_max1, dmg_type1, dmg_min2, dmg_max2, dmg_type2, armor, holy_res, fire_res, nature_res, frost_res, shadow_res, arcane_res, delay, ammo_type,
+  RangedModRange, spellid_1, spelltrigger_1, spellcharges_1, spellppmRate_1, spellcooldown_1, spellcategory_1, spellcategorycooldown_1,
 	spellid_2, spelltrigger_2, spellcharges_2, spellppmRate_2, spellcooldown_2, spellcategory_2, spellcategorycooldown_2, spellid_3, spelltrigger_3, spellcharges_3, spellppmRate_3, spellcooldown_3, spellcategory_3, spellcategorycooldown_3,
 	spellid_4, spelltrigger_4, spellcharges_4, spellppmRate_4, spellcooldown_4, spellcategory_4, spellcategorycooldown_4, spellid_5, spelltrigger_5, spellcharges_5, spellppmRate_5, spellcooldown_5, spellcategory_5, spellcategorycooldown_5,
 	bonding, description, PageText, LanguageID, PageMaterial, startquest, lockid, Material, sheath, RandomProperty, block, itemset, MaxDurability, area, BagFamily, Map, ScriptName, DisenchantID,RequiredDisenchantSkill,
@@ -2658,8 +2581,7 @@ function do_update() {
 	VALUES ('$entry', '$class', '$subclass', '$name','$displayid', '$Quality', '$Flags', '$BuyCount', '$BuyPrice', '$SellPrice', '$InventoryType', '$AllowableClass', '$AllowableRace', '$ItemLevel', '$RequiredLevel',
 	'$RequiredSkill', '$RequiredSkillRank', '$requiredspell', '$requiredhonorrank', '$RequiredCityRank', '$RequiredReputationFaction', '$RequiredReputationRank', '$maxcount', '$stackable', '$ContainerSlots', '$stat_type1',
 	'$stat_value1', '$stat_type2', '$stat_value2', '$stat_type3', '$stat_value3', '$stat_type4', '$stat_value4', '$stat_type5', '$stat_value5', '$stat_type6', '$stat_value6', '$stat_type7', '$stat_value7', '$stat_type8', '$stat_value8',
-	'$stat_type9', '$stat_value9', '$stat_type10', '$stat_value10', '$dmg_min1', '$dmg_max1', '$dmg_type1', '$dmg_min2', '$dmg_max2', '$dmg_type2', '$dmg_min3', '$dmg_max3', '$dmg_type3', '$dmg_min4', '$dmg_max4', '$dmg_type4', '$dmg_min5',
-	'$dmg_max5', '$dmg_type5', '$armor', '$holy_res', '$fire_res', '$nature_res', '$frost_res', '$shadow_res', '$arcane_res', '$delay', '$ammo_type', '$RangedModRange', '$spellid_1', '$spelltrigger_1', '$spellcharges_1', '$spellppmRate_1', '$spellcooldown_1',
+	'$stat_type9', '$stat_value9', '$stat_type10', '$stat_value10', '$dmg_min1', '$dmg_max1', '$dmg_type1', '$dmg_min2', '$dmg_max2', '$dmg_type2', '$armor', '$holy_res', '$fire_res', '$nature_res', '$frost_res', '$shadow_res', '$arcane_res', '$delay', '$ammo_type', '$RangedModRange', '$spellid_1', '$spelltrigger_1', '$spellcharges_1', '$spellppmRate_1', '$spellcooldown_1',
 	'$spellcategory_1', '$spellcategorycooldown_1', '$spellid_2', '$spelltrigger_2', '$spellcharges_2', '$spellppmRate_2', '$spellcooldown_2', '$spellcategory_2', '$spellcategorycooldown_2', '$spellid_3', '$spelltrigger_3', '$spellcharges_3', '$spellppmRate_3',
 	'$spellcooldown_3', '$spellcategory_3', '$spellcategorycooldown_3', '$spellid_4', '$spelltrigger_4', '$spellcharges_4', '$spellppmRate_4', '$spellcooldown_4', '$spellcategory_4', '$spellcategorycooldown_4', '$spellid_5', '$spelltrigger_5',
 	'$spellcharges_5', '$spellppmRate_5', '$spellcooldown_5', '$spellcategory_5', '$spellcategorycooldown_5', '$bonding', '$description', '$PageText', '$LanguageID', '$PageMaterial', '$startquest', '$lockid', '$Material', '$sheath', '$RandomProperty', '$block',
@@ -2670,7 +2592,7 @@ function do_update() {
 
 	$sql_query = "UPDATE item_template SET  ";
 
-	$result = $sql->query("SELECT `item_template`.`entry`,`class`,`subclass`,`unk0`,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,`displayid`,`Quality`,`Flags`,`BuyCount`,`BuyPrice`,`SellPrice`,`InventoryType`,`AllowableClass`,`AllowableRace`,`ItemLevel`,`RequiredLevel`,`RequiredSkill`,`RequiredSkillRank`,`requiredspell`,`requiredhonorrank`,`RequiredCityRank`,`RequiredReputationFaction`,`RequiredReputationRank`,`maxcount`,`stackable`,`ContainerSlots`,`stat_type1`,`stat_value1`,`stat_type2`,`stat_value2`,`stat_type3`,`stat_value3`,`stat_type4`,`stat_value4`,`stat_type5`,`stat_value5`,`stat_type6`,`stat_value6`,`stat_type7`,`stat_value7`,`stat_type8`,`stat_value8`,`stat_type9`,`stat_value9`,`stat_type10`,`stat_value10`,`dmg_min1`,`dmg_max1`,`dmg_type1`,`dmg_min2`,`dmg_max2`,`dmg_type2`,`dmg_min3`,`dmg_max3`,`dmg_type3`,`dmg_min4`,`dmg_max4`,`dmg_type4`,`dmg_min5`,`dmg_max5`,`dmg_type5`,`armor`,`holy_res`,`fire_res`,`nature_res`,`frost_res`,`shadow_res`,`arcane_res`,`delay`,`ammo_type`,`RangedModRange`,`spellid_1`,`spelltrigger_1`,`spellcharges_1`,`spellppmRate_1`,`spellcooldown_1`,`spellcategory_1`,`spellcategorycooldown_1`,`spellid_2`,`spelltrigger_2`,`spellcharges_2`,`spellppmRate_2`,`spellcooldown_2`,`spellcategory_2`,`spellcategorycooldown_2`,`spellid_3`,`spelltrigger_3`,`spellcharges_3`,`spellppmRate_3`,`spellcooldown_3`,`spellcategory_3`,`spellcategorycooldown_3`,`spellid_4`,`spelltrigger_4`,`spellcharges_4`,`spellppmRate_4`,`spellcooldown_4`,`spellcategory_4`,`spellcategorycooldown_4`,`spellid_5`,`spelltrigger_5`,`spellcharges_5`,`spellppmRate_5`,`spellcooldown_5`,`spellcategory_5`,`spellcategorycooldown_5`,`bonding`,`description`,`PageText`,`LanguageID`,`PageMaterial`,`startquest`,`lockid`,`Material`,`sheath`,`RandomProperty`,`RandomSuffix`,`block`,`itemset`,`MaxDurability`,`area`,`Map`,`BagFamily`,`TotemCategory`,`socketColor_1`,`socketContent_1`,`socketColor_2`,`socketContent_2`,`socketColor_3`,`socketContent_3`,`socketBonus`,`GemProperties`,`RequiredDisenchantSkill`,`ArmorDamageModifier`,`ScriptName`,`DisenchantID`,`FoodType`,`minMoneyLoot`,`maxMoneyLoot` FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry WHERE item_template.entry = '$entry'");
+	$result = $sql->query("SELECT `item_template`.`entry`,`class`,`subclass`,`unk0`,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,`displayid`,`Quality`,`Flags`,`BuyCount`,`BuyPrice`,`SellPrice`,`InventoryType`,`AllowableClass`,`AllowableRace`,`ItemLevel`,`RequiredLevel`,`RequiredSkill`,`RequiredSkillRank`,`requiredspell`,`requiredhonorrank`,`RequiredCityRank`,`RequiredReputationFaction`,`RequiredReputationRank`,`maxcount`,`stackable`,`ContainerSlots`,`stat_type1`,`stat_value1`,`stat_type2`,`stat_value2`,`stat_type3`,`stat_value3`,`stat_type4`,`stat_value4`,`stat_type5`,`stat_value5`,`stat_type6`,`stat_value6`,`stat_type7`,`stat_value7`,`stat_type8`,`stat_value8`,`stat_type9`,`stat_value9`,`stat_type10`,`stat_value10`,`dmg_min1`,`dmg_max1`,`dmg_type1`,`dmg_min2`,`dmg_max2`,`dmg_type2`,`armor`,`holy_res`,`fire_res`,`nature_res`,`frost_res`,`shadow_res`,`arcane_res`,`delay`,`ammo_type`,`RangedModRange`,`spellid_1`,`spelltrigger_1`,`spellcharges_1`,`spellppmRate_1`,`spellcooldown_1`,`spellcategory_1`,`spellcategorycooldown_1`,`spellid_2`,`spelltrigger_2`,`spellcharges_2`,`spellppmRate_2`,`spellcooldown_2`,`spellcategory_2`,`spellcategorycooldown_2`,`spellid_3`,`spelltrigger_3`,`spellcharges_3`,`spellppmRate_3`,`spellcooldown_3`,`spellcategory_3`,`spellcategorycooldown_3`,`spellid_4`,`spelltrigger_4`,`spellcharges_4`,`spellppmRate_4`,`spellcooldown_4`,`spellcategory_4`,`spellcategorycooldown_4`,`spellid_5`,`spelltrigger_5`,`spellcharges_5`,`spellppmRate_5`,`spellcooldown_5`,`spellcategory_5`,`spellcategorycooldown_5`,`bonding`,`description`,`PageText`,`LanguageID`,`PageMaterial`,`startquest`,`lockid`,`Material`,`sheath`,`RandomProperty`,`RandomSuffix`,`block`,`itemset`,`MaxDurability`,`area`,`Map`,`BagFamily`,`TotemCategory`,`socketColor_1`,`socketContent_1`,`socketColor_2`,`socketContent_2`,`socketColor_3`,`socketContent_3`,`socketBonus`,`GemProperties`,`RequiredDisenchantSkill`,`ArmorDamageModifier`,`ScriptName`,`DisenchantID`,`FoodType`,`minMoneyLoot`,`maxMoneyLoot` FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry WHERE item_template.entry = '$entry'");
 	if ($item_templ = $sql->fetch_assoc($result)){
 
 		if ($item_templ['class'] != $class) $sql_query .= "class='$class',";
@@ -2723,15 +2645,6 @@ function do_update() {
 		if ($item_templ['dmg_min2'] != $dmg_min2) $sql_query .= "dmg_min2='$dmg_min2',";
 		if ($item_templ['dmg_max2'] != $dmg_max2) $sql_query .= "dmg_max2='$dmg_max2',";
 		if ($item_templ['dmg_type2'] != $dmg_type2) $sql_query .= "dmg_type2='$dmg_type2',";
-		if ($item_templ['dmg_min3'] != $dmg_min3) $sql_query .= "dmg_min3='$dmg_min3',";
-		if ($item_templ['dmg_max3'] != $dmg_max3) $sql_query .= "dmg_max3='$dmg_max3',";
-		if ($item_templ['dmg_type3'] != $dmg_type3) $sql_query .= "dmg_type3='$dmg_type3',";
-		if ($item_templ['dmg_min4'] != $dmg_min4) $sql_query .= "dmg_min4='$dmg_min4',";
-		if ($item_templ['dmg_max4'] != $dmg_max4) $sql_query .= "dmg_max4='$dmg_max4',";
-		if ($item_templ['dmg_type4'] != $dmg_type4) $sql_query .= "dmg_type4='$dmg_type4',";
-		if ($item_templ['dmg_min5'] != $dmg_min5) $sql_query .= "dmg_min5='$dmg_min5',";
-		if ($item_templ['dmg_max5'] != $dmg_max5) $sql_query .= "dmg_max5='$dmg_max5',";
-		if ($item_templ['dmg_type5'] != $dmg_type5) $sql_query .= "dmg_type5='$dmg_type5',";
 		if ($item_templ['armor'] != $armor) $sql_query .= "armor='$armor',";
 		if ($item_templ['holy_res'] != $holy_res) $sql_query .= "holy_res='$holy_res',";
 		if ($item_templ['fire_res'] != $fire_res) $sql_query .= "fire_res='$fire_res',";
