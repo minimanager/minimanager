@@ -20,7 +20,7 @@ unset($output);
 			}
 		?>
 		<p>
-			<a href="http://www.mangosproject.org/" target="_blank"><img src="img/logo-mangos.png" class="logo_border" alt="" /></a>
+			<a href="http://getmangos.com/" target="_blank"><img src="img/logo-mangos.png" class="logo_border" alt="" /></a>
 			<a href="http://www.php.net/" target="_blank"><img src="img/logo-php.png" class="logo_border" alt="" /></a>
 			<a href="http://www.mysql.com/" target="_blank"><img src="img/logo-mysql.png" class="logo_border" alt="" /></a>
 			<a href="http://validator.w3.org/check?uri=referer" target="_blank"><img src="img/logo-css.png" class="logo_border" alt="" /></a>
