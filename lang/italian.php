@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Project Mangos
+ * Project Name: MiniManager for Project Mangos/Trinity
  * License: GNU General Public License v2(GPL)
  * Language: Italian
  * Supported Minimanager Revision: 174
@@ -162,6 +162,8 @@ $lang_index = array(
 	'zone' => 'Zona',
 	'rank' => 'Rank',
 	'honor_kills' => 'Uccisioni',
+	'latency' => 'Latenza',
+	'a_latency' => 'Latenza media',
 	'guild' => 'Guild'
 	);
 

@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
+ * Project Name: MiniManager for Mangos/Trinity Server
  * Date: 17.10.2006 inital version (0.0.1a)
  * Author: Q.SA
  * Copyright: Q.SA
@@ -16,7 +16,7 @@
 function doregister(){
  require_once("./scripts/config.php");
  global $lang_global, $characters_db, $realm_db, $realm_id, $disable_acc_creation, $limit_acc_per_ip, $valid_ip_mask,
-       $send_mail_on_creation, $create_acc_locked, $from_mail, $mailer_type, $smtp_cfg, $title, $defaultoption;
+       $send_mail_on_creation, $create_acc_locked, $from_mail, $mailer_type, $smtp_cfg, $title, $defaultoption, $server_type;
 
  if (($_POST['security_code']) != ($_SESSION['security_code'])) {
    redirect("register.php?err=13");
@@ -127,7 +127,10 @@ function doregister(){
 				}
 			}
 
-			$file_name = "mail_templates/mail_welcome.tpl";
+			if ($server_type)
+				$file_name = "mail_templates/mail_welcome_trinity.tpl";
+			else
+				$file_name = "mail_templates/mail_welcome_mangos.tpl";
 			$fh = fopen($file_name, 'r');
 			$subject = fgets($fh, 4096);
 			$body = fread($fh, filesize($file_name));

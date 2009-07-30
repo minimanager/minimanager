@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: Forums for "MiniManager for Mangos Server"
+ * Project Name: Forums for "MiniManager for Mangos/Trinity Server"
  * Date: 21.01.2007 inital version
  * Author: Jiboo
  * Copyright: Jiboo

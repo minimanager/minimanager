@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
+ * Project Name: MiniManager for Mangos/Trinity Server
  * Date: 17.10.2006 inital version (0.0.1a)
  * Author: Shnappie
  * Copyright: Q.SA, Shnappie

@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Project Mangos
+ * Project Name: MiniManager for Project Mangos/Trinity
  * License: GNU General Public License v2(GPL)
  * Language: Spanish
  * Supported Minimanager Revision: 96

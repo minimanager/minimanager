@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
+ * Project Name: MiniManager for Mangos/Trinity Server
  * Date: 17.10.2006 inital version (0.0.1a)
  * Author: Q.SA
  * Copyright: Q.SA
@@ -45,7 +45,7 @@ $world_db = Array(
 			'addr' => "127.0.0.1:3306",	//SQL server IP:port this DB located on
 			'user' => "root",			//SQL server login this DB located on
 			'pass' => "",			//SQL server pass this DB located on
-			'name' => "mangos",			//World Database name
+			'name' => "mangos",			//World Database name, by default "mangos" for MaNGOS, "world" for Trinity
 			'encoding' => "utf8" 		//SQL connection encoding
 			),
 );
@@ -62,13 +62,15 @@ $characters_db = Array(
 );
 
 //---- Game Server Configuration ----
+$server_type = 0    //0=MaNGOS, 1=Trinity
+
 $server = Array(	//if more than one realm used, even if they are on same system new subarray MUST be added.
 	1 => array(		//position in array must represent realmd ID, same as in $world_db
 			'addr' => "127.0.0.1",		//Game Server IP - Must be external address
 			'game_port' => 8085,		//Game Server port
 			'term_type' => "SSH",		//Terminal type - ("SSH"/"Telnet")
 			'term_port' => 22,			//Terminal port
-			'rev' => "rev. 7987+",		//Mangos rev. used
+			'rev' => "rev. ",		//MaNGOS/Trinity rev. used
 			'both_factions' => true	//Allow to see opponent faction characters. Affects only players.
 			),
 );
@@ -90,7 +92,7 @@ $smtp_cfg = array(
 //---- New account creation Options ----
 $disable_acc_creation = false; 	//true = Do not allow new accounts to be created
 $expansion_select = true; //true = Shows option to select expansion or classic False = no option(TBC) enabled by default
-$defaultoption = 2; //if the above is false then set what the default option will be (2 = WOTLK, 1 = TBC, 0 = Classic)
+$defaultoption = 2; //if the above is false then set what the default option will be (1 = TBC, 0 = Classic)
 $enable_captcha = false; //false = no security image check (enable for protection against 'bot' registrations)
 $send_mail_on_creation = false; //true = send mail at account creation.
 $create_acc_locked = 0; 		//if set to '1' newly created accounts will be made locked to 0.0.0.0 IP disallowing user to login.
@@ -105,7 +107,7 @@ $valid_ip_mask = array(
 				);
 
 //---- Layout configuration ----
-$title = "MiniManager for MaNGOS Server";
+$title = "MiniManager for Mangos/Trinity Server";
 $itemperpage = 25;
 
 $css_template = "Sulfur"; 		//file/folder name of css tamplate to use from templates directory by default

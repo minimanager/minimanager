@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
+ * Project Name: MiniManager for Mangos/Trinity Server
  * Date: 17.10.2006 inital version (0.0.1a)
  * Author: Q.SA
  * Copyright: Q.SA
@@ -108,7 +108,7 @@ foreach ($characters_db as $db){
 // EXECUTE TABLE REPAIR OR OPTIMIZATION
 //##############################################################################################
 function do_repair(){
- global $lang_global, $output, $realm_db, $world_db, $characters_db;
+ global $lang_global, $output, $realm_db, $world_db, $characters_db, $server_type;
 
  if ((!isset($_POST['repair_action']) && $_POST['repair_action'] === '') || (!isset($_POST['check'])) ) {
    redirect("repair.php?error=1");
@@ -123,11 +123,20 @@ function do_repair(){
  foreach($table_list as $table){
 
 		$table_data = explode("~", $table);
-		if ($table_data[0] == "realm"){
+		if ($table_data[0] == "realm")
+		{
 			$sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-		} elseif ($table_data[0] == "mangos"){
+		}
+		elseif ($server_type && $table_data[0] == "trinity")
+		{
 			$sql->connect($world_db['addr'], $world_db['user'], $world_db['pass']);
-		} elseif  ($table_data[0] == "characters"){
+		}
+		elseif (!$server_type && $table_data[0] == "mangos")
+		{
+			$sql->connect($world_db['addr'], $world_db['user'], $world_db['pass']);
+		}
+		elseif  ($table_data[0] == "characters")
+		{
 			$sql->connect($characters_db['addr'], $characters_db['user'], $characters_db['pass']);
 		}
 

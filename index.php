@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
+ * Project Name: MiniManager for Mangos/Trinity Server
  * Date: 17.10.2006 inital version (0.0.1a)
  * Author: Q.SA
  * Copyright: Q.SA
@@ -69,9 +69,20 @@ else
 
 //  This retrieves the actual database version from the database itself,  instead of hardcoding it into a string
 $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
-$query_db_version = $sql->query("SELECT version FROM db_version");
-$db_rev = $sql->result($query_db_version, 0);
-$output .= "Mangos: {$server[$realm_id]['rev']} Using DB: $db_rev</div>";
+
+if ($server_type)
+{
+	$query_version = $sql->query("SELECT core_revision, db_version FROM version");
+	$version = $sql->fetch_array($query_version, 0);
+	$output .= $lang_index['trinity_rev'] . ' ' . $version['core_revision'] . ' ' . $lang_index['using_db'] . ' ' . $version['db_version'] . '</div>';
+}
+else
+{
+	$query_db_version = $sql->query("SELECT version FROM db_version");
+	$db_rev = $sql->result($query_db_version, 0);
+	$output .= "Mangos: {$server[$realm_id]['rev']} Using DB: $db_rev</div>";
+}
+
 $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 $sql->db($characters_db[$realm_id]['name']);
 
@@ -138,6 +149,27 @@ if ($online)
 
 	require_once("scripts/defines.php");
     
+if ($server_type)
+            if ($gm_online == '1') {
+	$result = $sql->query("SELECT guid,name,race,class,zone,map,
+            CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
+            CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
+            account,
+            CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
+            mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender,
+		latency
+            FROM `characters` WHERE `online`= 1 $order_side ORDER BY $order_by $order_dir");
+            } else {
+	$result = $sql->query("SELECT guid,name,race,class,zone,map,
+            CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
+            CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
+            account,
+            CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
+            mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender,
+		latency
+            FROM `characters` WHERE `online`= 1 AND `extra_flags`& 1 = 0 $order_side ORDER BY $order_by $order_dir");
+            }
+else
             if ($gm_online == '1') {
 	$result = $sql->query("SELECT guid,name,race,class,zone,map,
             CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
@@ -168,7 +200,9 @@ if ($online)
 	<th width=\"15%\"><a href=\"index.php?order_by=GNAME&amp;dir=$dir\"".($order_by=='GNAME' ? " class=\"$order_dir\"" :"").">{$lang_index['guild']}</a></th>
 	<th width=\"20%\"><a href=\"index.php?order_by=map&amp;dir=$dir\"".($order_by=='map' ? " class=\"$order_dir\"" : "").">{$lang_index['map']}</a></th>
 	<th width=\"25%\"><a href=\"index.php?order_by=zone&amp;dir=$dir\"".($order_by=='zone' ? " class=\"$order_dir\"" : "").">{$lang_index['zone']}</th>
-	<th width=\"5%\">{$lang_global['country']}</th>
+	<th width=\"5%\">{$lang_global['country']}</th>";
+	if (server_type)
+		$output .="<th width=\"25%\"><a href=\"index.php?order_by=latency&amp;dir=$dir\"".($order_by=='latency' ? " class=\"$order_dir\"" : "").">{$lang_index['latency']}</th>
 	</tr>";
 
 	require_once("scripts/id_tab.php");
@@ -207,6 +241,30 @@ if ($online)
     else
       $lev = '<font color="#000000">'.$level.'</font>';
 
+if ($server_type)
+{
+    $lat = $char[11];
+        if ($lat < "120")
+        {$cc = "<font color=\"#00FF00\">";
+    }
+        else if ($lat > "120" AND $lat < "350")
+        {$cc = "<font color=\"#FFFF00\">";
+    }
+        else
+        {$cc = "<font color=\"#FF0000\">";
+    }
+        if ($lat < "1")
+        {$cc = "<i>Pending..</i>";
+    }
+        else
+        {$cc .= $lat."</font> ms";}
+		
+    $tlatency = ($tlatency+$lat);
+    $latencycount = ($latencycount+1);
+    $avglat = ($tlatency/$latencycount);
+    $fixavglat = round($avglat, 2);
+}
+
         $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 		$loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$accid';");
 		$location = $sql->fetch_row($loc);
@@ -224,10 +282,14 @@ if ($online)
 		 <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[6])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[6],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
 		 <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[9]\">$guild_name[0]</a></td>
  		 <td>".get_map_name($char[5])."</td>
-		 <td>".get_zone_name($char[4])."</td>
- 		 <td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
+		 <td>".get_zone_name($char[4])."</td>";
+		if ($server_type)
+		$output .="<td>$cc</td>";
+ 		 $output .="<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
          </tr>";
 	}
+	if ($server_type)
+		$output .= "<tr><td colspan=\"11\" class=\"hidden\" align=\"right\">{$lang_index['a_latency']} : $fixavglat ms</td></tr>";
    $output .= "</table><br /></center>";
 }
 

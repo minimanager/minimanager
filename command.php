@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
+ * Project Name: MiniManager for Mangos/Trinity Server
  * Date: 21.02.2007 version (0.0.9a)
  * Author: t0chiro (command.php)
  * Copyright: t0chiro(command.php)

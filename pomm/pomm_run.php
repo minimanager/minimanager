@@ -1,20 +1,20 @@
 <?php
 /*
- * Project Name: MiniManager for Mangos Server
+ * Project Name: MiniManager for Mangos/Trinity Server
  * Date: 17.10.2006 inital version (0.0.1a)
- * Author: Q.SA (thanks to mirage666 for the original idea) 
+ * Author: Q.SA (thanks to mirage666 for the original idea)
  * Copyright: Q.SA
  * Email: *****
  * License: GNU General Public License v2(GPL)
  */
 
-require_once ("scripts/pomm_lib.php");
-require_once ("js/ajax/Php.php");
+require_once ("pomm_lib.php");
+require_once ("../js/ajax/Php.php");
 
 $JsHttpRequest =& new JsHttpRequest($site_encoding);
 
 $sql = new SQL;
-$sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
 if( !$user_lvl && !$server[$realm_id]['both_factions']){
 	$result = $sql->query("SELECT race FROM `characters` WHERE account = '$user_id' AND totaltime = (SELECT MAX(totaltime) FROM `characters` WHERE account = '$user_id') LIMIT 1");
@@ -32,7 +32,7 @@ $i = 0;
 while($char = $sql->fetch_row($result)){
 	$char_gender = str_pad(dechex($char[7]),8, 0, STR_PAD_LEFT);
 
-	$pos = get_player_position($char[3],$char[4],$char[5],$char[8]); 
+	$pos = get_player_position($char[3],$char[4],$char[5],$char[8]);
  	$arr[$i]['x'] = $pos['x'];
 	$arr[$i]['y'] = $pos['y'];
 	$arr[$i]['name'] = $char[0];
@@ -47,5 +47,5 @@ while($char = $sql->fetch_row($result)){
 
 $sql->close();
 
-$_RESULT = $arr; 
+$_RESULT =$arr;
 ?>

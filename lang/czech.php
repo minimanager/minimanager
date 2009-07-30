@@ -163,6 +163,8 @@ $lang_index = array(
 	'zone' => 'ZÃ³na',
 	'rank' => 'Hodnost',
  	'honor_kills' => 'H.K',
+	'latency' => 'Latence',
+	'a_latency' => 'Průměrná latence',
 	'guild' => 'Spolek'
 	);
 	

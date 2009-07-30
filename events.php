@@ -1,6 +1,6 @@
 <?php
 /*
- * Project Name: Event Module for MiniManager for Mangos Server
+ * Project Name: Event Module for MiniManager for Mangos/Trinity Server
  * Date: 17.11.2007 version (0.0.2)
  * Author: Den Wailhorn
  * Edited by Shnappie to
