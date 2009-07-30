@@ -1,0 +1,76 @@
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	color: #EABA28;
+	background-color: #000000;
+}
+img {
+	border: 0px;
+	padding: 0px;
+}
+#world_map {
+	position: absolute;
+	height: 525px;
+	width: 784px;
+	left: 50%;
+	margin-left: -392px;
+	background-image: url(../img/map.jpg);
+	z-index: 10;
+}
+#points, #wow {
+	position: absolute;
+	height: 525px;
+	width: 784px;
+	left: 50%;
+	margin-left: -392px;
+	z-index: 100;
+	text-align: center;
+	clear: none;
+	float: none;
+}
+#info {
+	position: absolute;
+	height: 525px;
+	width: 784px;
+	left: 50%;
+	margin-left: -392px;
+	z-index: 30;
+	text-align: center;
+}
+#timer {
+	font-family: arial;
+	font-size: 12px;
+	font-style: normal;
+	text-align: center;
+	font-weight: bold;
+	color: #FFFF99;
+	z-index: 40;
+}
+#server_info {
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-size: 12px;
+	text-align: center;
+	font-weight: bold;
+	color: #FFFF99;
+}
+.tip_text {
+	background: #000000;
+	color: #FFF;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	text-align: center;
+	padding: 3px;
+	filter:alpha(opacity=75);
+	-moz-opacity:.75;
+	opacity:0.75;
+}
+.tip_text td {
+	width:120px;
+}
+.tip_text spawn{
+	font-size: 14px;
+	font-weight:bold;
+}
