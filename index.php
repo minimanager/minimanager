@@ -199,8 +199,9 @@ else
 	<th width=\"5%\"><a href=\"index.php?order_by=highest_rank&amp;dir=$dir\"".($order_by=='highest_rank' ? " class=\"$order_dir\"" : "").">{$lang_index['rank']}</a></th>
 	<th width=\"15%\"><a href=\"index.php?order_by=GNAME&amp;dir=$dir\"".($order_by=='GNAME' ? " class=\"$order_dir\"" :"").">{$lang_index['guild']}</a></th>
 	<th width=\"20%\"><a href=\"index.php?order_by=map&amp;dir=$dir\"".($order_by=='map' ? " class=\"$order_dir\"" : "").">{$lang_index['map']}</a></th>
-	<th width=\"25%\"><a href=\"index.php?order_by=zone&amp;dir=$dir\"".($order_by=='zone' ? " class=\"$order_dir\"" : "").">{$lang_index['zone']}</th>
-	<th width=\"5%\">{$lang_global['country']}</th>";
+	<th width=\"25%\"><a href=\"index.php?order_by=zone&amp;dir=$dir\"".($order_by=='zone' ? " class=\"$order_dir\"" : "").">{$lang_index['zone']}</th>";
+	if ($showcountryflag)
+		$output .="<th width=\"5%\">{$lang_global['country']}</th>";
 	if ($server_type)
 		$output .="<th width=\"25%\"><a href=\"index.php?order_by=latency&amp;dir=$dir\"".($order_by=='latency' ? " class=\"$order_dir\"" : "").">{$lang_index['latency']}</th>";
 	$output .= "</tr>";
@@ -265,6 +266,8 @@ if ($server_type)
     $fixavglat = round($avglat, 2);
 }
 
+      if ($showcountryflag)
+      {
         $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 		$loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$accid';");
 		$location = $sql->fetch_row($loc);
@@ -273,7 +276,7 @@ if ($server_type)
         $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
 		$country = $sql->fetch_row($nation);
-
+      }
 		$output .= "<tr>
 		 <td><a href=\"char.php?id=$char[0]\"><span onmousemove='toolTip(\"".get_player_user_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>".htmlentities($char[1])."</span></a></td>
          <td><img src='img/c_icons/{$char[2]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
@@ -284,11 +287,12 @@ if ($server_type)
  		 <td>".get_map_name($char[5])."</td>
 		 <td>".get_zone_name($char[4])."</td>";
 		if ($server_type)
-		$output .="<td>$cc</td>";
- 		 $output .="<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
-         </tr>";
-	if ($server_type)
-		$output .= "<tr><td colspan=\"11\" class=\"hidden\" align=\"right\">{$lang_index['a_latency']} : $fixavglat ms</td></tr>";
+		  $output .="<td>$cc</td>";
+		if ($showcountryflag)
+		  $output .="<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+        if ($server_type)
+          $output .= "<td colspan=\"11\" class=\"hidden\" align=\"right\">{$lang_index['a_latency']} : $fixavglat ms</td>";
+        $output .="</tr>";
 	}
 
    $output .= "</table><br /></center>";

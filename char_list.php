@@ -18,7 +18,7 @@ require_once("scripts/defines.php");
 //########################################################################################################################
 function browse_chars() {
  global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
-		$user_lvl,$user_name;
+		$user_lvl,$user_name, $showcountryflag;
 
  $sql = new SQL;
  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -94,9 +94,10 @@ function browse_chars() {
 	<th width=\"15%\">{$lang_char_list['zone']}</th>
 	<th width=\"5%\"><a href=\"char_list.php?order_by=highest_rank&amp;start=$start&amp;dir=$dir\">".($order_by=='highest_rank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['honor_kills']}</a></th>
 	<th width=\"5%\"><a href=\"char_list.php?order_by=logout_time&amp;start=$start&amp;dir=$dir\">".($order_by=='logout_time' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."Last Seen</a></th>
-	<th width=\"5%\"><a href=\"char_list.php?order_by=online&amp;start=$start&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['online']}</a></th>
-	<th width=\"5%\">{$lang_global['country']}</th>
-  </tr>";
+	<th width=\"5%\"><a href=\"char_list.php?order_by=online&amp;start=$start&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['online']}</a></th>";
+	if ($showcountryflag)
+	  $output .="<th width=\"5%\">{$lang_global['country']}</th>";
+    $output .="</tr>";
 
  $looping = ($this_page < $itemperpage) ? $this_page : $itemperpage;
 
@@ -130,6 +131,8 @@ function browse_chars() {
     else
       $lev = '<font color="#000000">'.$level.'</font>';
 
+      if ($showcountryflag)
+      {
         $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 		$loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[2]';");
 		$location = $sql->fetch_row($loc);
@@ -138,6 +141,7 @@ function browse_chars() {
         $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
 		$country = $sql->fetch_row($nation);
+      }
 
 	if (($user_lvl >= $owner_gmlvl)||($owner_acc_name == $user_name)){
 		 $output .= "<tr>";
@@ -154,9 +158,10 @@ function browse_chars() {
 			<td>".get_zone_name($char[5])."</td>
 			<td>$char[7]</td>
 			<td class=\"small\">$lastseen</td>
-			<td>".(($char[8]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
-			<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
-            </tr>";
+			<td>".(($char[8]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
+			if ($showcountryflag)
+				$output .="<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+            $output .="</tr>";
 	}else{
 		 $output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
 			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>***</td><td>*</td></tr>";
@@ -366,9 +371,11 @@ case "greater_level":
 	<th width=\"15%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['map']}</a></th>
 	<th width=\"15%\">{$lang_char_list['zone']}</th>
 	<th width=\"5%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=highest_rank&amp;dir=$dir\">".($order_by=='highest_rank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['honor_kills']}</a></th>
-	<th width=\"5%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['online']}</a></th>
-	<th width=\"5%\">{$lang_global['country']}</th>
-  </tr>";
+	<th width=\"5%\"><a href=\"char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['online']}</a></th>";
+	if ($showcountryflag)
+	  $output .="<th width=\"5%\">{$lang_global['country']}</th>";
+    $output .="
+	</tr>";
 
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
@@ -399,6 +406,8 @@ case "greater_level":
     else
       $lev = '<font color="#000000">'.$level.'</font>';
 
+      if ($showcountryflag)
+      {
         $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 		$loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[2]';");
 		$location = $sql->fetch_row($loc);
@@ -407,6 +416,7 @@ case "greater_level":
         $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
 		$country = $sql->fetch_row($nation);
+      }
 
   if (($user_lvl >= $owner_gmlvl)||($owner_acc_name == $user_name)){
 		 $output .= "<tr>";
@@ -423,9 +433,10 @@ case "greater_level":
 		<td>".get_map_name($char[6])."</td>
 		<td>".get_zone_name($char[5])."</td>
 		<td>$char[7]</td>
-		<td>".(($char[8]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
-		<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
-       </tr>";
+		<td>".(($char[8]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
+		if ($showcountryflag)
+			$output .="<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+        $output .="</tr>";
 	}else{
 		 $output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
 			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>***</td><td>*</td></tr>";

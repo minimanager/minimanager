@@ -17,7 +17,7 @@ require_once("scripts/defines.php");
 //##############################################################################################################
 function edit_user() {
  global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
-		$lang_id_tab, $gm_level_arr;
+		$lang_id_tab, $gm_level_arr, $expansion_select;
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
@@ -79,21 +79,25 @@ else
         <td>{$lang_edit['gm_level']}</td>
         <td>".get_gm_level($acc[1])." ( $acc[1] )</td>
       </tr>
-	  <tr>
-	  <td >{$lang_edit['client_type']}:</td>
-  	 <td>
-	   <select name=\"expansion\">
-	    <option value=\"2\" ";
-		if(!$acc[3]) $output .= "selected=\"selected\"";
-		$output .= ">{$lang_edit['wotlk']}</option>
-	    <option value=\"1\" ";
-		if(!$acc[3]) $output .= "selected=\"selected\"";
-		$output .= ">{$lang_edit['tbc']}</option>
-	    <option value=\"0\" ";
-		if(!$acc[3]) $output .= "selected=\"selected\"";
-		$output .= ">{$lang_edit['classic']}</option>
-	   </select>
-	</td>
+      <tr>";
+  if ($expansion_select)
+  { $output .="
+      <td >{$lang_edit['client_type']}:</td>
+      <td>
+        <select name=\"expansion\">
+          <option value=\"2\" ";
+    if(!$acc[3]) $output .= "selected=\"selected\"";
+      $output .= ">{$lang_edit['wotlk']}</option>
+          <option value=\"1\" ";
+    if(!$acc[3]) $output .= "selected=\"selected\"";
+      $output .= ">{$lang_edit['tbc']}</option>
+          <option value=\"0\" ";
+    if(!$acc[3]) $output .= "selected=\"selected\"";
+      $output .= ">{$lang_edit['classic']}</option>
+        </select>
+      </td>";
+   }
+	$output .="
 	</tr>
       <tr>
         <td>{$lang_edit['join_date']}</td>

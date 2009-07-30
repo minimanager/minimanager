@@ -22,7 +22,7 @@ require_once("scripts/char_aura.php");
 function char_main()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db, $mmfpm_db,
-    $server, $user_id, $user_name, $user_lvl, $item_datasite, $talent_datasite;
+    $server, $user_id, $user_name, $user_lvl, $showcountryflag, $item_datasite, $talent_datasite;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -191,13 +191,16 @@ function char_main()
         }
       }
 
-      $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-      $loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[9]';");
-      $location = $sql->fetch_row($loc);
-      $ip = $location[0];
-      $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-      $nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
-      $country = $sql->fetch_row($nation);
+      if ($showcountryflag)
+      {
+        $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+        $loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[9]';");
+        $location = $sql->fetch_row($loc);
+        $ip = $location[0];
+        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+        $nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+        $country = $sql->fetch_row($nation);
+      }
 
       $output .="
                   </div>
@@ -207,7 +210,10 @@ function char_main()
                     ".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])." (lvl {$char_data[CHAR_DATA_OFFSET_LEVEL]})
                   </font>
                   <br />{$lang_char['guild']}: $guild_name | {$lang_char['rank']}: ".htmlentities($guild_rank)."
-                  <br />".(($char[6]) ? "<img src=\"img/up.gif\" onmousemove='toolTip(\"Online\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"online\" />" : "<img src=\"img/down.gif\" onmousemove='toolTip(\"Offline\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"offline\" />")." - ".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")." </td></tr>
+                  <br />".(($char[6]) ? "<img src=\"img/up.gif\" onmousemove='toolTip(\"Online\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"online\" />" : "<img src=\"img/down.gif\" onmousemove='toolTip(\"Offline\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"offline\" />");
+      if ($showcountryflag)
+        $output .=" - ".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-");
+      $output .="
                 </td>
               </tr>
               <tr>

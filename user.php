@@ -17,7 +17,8 @@ require_once("scripts/defines.php");
 // BROWSE USERS
 //########################################################################################################################
 function browse_users() {
- global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name, $gm_level_arr, $exp_lvl_arr, $action_permission;
+ global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name, $gm_level_arr,
+   $exp_lvl_arr, $action_permission, $showcountryflag, $expansion_select;
 
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -90,16 +91,22 @@ if($user_lvl >= $action_permission['update'])
     else $output .= "<th width=\"1%\"></th>";
    $output .="<th width=\"5%\"><a href=\"user.php?order_by=id&amp;start=$start&amp;dir=$dir\">".($order_by=='id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['id']}</a></th>
 	<th width=\"21%\"><a href=\"user.php?order_by=username&amp;start=$start&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['username']}</a></th>
-	<th width=\"5%\"><a href=\"user.php?order_by=gmlevel&amp;start=$start&amp;dir=$dir\">".($order_by=='gmlevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['gm_level']}</a></th>
-	<th width=\"5%\"><a href=\"user.php?order_by=expansion&amp;start=$start&amp;dir=$dir\">".($order_by=='expansion' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."EXP</a></th>
+	<th width=\"5%\"><a href=\"user.php?order_by=gmlevel&amp;start=$start&amp;dir=$dir\">".($order_by=='gmlevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['gm_level']}</a></th>";
+   if ($expansion_select)
+    $output .="
+    <th width=\"5%\"><a href=\"user.php?order_by=expansion&amp;start=$start&amp;dir=$dir\">".($order_by=='expansion' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."EXP</a></th>";
+   $output .="
 	<th width=\"16%\"><a href=\"user.php?order_by=email&amp;start=$start&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['email']}</a></th>
 	<th width=\"14%\"><a href=\"user.php?order_by=joindate&amp;start=$start&amp;dir=$dir\">".($order_by=='joindate' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['join_date']}</a></th>
 	<th width=\"10%\"><a href=\"user.php?order_by=last_ip&amp;start=$start&amp;dir=$dir\">".($order_by=='last_ip' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['ip']}</a></th>
 	<th width=\"5%\"><a href=\"user.php?order_by=failed_logins&amp;start=$start&amp;dir=$dir\">".($order_by=='failed_logins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['failed_logins']}</a></th>
 	<th width=\"3%\"><a href=\"user.php?order_by=locked&amp;start=$start&amp;dir=$dir\">".($order_by=='locked' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['locked']}</a></th>
 	<th width=\"14%\"><a href=\"user.php?order_by=last_login&amp;start=$start&amp;dir=$dir\">".($order_by=='last_login' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['last_login']}</a></th>
-	<th width=\"3%\"><a href=\"user.php?order_by=online&amp;start=$start&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['online']}</a></th>
-	<th width=\"3%\">{$lang_global['country']}</th>
+	<th width=\"3%\"><a href=\"user.php?order_by=online&amp;start=$start&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['online']}</a></th>";
+   if ($showcountryflag)
+    $output .="
+    <th width=\"3%\">{$lang_global['country']}</th>";
+   $output .="
    </tr>";
 
  while ($data = $sql->fetch_row($query)){
@@ -107,9 +114,12 @@ if($user_lvl >= $action_permission['update'])
 
 		$ip = $data[5];
 
+      if ($showcountryflag)
+      {
         $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
 		$country = $sql->fetch_row($nation);
+      }
 
 	if (($user_lvl >= $data[2])||($user_name == $data[1])){
    		$output .= "<tr>";
@@ -117,7 +127,9 @@ if($user_lvl >= $action_permission['update'])
                  else $output .= "<td></td>";
    		$output .= "<td>$data[0]</td>
            	<td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a></td>
-			<td>".$gm_level_arr[$data[2]][2]."</td>
+			<td>".$gm_level_arr[$data[2]][2]."</td>";
+   if ($expansion_select)
+    $output .="
 			<td>".$exp_lvl_arr[$data[10]][2]."</td>";
                 if ($user_lvl >= $action_permission['update']) $output .= "
 			<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>";
@@ -128,8 +140,11 @@ if($user_lvl >= $action_permission['update'])
 		$output .= "<td>".(($data[6]) ? $data[6] : "-")."</td>
 			<td>".(($data[7]) ? $lang_global['yes_low'] : "-")."</td>
 			<td class=\"small\">$data[8]</td>
-			<td>".(($data[9]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
- 			<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
+			<td>".(($data[9]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
+        if ($showcountryflag)
+		  $output .= "
+ 			<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+        $output .= "
             </tr>";
 	} else {
 		$output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
@@ -155,7 +170,8 @@ if($user_lvl >= $action_permission['update'])
 //  SEARCH
 //#######################################################################################################
 function search() {
- global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $user_lvl, $user_name, $sql_search_limit, $gm_level_arr, $action_permission;
+ global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $user_lvl, $user_name, $sql_search_limit,
+   $gm_level_arr, $action_permission , $showcountryflag, $expansion_select;
 valid_login($action_permission['read']);
  if(!isset($_GET['search_value']) || !isset($_GET['search_by'])) redirect("user.php?error=2");
 
@@ -245,17 +261,24 @@ valid_login($action_permission['read']);
 	<th width=\"5%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=failed_logins&amp;dir=$dir\">".($order_by=='failed_logins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['failed_logins']}</a></th>
 	<th width=\"3%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=locked&amp;dir=$dir\">".($order_by=='locked' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['locked']}</a></th>
 	<th width=\"14%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=last_login&amp;dir=$dir\">".($order_by=='last_login' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['last_login']}</a></th>
-	<th width=\"3%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['online']}</a></th>
-	<th width=\"3%\">{$lang_global['country']}</th>
+	<th width=\"3%\"><a href=\"user.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['online']}</a></th>";
+   if ($showcountryflag)
+    $output .="
+    <th width=\"3%\">{$lang_global['country']}</th>";
+   $output .="
    </tr>";
 
  while ($data = $sql->fetch_row($query)){
 
 		$ip = $data[5];
 
+      if ($showcountryflag)
+      {
+
         $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
 		$country = $sql->fetch_row($nation);
+      }
 
 	if (($user_lvl >= $data[2])||($user_name == $data[1])){
    		$output .= "<tr>";
@@ -273,8 +296,11 @@ valid_login($action_permission['read']);
 		$output .= "<td>".(($data[6]) ? $data[6] : "-")."</td>
 			<td>".(($data[7]) ? $lang_global['yes_low'] : "-")."</td>
 			<td class=\"small\">$data[8]</td>
-			<td>".(($data[9]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
- 			<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
+			<td>".(($data[9]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
+        if ($showcountryflag)
+		  $output .= "
+ 			<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+        $output .= "
             </tr>";
 	} else {
 		$output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
@@ -516,7 +542,7 @@ redirect("user.php?error=15");
 //  ADD NEW USER
 //#######################################################################################################
 function add_new() {
- global $lang_global, $lang_user, $output, $action_permission;
+ global $lang_global, $lang_user, $output, $action_permission, $expansion_select;
   valid_login($action_permission['insert']);
  $output .= "<center>
   <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
@@ -559,7 +585,9 @@ function add_new() {
      <tr>
         <td>{$lang_user['locked']}</td>
         <td><input type=\"checkbox\" name=\"new_locked\" value=\"1\" /></td>
-     </tr>
+     </tr>";
+  if ( $expansion_select )
+      $output .= "
 	 <tr>
         <td>{$lang_user['expansion_account']}</td>
   	 <td>
@@ -569,7 +597,8 @@ function add_new() {
 	    <option value=\"0\">{$lang_user['classic']}</option>
 	   </select>
 	 </td>
-     </tr>
+     </tr>";
+  $output .="
      <tr><td>";
 			makebutton($lang_user['create_acc'], "javascript:do_submit_data()",120);
  $output .= "</td><td>";
@@ -636,7 +665,8 @@ function doadd_new() {
 //  EDIT USER
 //###########################################################################################################
 function edit_user() {
- global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl, $user_name, $gm_level_arr, $action_permission;
+ global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl, $user_name,
+   $gm_level_arr, $action_permission, $expansion_select;
  valid_login($action_permission['view']);
 
  if (empty($_GET['id'])) redirect("user.php?error=10");
@@ -759,20 +789,24 @@ function edit_user() {
       if($user_lvl >= $action_permission['update']) { $output .="
 	    <td><input type=\"text\" name=\"banreason\" size=\"43\" maxlength=\"255\" value=\"$banned[3]\" /></td>";}
       else $output .= "<td>$banned[3]</td>";
- $output .="</tr><tr>
-	   <td>{$lang_user['client_type']}</td>";
-      if($user_lvl >= $action_permission['update']) { $output .="
-		<td><select name=\"expansion\">";
-      $output .= "<option value=\"0\">{$lang_user['classic']}</option>
-			 <option value=\"1\" ";
-			 if ($data[10] == 1) $output .= "selected=\"selected\" ";
-			$output .= ">{$lang_user['tbc']}</option>
-			 <option value=\"2\" ";
-			 if ($data[10] ==2) $output .= "selected=\"selected\" ";
-			$output .= ">{$lang_user['wotlk']}</option>
-			</select>
-		</td>"; }
-      else $output .= "<td>{$lang_user['classic']}</td>";
+      if ($expansion_select)
+      {  $output .="</tr><tr>";
+        if($user_lvl >= $action_permission['update'])
+        {
+           $output .="<td>{$lang_user['client_type']}</td>";
+           $output .="
+           <td><select name=\"expansion\">";
+           $output .= "<option value=\"0\">{$lang_user['classic']}</option>
+            <option value=\"1\" ";
+            if ($data[10] == 1) $output .= "selected=\"selected\" ";
+            $output .= ">{$lang_user['tbc']}</option>
+            <option value=\"2\" ";
+            if ($data[10] ==2) $output .= "selected=\"selected\" ";
+            $output .= ">{$lang_user['wotlk']}</option>
+            </select>
+            </td>";
+        }else $output .= "<td>{$lang_user['classic']}</td>";
+      }
       $output .="</tr>
       <tr>
         <td>{$lang_user['failed_logins_long']}</td>";
