@@ -36,7 +36,7 @@ function browse_chars() {
  $query = $sql->query("SELECT guid,name,account,race,class,zone,map,
 		CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
 		online,CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-		mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+		mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time
 		FROM `characters` ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
  $this_page = $sql->num_rows($query) or die(error($lang_global['err_no_result']));
 
@@ -93,6 +93,7 @@ function browse_chars() {
 	<th width=\"15%\"><a href=\"char_list.php?order_by=map&amp;start=$start&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['map']}</a></th>
 	<th width=\"15%\">{$lang_char_list['zone']}</th>
 	<th width=\"5%\"><a href=\"char_list.php?order_by=highest_rank&amp;start=$start&amp;dir=$dir\">".($order_by=='highest_rank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['honor_kills']}</a></th>
+	<th width=\"5%\"><a href=\"char_list.php?order_by=logout_time&amp;start=$start&amp;dir=$dir\">".($order_by=='logout_time' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."Last Seen</a></th>
 	<th width=\"5%\"><a href=\"char_list.php?order_by=online&amp;start=$start&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['online']}</a></th>
 	<th width=\"5%\">{$lang_global['country']}</th>
   </tr>";
@@ -106,6 +107,7 @@ function browse_chars() {
 	$result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[2]'");
 	$owner_gmlvl = $sql->result($result, 0, 'gmlevel');
 	$owner_acc_name = $sql->result($result, 0, 'username');
+	$lastseen = date("Y-m-d G:i:s", $char[11]);
 
     $level = $char[9];
 
@@ -151,6 +153,7 @@ function browse_chars() {
 			<td>".get_map_name($char[6])."</td>
 			<td>".get_zone_name($char[5])."</td>
 			<td>$char[7]</td>
+			<td class=\"small\">$lastseen</td>
 			<td>".(($char[8]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
 			<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
             </tr>";
