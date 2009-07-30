@@ -939,125 +939,174 @@ while ($data = $sql->fetch_row($result)){
 //########################################################################################################################
 // SHOW CHAR REPUTATION
 //########################################################################################################################
-function char_rep() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
-    $user_name, $fact_id, $reputation_rank_length, $reputation_cap, $reputation_bottom, $reputation_rank, $MIN_REPUTATION_RANK, $MAX_REPUTATION_RANK;
+function char_rep()
+{
+  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
+    $user_name, $user_lvl, $fact_id, $reputation_rank_length, $reputation_cap, $reputation_bottom, $reputation_rank,
+    $MIN_REPUTATION_RANK, $MAX_REPUTATION_RANK;
 
-if (empty($_GET['id'])) error($lang_global['empty_fields']);
+  if (empty($_GET['id']))
+    error($lang_global['empty_fields']);
 
-$sql = new SQL;
-$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sql = new SQL;
+  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'],
+    $characters_db[$realm_id]['name']);
 
-$id = $sql->quote_smart($_GET['id']);
-$result = $sql->query("SELECT account,name,race,class FROM `characters` WHERE guid = $id LIMIT 1");
+  $id = $sql->quote_smart($_GET['id']);
+  if (!is_numeric($id))
+    $id = 0;
 
-if ($sql->num_rows($result)){
-  $char = $sql->fetch_row($result);
-  $race = $char[2];
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
-  $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
-  $owner_name = $sql->result($result, 0, 'username');
+  $result = $sql->query("SELECT account, name, race, class FROM `characters` WHERE guid = $id LIMIT 1");
 
- if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name)){
-
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-  $result = $sql->query("SELECT faction, standing, flags FROM character_reputation WHERE guid =$id AND (flags & 1 = 1)");
-
- $output .= "<center>
- <div id=\"tab\">
- <ul>
-  <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
-    <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
-    <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
-    <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
-    <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
-    <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
-    <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
-    if( get_player_class($char[3]) == 'Hunter' ) { $output .= "<li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>"; }
- $output .= " </ul>
- </div>
- <div id=\"tab_content\">
-  <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />";
-
- require_once("scripts/fact_tab.php");
-
- $temp_out = array(
-  1 => array("<table class=\"lined\" style=\"width: 550px;\">
-    <tr><th colspan=\"3\" align=\"left\">Alliance</th></tr>",0),
-  2 => array("<table class=\"lined\" style=\"width: 550px;\">
-    <tr><th colspan=\"3\" align=\"left\">Horde</th></tr>",0),
-  3 => array("<table class=\"lined\" style=\"width: 550px;\">
-    <tr><th colspan=\"3\" align=\"left\">Alliance Forces</th></tr>",0),
-  4 => array("<table class=\"lined\" style=\"width: 550px;\">
-    <tr><th colspan=\"3\" align=\"left\">Horde Forces</th></tr>",0),
-  5 => array("<table class=\"lined\" style=\"width: 550px;\">
-    <tr><th colspan=\"3\" align=\"left\">Steamwheedle Cartel</th></tr>",0),
-  6 => array("<table class=\"lined\" style=\"width: 550px;\">
-    <tr><th colspan=\"3\" align=\"left\">Outland</th></tr>",0),
-  7 => array("<table class=\"lined\" style=\"width: 550px;\">
-    <tr><th colspan=\"3\" align=\"left\">Shattrath City</th></tr>",0),
-  8 => array("<table class=\"lined\" style=\"width: 550px;\">
-    <tr><th colspan=\"3\" align=\"left\">Other</th></tr>",0),
-  0 => array("<table class=\"lined\" style=\"width: 550px;\">
-    <tr><th colspan=\"3\" align=\"left\">Unknown</th></tr>",0)
- );
- 
   if ($sql->num_rows($result))
   {
-    while ($fact = $sql->fetch_row($result))
+    $char = $sql->fetch_row($result);
+    $race = $char[2];
+    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+    $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+    $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
+    $owner_name = $sql->result($result, 0, 'username');
+
+    if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
-      $faction = $fact[0];
-      $standing = $fact[1];      
-      
-      $rep_rank = get_reputation_rank($faction, $standing, $race);
-      $rep_rank_name = $reputation_rank[$rep_rank];
-      $rep_cap = $reputation_rank_length[$rep_rank];
-      $rep = get_reputation_at_rank($faction, $standing, $race);
-      $faction_name = get_faction_name($faction);
-      
-      $ft = get_faction_tree($faction);
-      
-      // not show alliance rep for horde and vice versa:
-      if (!((((1 << ($race - 1)) & 690) && ($ft == 1 || $ft == 3)) || (((1 << ($race - 1)) & 1101) && ($ft == 2 || $ft == 4))))
+      $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+      $result = $sql->query("SELECT faction, standing, flags FROM character_reputation WHERE guid =$id AND (flags & 1 = 1)");
+
+      $output .= "
+        <center>
+          <div id=\"tab\">
+            <ul>
+              <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
+              <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
+      if( get_player_class($char[3]) == 'Hunter' )
+        $output .= "
+              <li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>";
+      $output .= "
+            </ul>
+          </div>
+          <div id=\"tab_content\">
+          <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])."</font>
+          <br /><br />";
+
+      require_once("scripts/fact_tab.php");
+
+      $temp_out = array
+      (
+        1 => array("<table class=\"lined\" style=\"width: 550px;\">
+             <tr><th colspan=\"3\" align=\"left\">Alliance</th></tr>",0),
+        2 => array("<table class=\"lined\" style=\"width: 550px;\">
+             <tr><th colspan=\"3\" align=\"left\">Horde</th></tr>",0),
+        3 => array("<table class=\"lined\" style=\"width: 550px;\">
+             <tr><th colspan=\"3\" align=\"left\">Alliance Forces</th></tr>",0),
+        4 => array("<table class=\"lined\" style=\"width: 550px;\">
+             <tr><th colspan=\"3\" align=\"left\">Horde Forces</th></tr>",0),
+        5 => array("<table class=\"lined\" style=\"width: 550px;\">
+             <tr><th colspan=\"3\" align=\"left\">Steamwheedle Cartel</th></tr>",0),
+        6 => array("<table class=\"lined\" style=\"width: 550px;\">
+             <tr><th colspan=\"3\" align=\"left\">Outland</th></tr>",0),
+        7 => array("<table class=\"lined\" style=\"width: 550px;\">
+             <tr><th colspan=\"3\" align=\"left\">Shattrath City</th></tr>",0),
+        8 => array("<table class=\"lined\" style=\"width: 550px;\">
+             <tr><th colspan=\"3\" align=\"left\">Other</th></tr>",0),
+        0 => array("<table class=\"lined\" style=\"width: 550px;\">
+             <tr><th colspan=\"3\" align=\"left\">Unknown</th></tr>",0)
+      );
+
+      if ($sql->num_rows($result))
       {
-            $temp_out[$ft][0] .= "<tr><td width=\"30%\" align=\"left\">$faction_name</td>
-                          <td width=\"55%\" valign=\"top\"><div class=\"faction-bar\"><div class=\"rep$rep_rank\"><span class=\"rep-data\">$rep/$rep_cap</span><div class=\"bar-color\" style=\"width:".(100*$rep/$rep_cap)."%\"></div></div></div></td>
-                          <td width=\"15%\" align=\"left\" class=\"rep$rep_rank\">$rep_rank_name</td></tr>";                          
+        while ($fact = $sql->fetch_row($result))
+        {
+          $faction  = $fact[0];
+          $standing = $fact[1];
+
+          $rep_rank      = get_reputation_rank($faction, $standing, $race);
+          $rep_rank_name = $reputation_rank[$rep_rank];
+          $rep_cap       = $reputation_rank_length[$rep_rank];
+          $rep           = get_reputation_at_rank($faction, $standing, $race);
+          $faction_name  = get_faction_name($faction);
+          $ft            = get_faction_tree($faction);
+
+          // not show alliance rep for horde and vice versa:
+          if (!((((1 << ($race - 1)) & 690) && ($ft == 1 || $ft == 3))
+            || (((1 << ($race - 1)) & 1101) && ($ft == 2 || $ft == 4))))
+          {
+            $temp_out[$ft][0] .= "
+             <tr>
+               <td width=\"30%\" align=\"left\">$faction_name</td>
+               <td width=\"55%\" valign=\"top\">
+                 <div class=\"faction-bar\">
+                   <div class=\"rep$rep_rank\">
+                     <span class=\"rep-data\">$rep/$rep_cap</span>
+                     <div class=\"bar-color\" style=\"width:".(100*$rep/$rep_cap)."%\"></div>
+                   </div>
+                 </div>
+               </td>
+               <td width=\"15%\" align=\"left\" class=\"rep$rep_rank\">$rep_rank_name</td>
+             </tr>";
             $temp_out[$ft][1] = 1;
+          }
+        }
       }
+      else
+        $output .= "
+             <tr>
+               <td colspan=\"2\"><br /><br />{$lang_global['err_no_records_found']}<br /><br /></td>
+             </tr>";
+
+      foreach ($temp_out as $out)
+        if ($out[1])
+          $output .= $out[0]."
+           </table>";
+      $output .= "
+         </div><br />
+         <table class=\"hidden\">
+           <tr>
+             <td>";
+      if ($user_lvl > $owner_gmlvl)
+      {
+        makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+        $output .= "
+             </td>
+             <td>";
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+        $output .= "
+             </td>
+             <td>";
+      }
+      if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name)))
+      {
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        $output .= "
+             </td>
+             <td>";
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
+        $output .= "
+             </td>
+             <td>";
+      }
+      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      $output .= "
+             </td>
+           </tr>
+        </table>
+        <br />
+      </center>";
     }
-  } else $output .= "<tr><td colspan=\"2\"><br /><br />{$lang_global['err_no_records_found']}<br /><br /></td></tr>";
-
-  foreach ($temp_out as $out) if ($out[1]) $output .= $out[0]."</table>";
-
-  $output .= "</div><br />
-    <table class=\"hidden\">
-          <tr><td>";
-    if ($user_lvl > $owner_gmlvl){
-      makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
-  $output .= "</td><td>";
-      }
-    if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name))){
-      makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
-  $output .= "</td><td>";
-      }
-    makebutton($lang_global['back'], "javascript:window.history.back()",140);
- $output .= "</td></tr>
-        </table><br /></center>";
-
- } else {
-    $sql->close();
-    error($lang_char['no_permission']);
+    else
+    {
+      $sql->close();
+      error($lang_char['no_permission']);
     }
+  }
+  else
+    error($lang_char['no_char_found']);
 
-} else error($lang_char['no_char_found']);
-$sql->close();
-
+  $sql->close();
 }
 
 
@@ -1227,131 +1276,184 @@ $sql->close();
 //########################################################################################################################
 // SHOW CHARACTER TALENTS
 //########################################################################################################################
-function char_talent() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
-        $user_name, $talent_datasite, $talent_calculator_datasite;
+function char_talent()
+{
+  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
+    $user_name, $user_lvl, $talent_datasite, $talent_calculator_datasite;
 
-if (empty($_GET['id'])) error($lang_global['empty_fields']);
+  if (empty($_GET['id']))
+    error($lang_global['empty_fields']);
 
-//check for php gmp extension
-if (extension_loaded('gmp')) { $GMP=1; }
-else { $GMP=0; }
-//end of gmp check
+  //check for php gmp extension
+  if (extension_loaded('gmp'))
+    $GMP=1;
+  else
+    $GMP=0;
+  //end of gmp check
 
-$sql = new SQL;
-$sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sql = new SQL;
+  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-$id = $sql->quote_smart($_GET['id']);
-$order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : 1;
-$dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
-$dir = ($dir) ? 0 : 1;
+  $id = $sql->quote_smart($_GET['id']);
+  if (!is_numeric($id))
+    $id = 0;
 
-$result = $sql->query("SELECT account FROM `characters` WHERE guid = $id");
+  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 0;
+  $dir = ($dir) ? 0 : 1;
 
-if ($sql->num_rows($result) == 1){
+  $result = $sql->query("SELECT account FROM `characters` WHERE guid = $id");
+
+  if ($sql->num_rows($result) == 1)
+  {
     $owner_acc_id = $sql->result($result, 0, 'account');
     $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
     $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$owner_acc_id'");
     $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
     $owner_name = $sql->result($result, 0, 'username');
 
- if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name)){
+    if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
+    {
+      $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+      $result = $sql->query("SELECT data,name,race,class,CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level FROM `characters` WHERE guid = $id");
+      $char = $sql->fetch_row($result);
+      $char_data = explode(' ',$char[0]);
 
-    $result = $sql->query("SELECT data,name,race,class,CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level FROM `characters` WHERE guid = $id");
-    $char = $sql->fetch_row($result);
-    $char_data = explode(' ',$char[0]);
+      $output .= "
+        <center>
+          <div id=\"tab\">
+          <ul>
+            <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
+            <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
+      if (get_player_class($char[3]) == 'Hunter')
+        $output .= "
+            <li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>";
+      $output .= "  
+          </ul>
+        </div>
+        <div id=\"tab_content\">
+        <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])."</font>
+        <br /><br />
+        <table class=\"lined\" style=\"width: 550px;\">
+          <tr>
+            <th><a href=\"char.php?id=$id&amp;action=char_talent&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['talent_id']}</a></th>
+            <th align=left><a href=\"char.php?id=$id&amp;action=char_talent&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['talent_name']}</a></th>
+          </tr>";
 
-    $output .= "<center>
-  <div id=\"tab\">
-    <ul>
-        <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
-        <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
-        <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
-        <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
-        <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
-        <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
-        <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
-    if( get_player_class($char[3]) == 'Hunter' ) { $output .= "  <li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>"; }
-    $output .= "  </ul>
-    </div>
-    <div id=\"tab_content\">
-    <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])." <br /><br /> ".get_player_class($char[3])." Talents </font><br /><br />
+      $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+      $result = $sql->query("SELECT spell FROM `character_spell` WHERE guid = $id AND active = 1 ORDER BY spell DESC");
 
-    <table class=\"lined\" style=\"width: 550px;\">
-    <tr>"
-        ."<th>{$lang_char['talent_id']}</th>"
-        ."<th align=left>{$lang_char['talent_name']}</th>
-    </tr>";
+      $talents_1 = array();
 
-    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-    $result = $sql->query("SELECT spell FROM `character_spell` WHERE guid = $id AND active = 1");
-
-    if ($sql->num_rows($result)){
-        if ($GMP) { $talent_sum = gmp_init(0); }
-        while ($talent = $sql->fetch_row($result)){
-            if( get_talent_value($talent[0]) )
-            {
-                $output .= "<tr>";
-                $output .= "<td>$talent[0]</td>";
-         $output .= "<td align=left><a href=\"$talent_datasite$talent[0]\">".get_talent_name($talent[0])."</a></td>";
-                if ($GMP) { $talent_sum = gmp_add($talent_sum,sprintf('%s',get_talent_value($talent[0]))); }
-                $output .= "</tr>";
-            }
+      if ($sql->num_rows($result))
+      {
+        while ($talent = $sql->fetch_row($result))
+        {
+          if(get_talent_value($talent[0]))
+            array_push($talents_1, array($talent[0], get_talent_name($talent[0])));
         }
+        aasort($talents_1, $order_by, $dir);
+
+        if ($GMP)
+          $talent_sum = gmp_init(0);
+
+        foreach ($talents_1 as $data)
+        {
+          $output .= "
+            <tr>
+              <td>$data[0]</td>
+              <td align=left><a href=\"$talent_datasite$data[0]\">$data[1]</a></td>";
+          if ($GMP)
+            $talent_sum = gmp_add($talent_sum,sprintf('%s',get_talent_value($data[0])));
+          $output .= "
+              </tr>";
+        }
+
         $playerclass = strtolower(get_player_class($char[3]));
-        switch ($playerclass) {
-            case "shaman":
-                $padlength = 61;
-                break;
-            case "druid":
-                $padlength = 62;
-                break;
-            case "warlock":
-            case "paladin":
-            case "hunter":
-            case "priest":
-                $padlength = 64;
-                break;
-            case "warrior":
-                $padlength = 66;
-                break;
-            case "rogue":
-            case "mage":
-                $padlength = 67;
-                break;
+        switch ($playerclass)
+        {
+          case "shaman":
+            $padlength = 61;
+            break;
+          case "druid":
+            $padlength = 62;
+            break;
+          case "warlock":
+          case "paladin":
+          case "hunter":
+          case "priest":
+            $padlength = 64;
+            break;
+          case "warrior":
+            $padlength = 66;
+            break;
+          case "rogue":
+          case "mage":
+            $padlength = 67;
+            break;
         }
-        if ($GMP) { $output .= "<tr><td><a href=\"$talent_calculator_datasite/$playerclass/talents.html?".str_pad(sprintf('%s',gmp_strval($talent_sum)), $padlength, "0", STR_PAD_LEFT)."\">Talent Calculator</a></td></tr>"; }
+        if ($GMP)
+          $output .= "
+              <tr>
+                <td>
+                  <a href=\"$talent_calculator_datasite/$playerclass/talents.html?".str_pad(sprintf('%s',gmp_strval($talent_sum)), $padlength, "0", STR_PAD_LEFT)."\">Talent Calculator</a>
+                </td>
+              </tr>";
 
+      }
+      $output .= "
+            </table>
+          </div>
+          <br />
+          <table class=\"hidden\">
+            <tr>
+              <td>";
+      if ($user_lvl > $owner_gmlvl)
+      {
+        makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+        $output .= "
+              </td>
+              <td>";
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+        $output .= "
+              </td>
+              <td>";
+      }
+      if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name)))
+      {
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        $output .= "
+              </td>
+              <td>";
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
+        $output .= "
+              </td>
+              <td>";
+      }
+      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      $output .= "
+              </td>
+              </tr>
+            </table>
+            <br />
+          </center>";
     }
-
-    $output .= "</table></div><br />
-        <table class=\"hidden\">
-          <tr><td>";
-    if ($user_lvl > $owner_gmlvl){
-      makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
-  $output .= "</td><td>";
-      }
-    if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name))){
-      makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
-  $output .= "</td><td>";
-      }
-    makebutton($lang_global['back'], "javascript:window.history.back()",140);
- $output .= "</td></tr>
-        </table><br /></center>";
-
- } else {
-        $sql->close();
+    else
+    {
+      $sql->close();
         error($lang_char['no_permission']);
-        }
+    }
+  }
+  else
+    error($lang_char['no_char_found']);
 
-} else error($lang_char['no_char_found']);
-$sql->close();
+  $sql->close();
 }
 
 
@@ -1368,6 +1470,8 @@ $sql = new SQL;
 $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
 $id = $sql->quote_smart($_GET['id']);
+  if (!is_numeric($id))
+    $id = 0;
 
 $result = $sql->query("SELECT account FROM `characters` WHERE guid = $id");
 
@@ -1382,7 +1486,7 @@ if ($sql->num_rows($result) == 1){
 
     $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-    $result = $sql->query("SELECT id,level,exp,talentpoints,name,curhappiness,teachspelldata FROM `character_pet` WHERE owner = $id");
+    $result = $sql->query("SELECT id,level,exp,name,curhappiness FROM `character_pet` WHERE owner = $id");
 
       $output .= "<center>
       <div id=\"tab\">
@@ -1401,7 +1505,7 @@ if ($sql->num_rows($result) == 1){
 
   if ($sql->num_rows($result)){
   while($pet = $sql->fetch_row($result)){
-        $happiness = floor($pet[7]/333000);
+        $happiness = floor($pet[4]/333000);
 
         switch ($happiness) {
     case 3:
@@ -1417,18 +1521,17 @@ if ($sql->num_rows($result) == 1){
             $hap_text = "Unhappy";
       $hap_val = 0;
         }
-    
-    $pet_next_lvl_xp = floor(xp_to_level($pet[1])/4); 
 
-      $output .= "  <font class=\"bold\">$pet[6] (lvl$pet[1])
+    $pet_next_lvl_xp = floor(xp_to_level($pet[1])/4);
+
+      $output .= "  <font class=\"bold\">$pet[3] (lvl$pet[1])
     <a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>$hap_text</font>','item_tooltip')\" onmouseout=\"toolTip()\"><img src=\"img/pet/happiness_$hap_val.jpg\"></a>
     <br /><br /></font>
     <table class=\"lined\" style=\"width: 550px;\">
     <tr><td align=right>Exp:</td><td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(385*$pet[2]/$pet_next_lvl_xp)-385)."px;\">
     <span>$pet[2]/$pet_next_lvl_xp</span>
     </td></tr>
-    <tr><td align=right>Loyalty:</td><td align=left>Level $pet[4] ($pet[3] pts)</td></tr>
-    <tr><td align=right>Training Points:</td><td align=left>$pet[5]</td></tr>";
+	";
     $output .= "<tr><td align=right>Pet Abilities:</td><td align=left>";
     $ability_results = $sql->query("SELECT spell FROM `pet_spell` WHERE guid = '$pet[0]'");
     if ($sql->num_rows($ability_results)){
@@ -1443,7 +1546,7 @@ if ($sql->num_rows($result) == 1){
     $output .= "</table><br /><br />";
   }
   }
-  
+
       $output .= "</div>
       <table class=\"hidden\">
           <tr><td>";
@@ -1475,32 +1578,33 @@ $sql->close();
 //########################################################################################################################
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-switch ($action) {
-case "char_main":
-   char_main();
-   break;
-case "char_inv":
-   char_inv();
-   break;
-case "char_quest":
-   char_quest();
-   break;
-case "char_achievements":
-   char_achievements();
-   break;
-case "char_rep":
-   char_rep();
-   break;
-case "char_skill":
-   char_skill();
-   break;
-case "char_talent":
-   char_talent();
-   break;
-case "char_pets":
-   char_pets();
-   break;
-default:
+switch ($action)
+{
+  case "char_main":
+    char_main();
+    break;
+  case "char_inv":
+    char_inv();
+    break;
+  case "char_quest":
+    char_quest();
+    break;
+  case "char_achievements":
+    char_achievements();
+    break;
+  case "char_rep":
+    char_rep();
+    break;
+  case "char_skill":
+    char_skill();
+    break;
+  case "char_talent":
+    char_talent();
+    break;
+  case "char_pets":
+    char_pets();
+    break;
+  default:
     char_main();
 }
 
