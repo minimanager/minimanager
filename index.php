@@ -31,6 +31,8 @@ function format_uptime($seconds) {
   $hours = intval($seconds / 3600 % 24);
   $days = intval($seconds / 86400);
   
+  $uptimeString='';
+  
   if ($days > 0) {
     $uptimeString .= $days;
     $uptimeString .= (($days == 1) ? " day" : " days");
@@ -51,11 +53,6 @@ function format_uptime($seconds) {
 }
 
 $staticUptime = "{$lang_index['realm']} <em>".htmlentities(get_realm_name($realm_id))."</em> {$lang_index['online']} for ".format_uptime($uptimetime);
-
-    if ($uptime['d'] < 2) $sd = ""; else $sd = "s"; 
-    if ($uptime['h'] < 2) $sh = ""; else $sh = "s"; 
-    if ($uptime['m'] < 2) $sm = ""; else $sm = "s"; 
-    if ($uptime['s'] < 2) $ss = ""; else $ss = "s"; 
 
 $output .= "<div id=\"uptime\"><h1><font color=\"#55aa55\">".$staticUptime."</font></h1></div>";
 

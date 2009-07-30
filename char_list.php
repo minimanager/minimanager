@@ -187,7 +187,7 @@ function browse_chars() {
 //########################################################################################################################
 function search() {
  global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
-		$user_lvl, $user_name, $sql_search_limit;
+		$user_lvl, $user_name, $sql_search_limit, $showcountryflag;
 
  if(!isset($_GET['search_value'])) redirect("char_list.php?error=2");
 

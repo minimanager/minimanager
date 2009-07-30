@@ -109,6 +109,9 @@ if($user_lvl >= $action_permission['update'])
    $output .="
    </tr>";
 
+if ($showcountryflag)
+	$sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
  while ($data = $sql->fetch_row($query)){
 
 
@@ -116,7 +119,6 @@ if($user_lvl >= $action_permission['update'])
 
       if ($showcountryflag)
       {
-        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
 		$country = $sql->fetch_row($nation);
       }

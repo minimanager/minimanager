@@ -25,7 +25,7 @@ function edit_user() {
 
  $refguid = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = '$user_id';"));
  $refguid = $refguid[0];
- $referred_by = mysql_fetch_row(mysql_query("SELECT `name` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `guid` = '$refguid';"));
+ $referred_by = mysql_fetch_row(mysql_query("SELECT `name` FROM `{$characters_db[$realm_id]['name']}`.`characters` WHERE `guid` = '$refguid';"));
  $referred_by = $referred_by[0];
 
  if ($acc = $sql->fetch_row($result)) {
