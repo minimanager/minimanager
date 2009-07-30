@@ -201,9 +201,9 @@ else
 	<th width=\"20%\"><a href=\"index.php?order_by=map&amp;dir=$dir\"".($order_by=='map' ? " class=\"$order_dir\"" : "").">{$lang_index['map']}</a></th>
 	<th width=\"25%\"><a href=\"index.php?order_by=zone&amp;dir=$dir\"".($order_by=='zone' ? " class=\"$order_dir\"" : "").">{$lang_index['zone']}</th>
 	<th width=\"5%\">{$lang_global['country']}</th>";
-	if (server_type)
-		$output .="<th width=\"25%\"><a href=\"index.php?order_by=latency&amp;dir=$dir\"".($order_by=='latency' ? " class=\"$order_dir\"" : "").">{$lang_index['latency']}</th>
-	</tr>";
+	if ($server_type)
+		$output .="<th width=\"25%\"><a href=\"index.php?order_by=latency&amp;dir=$dir\"".($order_by=='latency' ? " class=\"$order_dir\"" : "").">{$lang_index['latency']}</th>";
+	$output .= "</tr>";
 
 	require_once("scripts/id_tab.php");
 
@@ -287,9 +287,10 @@ if ($server_type)
 		$output .="<td>$cc</td>";
  		 $output .="<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>
          </tr>";
-	}
 	if ($server_type)
 		$output .= "<tr><td colspan=\"11\" class=\"hidden\" align=\"right\">{$lang_index['a_latency']} : $fixavglat ms</td></tr>";
+	}
+
    $output .= "</table><br /></center>";
 }
 
