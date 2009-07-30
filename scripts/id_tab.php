@@ -78,6 +78,19 @@ function get_player_race($id){
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
+//get skill type by its id
+function get_skill_type($id)
+{
+  global $mmfpm_db;
+  $sql = new SQL;
+  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $skill_type = $sql->fetch_row($sql->query("SELECT `field_1` FROM `skillline` WHERE `id`={$id}"));
+
+  $sql->close();
+  return $skill_type[0];
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
 //get skill name by its id
 function get_skill_name($id){
  global $mmfpm_db;

@@ -40,8 +40,8 @@ unset($output);
        </center>
       </table>
       <br />
+      </div>
     </div>
-   </div>
   </center>
 </body>
 </html>

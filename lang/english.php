@@ -7,7 +7,6 @@
  * Translator:
  */
 
-
 $lang_global = array(
 	// ----- GENERAL ERROR CODES -----
 	'err_sql_conn_db' => 'Error - Connection to database is not established !',
@@ -326,7 +325,12 @@ $lang_char = array(
 	'quest_id' => 'ID',
 	'quest_level' => 'lvl',
 	'quest_title' => 'Quest Title',
+	'classskills' => 'Class Skills',
 	'professions' => 'Professions',
+	'secondaryskills' => 'Secondary Skills',
+	'weaponskills' => 'Weapon Skills',
+	'armorproficiencies' => 'Armor Proficiencies',
+	'languages' => 'Languages',
 	'skills' => 'Skills',
 	'skill_id' => 'ID',
 	'skill_name' => 'Skill Name',
