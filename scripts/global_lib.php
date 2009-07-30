@@ -58,11 +58,11 @@ function redirect($url) {
 }
 
 //work around for MSIE and wowhead tooltip display error
-if (ereg("MSIE" , $_SERVER["HTTP_USER_AGENT"])) {
-     $tt_scrip = "";
-} else {
+//if (ereg("MSIE" , $_SERVER["HTTP_USER_AGENT"])) {
+//     $tt_scrip = "";
+//} else {
      $tt_scrip = "http://www.wowhead.com/widgets/power.js";
-}
+//}
 
 //##########################################################################################
 // Generate paging navigation.

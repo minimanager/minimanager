@@ -19,420 +19,631 @@ require_once("scripts/char_aura.php");
 //########################################################################################################################
 // SHOW GENERAL CHARACTERS INFO
 //########################################################################################################################
-function char_main() 
+function char_main()
 {
-    global $lang_global, $lang_char, $lang_item, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_lvl,$world_db,
-        $user_name, $item_datasite, $server, $user_id, $char_aura, $talent_datasite;
+  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db, $mmfpm_db,
+    $server, $user_id, $user_name, $user_lvl, $item_datasite, $talent_datasite;
 
-    if (empty($_GET['id'])) error($lang_global['empty_fields']);
+  if (empty($_GET['id']))
+    error($lang_global['empty_fields']);
 
-    $sql = new SQL;
-    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sql = new SQL;
+  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'],
+    $characters_db[$realm_id]['name']);
 
-    $id = $sql->quote_smart($_GET['id']);
-    if (!is_numeric($id)) $id = 0;
-    
-    $result = $sql->query("SELECT account, race FROM `characters` WHERE guid = $id LIMIT 1");
+  $id = $sql->quote_smart($_GET['id']);
+  if (!is_numeric($id))
+    $id = 0;
 
-    if ($sql->num_rows($result))
+  $result = $sql->query("SELECT account, race FROM `characters` WHERE guid = $id LIMIT 1");
+
+  if ($sql->num_rows($result))
+  {
+    //resrict by owner's gmlvl
+    $owner_acc_id = $sql->result($result, 0, 'account');
+    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+    $query = $sql->query("SELECT gmlevel,username FROM account WHERE id = $owner_acc_id");
+    $owner_gmlvl = $sql->result($query, 0, 'gmlevel');
+    $owner_name = $sql->result($query, 0, 'username');
+
+    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'],
+      $characters_db[$realm_id]['name']);
+
+    if(!$user_lvl && !$server[$realm_id]['both_factions'])
     {
-        //resrict by owner's gmlvl
-        $owner_acc_id = $sql->result($result, 0, 'account');
-        $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-        $query = $sql->query("SELECT gmlevel,username FROM account WHERE id = $owner_acc_id");
-        $owner_gmlvl = $sql->result($query, 0, 'gmlevel');
-        $owner_name = $sql->result($query, 0, 'username');
-
-        $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-
-        if(!$user_lvl && !$server[$realm_id]['both_factions'])
-        {
-            $side_p = (in_array($sql->result($result, 0, 'race'),array(2,5,6,8,10))) ? 1 : 2;
-            $result_1 = $sql->query("SELECT race FROM `characters` WHERE account = $user_id LIMIT 1");
-            if ($sql->num_rows($result))
-                $side_v = (in_array($sql->result($result_1, 0, 'race'), array(2,5,6,8,10))) ? 1 : 2;
-            else 
-                $side_v = 0;
-            unset($result_1);
-        } 
-        else 
-        {
-            $side_v = 0;
-            $side_p = 0;
-        }
-
-        if ($user_lvl >= $owner_gmlvl && (($side_v == $side_p) || !$side_v))
-        {
-
-        $result = $sql->query("SELECT data,name,race,class,zone,map,online,totaltime, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, account FROM `characters` WHERE guid = $id");
-        $char = $sql->fetch_row($result);
-        $char_data = explode(' ',$char[0]);
-
-        $online = ($char[6]) ? $lang_char['online'] : $lang_char['offline'];
-
-        if($char_data[CHAR_DATA_OFFSET_GUILD_ID])
-        {
-            $query = $sql->query("SELECT name FROM guild WHERE guildid ='{$char_data[CHAR_DATA_OFFSET_GUILD_ID]}'");
-            $guild_name = $sql->result($query, 0, 'name');
-            $guild_name = "<a href=\"guild.php?action=view_guild&amp;error=3&amp;id={$char_data[CHAR_DATA_OFFSET_GUILD_ID]}\" >$guild_name</a>";
-            $mrank = $char_data[CHAR_DATA_OFFSET_GUILD_RANK] + 1;
-            $guild_rank_query = $sql->query("SELECT rname FROM guild_rank WHERE guildid ='{$char_data[CHAR_DATA_OFFSET_GUILD_ID]}' AND rid='{$mrank}'");
-            $guild_rank = $sql->result($guild_rank_query, 0, 'rname');
-        } 
-        else 
-        {
-            $guild_name = $lang_global['none'];
-            $guild_rank = $lang_global['none'];
-        }
-
-        $block = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_BLOCK]));
-        $block = round($block[1],2);
-        $dodge = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_DODGE]));
-        $dodge = round($dodge[1],2);
-        $parry = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_PARRY]));
-        $parry = round($parry[1],2);
-        $crit = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_CRIT]));
-        $crit = round($crit[1],2);
-        $range_crit = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_RANGE_CRIT]));
-        $range_crit = round($range_crit[1],2);
-		  $rage = round($char_data[CHAR_DATA_OFFSET_RAGE] / 10);
-		  $maxrage = round($char_data[CHAR_DATA_OFFSET_MAX_RAGE] / 10);
-		  
-			  
-        $EQU_HEAD = $char_data[CHAR_DATA_OFFSET_EQU_HEAD];
-        $EQU_NECK = $char_data[CHAR_DATA_OFFSET_EQU_NECK];
-        $EQU_SHOULDER = $char_data[CHAR_DATA_OFFSET_EQU_SHOULDER];
-        $EQU_SHIRT = $char_data[CHAR_DATA_OFFSET_EQU_SHIRT];
-        $EQU_CHEST = $char_data[CHAR_DATA_OFFSET_EQU_CHEST];
-        $EQU_BELT = $char_data[CHAR_DATA_OFFSET_EQU_BELT];
-        $EQU_LEGS = $char_data[CHAR_DATA_OFFSET_EQU_LEGS];
-        $EQU_FEET = $char_data[CHAR_DATA_OFFSET_EQU_FEET];
-        $EQU_WRIST = $char_data[CHAR_DATA_OFFSET_EQU_WRIST];
-        $EQU_GLOVES = $char_data[CHAR_DATA_OFFSET_EQU_GLOVES];
-        $EQU_FINGER1 = $char_data[CHAR_DATA_OFFSET_EQU_FINGER1];
-        $EQU_FINGER2 = $char_data[CHAR_DATA_OFFSET_EQU_FINGER2];
-        $EQU_TRINKET1 = $char_data[CHAR_DATA_OFFSET_EQU_TRINKET1];
-        $EQU_TRINKET2 = $char_data[CHAR_DATA_OFFSET_EQU_TRINKET2];
-        $EQU_BACK = $char_data[CHAR_DATA_OFFSET_EQU_BACK];
-        $EQU_MAIN_HAND = $char_data[CHAR_DATA_OFFSET_EQU_MAIN_HAND];
-        $EQU_OFF_HAND = $char_data[CHAR_DATA_OFFSET_EQU_OFF_HAND];
-        $EQU_RANGED = $char_data[CHAR_DATA_OFFSET_EQU_RANGED];
-        $EQU_TABARD = $char_data[CHAR_DATA_OFFSET_EQU_TABARD];
-
-        $equiped_items = array(
-            1 => array(($EQU_HEAD       ? get_item_tooltip($EQU_HEAD)      : 0), ($EQU_HEAD      ? get_icon($EQU_HEAD)      : 0),($EQU_HEAD      ? get_item_border($EQU_HEAD)      : 0)),
-            2 => array(($EQU_NECK       ? get_item_tooltip($EQU_NECK)      : 0), ($EQU_NECK      ? get_icon($EQU_NECK)      : 0),($EQU_NECK      ? get_item_border($EQU_NECK)      : 0)),
-            3 => array(($EQU_SHOULDER   ? get_item_tooltip($EQU_SHOULDER)  : 0), ($EQU_SHOULDER  ? get_icon($EQU_SHOULDER)  : 0),($EQU_SHOULDER  ? get_item_border($EQU_SHOULDER)  : 0)),
-            4 => array(($EQU_SHIRT      ? get_item_tooltip($EQU_SHIRT)     : 0), ($EQU_SHIRT     ? get_icon($EQU_SHIRT)     : 0),($EQU_SHIRT     ? get_item_border($EQU_SHIRT)     : 0)),
-            5 => array(($EQU_CHEST      ? get_item_tooltip($EQU_CHEST)     : 0), ($EQU_CHEST     ? get_icon($EQU_CHEST)     : 0),($EQU_CHEST     ? get_item_border($EQU_CHEST)     : 0)),
-            6 => array(($EQU_BELT       ? get_item_tooltip($EQU_BELT)      : 0), ($EQU_BELT      ? get_icon($EQU_BELT)      : 0),($EQU_BELT      ? get_item_border($EQU_BELT)      : 0)),
-            7 => array(($EQU_LEGS       ? get_item_tooltip($EQU_LEGS)      : 0), ($EQU_LEGS      ? get_icon($EQU_LEGS)      : 0),($EQU_LEGS      ? get_item_border($EQU_LEGS)      : 0)),
-            8 => array(($EQU_FEET       ? get_item_tooltip($EQU_FEET)      : 0), ($EQU_FEET      ? get_icon($EQU_FEET)      : 0),($EQU_FEET      ? get_item_border($EQU_FEET)      : 0)),
-            9 => array(($EQU_WRIST      ? get_item_tooltip($EQU_WRIST)     : 0), ($EQU_WRIST     ? get_icon($EQU_WRIST)     : 0),($EQU_WRIST     ? get_item_border($EQU_WRIST)     : 0)),
-            10 => array(($EQU_GLOVES    ? get_item_tooltip($EQU_GLOVES)    : 0), ($EQU_GLOVES    ? get_icon($EQU_GLOVES)    : 0),($EQU_GLOVES    ? get_item_border($EQU_GLOVES)    : 0)),
-            11 => array(($EQU_FINGER1   ? get_item_tooltip($EQU_FINGER1)   : 0), ($EQU_FINGER1   ? get_icon($EQU_FINGER1)   : 0),($EQU_FINGER1   ? get_item_border($EQU_FINGER1)   : 0)),
-            12 => array(($EQU_FINGER2   ? get_item_tooltip($EQU_FINGER2)   : 0), ($EQU_FINGER2   ? get_icon($EQU_FINGER2)   : 0),($EQU_FINGER2   ? get_item_border($EQU_FINGER2)   : 0)),
-            13 => array(($EQU_TRINKET1  ? get_item_tooltip($EQU_TRINKET1)  : 0), ($EQU_TRINKET1  ? get_icon($EQU_TRINKET1)  : 0),($EQU_TRINKET1  ? get_item_border($EQU_TRINKET1)  : 0)),
-            14 => array(($EQU_TRINKET2  ? get_item_tooltip($EQU_TRINKET2)  : 0), ($EQU_TRINKET2  ? get_icon($EQU_TRINKET2)  : 0),($EQU_TRINKET2  ? get_item_border($EQU_TRINKET2)  : 0)),
-            15 => array(($EQU_BACK      ? get_item_tooltip($EQU_BACK)      : 0), ($EQU_BACK      ? get_icon($EQU_BACK)      : 0),($EQU_BACK      ? get_item_border($EQU_BACK)      : 0)),
-            16 => array(($EQU_MAIN_HAND ? get_item_tooltip($EQU_MAIN_HAND) : 0), ($EQU_MAIN_HAND ? get_icon($EQU_MAIN_HAND) : 0),($EQU_MAIN_HAND ? get_item_border($EQU_MAIN_HAND) : 0)),
-            17 => array(($EQU_OFF_HAND  ? get_item_tooltip($EQU_OFF_HAND)  : 0), ($EQU_OFF_HAND  ? get_icon($EQU_OFF_HAND)  : 0),($EQU_OFF_HAND  ? get_item_border($EQU_OFF_HAND)  : 0)),
-            18 => array(($EQU_RANGED    ? get_item_tooltip($EQU_RANGED)    : 0), ($EQU_RANGED    ? get_icon($EQU_RANGED)    : 0),($EQU_RANGED    ? get_item_border($EQU_RANGED)    : 0)),
-            19 => array(($EQU_TABARD    ? get_item_tooltip($EQU_TABARD)    : 0), ($EQU_TABARD    ? get_icon($EQU_TABARD)    : 0),($EQU_TABARD    ? get_item_border($EQU_TABARD)    : 0))
-          );
-
-        $output .= "<center><div id=\"tab\"><ul><li id=\"selected\"><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>";
-
-        if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
-        {  
-            $output .= "<li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
-            <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
-            <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
-            <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
-            <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
-            <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
-            if (get_player_class($char[3]) == 'Hunter' ) { $output .= "  <li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>"; }
-        }
-        $output .= "</ul></div><div id=\"tab_content\"><table class=\"lined\" style=\"width: 610px;\">
-            <tr><td colspan=\"6\"><div><img src=".get_image_dir($char_data[CHAR_DATA_OFFSET_LEVEL],$char[8],$char[2],$char[3],0)."></div><div>";
-
-        $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-        $a_results = $sql->query("SELECT DISTINCT spell,remaintime FROM `character_aura` WHERE guid = $id");
-        if ($sql->num_rows($a_results))
-        {
-            while ($aura = $sql->fetch_row($a_results))
-            {
-                // $output .= "<a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_char_aura_name($aura[0])."<br />Id: $aura[0]</font>','item_tooltip')\" onmouseout=\"toolTip()\" href=\"$talent_datasite$aura[0]\"><img src=\"".get_aura_icon($aura[0])."\" width=24 height=24></a>";
-				$output .= "<a style=\"padding:2px;\" href=\"$talent_datasite$aura[0]\"><img src=\"".get_aura_icon($aura[0])."\" width=24 height=24></a>";
-			}
-        }
-
-        $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-		$loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[9]';");
-		$location = $sql->fetch_row($loc);
-		$ip = $location[0];
-
-        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
-		$country = $sql->fetch_row($nation);
-
-  $output .="</div><font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])." (lvl {$char_data[CHAR_DATA_OFFSET_LEVEL]})</font><br />
-  {$lang_char['guild']}: $guild_name | {$lang_char['rank']}: ".htmlentities($guild_rank)."<br />".(($char[6]) ? "<img src=\"img/up.gif\" onmousemove='toolTip(\"Online\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "<img src=\"img/down.gif\" onmousemove='toolTip(\"Offline\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />")." - ".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")." </td></tr>
-  <tr>
-    <td width=\"6%\">";
-    if (!empty($equiped_items[1][1])) $output .= maketooltip("<img src=\"{$equiped_items[1][1]}\" class=\"{$equiped_items[1][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_HEAD]}", $equiped_items[1][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_head.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-    <td class=\"half_line\" colspan=\"4\">".get_map_name($char[5])." - ".get_zone_name($char[4])."</td>
-    <td width=\"6%\">";
-    if (!empty($equiped_items[10][1])) $output .= maketooltip("<img src=\"{$equiped_items[10][1]}\" class=\"{$equiped_items[10][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_GLOVES]}", $equiped_items[10][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_gloves.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-  </tr>
-  <tr>
-    <td>";
-    if (!empty($equiped_items[2][1])) $output .= maketooltip("<img src=\"{$equiped_items[2][1]}\" class=\"{$equiped_items[2][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_NECK]}", $equiped_items[2][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_neck.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-    <td class=\"half_line\" colspan=\"4\">
-    {$lang_char['honor_points']}: {$char_data[CHAR_DATA_OFFSET_HONOR_POINTS]}/{$char_data[CHAR_DATA_OFFSET_ARENA_POINTS]} - {$lang_char['honor_kills']}: {$char_data[CHAR_DATA_OFFSET_HONOR_KILL]}</td>
-    <td>";
-    if (!empty($equiped_items[6][1])) $output .= maketooltip("<img src=\"{$equiped_items[6][1]}\" class=\"{$equiped_items[6][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_BELT]}", $equiped_items[6][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_waist.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-  </tr>
-  <tr>
-    <td>";
-    if (!empty($equiped_items[3][1])) $output .= maketooltip("<img src=\"{$equiped_items[3][1]}\" class=\"{$equiped_items[3][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_SHOULDER]}", $equiped_items[3][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_shoulder.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-    <td class=\"half_line\" colspan=\"2\">
-      <div class=\"gradient_p\">{$lang_item['health']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_HEALTH]}</div>
-    </td>
-      <td class=\"half_line\" colspan=\"2\" align=\"center\" width=\"50%\">";
-	  
-    if ($char[3] == 11) { //druid
-      $output .= "<div class=\"gradient_p\">{$lang_item['mana']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_MAX_MANA]}</div></br>
-      <div class=\"gradient_p\">{$lang_item['rage']}:</div>
-      <div class=\"gradient_pp\">{$rage}/{$maxrage}</div></br>
-      <div class=\"gradient_p\">{$lang_item['energy']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_ENERGY]}/{$char_data[CHAR_DATA_OFFSET_MAX_ENERGY]}</div>";
-	}elseif ($char[3] == 4) { //rogue
-      $output .= "<div class=\"gradient_p\">{$lang_item['energy']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_ENERGY]}/{$char_data[CHAR_DATA_OFFSET_MAX_ENERGY]}</div>";
-	}elseif ($char[3] == 1) { //warrior
-      $output .= "<div class=\"gradient_p\">{$lang_item['rage']}:</div>
-      <div class=\"gradient_pp\">{$rage}/{$maxrage}</div>";
-    }elseif ($char[3] == 6) {  //death knight
-      // Don't know if FOCUS is the right one need to verify with Death Knight player.
-      $output .= "<div class=\"gradient_p\">{$lang_item['runic']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_FOCUS]}/{$char_data[CHAR_DATA_OFFSET_MAX_FOCUS]}</div>";
-    }elseif ($char[3] == 8 || //mage
-    $char[3] == 9 || //warlock
-    $char[3] == 2 || //paladin
-    $char[3] == 5 || //priest
-    $char[3] == 3 || //hunter
-    $char[3] == 7) { //shaman
-      $output .= "<div class=\"gradient_p\">{$lang_item['mana']}:</div>
-      <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_MAX_MANA]}</div>";
+      $side_p = (in_array($sql->result($result, 0, 'race'),array(2,5,6,8,10))) ? 1 : 2;
+      $result_1 = $sql->query("SELECT race FROM `characters` WHERE account = $user_id LIMIT 1");
+      if ($sql->num_rows($result))
+        $side_v = (in_array($sql->result($result_1, 0, 'race'), array(2,5,6,8,10))) ? 1 : 2;
+      else
+        $side_v = 0;
+      unset($result_1);
     }
-	$output .= "</td><td>";
-	
-    if (!empty($equiped_items[7][1])) $output .= maketooltip("<img src=\"{$equiped_items[7][1]}\" class=\"{$equiped_items[7][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_LEGS]}", $equiped_items[7][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_legs.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-  </tr>
-  <tr>
-    <td>";
-    if (!empty($equiped_items[15][1])) $output .= maketooltip("<img src=\"{$equiped_items[15][1]}\" class=\"{$equiped_items[15][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_BACK]}", $equiped_items[15][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_chest_back.png\" class=\"icon_border_0\" alt=\"\" />";
-    $output .= "</td>
-    <td class=\"half_line\" colspan=\"2\" rowspan=\"3\" align=\"center\">
-      <div class=\"gradient_p\">
-        {$lang_item['strength']}:<br />
-        {$lang_item['agility']}:<br />
-        {$lang_item['stamina']}:<br />
-        {$lang_item['intellect']}:<br />
-        {$lang_item['spirit']}:<br />
-        {$lang_item['armor']}:
-      </div>
-      <div class=\"gradient_pp\">
-        {$char_data[CHAR_DATA_OFFSET_STR]}<br />
-        {$char_data[CHAR_DATA_OFFSET_AGI]}<br />
-        {$char_data[CHAR_DATA_OFFSET_STA]}<br />
-        {$char_data[CHAR_DATA_OFFSET_INT]}<br />
-        {$char_data[CHAR_DATA_OFFSET_SPI]}<br />
-        {$char_data[CHAR_DATA_OFFSET_ARMOR]}
-      </div>
-    </td>
-    <td class=\"half_line\" colspan=\"2\" rowspan=\"3\" align=\"center\">
-      <div class=\"gradient_p\">
-        {$lang_item['res_holy']}:<br />
-        {$lang_item['res_arcane']}:<br />
-        {$lang_item['res_fire']}:<br />
-        {$lang_item['res_nature']}:<br />
-        {$lang_item['res_frost']}:<br />
-        {$lang_item['res_shadow']}:
-      </div>
-      <div class=\"gradient_pp\">
-        {$char_data[CHAR_DATA_OFFSET_RES_HOLY]}<br />
-        {$char_data[CHAR_DATA_OFFSET_RES_ARCANE]}<br />
-        {$char_data[CHAR_DATA_OFFSET_RES_FIRE]}<br />
-        {$char_data[CHAR_DATA_OFFSET_RES_NATURE]}<br />
-        {$char_data[CHAR_DATA_OFFSET_RES_FROST]}<br />
-        {$char_data[CHAR_DATA_OFFSET_RES_SHADOW]}
-      </div>
-    </td>
-    <td>";
-    if (!empty($equiped_items[8][1])) $output .= maketooltip("<img src=\"{$equiped_items[8][1]}\" class=\"{$equiped_items[8][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_FEET]}", $equiped_items[8][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_feet.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-  </tr>
-  <tr>
-    <td>";
-    if (!empty($equiped_items[5][1])) $output .= maketooltip("<img src=\"{$equiped_items[5][1]}\" class=\"{$equiped_items[5][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_CHEST]}", $equiped_items[5][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_chest_back.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-    <td>";
-    if (!empty($equiped_items[11][1])) $output .= maketooltip("<img src=\"{$equiped_items[11][1]}\" class=\"{$equiped_items[11][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_FINGER1]}", $equiped_items[11][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_finger.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-  </tr>
-  <tr>
-    <td>";
-    if (!empty($equiped_items[4][1])) $output .= maketooltip("<img src=\"{$equiped_items[4][1]}\" class=\"{$equiped_items[4][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_SHIRT]}", $equiped_items[4][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_shirt.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-    <td>";
-    if (!empty($equiped_items[12][1])) $output .= maketooltip("<img src=\"{$equiped_items[12][1]}\" class=\"{$equiped_items[12][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_FINGER2]}", $equiped_items[12][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_finger.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-  </tr>
-  <tr>
-    <td>";
-    if (!empty($equiped_items[19][1])) $output .= maketooltip("<img src=\"{$equiped_items[19][1]}\" class=\"{$equiped_items[19][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_TABARD]}", $equiped_items[19][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_tabard.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-    <td class=\"half_line\" colspan=\"2\" rowspan=\"2\" align=\"center\">
-      <div class=\"gradient_p\">
-        {$lang_char['expertise']}:<br />
-        {$lang_char['block']}:<br />
-        {$lang_char['dodge']}:<br />
-        {$lang_char['parry']}:<br />
-		  {$lang_char['resilience']}:
-      </div>
-      <div class=\"gradient_pp\">
-        {$char_data[CHAR_DATA_OFFSET_EXPERTISE]}<br />
-		  $block%<br />
-        $dodge%<br />
-        $parry%<br />
-        {$char_data[CHAR_DATA_OFFSET_RESILIENCE]}  
-      </div>
-    </td>
-    <td class=\"half_line\" colspan=\"2\" rowspan=\"2\" align=\"center\">
-      <div class=\"gradient_p\">
-        {$lang_char['melee_ap']}:<br />
-        {$lang_char['ranged_ap']}:<br />
-        {$lang_char['crit']}:<br />
-        {$lang_char['range_crit']}:
-      </div>
-      <div class=\"gradient_pp\">
-        {$char_data[CHAR_DATA_OFFSET_AP]}<br />
-        {$char_data[CHAR_DATA_OFFSET_RANGED_AP]}<br />
-        $crit%<br />
-        $range_crit%
-      </div>
-    </td>
-    <td>";
-    if (!empty($equiped_items[13][1])) $output .= maketooltip("<img src=\"{$equiped_items[13][1]}\" class=\"{$equiped_items[13][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_TRINKET1]}", $equiped_items[13][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_trinket.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-  </tr>
-  <tr>
-    <td>";
-    if (!empty($equiped_items[9][1])) $output .= maketooltip("<img src=\"{$equiped_items[9][1]}\" class=\"{$equiped_items[9][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_WRIST]}", $equiped_items[9][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_wrist.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-
-    <td>";
-    if (!empty($equiped_items[14][1])) $output .= maketooltip("<img src=\"{$equiped_items[14][1]}\" class=\"{$equiped_items[14][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_TRINKET2]}", $equiped_items[14][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_trinket.png\" class=\"icon_border_0\" alt=\"\" />";
-    $output .= "</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td width=\"15%\">";
-    if (!empty($equiped_items[16][1])) $output .= maketooltip("<img src=\"{$equiped_items[16][1]}\" class=\"{$equiped_items[16][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_MAIN_HAND]}", $equiped_items[16][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_main_hand.png\" class=\"icon_border_0\" alt=\"\" />";
-    $output .= "</td>
-    <td width=\"15%\">";
-    if (!empty($equiped_items[17][1])) $output .= maketooltip("<img src=\"{$equiped_items[17][1]}\" class=\"{$equiped_items[17][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_OFF_HAND]}", $equiped_items[17][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_off_hand.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-    <td width=\"15%\">";
-    if (!empty($equiped_items[18][1])) $output .= maketooltip("<img src=\"{$equiped_items[18][1]}\" class=\"{$equiped_items[18][2]}\" alt=\"\" />", "$item_datasite{$char_data[CHAR_DATA_OFFSET_EQU_RANGED]}", $equiped_items[18][0], "item_tooltip", "target=\"_blank\"");
-      else $output .= "<img src=\"img/Char_INV/INV_empty_ranged.png\" class=\"icon_border_0\" alt=\"\" />";
-$output .= "</td>
-<td width=\"15%\"></td>
-    <td></td></tr>
-</table><br />";
-
-if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name)){
-  //total time played
-  $tot_time = $char[7];
-  $tot_days = (int)($tot_time/86400);
-  $tot_time = $tot_time - ($tot_days*86400);
-  $total_hours = (int)($tot_time/3600);
-  $tot_time = $tot_time - ($total_hours*3600);
-  $total_min = (int)($tot_time/60);
-
- $output .= "<table class=\"lined\" style=\"width: 580px;\">
-  <tr><td colspan=\"10\">{$lang_char['tot_paly_time']}: $tot_days {$lang_char['days']} $total_hours {$lang_char['hours']} $total_min {$lang_char['min']}</td></tr>
-</table></div><br />";
-
-$output .= "<table class=\"hidden\">
-          <tr><td>";
-    if ($user_lvl > $owner_gmlvl){
-      makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
-  $output .= "</td><td>";
-      }
-    if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name))){
-      makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
-  $output .= "</td><td>";
-      }
-    makebutton($lang_global['back'], "javascript:window.history.back()",140);
- $output .= "</td></tr>
-        </table><br /></center>";
-
-  //end of admin options
-  } else {
-      $output .= "<table class=\"hidden\">
-        <tr><td>";
-          makebutton($lang_global['back'], "javascript:window.history.back()",200);
-      $output .= "</td></tr>
-        </table><br /></center>";
-      }
- } else {
-    $sql->close();
-    error($lang_char['no_permission']);
+    else
+    {
+        $side_v = 0;
+        $side_p = 0;
     }
 
-} else error($lang_char['no_char_found']);
-$sql->close();
+    if ($user_lvl >= $owner_gmlvl && (($side_v == $side_p) || !$side_v))
+    {
+      $result = $sql->query("SELECT data, name, race, class, zone, map, online, totaltime,
+        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender,
+        account FROM `characters` WHERE guid = $id");
+      $char = $sql->fetch_row($result);
+      $char_data = explode(' ',$char[0]);
+
+      $online = ($char[6]) ? $lang_char['online'] : $lang_char['offline'];
+
+      if($char_data[CHAR_DATA_OFFSET_GUILD_ID])
+      {
+        $query = $sql->query("SELECT name FROM guild WHERE guildid ='{$char_data[CHAR_DATA_OFFSET_GUILD_ID]}'");
+        $guild_name = $sql->result($query, 0, 'name');
+        $guild_name = "<a href=\"guild.php?action=view_guild&amp;error=3&amp;id={$char_data[CHAR_DATA_OFFSET_GUILD_ID]}\" >$guild_name</a>";
+        $mrank = $char_data[CHAR_DATA_OFFSET_GUILD_RANK] + 1;
+        $guild_rank_query = $sql->query("SELECT rname FROM guild_rank WHERE guildid ='{$char_data[CHAR_DATA_OFFSET_GUILD_ID]}' AND rid='{$mrank}'");
+        $guild_rank = $sql->result($guild_rank_query, 0, 'rname');
+      }
+      else
+      {
+        $guild_name = $lang_global['none'];
+        $guild_rank = $lang_global['none'];
+      }
+
+      $block = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_BLOCK]));
+      $block = round($block[1],2);
+      $dodge = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_DODGE]));
+      $dodge = round($dodge[1],2);
+      $parry = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_PARRY]));
+      $parry = round($parry[1],2);
+      $crit = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_CRIT]));
+      $crit = round($crit[1],2);
+      $range_crit = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_RANGE_CRIT]));
+      $range_crit = round($range_crit[1],2);
+      $rage = round($char_data[CHAR_DATA_OFFSET_RAGE] / 10);
+      $maxrage = round($char_data[CHAR_DATA_OFFSET_MAX_RAGE] / 10);
+      $resilience = round($char_data[CHAR_DATA_OFFSET_FOCUS] / 10);
+      $expertise = "{$char_data[CHAR_DATA_OFFSET_EXPERTISE]}"." / "."{$char_data[CHAR_DATA_OFFSET_OFFHAND_EXPERTISE]}";
+
+      $EQU_HEAD      = $char_data[CHAR_DATA_OFFSET_EQU_HEAD];
+      $EQU_NECK      = $char_data[CHAR_DATA_OFFSET_EQU_NECK];
+      $EQU_SHOULDER  = $char_data[CHAR_DATA_OFFSET_EQU_SHOULDER];
+      $EQU_SHIRT     = $char_data[CHAR_DATA_OFFSET_EQU_SHIRT];
+      $EQU_CHEST     = $char_data[CHAR_DATA_OFFSET_EQU_CHEST];
+      $EQU_BELT      = $char_data[CHAR_DATA_OFFSET_EQU_BELT];
+      $EQU_LEGS      = $char_data[CHAR_DATA_OFFSET_EQU_LEGS];
+      $EQU_FEET      = $char_data[CHAR_DATA_OFFSET_EQU_FEET];
+      $EQU_WRIST     = $char_data[CHAR_DATA_OFFSET_EQU_WRIST];
+      $EQU_GLOVES    = $char_data[CHAR_DATA_OFFSET_EQU_GLOVES];
+      $EQU_FINGER1   = $char_data[CHAR_DATA_OFFSET_EQU_FINGER1];
+      $EQU_FINGER2   = $char_data[CHAR_DATA_OFFSET_EQU_FINGER2];
+      $EQU_TRINKET1  = $char_data[CHAR_DATA_OFFSET_EQU_TRINKET1];
+      $EQU_TRINKET2  = $char_data[CHAR_DATA_OFFSET_EQU_TRINKET2];
+      $EQU_BACK      = $char_data[CHAR_DATA_OFFSET_EQU_BACK];
+      $EQU_MAIN_HAND = $char_data[CHAR_DATA_OFFSET_EQU_MAIN_HAND];
+      $EQU_OFF_HAND  = $char_data[CHAR_DATA_OFFSET_EQU_OFF_HAND];
+      $EQU_RANGED    = $char_data[CHAR_DATA_OFFSET_EQU_RANGED];
+      $EQU_TABARD    = $char_data[CHAR_DATA_OFFSET_EQU_TABARD];
+
+      $equiped_items = array(
+         1 => array(($EQU_HEAD      ? get_item_tooltip($EQU_HEAD)      : 0),($EQU_HEAD      ? get_icon($EQU_HEAD)      : 0),($EQU_HEAD      ? get_item_border($EQU_HEAD)      : 0)),
+         2 => array(($EQU_NECK      ? get_item_tooltip($EQU_NECK)      : 0),($EQU_NECK      ? get_icon($EQU_NECK)      : 0),($EQU_NECK      ? get_item_border($EQU_NECK)      : 0)),
+         3 => array(($EQU_SHOULDER  ? get_item_tooltip($EQU_SHOULDER)  : 0),($EQU_SHOULDER  ? get_icon($EQU_SHOULDER)  : 0),($EQU_SHOULDER  ? get_item_border($EQU_SHOULDER)  : 0)),
+         4 => array(($EQU_SHIRT     ? get_item_tooltip($EQU_SHIRT)     : 0),($EQU_SHIRT     ? get_icon($EQU_SHIRT)     : 0),($EQU_SHIRT     ? get_item_border($EQU_SHIRT)     : 0)),
+         5 => array(($EQU_CHEST     ? get_item_tooltip($EQU_CHEST)     : 0),($EQU_CHEST     ? get_icon($EQU_CHEST)     : 0),($EQU_CHEST     ? get_item_border($EQU_CHEST)     : 0)),
+         6 => array(($EQU_BELT      ? get_item_tooltip($EQU_BELT)      : 0),($EQU_BELT      ? get_icon($EQU_BELT)      : 0),($EQU_BELT      ? get_item_border($EQU_BELT)      : 0)),
+         7 => array(($EQU_LEGS      ? get_item_tooltip($EQU_LEGS)      : 0),($EQU_LEGS      ? get_icon($EQU_LEGS)      : 0),($EQU_LEGS      ? get_item_border($EQU_LEGS)      : 0)),
+         8 => array(($EQU_FEET      ? get_item_tooltip($EQU_FEET)      : 0),($EQU_FEET      ? get_icon($EQU_FEET)      : 0),($EQU_FEET      ? get_item_border($EQU_FEET)      : 0)),
+         9 => array(($EQU_WRIST     ? get_item_tooltip($EQU_WRIST)     : 0),($EQU_WRIST     ? get_icon($EQU_WRIST)     : 0),($EQU_WRIST     ? get_item_border($EQU_WRIST)     : 0)),
+        10 => array(($EQU_GLOVES    ? get_item_tooltip($EQU_GLOVES)    : 0),($EQU_GLOVES    ? get_icon($EQU_GLOVES)    : 0),($EQU_GLOVES    ? get_item_border($EQU_GLOVES)    : 0)),
+        11 => array(($EQU_FINGER1   ? get_item_tooltip($EQU_FINGER1)   : 0),($EQU_FINGER1   ? get_icon($EQU_FINGER1)   : 0),($EQU_FINGER1   ? get_item_border($EQU_FINGER1)   : 0)),
+        12 => array(($EQU_FINGER2   ? get_item_tooltip($EQU_FINGER2)   : 0),($EQU_FINGER2   ? get_icon($EQU_FINGER2)   : 0),($EQU_FINGER2   ? get_item_border($EQU_FINGER2)   : 0)),
+        13 => array(($EQU_TRINKET1  ? get_item_tooltip($EQU_TRINKET1)  : 0),($EQU_TRINKET1  ? get_icon($EQU_TRINKET1)  : 0),($EQU_TRINKET1  ? get_item_border($EQU_TRINKET1)  : 0)),
+        14 => array(($EQU_TRINKET2  ? get_item_tooltip($EQU_TRINKET2)  : 0),($EQU_TRINKET2  ? get_icon($EQU_TRINKET2)  : 0),($EQU_TRINKET2  ? get_item_border($EQU_TRINKET2)  : 0)),
+        15 => array(($EQU_BACK      ? get_item_tooltip($EQU_BACK)      : 0),($EQU_BACK      ? get_icon($EQU_BACK)      : 0),($EQU_BACK      ? get_item_border($EQU_BACK)      : 0)),
+        16 => array(($EQU_MAIN_HAND ? get_item_tooltip($EQU_MAIN_HAND) : 0),($EQU_MAIN_HAND ? get_icon($EQU_MAIN_HAND) : 0),($EQU_MAIN_HAND ? get_item_border($EQU_MAIN_HAND) : 0)),
+        17 => array(($EQU_OFF_HAND  ? get_item_tooltip($EQU_OFF_HAND)  : 0),($EQU_OFF_HAND  ? get_icon($EQU_OFF_HAND)  : 0),($EQU_OFF_HAND  ? get_item_border($EQU_OFF_HAND)  : 0)),
+        18 => array(($EQU_RANGED    ? get_item_tooltip($EQU_RANGED)    : 0),($EQU_RANGED    ? get_icon($EQU_RANGED)    : 0),($EQU_RANGED    ? get_item_border($EQU_RANGED)    : 0)),
+        19 => array(($EQU_TABARD    ? get_item_tooltip($EQU_TABARD)    : 0),($EQU_TABARD    ? get_icon($EQU_TABARD)    : 0),($EQU_TABARD    ? get_item_border($EQU_TABARD)    : 0))
+      );
+
+      $output .= "
+        <center>
+          <div id=\"tab\">
+            <ul>
+              <li id=\"selected\"><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>";
+
+      if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
+      {
+        $output .= "
+              <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
+        if (get_player_class($char[3]) == 'Hunter' )
+          $output .= "
+              <li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>";
+      }
+      $output .= "
+            </ul>
+          </div>
+          <div id=\"tab_content\">
+            <table class=\"lined\" style=\"width: 580px;\">
+              <tr>
+                <td colspan=\"2\">
+                  <div>
+                    <img src=".get_image_dir($char_data[CHAR_DATA_OFFSET_LEVEL],$char[8],$char[2],$char[3],0)." alt=\"avatar\">
+                  </div>
+                  <div>";
+
+      $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+      $a_results = $sql->query("SELECT DISTINCT spell FROM `character_aura` WHERE guid = $id");
+      if ($sql->num_rows($a_results))
+      {
+        while ($aura = $sql->fetch_row($a_results))
+        {
+           $output .= "
+                    <a style=\"padding:2px;\" href=\"$talent_datasite$aura[0]\" target=\"_blank\">
+                      <img src=\"".get_aura_icon($aura[0])."\" alt=\"".$aura[0]."\" width=24 height=24>
+                    </a>";
+        }
+      }
+
+      $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+      $loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[9]';");
+      $location = $sql->fetch_row($loc);
+      $ip = $location[0];
+      $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+      $nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+      $country = $sql->fetch_row($nation);
+
+      $output .="
+                  </div>
+                </td>
+                <td colspan=\"4\">
+                  <font class=\"bold\">
+                    ".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])." (lvl {$char_data[CHAR_DATA_OFFSET_LEVEL]})
+                  </font>
+                  <br />{$lang_char['guild']}: $guild_name | {$lang_char['rank']}: ".htmlentities($guild_rank)."
+                  <br />".(($char[6]) ? "<img src=\"img/up.gif\" onmousemove='toolTip(\"Online\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"online\" />" : "<img src=\"img/down.gif\" onmousemove='toolTip(\"Offline\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"offline\" />")." - ".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")." </td></tr>
+                </td>
+              </tr>
+              <tr>
+                <td width=\"6%\">";
+      if (!empty($equiped_items[1][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_HEAD\" target=\"_blank\">
+                    <img src=\"{$equiped_items[1][1]}\" class=\"{$equiped_items[1][2]}\" alt=\"Head\">
+                  </a>";
+      else
+        $output .= "
+                  <img src=\"img/Char_INV/INV_empty_head.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td class=\"half_line\" colspan=\"4\">
+                ".get_map_name($char[5])." - ".get_zone_name($char[4])."
+                </td>
+                <td width=\"6%\">";
+      if (!empty($equiped_items[10][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_GLOVES\" target=\"_blank\">
+                    <img src=\"{$equiped_items[10][1]}\" class=\"{$equiped_items[10][2]}\" alt=\"Gloves\">
+                  </a>";
+      else
+        $output .= "
+                  <img src=\"img/Char_INV/INV_empty_gloves.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+              </tr>
+              <tr>
+              <td>";
+      if (!empty($equiped_items[2][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_NECK\" target=\"_blank\">
+                    <img src=\"{$equiped_items[2][1]}\" class=\"{$equiped_items[2][2]}\" alt=\"Neck\">
+                  </a>";
+      else
+        $output .= "
+                  <img src=\"img/Char_INV/INV_empty_neck.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td class=\"half_line\" colspan=\"4\">
+                  {$lang_char['honor_points']}: {$char_data[CHAR_DATA_OFFSET_HONOR_POINTS]} / {$char_data[CHAR_DATA_OFFSET_ARENA_POINTS]} - {$lang_char['honor_kills']}: {$char_data[CHAR_DATA_OFFSET_HONOR_KILL]}
+                </td>
+                <td>";
+      if (!empty($equiped_items[6][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_BELT\" target=\"_blank\">
+                    <img src=\"{$equiped_items[6][1]}\" class=\"{$equiped_items[6][2]}\" alt=\"Belt\">
+                  </a>";
+      else
+        $output .= "
+                  <img src=\"img/Char_INV/INV_empty_waist.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+              </tr>
+              <tr>
+                <td>";
+      if (!empty($equiped_items[3][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_SHOULDER\" target=\"_blank\">
+                    <img src=\"{$equiped_items[3][1]}\" class=\"{$equiped_items[3][2]}\" alt=\"Shoulder\">
+                  </a>";
+      else
+        $output .= "
+                  <img src=\"img/Char_INV/INV_empty_shoulder.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td class=\"half_line\" colspan=\"2\">
+                  <div class=\"gradient_p\">{$lang_item['health']}:</div>
+                  <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_HEALTH]}</div>";
+      if ($char[3] == 11) //druid
+        $output .="
+                  </br>
+                  <div class=\"gradient_p\">{$lang_item['energy']}:</div>
+                  <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_ENERGY]}/{$char_data[CHAR_DATA_OFFSET_MAX_ENERGY]}</div>";
+      $output .= "
+                </td>
+                <td class=\"half_line\" colspan=\"2\" align=\"center\" width=\"50%\">";
+
+      if ($char[3] == 1) // warrior
+      {
+        $output .= "
+                  <div class=\"gradient_p\">{$lang_item['rage']}:</div>
+                  <div class=\"gradient_pp\">{$rage}/{$maxrage}</div>";
+      }
+      elseif ($char[3] == 4) // rogue
+      {
+        $output .= "
+                  <div class=\"gradient_p\">{$lang_item['energy']}:</div>
+                  <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_ENERGY]}/{$char_data[CHAR_DATA_OFFSET_MAX_ENERGY]}</div>";
+      }
+      elseif ($char[3] == 6) // death knight
+      {
+        // Don't know if FOCUS is the right one need to verify with Death Knight player.
+        $output .= "
+                  <div class=\"gradient_p\">{$lang_item['runic']}:</div>
+                  <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_FOCUS]}/{$char_data[CHAR_DATA_OFFSET_MAX_FOCUS]}</div>";
+      }
+      elseif ($char[3] == 11) // druid
+      {
+        $output .= "
+                  <div class=\"gradient_p\">{$lang_item['mana']}:</div>
+                  <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_MAX_MANA]}</div>
+                  </br>
+                  <div class=\"gradient_p\">{$lang_item['rage']}:</div>
+                  <div class=\"gradient_pp\">{$rage}/{$maxrage}</div>";
+      }
+      elseif ($char[3] == 2 || // paladin
+              $char[3] == 3 || // hunter
+              $char[3] == 5 || // priest
+              $char[3] == 7 || // shaman
+              $char[3] == 8 || // mage
+              $char[3] == 9)   // warlock
+      {
+        $output .= "
+                  <div class=\"gradient_p\">{$lang_item['mana']}:</div>
+                  <div class=\"gradient_pp\">{$char_data[CHAR_DATA_OFFSET_MAX_MANA]}</div>";
+      }
+      $output .= "
+                </td>
+                <td>";
+
+      if (!empty($equiped_items[7][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_LEGS\" target=\"_blank\">
+                    <img src=\"{$equiped_items[7][1]}\" class=\"{$equiped_items[7][2]}\" alt=\"Legs\">
+                  </a>";
+      else
+        $output .= "
+                  <img src=\"img/Char_INV/INV_empty_legs.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+              </tr>
+              <tr>
+                <td>";
+      if (!empty($equiped_items[15][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_BACK\" target=\"_blank\">
+                    <img src=\"{$equiped_items[15][1]}\" class=\"{$equiped_items[15][2]}\" alt=\"Back\">
+                  </a>";
+      else
+        $output .= "
+                  <img src=\"img/Char_INV/INV_empty_chest_back.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td class=\"half_line\" colspan=\"2\" rowspan=\"3\" align=\"center\">
+                  <div class=\"gradient_p\">
+                    {$lang_item['strength']}:<br />
+                    {$lang_item['agility']}:<br />
+                    {$lang_item['stamina']}:<br />
+                    {$lang_item['intellect']}:<br />
+                    {$lang_item['spirit']}:<br />
+                    {$lang_item['armor']}:
+                  </div>
+                  <div class=\"gradient_pp\">
+                    {$char_data[CHAR_DATA_OFFSET_STR]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_AGI]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_STA]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_INT]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_SPI]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_ARMOR]}
+                  </div>
+                </td>
+                <td class=\"half_line\" colspan=\"2\" rowspan=\"3\" align=\"center\">
+                  <div class=\"gradient_p\">
+                    {$lang_item['res_holy']}:<br />
+                    {$lang_item['res_arcane']}:<br />
+                    {$lang_item['res_fire']}:<br />
+                    {$lang_item['res_nature']}:<br />
+                    {$lang_item['res_frost']}:<br />
+                    {$lang_item['res_shadow']}:
+                  </div>
+                  <div class=\"gradient_pp\">
+                    {$char_data[CHAR_DATA_OFFSET_RES_HOLY]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_RES_ARCANE]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_RES_FIRE]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_RES_NATURE]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_RES_FROST]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_RES_SHADOW]}
+                  </div>
+                </td>
+                <td>";
+      if (!empty($equiped_items[8][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_FEET\" target=\"_blank\">
+                    <img src=\"{$equiped_items[8][1]}\" class=\"{$equiped_items[8][2]}\" alt=\"Feet\">
+                  </a>";
+      else
+        $output .= "
+                  <img src=\"img/Char_INV/INV_empty_feet.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+              </tr>
+              <tr>
+                <td>";
+      if (!empty($equiped_items[5][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_CHEST\" target=\"_blank\">
+                    <img src=\"{$equiped_items[5][1]}\" class=\"{$equiped_items[5][2]}\" alt=\"Chest\">
+                  </a>";
+      else
+        $output .= "<img src=\"img/Char_INV/INV_empty_chest_back.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td>";
+      if (!empty($equiped_items[11][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_FINGER1\" target=\"_blank\">
+                    <img src=\"{$equiped_items[11][1]}\" class=\"{$equiped_items[11][2]}\" alt=\"Finger1\">
+                  </a>";
+      else
+        $output .= "<img src=\"img/Char_INV/INV_empty_finger.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+              </tr>
+              <tr>
+                <td>";
+      if (!empty($equiped_items[4][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_SHIRT\" target=\"_blank\">
+                    <img src=\"{$equiped_items[4][1]}\" class=\"{$equiped_items[4][2]}\" alt=\"Shirt\">
+                  </a>";
+      else
+        $output .= "<img src=\"img/Char_INV/INV_empty_shirt.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td>";
+      if (!empty($equiped_items[12][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_FINGER2\" target=\"_blank\">
+                    <img src=\"{$equiped_items[12][1]}\" class=\"{$equiped_items[12][2]}\" alt=\"Finger2\">
+                  </a>";
+      else $output .= "<img src=\"img/Char_INV/INV_empty_finger.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+              </tr>
+              <tr>
+                <td>";
+      if (!empty($equiped_items[19][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_TABARD\" target=\"_blank\">
+                    <img src=\"{$equiped_items[19][1]}\" class=\"{$equiped_items[19][2]}\" alt=\"Tabard\">
+                  </a>";
+      else $output .= "<img src=\"img/Char_INV/INV_empty_tabard.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td class=\"half_line\" colspan=\"2\" rowspan=\"2\" align=\"center\">
+                  <div class=\"gradient_p\">
+                    {$lang_char['expertise']}:<br />
+                    {$lang_char['block']}:<br />
+                    {$lang_char['dodge']}:<br />
+                    {$lang_char['parry']}:<br />";
+      if ($char[3] == 6) //death knight
+        $output .= "
+                    {$lang_char['resilience']}:";
+      $output .= "
+                  </div>
+                  <div class=\"gradient_pp\">
+                    $expertise<br />
+                    $block%<br />
+                    $dodge%<br />
+                    $parry%<br />";
+      if ($char[3] == 6) //death knight
+        $output .= "
+                    $resilience";
+      $output .= "
+                  </div>
+                </td>
+                <td class=\"half_line\" colspan=\"2\" rowspan=\"2\" align=\"center\">
+                  <div class=\"gradient_p\">
+                    {$lang_char['melee_ap']}:<br />
+                    {$lang_char['ranged_ap']}:<br />
+                    {$lang_char['crit']}:<br />
+                    {$lang_char['range_crit']}:
+                  </div>
+                  <div class=\"gradient_pp\">
+                    {$char_data[CHAR_DATA_OFFSET_AP]}<br />
+                    {$char_data[CHAR_DATA_OFFSET_RANGED_AP]}<br />
+                    $crit%<br />
+                    $range_crit%
+                  </div>
+                </td>
+                <td>";
+      if (!empty($equiped_items[13][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_TRINKET1\" target=\"_blank\">
+                    <img src=\"{$equiped_items[13][1]}\" class=\"{$equiped_items[13][2]}\" alt=\"Trinket1\">
+                  </a>";
+      else
+        $output .= "<img src=\"img/Char_INV/INV_empty_trinket.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+              </tr>
+              <tr>
+                <td>";
+      if (!empty($equiped_items[9][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_WRIST\" target=\"_blank\">
+                    <img src=\"{$equiped_items[9][1]}\" class=\"{$equiped_items[9][2]}\" alt=\"Wrist\">
+                  </a>";
+      else
+        $output .= "<img src=\"img/Char_INV/INV_empty_wrist.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td>";
+      if (!empty($equiped_items[14][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_TRINKET2\" target=\"_blank\">
+                    <img src=\"{$equiped_items[14][1]}\" class=\"{$equiped_items[14][2]}\" alt=\"Trinket2\">
+                  </a>";
+      else
+        $output .= "<img src=\"img/Char_INV/INV_empty_trinket.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td width=\"15%\">";
+      if (!empty($equiped_items[16][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_MAIN_HAND\" target=\"_blank\">
+                    <img src=\"{$equiped_items[16][1]}\" class=\"{$equiped_items[16][2]}\" alt=\"MainHand\">
+                  </a>";
+      else
+        $output .= "<img src=\"img/Char_INV/INV_empty_main_hand.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td width=\"15%\">";
+      if (!empty($equiped_items[17][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_OFF_HAND\" target=\"_blank\">
+                    <img src=\"{$equiped_items[17][1]}\" class=\"{$equiped_items[17][2]}\" alt=\"OffHand\">
+                  </a>";
+      else
+        $output .= "<img src=\"img/Char_INV/INV_empty_off_hand.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td width=\"15%\">";
+      if (!empty($equiped_items[18][1]))
+        $output .= "
+                  <a style=\"padding:2px;\" href=\"$item_datasite$EQU_RANGED\" target=\"_blank\">
+                    <img src=\"{$equiped_items[18][1]}\" class=\"{$equiped_items[18][2]}\" alt=\"Ranged\">
+                  </a>";
+      else
+        $output .= "<img src=\"img/Char_INV/INV_empty_ranged.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      $output .= "
+                </td>
+                <td width=\"15%\"></td>
+                <td></td>
+              </tr>
+            </table>
+            <br />";
+
+      if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
+      {
+        //total time played
+        $tot_time = $char[7];
+        $tot_days = (int)($tot_time/86400);
+        $tot_time = $tot_time - ($tot_days*86400);
+        $total_hours = (int)($tot_time/3600);
+        $tot_time = $tot_time - ($total_hours*3600);
+        $total_min = (int)($tot_time/60);
+
+        $output .= "
+            <table class=\"lined\" style=\"width: 580px;\">
+              <tr>
+                <td colspan=\"10\">
+                  {$lang_char['tot_paly_time']}: $tot_days {$lang_char['days']} $total_hours {$lang_char['hours']} $total_min {$lang_char['min']}
+                </td>
+              </tr>
+            </table>
+          </div>
+          <br />";
+
+        $output .= "
+          <table class=\"hidden\">
+            <tr>
+              <td>";
+        if ($user_lvl > $owner_gmlvl)
+        {
+          makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+          $output .= "
+              </td>
+              <td>";
+          makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+          $output .= "
+              </td>
+              <td>";
+        }
+        if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name)))
+        {
+          makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+          $output .= "
+              </td>
+              <td>";
+          makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
+          $output .= "
+              </td>
+              <td>";
+        }
+        makebutton($lang_global['back'], "javascript:window.history.back()",140);
+        //end of admin options
+      }
+      else
+      {
+        $output .= "
+          <table class=\"hidden\">
+            <tr>
+              <td>";
+        makebutton($lang_global['back'], "javascript:window.history.back()",200);
+      }
+      $output .= "
+              </td>
+            </tr>
+          </table>
+          <br />
+        </center>";
+    }
+    else
+      error($lang_char['no_permission']);
+  }
+  else
+    error($lang_char['no_char_found']);
+
+  $sql->close();
 }
+
 
 //########################################################################################################################
 // SHOW INV. AND BANK ITEMS
 //########################################################################################################################
-function char_inv() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
-    $user_name,$item_datasite;
+function char_inv()
+{
+  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
+    $user_name, $user_lvl, $item_datasite;
 
 if (empty($_GET['id'])) error($lang_global['empty_fields']);
 
@@ -440,6 +651,8 @@ $sql = new SQL;
 $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
 $id = $sql->quote_smart($_GET['id']);
+  if (!is_numeric($id))
+    $id = 0;
 
 $result = $sql->query("SELECT account FROM `characters` WHERE guid = $id LIMIT 1");
 
@@ -734,19 +947,24 @@ $sql->close();
 //########################################################################################################################
 // SHOW CHARACTERS QUESTS
 //########################################################################################################################
-function char_quest(){
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
-    $user_name, $quest_datasite, $language;
+function char_quest()
+{
+  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
+    $user_name, $user_lvl, $quest_datasite;
 
  if (empty($_GET['id'])) error($lang_global['empty_fields']);
 
  $sql = new SQL;
  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
- $id = $sql->quote_smart($_GET['id']);
- $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : 1;
- $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 0;
- $dir = ($dir) ? 0 : 1;
+  $id = $sql->quote_smart($_GET['id']);
+  if (!is_numeric($id))
+    $id = 0;
+
+  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 0;
+  $dir = ($dir) ? 0 : 1;
+
  $result = $sql->query("SELECT account,name,race,class FROM `characters` WHERE guid = $id LIMIT 1");
 
  if ($sql->num_rows($result)){
@@ -853,88 +1071,121 @@ function char_quest(){
 //########################################################################################################################
 // SHOW CHARACTERS ACHIEVEMENTS
 //########################################################################################################################
-function char_achievements(){
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
-    $user_name, $quest_datasite, $language;
+function char_achievements()
+{
+  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
+    $user_name, $user_lvl;
 
- if (empty($_GET['id'])) error($lang_global['empty_fields']);
+  if (empty($_GET['id']))
+    error($lang_global['empty_fields']);
 
- $sql = new SQL;
- $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sql = new SQL;
+  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
- $id = $sql->quote_smart($_GET['id']);
- $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : 1;
- $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 0;
- $dir = ($dir) ? 0 : 1;
- $result = $sql->query("SELECT account,name,race,class FROM `characters` WHERE guid = $id LIMIT 1");
+  $id = $sql->quote_smart($_GET['id']);
+  if (!is_numeric($id))
+    $id = 0;
 
- if ($sql->num_rows($result)){
-  $char = $sql->fetch_row($result);
+  $result = $sql->query("SELECT account,name,race,class FROM `characters` WHERE guid = $id LIMIT 1");
 
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
-  $owner_gmlvl  = $sql->result($result, 0, 'gmlevel');
-  $owner_name    = $sql->result($result, 0, 'username');
+  if ($sql->num_rows($result))
+  {
+    $char = $sql->fetch_row($result);
 
-  if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name)){
+    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+    $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+    $owner_gmlvl  = $sql->result($result, 0, 'gmlevel');
+    $owner_name    = $sql->result($result, 0, 'username');
 
-	$output .= "<center>
-    <div id=\"tab\">
-    <ul>
-    <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
-    <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
-    <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
-    <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
-    <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
-    <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
-    <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
-    if( get_player_class($char[3]) == 'Hunter' ) { $output .= "    <li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>"; }
-    $output .= "</ul>
-    </div>
-    <div id=\"tab_content\">
-    <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])."</font><br /><br />
+    if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
+    {
+      $output .= "
+      <center>
+        <div id=\"tab\">
+          <ul>
+            <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_inv\">{$lang_char['inventory']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_quest\">{$lang_char['quests']}</a></li>
+            <li id=\"selected\"><a href=\"char.php?id=$id&amp;action=char_achievements\">{$lang_char['achievements']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_skill\">{$lang_char['skills']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_talent\">{$lang_char['talents']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;action=char_rep\">{$lang_char['reputation']}</a></li>";
+      if (get_player_class($char[3]) == 'Hunter')
+        $output .= "
+            <li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>";
+      $output .= "
+          </ul>
+        </div>
+        <div id=\"tab_content\">
+          <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])."</font>
+          <br /><br />
+          <table class=\"lined\" style=\"width: 550px;\">
+            <tr>";
+      $output .= "
+              <th width=\"78%\">{$lang_char['achievement_title']}</th>
+              <th width=\"22%\">{$lang_char['achievement_date']}</th>
+            </tr>";
 
-    <table class=\"lined\" style=\"width: 550px;\">
-    <tr>";
-    $output .= "<th width=\"78%\">{$lang_char['achievement_title']}</th>
-      <th width=\"22%\">{$lang_char['achievement_date']}</th>";
+      $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+      $result = $sql->query("SELECT achievement,date FROM character_achievement WHERE guid =$id");
 
-    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-    $result = $sql->query("SELECT achievement,date FROM character_achievement WHERE guid =$id");
-while ($data = $sql->fetch_row($result)){
-	$output .="<tr>
-		<td align=\"left\"><a href=\"http://www.wowhead.com/?achievement=".$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a></td>
-		<td>".date("n-j-o", $data['1'])."</td>
-	</tr>";
-}
-    $output .= "</table></div><br />
-    <table class=\"hidden\">
-          <tr><td>";
-    if ($user_lvl > $owner_gmlvl){
-      makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
-  $output .= "</td><td>";
+      while ($data = $sql->fetch_row($result))
+      {
+        $output .="
+             <tr>
+               <td align=\"left\"><a href=\"http://www.wowhead.com/?achievement=".$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a></td>
+               <td>".date("n-j-o", $data['1'])."</td>
+             </tr>";
       }
-    if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name))){
-      makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
-  $output .= "</td><td>";
+      $output .= "
+           </table>
+         </div>
+       <br />
+       <table class=\"hidden\">
+         <tr>
+           <td>";
+      if ($user_lvl > $owner_gmlvl)
+      {
+        makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+        $output .= "
+           </td>
+           <td>";
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+        $output .= "
+           </td>
+           <td>";
       }
-    makebutton($lang_global['back'], "javascript:window.history.back()",140);
- $output .= "</td></tr>
-        </table><br /></center>";
+      if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name)))
+      {
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        $output .= "
+           </td>
+           <td>";
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
+        $output .= "
+           </td>
+           <td>";
+      }
+      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      $output .= "
+           </td>
+         </tr>
+       </table>
+       <br />
+     </center>";
+    }
+    else
+    {
+      $sql->close();
+        error($lang_char['no_permission']);
+    }
   }
   else
-  {
-    $sql->close();
-    error($lang_char['no_permission']);
-  }
- }
- else error($lang_char['no_char_found']);
- $sql->close();
+    error($lang_char['no_char_found']);
+
+  $sql->close();
 }
+
 
 //########################################################################################################################
 // SHOW CHAR REPUTATION

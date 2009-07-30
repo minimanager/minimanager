@@ -62,7 +62,7 @@ $characters_db = Array(
 );
 
 //---- Game Server Configuration ----
-$server_type = 0    //0=MaNGOS, 1=Trinity
+$server_type = 0;    //0=MaNGOS, 1=Trinity
 
 $server = Array(	//if more than one realm used, even if they are on same system new subarray MUST be added.
 	1 => array(		//position in array must represent realmd ID, same as in $world_db
@@ -134,7 +134,7 @@ $skill_datasite = "http://$tt_lang.wowhead.com/?spells=";
 $talent_datasite = "http://$tt_lang.wowhead.com/?spell=";
 $talent_calculator_datasite = "http://www.worldofwarcraft.com/info/classes";
 $go_datasite = "http://$tt_lang.wowhead.com/?object=";
-$get_icons_from_web = true; //wherever to get icons from the web in case they are missing in /img/INV dir.
+$get_icons_from_web = false; //wherever to get icons from the web in case they are missing in /img/INV dir.
 
 //---- Active Translations
 
