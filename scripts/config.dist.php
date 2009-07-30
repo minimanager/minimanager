@@ -211,15 +211,13 @@ $menu_array = Array(
 	  ),
 	),
 	array("#", 'invisible', array(
-	  ),
-	),
-	array("#", 'invisible', array(
 	  array("forum.php", 'forums',0,0,0,0),
 	  array("javascript:void(0);\" onclick=\"window.open('./forum.html', 'forum')", 'forums',0,0,0,0),
 	  array("char.php", 'character',0,0,0,0),
 	  array("char_edit.php", 'char_edit',1,0,0,0),
 	  array("edit.php", 'MyAccount',0,0,0,0),
 	  array("index.php", 'Startpage',0,0,0,0),
+	  array("stat_on.php", 'statistics',0,0,0,0),
 	  ),
 	),
 );

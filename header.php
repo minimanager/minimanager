@@ -105,8 +105,8 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
           <div id=\"menuwrapper\">
             <ul id=\"menubar\">";
 
-  if(!isset($menu_array[$user_lvl]))
-    error("Wrong menu_array configuration.<br />Level $user_lvl menu missing...");
+  //if(!isset($menu_array[$user_lvl]))
+  //  error("Wrong menu_array configuration.<br />Level $user_lvl menu missing...");
 
   // get file we are executing
   $array = explode ( '/', $_SERVER['PHP_SELF']);
