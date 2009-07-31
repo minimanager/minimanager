@@ -12,7 +12,6 @@
  valid_login($action_permission['read']);
  require_once("scripts/get_lib.php");
  require_once("scripts/defines.php");
- require_once("scripts/id_tab.php");
 
  global $lang_honor, $lang_global, $output, $characters_db, $realm_id, $itemperpage, $realm_db;
 

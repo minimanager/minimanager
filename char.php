@@ -9,7 +9,6 @@
  */
 require_once("header.php");
 valid_login($action_permission['read']);
-require_once("scripts/id_tab.php");
 require_once("scripts/get_lib.php");
 require_once("scripts/talents.php");
 require_once("scripts/pets.php");
@@ -1597,7 +1596,6 @@ function char_skill()
               <th align=\"right\"><a href=\"char.php?id=$id&amp;action=char_skill&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\"  /> " : "")."{$lang_char['skill_name']}</a></th>
               <th><a href=\"char.php?id=$id&amp;action=char_skill&amp;order_by=2&amp;dir=$dir\">".($order_by==2 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['skill_value']}</a></th>
             </tr>";
-      //require_once("scripts/id_tab.php");
 
       $skill_array = array();
       $class_array = array();

@@ -9,8 +9,7 @@
  */
 
 require_once("header.php");
-valid_login(0);
-require_once("scripts/id_tab.php");
+valid_login($action_permission['read']);
 require_once("scripts/get_lib.php");
 require_once("scripts/bbcode_lib.php");
 
@@ -203,8 +202,6 @@ else
 		$output .="<th width=\"5%\">{$lang_global['country']}</th>";
 	$output .= "</tr>";
 
-	require_once("scripts/id_tab.php");
-
 	while ($char = $sql->fetch_row($result))
     {
 	    $accid = $char[8];
@@ -275,7 +272,7 @@ if ($server_type)
 		$country = $sql->fetch_row($nation);
       }
 		$output .= "<tr>
-		 <td><a href=\"char.php?id=$char[0]\"><span onmousemove='toolTip(\"".get_player_user_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>".htmlentities($char[1])."</span></a></td>
+		 <td><a href=\"char.php?id=$char[0]\"><span onmousemove='toolTip(\"".get_gm_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>".htmlentities($char[1])."</span></a></td>
          <td><img src='img/c_icons/{$char[2]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		 <td>$lev</td>

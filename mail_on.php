@@ -1,7 +1,6 @@
 <?php
  
 require_once("header.php");
-require_once("scripts/id_tab.php");
 require_once("scripts/mail_lib.php");
 valid_login(0);
  

@@ -206,4 +206,5 @@ $output .= "
       <div class=\"bubble\">
         <i class=\"tr\"></i>
         <i class=\"tl\"></i>";
+
 ?>

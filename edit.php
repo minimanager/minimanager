@@ -17,7 +17,7 @@ require_once("scripts/defines.php");
 //##############################################################################################################
 function edit_user() {
  global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
-		$lang_id_tab, $gm_level_arr, $expansion_select;
+		$lang_id_tab, $expansion_select;
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
@@ -29,7 +29,6 @@ function edit_user() {
  $referred_by = $referred_by[0];
 
  if ($acc = $sql->fetch_row($result)) {
-  require_once("scripts/id_tab.php");
 
   $output .= "<center>
   <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
@@ -204,7 +203,7 @@ else
 //#############################################################################################################
 function doedit_user() {
  global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
-		$lang_id_tab, $gm_level_arr;
+		$lang_id_tab;
 
  if ( (!isset($_POST['pass'])||$_POST['pass'] === '') || (!isset($_POST['mail'])||$_POST['mail'] === '') ||(!isset($_POST['expansion'])||$_POST['expansion'] === '') )
 	redirect("edit.php?error=1");
