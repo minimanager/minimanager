@@ -35,11 +35,11 @@ function browse_tickets() {
  $all_record = $sql->result($query_1,0);
 
  if($server_type)
-   $query = $sql->query("SELECT gm_tickets.ticket_id, gm_tickets.guid,SUBSTRING_INDEX(gm_tickets.ticket_text,' ',6),
+   $query = $sql->query("SELECT gm_tickets.guid, gm_tickets.playerGuid,SUBSTRING_INDEX(gm_tickets.message_text,' ',6),
 						`characters`.name
 						FROM gm_tickets,`characters`
-						LEFT JOIN gm_tickets k1 ON k1.`guid`=`characters`.`guid`
-						WHERE gm_tickets.guid = `characters`.`guid`
+						LEFT JOIN gm_tickets k1 ON k1.`playerGuid`=`characters`.`guid`
+						WHERE gm_tickets.playerGuid = `characters`.`guid`
 						ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
  else
    $query = $sql->query("SELECT character_ticket.ticket_id, character_ticket.guid,SUBSTRING_INDEX(character_ticket.ticket_text,' ',6),
@@ -112,7 +112,7 @@ global $lang_global, $characters_db, $realm_id, $server_type;
     if ($check[$i] != "" )
     {
       if ($server_type)
-        $query = $sql->query("DELETE FROM gm_tickets WHERE ticket_id = '$check[$i]'");
+        $query = $sql->query("DELETE FROM gm_tickets WHERE guid = '$check[$i]'");
       else
         $query = $sql->query("DELETE FROM character_ticket WHERE ticket_id = '$check[$i]'");
       $deleted_tickets++;
@@ -139,11 +139,11 @@ function edit_ticket() {
 	else redirect("ticket.php?error=1");
 
  if ($server_type)
-   $query = $sql->query("SELECT gm_tickets.guid, gm_tickets.ticket_text,
+   $query = $sql->query("SELECT gm_tickets.playerGuid, gm_tickets.message text,
 						`characters`.name
 						FROM gm_tickets,`characters`
-						LEFT JOIN gm_tickets k1 ON k1.`guid`=`characters`.`guid`
-						WHERE gm_tickets.guid = `characters`.`guid` AND gm_tickets.ticket_id = '$id'");
+						LEFT JOIN gm_tickets k1 ON k1.`playerGuid`=`characters`.`guid`
+						WHERE gm_tickets.playerGuid = `characters`.`guid` AND gm_tickets.guid = '$id'");
  else
       $query = $sql->query("SELECT character_ticket.guid, character_ticket.ticket_text,
    						`characters`.name
