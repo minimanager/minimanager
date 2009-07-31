@@ -165,6 +165,8 @@ $lang_index = array(
 	'latency' => 'Latency',
 	'a_latency' => 'Average Latency',
 	'guild' => 'Guild'
+	'trinity_rev' => 'Trinity Rev',
+	'using_db' => 'using db'
 	);
 
 $lang_header = array(

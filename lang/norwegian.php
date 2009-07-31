@@ -165,7 +165,9 @@ $lang_index = array(
 	'honor_kills' => 'H.R',
 	'latency' => 'Latency',
 	'a_latency' => 'Gjennomsnittlig ventetid',
-	'guild' => 'Guild'
+	'guild' => 'Guild',
+	'trinity_rev' => 'Trinity Rev',
+	'using_db' => 'using db'
 	);
 
 $lang_header = array(
