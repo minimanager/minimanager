@@ -1,0 +1,127 @@
+/*
+ * Project Name: MiniManager for Trinity Server
+ * Date: 17.10.2006 inital version (0.0.1a)
+ * Author: SixSixNine
+ * Copyright: SixSixNine
+ * Email: *****
+ * License: GNU General Public License (GPL)
+ */
+
+.table_top {
+	width: 1045px;
+}
+
+.table_top_middle {
+	width: 460px;
+}
+#menubar a {
+	font-size: .90em;
+}
+
+/*********** MENU BAR END***********/
+
+#username {
+	font:13pt Verdana,sans-serif;
+}
+#version {
+	font:9pt Verdana,sans-serif;
+}
+
+form {
+   margin: 0px;
+}
+
+input, input.mouseover, a.button {
+   line-height:130%;
+}
+
+fieldset.half_frame{
+	width: 650px;
+}
+fieldset.tquarter_frame{
+	width: 780px;
+}
+fieldset.full_frame{
+	width: 860px;
+}
+
+
+/*****TABLES******/
+
+table.top_hidden {
+	width: 960px;
+}
+
+table.lined {
+	width: 960px;
+}
+
+table.lined tr th{	
+	font-size: 12px;
+}
+
+/*****TABLES END******/
+
+#body_main {
+    width: 1000px;
+    margin-left: -500px; /* half of the width */
+	font-size: 12px;
+}
+
+.bold {
+	font:14pt Trebuchet MS,sans-serif;
+}
+.small {
+	font-size: 9px;
+}	
+.large_bold {
+	font-size: 14px;
+	font-weight:bold;
+}
+.large {
+	font-size: 14px;
+}
+.half_line {
+	font-size: 13px;
+}
+
+.table_buttom {
+	width: 1000px;
+}
+
+table.stat_hidden {
+	width: 960px;
+}
+
+tr td.bar span.rank{
+	position: absolute;
+	width: auto;
+}
+
+/*** link tabs ***/
+
+#tab ul {
+	padding: 0px 50px;
+}
+
+#tab_content {
+	width: 900px;
+}
+
+/*** Java layer tabs ***/
+
+.jtabs a  {
+	top: -27px;
+}
+.jtab-container {
+	width: 900px;
+}
+
+/*** item tooltips***/
+.item_tooltip  td{
+	font-size: 12px;
+}
+.info_tooltip  td{
+	font-size: 12px;
+
+}
