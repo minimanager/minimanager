@@ -177,8 +177,8 @@ function browse_chars()
                 <td><img src='img/c_icons/{$char[3]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td><img src='img/c_icons/{$char[4]}.gif' onmousemove='toolTip(\"".get_player_class($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td>$lev</td>
-                <td class=\"small\">".get_map_name($char[6])."</td>
-                <td class=\"small\">".get_zone_name($char[5])."</td>
+                <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$char[6]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_map_name($char[6])."</span></td>
+                <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$char[5]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_zone_name($char[5])."</span></td>
                 <td>$char[7]</td>
                 <td class=\"small\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[12]\">$guild_name[0]</a></td>
                 <td class=\"small\">$lastseen</td>
@@ -227,8 +227,8 @@ function browse_chars()
 //########################################################################################################################
 function search()
 {
-  global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id,
-    $user_lvl, $user_name, $sql_search_limit, $showcountryflag;
+  global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
+    $user_lvl, $user_name, $start, $itemperpage, $showcountryflag;
 
   if(!isset($_GET['search_value'])) redirect("char_list.php?error=2");
 
@@ -239,7 +239,7 @@ function search()
   $search_by = (isset($_GET['search_by'])) ? $sql->quote_smart($_GET['search_by']) : "name";
   $search_menu = array("name", "guid", "account", "level", "greater_level", "guild", "race", "class", "map", "highest_rank", "greater_rank", "online", "gold", "item");
   if (!in_array($search_by, $search_menu)) $search_by = 'name';
-
+  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
   $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "guid";
   $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
   $order_dir = ($dir) ? "ASC" : "DESC";
@@ -250,7 +250,7 @@ function search()
     //need to get the acc id from other table since input comes as name
     case "account":
       $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-      $result = $sql->query("SELECT id FROM account WHERE username LIKE '%$search_value%' LIMIT $sql_search_limit");
+      $result = $sql->query("SELECT id FROM account WHERE username LIKE '%$search_value%' LIMIT $start, $itemperpage");
 
       $where_out = " account IN (0 ";
       while ($char = $sql->fetch_row($result))
@@ -265,37 +265,43 @@ function search()
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME FROM `characters`
-      WHERE $where_out ORDER BY $order_by $order_dir LIMIT $sql_search_limit";
+      WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
     break;
 
     case "level":
       if (!is_numeric($search_value)) $search_value = 1;
+      $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) = $search_value";
+      
       $sql_query = "SELECT guid,name,account,race,class,zone,map,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME FROM `characters`
-      WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) = $search_value ORDER BY $order_by $order_dir LIMIT $sql_search_limit";
+      WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
     break;
 
     case "greater_level":
       if (!is_numeric($search_value)) $search_value = 1;
+      $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) > $search_value";
+
       $sql_query = "SELECT guid,name,account,race,class,zone,map,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME FROM `characters`
-      WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) > $search_value ORDER BY 'level' $order_dir LIMIT $sql_search_limit";
+      WHERE $where_out ORDER BY 'level' $order_dir LIMIT $start, $itemperpage";
     break;
 
     case "gold":
       if (!is_numeric($search_value)) $search_value = 1;
+      $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1) > $search_value";
+
       $sql_query = "SELECT guid,name,account,race,class,zone,map,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME FROM `characters`
-      WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1) > $search_value ORDER BY $order_by $order_dir LIMIT $sql_search_limit";
+      WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
     break;
 
     case "guild":
@@ -303,6 +309,8 @@ function search()
       $result = $sql->query("SELECT guildid FROM guild WHERE name LIKE '%$search_value%'");
       $guildid = $sql->result($result, 0, 'guildid');
 
+      if (!$search_value)
+        $guildid = 0;
       $Q1 = "SELECT guid FROM guild_member WHERE guildid = ";
       $Q1 .= $guildid;
 
@@ -321,7 +329,7 @@ function search()
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME FROM `characters`
-      WHERE $where_out ORDER BY $order_by $order_dir LIMIT $sql_search_limit";
+      WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
     break;
 
     case "item":
@@ -341,42 +349,50 @@ function search()
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME FROM `characters`
-      WHERE $where_out ORDER BY $order_by $order_dir LIMIT $sql_search_limit";
+      WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
     break;
 
     case "greater_rank":
       if (!is_numeric($search_value)) $search_value = 0;
+      $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) > $search_value";
       $sql_query = "SELECT guid,name,account,race,class,zone,map,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME FROM `characters`
-      WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) > $search_value ORDER BY 'highest_rank' $order_dir LIMIT $sql_search_limit";
+      WHERE $where_out ORDER BY 'highest_rank' $order_dir LIMIT $start, $itemperpage";
     break;
 
     case "highest_rank":
       if (!is_numeric($search_value)) $search_value = 0;
+      $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) = $search_value";
+      
       $sql_query = "SELECT guid,name,account,race,class,zone,map,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME FROM `characters`
-      WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) = $search_value ORDER BY $order_by $order_dir LIMIT $sql_search_limit";
+      WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
     break;
 
     default:
+      $where_out ="$search_by LIKE '%$search_value%'";
+
       $sql_query = "SELECT guid,name,account,race,class,zone,map,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME FROM `characters`
-      WHERE $search_by LIKE '%$search_value%' ORDER BY $order_by $order_dir LIMIT $sql_search_limit";
+      WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
   }
 
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
+  $query_1 = $sql->query("SELECT count(*) FROM `characters` where $where_out");
+  $all_record = $sql->result($query_1,0);
+
   $query = $sql->query($sql_query);
-  $all_record = $sql->num_rows($query);
+  //$all_record = $sql->num_rows($query);
 
   //==========================top tage navigaion starts here========================
   $output .="
@@ -416,6 +432,10 @@ function search()
               <td>";
                 makebutton($lang_global['search'], "javascript:do_submit()",100);
  $output .= "
+              </td>
+                            <td align=\"right\" width=\"30%\">";
+			    $output .= generate_pagination("char_list.php?action=search&amp;error=3&amp;search_value=$search_value&amp;search_by=$search_by&amp;order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
+			    $output .= "
               </td>
             </tr>
           </table>";
@@ -500,8 +520,8 @@ function search()
                 <td><img src='img/c_icons/{$char[3]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td><img src='img/c_icons/{$char[4]}.gif' onmousemove='toolTip(\"".get_player_class($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td>$lev</td>
-                <td>".get_map_name($char[6])."</td>
-                <td>".get_zone_name($char[5])."</td>
+                <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$char[6]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_map_name($char[6])."</span></td>
+                <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$char[5]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_zone_name($char[5])."</span></td>
                 <td>$char[7]</td>
                 <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[9]\">$guild_name[0]</a></td>
                 <td class=\"small\">$lastseen</td>
@@ -534,7 +554,7 @@ function search()
                   makebutton($lang_char_list['del_selected_chars'], "javascript:do_submit('form1',0)",220);
   $output .= "
                 </td>
-                <td colspan=\"6\" align=\"right\" class=\"hidden\">{$lang_char_list['tot_found']} : $all_record : {$lang_global['limit']} $sql_search_limit</td>
+                <td colspan=\"6\" align=\"right\" class=\"hidden\">{$lang_char_list['tot_found']} : $all_record : {$lang_global['limit']} $start, $itemperpage</td>
               </tr>
             </table>
           </form>
