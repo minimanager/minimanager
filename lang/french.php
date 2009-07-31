@@ -3902,6 +3902,7 @@ $lang_id_tab = array(
 	'CHAR_AURA_TRUESHOT_AURA_RANK_2' => 'Aura de précision Rang 2',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_3' => 'Aura de précision Rang 3',
 	'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Aura de précision Rang 4',
+	'unknown' => 'Unknown'
 	);
 
 $lang_arenateam = array(
