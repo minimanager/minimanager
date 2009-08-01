@@ -228,7 +228,7 @@ $tab_backup_user_characters_trinity = Array(
     Array("character_social","friend"),
     Array("character_spell","guid"),
     Array("character_spell_cooldown","guid"),
-    Array("gm_tickets","guid"),
+    Array("gm_tickets","playerGuid"),
     Array("corpse","player"),
     Array("groups","leaderGuid"),
     Array("group_member","memberGuid"),

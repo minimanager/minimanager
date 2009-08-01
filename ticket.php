@@ -214,7 +214,7 @@ function do_edit_ticket() {
  $id = $sql->quote_smart($_POST['id']);
 
  if ($server_type)
-  $query = $sql->query("UPDATE gm_tickets SET ticket_text='$new_text' WHERE guid = '$id'");
+  $query = $sql->query("UPDATE gm_tickets SET message='$new_text' WHERE guid = '$id'");
  else
   $query = $sql->query("UPDATE character_ticket SET ticket_text='$new_text' WHERE ticket_id = '$id'");
 
