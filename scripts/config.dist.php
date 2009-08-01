@@ -69,6 +69,7 @@ $world_db = Array
     'pass'     => "1",              // SQL server pass this DB located on
     'name'     => "mangos",         // World Database name, by default "mangos" for MaNGOS, "world" for Trinity
     'encoding' => "utf8"            // SQL connection encoding
+  ),
 );
 
 $characters_db = Array
