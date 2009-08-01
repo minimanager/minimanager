@@ -91,9 +91,17 @@ $sql = new SQL;
 	$output .= "<td>$realm[1]</td>";
 		if (test_port($server[$realm[0]]['addr'],$server[$realm[0]]['game_port']))  $output .= "<td><img src=\"img/up.gif\" alt=\"\" /></td>";
 			else $output .= "<td><img src=\"img/down.gif\" alt=\"\" /></td>";
-	} else $output .= "<td><a href=\"realm.php?action=edit_realm&amp;id=$realm[0]\">$realm[1] (Not Configured yet)</a></td>
-					   <td>***</td>";
-
+	}
+	else
+	{  
+	  $output .= "<td>";
+	  if($user_lvl >= $action_permission['update'])
+	    $output .= "<a href=\"realm.php?action=edit_realm&amp;id=$realm[0]\">$realm[1] (Not Configured yet)</a>";
+	  else
+	    $output .="$realm[1] (Not Configured yet)";
+	 $output .="</td><td>***</td>";
+	}
+	 
   $output .= "<td>$realm[7]</td>
 				<td>$realm[2]</td>
 				<td>$realm[3]</td>

@@ -233,10 +233,15 @@ function view_team() {
 
  $total_members = $sql->num_rows($members);
  $losses_week = $arenateamstats_data[2]-$arenateamstats_data[3];
- $winperc_week = round((10000 * $arenateamstats_data[3]) / $arenateamstats_data[2]) / 100;
+ if($arenateamstats_data[2])
+   $winperc_week = round((10000 * $arenateamstats_data[3]) / $arenateamstats_data[2]) / 100;
+ else
+   $winperc_week = $arenateamstats_data[2];
  $losses_season = $arenateamstats_data[4]-$arenateamstats_data[5];
- $winperc_season = round((10000 * $arenateamstats_data[5]) / $arenateamstats_data[4]) / 100;
-
+ if($arenateamstats_data[4])
+   $winperc_season = round((10000 * $arenateamstats_data[5]) / $arenateamstats_data[4]) / 100;
+ else
+   $winperc_season = $arenateamstats_data[4];
 $output .= "<script type=\"text/javascript\">
 	answerbox.btn_ok='{$lang_global['yes_low']}';
 	answerbox.btn_cancel='{$lang_global['no']}';
@@ -321,8 +326,14 @@ $output .= "<script type=\"text/javascript\">
 		if ($user_lvl > 2){
 		$output .= " <td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$member[1]}</font><br />{$lang_global['are_you_sure']}', 'arenateam.php?action=rem_char_from_team&amp;id=$member[0]&amp;arenateam_id=$arenateam_id');\" style=\"cursor:pointer;\" /></td>";
 		}
-		$ww_pct = round((10000 * $member[5]) / $member[4]) / 100;
-		$ws_pct = round((10000 * $member[7]) / $member[6]) / 100;
+		if($member[4])
+		  $ww_pct = round((10000 * $member[5]) / $member[4]) / 100;
+		else
+		  $ww_pct = $member[4];
+		if($member[6])
+		  $ws_pct = round((10000 * $member[7]) / $member[6]) / 100;
+		else
+		  $ws_pct = $member[6];
 		$output .= " <td><a href=\"char.php?id=$member[0]\">".htmlentities($member[1])."</a></td>
  		<td><img src='img/c_icons/{$online[0]}-{$online[6]}.gif' onmousemove='toolTip(\"".get_player_race($online[0])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
  		<td><img src='img/c_icons/{$online[1]}.gif' onmousemove='toolTip(\"".get_player_class($online[1])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>

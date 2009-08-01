@@ -21,7 +21,7 @@ $result = $sql->query("SELECT guid, name, race, class, account, totaltime, onlin
 		CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
 		mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender,
 		CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1) AS UNSIGNED) as money
-		FROM `characters` $order_side ORDER BY $order_by $order_dir LIMIT 100");
+		FROM `characters` ORDER BY $order_by $order_dir LIMIT 100");
 
  $total_found = $sql->num_rows($result);
 

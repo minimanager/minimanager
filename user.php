@@ -771,7 +771,7 @@ function edit_user() {
         <td>{$lang_user['email']}</td>";
       if($user_lvl >= $action_permission['update']) { $output .="
         <td><input type=\"text\" name=\"mail\" size=\"43\" maxlength=\"225\"value=\"$data[3]\" /></td>"; }
-      else $output.="<td>$data[3]</td>";
+      else $output.="<td>***@***</td>";
    $output .= "
       </tr>
       <tr>
@@ -830,7 +830,11 @@ function edit_user() {
         <td>{$lang_user['banned_reason']}</td>";
       if($user_lvl >= $action_permission['update']) { $output .="
 	    <td><input type=\"text\" name=\"banreason\" size=\"43\" maxlength=\"255\" value=\"$banned[3]\" /></td>";}
-      else $output .= "<td>$banned[3]</td>";
+      else
+        if($ban_checked)
+          $output .= "<td>$banned[3]</td>";
+        else
+          $output .= "<td></td>";
       if ($expansion_select)
       {  $output .="</tr><tr>";
         if($user_lvl >= $action_permission['update'])

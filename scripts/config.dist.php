@@ -246,7 +246,7 @@ $menu_array = Array
     array("user.php", 'accounts',0,5,5,5),           // new security system implemented
     array("char_list.php", 'characters',0,5,5,5),    // new security system implemented
     array("command.php", 'command',0,5,5,5),         // has own level security, but has yet to honor the new security system.
-    array("banned.php", 'banned_list',5,5,5,5),      // new security system implemented
+    array("banned.php", 'banned_list',0,5,5,5),      // new security system implemented
     array("mail.php", 'mail',0,5,5,5),               // new security system implemented
     array("ticket.php", 'tickets',5,5,5,5),          // this page has yet to honor the new security system, please use with caution.
     array("tele.php", 'teleports',0,5,5,5),          // new security system implemented
