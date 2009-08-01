@@ -15,8 +15,8 @@ valid_login($action_permission['read']);
 // BROWSE TELEPORT LOCATIONS
 //########################################################################################################################
 function browse_tele() {
- global $lang_tele, $lang_global, $output, $world_db, $realm_id, $itemperpage;
-
+ global $lang_tele, $lang_global, $output, $world_db, $realm_id, $itemperpage, $action_permission, $user_lvl;
+valid_login($action_permission['read']);
  $sql = new SQL;
  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  
@@ -39,6 +39,7 @@ function browse_tele() {
           <tr><td width=\"80%\">
 			<table class=\"hidden\"> 
 				<tr><td>";
+				if($user_lvl >= $action_permission['insert'])
 		makebutton($lang_tele['add_new'], "tele.php?action=add_tele",80);
  $output .="<form action=\"tele.php\" method=\"get\" name=\"form\">
 	   <input type=\"hidden\" name=\"action\" value=\"search\" />
@@ -63,9 +64,10 @@ function browse_tele() {
 	var del_tele = 'tele.php?action=del_tele&amp;order_by=$order_by&amp;start=$start&amp;dir=$dir&amp;id=';
  </script>
  <table class=\"lined\">
-   <tr>
-	<th width=\"5%\">{$lang_global['delete_short']}</th>
-	<th width=\"5%\"><a href=\"tele.php?order_by=id&amp;start=$start&amp;dir=$dir\"".($order_by=='id' ? " class=\"$order_dir\"" : "").">{$lang_tele['id']}</a></th>
+   <tr>";
+   if($user_lvl >= $action_permission['delete'])
+   $output .= "<th width=\"5%\">{$lang_global['delete_short']}</th>";
+	$output .= "<th width=\"5%\"><a href=\"tele.php?order_by=id&amp;start=$start&amp;dir=$dir\"".($order_by=='id' ? " class=\"$order_dir\"" : "").">{$lang_tele['id']}</a></th>
 	<th width=\"28%\"><a href=\"tele.php?order_by=name&amp;start=$start&amp;dir=$dir\"".($order_by=='name' ? " class=\"$order_dir\"" : "").">{$lang_tele['name']}</a></th>
 	<th width=\"22%\><a href=\"tele.php?order_by=map&amp;start=$start&amp;dir=$dir\"".($order_by=='map' ? " class=\"$order_dir\"" : "").">{$lang_tele['map']}</a></th>
 	<th width=\"9%\"><a href=\"tele.php?order_by=position_x&amp;start=$start&amp;dir=$dir\"".($order_by=='position_x' ? " class=\"$order_dir\"" : "").">{$lang_tele['x']}</a></th>
@@ -75,11 +77,17 @@ function browse_tele() {
    </tr>";
 
 while ($data = $sql->fetch_row($query)){
-   	$output .= "<tr>
-			<td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$data[1]}</font> <br /> ' + question, del_tele + $data[0]);\" style=\"cursor:pointer;\" /></td>
-			<td>$data[0]</td>
-			<td><a href=\"tele.php?action=edit_tele&amp;id=$data[0]\">$data[1]</a></td>
-			<td>".get_map_name($data[2])." ($data[2])</td>
+   	$output .= "<tr>";
+   	if($user_lvl >= $action_permission['delete'])
+   $output .= "
+			<td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$data[1]}</font> <br /> ' + question, del_tele + $data[0]);\" style=\"cursor:pointer;\" /></td>";
+			$output .= "
+			<td>$data[0]</td>	<td>";
+			if($user_lvl >= $action_permission['update'])
+			$output .="<a href=\"tele.php?action=edit_tele&amp;id=$data[0]\">$data[1]</a>";
+			else
+			$output .="$data[1]";
+			$output .="</td><td>".get_map_name($data[2])." ($data[2])</td>
 			<td>$data[3]</td>
 			<td>$data[4]</td>
 			<td>$data[5]</td>
@@ -98,8 +106,8 @@ while ($data = $sql->fetch_row($query)){
 //  SEARCH
 //########################################################################################################################
 function search() {
- global $lang_tele, $lang_global, $output, $world_db, $realm_id, $sql_search_limit;
-
+ global $lang_tele, $lang_global, $output, $world_db, $realm_id, $sql_search_limit, $action_permission, $user_lvl;
+valid_login($action_permission['read']);
  if(empty($_GET['search_value']) || empty($_GET['search_by'])) redirect("guild.php?error=2");
 
  $sql = new SQL;
@@ -126,6 +134,7 @@ function search() {
 		 </script>
 		 <center><table class=\"top_hidden\">
 			<tr><td>";
+			if($user_lvl >= $action_permission['update'])
 			makebutton($lang_tele['add_new'], "tele.php?action=add_tele",90);
  $output .="<form action=\"tele.php\" method=\"get\" name=\"form\">
 	   <input type=\"hidden\" name=\"action\" value=\"search\" />
@@ -142,9 +151,10 @@ $output .= "</td></tr></table>";
 //==========================top tage navigaion ENDS here ========================
 
  $output .= "<table class=\"lined\">
-   <tr>
-	<th width=\"5%\">{$lang_global['delete_short']}</th>
-	<th width=\"5%\"><a href=\"tele.php?action=search&amp;error=4&amp;order_by=id&amp;search_by=$search_by&amp;search_value=$search_value&amp;dir=$dir\"".($order_by=='id' ? " class=\"$order_dir\"" : "").">{$lang_tele['id']}</a></th>
+   <tr>";
+   if($user_lvl >= $action_permission['delete'])
+   $output .= "<th width=\"5%\">{$lang_global['delete_short']}</th>";
+	$output .= "<th width=\"5%\"><a href=\"tele.php?action=search&amp;error=4&amp;order_by=id&amp;search_by=$search_by&amp;search_value=$search_value&amp;dir=$dir\"".($order_by=='id' ? " class=\"$order_dir\"" : "").">{$lang_tele['id']}</a></th>
 	<th width=\"28%\"><a href=\"tele.php?action=search&amp;error=4&amp;order_by=name&amp;search_by=$search_by&amp;search_value=$search_value&amp;dir=$dir\"".($order_by=='name' ? " class=\"$order_dir\"" : "").">{$lang_tele['name']}</a></th>
 	<th width=\"22%\"><a href=\"tele.php?action=search&amp;error=4&amp;order_by=map&amp;search_by=$search_by&amp;search_value=$search_value&amp;dir=$dir\"".($order_by=='map' ? " class=\"$order_dir\"" : "").">{$lang_tele['map']}</a></th>
 	<th width=\"9%\"><a href=\"tele.php?action=search&amp;error=4&amp;order_by=position_x&amp;search_by=$search_by&amp;search_value=$search_value&amp;dir=$dir\"".($order_by=='position_x' ? " class=\"$order_dir\"" : "").">{$lang_tele['x']}</a></th>
@@ -154,11 +164,16 @@ $output .= "</td></tr></table>";
    </tr>";
 
 while ($data = $sql->fetch_row($query)){
-   	$output .= "<tr>
-		<td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$data[1]}</font> <br /> ' + question, del_tele + $data[0]);\" style=\"cursor:pointer;\" /></td>
-		<td>$data[0]</td>
-		<td><a href=\"tele.php?action=edit_tele&amp;id=$data[0]\">$data[1]</a></td>
-		<td>".get_map_name($data[2])." ($data[2])</td>
+   	$output .= "<tr>";
+   	if($user_lvl >= $action_permission['delete'])
+   $output .= "<td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$data[1]}</font> <br /> ' + question, del_tele + $data[0]);\" style=\"cursor:pointer;\" /></td>";
+   $output .= "
+		<td>$data[0]</td><td>";
+		if($user_lvl >= $action_permission['update'])
+		$output .="<a href=\"tele.php?action=edit_tele&amp;id=$data[0]\">$data[1]</a>";
+		else
+		$output .="$data[1]";
+		$output .="</td><td>".get_map_name($data[2])." ($data[2])</td>
 		<td>$data[3]</td>
 		<td>$data[4]</td>
 		<td>$data[5]</td>
@@ -179,7 +194,8 @@ while ($data = $sql->fetch_row($query)){
 // DO DELETE TELE FROM LIST
 //########################################################################################################################
 function del_tele() {
- global $world_db, $realm_id;
+ global $world_db, $realm_id, $action_permission;
+valid_login($action_permission['delete']);
 
  $sql = new SQL;
  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
@@ -208,8 +224,8 @@ function del_tele() {
 //  EDIT   TELE
 //########################################################################################################################
 function edit_tele() {
- global  $lang_tele, $lang_global, $output, $world_db, $realm_id, $map_id;
-
+ global  $lang_tele, $lang_global, $output, $world_db, $realm_id, $map_id, $action_permission, $user_lvl;
+valid_login($action_permission['update']);
  $sql = new SQL;
  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
  
@@ -267,6 +283,7 @@ function edit_tele() {
         <td><input type=\"text\" name=\"new_orientation\" size=\"42\" maxlength=\"36\" value=\"$tele[6]\" /></td>
       </tr>
       <tr><td>";
+   	if($user_lvl >= $action_permission['delete'])
 			makebutton($lang_tele['delete_tele'], "#\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$tele[1]}</font> <br /> {$lang_global['are_you_sure']}', 'tele.php?action=del_tele&amp;id=$id');\" type=\"wrn",148);
 $output .= "</td><td>
 		<table class=\"hidden\">
@@ -288,8 +305,8 @@ $output .= "</td></tr>
 //  DO EDIT TELE LOCATION
 //########################################################################################################################
 function do_edit_tele() {
- global $world_db, $realm_id;
-
+ global $world_db, $realm_id, $action_permission;
+valid_login($action_permission['update']);
  if( empty($_GET['id']) || !isset($_GET['new_name']) || !isset($_GET['new_map']) || !isset($_GET['new_x'])
  || !isset($_GET['new_y'])|| !isset($_GET['new_z'])|| !isset($_GET['new_orientation']))
   redirect("tele.php?error=1");
@@ -321,8 +338,8 @@ function do_edit_tele() {
 //  ADD NEW TELE
 //########################################################################################################################
 function add_tele() {
- global  $output, $lang_tele, $lang_global, $map_id;
-
+ global  $output, $lang_tele, $lang_global, $map_id, $action_permission;
+valid_login($action_permission['insert']);
 	$output .= "<center>
 	<fieldset class=\"half_frame\">
 	<legend>{$lang_tele['add_new_tele']}</legend>
@@ -373,8 +390,8 @@ $output .= "</td></tr>
 //  DO ADD  TELE LOCATION
 //########################################################################################################################
 function do_add_tele() {
- global $world_db, $realm_id;
-
+ global $world_db, $realm_id, $action_permission;
+valid_login($action_permission['insert']);
  if( !isset($_GET['name']) || !isset($_GET['map']) || !isset($_GET['x'])
  || !isset($_GET['y'])|| !isset($_GET['z'])|| !isset($_GET['orientation']))
   redirect("tele.php?error=1");

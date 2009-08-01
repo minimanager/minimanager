@@ -15,14 +15,15 @@ valid_login($action_permission['read']);
 // PRINT REPAIR/OPTIMIZE FORM
 //##############################################################################################
 function repair_form(){
- global $lang_global, $lang_repair, $output, $realm_db, $realm_id, $world_db, $characters_db;
+ global $lang_global, $lang_repair, $output, $realm_db, $realm_id, $world_db, $characters_db, $action_permission, $user_lvl;
 
  $output .= "<center>
 		<fieldset class=\"tquarter_frame\">
-		<legend>{$lang_repair['repair_optimize']}</legend>
-		<form action=\"repair.php?action=do_repair\" method=\"post\" name=\"form\">
-		  <table class=\"hidden\">";
- $output .= "<tr><td>
+		<legend>{$lang_repair['repair_optimize']}</legend>";
+		if($user_lvl >= $action_permission['update'])
+		{
+		$output .= "		<form action=\"repair.php?action=do_repair\" method=\"post\" name=\"form\">
+		  <table class=\"hidden\"><tr><td>
 	   <select name=\"repair_action\">
 		<option value=\"REPAIR\">{$lang_repair['repair']}</option>
 		<option value=\"OPTIMIZE\">{$lang_repair['optimize']}</option>
@@ -32,6 +33,7 @@ function repair_form(){
 		makebutton($lang_global['back'], "javascript:window.history.back()",100);
  $output .= "</td></tr>
         </table><p>{$lang_repair['select_tables']}</p>";
+        }
  $output .="<script type=\"text/javascript\" src=\"js/check.js\"></script>";
 
  $sql = new SQL;
@@ -40,8 +42,11 @@ function repair_form(){
  $result = $sql->query("SHOW TABLES FROM {$realm_db['name']}");
 
  $output .= "<table class=\"lined\" style=\"width: 550px;\">
-			<tr>
-				<th width=\"5%\"><input name=\"allbox\" type=\"checkbox\" value=\"Check All\" onclick=\"CheckAll(document.form);\" /></th>
+			<tr>";
+	if($user_lvl >= $action_permission['update'])
+		$output .= " 
+				<th width=\"5%\"><input name=\"allbox\" type=\"checkbox\" value=\"Check All\" onclick=\"CheckAll(document.form);\" /></th>";
+	$output .= "
 				<th width=\"25%\">{$lang_repair['table_name']}</th>
 				<th width=\"35%\">{$lang_repair['status']}</th>
 				<th width=\"15%\">{$lang_repair['num_records']}</th>
@@ -52,9 +57,10 @@ function repair_form(){
 	$result1 = $sql->query("SELECT count(*) FROM `$table[0]`");
 	$result2 = $sql->query("CHECK TABLE `$table[0]` CHANGED");
 
-	$output .= "<tr>
-   		    <td><input type=\"checkbox\" name=\"check[]\" value=\"realm~0~{$realm_db['name']}~$table[0]\" onclick=\"CheckCheckAll(document.form);\" /></td>
-   		    <td>$table[0]</td>
+	$output .= "<tr>";
+	if($user_lvl >= $action_permission['update'])
+		$output .= " <td><input type=\"checkbox\" name=\"check[]\" value=\"realm~0~{$realm_db['name']}~$table[0]\" onclick=\"CheckCheckAll(document.form);\" /></td>";
+	$output .= "   <td>$table[0]</td>
 			<td>".$sql->result($result2, 0, 'Msg_type')." : ".$sql->result($result2, 0, 'Msg_text')."</td>
 			<td>".$sql->result($result1, 0)."</td>
             </tr>";
@@ -70,9 +76,10 @@ function repair_form(){
 	$result1 = $sql->query("SELECT count(*) FROM `$table[0]`");
 	$result2 = $sql->query("CHECK TABLE `$table[0]` CHANGED");
 
-	$output .= "<tr>
-   		    <td><input type=\"checkbox\" name=\"check[]\" value=\"world~{$db['id']}~{$db['name']}~$table[0]\" onclick=\"CheckCheckAll(document.form);\" /></td>
-   		    <td>$table[0]</td>
+	$output .= "<tr>";
+	if($user_lvl >= $action_permission['update'])
+		 $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"world~{$db['id']}~{$db['name']}~$table[0]\" onclick=\"CheckCheckAll(document.form);\" /></td>";
+   		   $output .= " <td>$table[0]</td>
 			<td>".$sql->result($result2, 0, 'Msg_type')." : ".$sql->result($result2, 0, 'Msg_text')."</td>
 			<td>".$sql->result($result1, 0)."</td>
             </tr>";
@@ -91,8 +98,11 @@ foreach ($characters_db as $db){
 	$result1 = $sql->query("SELECT count(*) FROM `$table[0]`");
 	$result2 = $sql->query("CHECK TABLE `$table[0]` CHANGED");
 
-	$output .= "<tr>
-   		    <td><input type=\"checkbox\" name=\"check[]\" value=\"world~{$db['id']}~{$db['name']}~$table[0]\" onclick=\"CheckCheckAll(document.form);\" /></td>
+	$output .= "<tr>";
+	if($user_lvl >= $action_permission['update'])
+		 $output .= "
+   		    <td><input type=\"checkbox\" name=\"check[]\" value=\"world~{$db['id']}~{$db['name']}~$table[0]\" onclick=\"CheckCheckAll(document.form);\" /></td>";
+   		   $output .= "
    		    <td>$table[0]</td>
 			<td>".$sql->result($result2, 0, 'Msg_type')." : ".$sql->result($result2, 0, 'Msg_text')."</td>
 			<td>".$sql->result($result1, 0)."</td>
@@ -108,8 +118,8 @@ foreach ($characters_db as $db){
 // EXECUTE TABLE REPAIR OR OPTIMIZATION
 //##############################################################################################
 function do_repair(){
- global $lang_global, $output, $realm_db, $world_db, $characters_db, $server_type;
-
+ global $lang_global, $output, $realm_db, $world_db, $characters_db, $server_type,  $action_permission;
+valid_login($action_permission['update']);
  if ((!isset($_POST['repair_action']) && $_POST['repair_action'] === '') || (!isset($_POST['check'])) ) {
    redirect("repair.php?error=1");
  } else {

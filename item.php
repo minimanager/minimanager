@@ -84,7 +84,8 @@ function output_dmgtype_options($dmg_type_offset){
 //  PRINT  ITEM SEARCH FORM
 //########################################################################################################################
 function search() {
- global $lang_global, $lang_item, $lang_item_edit, $lang_id_tab, $output, $world_db, $realm_id, $itemset_id;
+ global $lang_global, $lang_item, $lang_item_edit, $lang_id_tab, $output, $world_db, $realm_id, $itemset_id, $action_permission, $user_lvl;
+valid_login($action_permission['read']);
 
  $sql = new SQL;
  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
@@ -213,6 +214,7 @@ $output .= "</select></td>
 	<tr>
 		<td></td>
 		<td colspan=\"2\">";
+		if($user_lvl >= $action_permission['update'])
 			makebutton($lang_item_edit['add_new_item'], "item.php?action=add_new&error=3",200);
  $output .= "</td>
 		<td colspan=\"4\">{$lang_item_edit['tot_items_in_db']}: $tot_items</td>
@@ -227,7 +229,8 @@ $output .= "</select></td>
 // SHOW SEARCH RESULTS
 //########################################################################################################################
 function do_search() {
- global $lang_global, $lang_item, $lang_item_edit, $output, $world_db, $realm_id, $item_datasite, $sql_search_limit;
+ global $lang_global, $lang_item, $lang_item_edit, $output, $world_db, $realm_id, $item_datasite, $sql_search_limit, $action_permission, $user_lvl;
+ valid_login($action_permission['read']);
  $deplang = get_lang_id();
  if(($_POST['class'] == "-1")&&($_POST['Quality'] == "-1")&&($_POST['InventoryType'] == "-1")&&($_POST['bonding'] == "-1")
 	&&(!isset($_POST['entry'])||$_POST['entry'] === '')&&(!isset($_POST['name'])||$_POST['name'] === '')&&(!isset($_POST['displayid'])||$_POST['displayid'] === '')&&(!isset($_POST['RequiredLevel'])||$_POST['RequiredLevel'] === '')
@@ -309,7 +312,12 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
 				<td>";
   $output .= maketooltip("<img src=\"".get_icon($item[0])."\" class=\"icon_border\" alt=\"\" />", "$item_datasite$item[0]", "$tooltip", "item_tooltip", "target=\"_blank\"");
   $output .="</td>
-				<td><a href=\"item.php?action=edit&amp;entry=$item[0]&amp;error=4\">".htmlentities($item[2])."</a></td>
+				<td>";
+				if($user_lvl >= $action_permission['update'])
+				$output .="<a href=\"item.php?action=edit&amp;entry=$item[0]&amp;error=4\">".htmlentities($item[2])."</a>";
+				else
+				$output .=htmlentities($item[2]);
+				$output .="</td>
 				<td>$item[3]</td>
 				<td>$item[4]</td>
 			</tr>";
@@ -324,7 +332,8 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
 // ADD NEW ITEM
 //########################################################################################################################
 function add_new() {
- global $lang_global, $lang_item, $lang_id_tab, $lang_item_edit, $output, $item_datasite;
+ global $lang_global, $lang_item, $lang_id_tab, $lang_item_edit, $output, $item_datasite, $action_permission, $user_lvl;
+valid_login($action_permission['update']);
 
  $output .= "<script type=\"text/javascript\" src=\"js/tab.js\"></script>
 	 <center>
@@ -1153,7 +1162,8 @@ $output .= "<div id=\"pane7\">
 //########################################################################################################################
 function edit() {
  global $lang_global, $lang_item_templ, $lang_item, $lang_item_edit, $output, $world_db, $realm_id,
-		$item_datasite, $lang_id_tab, $quest_datasite;
+		$item_datasite, $lang_id_tab, $quest_datasite, $action_permission, $user_lvl;
+valid_login($action_permission['update']);
 
  if (!isset($_GET['entry'])) redirect("item.php?error=1");
 
@@ -2123,7 +2133,12 @@ $output .= "<div id=\"pane8\">
  while ($info = $sql->fetch_row($result2)){
 	$result3 = $sql->query("SELECT creature_template.entry,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,maxlevel FROM creature_template LEFT JOIN locales_creature ON creature_template.entry = locales_creature.entry WHERE lootid = {$info[0]} LIMIT 1");
 	while ($mob = $sql->fetch_row($result3)){
-		$output .= "<tr><td><a class=\"tooltip\" href=\"creature.php?action=edit&amp;entry=$mob[0]&amp;error=4\" target=\"_blank\">$mob[1]</a></td>
+		$output .= "<tr><td>";
+		if($user_lvl >= $action_permission['update'])
+		$output .="<a class=\"tooltip\" href=\"creature.php?action=edit&amp;entry=$mob[0]&amp;error=4\" target=\"_blank\">$mob[1]</a>";
+		else
+		$output .="$mob[1]";
+		$output .="</td>
 					<td>$mob[2]</td>
 					<td>$info[1]%</td>
 					<td>$info[2]%</td></tr>";
@@ -2135,7 +2150,12 @@ $result2 = $sql->query("SELECT creature_template.entry,IFNULL(".($deplang<>0?"na
 	$output .= "<tr class=\"large_bold\"><td colspan=\"4\" class=\"hidden\" align=\"left\">{$lang_item_edit['soled_by']}: {$lang_item_edit['limit_x']}</td></tr>";
 	while ($mob = $sql->fetch_row($result2)){
 		$output .= "<tr><td width=\"20%\">$mob[2]</td>
-				<td width=\"80%\" colspan=\"3\" align=\"left\"><a class=\"tooltip\" href=\"creature.php?action=edit&amp;entry=$mob[0]&amp;error=4\" target=\"_blank\">$mob[1]</a></td></tr>";
+				<td width=\"80%\" colspan=\"3\" align=\"left\">";
+				if($user_lvl >= $action_permission['delete'])
+				$output .="<a class=\"tooltip\" href=\"creature.php?action=edit&amp;entry=$mob[0]&amp;error=4\" target=\"_blank\">$mob[1]</a>";
+				else
+				$output .="$mob[1]";
+				$output .="</td></tr>";
 		}
 }
 
@@ -2229,6 +2249,7 @@ $output .= "</div>
  $output .= "<table class=\"hidden\">
           <tr><td>";
 			 makebutton($lang_item_edit['update'], "javascript:do_submit('form1',0)",180);
+	    if($user_lvl >= $action_permission['delete'])
 			 makebutton($lang_item_edit['del_item'], "item.php?action=delete&amp;entry=$entry",180);
 			 makebutton($lang_item_edit['export_sql'], "javascript:do_submit('form1',1)",180);
 			 makebutton($lang_item_edit['search_items'], "item.php",180);
@@ -2249,7 +2270,8 @@ $output .= "</div>
 //DO UPDATE ITEM
 //########################################################################################################################
 function do_update() {
- global $world_db, $realm_id;
+ global $world_db, $realm_id, $action_permission, $user_lvl;
+valid_login($action_permission['update']);
 
  if (!isset($_POST['type']) || $_POST['type'] === '') redirect("item.php?error=1");
  if (!isset($_POST['entry']) || $_POST['entry'] === '') redirect("item.php?error=1");
@@ -2776,7 +2798,8 @@ function do_update() {
 //  DELETE ITEM
 //#######################################################################################################
 function delete() {
-global $lang_global, $lang_item_edit, $output;
+global $lang_global, $lang_item_edit, $output, $action_permission, $user_lvl;
+valid_login($action_permission['delete']);
  if(isset($_GET['entry'])) $entry = $_GET['entry'];
 	else redirect("item.php?error=1");
 
@@ -2798,7 +2821,8 @@ global $lang_global, $lang_item_edit, $output;
 //  DO DELETE ITEM
 //########################################################################################################################
 function do_delete() {
- global $world_db, $realm_id;
+ global $world_db, $realm_id, $action_permission, $user_lvl;
+valid_login($action_permission['delete']);
 
  if(isset($_GET['entry'])) $entry = $_GET['entry'];
 	else redirect("item.php?error=1");

@@ -42,9 +42,10 @@ $timezone_type = Array(
 // SHOW REALMS
 //####################################################################################################
 function show_realm() {
- global $lang_global, $lang_realm, $output, $realm_db, $user_name, $server, $realm_id, $icon_type, $timezone_type;
+ global $lang_global, $lang_realm, $output, $realm_db, $user_name, $server, $realm_id, $icon_type, $timezone_type, $action_permission, $user_lvl;
+valid_login($action_permission['read']);
 
- $sql = new SQL;
+$sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "name";
@@ -59,15 +60,18 @@ function show_realm() {
 
  $output .= "<center><table class=\"top_hidden\">
        <tr><td>";
+       if($user_lvl >= $action_permission['insert'])
 		makebutton($lang_realm['add_realm'], "realm.php?action=add_realm",135);
 		makebutton($lang_global['back'], "javascript:window.history.back()",135);
  $output .= "</td>
      <td align=\"right\">{$lang_realm['tot_realms']} : $total_realms</td></tr>
    </table>
    <table class=\"lined\">
-   <tr> 
-	<th width=\"5%\">{$lang_global['delete_short']}</th>
-	<th width=\"40%\"><a href=\"realm.php?order_by=name&amp;dir=$dir\"".($order_by=='name' ? " class=\"$order_dir\"" : "").">{$lang_realm['name']}</a></th>
+   <tr>";
+   if($user_lvl >= $action_permission['delete'])
+   $output .="
+	<th width=\"5%\">{$lang_global['delete_short']}</th>";
+	$output .="<th width=\"40%\"><a href=\"realm.php?order_by=name&amp;dir=$dir\"".($order_by=='name' ? " class=\"$order_dir\"" : "").">{$lang_realm['name']}</a></th>
 	<th width=\"5%\">{$lang_realm['online']}</th>
 	<th width=\"10%\">{$lang_realm['tot_char']}</th>
 	<th width=\"10%\"><a href=\"realm.php?order_by=address&amp;dir=$dir\"".($order_by=='address' ? " class=\"$order_dir\"" : "").">{$lang_realm['address']}</a></th>
@@ -78,9 +82,13 @@ function show_realm() {
    </tr>";
 
  while ($realm = $sql->fetch_row($result)){
+ if($user_lvl >= $action_permission['delete'])
 	$output .= "<tr><td><a href=\"realm.php?action=del_realm&amp;id=$realm[0]\"><img src=\"img/aff_cross.png\" alt=\"\" /></a></td>";
 	if (isset($server[$realm[0]]['game_port'])) {
+	if($user_lvl >= $action_permission['update'])
 		$output .= "<td><a href=\"realm.php?action=edit_realm&amp;id=$realm[0]\">$realm[1]</a></td>";
+	else
+	$output .= "<td>$realm[1]</td>";
 		if (test_port($server[$realm[0]]['addr'],$server[$realm[0]]['game_port']))  $output .= "<td><img src=\"img/up.gif\" alt=\"\" /></td>";
 			else $output .= "<td><img src=\"img/down.gif\" alt=\"\" /></td>";
 	} else $output .= "<td><a href=\"realm.php?action=edit_realm&amp;id=$realm[0]\">$realm[1] (Not Configured yet)</a></td>
@@ -104,8 +112,8 @@ function show_realm() {
 //  EDIT REALM
 //####################################################################################################
 function edit_realm() {
-valid_login(3);
- global $lang_global, $lang_realm, $output, $realm_db, $icon_type, $timezone_type,$server;
+ global $lang_global, $lang_realm, $output, $realm_db, $icon_type, $timezone_type,$server, $action_permission, $user_lvl;
+valid_login($action_permission['update']);
 
  if(!isset($_GET['id'])) redirect("realm.php?error=1");
  
@@ -179,6 +187,7 @@ valid_login(3);
  $output .= "</td><td>
 		  <table class=\"hidden\">
           <tr><td>";
+          if($user_lvl >= $action_permission['delete'])
 			makebutton($lang_realm['delete'], "realm.php?action=del_realm&amp;id=$realm[0]",142);
 			makebutton($lang_global['back'], "realm.php",142);
  $output .= "</td></tr>
@@ -196,8 +205,8 @@ valid_login(3);
 //  DO EDIT REALM
 //####################################################################################################
 function doedit_realm() {
-valid_login(3);
- global $realm_db;
+ global $realm_db, $action_permission;
+valid_login($action_permission['update']);
 
  if( empty($_GET['new_name']) || empty($_GET['new_address']) || empty($_GET['new_port']) || empty($_GET['id']) ) {
    redirect("realm.php?error=1");
@@ -230,8 +239,8 @@ valid_login(3);
 // DELETE REALM
 //####################################################################################################
 function del_realm() {
-valid_login(3);
-global $lang_realm, $lang_global, $output;
+global $lang_realm, $lang_global, $output, $action_permission;
+valid_login($action_permission['delete']);
  if(isset($_GET['id'])) $id = addslashes($_GET['id']);
 	else redirect("realm.php?error=1");
 
@@ -252,9 +261,8 @@ global $lang_realm, $lang_global, $output;
 // DO DELETE REALM
 //####################################################################################################
 function dodel_realm() {
-valid_login(3);
- global $realm_db;
-
+ global $realm_db, $action_permission;
+valid_login($action_permission['delete']);
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
@@ -277,8 +285,8 @@ valid_login(3);
 //  ADD NEW REALM
 //####################################################################################################
 function add_realm() {
-valid_login(3);
- global $realm_db;
+ global $realm_db, $action_permission;
+valid_login($action_permission['insert']);
 
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -297,8 +305,8 @@ valid_login(3);
 // SET REALM TO DEFAULT IN CMS
 //####################################################################################################
 function set_def_realm() {
-valid_login(0);
- global $realm_db;
+ global $realm_db, $action_permission;
+valid_login($action_permission['read']);
 
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);

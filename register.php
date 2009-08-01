@@ -14,7 +14,6 @@
 // DO REGISTER
 //#####################################################################################################
 function doregister(){
- require_once("./scripts/config.php");
  global $lang_global, $characters_db, $realm_db, $realm_id, $disable_acc_creation, $limit_acc_per_ip, $valid_ip_mask,
        $send_mail_on_creation, $create_acc_locked, $from_mail, $mailer_type, $smtp_cfg, $title, $defaultoption, $server_type;
 

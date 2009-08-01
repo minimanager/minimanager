@@ -42,12 +42,19 @@ function browse_users() {
  $output .="<script type=\"text/javascript\" src=\"js/check.js\"></script>
 			<center><table class=\"top_hidden\">
 			<tr><td>";
+if($user_lvl >= $action_permission['insert'])
+{
+makebutton($lang_user['add_acc'], "user.php?action=add_new", 124);
+makebutton($lang_user['backup'], "backup.php", 122);
+}
 if($user_lvl >= $action_permission['update'])
 {
- makebutton($lang_user['add_acc'], "user.php?action=add_new", 124);
- makebutton($lang_user['cleanup'], "cleanup.php", 122);
- makebutton($lang_user['backup'], "backup.php", 122);
+// makebutton($lang_user['add_acc'], "user.php?action=add_new", 124);
+// makebutton($lang_user['cleanup'], "cleanup.php", 122);
+// makebutton($lang_user['backup'], "backup.php", 122);
 }
+if($user_lvl >= $action_permission['delete'])
+makebutton($lang_user['cleanup'], "cleanup.php", 122);
  makebutton($lang_global['back'], "javascript:window.history.back()", 122);
  $output .= " </td><td align=\"right\" width=\"25%\" rowspan=\"2\">";
  $output .= generate_pagination("user.php?action=brows_user&amp;order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
@@ -86,7 +93,7 @@ if($user_lvl >= $action_permission['update'])
 	 <input type=\"hidden\" name=\"backup_op\" value=\"0\"/>
  <table class=\"lined\">
    <tr>";
-   if($user_lvl >= $action_permission['update']) $output.= "<th width=\"1%\"><input name=\"allbox\" type=\"checkbox\" value=\"Check All\" onclick=\"CheckAll(document.form1);\" /></th>";
+   if($user_lvl >= $action_permission['insert']) $output.= "<th width=\"1%\"><input name=\"allbox\" type=\"checkbox\" value=\"Check All\" onclick=\"CheckAll(document.form1);\" /></th>";
     else $output .= "<th width=\"1%\"></th>";
    $output .="<th width=\"5%\"><a href=\"user.php?order_by=id&amp;start=$start&amp;dir=$dir\">".($order_by=='id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['id']}</a></th>
 	<th width=\"21%\"><a href=\"user.php?order_by=username&amp;start=$start&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['username']}</a></th>
@@ -124,10 +131,15 @@ if ($showcountryflag)
 
 	if (($user_lvl >= $data[2])||($user_name == $data[1])){
    		$output .= "<tr>";
-		if ($user_lvl >= $action_permission['update']) $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
+		if ($user_lvl >= $action_permission['insert']) $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
                  else $output .= "<td></td>";
    		$output .= "<td>$data[0]</td>
-           	<td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a></td>
+           	<td>";
+           	if ($user_lvl >= $action_permission['update']) 
+           	$output .= "<a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a>";
+           	else
+           	$output .= $data[1];
+           	$output .= "</td>
 			<td>".$gm_level_arr[$data[2]][2]."</td>";
    if ($expansion_select)
     $output .="
@@ -155,9 +167,10 @@ if ($showcountryflag)
  $output .= "<tr><td colspan=\"12\" class=\"hidden\"><br /></td></tr>
 	<tr>
 		<td colspan=\"8\" align=\"left\" class=\"hidden\">";
-		if($user_lvl >= $action_permission['update']) {
+		if($user_lvl >= $action_permission['delete'])
 			makebutton($lang_user['del_selected_users'], "javascript:do_submit('form1',0)",220);
-			makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",220); }
+	if($user_lvl >= $action_permission['insert'])
+			makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",220);
  $output .= "</td>
       <td colspan=\"4\" align=\"right\" class=\"hidden\">{$lang_user['tot_acc']} : $all_record</td>
 	 </tr>
@@ -283,11 +296,14 @@ valid_login($action_permission['read']);
 
 	if (($user_lvl >= $data[2])||($user_name == $data[1])){
    		$output .= "<tr>";
-		if ($user_lvl >= $action_permission['update']) $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
+		if ($user_lvl >= $action_permission['insert']) $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
                  else $output .= "<td></td>";
-   		$output .= "<td>$data[0]</td>
-           	<td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a></td>
-			<td>".$gm_level_arr[$data[2]][2]."</td>";
+   		$output .= "<td>$data[0]</td>";
+           	if ($user_lvl >= $action_permission['update']) 
+           	$output .= "<a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a>";
+           	else
+           	$output .= $data[1];
+           	$output .= "</td>";
                 if ($user_lvl >= $action_permission['update']) $output .= "
 			<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>";
                 else $output .= "<td>***@***</td>";
@@ -311,9 +327,10 @@ valid_login($action_permission['read']);
 $output .= "<tr><td colspan=\"12\" class=\"hidden\"><br /></td></tr>
 	<tr>
 		<td colspan=\"8\" align=\"left\" class=\"hidden\">";
-		if($user_lvl >= $action_permission['update']) {
+		if($user_lvl >= $action_permission['delete'])
 			makebutton($lang_user['del_selected_users'], "javascript:do_submit('form1',0)",220);
-			makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",220); }
+			if($user_lvl >= $action_permission['insert'])
+			makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",220);
 $output .= "</td>
       <td colspan=\"4\" align=\"right\" class=\"hidden\">{$lang_user['tot_found']} : $total_found : {$lang_global['limit']} $sql_search_limit</td>
 	 </tr>
@@ -675,7 +692,7 @@ function doadd_new() {
 function edit_user() {
  global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl, $user_name,
    $gm_level_arr, $action_permission, $expansion_select;
- valid_login($action_permission['view']);
+ valid_login($action_permission['update']);
 
  if (empty($_GET['id'])) redirect("user.php?error=10");
 
@@ -873,8 +890,9 @@ function edit_user() {
  {
  $output .= "<tr><td>";
 		makebutton($lang_user['update_data'], "javascript:do_submit_data()",140);
-		makebutton($lang_user['del_acc'], "user.php?action=del_user&amp;check%5B%5D=$id",150);
  }
+ elseif($user_lvl >= $action_permission['update'])
+  		makebutton($lang_user['del_acc'], "user.php?action=del_user&amp;check%5B%5D=$id",150);
  else
  $output .= "<tr><td>";
  $output .= "</td><td>";

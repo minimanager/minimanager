@@ -12,7 +12,16 @@ $time_start = microtime(true);
 
 if ( !ini_get('session.auto_start') ) session_start();
 
-require_once("./scripts/config.php");
+if (file_exists("scripts/config.php"))
+{ if (file_exists("scripts/config.dist.php")) 
+    require_once("./scripts/config.dist.php");
+  else
+    exit("<center><br><code>./scripts/config.dist.php</code> not found,<br> please restore <code>./scripts/config.dist.php</code>");
+  require_once("./scripts/config.php");
+}
+else
+  exit("<center><br><code>./scripts/config.php</code> not found,<br> please copy <code>./scripts/config.dist.php</code> to <code>./scripts/config.php</code> and make appropriate changes.");
+
 if($debug) $tot_queries = 0;
 require_once("./scripts/db_layer.php");
 
@@ -149,13 +158,6 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
       }
     }
   }
-
-  // secure non secure settings
-  // some pages don't have security yet, because they dont use header.php... like pomm.php and login.php
-  if(!isset($action_permission['read']))                                                                   $action_permission['read']   = 3;
-  if(!isset($action_permission['update']) || $action_permission['update'] < $action_permission['read']   ) $action_permission['update'] = $action_permission['read'];
-  if(!isset($action_permission['insert']) || $action_permission['insert'] < $action_permission['update'] ) $action_permission['insert'] = $action_permission['update'];
-  if(!isset($action_permission['delete']) || $action_permission['delete'] < $action_permission['insert'] ) $action_permission['delete'] = $action_permission['insert'];
 
   $output .= "
               <li><a class=\"trigger\" href=\"edit.php\">{$lang_header['my_acc']}</a>

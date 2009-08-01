@@ -9,7 +9,7 @@
  */
 
 require_once("header.php");
-valid_login($action_permission['read']);
+valid_login($action_permission['delete']);
 
 //#####################################################################################################
 // DO UPLOAD/SUBMIT PATCH

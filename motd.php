@@ -10,14 +10,14 @@
  
 require_once("header.php");
 require_once("scripts/bbcode_lib.php");
-valid_login($action_permission['read']);
+valid_login($action_permission['update']);
 
 //#####################################################################################################
 // ADD MOTD
 //#####################################################################################################
 function add_motd(){
- global $lang_motd, $lang_global, $output;
- 
+ global $lang_motd, $lang_global, $output, $action_permission;
+ valid_login($action_permission['update']);
  $output .= "<center>
 			<form action=\"motd.php?action=do_add_motd\" method=\"post\" name=\"form\">		
 			<table class=\"top_hidden\">
@@ -46,7 +46,8 @@ $output .= "	</td>
 // DO ADD MOTD
 //#####################################################################################################
 function do_add_motd(){
- global  $lang_global, $characters_db, $realm_id, $user_name;
+ global  $lang_global, $characters_db, $realm_id, $user_name, $action_permission;
+valid_login($action_permission['update']);
  
 if (empty($_POST['msg'])) redirect("motd.php?error=1");
 
@@ -72,8 +73,8 @@ if (empty($_POST['msg'])) redirect("motd.php?error=1");
 // EDIT MOTD
 //#####################################################################################################
 function edit_motd(){
- global $lang_motd,$lang_global, $output, $characters_db, $realm_id;
- 
+ global $lang_motd,$lang_global, $output, $characters_db, $realm_id, $action_permission;
+ valid_login($action_permission['update']);
  $sql = new SQL;
  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
  
@@ -115,8 +116,8 @@ $output .= "</td>
 // DO EDIT MOTD
 //#####################################################################################################
 function do_edit_motd(){
- global  $lang_global, $characters_db, $realm_id, $user_name;
- 
+ global  $lang_global, $characters_db, $realm_id, $user_name, $action_permission;
+ valid_login($action_permission['update']);
  if (empty($_POST['msg']) || empty($_POST['id'])) redirect("motd.php?error=1");
 
  $sql = new SQL;
@@ -146,8 +147,8 @@ function do_edit_motd(){
 // DELETE MOTD
 //#####################################################################################################
 function delete_motd(){
- global  $lang_global, $characters_db, $realm_id;
-
+ global  $lang_global, $characters_db, $realm_id, $action_permission;
+valid_login($action_permission['delete']);
  if (empty($_GET['id'])) redirect("index.php");
 
  $sql = new SQL;

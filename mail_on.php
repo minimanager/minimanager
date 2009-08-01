@@ -2,7 +2,7 @@
  
 require_once("header.php");
 require_once("scripts/mail_lib.php");
-valid_login(0);
+valid_login($action_permission['update']);
  
 /*--------------------------------------------------*/
  
