@@ -81,7 +81,7 @@ $characters_db = Array
     'user' => "root",               // SQL server login this DB located on
     'pass' => "1",                  // SQL server pass this DB located on
     'name' => "characters",         // Character Database name
-     'encoding' => "utf8",          // SQL connection encoding
+    'encoding' => "utf8",           // SQL connection encoding
   ),                                // NOTE: THIS USER MUST HAVE AT LEAST READ ACCESS ON THE WORLD DATABASE
 );
 
@@ -230,13 +230,13 @@ $menu_array = Array
 (
   array("index.php", 'main', array
   (
-    array("ahstats.php", 'auctionhouse',0,5,5,5),    // this page is a read-only page
+    array("ahstats.php", 'auctionhouse',0,5,5,5),    // new security system implemented
     array("arenateam.php", 'arena_teams',0,5,5,5),   // has own level security, but has yet to honor the new security system.
     array("guild.php", 'guilds',0,5,5,5),            // has own level security, but has yet to honor the new security system.
     array("honor.php", 'honor',0,5,5,5),             // this page is a read-only page, but links to other pages, please use with caution
-    array("stat.php", 'statistics',0,5,5,5),         // this page is a read-only page
-    array("events.php", 'events',0,5,5,5),           // this page is a read-only page
-    array("instances.php", 'instances',0,5,5,5),     // this page is a read-only page
+    array("stat.php", 'statistics',0,5,5,5),         // new security system implemented
+    array("events.php", 'events',0,5,5,5),           // new security system implemented
+    array("instances.php", 'instances',0,5,5,5),     // new security system implemented
     array("top100.php", 'top100',0,5,5,5),           // this page is a read-only page, but links to other pages, please use with caution
     array("javascript:void(0);\" onclick=\"window.open('./pomm/pomm.php?realmid=".(empty($_SESSION)?"":$_SESSION['realm_id'])."', 'pomm', 'Toolbar=0, Location=0, Directories=0, Status=0, Menubar=0, Scrollbar=0, Resizable=0, Copyhistory=1, Width=966, Height=732')", 'player_map',0,5,5,5),
   ),
@@ -244,14 +244,14 @@ $menu_array = Array
   array("#", 'tools', array
   (
     array("user.php", 'accounts',0,5,5,5),           // new security system implemented
-    array("char_list.php", 'characters',0,5,5,5),    // has own level security, but has yet to honor the new security system.
+    array("char_list.php", 'characters',0,5,5,5),    // new security system implemented
     array("command.php", 'command',0,5,5,5),         // has own level security, but has yet to honor the new security system.
-    array("banned.php", 'banned_list',5,5,5,5),      // this page has yet to honor the new security system, please use with caution.
+    array("banned.php", 'banned_list',5,5,5,5),      // new security system implemented
     array("mail.php", 'mail',0,5,5,5),               // new security system implemented
     array("ticket.php", 'tickets',5,5,5,5),          // this page has yet to honor the new security system, please use with caution.
     array("tele.php", 'teleports',0,5,5,5),          // new security system implemented
-    array("cleanup.php", 'cleanup',5,5,5,5),         // this page has yet to honor the new security system, please use with caution.
-    array("ssh.php", 'ssh_line',0,5,5,5),            // this page has yet to honor the new security system, please use with caution.
+    array("cleanup.php", 'cleanup',5,5,5,5),         // new security system implemented
+    array("ssh.php", 'ssh_line',0,5,5,5),            // new security system implemented
     array("run_patch.php", 'run_sql_patch',0,5,5,5), // new security system implemented
     array("realm.php", 'realm',0,5,5,5),             // new security system implemented
     array("motd.php", 'add_motd',0,5,5,5),           // new security system implemented
@@ -275,11 +275,11 @@ $menu_array = Array
   (
     array("forum.php", 'forums',0,5,5,5),            // has own level security, but has yet to honor the new security system.
     array("javascript:void(0);\" onclick=\"window.open('./forum.html', 'forum')", 'forums',0,0,0,0),
-    array("char.php", 'character',0,5,5,5),          // has own level security, but has yet to honor the new security system.
-    array("char_edit.php", 'char_edit',0,5,5,5),     // has own level security, but has yet to honor the new security system.
-    array("edit.php", 'MyAccount',0,5,5,5),          // has own level security, but has yet to honor the new security system.
+    array("char.php", 'character',0,5,5,5),          // new security system implemented
+    array("char_edit.php", 'char_edit',0,5,5,5),     // new security system implemented
+    array("edit.php", 'MyAccount',0,5,5,5),          // new security system implemented
     array("index.php", 'Startpage',0,5,5,5),
-    array("stat_on.php", 'statistics',0,5,5,5),      // this page is a read-only page
+    array("stat_on.php", 'statistics',0,5,5,5),      // new security system implemented
     array("realm.php", 'realm',0,5,5,5),             // this last one is special, if this is not here, users are unable to switch realms
   ),                                                 // if READ is set to level 3, only level 3 and above can switch realms.
 ),                                                   // INSERT, UPDATE and DELETE should have no effect, but best to keep it at 5.

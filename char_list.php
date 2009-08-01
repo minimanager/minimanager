@@ -18,7 +18,8 @@ require_once("scripts/defines.php");
 function browse_chars()
 {
   global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
-    $user_lvl, $user_name, $showcountryflag;
+    $action_permission, $user_lvl, $user_name, $showcountryflag;
+  valid_login($action_permission['read']);
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -51,7 +52,8 @@ function browse_chars()
                 <table class=\"hidden\">
                   <tr>
                     <td>";
-                      makebutton($lang_char_list['cleanup'], "cleanup.php", 110);
+                      if($user_lvl >= $action_permission['delete'])
+                        makebutton($lang_char_list['cleanup'], "cleanup.php", 110);
                       makebutton($lang_global['back'], "javascript:window.history.back()", 110);
   $output .= "
                     </td>
@@ -166,7 +168,7 @@ function browse_chars()
       $output .= "
               <tr>
                 <td>";
-      if (($user_lvl > $owner_gmlvl)||($owner_acc_name == $user_name))
+      if (($user_lvl >= $action_permission['delete'])||($owner_acc_name == $user_name))
         $output .= "
                   <input type=\"checkbox\" name=\"check[]\" value=\"$char[0]\" onclick=\"CheckCheckAll(document.form1);\" />";
       $output .= "
@@ -228,7 +230,8 @@ function browse_chars()
 function search()
 {
   global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
-    $user_lvl, $user_name, $start, $itemperpage, $showcountryflag;
+    $action_permission, $user_lvl, $user_name, $start, $showcountryflag;
+  valid_login($action_permission['read']);
 
   if(!isset($_GET['search_value'])) redirect("char_list.php?error=2");
 
@@ -402,7 +405,8 @@ function search()
             <tr>
               <td>";
                 makebutton($lang_char_list['characters'], "char_list.php", 120);
-                makebutton($lang_char_list['cleanup'], "cleanup.php", 120);
+                if($user_lvl >= $action_permission['delete'])
+                  makebutton($lang_char_list['cleanup'], "cleanup.php", 120);
                 makebutton($lang_global['back'], "javascript:window.history.back()", 120);
   $output .= "
               </td>
@@ -509,7 +513,7 @@ function search()
       $output .= "
               <tr>
                 <td>";
-      if (($user_lvl > $owner_gmlvl)||($owner_acc_name == $user_name))
+      if (($user_lvl >= $action_permission['delete'])||($owner_acc_name == $user_name))
         $output .= "
                   <input type=\"checkbox\" name=\"check[]\" value=\"$char[0]\" onclick=\"CheckCheckAll(document.form1);\" />";
       $output .= "
@@ -570,7 +574,9 @@ function search()
 //########################################################################################################################
 function del_char_form()
 {
-  global $lang_global, $lang_char_list, $output, $realm_id, $characters_db;
+  global $lang_char_list, $lang_global, $output, $characters_db, $realm_id, $action_permission;
+
+  valid_login($action_permission['delete']);
   
   if(isset($_GET['check'])) $check = $_GET['check'];
     else redirect("char_list.php?error=1");
@@ -620,8 +626,9 @@ function del_char_form()
 //########################################################################################################################
 function dodel_char()
 {
-  global $lang_global, $lang_char_list, $output, $realm_db, $characters_db, $realm_id,
-    $user_lvl, $user_name;
+  global $lang_global, $lang_char_list, $output, $characters_db, $realm_id, $action_permission;
+
+  valid_login($action_permission['read']);
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);

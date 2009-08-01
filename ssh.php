@@ -9,7 +9,7 @@
  */
 
 require_once("header.php");
-valid_login($action_permission['read']);
+valid_login($action_permission['delete']);
 
 if (test_port($server[$realm_id]['addr'],$server[$realm_id]['term_port'])){
   $output .= "<center><br /><applet codebase=\".\" archive=\"js/ssh.jar\"

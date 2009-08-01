@@ -154,7 +154,11 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
       foreach ($trunk[2] as $branch)
       {
         if($branch[0] == $lookup_file)
-          $action_permission['read']=$branch[2];
+        { $action_permission['read']=$branch[2];
+          $action_permission['insert'] = $branch[3];
+          $action_permission['update'] = $branch[4];
+          $action_permission['delete'] = $branch[5];
+        }
       }
     }
   }

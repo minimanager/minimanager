@@ -9,7 +9,7 @@
  */
 
 require_once("header.php");
-valid_login($action_permission['read']);
+valid_login($action_permission['delete']);
 require_once("scripts/get_lib.php");
 require_once("scripts/defines.php");
 
@@ -17,9 +17,9 @@ require_once("scripts/defines.php");
 //  PRINT  EDIT FORM
 //########################################################################################################################
 function edit_char() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,
+ global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $action_permission, $user_lvl,
 		$item_datasite;
-		
+valid_login($action_permission['delete']);
 if (empty($_GET['id'])) error($lang_global['empty_fields']);
 
 $sql = new SQL;
@@ -234,8 +234,8 @@ $sql->close();
 //########################################################################################################################
 function do_edit_char() {
  global $lang_global, $lang_char, $output, $realm_db, 
-		$characters_db, $realm_id, $user_lvl , $world_db;
-
+		$characters_db, $realm_id, $action_permission, $user_lvl, $world_db;
+valid_login($action_permission['delete']);
 if ( empty($_GET['id']) || empty($_GET['name']) ) error($lang_global['empty_fields']);
 
 $sql = new SQL;

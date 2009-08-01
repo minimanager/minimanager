@@ -13,7 +13,7 @@ require_once("scripts/defines.php");
 
 // override default security : guild.php (guild leader deletes guild)
 if(!isset($_POST['override']) || $_POST['override'] != '1') 
-  valid_login($action_permission['read']);
+  valid_login($action_permission['delete']);
 
 
 //#################################################################################################################

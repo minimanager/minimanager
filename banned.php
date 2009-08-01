@@ -15,7 +15,9 @@ valid_login($action_permission['read']);
 // SHOW BANNED LIST
 //########################################################################################################################
 function show_list() {
- global  $lang_global, $lang_banned, $output, $realm_db, $itemperpage;
+ global  $lang_global, $lang_banned, $output, $realm_db, $itemperpage, $action_permission, $user_lvl;
+
+valid_login($action_permission['read']);
 
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -38,6 +40,7 @@ function show_list() {
   $output .= "<center>
 	<table class=\"top_hidden\">
        <tr><td>";
+       if($user_lvl >= $action_permission['insert'])
 		makebutton($lang_banned['add_to_banned'], "banned.php?action=add_entry",180);
 		 if ($ban_type === "account_banned") makebutton($lang_banned['banned_ips'], "banned.php?ban_type=ip_banned",180);
 			else makebutton($lang_banned['banned_accounts'], "banned.php?ban_type=account_banned",180);
@@ -73,7 +76,10 @@ function show_list() {
 		}
 
   $output .= "<tr>
-			<td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>$owner_acc_name</font><br />{$lang_global['are_you_sure']}', del_banned + '$ban[0]');\" style=\"cursor:pointer;\" /></td>
+			<td>";
+			if($user_lvl >= $action_permission['delete'])
+			  $output .= "<img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>$owner_acc_name</font><br />{$lang_global['are_you_sure']}', del_banned + '$ban[0]');\" style=\"cursor:pointer;\" />";
+			$output .= "</td>
 			<td>$name_out</td>
 			<td>".date('d-m-Y G:i', $ban[1])."</td>
 			<td>".date('d-m-Y G:i', $ban[2])."</td>
@@ -93,8 +99,8 @@ function show_list() {
 // DO DELETE ENTRY FROM LIST
 //########################################################################################################################
 function do_delete_entry() {
- global $lang_global, $realm_db;
-
+ global $lang_global, $realm_db, $action_permission, $user_lvl;
+valid_login($action_permission['delete']);
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
@@ -122,7 +128,8 @@ function do_delete_entry() {
 //  BAN NEW IP
 //########################################################################################################################
 function add_entry() {
- global  $lang_global, $lang_banned, $output;
+ global  $lang_global, $lang_banned, $output, $action_permission, $user_lvl;
+ valid_login($action_permission['insert']);
   $output .= "<center>
   <fieldset class=\"half_frame\">
 	<legend>{$lang_banned['ban_entry']}</legend>
@@ -165,8 +172,8 @@ $output .= "</td><td>";
 //DO  BAN NEW IP/ACC
 //########################################################################################################################
 function do_add_entry() {
- global $lang_global, $realm_db, $user_name, $lang_banned, $output;
-
+ global $lang_global, $realm_db, $user_name, $lang_banned, $output, $action_permission, $user_lvl;
+valid_login($action_permission['insert']);
  if((empty($_GET['ban_type']))||(empty($_GET['entry'])) ||(empty($_GET['bantime'])))
 	redirect("banned.php?error=1&action=add_entry");
 

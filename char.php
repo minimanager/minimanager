@@ -21,7 +21,9 @@ require_once("scripts/char_aura.php");
 function char_main()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db, $mmfpm_db,
-    $server, $user_id, $user_name, $user_lvl, $showcountryflag, $item_datasite, $talent_datasite;
+    $server, $user_id, $user_name, $action_permission, $user_lvl, $showcountryflag, $item_datasite, $talent_datasite;
+
+  valid_login($action_permission['read']);
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -592,23 +594,27 @@ function char_main()
           <table class=\"hidden\">
             <tr>
               <td>";
-        if ($user_lvl > $owner_gmlvl)
-        {
-          makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-          $output .= "
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+        $output .= "
               </td>
               <td>";
+
+        if (($user_lvl >= $action_permission['delete']))
+        {
           makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
           $output .= "
               </td>
               <td>";
         }
-        if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name)))
+        if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
         {
           makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
           $output .= "
               </td>
               <td>";
+        }
+        if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
+        {
           makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
           $output .= "
               </td>
@@ -630,7 +636,8 @@ function char_main()
             </tr>
           </table>
           <br />
-        </center>";
+        </center>
+";
     }
     else
       error($lang_char['no_permission']);
@@ -648,7 +655,7 @@ function char_main()
 function char_inv()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $user_lvl, $item_datasite;
+    $user_name, $action_permission, $user_lvl, $item_datasite;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -1061,42 +1068,47 @@ function char_inv()
           <table class=\"hidden\">
             <tr>
               <td>";
-      if ($user_lvl > $owner_gmlvl)
-      {
-        makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-        $output .= "
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+      $output .= "
               </td>
               <td>";
+
+      if (($user_lvl >= $action_permission['delete']))
+      {
         makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
         $output .= "
-              </td>
-              <td>";
+            </td>
+            <td>";
       }
-      if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name)))
+      if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
         makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
         $output .= "
               </td>
               <td>";
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
+      }
+      if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
         $output .= "
               </td>
               <td>";
       }
       makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      //end of admin options
       $output .= "
               </td>
             </tr>
           </table>
           <br />
         </center>
- ";
-   }
-   else
-   {
-     $sql->close();
-     error($lang_char['no_permission']);
-   }
+";
+    }
+    else
+    {
+      $sql->close();
+      error($lang_char['no_permission']);
+    }
   }
   else
     error($lang_char['no_char_found']);
@@ -1111,7 +1123,7 @@ $sql->close();
 function char_quest()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $user_lvl, $quest_datasite;
+    $user_name, $action_permission, $user_lvl, $quest_datasite;
 
  if (empty($_GET['id'])) error($lang_global['empty_fields']);
 
@@ -1203,21 +1215,41 @@ function char_quest()
     $output .= "</table></div><br />
     <table class=\"hidden\">
           <tr><td>";
-    if ($user_lvl > $owner_gmlvl){
-      makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
-  $output .= "</td><td>";
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+      $output .= "
+              </td>
+              <td>";
+
+      if (($user_lvl >= $action_permission['delete']))
+      {
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+        $output .= "
+            </td>
+            <td>";
       }
-    if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name))){
-      makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
-  $output .= "</td><td>";
+      if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        $output .= "
+              </td>
+              <td>";
       }
-    makebutton($lang_global['back'], "javascript:window.history.back()",140);
- $output .= "</td></tr>
-        </table><br /></center>";
+      if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
+        $output .= "
+              </td>
+              <td>";
+      }
+      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      //end of admin options
+      $output .= "
+              </td>
+            </tr>
+          </table>
+          <br />
+        </center>
+";
   }
   else
   {
@@ -1236,7 +1268,7 @@ function char_quest()
 function char_achievements()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $user_lvl;
+    $user_name, $action_permission, $user_lvl;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -1307,35 +1339,41 @@ function char_achievements()
        <table class=\"hidden\">
          <tr>
            <td>";
-      if ($user_lvl > $owner_gmlvl)
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+      $output .= "
+              </td>
+              <td>";
+
+      if (($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-        $output .= "
-           </td>
-           <td>";
         makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
         $output .= "
-           </td>
-           <td>";
+            </td>
+            <td>";
       }
-      if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name)))
+      if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
         makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
         $output .= "
-           </td>
-           <td>";
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
+              </td>
+              <td>";
+      }
+      if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
         $output .= "
-           </td>
-           <td>";
+              </td>
+              <td>";
       }
       makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      //end of admin options
       $output .= "
-           </td>
-         </tr>
-       </table>
-       <br />
-     </center>";
+              </td>
+            </tr>
+          </table>
+          <br />
+        </center>
+";
     }
     else
     {
@@ -1356,7 +1394,7 @@ function char_achievements()
 function char_rep()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $user_lvl, $fact_id, $reputation_rank_length, $reputation_cap, $reputation_bottom, $reputation_rank,
+    $user_name, $action_permission, $user_lvl, $fact_id, $reputation_rank_length, $reputation_cap, $reputation_bottom, $reputation_rank,
     $MIN_REPUTATION_RANK, $MAX_REPUTATION_RANK;
 
   if (empty($_GET['id']))
@@ -1483,35 +1521,41 @@ function char_rep()
          <table class=\"hidden\">
            <tr>
              <td>";
-      if ($user_lvl > $owner_gmlvl)
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+      $output .= "
+              </td>
+              <td>";
+
+      if (($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-        $output .= "
-             </td>
-             <td>";
         makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
         $output .= "
-             </td>
-             <td>";
+            </td>
+            <td>";
       }
-      if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name)))
+      if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
         makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
         $output .= "
-             </td>
-             <td>";
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
+              </td>
+              <td>";
+      }
+      if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
         $output .= "
-             </td>
-             <td>";
+              </td>
+              <td>";
       }
       makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      //end of admin options
       $output .= "
-             </td>
-           </tr>
-        </table>
-        <br />
-      </center>";
+              </td>
+            </tr>
+          </table>
+          <br />
+        </center>
+";
     }
     else
     {
@@ -1532,7 +1576,7 @@ function char_rep()
 function char_skill()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $user_lvl, $skill_datasite;
+    $user_name, $action_permission, $user_lvl, $skill_datasite;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -1776,35 +1820,41 @@ function char_skill()
         <table class=\"hidden\">
           <tr>
             <td>";
-      if ($user_lvl > $owner_gmlvl)
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+      $output .= "
+              </td>
+              <td>";
+
+      if (($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-        $output .= "
-            </td>
-            <td>";
         makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
         $output .= "
             </td>
             <td>";
       }
-      if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name)))
+      if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
         makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
         $output .= "
-            </td>
-            <td>";
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
+              </td>
+              <td>";
+      }
+      if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
         $output .= "
-            </td>
-            <td>";
+              </td>
+              <td>";
       }
       makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      //end of admin options
       $output .= "
-            </td>
-          </tr>
-        </table>
-        <br />
-      </center>";
+              </td>
+            </tr>
+          </table>
+          <br />
+        </center>
+";
     }
     else
       error($lang_char['no_permission']);
@@ -1822,7 +1872,7 @@ function char_skill()
 function char_talent()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $user_lvl, $talent_datasite, $talent_calculator_datasite;
+    $user_name, $action_permission, $user_lvl, $talent_datasite, $talent_calculator_datasite;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -1957,35 +2007,41 @@ function char_talent()
           <table class=\"hidden\">
             <tr>
               <td>";
-      if ($user_lvl > $owner_gmlvl)
-      {
-        makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-        $output .= "
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+      $output .= "
               </td>
               <td>";
+
+      if (($user_lvl >= $action_permission['delete']))
+      {
         makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
         $output .= "
-              </td>
-              <td>";
+            </td>
+            <td>";
       }
-      if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name)))
+      if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
         makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
         $output .= "
               </td>
               <td>";
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
+      }
+      if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
         $output .= "
               </td>
               <td>";
       }
       makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      //end of admin options
       $output .= "
               </td>
-              </tr>
-            </table>
-            <br />
-          </center>";
+            </tr>
+          </table>
+          <br />
+        </center>
+";
     }
     else
     {
@@ -2004,8 +2060,8 @@ function char_talent()
 // SHOW CHARACTER PETS
 //########################################################################################################################^M
 function char_pets() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$world_db,
-        $user_name, $pet_ability, $talent_datasite;
+ global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $world_db,
+        $action_permission, $user_lvl, $user_name, $pet_ability, $talent_datasite;
 
 if (empty($_GET['id'])) error($lang_global['empty_fields']);
 
@@ -2093,21 +2149,41 @@ if ($sql->num_rows($result) == 1){
       $output .= "</div>
       <table class=\"hidden\">
           <tr><td>";
-    if ($user_lvl > $owner_gmlvl){
-      makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
-  $output .= "</td><td>";
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+      $output .= "
+              </td>
+              <td>";
+
+      if (($user_lvl >= $action_permission['delete']))
+      {
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+        $output .= "
+            </td>
+            <td>";
       }
-    if (($user_lvl > 0)&&(($user_lvl > $owner_gmlvl)||($owner_name == $user_name))){
-      makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
-  $output .= "</td><td>";
-      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[0]",140);
-  $output .= "</td><td>";
+      if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        $output .= "
+              </td>
+              <td>";
       }
-    makebutton($lang_global['back'], "javascript:window.history.back()",140);
- $output .= "</td></tr>
-        </table><br /></center>";
+      if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
+        $output .= "
+              </td>
+              <td>";
+      }
+      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      //end of admin options
+      $output .= "
+              </td>
+            </tr>
+          </table>
+          <br />
+        </center>
+";
  } else {
         $sql->close();
         error($lang_char['no_permission']);
