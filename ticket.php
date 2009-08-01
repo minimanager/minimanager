@@ -38,7 +38,7 @@ function browse_tickets() {
  $all_record = $sql->result($query_1,0);
 
  if($server_type)
-   $query = $sql->query("SELECT gm_tickets.guid, gm_tickets.playerGuid,SUBSTRING_INDEX(gm_tickets.message_text,' ',6),
+   $query = $sql->query("SELECT gm_tickets.guid, gm_tickets.playerGuid,SUBSTRING_INDEX(gm_tickets.message,' ',6),
 						`characters`.name
 						FROM gm_tickets,`characters`
 						LEFT JOIN gm_tickets k1 ON k1.`playerGuid`=`characters`.`guid`

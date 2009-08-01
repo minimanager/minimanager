@@ -374,6 +374,10 @@ valid_login($action_permission['delete']);
 function dodel_user() {
  global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,
 		$tab_del_user_characters, $tab_del_user_realmd, $action_permission;
+ if ($server_type)
+   $tab_del_user_characters = $tab_del_user_characters_trinity;
+
+
 valid_login($action_permission['delete']);
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -415,6 +419,9 @@ valid_login($action_permission['delete']);
 //#####################################################################################################
 function backup_user() {
  global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$backup_dir,$action_permission;
+ if ($server_type)
+   $tab_backup_user_characters = $tab_backup_user_characters_trinity;
+
 valid_login($action_permission['insert']);
  $sql = new SQL;
  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);

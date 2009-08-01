@@ -488,6 +488,9 @@ function docleanup(){
  global $lang_cleanup, $lang_global, $output, $realm_db, $characters_db, $realm_id, $user_lvl,
 		$tab_del_user_characters, $tab_del_user_realmd;
 
+ if ($server_type)
+   $tab_del_user_characters = $tab_del_user_characters_trinity;
+
  if (!isset($_POST['type']) || $_POST['type'] === '') redirect("cleanup.php?error=1");
 
  $sql = new SQL;
