@@ -135,8 +135,8 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
         if($branch[0] == $lookup_file)
         {
           $action_permission['read']   = $branch[2];
-          $action_permission['update'] = $branch[3];
-          $action_permission['insert'] = $branch[4];
+          $action_permission['insert'] = $branch[3];
+          $action_permission['update'] = $branch[4];
           $action_permission['delete'] = $branch[5];
         }
         if ( $user_lvl >= $branch[2] )
