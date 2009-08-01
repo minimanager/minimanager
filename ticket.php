@@ -22,7 +22,10 @@ function browse_tickets() {
  
  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
 
- $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "ticket_id";
+ if ($server_type)
+   $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "guid";
+ else
+   $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "ticket_id";
  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
  $order_dir = ($dir) ? "ASC" : "DESC";
  $dir = ($dir) ? 0 : 1;
@@ -63,8 +66,12 @@ function browse_tickets() {
  <table class=\"lined\">
    <tr>
 	<th width=\"7%\"><input name=\"allbox\" type=\"checkbox\" value=\"Check All\" onclick=\"CheckAll(document.form);\" /></th>
-	<th width=\"7%\">{$lang_global['edit']}</th>
-	<th width=\"10%\"><a href=\"ticket.php?order_by=ticket_id&amp;start=$start&amp;dir=$dir\">".($order_by=='ticket_id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_ticket['id']}</a></th>
+	<th width=\"7%\">{$lang_global['edit']}</th>";
+if ($server_type)
+	$output .="<th width=\"10%\"><a href=\"ticket.php?order_by=guid&amp;start=$start&amp;dir=$dir\">".($order_by=='guid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_ticket['id']}</a></th>";
+else
+	$output .="<th width=\"10%\"><a href=\"ticket.php?order_by=ticket_id&amp;start=$start&amp;dir=$dir\">".($order_by=='ticket_id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_ticket['id']}</a></th>";
+$output .="
 	<th width=\"16%\"><a href=\"ticket.php?order_by=guid&amp;start=$start&amp;dir=$dir\">".($order_by=='guid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_ticket['sender']}</a></th>
 	<th width=\"60%\">{$lang_ticket['ticket_text']}</th>    
   </tr>";
@@ -207,7 +214,7 @@ function do_edit_ticket() {
  $id = $sql->quote_smart($_POST['id']);
 
  if ($server_type)
-  $query = $sql->query("UPDATE gm_tickets SET ticket_text='$new_text' WHERE ticket_id = '$id'");
+  $query = $sql->query("UPDATE gm_tickets SET ticket_text='$new_text' WHERE guid = '$id'");
  else
   $query = $sql->query("UPDATE character_ticket SET ticket_text='$new_text' WHERE ticket_id = '$id'");
 
