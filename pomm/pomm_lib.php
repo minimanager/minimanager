@@ -8,7 +8,8 @@
  * License: GNU General Public License v2(GPL)
  */
  
-require_once("../scripts/config.php");
+require_once("config.dist.php");
+require_once("config.php");
 require_once("../scripts/global_lib.php");
 require_once("../scripts/db_layer.php");
 require_once("../scripts/get_lib.php");
