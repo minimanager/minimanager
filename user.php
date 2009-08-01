@@ -158,10 +158,12 @@ if ($showcountryflag)
             </tr>";
 	} else {
 		$output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
-			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td><td>*</td>";
-			if ($showcountryflag)
+			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td>";
+		if ($expansion_select)
 		  $output .= "<td>*</td>";
-			$output .= "</tr>";
+		if ($showcountryflag)
+		  $output .= "<td>*</td>";
+		$output .= "</tr>";
 	}
 }
  $output .= "<tr><td colspan=\"12\" class=\"hidden\"><br /></td></tr>
@@ -331,7 +333,9 @@ valid_login($action_permission['read']);
     }
     else
     {
-      $output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td><td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td><td>*</td>";
+      $output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td><td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td>";
+      if ($expansion_select)
+		$output .= "<td>*</td>";
       if ($showcountryflag)
         $output .= "<td>*</td>";
       $output .= "</tr>";
@@ -898,17 +902,18 @@ function edit_user() {
 		}
 	}
 
- 
+	$output .= "<tr><td>"; 
  if($user_lvl >= $action_permission['update'])
  {
- $output .= "<tr><td>";
-		makebutton($lang_user['update_data'], "javascript:do_submit_data()",140);
+ 		makebutton($lang_user['update_data'], "javascript:do_submit_data()",150);
+
  }
- elseif($user_lvl >= $action_permission['update'])
-  		makebutton($lang_user['del_acc'], "user.php?action=del_user&amp;check%5B%5D=$id",150);
- else
- $output .= "<tr><td>";
- $output .= "</td><td>";
+ if($user_lvl >= $action_permission['delete'])
+ {
+		makebutton($lang_user['del_acc'], "user.php?action=del_user&amp;check%5B%5D=$id",150);
+
+ }
+		$output .= "</td><td>";	
 		makebutton($lang_global['back'], "javascript:window.history.back()",150);
  $output .= "</td></tr>
 		</table>

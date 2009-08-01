@@ -96,7 +96,7 @@ for ($i=1; $i<=$total_found; $i++){
       $lev = '<font color="#000000">'.$level.'</font>';
 
 	$output .= "<tr valign=top>
-		<td><a href=\"char.php?id=$char[0]\"><span onmousemove='toolTip(\"".get_gm_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>".htmlentities($char[1])."</span></a></td>
+		<td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
         <td><img src='img/c_icons/{$char[2]}-{$char[12]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		<td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		<td>$lev</td>
