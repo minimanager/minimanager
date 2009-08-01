@@ -13,29 +13,29 @@ require_once("scripts/defines.php");
 valid_login($action_permission['read']);
 
 $race = Array(
-	1 => array(1,Human,"",""),
-	2 => array(2,Orc,"",""),
-	3 => array(3,Dwarf,"",""),
-	4 => array(4,Nightelf,"",""),
-	5 => array(5,Undead,"",""),
-	6 => array(6,Tauren,"",""),
-	7 => array(7,Gnome,"",""),
-	8 => array(8,Troll,"",""),
-	10 => array(10,Bloodelf,"",""),
-	11 => array(11,Draenei,"","")
+	1 => array(1,'Human',"",""),
+	2 => array(2,'Orc',"",""),
+	3 => array(3,'Dwarf',"",""),
+	4 => array(4,'Nightelf',"",""),
+	5 => array(5,'Undead',"",""),
+	6 => array(6,'Tauren',"",""),
+	7 => array(7,'Gnome',"",""),
+	8 => array(8,'Troll',"",""),
+	10 => array(10,'Bloodelf',"",""),
+	11 => array(11,'Draenei',"","")
 );
 
 $class = Array(
-	1 => array(1,Warrior,"",""),
-	2 => array(2,Paladin,"",""),
-	3 => array(3,Hunter,"",""),
-	4 => array(4,Rogue,"",""),
-	5 => array(5,Priest,"",""),
+	1 => array(1,'Warrior',"",""),
+	2 => array(2,'Paladin',"",""),
+	3 => array(3,'Hunter',"",""),
+	4 => array(4,'Rogue',"",""),
+	5 => array(5,'Priest',"",""),
 	6 => array(6,'Death Knight',"",""),
-	7 => array(7,Shaman,"",""),
-	8 => array(8,Mage,"",""),
-	9 => array(9,Warlock,"",""),
-	11 => array(11,Druid,"","")
+	7 => array(7,'Shaman',"",""),
+	8 => array(8,'Mage',"",""),
+	9 => array(9,'Warlock',"",""),
+	11 => array(11,'Druid',"","")
 );
 
 $level = Array(

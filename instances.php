@@ -9,7 +9,7 @@ valid_login($action_permission['read']);
 //#############################################################################
 function do_search()
 {
-  global $lang_instances, $lang_global, $output, $world_db, $realm_id, $server_type;
+  global $lang_instances, $output, $world_db, $realm_id, $server_type;
 
   $sql = new SQL;
   $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);

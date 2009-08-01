@@ -15,7 +15,8 @@
 
 // use Minimanager configuration
 require_once "func.php";
-require_once "../scripts/config.php";
+require_once("../scripts/config.dist.php");
+require_once("../scripts/config.php");
 $realmid = (int)$_GET["realmid"];
 $server_arr = $server;
 
@@ -58,7 +59,7 @@ $server = $server_arr[$realmid]["addr"];
 $port = $server_arr[$realmid]["game_port"];
 
 // Update time (seconds), 0 - not update.
-$time= "120";
+$time= "12";
 
 // Show update timer 1 - on, 0 - off
 $show_time="1";

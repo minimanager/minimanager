@@ -1,6 +1,8 @@
 <?php
 
+require_once("config.dist.php");
 require_once("config.php");
+
 $char_aura = Array(
 	2383 => array($lang_id_tab['CHAR_AURA_FIND_HERBS'],'INV_Misc_Flower_02'),
 	2580 => array($lang_id_tab['CHAR_AURA_FIND_MINERALS'],'Spell_Nature_Earthquake'),

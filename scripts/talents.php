@@ -1,5 +1,6 @@
 <?php
 
+require_once("config.dist.php");
 require_once("config.php");
 
 //array of talent ids, name, talent calculator value

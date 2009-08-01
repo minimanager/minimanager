@@ -27,6 +27,7 @@ unset($output);
   }
   print "
                 <p>";
+  require_once("./scripts/config.dist.php");
   require_once("./scripts/config.php");
   if ($server_type)
     print "

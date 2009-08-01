@@ -1,5 +1,6 @@
 <?php
 
+require_once("config.dist.php");
 require_once("config.php");
 $pet_ability = Array(
 //	Bite
