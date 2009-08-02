@@ -16,22 +16,10 @@ valid_login($action_permission['read']);
 //#######################################################################################
 function print_commands_form()
 {
-  global $lang_command, $output, $world_db, $action_permission, $user_lvl, $realm_id;
+  global $lang_command, $output, $world_db, $action_permission, $user_lvl, $realm_id, $gm_level_arr;
   valid_login($action_permission['read']);
 
-  $levels = array
-  (
-    0 => array ('level0',''),
-    1 => array ('level1',''),
-    2 => array ('level2',''),
-    3 => array ('level3',''),
-    4 => array ('level4',''),
-    5 => array ('level5',''),
-    6 => array ('level6',''),
-    7 => array ('level7',''),
-    8 => array ('level8',''),
-    9 => array ('level9',''),
-  );
+  $levels = $gm_level_arr;
 
   $sql = new SQL;
   $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
@@ -61,7 +49,7 @@ function print_commands_form()
           <td>".htmlentities($syntax)."</td>
           <td>".htmlentities($description)."</td>
         </tr>";
-    $levels[$data[2]][1] .= $tmp_output;
+    $levels[$data[2]][3] .= $tmp_output;
   }
 
   $output .= "
@@ -72,8 +60,8 @@ function print_commands_form()
   {
     $output .= "
              <fieldset class=\"full_frame\">
-               <legend>".(($user_lvl) ? "<a href=\"#\" onclick=\"showHide('{$levels[$i][0]}')\">{$lang_command[$levels[$i][0]]}</a>" : "{$lang_command[$levels[$i][0]]}")."</legend>
-                 <div id=\"{$levels[$i][0]}\">";
+               <legend>".(($user_lvl) ? "<a href=\"#\" onclick=\"showHide('{$levels[$i][1]}')\">{$levels[$i][1]}</a>" : "{$levels[$i][1]}")."</legend>
+                 <div id=\"{$levels[$i][1]}\">";
     $output .="
                <br />
                  <table class=\"lined\" style=\"width: 720px;text-align: left;\">
@@ -82,7 +70,7 @@ function print_commands_form()
                      <th width=\"13%\">{$lang_command['command']}</th>
                      <th width=\"20%\">{$lang_command['syntax']}</th>
                      <th width=\"65%\">{$lang_command['description']}</th>
-                   </tr>" . $levels[$i][1];
+                   </tr>" . $levels[$i][3];
     if($user_lvl >= $action_permission['update'])
     {
       $output .= "

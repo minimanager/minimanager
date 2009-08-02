@@ -9,18 +9,6 @@
  */
 
 
-$gm_level_arr =
-  Array
-  (
-    0 => array(0, "Player",     ""     ),
-    1 => array(1, "Moderator",  "Mod"  ),
-    2 => array(2, "Gamemaster", "GM"   ),
-    3 => array(3, "BugTracker", "BT"   ),
-    4 => array(4, "Admin",      "Admin"),
-    5 => array(5, "SysOp",      "SysOp")
-  );
-
-
 $exp_lvl_arr = 
   Array
   (

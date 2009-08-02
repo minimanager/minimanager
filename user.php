@@ -812,6 +812,7 @@ function edit_user() {
 	} else {
 			$ban_checked = "";
 			$ban_info = "";
+			$banned[3] = "";
 			}
       if($user_lvl >= $action_permission['update']) {
       $output .= "<td><input type=\"checkbox\" name=\"banned\" value=\"1\" $ban_checked/>$ban_info</td>"; }
@@ -831,10 +832,7 @@ function edit_user() {
       if($user_lvl >= $action_permission['update']) { $output .="
 	    <td><input type=\"text\" name=\"banreason\" size=\"43\" maxlength=\"255\" value=\"$banned[3]\" /></td>";}
       else
-        if($ban_checked)
-          $output .= "<td>$banned[3]</td>";
-        else
-          $output .= "<td></td>";
+        $output .= "<td>$banned[3]</td>";
       if ($expansion_select)
       {  $output .="</tr><tr>";
         if($user_lvl >= $action_permission['update'])

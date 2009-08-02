@@ -11,6 +11,7 @@
  * instead of 2 supported by version of Q.SA
  */
 
+
 //#############################################################################
 //
 // configuration note.
@@ -28,9 +29,10 @@
 
 $version = "0.14";
 
+
 //#############################################################################
 //---- SQL Configuration ----
-
+//
 //  SQL server type  :
 //  "MySQL"   - Mysql
 //  "PgSQL"   - PostgreSQL
@@ -85,8 +87,10 @@ $characters_db = Array
   ),                                // NOTE: THIS USER MUST HAVE AT LEAST READ ACCESS ON THE WORLD DATABASE
 );
 
+
 //#############################################################################
 //---- Game Server Configuration ----
+
 $server_type = 0;                   // 0=MaNGOS, 1=Trinity
 
 $server = Array
@@ -102,10 +106,11 @@ $server = Array
   ),
 );
 
+
 //#############################################################################
 //---- Mail configuration ----
-$admin_mail = "mail@mail.com";      // mail used for bug reports and other user contact
 
+$admin_mail = "mail@mail.com";      // mail used for bug reports and other user contact
 $mailer_type = "smtp";              // type of mailer to be used("mail", "sendmail", "smtp")
 $from_mail = "mail@mail.com";       // all emails will be sent from this email
 
@@ -118,8 +123,10 @@ $smtp_cfg = array
   'pass' => ""                      // pass
 );
 
+
 //#############################################################################
 //---- IRC Options ------
+
 $irc_cfg = array
 (
   'server'  => "mangos.cjb.net",    // irc server
@@ -127,8 +134,37 @@ $irc_cfg = array
   'channel' => "minimanager"        // channel
 );
 
+
+//#############################################################################
+//---- HTTP Proxy Configuration ----
+
+$proxy_cfg = Array
+(
+  'addr' => "",              // configure only if requierd
+  'port' => 80,
+  'user' => "",
+  'pass' => ""
+);
+
+
+//#############################################################################
+//---- External Links ----
+
+$tt_lang                    = "www";// wowhead tooltip language. choices are 'fr', 'de', 'es' (for 'en' use www)
+$item_datasite              = "http://$tt_lang.wowhead.com/?item=";
+$quest_datasite             = "http://$tt_lang.wowhead.com/?quest=";
+$creature_datasite          = "http://$tt_lang.wowhead.com/?npc=";
+$spell_datasite             = "http://$tt_lang.wowhead.com/?spell=";
+$skill_datasite             = "http://$tt_lang.wowhead.com/?spells=";
+$talent_datasite            = "http://$tt_lang.wowhead.com/?spell=";
+$go_datasite                = "http://$tt_lang.wowhead.com/?object=";
+$talent_calculator_datasite = "http://www.wowarmory.com/talent-calc.xml?cid=";
+$get_icons_from_web         = false; //wherever to get icons from the web in case they are missing in /img/INV dir.
+
+
 //#############################################################################
 //---- New account creation Options ----
+
 $disable_acc_creation  = false;     // true = Do not allow new accounts to be created
 $expansion_select      = true;      // true = Shows option to select expansion or classic False = no option, WOTLK enabled by default
 $defaultoption         = 2;         // if the above is false then set what the default option will be (2 = WOTLK, 1 = TBC, 0 = Classic)
@@ -142,10 +178,16 @@ $simple_register       = false;     // Sets the registration to a simple form. N
 // this option will limit account creation to users from selected net range(s).
 // allow all => empty array
 // e.g: "120-122.55.255-0.255-0"
+
 $valid_ip_mask = array
 (
   // "255-0.255-0.255-0.255-0",
 );
+
+//#############################################################################
+//---- Login Options ----
+
+$remember_me_checked  = false;     // "Remember Me" cookie check box default, false = unchecked
 
 //#############################################################################
 //---- Layout configuration ----
@@ -163,21 +205,6 @@ $motd_display_poster = "1";         // display the poserter info in the MOTD (1 
 
 
 //#############################################################################
-//---- External Links ----
-
-$tt_lang                    = "www";  // wowhead tooltip language. choices are 'fr', 'de', 'es' (for 'en' use www)
-$item_datasite              = "http://$tt_lang.wowhead.com/?item=";
-$quest_datasite             = "http://$tt_lang.wowhead.com/?quest=";
-$creature_datasite          = "http://$tt_lang.wowhead.com/?npc=";
-$spell_datasite             = "http://$tt_lang.wowhead.com/?spell=";
-$skill_datasite             = "http://$tt_lang.wowhead.com/?spells=";
-$talent_datasite            = "http://$tt_lang.wowhead.com/?spell=";
-$go_datasite                = "http://$tt_lang.wowhead.com/?object=";
-$talent_calculator_datasite = "http://www.wowarmory.com/talent-calc.xml?cid=";
-$get_icons_from_web         = false; //wherever to get icons from the web in case they are missing in /img/INV dir.
-
-
-//#############################################################################
 //---- Active Translations
 // 0 = English/Default; 1 = Korean; 2 = French; 4 = German; 8 = Chinese; 16 = Taiwanese; 32 = Spanish; 64 = Mexican; 128 = Russian
 // Prototype for search options
@@ -188,21 +215,27 @@ $get_icons_from_web         = false; //wherever to get icons from the web in cas
 $locales_search_option = 0;  // No search option, don't use locales_XXX for search
 $site_encoding = "utf-8";    // used charset
 
+
 //#############################################################################
 //---- Backup configuration ----
 
 $backup_dir = "./backup";    // make sure webserver have the permission to write/read it!
 
-//#############################################################################
-//---- HTTP Proxy Configuration ----
 
-$proxy_cfg = Array
-(
-  'addr' => "",              // configure only if requierd
-  'port' => 80,
-  'user' => "",
-  'pass' => ""
-);
+//#############################################################################
+//---- Account Levels ----
+
+$gm_level_arr =
+  Array
+  (
+    0 => array(0, 'Player',     ''     ,''),
+    1 => array(1, 'Moderator',  'Mod'  ,''),
+    2 => array(2, 'Gamemaster', 'GM'   ,''),   // change the name and alias as required
+    3 => array(3, 'BugTracker', 'BT'   ,''),
+    4 => array(4, 'Admin',      'Admin',''),
+    5 => array(5, 'SysOp',      'SysOp',''),
+    6 => array(6, 'Unknown',    'UnK'  ,''),   // Add additional levels as required
+  );
 
 
 //#############################################################################
@@ -218,13 +251,14 @@ $proxy_cfg = Array
 // --    level 1 can add new items but cannot edit,
 // --    level 2 can add and edit but cannot delete,
 // --    level 3 has full access
-
+//
 // --   Example: array("item.php", 'items',1,0,3,2),
 // --    this is tricky,
 // --    level 0 would have no access
 // --    level 1 can only search and browse
 // --    level 2 can delete items, but cannot add or edit
 // --    level 3 can add and edit, but cannot delete
+
 
 $menu_array = Array
 (

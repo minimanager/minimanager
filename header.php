@@ -89,6 +89,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
   }
 
   //temp workaround
+  if (ini_get('memory_limit') < 16)
   @ini_set('memory_limit', '16M');
 
   //set user variables
@@ -113,9 +114,6 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
   $output .= "
           <div id=\"menuwrapper\">
             <ul id=\"menubar\">";
-
-  //if(!isset($menu_array[$user_lvl]))
-  //  error("Wrong menu_array configuration.<br />Level $user_lvl menu missing...");
 
   // get file we are executing
   $array = explode ( '/', $_SERVER['PHP_SELF']);
@@ -168,13 +166,16 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
               <li><a class=\"trigger\" href=\"edit.php\">{$lang_header['my_acc']}</a>
                 <ul>";
 
-  if ($sql->num_rows($result) > 1)
+  if ($sql->num_rows($result) > 1 && (count($server) >1))
   {
     while ($realm = $sql->fetch_row($result))
     {
-      $set = ($realm[0] == $realm_id) ? ">" : "";
-      $output .= "
+      if(isset($server[$realm[0]]))
+      {
+        $set = ($realm[0] == $realm_id) ? ">" : "";
+        $output .= "
                   <li><a href=\"realm.php?action=set_def_realm&amp;id=$realm[0]&amp;url={$_SERVER['PHP_SELF']}\">".htmlentities($set." ".$realm[1])."</a></li>";
+      }
     }
     $output .= "
                   <li><a href=\"#\">-------------------</a></li>";
