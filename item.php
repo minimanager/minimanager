@@ -305,12 +305,15 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
  for ($i=1; $i<=$total_items_found; $i++){
   $item = $sql->fetch_row($result);
 
-  $tooltip = get_item_tooltip($item[0]);
+  //$tooltip = get_item_tooltip($item[0]);
 
   $output .= "<tr>
 				<td><a href=\"$item_datasite$item[0]\" target=\"_blank\">$item[0]</a></td>
 				<td>";
-  $output .= maketooltip("<img src=\"".get_icon($item[0])."\" class=\"icon_border\" alt=\"\" />", "$item_datasite$item[0]", "$tooltip", "item_tooltip", "target=\"_blank\"");
+  $output .= "
+                    <a style=\"padding:2px;\" href=\"$item_datasite$item[0]\" target=\"_blank\">
+                      <img src=\"".get_icon($item[0])."\" class=\"".get_item_border($item[0])."\" alt=\"\">
+                  </a>";
   $output .="</td>
 				<td>";
 				if($user_lvl >= $action_permission['update'])
@@ -1177,7 +1180,7 @@ valid_login($action_permission['update']);
  if ($result){
 	$item = $sql->fetch_assoc($result);
 	require_once("scripts/get_lib.php");
-	$tooltip = get_item_tooltip($entry);
+	//$tooltip = get_item_tooltip($entry);
 
 	$output .= "<script type=\"text/javascript\" src=\"js/tab.js\"></script>
 	 <center>
