@@ -173,7 +173,7 @@ $spell_datasite             = "http://$tt_lang.wowhead.com/?spell=";
 $skill_datasite             = "http://$tt_lang.wowhead.com/?spells=";
 $talent_datasite            = "http://$tt_lang.wowhead.com/?spell=";
 $go_datasite                = "http://$tt_lang.wowhead.com/?object=";
-$talent_calculator_datasite = "http://www.worldofwarcraft.com/info/classes";
+$talent_calculator_datasite = "http://www.wowarmory.com/talent-calc.xml?cid=";
 $get_icons_from_web         = false; //wherever to get icons from the web in case they are missing in /img/INV dir.
 
 
@@ -233,11 +233,11 @@ $menu_array = Array
     array("ahstats.php", 'auctionhouse',0,5,5,5),    // new security system implemented
     array("arenateam.php", 'arena_teams',0,5,5,5),   // has own level security, but has yet to honor the new security system.
     array("guild.php", 'guilds',0,5,5,5),            // has own level security, but has yet to honor the new security system.
-    array("honor.php", 'honor',0,5,5,5),             // this page is a read-only page, but links to other pages, please use with caution
+    array("honor.php", 'honor',0,5,5,5),             // new security system implemented, but links to other pages, please use with caution
     array("stat.php", 'statistics',0,5,5,5),         // new security system implemented
     array("events.php", 'events',0,5,5,5),           // new security system implemented
     array("instances.php", 'instances',0,5,5,5),     // new security system implemented
-    array("top100.php", 'top100',0,5,5,5),           // this page is a read-only page, but links to other pages, please use with caution
+    array("top100.php", 'top100',0,5,5,5),           // new security system implemented, but links to other pages, please use with caution
     array("javascript:void(0);\" onclick=\"window.open('./pomm/pomm.php?realmid=".(empty($_SESSION)?"":$_SESSION['realm_id'])."', 'pomm', 'Toolbar=0, Location=0, Directories=0, Status=0, Menubar=0, Scrollbar=0, Resizable=0, Copyhistory=1, Width=966, Height=732')", 'player_map',0,5,5,5),
   ),
 ),
@@ -245,10 +245,10 @@ $menu_array = Array
   (
     array("user.php", 'accounts',0,5,5,5),           // new security system implemented
     array("char_list.php", 'characters',0,5,5,5),    // new security system implemented
-    array("command.php", 'command',0,5,5,5),         // has own level security, but has yet to honor the new security system.
+    array("command.php", 'command',0,5,5,5),         // new security system implemented
     array("banned.php", 'banned_list',0,5,5,5),      // new security system implemented
     array("mail.php", 'mail',0,5,5,5),               // new security system implemented
-    array("ticket.php", 'tickets',5,5,5,5),          // this page has yet to honor the new security system, please use with caution.
+    array("ticket.php", 'tickets',0,5,5,5),          // new security system implemented
     array("tele.php", 'teleports',0,5,5,5),          // new security system implemented
     array("cleanup.php", 'cleanup',5,5,5,5),         // new security system implemented
     array("ssh.php", 'ssh_line',0,5,5,5),            // new security system implemented

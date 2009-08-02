@@ -1961,7 +1961,7 @@ function char_talent()
           $output .= "
             <tr>
               <td>$data[0]</td>
-              <td align=left><a href=\"$talent_datasite$data[0]\">$data[1]</a></td>";
+              <td align=left><a href=\"$talent_datasite$data[0]\" target=\"_blank\">$data[1]</a></td>";
           if ($GMP)
             $talent_sum = gmp_add($talent_sum,sprintf('%s',get_talent_value($data[0])));
           $output .= "
@@ -1995,7 +1995,7 @@ function char_talent()
           $output .= "
               <tr>
                 <td>
-                  <a href=\"$talent_calculator_datasite/$playerclass/talents.html?".str_pad(sprintf('%s',gmp_strval($talent_sum)), $padlength, "0", STR_PAD_LEFT)."\">Talent Calculator</a>
+                  <a href=\"".$talent_calculator_datasite.$char[3]."&tal=".str_pad(sprintf('%s',gmp_strval($talent_sum)), "0", "0", STR_PAD_LEFT)."\" target=\"_blank\">Talent Calculator</a>
                 </td>
               </tr>";
 
