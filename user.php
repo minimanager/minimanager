@@ -16,8 +16,8 @@ require_once("scripts/defines.php");
 // BROWSE USERS
 //########################################################################################################################
 function browse_users() {
- global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name, $gm_level_arr,
-   $exp_lvl_arr, $action_permission, $showcountryflag, $expansion_select;
+ global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name, $sql_search_limit, 
+   $gm_level_arr, $exp_lvl_arr, $action_permission, $showcountryflag, $expansion_select;
 valid_login($action_permission['read']);
 
  $sql = new SQL;
@@ -111,19 +111,17 @@ makebutton($lang_user['cleanup'], "cleanup.php", 122);
    $output .="
    </tr>";
 
-if ($showcountryflag)
-	$sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-
  while ($data = $sql->fetch_row($query)){
 
 
 		$ip = $data[5];
 
-      if ($showcountryflag)
-      {
-	   	$nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
-		$country = $sql->fetch_row($nation);
-      }
+    if ($showcountryflag)
+    {
+      $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+      $nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+      $country = $sql->fetch_row($nation);
+    }
 
 	if (($user_lvl >= $data[2])||($user_name == $data[1])){
    		$output .= "<tr>";
@@ -186,8 +184,8 @@ if ($showcountryflag)
 //  SEARCH
 //#######################################################################################################
 function search() {
- global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $user_lvl, $user_name, $sql_search_limit,
-   $gm_level_arr, $action_permission , $showcountryflag, $expansion_select;
+ global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name, $sql_search_limit, 
+   $gm_level_arr, $exp_lvl_arr, $action_permission, $showcountryflag, $expansion_select;
 valid_login($action_permission['read']);
  if(!isset($_GET['search_value']) || !isset($_GET['search_by'])) redirect("user.php?error=2");
 
@@ -207,12 +205,12 @@ valid_login($action_permission['read']);
  switch ($search_by){
 
  case "greater_gmlevel":
-	 $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online
+	 $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
 		 FROM account WHERE gmlevel > $search_value ORDER BY $order_by $order_dir LIMIT $sql_search_limit";
  break;
 
  case "banned":
-	$sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online
+	$sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
 		 FROM account WHERE id = 0 ";
 	$que = $sql->query("SELECT id FROM account_banned");
 	while ($banned = $sql->fetch_row($que)) $sql_query .= "OR id =$banned[0] ";
@@ -220,15 +218,15 @@ valid_login($action_permission['read']);
  break;
 
  case "failed_logins":
-	 $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online
+	 $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
 		 FROM account WHERE failed_logins > $search_value ORDER BY $order_by $order_dir LIMIT $sql_search_limit";
  break;
 
  default:
-    $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online
+    $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
 		 FROM account WHERE $search_by LIKE '%$search_value%' ORDER BY $order_by $order_dir LIMIT $sql_search_limit";
  }
-
+ 
  $query = $sql->query($sql_query);
  $total_found = $sql->num_rows($query);
 
@@ -288,9 +286,9 @@ valid_login($action_permission['read']);
    $output .="
    </tr>";
 
-  while ($data = $sql->fetch_row($query))
-  {
-    $ip = $data[5];
+ while ($data = $sql->fetch_row($query)){
+
+		$ip = $data[5];
 
     if ($showcountryflag)
     {
@@ -299,48 +297,47 @@ valid_login($action_permission['read']);
       $country = $sql->fetch_row($nation);
     }
 
-    if (($user_lvl >= $data[2])||($user_name == $data[1]))
-    {
-      $output .= "<tr>";
-      if ($user_lvl >= $action_permission['insert'])
-        $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
-      else
-        $output .= "<td></td>";
-      $output .= "<td>$data[0]</td><td>";
-      if ($user_lvl >= $action_permission['read']) 
-        $output .= "<a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a>";
-      else
-        $output .= $data[1];
-      $output .= "</td><td>".$gm_level_arr[$data[2]][2]."</td>";
-      if ($user_lvl >= $action_permission['update'])
-        $output .= "<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>";
-      else
-        $output .= "<td>***@***</td>";
-      if ($expansion_select)
-        $output .="<td>".$exp_lvl_arr[$data[10]][2]."</td>";
-      $output .="<td class=\"small\">$data[4]</td>";
-      if (($user_lvl >= $action_permission['update'])||($user_name == $data[1]))
-        $output .= "<td>$data[5]</td>";
-      else
-        $output .= "<td>******</td>";
-      $output .= "<td>".(($data[6]) ? $data[6] : "-")."</td>
-      <td>".(($data[7]) ? $lang_global['yes_low'] : "-")."</td>
-      <td class=\"small\">$data[8]</td>
-      <td>".(($data[9]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
-      if ($showcountryflag)
-        $output .= "<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
-      $output .= "</tr>";
-    }
-    else
-    {
-      $output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td><td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td>";
-      if ($expansion_select)
-		$output .= "<td>*</td>";
-      if ($showcountryflag)
-        $output .= "<td>*</td>";
-      $output .= "</tr>";
-    }
-  }
+	if (($user_lvl >= $data[2])||($user_name == $data[1])){
+   		$output .= "<tr>";
+		if ($user_lvl >= $action_permission['insert']) $output .= "<td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
+                 else $output .= "<td></td>";
+   		$output .= "<td>$data[0]</td>
+           	<td>";
+           	if ($user_lvl >= $action_permission['read']) 
+           	$output .= "<a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a>";
+           	else
+           	$output .= $data[1];
+           	$output .= "</td>
+           	
+			<td>".$gm_level_arr[$data[2]][2]."</td>";
+   if ($expansion_select)
+    $output .="
+			<td>".$exp_lvl_arr[$data[10]][2]."</td>";
+                if ($user_lvl >= $action_permission['update']) $output .= "
+			<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>";
+                else $output .= "<td>***@***</td>";
+		$output .="<td class=\"small\">$data[4]</td>";
+		if (($user_lvl >= $action_permission['update'])||($user_name == $data[1])) $output .= "<td>$data[5]</td>";
+			else $output .= "<td>******</td>";
+		$output .= "<td>".(($data[6]) ? $data[6] : "-")."</td>
+			<td>".(($data[7]) ? $lang_global['yes_low'] : "-")."</td>
+			<td class=\"small\">$data[8]</td>
+			<td>".(($data[9]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
+        if ($showcountryflag)
+		  $output .= "
+ 			<td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+        $output .= "
+            </tr>";
+	} else {
+		$output .= "<tr><td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
+			<td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>*</td>";
+		if ($expansion_select)
+		  $output .= "<td>*</td>";
+		if ($showcountryflag)
+		  $output .= "<td>*</td>";
+		$output .= "</tr>";
+	}
+}
 $output .= "<tr><td colspan=\"12\" class=\"hidden\"><br /></td></tr>
 	<tr>
 		<td colspan=\"8\" align=\"left\" class=\"hidden\">";
