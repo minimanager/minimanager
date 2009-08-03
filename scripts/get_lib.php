@@ -10,9 +10,6 @@
 
 //##########################################################################################
 
-require_once("item_display_info.php");
-require_once("char_aura.php");
-
 //get name from realmlist.name
 function get_realm_name($realm_id){
  global $lang_global, $realm_db;
@@ -27,20 +24,6 @@ function get_realm_name($realm_id){
  return $realm_name;
 }
 
-//get displayid of item
-function get_displayid($itemid)
-{
-  global $lang_global,  $realm_id, $world_db;
-  $sql_0 = new SQL;
-  $sql_0->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
-  $result = $sql_0->query("SELECT `displayid` FROM `item_template` WHERE `entry` = $itemid");
-  if ($result)
-    $displayid = $sql_0->result($result, 0);
-  else
-    $diaplayid = 0;
-  $sql_0->close();
-  return $displayid;
-}
 
 //##########################################################################################
 //get DBC Language from config
@@ -684,211 +667,273 @@ function get_item_tooltip($item_id){
 //##########################################################################################
 //get item icon - if icon not exists in INV folder D/L it from web.
 
-function get_icon($itemid) {
- $displayid = get_displayid($itemid); 
- 
- return get_icon_by($displayid, $itemid);
-}
-
-function get_icon_by($displayid, $itemid)
+function get_icon($itemid)
 {
- global $proxy_cfg, $get_icons_from_web, $item_display_info;
+  global $lang_global,  $realm_id, $world_db, $proxy_cfg, $get_icons_from_web, $mmfpm_db;
 
- if ($displayid)
- {
-  $item = $item_display_info[$displayid];
-  if ($item && file_exists("img/item_icons/$item.jpg")) 
-	return "img/item_icons/$item.jpg";
+  $sql_3 = new SQL;
+  $sql_3->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $result = $sql_3->query("SELECT `displayid` FROM `item_template` WHERE `entry` = $itemid");
+
+  if ($result)
+    $displayid = $sql_3->result($result, 0);
   else
-	$item = '';
- } 
-else $item = '';
+    $displayid = 0;
 
- if($get_icons_from_web)
- {
-  $xmlfilepath="http://www.wowhead.com/?item=";
-  $proxy = $proxy_cfg['addr'];
-  $port = $proxy_cfg['port'];
+  $sql_3->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
-  if (empty($proxy_cfg['addr'])) 
+  if ($displayid)
   {
-    $proxy = "www.wowhead.com";
-    $xmlfilepath = "?item=";
-    $port = 80;
-  }
+    $result = $sql_3->query("SELECT `name` FROM `item_display_info` WHERE `id`=$displayid");
 
-  if ($item == '')
+    if($result)
+    { 
+      $item = $sql_3->result($result, 0);
+
+      if ($item)
+      {
+        if(file_exists("img/item_icons/$item.jpg")) 
+        {
+          $sql_3->close();
+          return "img/item_icons/$item.jpg";
+        }
+      }
+      else
+        $item = '';
+    }
+    else
+      $item = '';
+  } 
+  else
+    $item = '';
+
+  if($get_icons_from_web)
   {
-    //get the icon name
+    $xmlfilepath="http://www.wowhead.com/?item=";
+    $proxy = $proxy_cfg['addr'];
+    $port = $proxy_cfg['port'];
+
+    if (empty($proxy_cfg['addr'])) 
+    {
+      $proxy = "www.wowhead.com";
+      $xmlfilepath = "?item=";
+      $port = 80;
+    }
+
+    if ($item == '')
+    {
+      //get the icon name
+      $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
+      if (!$fp) return "img/INV/INV_blank_32.gif";
+      $out = "GET /$xmlfilepath$itemid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
+      if (!empty($proxy_cfg['user'])) $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
+      $out .="Connection: Close\r\n\r\n";
+
+      $temp = "";
+      fwrite($fp, $out);
+      while ($fp && !feof($fp))
+        $temp .= fgets($fp, 4096);
+      fclose($fp);
+
+      $wowhead_string = $temp;
+      $temp_string1 = strstr($wowhead_string, "Icon.create(");
+      $temp_string2 = substr($temp_string1, 12, 50);
+      $temp_string3 = strtok($temp_string2, ',');
+      $temp_string4 = substr($temp_string3, 1, strlen($temp_string3) - 2);
+      $icon_name = $temp_string4;
+
+      $item = $icon_name;
+    }
+
+    if (file_exists("img/item_icons/$item.jpg"))
+    {
+      $sql_3->query("INSERT IGNORE INTO item_display_info (id, name) VALUES ('$displayid','$item')");
+      $sql_3->close();
+      return "img/item_icons/$item.jpg";
+    }
+
+    //get the icon itself
+    if (empty($proxy_cfg['addr'])) 
+    {
+      $proxy = "static.wowhead.com";
+      $port = 80;
+    }
     $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
-    if (!$fp) return "img/INV/INV_blank_32.gif";
-    $out = "GET /$xmlfilepath$itemid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
-    if (!empty($proxy_cfg['user'])) $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
+    if (!$fp)
+      return "img/INV/INV_blank_32.gif";
+    $iconfilename = strtolower($item);
+    $file = "http://static.wowhead.com/images/icons/medium/$iconfilename.jpg";
+    $out = "GET $file HTTP/1.0\r\nHost: static.wowhead.com\r\n";
+    if (!empty($proxy_cfg['user']))
+      $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
     $out .="Connection: Close\r\n\r\n";
-
-    $temp = "";
     fwrite($fp, $out);
-    while ($fp && !feof($fp)) $temp .= fgets($fp, 4096);
+
+    //remove header
+    while ($fp && !feof($fp))
+    {
+      $headerbuffer = fgets($fp, 4096);
+      if (urlencode($headerbuffer) == "%0D%0A")
+        break;
+    }
+
+    if (file_exists("img/item_icons/$item.jpg"))
+    {
+      $sql_3->query("INSERT IGNORE INTO item_display_info (id, name) VALUES ('$displayid','$item')");
+      $sql_3->close();
+      return "img/item_icons/$item.jpg";
+    }
+
+    $img_file = fopen("img/item_icons/$item.jpg", 'wb');
+    while (!feof($fp))
+      fwrite($img_file,fgets($fp, 4096));
     fclose($fp);
-    
-	//ADDED:
-	$wowhead_string = $temp;
-	//ENDOF ADDED
-	
-	//preg_match("~(Icon.create\('(.*?)')~", $temp, $temp);
-	//foxpl regexp:
-    //preg_match("Icon.create\('([^\']*?)", $temp, $temp);
+    fclose($img_file);
 
-	// if (!isset($temp[2])) return "img/INV/INV_blank_32.gif";
-    //$item = $temp[2];
-  }
-  //$iconfilename = strtolower($item);  
-  
-  //ADDED:
-  //GETTING ICON NAME FROM WOWHEAD STRING:
-  $temp_string1 = strstr($wowhead_string, "Icon.create(");
-  $temp_string2 = substr($temp_string1, 12, 50);
-  $temp_string3 = strtok($temp_string2, ',');
-  $temp_string4 = substr($temp_string3, 1, strlen($temp_string3) - 2);
-
-  $icon_name = $temp_string4;
-  $item = $icon_name;
-  $iconfilename = strtolower($icon_name);
-  //ENDOF ADDED
-	
-  //get the icon itself
-  if (empty($proxy_cfg['addr'])) 
-  {
-    $proxy = "static.wowhead.com";
-    $port = 80;
-  }  
-  $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
-    if (!$fp) return "img/INV/INV_blank_32.gif";
-  $file = "http://static.wowhead.com/images/icons/medium/$iconfilename.jpg";
-  $out = "GET $file HTTP/1.0\r\nHost: static.wowhead.com\r\n";
-  if (!empty($proxy_cfg['user'])) $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
-  $out .="Connection: Close\r\n\r\n";
-  fwrite($fp, $out);
-
-  //remove header
-  while ($fp && !feof($fp))
-  {
-    $headerbuffer = fgets($fp, 4096);
-    if (urlencode($headerbuffer) == "%0D%0A") break;
-  }
-
-  if (file_exists("img/item_icons/$item.jpg")) return "img/item_icons/$item.jpg";
-  
-  $img_file = fopen("img/item_icons/$item.jpg", 'wb');
-  while (!feof($fp)) fwrite($img_file,fgets($fp, 4096));
-  fclose($fp);
-  fclose($img_file);
-
-  if (file_exists("img/item_icons/$item.jpg")) return "img/item_icons/$item.jpg";
-  else return "img/INV/INV_blank_32.gif";
- } 
- else return "img/INV/INV_blank_32.gif";
+    if (file_exists("img/item_icons/$item.jpg"))
+    {
+      $sql_3->query("INSERT IGNORE INTO item_display_info (id, name) VALUES ('$displayid','$item')");
+      $sql_3->close();
+      return "img/item_icons/$item.jpg";
+    }
+    else
+      return "img/INV/INV_blank_32.gif";
+  } 
+  else
+    return "img/INV/INV_blank_32.gif";
 }
+
 
 //##########################################################################################
 //get aura icon - if icon not exists in Char_AURA folder D/L it from web.
 
 function get_aura_icon($auraid)
 {
- global $proxy_cfg, $get_icons_from_web, $char_aura;
- if ($auraid)
- {
-  $aura = $char_aura[$auraid[1]];
-  if ($aura && file_exists("img/Char_AURA/$aura.jpg")) return "img/Char_AURA/$aura.jpg";
-  else
-	$aura = '';
- }
- else $aura = ''; 
+  global $proxy_cfg, $get_icons_from_web, $mmfpm_db;
+  $sql_4 = new SQL;
+  $sql_4->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
+  if ($auraid)
+  {
+    $result = $sql_4->query("SELECT `name` FROM `char_aura` WHERE `id`=$auraid");
+
+    if($result)
+    {
+      $aura = $sql_4->result($result, 0);
+
+      if ($aura)
+      {
+        if(file_exists("img/item_icons/$aura.jpg"))
+        {
+          $sql_4->close();
+          return "img/item_icons/$aura.jpg";
+        }
+      }
+      else
+        $aura = '';
+    }
+    else
+      $aura = ''; 
+   }
+   else
+     $aura = '';
  
- if($get_icons_from_web)
- {
-  $xmlfilepath="http://www.wowhead.com/?spell=";
-  $proxy = $proxy_cfg['addr'];
-  $port = $proxy_cfg['port'];
-
-  if (empty($proxy_cfg['addr'])) 
+  if($get_icons_from_web)
   {
-    $proxy = "www.wowhead.com";
-    $xmlfilepath = "?spell=";
-    $port = 80;
-  }
+    $xmlfilepath="http://www.wowhead.com/?spell=";
+    $proxy = $proxy_cfg['addr'];
+    $port = $proxy_cfg['port'];
 
-  if ($aura == '')
-  {
-    //get the icon name
+    if (empty($proxy_cfg['addr'])) 
+    {
+      $proxy = "www.wowhead.com";
+      $xmlfilepath = "?spell=";
+      $port = 80;
+    }
+
+    if ($aura == '')
+    {
+      //get the icon name
+      $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
+      if (!$fp)
+        return "img/INV/INV_blank_32.gif";
+      $out = "GET /$xmlfilepath$auraid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
+      if (!empty($proxy_cfg['user']))
+        $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
+      $out .="Connection: Close\r\n\r\n";
+
+      $temp = "";
+      fwrite($fp, $out);
+      while ($fp && !feof($fp))
+        $temp .= fgets($fp, 4096);
+      fclose($fp);
+
+      $wowhead_string = $temp;
+      $temp_string1 = strstr($wowhead_string, "Icon.create(");
+      $temp_string2 = substr($temp_string1, 12, 50);
+      $temp_string3 = strtok($temp_string2, ',');
+      $temp_string4 = substr($temp_string3, 1, strlen($temp_string3) - 2);
+      $aura_icon_name = $temp_string4;
+      
+      $aura = $aura_icon_name;
+    }
+
+    if (file_exists("img/item_icons/$aura.jpg"))
+    {
+      $sql_4->query("INSERT IGNORE INTO char_aura (id, name) VALUES ('$auraid','$aura')");
+      $sql_4->close();
+      return "img/item_icons/$aura.jpg";
+    }
+
+    //get the icon itself
+    if (empty($proxy_cfg['addr'])) 
+    {
+      $proxy = "static.wowhead.com";
+      $port = 80;
+    }  
     $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
-    if (!$fp) return "img/INV/INV_blank_32.gif";
-    $out = "GET /$xmlfilepath$auraid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
-    if (!empty($proxy_cfg['user'])) $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
+    if (!$fp)
+      return "img/INV/INV_blank_32.gif";
+    $iconfilename = strtolower($aura_icon_name);
+    $file = "http://static.wowhead.com/images/icons/medium/$iconfilename.jpg";
+    $out = "GET $file HTTP/1.0\r\nHost: static.wowhead.com\r\n";
+    if (!empty($proxy_cfg['user']))
+      $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
     $out .="Connection: Close\r\n\r\n";
-
-    $temp = "";
     fwrite($fp, $out);
-    while ($fp && !feof($fp)) $temp .= fgets($fp, 4096);
+
+    //remove header
+    while ($fp && !feof($fp))
+    {
+      $headerbuffer = fgets($fp, 4096);
+      if (urlencode($headerbuffer) == "%0D%0A")
+        break;
+    }
+
+    if (file_exists("img/item_icons/$aura.jpg"))
+    {
+      $sql_4->query("INSERT IGNORE INTO char_aura (id, name) VALUES ('$auraid','$aura')");
+      $sql_4->close();
+      return "img/item_icons/$aura.jpg";
+    }
+
+    $img_file = fopen("img/item_icons/$aura.jpg", 'wb');
+    while (!feof($fp))
+      fwrite($img_file,fgets($fp, 4096));
     fclose($fp);
-	
-	//ADDED
-	$wowhead_string = $temp;
-	//ENDOF ADDED
-    
-	//preg_match("~(Icon.create\('(.*?)')~", $temp, $temp);
-	//foxpl regexp:
-    //preg_match("Icon.create\('([^\']*?)\'", $temp, $temp);
-	//    $temp = "test";
-    //if (!isset($temp[2])) return "img/INV/INV_blank_32.gif";
-    //$aura = $temp[2];
+    fclose($img_file);
+
+    if (file_exists("img/item_icons/$aura.jpg"))
+    {
+      $sql_4->query("INSERT IGNORE INTO char_aura (id, name) VALUES ('$auraid','$aura')");
+      $sql_4->close();
+      return "img/item_icons/$aura.jpg";
+    }
+    else 
+      return "img/INV/INV_blank_32.gif";
   }
-  //$iconfilename = strtolower($aura); 
-
-	//ADDED:
-	//GETTING ICON NAME FROM WOWHEAD STRING:
-	$temp_string1 = strstr($wowhead_string, "Icon.create(");
-	$temp_string2 = substr($temp_string1, 12, 50);
-	$temp_string3 = strtok($temp_string2, ',');
-	$temp_string4 = substr($temp_string3, 1, strlen($temp_string3) - 2);
-	
-	$aura_icon_name = $temp_string4;
-	$aura = $aura_icon_name;
-	$iconfilename = strtolower($aura_icon_name);
-	//ENDOF ADDED
-	
-  //get the icon itself
-  if (empty($proxy_cfg['addr'])) 
-  {
-    $proxy = "static.wowhead.com";
-    $port = 80;
-  }  
-  $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
-    if (!$fp) return "img/INV/INV_blank_32.gif";
-  $file = "http://static.wowhead.com/images/icons/medium/$iconfilename.jpg";
-  $out = "GET $file HTTP/1.0\r\nHost: static.wowhead.com\r\n";
-  if (!empty($proxy_cfg['user'])) $out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
-  $out .="Connection: Close\r\n\r\n";
-  fwrite($fp, $out);
-
-  //remove header
-  while ($fp && !feof($fp))
-  {
-    $headerbuffer = fgets($fp, 4096);
-    if (urlencode($headerbuffer) == "%0D%0A") break;
-  }
-
-  if (file_exists("img/Char_AURA/$aura.jpg")) return "img/Char_AURA/$aura.jpg";
-  
-  $img_file = fopen("img/Char_AURA/$aura.jpg", 'wb');
-  while (!feof($fp)) fwrite($img_file,fgets($fp, 4096));
-  fclose($fp);
-  fclose($img_file);
-  if (file_exists("img/Char_AURA/$aura.jpg")) return "img/Char_AURA/$aura.jpg";
-  else 
-	return "img/INV/INV_blank_32.gif";
- } 
- else return "img/INV/INV_blank_32.gif";
+  else
+    return "img/INV/INV_blank_32.gif";
 }
 
 
