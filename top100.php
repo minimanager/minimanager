@@ -2,6 +2,7 @@
 
 require_once("header.php");
 require_once("scripts/defines.php");
+ require_once("scripts/get_lib.php");
 valid_login($action_permission['read']);
 
 $sql = new SQL;
@@ -74,32 +75,11 @@ for ($i=1; $i<=$total_found; $i++){
 			$time .= " hours";
 		}
 
-    $level = $char[9];
-
-    if($level < 10)
-      $lev = '<font color="#FFFFFF">'.$level.'</font>';
-    else if($level < 20)
-      $lev = '<font color="#858585">'.$level.'</font>';
-    else if($level < 30)
-      $lev = '<font color="#339900">'.$level.'</font>';
-    else if($level < 40)
-      $lev = '<font color="#3300CC">'.$level.'</font>';
-    else if($level < 50)
-      $lev = '<font color="#C552FF">'.$level.'</font>';
-    else if($level < 60)
-      $lev = '<font color="#FF8000">'.$level.'</font>';
-    else if($level < 70)
-      $lev = '<font color="#FFF280">'.$level.'</font>';
-    else if($level < 80)
-      $lev = '<font color="#FF0000">'.$level.'</font>';
-    else
-      $lev = '<font color="#000000">'.$level.'</font>';
-
 	$output .= "<tr valign=top>
 		<td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
         <td><img src='img/c_icons/{$char[2]}-{$char[12]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
 		<td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-		<td>$lev</td>
+		<td>".color_per_level_range($char[9])."</td>
 		<td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[11]\">".htmlentities($guild_name[0])."</a></td>
 		<td>$money</td>
 		<td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[7])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[7],$CHAR_RACE[$char[2]][1]).".gif'></span></td>

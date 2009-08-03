@@ -62,37 +62,15 @@ $output .= "<script type=\"text/javascript\">
     <th width=\"30%\">{$lang_honor['guild']}</th>
   </tr>";
 
-
 while ($char = $sql->fetch_row($query))	{
 
 $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[6].";"));
-
-    $level = $char[6];
-
-    if($level < 10)
-      $lev = '<font color="#FFFFFF">'.$level.'</font>';
-    else if($level < 20)
-      $lev = '<font color="#858585">'.$level.'</font>';
-    else if($level < 30)
-      $lev = '<font color="#339900">'.$level.'</font>';
-    else if($level < 40)
-      $lev = '<font color="#3300CC">'.$level.'</font>';
-    else if($level < 50)
-      $lev = '<font color="#C552FF">'.$level.'</font>';
-    else if($level < 60)
-      $lev = '<font color="#FF8000">'.$level.'</font>';
-    else if($level < 70)
-      $lev = '<font color="#FFF280">'.$level.'</font>';  
-    else if($level < 80)
-      $lev = '<font color="#FF0000">'.$level.'</font>';  
-    else
-      $lev = '<font color="#000000">'.$level.'</font>';
 
   	$output .= " <tr>
 			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
 		 	 <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
 		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
-			 <td>$lev</td>
+			 <td>".color_per_level_range($char[6])."</td>
 			 <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
 			 <td>$char[4]</td>
 			 <td>$char[5]</td>
@@ -143,37 +121,15 @@ $output .= "<script type=\"text/javascript\">
     <th width=\"30%\">{$lang_honor['guild']}</th>
   </tr>";
 
-
 while ($char = $sql->fetch_row($query))	{
 
 $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[6].";"));
-
-    $level = $char[6];
-
-    if($level < 10)
-      $lev = '<font color="#FFFFFF">'.$level.'</font>';
-    else if($level < 20)
-      $lev = '<font color="#858585">'.$level.'</font>';
-    else if($level < 30)
-      $lev = '<font color="#339900">'.$level.'</font>';
-    else if($level < 40)
-      $lev = '<font color="#3300CC">'.$level.'</font>';
-    else if($level < 50)
-      $lev = '<font color="#C552FF">'.$level.'</font>';
-    else if($level < 60)
-      $lev = '<font color="#FF8000">'.$level.'</font>';
-    else if($level < 70)
-      $lev = '<font color="#FFF280">'.$level.'</font>';  
-    else if($level < 80)
-      $lev = '<font color="#FF0000">'.$level.'</font>';  
-    else
-      $lev = '<font color="#000000">'.$level.'</font>';
 
   	$output .= " <tr>
 			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
 		 	 <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
 		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
-			 <td>$lev</td>
+			 <td>".color_per_level_range($char[6])."</td>
 		     <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
 			 <td>$char[4]</td>
 			 <td>$char[5]</td>

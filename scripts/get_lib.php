@@ -1015,4 +1015,29 @@ function xp_to_level($lvl)
 
     return $xp;
 }
+
+//#############################################################################
+//set color per Level range
+function color_per_level_range($lvl)
+{
+    if($lvl < 10)
+      $level = '<font color="#FFFFFF">'.$lvl.'</font>';
+    else if($lvl < 20)
+      $level = '<font color="#858585">'.$lvl.'</font>';
+    else if($lvl < 30)
+      $level = '<font color="#339900">'.$lvl.'</font>';
+    else if($lvl < 40)
+      $level = '<font color="#3300CC">'.$lvl.'</font>';
+    else if($lvl < 50)
+      $level = '<font color="#C552FF">'.$lvl.'</font>';
+    else if($lvl < 60)
+      $level = '<font color="#FF8000">'.$lvl.'</font>';
+    else if($lvl < 70)
+      $level = '<font color="#FFF280">'.$lvl.'</font>';  
+    else if($lvl < 80)
+      $level = '<font color="#FF0000">'.$lvl.'</font>';  
+    else
+      $level = '<font color="#000000">'.$lvl.'</font>';
+	    return $level;
+}
 ?>

@@ -10,6 +10,7 @@
 
 require_once("header.php");
 valid_login($action_permission['read']);
+require_once("scripts/get_lib.php");
 
 //########################################################################################################################
 // BROWSE GUILDS
@@ -285,25 +286,6 @@ require_once("scripts/defines.php");
 
   $llogin = count_days($member[12], time());
 
-    if($member[4] < 10)
-      $lev = '<font color="#FFFFFF">'.$member[4].'</font>';
-    else if($member[4] < 20)
-      $lev = '<font color="#858585">'.$member[4].'</font>';
-    else if($member[4] < 30)
-      $lev = '<font color="#339900">'.$member[4].'</font>';
-    else if($member[4] < 40)
-      $lev = '<font color="#3300CC">'.$member[4].'</font>';
-    else if($member[4] < 50)
-      $lev = '<font color="#C552FF">'.$member[4].'</font>';
-    else if($member[4] < 60)
-      $lev = '<font color="#FF8000">'.$member[4].'</font>';
-    else if($member[4] < 70)
-      $lev = '<font color="#FFF280">'.$member[4].'</font>';
-    else if($member[4] < 80)
-      $lev = '<font color="#FF0000">'.$member[4].'</font>';
-    else
-      $lev = '<font color="#000000">'.$member[4].'</font>';
-
     if($llogin < 1)
       $lastlogin = '<font color="#009900">'.$llogin.'</font>';
     else if($llogin < 6)
@@ -328,7 +310,7 @@ require_once("scripts/defines.php");
 	$output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($member[1])."</td>" : "<td><a href=\"char.php?id=$member[0]\">".htmlentities($member[1])."</a></td>";
 	$output .= "<td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".get_player_race($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()'/></td>
 					<td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".get_player_class($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()'/></td>
-					<td>$lev</td>
+					<td>".color_per_level_range($member[4])."</td>
 					<td>".htmlentities($member[6])." (".$member[5].")</td>
 					<td>".htmlentities($member[7])."</td>
 					<td>".htmlentities($member[8])."</td>

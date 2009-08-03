@@ -11,7 +11,8 @@
 require_once("header.php");
 valid_login($action_permission['read']);
 require_once("scripts/defines.php");
-
+require_once("scripts/get_lib.php");
+ 
 //########################################################################################################################
 //  BROWSE CHARS
 //########################################################################################################################
@@ -130,25 +131,7 @@ function browse_chars()
     $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
     $owner_acc_name = $sql->result($result, 0, 'username');
     $lastseen = date("Y-m-d G:i:s", $char[11]);
-    $level = $char[9];
-    if($level < 10)
-      $lev = '<font color="#FFFFFF">'.$level.'</font>';
-    else if($level < 20)
-      $lev = '<font color="#858585">'.$level.'</font>';
-    else if($level < 30)
-      $lev = '<font color="#339900">'.$level.'</font>';
-    else if($level < 40)
-      $lev = '<font color="#3300CC">'.$level.'</font>';
-    else if($level < 50)
-      $lev = '<font color="#C552FF">'.$level.'</font>';
-    else if($level < 60)
-      $lev = '<font color="#FF8000">'.$level.'</font>';
-    else if($level < 70)
-      $lev = '<font color="#FFF280">'.$level.'</font>';
-    else if($level < 80)
-      $lev = '<font color="#FF0000">'.$level.'</font>';
-    else
-      $lev = '<font color="#000000">'.$level.'</font>';
+
     if ($showcountryflag)
     {
         $loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[2]';");
@@ -178,7 +161,7 @@ function browse_chars()
                 <td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$char[2]\">$owner_acc_name</a></td>
                 <td><img src='img/c_icons/{$char[3]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td><img src='img/c_icons/{$char[4]}.gif' onmousemove='toolTip(\"".get_player_class($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-                <td>$lev</td>
+                <td>".color_per_level_range($char[9])."</td>
                 <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$char[6]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_map_name($char[6])."</span></td>
                 <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$char[5]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_zone_name($char[5])."</span></td>
                 <td>$char[7]</td>
@@ -475,25 +458,7 @@ function search()
     $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
     $owner_acc_name = $sql->result($result, 0, 'username');
     $lastseen = date("Y-m-d G:i:s", $char[11]);
-    $level = $char[9];
-    if($level < 10)
-      $lev = '<font color="#FFFFFF">'.$level.'</font>';
-    else if($level < 20)
-      $lev = '<font color="#858585">'.$level.'</font>';
-    else if($level < 30)
-      $lev = '<font color="#339900">'.$level.'</font>';
-    else if($level < 40)
-      $lev = '<font color="#3300CC">'.$level.'</font>';
-    else if($level < 50)
-      $lev = '<font color="#C552FF">'.$level.'</font>';
-    else if($level < 60)
-      $lev = '<font color="#FF8000">'.$level.'</font>';
-    else if($level < 70)
-      $lev = '<font color="#FFF280">'.$level.'</font>';
-    else if($level < 80)
-      $lev = '<font color="#FF0000">'.$level.'</font>';
-    else
-      $lev = '<font color="#000000">'.$level.'</font>';
+
     if ($showcountryflag)
     {
         $loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[2]';");
@@ -523,7 +488,7 @@ function search()
                 <td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$char[2]\">$owner_acc_name</a></td>
                 <td><img src='img/c_icons/{$char[3]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td><img src='img/c_icons/{$char[4]}.gif' onmousemove='toolTip(\"".get_player_class($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-                <td>$lev</td>
+                <td>".color_per_level_range($char[9])."</td>
                 <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$char[6]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_map_name($char[6])."</span></td>
                 <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$char[5]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_zone_name($char[5])."</span></td>
                 <td>$char[7]</td>

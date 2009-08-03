@@ -215,25 +215,6 @@ if ($online)
     $gm = $gml[0];
     $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
     $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`={$char[9]}"));
-    $level = $char[7];
-    if($level < 10)
-      $lev = '<font color="#FFFFFF">'.$level.'</font>';
-    else if($level < 20)
-      $lev = '<font color="#858585">'.$level.'</font>';
-    else if($level < 30)
-      $lev = '<font color="#339900">'.$level.'</font>';
-    else if($level < 40)
-      $lev = '<font color="#3300CC">'.$level.'</font>';
-    else if($level < 50)
-      $lev = '<font color="#C552FF">'.$level.'</font>';
-    else if($level < 60)
-      $lev = '<font color="#FF8000">'.$level.'</font>';
-    else if($level < 70)
-      $lev = '<font color="#FFF280">'.$level.'</font>';  
-    else if($level < 80)
-      $lev = '<font color="#FF0000">'.$level.'</font>';  
-    else
-      $lev = '<font color="#000000">'.$level.'</font>';
 
     if ($server_type)
     {
@@ -280,7 +261,7 @@ if ($online)
               <td>
                 <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' />
               </td>
-              <td>$lev</td>
+			 <td>".color_per_level_range($char[7])."</td>
               <td>
                 <span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[6])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[6],$CHAR_RACE[$char[2]][1]).".gif'></span>
               </td>
