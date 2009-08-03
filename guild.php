@@ -60,7 +60,7 @@ if ($query_myGuild)
 
     $output .= "<tr>
       <td>$data[0]</td>
-      <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$data[0]\">$data[1]</a></td>";
+      <td><a href=\"guild.php?action=view_guild&id=$data[0]\">$data[1]</a></td>";
     $output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($data[3])."</td>" : "<td><a href=\"char.php?id=$data[2]\">".htmlentities($data[3])."</a></td>";
     $output .= "<td><img src=\"img/".($data[4]==0 ? "alliance" : "horde")."_small.gif\" /></td>
       <td>$data[5]/$data[6]</td>
@@ -238,15 +238,17 @@ require_once("scripts/defines.php");
  <legend>{$lang_guild['guild']}</legend>
  <table class=\"hidden\" style=\"width: 100%;\"><tr><td>
   <table class=\"lined\">
-  <tr class=\"bold\"><td>".htmlentities($guild_data[1])."</td></tr>
-  <tr><td><b>{$lang_guild['create_date']}:</b><br>$guild_data[4]</td></tr>";
-
-  if ($guild_data[2] != '') $output .= "<tr><td><b>{$lang_guild['info']}:</b><br>".htmlentities($guild_data[2],ENT_QUOTES)."</td></tr>";
-  if ($guild_data[3] != '') $output .= "<tr><td><b>{$lang_guild['motd']}:</b><br>".htmlentities($guild_data[3],ENT_QUOTES)."</td></tr>";
-
-  $output .="<tr><td><b>{$lang_guild['tot_m_online']}:</b><br>$guild_data[6] / $guild_data[5]</td></tr>
-             </table></td></tr><td>
-
+  <tr>
+  <td width=\"25%\"><b>{$lang_guild['create_date']}:</b><br>$guild_data[4]</td>
+  <td width=\"50%\" class=\"bold\">$guild_data[1]</td>
+  <td width=\"25%\"><b>{$lang_guild['tot_m_online']}:</b><br>$guild_data[6] / $guild_data[5]</td>
+  </tr>";
+  
+  if ($guild_data[2] != '') $output .= "<tr><td colspan=\"3\"><b>{$lang_guild['info']}:</b><br>$guild_data[2]</td></tr>";
+  if ($guild_data[3] != '') $output .= "<tr><td colspan=\"3\"><b>{$lang_guild['motd']}:</b><br>$guild_data[3]</td></tr>";
+  
+  $output .="</table></td></tr><td>
+  
              <div align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start)."</div>
 
              <tr><td><table class=\"lined\"><tr>";
@@ -284,23 +286,6 @@ require_once("scripts/defines.php");
  $result = $sql->query("SELECT gmlevel FROM account WHERE id ='$member[11]'");
  $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
 
-  $llogin = count_days($member[12], time());
-
-    if($llogin < 1)
-      $lastlogin = '<font color="#009900">'.$llogin.'</font>';
-    else if($llogin < 6)
-      $lastlogin = '<font color="#0000CC">'.$llogin.'</font>';
-    else if($llogin < 16)
-      $lastlogin = '<font color="#FFFF00">'.$llogin.'</font>';
-    else if($llogin < 16)
-      $lastlogin = '<font color="#FF8000">'.$llogin.'</font>';
-    else if($llogin < 31)
-      $lastlogin = '<font color="#FF0000">'.$llogin.'</font>';
-    else if($llogin < 61)
-      $lastlogin = '<font color="#FF00FF">'.$llogin.'</font>';
-    else
-      $lastlogin = '<font color="#FF0000">'.$llogin.'</font>';
-
     $output .= " <tr>";
       // gm, gildleader or own account! are allowed to remove from guild
     $output .= ($user_lvl >= 4 || $amIguildleader || $member[11] == $user_id) ?
@@ -314,7 +299,7 @@ require_once("scripts/defines.php");
 					<td>".htmlentities($member[6])." (".$member[5].")</td>
 					<td>".htmlentities($member[7])."</td>
 					<td>".htmlentities($member[8])."</td>
-					<td>$lastlogin</td>
+					<td>".color_per_days_range($member[12])."</td>
 					<td>".(($member[10]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
 				</tr>";
 }

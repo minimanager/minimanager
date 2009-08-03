@@ -1040,4 +1040,25 @@ function color_per_level_range($lvl)
       $level = '<font color="#000000">'.$lvl.'</font>';
 	    return $level;
 }
+//#############################################################################
+//set color per Level range
+function color_per_days_range($how_long)
+{
+    $days = count_days($how_long, time());
+    if($days < 1)
+      $lastlogin = '<font color="#009900">'.$days.'</font>';
+    else if($days < 6)
+      $lastlogin = '<font color="#0000CC">'.$days.'</font>';
+    else if($days < 16)
+      $lastlogin = '<font color="#FFFF00">'.$days.'</font>';
+    else if($days < 16)
+      $lastlogin = '<font color="#FF8000">'.$days.'</font>';
+    else if($days < 31)
+      $lastlogin = '<font color="#FF0000">'.$days.'</font>';
+    else if($days < 61)
+      $lastlogin = '<font color="#FF00FF">'.$days.'</font>';
+    else
+      $lastlogin = '<font color="#FF0000">'.$days.'</font>';
+	    return $lastlogin;
+}
 ?>

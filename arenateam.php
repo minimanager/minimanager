@@ -11,6 +11,8 @@
 require_once("header.php");
 valid_login($action_permission['read']);
 require_once("scripts/defines.php");
+require_once("scripts/get_lib.php");
+
 //########################################################################################################################
 // BROWSE ARENA TEAMS
 //########################################################################################################################
@@ -303,24 +305,6 @@ $output .= "<script type=\"text/javascript\">
 
 	$online = $sql->fetch_row($query);
 	$accid = $online[3];
-	$llogin = count_days($online[4], time());
-
-    $level = $online[5];
-
-    if($llogin < 1)
-      $lastlogin = '<font color="#009900">'.$llogin.'</font>';
-    else if($llogin < 6)
-      $lastlogin = '<font color="#0000CC">'.$llogin.'</font>';
-    else if($llogin < 16)
-      $lastlogin = '<font color="#FFFF00">'.$llogin.'</font>';
-    else if($llogin < 16)
-      $lastlogin = '<font color="#FF8000">'.$llogin.'</font>';
-    else if($llogin < 31)
-      $lastlogin = '<font color="#FF0000">'.$llogin.'</font>';
-    else if($llogin < 61)
-      $lastlogin = '<font color="#FF00FF">'.$llogin.'</font>';
-    else
-      $lastlogin = '<font color="#FF0000">'.$llogin.'</font>';
 
    		$output .= " <tr>";
 		if ($user_lvl > 2){
@@ -338,7 +322,7 @@ $output .= "<script type=\"text/javascript\">
  		<td><img src='img/c_icons/{$online[0]}-{$online[6]}.gif' onmousemove='toolTip(\"".get_player_race($online[0])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
  		<td><img src='img/c_icons/{$online[1]}.gif' onmousemove='toolTip(\"".get_player_class($online[1])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
  		<td>$member[2]</td>
-		<td>$lastlogin</td>
+ 		<td>".color_per_days_range($online[4])."</td>
 		<td>".(($online[2]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
 		<td>$member[4]</td>
 		<td>$member[5]</td>
