@@ -704,7 +704,7 @@ function doadd_new() {
 //  EDIT USER
 //###########################################################################################################
 function edit_user() {
- global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl, $user_name,
+ global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $mmfpm_db, $user_lvl, $user_name,
    $gm_level_arr, $action_permission, $expansion_select;
  valid_login($action_permission['read']);
 
@@ -717,6 +717,11 @@ function edit_user() {
 
  $result = $sql->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion FROM account WHERE id = '$id'");
  $data = $sql->fetch_row($result);
+
+  $refguid = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = '$data[0]';"));
+  $refguid = $refguid[0];
+  $referred_by = mysql_fetch_row(mysql_query("SELECT `name` FROM `{$characters_db[$realm_id]['name']}`.`characters` WHERE `guid` = '$refguid';"));
+  $referred_by = $referred_by[0];
 
  if ($sql->num_rows($result)){
 	//restricting accsess to lower gmlvl
@@ -769,8 +774,23 @@ function edit_user() {
       if($user_lvl >= $action_permission['update']) { $output .="
         <td><input type=\"text\" name=\"mail\" size=\"43\" maxlength=\"225\"value=\"$data[3]\" /></td>"; }
       else $output.="<td>***@***</td>";
+
+    $output .= "
+                </tr>
+                <tr>
+                  <td>{$lang_user['invited_by']}:</td>
+                  <td>";
+    if($user_lvl >= $action_permission['update'] && !$referred_by !=NULL)
+      $output .="
+                    <input type=\"text\" name=\"referredby\" size=\"43\" maxlength=\"12\" value=\"$referred_by\" />";
+    else
+      $output .="
+                    $referred_by";
+    $output .="
+                  </td>
+                </tr>";
+
    $output .= "
-      </tr>
       <tr>
         <td>{$lang_user['gm_level_long']}</td>";
       if($user_lvl >= $action_permission['update']) { $output .="
@@ -927,7 +947,7 @@ function edit_user() {
 //  DO   EDIT   USER
 //############################################################################################################
 function doedit_user() {
- global $lang_global, $realm_db, $user_lvl, $user_name, $action_permission;
+ global $lang_global, $realm_db, $mmfpm_db, $user_lvl, $user_name, $action_permission;
  valid_login($action_permission['update']);
  if( (!isset($_POST['id']) || $_POST['id'] === '') || (!isset($_POST['username']) || $_POST['username'] === '') || (!isset($_POST['pass']) || $_POST['pass'] === '') )
    redirect("user.php?action=edit_user&&id={$_POST['id']}&error=1");
@@ -983,8 +1003,38 @@ function doedit_user() {
 
  $sql->query("UPDATE account SET email='$mail', $user_pass_change failed_logins='$failed',locked='$locked',gmlevel='$gmlevel',expansion='$expansion' WHERE id=$id");
 
+
+ doupdate_referral($mmfpm_db, $id);
  $sql->close();
  redirect("user.php?action=edit_user&error=13&id=$id");
+}
+function doupdate_referral($mmfpm_db, $user_id)
+{
+  global $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name;
+  $result = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = '$user_id';"));
+  $result = $result[0];
+  if ($result == NULL)
+  {
+    $referredby = $_POST['referredby'];
+    $referred_by = mysql_fetch_row(mysql_query("SELECT `guid` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `name` = '$referredby';"));
+    $referred_by = $referred_by[0];
+
+    if ($referred_by != NULL)
+    {
+      $result = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `id` = (SELECT `account` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `guid`='$referred_by');"));
+      $result = $result[0];
+      if ($result != NULL)
+      {
+        if ($result != $user_id)
+        {
+          mysql_query("INSERT INTO `$mmfpm_db[name]`.`point_system_invites` (`PlayersAccount`, `InvitedBy`, `InviterAccount`) VALUES ('$user_id', '$referred_by', '$result');");
+          redirect("user.php?action=edit_user&error=13&id=$user_id");
+        }
+      }
+      else
+        redirect("user.php?action=edit_user&error=12&id=$user_id");
+    }
+  }
 }
 
 

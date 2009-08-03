@@ -637,7 +637,8 @@ $lang_edit = array(
 	'username' => 'Username',
 	'password' => 'Password',
 	'mail' => 'Mail',
-	'gm_level' => 'GMlevel',
+	'gm_level' => 'GM level',
+	'last_ip' => 'Last IP',
 	'join_date' => 'Join Date',
 	'characters' => 'Characters on Realm',
 	'del_acc' => 'Delete Account',
@@ -866,7 +867,8 @@ $lang_user = array(
 	'client_type' => 'Client Type',
 	'classic' => 'Classic',
 	'tbc' => 'TBC',
-	'wotlk' => 'WOTLK'
+	'wotlk' => 'WOTLK',
+	'invited_by' => 'Invited By'
 	);
 
 $lang_stat = array(
