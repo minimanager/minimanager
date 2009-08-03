@@ -10,7 +10,7 @@
  */
 require_once("header.php");
 valid_login($action_permission['read']);
-include_once("./scripts/get_lib.php");
+include_once("scripts/get_lib.php");
 
 // return npcflag
 function get_npcflag($flag){
@@ -230,6 +230,7 @@ $where = '';
 if ($_POST['language'] != '0') {
   $loc_language  = (preg_match("/^[[:digit:]]{1,2}$/", $_POST['language']))  ? $sql->quote_smart($_POST['language'])  : redirect("creature.php?error=8");
 }
+else $loc_language = '0';
 
 // check input and prepare sql query
 

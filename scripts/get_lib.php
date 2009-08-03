@@ -985,7 +985,7 @@ function xp_to_level($lvl)
 {
     $RATE_XP_PAST_70 = 1;
     $xp = 0;
-    if (lvl < 60)
+    if ($lvl < 60)
     {
         $xp = (8*$lvl + xp_Diff($lvl)) * mxp($lvl);
     }

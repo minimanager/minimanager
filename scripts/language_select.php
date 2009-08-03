@@ -3,7 +3,7 @@
 function generate_language_selectbox() {
   global $lang_global, $locales_search_option;
 	
-	include_once("./get_lib.php");
+	include_once("get_lib.php");
 	$selectedlanguage = get_lang_id();
 	
 	// generate a html option list with available locales_entries
