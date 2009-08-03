@@ -170,7 +170,7 @@ $expansion_select      = true;      // true = Shows option to select expansion o
 $defaultoption         = 2;         // if the above is false then set what the default option will be (2 = WOTLK, 1 = TBC, 0 = Classic)
 $enable_captcha        = false;     // false = no security image check (enable for protection against 'bot' registrations)
 $send_mail_on_creation = false;     // true = send mail at account creation.
-$create_acc_locked     = 0;         // if set to '1' newly created accounts will be made locked to 0.0.0.0 IP disallowing user to login.
+$create_acc_locked     = 0;         // if set to '1' newly created accounts will be made locked to registered IP, disallowing user to login from other IPs.
 $validate_mail_host    = false;     // actualy make sure the mail host provided in email is valid/accessible host.
 $limit_acc_per_ip      = false;     // true = limit to one account per IP
 $simple_register       = false;     // Sets the registration to a simple form. Name, Password, Expansion and Email.

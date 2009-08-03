@@ -19,8 +19,8 @@ require_once("scripts/defines.php");
 //########################################################################################################################
 function char_main()
 {
-  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db, $mmfpm_db,
-    $server, $user_id, $user_name, $action_permission, $user_lvl, $showcountryflag, $item_datasite, $talent_datasite;
+  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $characters_db, $server, $mmfpm_db,
+    $action_permission, $user_lvl, $user_name, $user_id, $item_datasite, $talent_datasite, $showcountryflag;
 
   valid_login($action_permission['read']);
 
@@ -676,7 +676,7 @@ function char_main()
 function char_inv()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $action_permission, $user_lvl, $item_datasite;
+    $action_permission, $user_lvl, $user_name, $item_datasite;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -1143,8 +1143,8 @@ $sql->close();
 //########################################################################################################################
 function char_quest()
 {
-  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $action_permission, $user_lvl, $quest_datasite;
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $world_db, $characters_db,
+    $action_permission, $user_lvl, $user_name, $quest_datasite;
 
   if (empty($_GET['id'])) error($lang_global['empty_fields']);
 
@@ -1318,8 +1318,8 @@ $sql->close();
 //########################################################################################################################
 function char_achievements()
 {
-  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $action_permission, $user_lvl;
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
+    $action_permission, $user_lvl, $user_name;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -1444,8 +1444,9 @@ function char_achievements()
 //########################################################################################################################
 function char_rep()
 {
-  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $action_permission, $user_lvl, $fact_id, $reputation_rank_length, $reputation_cap, $reputation_bottom, $reputation_rank,
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
+    $action_permission, $user_lvl, $user_name, 
+    $fact_id, $reputation_rank_length, $reputation_cap, $reputation_bottom, $reputation_rank,
     $MIN_REPUTATION_RANK, $MAX_REPUTATION_RANK;
 
   if (empty($_GET['id']))
@@ -1634,8 +1635,8 @@ function char_rep()
 //########################################################################################################################
 function char_skill()
 {
-  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $action_permission, $user_lvl, $skill_datasite;
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
+    $action_permission, $user_lvl, $user_name, $skill_datasite;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -1930,8 +1931,8 @@ function char_skill()
 //########################################################################################################################
 function char_talent()
 {
-  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
-    $user_name, $action_permission, $user_lvl, $talent_datasite, $talent_calculator_datasite;
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
+    $action_permission, $user_lvl, $user_name, $talent_datasite, $talent_calculator_datasite;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -2120,8 +2121,8 @@ function char_talent()
 //########################################################################################################################^M
 function char_pets()
 {
-  global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $world_db,
-    $action_permission, $user_lvl, $user_name, $pet_ability, $talent_datasite;
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
+    $action_permission, $user_lvl, $user_name, $talent_datasite, $pet_ability;
 
   if (empty($_GET['id'])) error($lang_global['empty_fields']);
 
