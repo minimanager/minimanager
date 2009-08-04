@@ -386,7 +386,7 @@ function do_insert_update($do_insert) {
  	// get new free id
   $result = $sql->query("SELECT max(entry)+1 as newentry from creature_template");
  	$entry  = $sql->result($result, 0, 'newentry');
- 	$result = $sql->query("SELECT $entry as `entry`, 0 as `heroic_entry`, 0 as `KillCredit1`, 0 as `KillCredit2`, 0 as `modelid_A`, 0 as `modelid_A2`, 0 as `modelid_H`, 0 as `modelid_H2`, 'new creature' as`name`,'' as `subname`, '' as `IconName`, 1 as `minlevel`, 1 as `maxlevel`, 1 as `minhealth`, 1 as `maxhealth`, 0 as `minmana`, 0 as `maxmana`, 0 as `armor`,0 as `faction_A`, 0 as `faction_H`, 0 as `npcflag`, 1 as `speed`, 1 as `scale`,0 as `rank`, 1 as `mindmg`, 1 as `maxdmg`, 0 as `dmgschool`, 0 as `attackpower`, 2000 as `baseattacktime`, 0 as `rangeattacktime`, 0 as `unit_flags`,0 as `dynamicflags`, 0 as `family`, 0 as `trainer_type`, 0 as `trainer_spell`, 0 as `class`,0 as `race`,0 as `minrangedmg`, 0 as `maxrangedmg`, 0 as `rangedattackpower`, 0 as `type`,0 as `type_flags`,0 as `lootid`, 0 as `pickpocketloot`, 0 as `skinloot`, 0 as `resistance1`, 0 as `resistance2`, 0 as `resistance3`, 0 as `resistance4`, 0 as `resistance5`, 0 as `resistance6`, 0 as`spell1`, 0 as`spell2`, 0 as `spell3`, 0 as `spell4`, 0 as `PetSpellDataId`, 100 as `mingold`, 250 as `maxgold`, '' as `AIName`, 0 as `MovementType`, 1 as `InhabitType`, 0 as `RacialLeader`, 1 as `RegenHealth`, 0 as `equipment_id`, 0 as `mechanic_immune_mask`, 0 as `flags_extra`, '' as `ScriptName`");
+ 	$result = $sql->query("SELECT $entry as `entry`, 0 as `heroic_entry`, 0 as `KillCredit1`, 0 as `KillCredit2`, 0 as `modelid_A`, 0 as `modelid_A2`, 0 as `modelid_H`, 0 as `modelid_H2`, 'new creature' as`name`,'' as `subname`, '' as `IconName`, 1 as `minlevel`, 1 as `maxlevel`, 1 as `minhealth`, 1 as `maxhealth`, 0 as `minmana`, 0 as `maxmana`, 0 as `armor`,0 as `faction_A`, 0 as `faction_H`, 0 as `npcflag`, 1 as `speed`, 1 as `scale`,0 as `rank`, 1 as `mindmg`, 1 as `maxdmg`, 0 as `dmgschool`, 0 as `attackpower`, 2000 as `baseattacktime`, 0 as `rangeattacktime`, 0 as `unit_flags`,0 as `dynamicflags`, 0 as `family`, 0 as `trainer_type`, 0 as `trainer_spell`, 0 as `trainer_class`,0 as `trainer_race`,0 as `minrangedmg`, 0 as `maxrangedmg`, 0 as `rangedattackpower`, 0 as `type`,0 as `type_flags`,0 as `lootid`, 0 as `pickpocketloot`, 0 as `skinloot`, 0 as `resistance1`, 0 as `resistance2`, 0 as `resistance3`, 0 as `resistance4`, 0 as `resistance5`, 0 as `resistance6`, 0 as`spell1`, 0 as`spell2`, 0 as `spell3`, 0 as `spell4`, 0 as `PetSpellDataId`, 100 as `mingold`, 250 as `maxgold`, '' as `AIName`, 0 as `MovementType`, 1 as `InhabitType`, 0 as `RacialLeader`, 1 as `RegenHealth`, 0 as `equipment_id`, 0 as `mechanic_immune_mask`, 0 as `flags_extra`, '' as `ScriptName`");
  	// use id for new creature_template
  }
 
@@ -856,40 +856,40 @@ $output .= "<div id=\"pane2\">
 
 <tr class=\"large_bold\"><td colspan=\"6\" class=\"hidden\" align=\"left\">{$lang_creature['other']}:</td></tr>";
 
- $class = array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "",5 => "",7 => "",8 => "",9 => "",11 => "");
- $class[$mob['class']] = " selected=\"selected\" ";
+ $trainer_class = array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "",5 => "",7 => "",8 => "",9 => "",11 => "");
+ $trainer_class[$mob['class']] = " selected=\"selected\" ";
 
 $output .= "<td>".makeinfocell($lang_creature['class'],$lang_creature['class_desc'])."</td>
 	   <td><select name=\"class\">
-		<option value=\"0\" {$class[0]}>0 - {$lang_creature['none']}</option>
-		<option value=\"1\" {$class[1]}>1 - {$lang_id_tab['warrior']}</option>
-		<option value=\"2\" {$class[2]}>2 - {$lang_id_tab['paladin']}</option>
-		<option value=\"3\" {$class[3]}>3 - {$lang_id_tab['hunter']}</option>
-		<option value=\"4\" {$class[4]}>4 - {$lang_id_tab['rogue']}</option>
-		<option value=\"5\" {$class[5]}>5 - {$lang_id_tab['priest']}</option>
-		<option value=\"7\" {$class[7]}>7 - {$lang_id_tab['shaman']}</option>
-		<option value=\"8\" {$class[8]}>8 - {$lang_id_tab['mage']}</option>
-		<option value=\"9\" {$class[9]}>9 - {$lang_id_tab['warlock']}</option>
-		<option value=\"11\" {$class[11]}>11 - {$lang_id_tab['druid']}</option>
+		<option value=\"0\" {$trainer_class[0]}>0 - {$lang_creature['none']}</option>
+		<option value=\"1\" {$trainer_class[1]}>1 - {$lang_id_tab['warrior']}</option>
+		<option value=\"2\" {$trainer_class[2]}>2 - {$lang_id_tab['paladin']}</option>
+		<option value=\"3\" {$trainer_class[3]}>3 - {$lang_id_tab['hunter']}</option>
+		<option value=\"4\" {$trainer_class[4]}>4 - {$lang_id_tab['rogue']}</option>
+		<option value=\"5\" {$trainer_class[5]}>5 - {$lang_id_tab['priest']}</option>
+		<option value=\"7\" {$trainer_class[7]}>7 - {$lang_id_tab['shaman']}</option>
+		<option value=\"8\" {$trainer_class[8]}>8 - {$lang_id_tab['mage']}</option>
+		<option value=\"9\" {$trainer_class[9]}>9 - {$lang_id_tab['warlock']}</option>
+		<option value=\"11\" {$trainer_class[11]}>11 - {$lang_id_tab['druid']}</option>
 	   </select></td>";
-  unset($class);
+  unset($trainer_class);
 
- $race = array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "",5 => "",6 => "", 7 => "",8 => "",10 => "",11 => "");
- $race[$mob['race']] = " selected=\"selected\" ";
+ $trainer_race = array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "",5 => "",6 => "", 7 => "",8 => "",10 => "",11 => "");
+ $trainer_race[$mob['race']] = " selected=\"selected\" ";
 
  $output .= "<td>".makeinfocell($lang_creature['race'],$lang_creature['race_desc'])."</td>
 	   <td><select name=\"race\">
-		<option value=\"0\" {$race[0]}>0 - {$lang_creature['none']}</option>
-		<option value=\"1\" {$race[1]}>1 - {$lang_id_tab['human']}</option>
-		<option value=\"2\" {$race[2]}>2 - {$lang_id_tab['orc']}</option>
-		<option value=\"3\" {$race[3]}>3 - {$lang_id_tab['dwarf']}</option>
-		<option value=\"4\" {$race[4]}>4 - {$lang_id_tab['nightelf']}</option>
-		<option value=\"5\" {$race[5]}>5 - {$lang_id_tab['undead']}</option>
-		<option value=\"6\" {$race[6]}>6 - {$lang_id_tab['tauren']}</option>
-		<option value=\"7\" {$race[7]}>7 - {$lang_id_tab['gnome']}</option>
-		<option value=\"8\" {$race[8]}>8 - {$lang_id_tab['troll']}</option>
-		<option value=\"10\" {$race[10]}>10 - {$lang_id_tab['bloodelf']}</option>
-		<option value=\"11\" {$race[11]}>11 - {$lang_id_tab['draenei']}</option>
+		<option value=\"0\" {$trainer_race[0]}>0 - {$lang_creature['none']}</option>
+		<option value=\"1\" {$trainer_race[1]}>1 - {$lang_id_tab['human']}</option>
+		<option value=\"2\" {$trainer_race[2]}>2 - {$lang_id_tab['orc']}</option>
+		<option value=\"3\" {$trainer_race[3]}>3 - {$lang_id_tab['dwarf']}</option>
+		<option value=\"4\" {$trainer_race[4]}>4 - {$lang_id_tab['nightelf']}</option>
+		<option value=\"5\" {$trainer_race[5]}>5 - {$lang_id_tab['undead']}</option>
+		<option value=\"6\" {$trainer_race[6]}>6 - {$lang_id_tab['tauren']}</option>
+		<option value=\"7\" {$trainer_race[7]}>7 - {$lang_id_tab['gnome']}</option>
+		<option value=\"8\" {$trainer_race[8]}>8 - {$lang_id_tab['troll']}</option>
+		<option value=\"10\" {$trainer_race[10]}>10 - {$lang_id_tab['bloodelf']}</option>
+		<option value=\"11\" {$trainer_race[11]}>11 - {$lang_id_tab['draenei']}</option>
 	   </select></td>";
 
  if ($mob['RacialLeader']) $RacialLeader = "checked";
@@ -901,7 +901,7 @@ $output .= "<td>".makeinfocell($lang_creature['RacialLeader'],$lang_creature['Ra
 <tr>
  <td>".makeinfocell($lang_creature['trainer_spell'],$lang_creature['trainer_spell_desc'])."</td>
  <td><input type=\"text\" name=\"trainer_spell\" size=\"14\" maxlength=\"11\" value=\"{$mob['trainer_spell']}\" /></td>";
-  unset($race);
+  unset($trainer_race);
 
  $InhabitType = array(0 => "", 1 => "", 2 => "", 3 => "");
  $InhabitType[$mob['InhabitType']] = " selected=\"selected\" ";
@@ -1431,10 +1431,10 @@ function do_update() {
 	 	else $trainer_type = 0;
 	 if (isset($_POST['trainer_spell']) && $_POST['trainer_spell'] != '') $trainer_spell = $sql->quote_smart($_POST['trainer_spell']);
 	 	else $trainer_spell = 0;
-	 if (isset($_POST['class']) && $_POST['class'] != '') $class = $sql->quote_smart($_POST['class']);
-	 	else $class = 0;
-	 if (isset($_POST['race']) && $_POST['race'] != '') $race = $sql->quote_smart($_POST['race']);
-	 	else $race = 0;
+	 if (isset($_POST['trainer_class']) && $_POST['trainer_class'] != '') $trainer_class = $sql->quote_smart($_POST['trainer_class']);
+	 	else $trainer_class = 0;
+	 if (isset($_POST['trainer_race']) && $_POST['trainer_race'] != '') $trainer_race = $sql->quote_smart($_POST['trainer_race']);
+	 	else $trainer_race = 0;
 	 if (isset($_POST['minrangedmg']) && $_POST['minrangedmg'] != '') $minrangedmg = $sql->quote_smart($_POST['minrangedmg']);
 	 	else $minrangedmg = 0;
 	 if (isset($_POST['maxrangedmg']) && $_POST['maxrangedmg'] != '') $maxrangedmg = $sql->quote_smart($_POST['maxrangedmg']);
@@ -1622,13 +1622,13 @@ function do_update() {
 	$sql_query = "{$db_action_creature} INTO creature_template ( entry, heroic_entry, modelid_A, modelid_H, name, subname, minlevel,
 	              maxlevel, minhealth, maxhealth, minmana, maxmana, armor, faction_A, faction_H, npcflag, speed, rank, mindmg,
 	              maxdmg, dmgschool, attackpower, baseattacktime, rangeattacktime, unit_flags, dynamicflags, family,
-	              trainer_type, trainer_spell, class, race, minrangedmg, maxrangedmg, rangedattackpower,
+	              trainer_type, trainer_spell, trainer_class, trainer_race, minrangedmg, maxrangedmg, rangedattackpower,
                 type, flags_extra, type_flags, lootid, pickpocketloot, skinloot, resistance1,
 	              resistance2, resistance3, resistance4, resistance5, resistance6, spell1, spell2, spell3, spell4,
 	              mingold, maxgold, AIName, MovementType, InhabitType, RacialLeader, ScriptName) VALUES ( '$entry', '$heroic_entry', '$modelid_A', '$modelid_H', '$name',
 	              '$subname', '$minlevel', '$maxlevel', '$minhealth', '$maxhealth', '$minmana', '$maxmana', '$armor', '$faction_A', '$faction_A',  '$npcflag',
 	              '$speed', '$rank', '$mindmg', '$maxdmg', '$dmgschool', '$attackpower', '$baseattacktime', '$rangeattacktime', '$unit_flags',
-	              '$dynamicflags', '$family', '$trainer_type', '$trainer_spell', '$class', '$race',
+	              '$dynamicflags', '$family', '$trainer_type', '$trainer_spell', '$trainer_class', '$trainer_race',
                 '$minrangedmg', '$maxrangedmg', '$rangedattackpower', '$type', '$flags_extra', '$type_flags',
 	              '$lootid', '$pickpocketloot', '$skinloot', '$resistance1', '$resistance2',
 	              '$resistance3', '$resistance4', '$resistance5', '$resistance6', '$spell1', '$spell2', '$spell3', '$spell4',

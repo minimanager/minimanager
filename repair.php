@@ -29,8 +29,9 @@ function repair_form(){
 		<option value=\"OPTIMIZE\">{$lang_repair['optimize']}</option>
 	   </select>
 	   </td><td>";
-		makebutton($lang_repair['start'], "javascript:do_submit()",100);
-		makebutton($lang_global['back'], "javascript:window.history.back()",100);
+		makebutton($lang_repair['start'], "javascript:do_submit()\" type=\"wrn",130);
+		 $output .= "</td><td>";
+		makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
  $output .= "</td></tr>
         </table><p>{$lang_repair['select_tables']}</p>";
         }

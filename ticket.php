@@ -222,15 +222,18 @@ function edit_ticket()
                   </tr>
                   <tr>
                     <td>";
-                      makebutton($lang_ticket['update'], "javascript:do_submit()",130);
+                      makebutton($lang_ticket['update'], "javascript:do_submit()\" type=\"wrn",130);
     $output .= "
                     </td>
                     <td>
                       <table class=\"hidden\">
                         <tr>
                           <td>";
-                            makebutton($lang_ticket['send_ingame_mail'], "mail.php?type=ingame_mail&amp;to=$ticket[3]",205);
-                            makebutton($lang_global['back'], "ticket.php",120);
+                            makebutton($lang_ticket['send_ingame_mail'], "mail.php?type=ingame_mail&amp;to=$ticket[2]",130);
+    $output .= "
+                          </td>
+                          <td>";
+                            makebutton($lang_global['back'], "ticket.php\" type=\"def",130);
     $output .= "
                           </td>
                         </tr>

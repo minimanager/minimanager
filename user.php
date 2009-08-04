@@ -45,13 +45,13 @@ valid_login($action_permission['read']);
 			<tr><td>";
 if($user_lvl >= $action_permission['insert'])
 {
-makebutton($lang_user['add_acc'], "user.php?action=add_new", 124);
-makebutton($lang_user['backup'], "backup.php", 122);
+makebutton($lang_user['add_acc'], "user.php?action=add_new", 130);
+makebutton($lang_user['backup'], "backup.php", 130);
 }
 
 if($user_lvl >= $action_permission['delete'])
-makebutton($lang_user['cleanup'], "cleanup.php", 122);
- makebutton($lang_global['back'], "javascript:window.history.back()", 122);
+makebutton($lang_user['cleanup'], "cleanup.php", 130);
+ makebutton($lang_global['back'], "javascript:window.history.back()", 130);
  $output .= " </td><td align=\"right\" width=\"25%\" rowspan=\"2\">";
  $output .= generate_pagination("user.php?action=brows_user&amp;order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
  $output .= "</td></tr>
@@ -439,7 +439,7 @@ valid_login($action_permission['delete']);
  $output .= "<br /><br />";
  $output .= "<table class=\"hidden\">
           <tr><td>";
-			makebutton($lang_user['back_browsing'], "user.php", 200);
+			makebutton($lang_user['back_browsing'], "user.php", 130);
  $output .= "</td></tr>
         </table><br /></center>";
 }
@@ -639,9 +639,9 @@ function add_new() {
      </tr>";
   $output .="
      <tr><td>";
-			makebutton($lang_user['create_acc'], "javascript:do_submit_data()",120);
+			makebutton($lang_user['create_acc'], "javascript:do_submit_data()\" type=\"wrn",130);
  $output .= "</td><td>";
-			makebutton($lang_global['back'], "javascript:window.history.back()",306);
+			makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
  $output .= "</td></tr>
 	</table>
     </form>
@@ -922,18 +922,18 @@ function edit_user() {
 	}
 
 	$output .= "<tr><td>"; 
- if($user_lvl >= $action_permission['update'])
- {
- 		makebutton($lang_user['update_data'], "javascript:do_submit_data()",150);
-
- }
  if($user_lvl >= $action_permission['delete'])
  {
-		makebutton($lang_user['del_acc'], "user.php?action=del_user&amp;check%5B%5D=$id",150);
+		makebutton($lang_user['del_acc'], "user.php?action=del_user&amp;check%5B%5D=$id\" type=\"wrn",130);
 
  }
 		$output .= "</td><td>";	
-		makebutton($lang_global['back'], "javascript:window.history.back()",150);
+ if($user_lvl >= $action_permission['update'])
+ {
+ 		makebutton($lang_user['update_data'], "javascript:do_submit_data()",130);
+
+ }
+		makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
  $output .= "</td></tr>
 		</table>
     </form></fieldset><br /><br /></center>";

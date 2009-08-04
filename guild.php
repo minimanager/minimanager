@@ -128,15 +128,15 @@ function browse_guilds()
   $output .="
         <table class=\"top_hidden\" align=\"center\">
           <tr>
-            <td width =\"140\">";
-  ($search_by &&  $search_value) ? makebutton($lang_guild['show_guilds'], "guild.php\" type=\"def", 130) : $output .= "&nbsp;";
+            <td width =\"200\">";
+  ($search_by &&  $search_value) ? makebutton($lang_guild['show_guilds'], "guild.php\" type=\"def", 130) : $output .= "";
   $output .= "
             </td>
             <td align=\"right\">
               <form action=\"guild.php\" method=\"get\" name=\"form\">
                 <input type=\"hidden\" name=\"action\" value=\"browse_guilds\" />
                 <input type=\"hidden\" name=\"error\" value=\"4\" />
-                <input type=\"text\" size=\"45\" name=\"search_value\" value=\"{$search_value}\" />
+                <input type=\"text\" size=\"42\" name=\"search_value\" value=\"{$search_value}\" />
                 <select name=\"search_by\">
                   <option value=\"name\"".($search_by == 'name' ? " selected=\"selected\"" : "").">{$lang_guild['by_name']}</option>
                   <option value=\"leadername\"".($search_by == 'leadername' ? " selected=\"selected\"" : "").">{$lang_guild['by_guild_leader']}</option>
@@ -145,7 +145,7 @@ function browse_guilds()
               </form>
             </td>
             <td>";
-              makebutton($lang_global['search'], "javascript:do_submit()",80);
+              makebutton($lang_global['search'], "javascript:do_submit()",130);
   $output .= "
             </td>
           </tr>
@@ -262,7 +262,7 @@ function view_guild()
 
   $output .= "
         <script type=\"text/javascript\">
-          answerbox.btn_ok='{$lang_global['yes_low']}';
+          answerbox.btn_ok='{$lang_global['yes']}';
           answerbox.btn_cancel='{$lang_global['no']}';
         </script>
         <center>
@@ -369,7 +369,6 @@ function view_guild()
             </table>
           </fieldset>
         </center>
-        <br />
 ";
 }
 
@@ -405,8 +404,11 @@ function del_guild()
             <table class=\"hidden\">
               <tr>
                 <td>";
-                  makebutton($lang_global['yes'], "javascript:do_submit()",120);
-                  makebutton($lang_global['no'], "guild.php?action=view_guild&amp;id=$id",120);
+                  makebutton($lang_global['yes'], "javascript:do_submit()\" type=\"wrn",130);
+  $output .= "
+                </td>
+                <td>";
+                  makebutton($lang_global['no'], "guild.php?action=view_guild&amp;id=$id\" type=\"def",130);
   $output .= "
                 </td>
               </tr>

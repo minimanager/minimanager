@@ -615,33 +615,33 @@ function char_main()
           <table class=\"hidden\">
             <tr>
               <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
         $output .= "
               </td>
               <td>";
 
         if (($user_lvl >= $action_permission['delete']))
         {
-          makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+          makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
           $output .= "
               </td>
               <td>";
         }
         if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
         {
-          makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+          makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
           $output .= "
               </td>
               <td>";
         }
         if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
         {
-          makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
+          makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
           $output .= "
               </td>
               <td>";
         }
-        makebutton($lang_global['back'], "javascript:window.history.back()",140);
+        makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
         //end of admin options
       }
       else
@@ -650,7 +650,7 @@ function char_main()
           <table class=\"hidden\">
             <tr>
               <td>";
-        makebutton($lang_global['back'], "javascript:window.history.back()",200);
+        makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       }
       $output .= "
               </td>
@@ -1089,33 +1089,33 @@ function char_inv()
           <table class=\"hidden\">
             <tr>
               <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
       $output .= "
               </td>
               <td>";
 
       if (($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
         $output .= "
             </td>
             <td>";
       }
       if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
               </td>
               <td>";
       }
       if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
         $output .= "
               </td>
               <td>";
       }
-      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       //end of admin options
       $output .= "
               </td>
@@ -1265,32 +1265,32 @@ function char_quest()
           <table class=\"hidden\">
             <tr>
               <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
     $output .= "
               </td>
               <td>";
     if (($user_lvl >= $action_permission['delete']))
     {
-      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
       $output .= "
               </td>
               <td>";
     }
     if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
     {
-      makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+      makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
       $output .= "
               </td>
               <td>";
     }
     if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
     {
-      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
+      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
       $output .= "
               </td>
               <td>";
     }
-    makebutton($lang_global['back'], "javascript:window.history.back()",140);
+    makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
     //end of admin options
     $output .= "
               </td>
@@ -1390,33 +1390,33 @@ function char_achievements()
        <table class=\"hidden\">
          <tr>
            <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
       $output .= "
               </td>
               <td>";
 
       if (($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
         $output .= "
             </td>
             <td>";
       }
       if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
               </td>
               <td>";
       }
       if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
         $output .= "
               </td>
               <td>";
       }
-      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       //end of admin options
       $output .= "
               </td>
@@ -1581,33 +1581,33 @@ function char_rep()
          <table class=\"hidden\">
            <tr>
              <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
       $output .= "
               </td>
               <td>";
 
       if (($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
         $output .= "
             </td>
             <td>";
       }
       if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
               </td>
               <td>";
       }
       if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
         $output .= "
               </td>
               <td>";
       }
-      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       //end of admin options
       $output .= "
               </td>
@@ -1880,33 +1880,33 @@ function char_skill()
         <table class=\"hidden\">
           <tr>
             <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
       $output .= "
               </td>
               <td>";
 
       if (($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
         $output .= "
             </td>
             <td>";
       }
       if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
               </td>
               <td>";
       }
       if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
         $output .= "
               </td>
               <td>";
       }
-      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       //end of admin options
       $output .= "
               </td>
@@ -2067,33 +2067,33 @@ function char_talent()
           <table class=\"hidden\">
             <tr>
               <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
       $output .= "
               </td>
               <td>";
 
       if (($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
         $output .= "
             </td>
             <td>";
       }
       if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
               </td>
               <td>";
       }
       if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",140);
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
         $output .= "
               </td>
               <td>";
       }
-      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       //end of admin options
       $output .= "
               </td>
@@ -2226,32 +2226,32 @@ function char_pets()
           <table class=\"hidden\">
             <tr>
               <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",140);
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
     $output .= "
               </td>
               <td>";
     if (($user_lvl >= $action_permission['delete']))
     {
-      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",140);
+      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
       $output .= "
               </td>
               <td>";
     }
       if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id",140);
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
               </td>
               <td>";
       }
       if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
       {
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail",140);
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail",130);
         $output .= "
               </td>
               <td>";
       }
-      makebutton($lang_global['back'], "javascript:window.history.back()",140);
+      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       //end of admin options
       $output .= "
               </td>

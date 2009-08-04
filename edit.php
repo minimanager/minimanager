@@ -183,7 +183,7 @@ function edit_user()
                   </form>
                 </td>
                 <td>";
-                  makebutton($lang_edit['save'], "javascript:do_submit('form1',0)",100);
+                  makebutton($lang_edit['save'], "javascript:do_submit('form1',0)",130);
     $output .= "
                 </td>
               </tr>
@@ -218,7 +218,7 @@ function edit_user()
                   </form>
                 </td>
                 <td>";
-                  makebutton($lang_edit['save'], "javascript:do_submit('form2',0)",100);
+                  makebutton($lang_edit['save'], "javascript:do_submit('form2',0)",130);
     $output .= "
                 </td>
               </tr>
