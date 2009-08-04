@@ -70,7 +70,12 @@ function browse_tele()
                   <tr>
                     <td>";
   if($user_lvl >= $action_permission['insert'])
+  {
     makebutton($lang_tele['add_new'], "tele.php?action=add_tele",80);
+    $output .="
+                    </td>
+                    <td>";
+  }
   $output .="
                       <form action=\"tele.php\" method=\"get\" name=\"form\">
                         <input type=\"hidden\" name=\"action\" value=\"browse_tele\" />
@@ -84,15 +89,16 @@ function browse_tele()
                       </form>
                     </td>
                     <td>";
-                      makebutton($lang_global['search'], "javascript:do_submit()",80);
   ($search_by &&  $search_value) ? makebutton($lang_global['back'], "javascript:window.history.back()", 80) : $output .= "&nbsp;";
+                      makebutton($lang_global['search'], "javascript:do_submit()",80);
+  ($search_by &&  $search_value) ? makebutton($lang_tele['teleports'], "tele.php\" type=\"def", 80) : $output .= "&nbsp;";
   $output .= "
                     </td>
                   </tr>
                 </table>
               </td>
               <td width=\"20%\" align=\"right\">";
-  $output .= generate_pagination("tele.php?action=browse_tele&amp;order_by=$order_by&amp;dir=".!$dir.( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
+  $output .= generate_pagination("tele.php?action=browse_tele&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
   $output .= "
               </td>
             </tr>
@@ -173,7 +179,7 @@ function del_tele()
 
   $id = $sql->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
- 
+
   //==========================$_GET and SECURE========================
   $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
@@ -207,14 +213,14 @@ function del_tele()
 //########################################################################################################################
 function edit_tele()
 {
-  global  $lang_tele, $lang_global, $output, $world_db, $realm_id, $map_id, $action_permission, $user_lvl;
+  global  $lang_tele, $lang_global, $output, $world_db, $realm_id, $mmfpm_db, $action_permission, $user_lvl;
   valid_login($action_permission['update']);
 
   if(!isset($_GET['id'])) redirect("Location: tele.php?error=1");
 
   $sql = new SQL;
   $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
- 
+
   $id = $sql->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
  
@@ -225,7 +231,7 @@ function edit_tele()
     $tele = $sql->fetch_row($query);
     $output .= "
         <script type=\"text/javascript\">
-          answerbox.btn_ok='{$lang_global['yes_low']}';
+          answerbox.btn_ok='{$lang_global['yes']}';
           answerbox.btn_cancel='{$lang_global['no']}';
         </script>
         <center>
@@ -247,7 +253,10 @@ function edit_tele()
                 <td>{$lang_tele['on_map']}</td>
                 <td>
                   <select name=\"new_map\">";
-    foreach ($map_id as $map)
+
+    $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+    $map_query = $sql->query("SELECT id, name01 from map order by id");
+    while ($map = $sql->fetch_row($map_query))
     {
       $output .= "
                     <option value=\"{$map[0]}\" ";
@@ -271,27 +280,21 @@ function edit_tele()
                  <td><input type=\"text\" name=\"new_z\" size=\"42\" maxlength=\"36\" value=\"$tele[5]\" /></td>
                </tr>
                <tr>
-               <td>{$lang_tele['orientation']}</td>
-               <td><input type=\"text\" name=\"new_orientation\" size=\"42\" maxlength=\"36\" value=\"$tele[6]\" /></td>
-             </tr>
-             <tr>
-               <td>";
+                 <td>{$lang_tele['orientation']}</td>
+                 <td><input type=\"text\" name=\"new_orientation\" size=\"42\" maxlength=\"36\" value=\"$tele[6]\" /></td>
+               </tr>
+               <tr>
+                 <td>";
     if($user_lvl >= $action_permission['delete'])
-      makebutton($lang_tele['delete_tele'], "#\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$tele[1]}</font> <br /> {$lang_global['are_you_sure']}', 'tele.php?action=del_tele&amp;id=$id');\" type=\"wrn",148);
-    $output .= "
-               </td>
-               <td>
-                 <table class=\"hidden\">
-                   <tr>
-                     <td>";
-                       makebutton($lang_tele['update_tele'], "javascript:do_submit()",130);
-                       makebutton($lang_global['back'], "tele.php\" type=\"def",148);
-    $output .= "
-                     </td>
-                   </tr>
-                 </table>";
+      makebutton($lang_tele['delete_tele'], "#\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$tele[1]}</font> <br /> {$lang_global['are_you_sure']}', 'tele.php?action=del_tele&amp;id=$id');\" type=\"wrn",130);
     $output .= "
                  </td>
+                 <td>";
+                       makebutton($lang_tele['update_tele'], "javascript:do_submit()",130);
+                       makebutton($lang_global['back'], "tele.php\" type=\"def",130);
+    $output .= "
+                 </td>";
+    $output .= "
                </tr>
              </table>
            </form>
@@ -351,8 +354,9 @@ function do_edit_tele()
 //########################################################################################################################
 function add_tele()
 {
-  global  $output, $lang_tele, $lang_global, $map_id, $action_permission;
+  global  $output, $lang_tele, $lang_global, $mmfpm_db, $action_permission;
   valid_login($action_permission['insert']);
+  $sql = new SQL;
   $output .= "
         <center>
           <fieldset class=\"half_frame\">
@@ -368,7 +372,9 @@ function add_tele()
                   <td>{$lang_tele['on_map']}</td>
                   <td>
                     <select name=\"map\">";
-  foreach ($map_id as $map)
+  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $map_query = $sql->query("SELECT id, name01 from map order by id");
+  while ($map = $sql->fetch_row($map_query))
     $output .= "
                     <option value=\"{$map[0]}\">{$map[0]} : {$map[1]}</option>";
   $output .= "
@@ -392,19 +398,11 @@ function add_tele()
                   <td><input type=\"text\" name=\"orientation\" size=\"42\" maxlength=\"36\" value=\"0\" /></td>
                 </tr>
                 <tr>
+                  <td>
+                  </td>
                   <td>";
                     makebutton($lang_tele['add_new'], "javascript:do_submit()",130);
-  $output .= "
-                  </td>
-                  <td>
-                    <table class=\"hidden\">
-                      <tr>
-                        <td>";
-                          makebutton($lang_global['back'], "tele.php",310);
-  $output .= "
-                        </td>
-                      </tr>
-                    </table>";
+                    makebutton($lang_global['back'], "tele.php\" type=\"def",130);
   $output .= "
                   </td>
                 </tr>

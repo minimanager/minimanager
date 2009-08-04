@@ -133,11 +133,11 @@ function edit_user()
     $output .= "
                 <tr>
                   <td>";
-                    makebutton($lang_edit['update'], "javascript:do_submit_data()",140);
+                    makebutton($lang_edit['update'], "javascript:do_submit_data()\" type=\"wrn", 130);
     $output .= "
                   </td>
                   <td>";
-                    makebutton($lang_global['back'], "javascript:window.history.back()",150);
+                    makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def", 130);
     $output .= "
                   </td>
                 </tr>

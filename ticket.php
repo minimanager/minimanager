@@ -120,7 +120,7 @@ function browse_tickets()
               <tr>
                 <td colspan=\"3\" align=\"left\" class=\"hidden\">";
   if($user_lvl >= $action_permission['delete'])
-                  makebutton($lang_ticket['del_selected_tickets'], "javascript:do_submit()",200);
+                  makebutton($lang_ticket['del_selected_tickets'], "javascript:do_submit()\" type=\"wrn",200);
   $output .= "
                 </td>
                 <td colspan=\"2\" align=\"right\" class=\"hidden\">{$lang_ticket['tot_tickets']}: $all_record</td>

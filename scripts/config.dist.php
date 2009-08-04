@@ -271,7 +271,7 @@ $menu_array = Array
     array("stat.php", 'statistics',0,5,5,5),         // new security system implemented
     array("events.php", 'events',0,5,5,5),           // new security system implemented
     array("instances.php", 'instances',0,5,5,5),     // new security system implemented
-    array("top100.php", 'top100',0,5,5,5),           // new security system implemented, but links to other pages, please use with caution
+    array("top100.php", 'top100',0,5,5,5),           // new security system implemented
     array("javascript:void(0);\" onclick=\"window.open('./pomm/pomm.php?realmid=".(empty($_SESSION)?"":$_SESSION['realm_id'])."', 'pomm', 'Toolbar=0, Location=0, Directories=0, Status=0, Menubar=0, Scrollbar=0, Resizable=0, Copyhistory=1, Width=966, Height=732')", 'player_map',0,5,5,5),
   ),
 ),

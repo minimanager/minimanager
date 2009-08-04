@@ -897,6 +897,7 @@ $lang_stat = array(
 
 $lang_tele = array(
 	// ----- TELE.PHP -----
+	'teleports' => 'Teleports',
 	'loc_name' => 'Location Name',
 	'loc_id' => 'Location ID',
 	'on_map' => 'On Map ID',

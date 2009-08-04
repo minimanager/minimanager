@@ -129,7 +129,7 @@ function browse_guilds()
         <table class=\"top_hidden\" align=\"center\">
           <tr>
             <td width =\"140\">";
-  ($search_by &&  $search_value) ? makebutton($lang_guild['show_guilds'], "guild.php", 150) : $output .= "&nbsp;";
+  ($search_by &&  $search_value) ? makebutton($lang_guild['show_guilds'], "guild.php\" type=\"def", 130) : $output .= "&nbsp;";
   $output .= "
             </td>
             <td align=\"right\">
@@ -355,13 +355,13 @@ function view_guild()
             <table class=\"hidden\">
               <tr>
                 <td>";
-                  makebutton($lang_guild['show_guilds'], "guild.php", 272);
+                  makebutton($lang_guild['show_guilds'], "guild.php\" type=\"def", 130);
   if ($user_lvl >= $action_permission['delete'] || $amIguildleader)
   {
     $output .= "
                 </td>
                 <td>";
-                  makebutton($lang_guild['del_guild'], "guild.php?action=del_guild&amp;id=$guild_id", 272);
+                  makebutton($lang_guild['del_guild'], "guild.php?action=del_guild&amp;id=$guild_id\" type=\"wrn", 130);
   }
   $output .= "
                 </td>
