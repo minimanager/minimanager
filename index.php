@@ -261,7 +261,7 @@ if ($online)
               <td>
                 <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' />
               </td>
-			 <td>".color_per_level_range($char[7])."</td>
+			 <td>".get_level_with_color($char[7])."</td>
               <td>
                 <span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[6])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[6],$CHAR_RACE[$char[2]][1]).".gif'></span>
               </td>

@@ -70,7 +70,7 @@ $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `gui
 			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
 		 	 <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
 		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
-			 <td>".color_per_level_range($char[6])."</td>
+			 <td>".get_level_with_color($char[6])."</td>
 			 <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
 			 <td>$char[4]</td>
 			 <td>$char[5]</td>
@@ -129,7 +129,7 @@ $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `gui
 			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
 		 	 <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
 		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
-			 <td>".color_per_level_range($char[6])."</td>
+			 <td>".get_level_with_color($char[6])."</td>
 		     <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
 			 <td>$char[4]</td>
 			 <td>$char[5]</td>

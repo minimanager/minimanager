@@ -266,8 +266,8 @@ $menu_array = Array
   (
     array("ahstats.php", 'auctionhouse',0,5,5,5),    // new security system implemented
     array("arenateam.php", 'arena_teams',0,5,5,5),   // has own level security, but has yet to honor the new security system.
-    array("guild.php", 'guilds',0,5,5,5),            // has own level security, but has yet to honor the new security system.
-    array("honor.php", 'honor',0,5,5,5),             // new security system implemented, but links to other pages, please use with caution
+    array("guild.php", 'guilds',0,5,5,5),            // new security system implemented
+    array("honor.php", 'honor',0,5,5,5),             // new security system implemented
     array("stat.php", 'statistics',0,5,5,5),         // new security system implemented
     array("events.php", 'events',0,5,5,5),           // new security system implemented
     array("instances.php", 'instances',0,5,5,5),     // new security system implemented

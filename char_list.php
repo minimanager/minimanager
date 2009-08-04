@@ -20,17 +20,22 @@ function browse_chars()
 {
   global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
     $action_permission, $user_lvl, $user_name, $showcountryflag;
-  valid_login($action_permission['read']);
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-
+  //==========================$_GET and SECURE========================
   $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) :"guid";
+  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+
+  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "guid";
+  if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="guid";
+
   $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
+
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
-
+  //==========================$_GET and SECURE end========================
   $query_1 = $sql->query("SELECT count(*) FROM `characters`");
   $all_record = $sql->result($query_1,0);
 
@@ -158,14 +163,14 @@ function browse_chars()
                 </td>
                 <td>$char[0]</td>
                 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
-                <td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$char[2]\">$owner_acc_name</a></td>
+                <td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$char[2]\">".htmlentities($owner_acc_name)."</a></td>
                 <td><img src='img/c_icons/{$char[3]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td><img src='img/c_icons/{$char[4]}.gif' onmousemove='toolTip(\"".get_player_class($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-                <td>".color_per_level_range($char[9])."</td>
+                <td>".get_level_with_color($char[9])."</td>
                 <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$char[6]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_map_name($char[6])."</span></td>
                 <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$char[5]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_zone_name($char[5])."</span></td>
                 <td>$char[7]</td>
-                <td class=\"small\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[12]\">$guild_name[0]</a></td>
+                <td class=\"small\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[12]\">".htmlentities($guild_name[0])."</a></td>
                 <td class=\"small\">$lastseen</td>
                 <td>".(($char[8]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
       if ($showcountryflag)
@@ -201,7 +206,8 @@ function browse_chars()
             </table>
           </form>
           <br />
-        </center>";
+        </center>
+";
 
   $sql->close();
 }
@@ -214,7 +220,6 @@ function search()
 {
   global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
     $action_permission, $user_lvl, $user_name, $start, $showcountryflag;
-  valid_login($action_permission['read']);
 
   if(!isset($_GET['search_value'])) redirect("char_list.php?error=2");
 
@@ -225,16 +230,24 @@ function search()
   $search_by = (isset($_GET['search_by'])) ? $sql->quote_smart($_GET['search_by']) : "name";
   $search_menu = array("name", "guid", "account", "level", "greater_level", "guild", "race", "class", "map", "highest_rank", "greater_rank", "online", "gold", "item");
   if (!in_array($search_by, $search_menu)) $search_by = 'name';
+  //==========================$_GET and SECURE========================
   $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+
   $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "guid";
+  if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="guid";
+
   $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
+
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
-
+  //==========================$_GET and SECURE end========================
   switch ($search_by)
   {
     //need to get the acc id from other table since input comes as name
     case "account":
+      if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("charlist.php?error=2");
       $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
       $result = $sql->query("SELECT id FROM account WHERE username LIKE '%$search_value%' LIMIT $start, $itemperpage");
 
@@ -291,6 +304,7 @@ function search()
     break;
 
     case "guild":
+      if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("charlist.php?error=2");
       $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
       $result = $sql->query("SELECT guildid FROM guild WHERE name LIKE '%$search_value%'");
       $guildid = $sql->result($result, 0, 'guildid');
@@ -319,6 +333,7 @@ function search()
     break;
 
     case "item":
+      if (!is_numeric($search_value)) $search_value = 0;
       $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
       $result = $sql->query("SELECT guid FROM character_inventory WHERE item_template = '$search_value'");
 
@@ -362,6 +377,7 @@ function search()
     break;
 
     default:
+      if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("charlist.php?error=2");
       $where_out ="$search_by LIKE '%$search_value%'";
 
       $sql_query = "SELECT guid,name,account,race,class,zone,map,
@@ -378,7 +394,6 @@ function search()
   $all_record = $sql->result($query_1,0);
 
   $query = $sql->query($sql_query);
-  //$all_record = $sql->num_rows($query);
 
   //==========================top tage navigaion starts here========================
   $output .="
@@ -485,14 +500,14 @@ function search()
                 </td>
                 <td>$char[0]</td>
                 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
-                <td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$char[2]\">$owner_acc_name</a></td>
+                <td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$char[2]\">".htmlentities($owner_acc_name)."</a></td>
                 <td><img src='img/c_icons/{$char[3]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td><img src='img/c_icons/{$char[4]}.gif' onmousemove='toolTip(\"".get_player_class($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-                <td>".color_per_level_range($char[9])."</td>
+                <td>".get_level_with_color($char[9])."</td>
                 <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$char[6]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_map_name($char[6])."</span></td>
                 <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$char[5]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_zone_name($char[5])."</span></td>
                 <td>$char[7]</td>
-                <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[9]\">$guild_name[0]</a></td>
+                <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[9]\">".htmlentities($guild_name[0])."</a></td>
                 <td class=\"small\">$lastseen</td>
                 <td>".(($char[8]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
       if ($showcountryflag)
@@ -528,7 +543,8 @@ function search()
             </table>
           </form>
           <br />
-        </center>";
+        </center>
+";
 
   $sql->close();
 }
@@ -582,7 +598,8 @@ function del_char_form()
                 </td>
               </tr>
             </table>
-          </center>";
+          </center>
+";
 }
 
 
@@ -593,7 +610,7 @@ function dodel_char()
 {
   global $lang_global, $lang_char_list, $output, $characters_db, $realm_id, $action_permission;
 
-  valid_login($action_permission['read']);
+  valid_login($action_permission['delete']);
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -633,7 +650,8 @@ function dodel_char()
             </tr>
           </table>
           <br />
-        </center>";
+        </center>
+";
 }
 
 

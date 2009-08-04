@@ -322,7 +322,7 @@ $output .= "<script type=\"text/javascript\">
  		<td><img src='img/c_icons/{$online[0]}-{$online[6]}.gif' onmousemove='toolTip(\"".get_player_race($online[0])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
  		<td><img src='img/c_icons/{$online[1]}.gif' onmousemove='toolTip(\"".get_player_class($online[1])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
  		<td>$member[2]</td>
- 		<td>".color_per_days_range($online[4])."</td>
+ 		<td>".get_days_with_color($online[4])."</td>
 		<td>".(($online[2]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
 		<td>$member[4]</td>
 		<td>$member[5]</td>

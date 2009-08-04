@@ -9,19 +9,20 @@
  */
 
 //##########################################################################################
-
 //get name from realmlist.name
-function get_realm_name($realm_id){
- global $lang_global, $realm_db;
 
- $sql_0 = new SQL;
- $sql_0->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+function get_realm_name($realm_id)
+{
+  global $lang_global, $realm_db;
 
- $result = $sql_0->query("SELECT name FROM `realmlist` WHERE id = '$realm_id'");
- $realm_name = $sql_0->result($result, 0);
+  $sql_0 = new SQL;
+  $sql_0->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
- $sql_0->close();
- return $realm_name;
+  $result = $sql_0->query("SELECT name FROM `realmlist` WHERE id = '$realm_id'");
+  $realm_name = $sql_0->result($result, 0);
+
+  $sql_0->close();
+  return $realm_name;
 }
 
 
@@ -1016,49 +1017,58 @@ function xp_to_level($lvl)
     return $xp;
 }
 
+
 //#############################################################################
 //set color per Level range
-function color_per_level_range($lvl)
+
+function get_level_with_color($lvl)
 {
-    if($lvl < 10)
-      $level = '<font color="#FFFFFF">'.$lvl.'</font>';
-    else if($lvl < 20)
-      $level = '<font color="#858585">'.$lvl.'</font>';
-    else if($lvl < 30)
-      $level = '<font color="#339900">'.$lvl.'</font>';
-    else if($lvl < 40)
-      $level = '<font color="#3300CC">'.$lvl.'</font>';
-    else if($lvl < 50)
-      $level = '<font color="#C552FF">'.$lvl.'</font>';
-    else if($lvl < 60)
-      $level = '<font color="#FF8000">'.$lvl.'</font>';
-    else if($lvl < 70)
-      $level = '<font color="#FFF280">'.$lvl.'</font>';  
-    else if($lvl < 80)
-      $level = '<font color="#FF0000">'.$lvl.'</font>';  
-    else
-      $level = '<font color="#000000">'.$lvl.'</font>';
-	    return $level;
+  if($lvl < 10)
+    $level = '<font color="#FFFFFF">'.$lvl.'</font>';
+  else if($lvl < 20)
+    $level = '<font color="#858585">'.$lvl.'</font>';
+  else if($lvl < 30)
+    $level = '<font color="#339900">'.$lvl.'</font>';
+  else if($lvl < 40)
+    $level = '<font color="#3300CC">'.$lvl.'</font>';
+  else if($lvl < 50)
+    $level = '<font color="#C552FF">'.$lvl.'</font>';
+  else if($lvl < 60)
+    $level = '<font color="#FF8000">'.$lvl.'</font>';
+  else if($lvl < 70)
+    $level = '<font color="#FFF280">'.$lvl.'</font>';  
+  else if($lvl < 80)
+    $level = '<font color="#FF0000">'.$lvl.'</font>';  
+  else
+    $level = '<font color="#000000">'.$lvl.'</font>';
+
+  return $level;
 }
+
+
 //#############################################################################
 //set color per Level range
-function color_per_days_range($how_long)
+
+function get_days_with_color($how_long)
 {
-    $days = count_days($how_long, time());
-    if($days < 1)
-      $lastlogin = '<font color="#009900">'.$days.'</font>';
-    else if($days < 6)
-      $lastlogin = '<font color="#0000CC">'.$days.'</font>';
-    else if($days < 16)
-      $lastlogin = '<font color="#FFFF00">'.$days.'</font>';
-    else if($days < 16)
-      $lastlogin = '<font color="#FF8000">'.$days.'</font>';
-    else if($days < 31)
-      $lastlogin = '<font color="#FF0000">'.$days.'</font>';
-    else if($days < 61)
-      $lastlogin = '<font color="#FF00FF">'.$days.'</font>';
-    else
-      $lastlogin = '<font color="#FF0000">'.$days.'</font>';
-	    return $lastlogin;
+  $days = count_days($how_long, time());
+
+  if($days < 1)
+    $lastlogin = '<font color="#009900">'.$days.'</font>';
+  else if($days < 6)
+    $lastlogin = '<font color="#0000CC">'.$days.'</font>';
+  else if($days < 16)
+    $lastlogin = '<font color="#FFFF00">'.$days.'</font>';
+  else if($days < 16)
+    $lastlogin = '<font color="#FF8000">'.$days.'</font>';
+  else if($days < 31)
+    $lastlogin = '<font color="#FF0000">'.$days.'</font>';
+  else if($days < 61)
+    $lastlogin = '<font color="#FF00FF">'.$days.'</font>';
+  else
+    $lastlogin = '<font color="#FF0000">'.$days.'</font>';
+
+  return $lastlogin;
 }
+
 ?>

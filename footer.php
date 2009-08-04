@@ -40,6 +40,7 @@ unset($output);
                   <a href="http://www.mysql.com/" target="_blank"><img src="img/logo-mysql.png" class="logo_border" alt="" /></a>
                   <a href="http://validator.w3.org/check?uri=referer" target="_blank"><img src="img/logo-css.png" class="logo_border" alt="" /></a>
                   <a href="http://www.spreadfirefox.com/" target="_blank"><img src="img/logo-firefox.png" class="logo_border" alt="" /></a>
+                  <a href="http://www.opera.com/" target="_blank"><img src="img/logo-opera.png" class="logo_border" alt="" /></a>
                 </p>
               </td>
               <td class="table_buttom_right"></td>

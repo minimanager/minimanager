@@ -3997,6 +3997,7 @@ $lang_captcha = array(
 
 $lang_top = array(
 	// ----- TOP100.PHP -----
+	'top100' => 'Top 100',
 	'name' => 'Name',
 	'race' => 'Race',
 	'class' => 'Class',
