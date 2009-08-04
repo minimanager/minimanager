@@ -816,7 +816,7 @@ function get_aura_icon($auraid)
 
   if ($auraid)
   {
-    $result = $sql_4->query("SELECT `name` FROM `char_aura` WHERE `id`=$auraid");
+    $result = $sql_4->query("SELECT `name` FROM `spell_icon` WHERE `id` IN (SELECT `spellicon` FROM `spell` WHERE `spellID`=$auraid)");
 
     if($result)
     {
