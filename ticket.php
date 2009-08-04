@@ -17,21 +17,32 @@ valid_login($action_permission['read']);
 function browse_tickets()
 {
   global  $lang_global, $lang_ticket, $output, $characters_db, $realm_id, $itemperpage, $server_type, $action_permission, $user_lvl;
-  valid_login($action_permission['read']);
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
  
+  //==========================$_GET and SECURE========================
   $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
-
+  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+ 
   if ($server_type)
+  {
     $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "guid";
+    if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="guid";
+  }
   else
+  {
     $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "ticket_id";
+    if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="ticket_id";
+  }
+ 
   $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
+ 
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
- 
+  //==========================$_GET and SECURE end========================
+
   //get total number of items
   if($server_type)
     $query_1 = $sql->query("SELECT count(*) FROM gm_tickets");
@@ -117,9 +128,11 @@ function browse_tickets()
             </table>
           </form>
           <br />
-        </center>";
+        </center>
+";
  
 $sql->close();
+
 }
 
 
@@ -136,6 +149,7 @@ function delete_tickets()
 
   if(isset($_GET['check'])) $check = $sql->quote_smart($_GET['check']);
     else redirect("ticket.php?error=1");
+
   $deleted_tickets = 0;
   for ($i=0; $i<count($check); $i++)
   {
@@ -166,13 +180,13 @@ function edit_ticket()
   global  $lang_global, $lang_ticket, $output, $characters_db, $realm_id, $server_type, $action_permission;
   valid_login($action_permission['update']);
 
+  if(!isset($_GET['id'])) redirect("Location: ticket.php?error=1");
+
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
  
-  if(isset($_GET['id']))
-    $id = $sql->quote_smart($_GET['id']);
-  else
-    redirect("ticket.php?error=1");
+  $id = $sql->quote_smart($_GET['id']);
+  if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("ticket.php?error=1");
 
   if ($server_type)
     $query = $sql->query("SELECT gm_tickets.playerGuid, gm_tickets.message text, `characters`.name

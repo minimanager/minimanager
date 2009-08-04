@@ -92,6 +92,9 @@ function browse_guilds()
     $search_by = $sql->quote_smart($_GET['search_by']);
     $search_value = $sql->quote_smart($_GET['search_value']);
 
+    $search_menu = array("name", "leadername", "guildid");
+    if (!in_array($search_by, $search_menu)) $search_by = 'name';
+
     switch($search_by)
     {
       case "name":
