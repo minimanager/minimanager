@@ -78,16 +78,12 @@ function top100()
   {
     $char = $sql->fetch_array($result);
     $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[11].";"));
-    $g = floor($char[13]/10000);
-    $char[13] -= $g*10000;
-    $s = floor($char[13]/100);
-    $char[13] -= $s*100;
-    $c = $char[13];
-    $money = "";
-    if ($char[13] > 0)
-    {
-      $money = $g."<img src=\"./img/gold.gif\" /> ".$s."<img src=\"./img/silver.gif\" /> ".$c."<img src=\"./img/copper.gif\" /> ";
-    }
+
+    $money_gold = (int)($char[13]/10000);
+	$money_silver = (int)(($char[13]-$money_gold*10000)/100);
+    $money_cooper = (int)($char[13]-$money_gold*10000-$money_silver*100);
+
+    $money = $money_gold."<img src=\"./img/gold.gif\" /> ".$money_silver."<img src=\"./img/silver.gif\" /> ".$money_cooper."<img src=\"./img/copper.gif\" /> ";
 
     $days = floor(round($char[5] / 3600)/24);
     $hours = round($char[5] / 3600) - ($days * 24);
