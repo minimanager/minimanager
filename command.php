@@ -11,9 +11,9 @@
 include("header.php");
 valid_login($action_permission['read']);
 
-//#######################################################################################
+//#############################################################################
 // PRINT COMMAND FORM
-//#######################################################################################
+//#############################################################################
 function print_commands_form()
 {
   global $lang_command, $output, $world_db, $action_permission, $user_lvl, $realm_id, $gm_level_arr;
@@ -26,7 +26,6 @@ function print_commands_form()
 
   $query = $sql->query("SELECT name,help,`security` FROM command WHERE `security` <= $user_lvl");
 
-  $counter = 0;
   while ($data = $sql->fetch_row($query))
   {
     $tmp_output = "
@@ -51,6 +50,8 @@ function print_commands_form()
         </tr>";
     $levels[$data[2]][3] .= $tmp_output;
   }
+  unset($data);
+  unset($query);
 
   $output .= "
          <center>
@@ -96,15 +97,16 @@ function print_commands_form()
 
 $sql->close();
 unset($sql);
+
 }
 
 
-//#######################################################################################################
+//#############################################################################
 //  UPDATE COMMAND LEVEL
-//#######################################################################################################
+//#############################################################################
 function update_commands()
 {
-  global  $lang_global, $lang_command, $output, $action_permission;
+  global  $lang_global, $lang_command, $output, $action_permission, $user_lvl, $gm_level_arr;
   valid_login($action_permission['update']);
 
   if(isset($_GET['check'])) $check = $_GET['check'];
@@ -116,13 +118,14 @@ function update_commands()
             <input type=\"hidden\" name=\"action\" value=\"doupdate\">
               <table class=\"lined\" style=\"width: 720px;\">
                 <tr>
-                  <th width=\"22%\"></th>
-                  <th width=\"13%\">{$lang_command['level0']}</th>
-                  <th width=\"13%\">{$lang_command['level1']}</th>
-                  <th width=\"13%\">{$lang_command['level2']}</th>
-                  <th width=\"13%\">{$lang_command['level3']}</th>
-                  <th width=\"13%\">{$lang_command['level4']}</th>
-                  <th width=\"13%\">{$lang_command['level5']}</th>
+                  <th width=\"1%\"></th>";
+  for ($i=0; $i<=$user_lvl; $i++)
+  {
+    $output .= "
+                  <th width=\"1%\">{$gm_level_arr[$i][1]}</th>";
+  }
+
+  $output .= "
                 </tr>";
 
   $commands = array_keys($check);
@@ -130,42 +133,26 @@ function update_commands()
   {
     $output .= "
                 <tr>
-                  <td>.$commands[$i]</td>
-                  <td><input type=\"radio\" name=\"change[".$commands[$i]."]\" value=\"0\"";
-    if ($check[$commands[$i]]==0)
-      $output .= "checked=\"checked\"";
-    $output .= "></td>
-                  <td><input type=\"radio\" name=\"change[".$commands[$i]."]\" value=\"1\"";
-    if ($check[$commands[$i]]==1)
-      $output .= "checked=\"checked\"";
-    $output .= " ></td>
-                  <td><input type=\"radio\" name=\"change[".$commands[$i]."]\" value=\"2\"";
-    if ($check[$commands[$i]]==2)
-      $output .= "checked=\"checked\"";
-    $output .= " ></td>
-                  <td><input type=\"radio\" name=\"change[".$commands[$i]."]\" value=\"3\"";
-    if ($check[$commands[$i]]==3)
-      $output .= "checked=\"checked\"";
-    $output .= " ></td>
-                  <td><input type=\"radio\" name=\"change[".$commands[$i]."]\" value=\"4\"";
-    if ($check[$commands[$i]]==4)
-      $output .= "checked=\"checked\"";
-    $output .= " ></td>
-                  <td><input type=\"radio\" name=\"change[".$commands[$i]."]\" value=\"5\"";
-    if ($check[$commands[$i]]==3)
-      $output .= "checked=\"checked\"";
-    $output .= " ></td>
-                </tr>";
+                  <td>.$commands[$i]</td>";
+    for ($j=0; $j<=$user_lvl; $j++)
+    {
+      $output .= "
+                  <td><input type=\"radio\" name=\"change[".$commands[$i]."]\" value=\"".$j."\"";
+      if ($check[$commands[$i]]==$j)
+        $output .= "checked=\"checked\"";
+      $output .= "></td>";
+    }
+    $output .="</tr>";
   }
 
   $output .= "
               </table>
             </form>
-            <table class=\"hidden\">
+            <table width=\"300\" class=\"hidden\">
               <tr>
                 <td>";
-                  makebutton($lang_command['save'], "javascript:do_submit()",140);
-                  makebutton($lang_global['back'], "command.php",140);
+                  makebutton($lang_command['save'], "javascript:do_submit()\" type=\"wrn",130);
+                  makebutton($lang_global['back'], "command.php\" type=\"def",130);
   $output .= "
                 </td>
               </tr>
@@ -173,9 +160,10 @@ function update_commands()
           </center>";
 }
 
-//#######################################################################################################
+
+//#############################################################################
 //  DO UPDATE COMMAND LEVEL
-//#######################################################################################################
+//#############################################################################
 function doupdate_commands()
 {
   global $lang_global, $output, $world_db, $realm_id, $action_permission;
@@ -190,13 +178,6 @@ function doupdate_commands()
 
   $commands = array_keys($change);
 
-  // Quick sanity check
-  for ($i=0; $i<count($change); $i++)
-  {
-    if (!in_array($change[$commands[$i]],array(0,1,2,3,4,5)))
-      redirect("command.php?error=1");
-  }
-
   for ($i=0; $i<count($change); $i++)
   {
     $query = $sql->query("UPDATE command SET `security` = '".$change[$commands[$i]]."' WHERE name= '$commands[$i]'");
@@ -207,13 +188,16 @@ function doupdate_commands()
   redirect("command.php");
 }
 
-//########################################################################################################################
+//#############################################################################
 // MAIN
-//########################################################################################################################
+//#############################################################################
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
 $output .= "
         <div class=\"top\">";
+
+$lang_command = lang_command();
+
 switch ($err)
 {
   case 1:
@@ -224,6 +208,9 @@ switch ($err)
     $output .= "
           <h1>{$lang_command['command_list']}</h1>";
 }
+
+unset($err);
+
 $output .= "
         </div>";
 
@@ -240,6 +227,10 @@ switch ($action)
   default:
     print_commands_form();
 }
+
+unset($action);
+unset($action_permission);
+unset($lang_command);
 
 include("footer.php");
 ?>

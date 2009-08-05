@@ -981,21 +981,28 @@ function lang_tele()
 }
 
 
-$lang_command = array(
-  // ----- COMMAND.PHP -----
-  'command_list' => 'Available Commands',
-  'level0' => 'Player',
-  'level1' => 'Moderator',
-  'level2' => 'Game Master',
-  'level3' => 'Bug Tracker',
-  'level4' => 'Administrator',
-  'level5' => 'Sys OP',
-  'command' => 'Command',
-  'syntax' => 'Syntax',
-  'description' => 'Description',
-  'change_level' => 'Change Checked Command(s) Level',
-  'save' => 'Save'
+// ----- COMMAND.PHP -----
+function lang_command()
+{
+  $lang_command = array
+  (
+    'command_list' => 'Available Commands',
+    'level0' => 'Player',
+    'level1' => 'Moderator',
+    'level2' => 'Game Master',
+    'level3' => 'Bug Tracker',
+    'level4' => 'Administrator',
+    'level5' => 'Sys OP',
+    'level6' => 'Unknown',
+    'command' => 'Command',
+    'syntax' => 'Syntax',
+    'description' => 'Description',
+    'change_level' => 'Change Checked Command(s) Level',
+    'save' => 'Save'
   );
+  return $lang_command;
+}
+
 
 $lang_item_edit = array(
   // ----- ITEM.PHP -----

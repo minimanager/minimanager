@@ -981,8 +981,11 @@ function lang_tele()
 }
 
 
-$lang_command = array(
-  // ----- COMMAND.PHP -----
+// ----- COMMAND.PHP -----
+function lang_command()
+{
+  $lang_command = array
+  (
   'command_list' => 'Commandes disponibles',
   'level0' => 'Joueur',
   'level1' => 'Modérateur',
@@ -990,12 +993,16 @@ $lang_command = array(
   'level3' => 'Bug Tracker',
   'level4' => 'Administrator',
   'level5' => 'Opérateur système',
+  'level6' => 'Inconnu',
   'command' => 'Commande',
   'syntax' => 'Syntaxe',
   'description' => 'Description',
   'change_level' => 'Changer le niveau des commandes cochées',
   'save' => 'Sauver'
   );
+  return $lang_command;
+}
+
 
 $lang_item_edit = array(
   // ----- ITEM.PHP -----
