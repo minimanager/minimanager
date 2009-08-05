@@ -8,21 +8,22 @@
  * License: GNU General Public License v2(GPL)
  */
 
-require_once("header.php");
-valid_login($action_permission['read']);
-require_once("scripts/get_lib.php");
 
-//########################################################################################################################
+require_once("header.php");
+require_once("scripts/get_lib.php");
+valid_login($action_permission['read']);
+
+//#############################################################################
 // BROWSE GUILDS
-//########################################################################################################################
+//#############################################################################
 function browse_guilds()
 {
-  global $lang_guild, $lang_global, $output, $realm_db, $characters_db, $realm_id, $itemperpage, $search_by, $search_value,
+  global $lang_guild, $lang_global, $output, $realm_db, $characters_db, $realm_id, $itemperpage,
     $action_permission, $user_lvl, $user_id;
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  //==========================$_GET and SECURE========================
+  //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
@@ -34,16 +35,16 @@ function browse_guilds()
 
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
-  //==========================$_GET and SECURE end========================
-  //==========================MyGuild========================
+  //==========================$_GET and SECURE end=============================
+  //==========================MyGuild==========================================
 
-  $query_myGuild = $sql->query("SELECT g.guildid as gid, g.name, g.leaderguid AS lguid, 
-  (SELECT name from characters where guid = lguid), (SELECT race in (2,5,6,8,10) from characters where guid = lguid) as faction, 
-  (select count(*) from characters where guid in (select guid from guild_member where guildid = lguid) and online = 1) as gonline, 
-  (select count(*) from guild_member where guildid = gid), SUBSTRING_INDEX(g.MOTD,' ',6), g.createdate, 
-  (select account from characters where guid = lguid) FROM guild as g
-  left outer join guild_member as gm on gm.guildid = g.guildid left outer join characters as c on c.guid = gm.guid
-  where c.account = $user_id group by g.guildid order by gid");
+  $query_myGuild = $sql->query("SELECT g.guildid as gid, g.name, g.leaderguid AS lguid,
+    (SELECT name from characters where guid = lguid), (SELECT race in (2,5,6,8,10) from characters where guid = lguid) as faction,
+    (select count(*) from characters where guid in (select guid from guild_member where guildid = lguid) and online = 1) as gonline,
+    (select count(*) from guild_member where guildid = gid), SUBSTRING_INDEX(g.MOTD,' ',6), g.createdate,
+    (select account from characters where guid = lguid) FROM guild as g
+    left outer join guild_member as gm on gm.guildid = g.guildid left outer join characters as c on c.guid = gm.guid
+    where c.account = $user_id group by g.guildid order by gid");
 
   if ($query_myGuild)
   {
@@ -78,6 +79,8 @@ function browse_guilds()
                 <td class=\"small\">$data[8]</td>
               </tr>";
     }
+    unset($data);
+    unset($result);
     $output .= "
             </table>
           </fieldset>
@@ -85,8 +88,10 @@ function browse_guilds()
         <br />";
     $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
   }
-  //==========================MyGuild end========================
-  //==========================Browse/Search Guilds CHECK========================
+  //==========================MyGuild end======================================
+  //==========================Browse/Search Guilds CHECK=======================
+  $search_by ='';
+  $search_value = '';
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
     $search_by = $sql->quote_smart($_GET['search_by']);
@@ -99,20 +104,32 @@ function browse_guilds()
     {
       case "name":
         if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("guild.php?error=5");
-        $query = $sql->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid, (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction, (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount FROM guild as g left outer join characters as c on c.guid = g.leaderguid where g.name like '%$search_value%' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+        $query = $sql->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
+          (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
+          (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
+          FROM guild as g left outer join characters as c on c.guid = g.leaderguid
+          where g.name like '%$search_value%' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
         $query_count = $sql->query("SELECT 1 from guild where name like '%$search_value%'");
         break;
       case "leadername" :
         if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("guild.php?error=5");
-        $query = $sql->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid, (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction, (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount FROM guild as g left outer join characters as c on c.guid = g.leaderguid where g.leaderguid in (SELECT guid from characters where name like '%$search_value%') ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+        $query = $sql->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
+          (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
+          (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
+          FROM guild as g left outer join characters as c on c.guid = g.leaderguid where g.leaderguid in
+          (SELECT guid from characters where name like '%$search_value%') ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
         $query_count = $sql->query("SELECT 1 from guild where leaderguid in (select guid from characters where name like '%$search_value%')");
         break;
       case "guildid" :
         if (!preg_match('/^[[:digit:]]{1,12}$/', $search_value)) redirect("guild.php?error=5");
-        $query = $sql->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid, (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction, (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount FROM guild as g left outer join characters as c on c.guid = g.leaderguid where g.guildid = '$search_value' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+        $query = $sql->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
+          (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
+          (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
+          FROM guild as g left outer join characters as c on c.guid = g.leaderguid
+          where g.guildid = '$search_value' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
         $query_count = $sql->query("SELECT 1 from guild where guildid = '$search_value'");
         break;
-      default : 
+      default :
         redirect("guild.php?error=2");
     }
   }
@@ -122,8 +139,8 @@ function browse_guilds()
     $query_count = $sql->query("SELECT 1 from guild");
   }
   $all_record = $sql->num_rows($query_count);
-  //==========================Browse/Search Guilds CHECK end========================
-  //==========================Browse/Search Guilds========================
+  //==========================Browse/Search Guilds CHECK end===================
+  //==========================Browse/Search Guilds=============================
 
   $output .="
         <table class=\"top_hidden\" align=\"center\">
@@ -156,7 +173,7 @@ function browse_guilds()
             </td>
           </tr>
         </table>";
-  //==========================top tage navigaion ENDS here ========================
+  //==========================top tage navigaion ENDS here ====================
   $output .= "
         <center>
           <fieldset>
@@ -197,9 +214,10 @@ function browse_guilds()
             </fieldset>
           </center>
           <br />";
-  //==========================Browse/Search Guilds end========================
+  //==========================Browse/Search Guilds end=========================
 
   $sql->close();
+  unset($sql);
 }
 
 
@@ -213,9 +231,9 @@ function count_days( $a, $b )
 }
 
 
-//########################################################################################################################
+//#############################################################################
 // VIEW GUILD
-//########################################################################################################################
+//#############################################################################
 function view_guild()
 {
   global $lang_guild, $lang_global, $output, $realm_db, $characters_db, $realm_id, $itemperpage,
@@ -228,7 +246,7 @@ function view_guild()
   $guild_id = $sql->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $guild_id)) redirect("guild.php?error=6");
 
-  //==========================SQL INGUILD and GUILDLEADER========================
+  //==========================SQL INGUILD and GUILDLEADER======================
   $q_inguild = $sql->query("select 1 from guild_member where guildid = '$guild_id' and guid in (select guid from characters where account = '$user_id')");
   $inguild = $sql->result($q_inguild, 0, '1');
   if ( $user_lvl < $action_permission['update'] && !$inguild )
@@ -239,9 +257,9 @@ function view_guild()
 
   $q_guildmemberCount = $sql->query("SELECT 1 from guild_member where guildid = '$guild_id'");
   $guildmemberCount = $sql->num_rows($q_guildmemberCount);
-  //==========================SQL INGUILD and GUILDLEADER end========================
+  //====================SQL INGUILD and GUILDLEADER end========================
 
-  //==========================$_GET and SECURE========================
+  //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
@@ -253,11 +271,15 @@ function view_guild()
 
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
-  //==========================$_GET and SECURE end========================
+  //==========================$_GET and SECURE end=============================
 
   require_once("scripts/defines.php");
 
-  $query = $sql->query("SELECT guildid, name, info, MOTD, createdate, (select count(*) from guild_member where guildid = '$guild_id') as mtotal, (select count(*) from guild_member where guildid = '$guild_id' and guid in (select guid from characters where online = 1)) as monline FROM guild WHERE guildid = '$guild_id'");
+  $query = $sql->query("SELECT guildid, name, info, MOTD, createdate,
+    (select count(*) from guild_member where guildid = '$guild_id') as mtotal,
+    (select count(*) from guild_member where guildid = '$guild_id' and guid in
+    (select guid from characters where online = 1)) as monline
+    FROM guild WHERE guildid = '$guild_id'");
   $guild_data = $sql->fetch_row($query);
 
   $output .= "
@@ -344,6 +366,7 @@ function view_guild()
                       <td>".(($member[10]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
                     </tr>";
   }
+  unset($member);
   $output .= "
                   </table>
                 </td>
@@ -351,18 +374,19 @@ function view_guild()
             </table>
             <br />";
   $sql->close();
+  unset($sql);
   $output .= "
             <table class=\"hidden\">
               <tr>
                 <td>";
-                  makebutton($lang_guild['show_guilds'], "guild.php\" type=\"def", 130);
   if ($user_lvl >= $action_permission['delete'] || $amIguildleader)
   {
+                  makebutton($lang_guild['del_guild'], "guild.php?action=del_guild&amp;id=$guild_id\" type=\"wrn", 130);
     $output .= "
                 </td>
                 <td>";
-                  makebutton($lang_guild['del_guild'], "guild.php?action=del_guild&amp;id=$guild_id\" type=\"wrn", 130);
   }
+                  makebutton($lang_guild['show_guilds'], "guild.php\" type=\"def", 130);
   $output .= "
                 </td>
               </tr>
@@ -372,9 +396,10 @@ function view_guild()
 ";
 }
 
-//########################################################################################################################
+
+//#############################################################################
 // ARE YOU SURE  YOU WOULD LIKE TO OPEN YOUR AIRBAG?
-//########################################################################################################################
+//#############################################################################
 function del_guild()
 {
   global $lang_guild, $lang_global, $output, $characters_db, $realm_id,
@@ -419,11 +444,13 @@ function del_guild()
 ";
 
   $sql->close();
+  unset($sql);
 }
 
 
-//##########################################################################################
+//#############################################################################
 //REMOVE CHAR FROM GUILD
+//#############################################################################
 function rem_char_from_guild()
 {
   global $characters_db, $realm_id, $user_lvl, $user_id;
@@ -460,17 +487,21 @@ function rem_char_from_guild()
   $sql->query("UPDATE `characters` SET data = '$data' WHERE guid = '$guid'");
   $sql->query("DELETE FROM guild_member WHERE guid = '$guid'");
   $sql->close();
+  unset($sql);
   redirect("guild.php?action=view_guild&id=$guld_id");
 }
 
 
-//########################################################################################################################
+//#############################################################################
 // MAIN
-//########################################################################################################################
+//#############################################################################
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
 $output .= "
         <div class=\"top\">";
+
+$lang_guild = lang_guild();
+
 switch ($err)
 {
   case 1:
@@ -499,6 +530,9 @@ switch ($err)
     $output .= "
           <h1>{$lang_guild['browse_guilds']}</h1>";
 }
+
+unset($err);
+
 $output .= "
         </div>";
 
@@ -521,6 +555,10 @@ switch ($action)
   default:
     browse_guilds();
 }
+
+unset($action);
+unset($action_permission);
+unset($lang_guild);
 
 require_once("footer.php");
 

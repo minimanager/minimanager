@@ -72,40 +72,47 @@ function lang_login()
   return $lang_login;
 }
 
-$lang_guild = array(
-  // ----- GUILD.PHP -----
-  'my_guilds' => 'My Guilds',
-  'id' => 'ID',
-  'guild_name' => 'Guild Name',
-  'guild_leader' => 'Guild Leader',
-  'guild_faction' => 'Faction',
-  'tot_members' => 'Total Members',
-  'tot_m_online' => 'Online Members',
-  'remove' => 'Rem.',
-  'guild_motd' => 'Guild MOTD',
-  'create_date' => 'Create Date',
-  'by_name' => 'by name',
-  'by_guild_leader' => 'by leader name',
-  'by_id' => 'by id',
-  'tot_guilds' => 'Total Guilds',
-  'guild' => 'Guild',
-  'info' => 'Info',
-  'motd' => 'MOTD',
-  'name' => 'Name',
-  'race' => 'Race',
-  'class' => 'Class',
-  'level' => 'level',
-  'rank' => 'Rank',
-  'pnote' => 'Player Note',
-  'offnote' => 'Office Note',
-  'online' => 'Online',
-  'llogin' => 'Last Login (Days)',
-  'del_guild' => 'Delete Guild',
-  'guild_id' => 'Guild id',
-  'guild_search_result' => 'Guilds Search Results',
-  'show_guilds' => 'Show all Guilds',
-  'browse_guilds' => 'Browse Guilds'
+
+// ----- GUILD.PHP -----
+function lang_guild()
+{
+  $lang_guild = array
+  (
+    'my_guilds' => 'My Guilds',
+    'id' => 'ID',
+    'guild_name' => 'Guild Name',
+    'guild_leader' => 'Guild Leader',
+    'guild_faction' => 'Faction',
+    'tot_m_online' => 'Online Members',
+    'guild_motd' => 'Guild MOTD',
+    'create_date' => 'Create Date',
+    'show_guilds' => 'Show all Guilds',
+    'by_name' => 'by name',
+    'by_guild_leader' => 'by leader name',
+    'by_id' => 'by id',
+    'browse_guilds' => 'Browse Guilds',
+    'tot_members' => 'Total Members',
+    'remove' => 'Rem.',
+    'tot_guilds' => 'Total Guilds',
+    'guild' => 'Guild',
+    'info' => 'Info',
+    'motd' => 'MOTD',
+    'name' => 'Name',
+    'race' => 'Race',
+    'class' => 'Class',
+    'level' => 'level',
+    'rank' => 'Rank',
+    'pnote' => 'Player Note',
+    'offnote' => 'Office Note',
+    'online' => 'Online',
+    'llogin' => 'Last Login (Days)',
+    'del_guild' => 'Delete Guild',
+    'guild_id' => 'Guild id',
+    'guild_search_result' => 'Guilds Search Results',
   );
+  return $lang_guild;
+}
+
 
 $lang_register = array(
   // ----- REGISTER.PHP -----
@@ -4032,24 +4039,37 @@ $lang_honor = array(
   'guild' => 'Guild'
   );
 
-$lang_events = array(
-  // ----- EVENTS.PHP -----
-  'total' => 'Total',
-  'descr' => 'Event name',
-  'start' => 'First Starting Time',
-  'occur' => 'Occurance<br><small>days/hours',
-  'length' => 'Length<br><small>days/hours',
-  'events' => 'Events'
-  );
 
-$lang_instances = array(
-  // ----- INSTANCES.PHP -----
-  'map' => 'Map',
-  'level_min' => 'Minimum level',
-  'level_max' => 'Maximum level',
-  'max_players' => 'Maximum players',
-  'reset_delay' => 'Reset delay',
+// ----- EVENTS.PHP -----
+function lang_events()
+{
+  $lang_events = array
+  (
+    'total' => 'Total',
+    'descr' => 'Event name',
+    'start' => 'First Starting Time',
+    'occur' => 'Occurance<br><small>days/hours',
+    'length' => 'Length<br><small>days/hours',
+    'events' => 'Events',
   );
+  return $lang_events;
+}
+
+
+// ----- INSTANCES.PHP -----
+function lang_instances()
+{
+  $lang_instances = array
+  (
+    'total' => 'Total',
+    'map' => 'Map',
+    'level_min' => 'Minimum level',
+    'level_max' => 'Maximum level',
+    'max_players' => 'Maximum players',
+    'reset_delay' => 'Reset delay',
+  );
+  return $lang_instances;
+}
 
 $lang_captcha = array(
   // ----- FORM.PHP -----

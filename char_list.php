@@ -20,7 +20,7 @@ valid_login($action_permission['read']);
 function browse_chars()
 {
   global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
-    $action_permission, $user_lvl, $user_name, $start, $showcountryflag;
+    $action_permission, $user_lvl, $user_name, $showcountryflag;
 
   $sql = new SQL;
   $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);

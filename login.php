@@ -8,11 +8,12 @@
  * License: GNU General Public License v2(GPL)
  */
 
+
 require_once("header.php");
 
-//#################################################################################################
+//#############################################################################
 // Login
-//#################################################################################################
+//#############################################################################
 function dologin()
 {
   global $lang_global, $realm_db;
@@ -28,7 +29,7 @@ function dologin()
 
   if (strlen($user_name) > 255 || strlen($user_pass) > 255)
     redirect("login.php?error=1");
- 
+
   $result = $sql->query("SELECT id,gmlevel,username FROM account WHERE username='$user_name' AND sha_pass_hash='$user_pass' ");
 
   if ($sql->num_rows($result) == 1)
@@ -156,7 +157,7 @@ function login()
             <br />
           </fieldset>
           <br /><br />
-          </center>
+        </center>
 ";
 }
 
@@ -183,6 +184,7 @@ function do_cookie_login()
     if ($sql->result($result1, 0))
     {
       $sql->close();
+      unset($sql);
       redirect("login.php?error=3");
     }
     else
@@ -193,12 +195,14 @@ function do_cookie_login()
       $_SESSION['realm_id'] = $sql->quote_smart($_COOKIE['realm_id']);
       $_SESSION['client_ip'] = ( !empty($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
       $sql->close();
+      unset($sql);
       redirect("index.php");
     }
   }
   else
   {
     $sql->close();
+    unset($sql);
     setcookie ("uname", "", time() - 3600);
     setcookie ("realm_id", "", time() - 3600);
     setcookie ("p_hash", "", time() - 3600);
@@ -213,13 +217,13 @@ function do_cookie_login()
 if (isset($_COOKIE["uname"]) && isset($_COOKIE["p_hash"]) && isset($_COOKIE["realm_id"]) && !isset($_GET['error']))
   do_cookie_login();
 
-
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
 $lang_login = lang_login();
 
 $output .= "
         <div class=\"top\">";
+
 switch ($err)
 {
   case 1:
@@ -246,6 +250,8 @@ switch ($err)
     $output .=  "
           <h1>{$lang_login['enter_valid_logon']}</h1>";
 }
+unset($err);
+
 $output .= "
         </div>";
 
@@ -259,6 +265,10 @@ switch ($action)
   default:
     login();
 }
+
+unset($action);
+unset($action_permission);
+unset($lang_login);
 
 require_once("footer.php");
 

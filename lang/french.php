@@ -72,40 +72,47 @@ function lang_login()
   return $lang_login;
 }
 
-$lang_guild = array(
-  // ----- GUILD.PHP -----
-  'my_guild' => 'Ma Guilde',
-  'id' => 'ID',
-  'guild_name' => 'Nom de la guilde',
-  'guild_leader' => 'Maître de guilde',
-  'guild_faction' => 'Faction',
-  'tot_members' => 'Total de membres',
-  'tot_m_online' => 'Membres en ligne',
-  'remove' => 'Supp.',
-  'guild_motd' => 'MOTD de la guilde',
-  'create_date' => 'Date de création',
-  'by_name' => 'par nom',
-  'by_guild_leader' => 'par maître de guilde',
-  'by_id' => 'par id',
-  'tot_guilds' => 'Nombre total de guildes',
-  'guild' => 'Guilde',
-  'info' => 'Info',
-  'motd' => 'MOTD',
-  'name' => 'Nom',
-  'race' => 'Race',
-  'class' => 'Classe',
-  'level' => 'Niveau',
-  'rank' => 'Rang',
-  'pnote' => 'Note de joueur',
-  'offnote' => 'Note d\'officier',
-  'online' => 'En ligne',
-  'llogin' => 'Dernière connection (jours)',
-  'del_guild' => 'Effacer la guilde',
-  'guild_id' => 'Id de guilde',
-  'guild_search_result' => 'Résultats de recherche de guildes',
-  'show_guilds' => 'Afficher toutes les guildes',
-  'browse_guilds' => 'Parcourir les guildes'
+
+// ----- GUILD.PHP -----
+function lang_guild()
+{
+  $lang_guild = array
+  (
+    'my_guild' => 'Ma Guilde',
+    'id' => 'ID',
+    'guild_name' => 'Nom de la guilde',
+    'guild_leader' => 'Maître de guilde',
+    'guild_faction' => 'Faction',
+    'tot_members' => 'Total de membres',
+    'tot_m_online' => 'Membres en ligne',
+    'remove' => 'Supp.',
+    'guild_motd' => 'MOTD de la guilde',
+    'create_date' => 'Date de création',
+    'by_name' => 'par nom',
+    'by_guild_leader' => 'par maître de guilde',
+    'by_id' => 'par id',
+    'tot_guilds' => 'Nombre total de guildes',
+    'guild' => 'Guilde',
+    'info' => 'Info',
+    'motd' => 'MOTD',
+    'name' => 'Nom',
+    'race' => 'Race',
+    'class' => 'Classe',
+    'level' => 'Niveau',
+    'rank' => 'Rang',
+    'pnote' => 'Note de joueur',
+    'offnote' => 'Note d\'officier',
+    'online' => 'En ligne',
+    'llogin' => 'Dernière connection (jours)',
+    'del_guild' => 'Effacer la guilde',
+    'guild_id' => 'Id de guilde',
+    'guild_search_result' => 'Résultats de recherche de guildes',
+    'show_guilds' => 'Afficher toutes les guildes',
+    'browse_guilds' => 'Parcourir les guildes'
   );
+  return $lang_guild;
+}
+
 
 $lang_register = array(
   // ----- REGISTER.PHP -----
@@ -580,6 +587,7 @@ $lang_item = array(
   'RESILIENCE_RATING' => 'Résistance',
   'HASTE_RATING' => 'Vitesse'
   );
+
 
 // ----- CHAR_LIST.PHP -----
 function lang_char_list()
@@ -4032,24 +4040,37 @@ $lang_honor = array(
   'guild' => 'Guilde'
   );
 
-$lang_events = array(
-  // ----- EVENTS.PHP -----
-  'total' => 'Total',
-  'descr' => 'Nom de l\'évènement',
-  'start' => 'Première date de démarrage',
-  'occur' => 'Occurance<br /><small>jour(s)/heure(s)',
-  'length' => 'Durée<br /><small>jour(s)/heure(s)',
-  'events' => 'Evènements'
-  );
 
-$lang_instances = array(
-  // ----- INSTANCES.PHP -----
-  'map' => 'Map',
-  'level_min' => 'Niveau minimum',
-  'level_max' => 'Niveau maximum',
-  'max_players' => 'Nombre de joueurs maxi',
-  'reset_delay' => 'Temps avant reset'
+// ----- EVENTS.PHP -----
+function lang_events()
+{
+  $lang_events = array
+  (
+    'total' => 'Total',
+    'descr' => 'Nom de l\'évènement',
+    'start' => 'Première date de démarrage',
+    'occur' => 'Occurance<br /><small>jour(s)/heure(s)',
+    'length' => 'Durée<br /><small>jour(s)/heure(s)',
+    'events' => 'Evènements',
   );
+  return $lang_events;
+}
+
+
+// ----- INSTANCES.PHP -----
+function lang_instances()
+{
+  $lang_instances = array
+  (
+    'total' => 'Total',
+    'map' => 'Map',
+    'level_min' => 'Niveau minimum',
+    'level_max' => 'Niveau maximum',
+    'max_players' => 'Nombre de joueurs maxi',
+    'reset_delay' => 'Temps avant reset',
+  );
+  return $lang_instances;
+}
 
 $lang_captcha = array(
   // ----- FORM.PHP -----
