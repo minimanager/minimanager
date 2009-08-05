@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS `achievement`;
+DROP TABLE IF EXISTS `chrclasses`;
+DROP TABLE IF EXISTS `chrraces`;
+DROP TABLE IF EXISTS `item_display_info`;
+DROP TABLE IF EXISTS `map`;
+DROP TABLE IF EXISTS `skillline`;
+DROP TABLE IF EXISTS `spell`;
+DROP TABLE IF EXISTS `spell_icon`;
+DROP TABLE IF EXISTS `worldmaparea`;

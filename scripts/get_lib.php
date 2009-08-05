@@ -685,7 +685,7 @@ function get_icon($itemid)
 
   if ($displayid)
   {
-    $result = $sql_3->query("SELECT `name` FROM `item_display_info` WHERE `id`=$displayid");
+    $result = $sql_3->query("SELECT `name` FROM `dbc_itemdisplayinfo` WHERE `id`=$displayid");
 
     if($result)
     { 
@@ -748,7 +748,7 @@ function get_icon($itemid)
 
     if (file_exists("img/item_icons/$item.jpg"))
     {
-      $sql_3->query("INSERT IGNORE INTO item_display_info (id, name) VALUES ('$displayid','$item')");
+      $sql_3->query("INSERT IGNORE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
       $sql_3->close();
       return "img/item_icons/$item.jpg";
     }
@@ -780,7 +780,7 @@ function get_icon($itemid)
 
     if (file_exists("img/item_icons/$item.jpg"))
     {
-      $sql_3->query("INSERT IGNORE INTO item_display_info (id, name) VALUES ('$displayid','$item')");
+      $sql_3->query("INSERT IGNORE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
       $sql_3->close();
       return "img/item_icons/$item.jpg";
     }
@@ -793,7 +793,7 @@ function get_icon($itemid)
 
     if (file_exists("img/item_icons/$item.jpg"))
     {
-      $sql_3->query("INSERT IGNORE INTO item_display_info (id, name) VALUES ('$displayid','$item')");
+      $sql_3->query("INSERT IGNORE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
       $sql_3->close();
       return "img/item_icons/$item.jpg";
     }
@@ -816,7 +816,7 @@ function get_aura_icon($auraid)
 
   if ($auraid)
   {
-    $result = $sql_4->query("SELECT `name` FROM `spell_icon` WHERE `id` IN (SELECT `spellicon` FROM `spell` WHERE `spellID`=$auraid)");
+    $result = $sql_4->query("SELECT `name` FROM `dbc_spellicon` WHERE `id` IN (SELECT `spellicon` FROM `dbc_spell` WHERE `spellID`=$auraid)");
 
     if($result)
     {
@@ -881,7 +881,7 @@ function get_aura_icon($auraid)
 
     if (file_exists("img/item_icons/$aura.jpg"))
     {
-      $sql_4->query("INSERT IGNORE INTO char_aura (id, name) VALUES ('$auraid','$aura')");
+      $sql_4->query("INSERT IGNORE INTO dbc_spellicon (id, name) VALUES ('$auraid','$aura')");
       $sql_4->close();
       return "img/item_icons/$aura.jpg";
     }
@@ -913,7 +913,7 @@ function get_aura_icon($auraid)
 
     if (file_exists("img/item_icons/$aura.jpg"))
     {
-      $sql_4->query("INSERT IGNORE INTO char_aura (id, name) VALUES ('$auraid','$aura')");
+      $sql_4->query("INSERT IGNORE INTO dbc_spellicon (id, name) VALUES ('$auraid','$aura')");
       $sql_4->close();
       return "img/item_icons/$aura.jpg";
     }
@@ -926,7 +926,7 @@ function get_aura_icon($auraid)
 
     if (file_exists("img/item_icons/$aura.jpg"))
     {
-      $sql_4->query("INSERT IGNORE INTO char_aura (id, name) VALUES ('$auraid','$aura')");
+      $sql_4->query("INSERT IGNORE INTO dbc_spellicon (id, name) VALUES ('$auraid','$aura')");
       $sql_4->close();
       return "img/item_icons/$aura.jpg";
     }

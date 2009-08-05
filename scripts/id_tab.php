@@ -111,7 +111,7 @@ function get_map_name($id)
   global $mmfpm_db;
   $sql = new SQL;
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $map_name = $sql->fetch_row($sql->query("SELECT `name01` FROM `map` WHERE `id`={$id} LIMIT 1"));
+  $map_name = $sql->fetch_row($sql->query("SELECT `name01` FROM `dbc_map` WHERE `id`={$id} LIMIT 1"));
   $sql->close();
   unset($sql);
   return $map_name[0];
@@ -125,7 +125,7 @@ function get_zone_name($id)
   global $mmfpm_db;
   $sql = new SQL;
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $zone_name = $sql->fetch_row($sql->query("SELECT `field_3` FROM `worldmaparea` WHERE `field_2`={$id} LIMIT 1"));
+  $zone_name = $sql->fetch_row($sql->query("SELECT `field_3` FROM `dbc_worldmaparea` WHERE `field_2`={$id} LIMIT 1")); //needs to be improved with new tables
   $sql->close();
   unset($sql);
   return $zone_name[0];
@@ -139,7 +139,7 @@ function get_player_class($id)
   global $mmfpm_db;
   $sql = new SQL;
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $class_name = $sql->fetch_row($sql->query("SELECT `field_4` FROM `chrclasses` WHERE `id`={$id} LIMIT 1"));
+  $class_name = $sql->fetch_row($sql->query("SELECT `field_4` FROM `dbc_chrclasses` WHERE `id`={$id} LIMIT 1")); //needs to be improved with new tables
   $sql->close();
   unset($sql);
   return $class_name[0];
@@ -153,7 +153,7 @@ function get_player_race($id)
   global $mmfpm_db;
   $sql = new SQL;
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $race_name = $sql->fetch_row($sql->query("SELECT `field_12` FROM `chrraces` WHERE `id`={$id} LIMIT 1"));
+  $race_name = $sql->fetch_row($sql->query("SELECT `field_12` FROM `dbc_chrraces` WHERE `id`={$id} LIMIT 1")); //we need to use either db or function id_get_char_race, if from db we need to determine side (alliance or horde) as that info isnt present in chrraces.dbc
   $sql->close();
   unset($sql);
   return $race_name[0];
@@ -185,7 +185,7 @@ function get_skill_type($id)
   global $mmfpm_db;
   $sql = new SQL;
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $skill_type = $sql->fetch_row($sql->query("SELECT `field_1` FROM `skillline` WHERE `id`={$id} LIMIT 1"));
+  $skill_type = $sql->fetch_row($sql->query("SELECT `Category` FROM `dbc_skillline` WHERE `id`={$id} LIMIT 1")); //This table came from CSWOWD as its fields are named
   $sql->close();
   unset($sql);
   return $skill_type[0];
@@ -199,7 +199,7 @@ function get_skill_name($id)
   global $mmfpm_db;
   $sql = new SQL;
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $skill_name = $sql->fetch_row($sql->query("SELECT `field_3` FROM `skillline` WHERE `id`={$id} LIMIT 1"));
+  $skill_name = $sql->fetch_row($sql->query("SELECT `Name` FROM `dbc_skillline` WHERE `id`={$id} LIMIT 1")); //This table came from CSWOWD as its fields are named
   $sql->close();
   unset($sql);
   return $skill_name[0];
@@ -213,7 +213,7 @@ function get_achievement_name($id)
   global $mmfpm_db;
   $sql = new SQL;
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $achievement_name = $sql->fetch_row($sql->query("SELECT `name01` FROM `achievement` WHERE `id`={$id} LIMIT 1"));
+  $achievement_name = $sql->fetch_row($sql->query("SELECT `name01` FROM `dbc_achievement` WHERE `id`={$id} LIMIT 1"));
   $sql->close();
   unset($sql);
   return $achievement_name[0];
