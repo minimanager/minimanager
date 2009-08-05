@@ -8,23 +8,24 @@
  * License: GNU General Public License v2(GPL)
  */
 
+
 require_once("header.php");
 valid_login($action_permission['read']);
 
-//########################################################################################################################
+//#############################################################################
 //  BROWSE  TICKETS
-//########################################################################################################################
+//#############################################################################
 function browse_tickets()
 {
   global  $lang_global, $lang_ticket, $output, $characters_db, $realm_id, $itemperpage, $server_type, $action_permission, $user_lvl;
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
- 
-  //==========================$_GET and SECURE========================
+
+  //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
- 
+
   if ($server_type)
   {
     $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "guid";
@@ -35,13 +36,13 @@ function browse_tickets()
     $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "ticket_id";
     if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="ticket_id";
   }
- 
+
   $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
- 
+
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
-  //==========================$_GET and SECURE end========================
+  //==========================$_GET and SECURE end=============================
 
   //get total number of items
   if($server_type)
@@ -49,6 +50,7 @@ function browse_tickets()
   else
     $query_1 = $sql->query("SELECT count(*) FROM character_ticket");
   $all_record = $sql->result($query_1,0);
+  unset($query_1);
 
   if($server_type)
     $query = $sql->query("SELECT gm_tickets.guid, gm_tickets.playerGuid, SUBSTRING_INDEX(gm_tickets.message,' ',6),`characters`.name
@@ -62,8 +64,6 @@ function browse_tickets()
        LEFT JOIN character_ticket k1 ON k1.`guid`=`characters`.`guid`
          WHERE character_ticket.guid = `characters`.`guid`
            ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-
-  $this_page = $sql->num_rows($query);
 
   $output .="
         <script type=\"text/javascript\" src=\"js/check.js\"></script>
@@ -115,6 +115,8 @@ function browse_tickets()
                 <td>".htmlentities($ticket[2])." ...</td>
               </tr>";
   }
+  unset($query);
+  unset($ticket);
   $output .= "
               <tr><td colspan=\"12\" class=\"hidden\"><br /></td></tr>
               <tr>
@@ -130,9 +132,9 @@ function browse_tickets()
           <br />
         </center>
 ";
- 
-$sql->close();
 
+  $sql->close();
+  unset($sql);
 }
 
 
@@ -144,11 +146,12 @@ function delete_tickets()
   global $lang_global, $characters_db, $realm_id, $server_type, $action_permission;
   valid_login($action_permission['delete']);
 
+  if(!isset($_GET['check'])) redirect("ticket.php?error=1");
+
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  if(isset($_GET['check'])) $check = $sql->quote_smart($_GET['check']);
-    else redirect("ticket.php?error=1");
+  $check = $sql->quote_smart($_GET['check']);
 
   $deleted_tickets = 0;
   for ($i=0; $i<count($check); $i++)
@@ -164,7 +167,7 @@ function delete_tickets()
   }
 
   $sql->close();
-
+  unset($sql);
   if ($deleted_tickets == 0)
     redirect("ticket.php?error=3");
   else
@@ -184,7 +187,7 @@ function edit_ticket()
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
- 
+
   $id = $sql->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("ticket.php?error=1");
 
@@ -249,8 +252,9 @@ function edit_ticket()
   }
   else
     error($lang_global['err_no_records_found']);
-  
+
   $sql->close();
+  unset($sql);
 }
 
 
@@ -267,9 +271,10 @@ function do_edit_ticket()
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
- 
+
   $new_text = $sql->quote_smart($_POST['new_text']);
   $id = $sql->quote_smart($_POST['id']);
+  if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("ticket.php?error=1");
 
   if ($server_type)
     $query = $sql->query("UPDATE gm_tickets SET message='$new_text' WHERE guid = '$id'");
@@ -279,11 +284,13 @@ function do_edit_ticket()
   if ($sql->affected_rows())
   {
     $sql->close();
+    unset($sql);
     redirect("ticket.php?error=5");
   }
   else
   {
     $sql->close();
+    unset($sql);
     redirect("ticket.php?error=6");
   }
 }
@@ -296,6 +303,9 @@ $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
 $output .= "
         <div class=\"top\">";
+
+$lang_ticket = lang_ticket();
+
 switch ($err)
 {
   case 1:
@@ -326,6 +336,9 @@ switch ($err)
     $output .= "
           <h1>{$lang_ticket['browse_tickets']}</h1>";
 }
+
+unset($err);
+
 $output .= "
         </div>";
 
@@ -333,21 +346,26 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 switch ($action)
 {
-  case "browse_tickets": 
+  case "browse_tickets":
     browse_tickets();
     break;
-  case "delete_tickets": 
+  case "delete_tickets":
     delete_tickets();
     break;
-  case "edit_ticket": 
+  case "edit_ticket":
     edit_ticket();
     break;
-  case "do_edit_ticket": 
+  case "do_edit_ticket":
     do_edit_ticket();
     break;
   default:
     browse_tickets();
 }
 
+unset($action);
+unset($action_permission);
+unset($lang_tikcet);
+
 require_once("footer.php");
+
 ?>

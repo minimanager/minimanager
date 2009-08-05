@@ -82,7 +82,7 @@ function top100()
     $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[11].";"));
 
     $money_gold = (int)($char[13]/10000);
-	$money_silver = (int)(($char[13]-$money_gold*10000)/100);
+    $money_silver = (int)(($char[13]-$money_gold*10000)/100);
     $money_cooper = (int)($char[13]-$money_gold*10000-$money_silver*100);
 
     $money = $money_gold."<img src=\"./img/gold.gif\" /> ".$money_silver."<img src=\"./img/silver.gif\" /> ".$money_cooper."<img src=\"./img/copper.gif\" /> ";
@@ -128,9 +128,9 @@ function top100()
 
 }
 
-//########################################################################################################################
+//#############################################################################
 // MAIN
-//########################################################################################################################
+//#############################################################################
 
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 

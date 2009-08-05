@@ -13,7 +13,7 @@ $time_start = microtime(true);
 if ( !ini_get('session.auto_start') ) session_start();
 
 if (file_exists("./scripts/config.php"))
-{ if (file_exists("./scripts/config.dist.php")) 
+{ if (file_exists("./scripts/config.dist.php"))
     require_once("./scripts/config.dist.php");
   else
     exit("<center><br><code>'./scripts/config.dist.php'</code> not found,<br> please restore <code>'./scripts/config.dist.php'</code></center>");
@@ -47,7 +47,7 @@ else
 require_once("./lang/$lang.php");
 
 if($debug) $tot_queries = 0;
-require_once("./scripts/db_lib.php");
+require_once("./libs/db_lib.php");
 
 require_once("./scripts/global_lib.php");
 require_once("./scripts/id_tab.php");
@@ -91,7 +91,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
 {
   if(ini_get('max_execution_time') < 1800)
   {
-    if(!ini_set('max_execution_time',0)) 
+    if(!ini_set('max_execution_time',0))
       error("Error - max_execution_time not set.<br /> Please set it manually to 0, in php.ini for full functionality.");
   }
 
@@ -106,7 +106,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
   $user_id = $_SESSION['user_id'];
   $realm_id = (isset($_GET['r_id'])) ? (int)$_GET['r_id'] : $_SESSION['realm_id'];
 
-  $user_lvl_name = id_get_gm_level($user_lvl); 
+  $user_lvl_name = id_get_gm_level($user_lvl);
 
   // get file we are executing
   $array = explode ( '/', $_SERVER['PHP_SELF']);

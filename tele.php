@@ -8,20 +8,22 @@
  * License: GNU General Public License v2(GPL)
  */
 
+
 require_once("header.php");
 valid_login($action_permission['read']);
 
-//########################################################################################################################
+//#############################################################################
 // BROWSE TELEPORT LOCATIONS
-//########################################################################################################################
+//#############################################################################
 function browse_tele()
 {
-  global $lang_tele, $lang_global, $output, $world_db, $realm_id, $itemperpage, $action_permission, $user_lvl;
+  global $lang_tele, $lang_global, $output, $world_db, $realm_id, $itemperpage,
+    $action_permission, $user_lvl;
 
   $sql = new SQL;
   $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
-  //==========================$_GET and SECURE========================
+  //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
@@ -33,9 +35,9 @@ function browse_tele()
 
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
-  //==========================$_GET and SECURE end========================
+  //==========================$_GET and SECURE end=============================
 
-  //==========================Browse/Search CHECK========================
+  //==========================Browse/Search CHECK==============================
   $search_by = '';
   $search_value = '';
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
@@ -48,20 +50,20 @@ function browse_tele()
 
     if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("tele.php?error=1");
     $query_1 = $sql->query("SELECT count(*) FROM game_tele WHERE $search_by LIKE '%$search_value%'");
-    $query = $sql->query("SELECT id, name, map, position_x, position_y, position_z, orientation 
+    $query = $sql->query("SELECT id, name, map, position_x, position_y, position_z, orientation
       FROM game_tele WHERE $search_by LIKE '%$search_value%' ORDER BY $order_by $order_dir LIMIT  $start, $itemperpage");
   }
   else
   {
     $query_1 = $sql->query("SELECT count(*) FROM game_tele");
-    $query = $sql->query("SELECT id, name, map, position_x, position_y, position_z, orientation 
+    $query = $sql->query("SELECT id, name, map, position_x, position_y, position_z, orientation
       FROM game_tele ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   }
 
   $all_record = $sql->result($query_1,0);
   unset($query_1);
 
-  //==========================top tage navigaion starts here========================
+  //=====================top tage navigaion starts here========================
   $output .="
         <center>
           <table class=\"top_hidden\">
@@ -82,7 +84,7 @@ function browse_tele()
             </tr>
             <tr align=\"left\">
               <td>
-                <table class=\"hidden\"> 
+                <table class=\"hidden\">
                   <tr>
                     <td>
                       <form action=\"tele.php\" method=\"get\" name=\"form\">
@@ -105,7 +107,7 @@ function browse_tele()
               </td>
             </tr>
           </table>";
-  //==========================top tage navigaion ENDS here ========================
+  //======================top tage navigaion ENDS here ========================
 
   $output .= "
           <script type=\"text/javascript\">
@@ -170,9 +172,9 @@ function browse_tele()
 }
 
 
-//########################################################################################################################
+//#############################################################################
 // DO DELETE TELE FROM LIST
-//########################################################################################################################
+//#############################################################################
 function del_tele()
 {
   global $world_db, $realm_id, $action_permission;
@@ -186,7 +188,7 @@ function del_tele()
   $id = $sql->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
 
-  //==========================$_GET and SECURE========================
+  //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
@@ -198,7 +200,7 @@ function del_tele()
 
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
-  //==========================$_GET and SECURE end========================
+  //==========================$_GET and SECURE end=============================
 
   $sql->query("DELETE FROM game_tele WHERE id = '$id'");
   if ($sql->affected_rows() != 0)
@@ -216,9 +218,9 @@ function del_tele()
 }
 
 
-//########################################################################################################################
+//#############################################################################
 //  EDIT   TELE
-//########################################################################################################################
+//#############################################################################
 function edit_tele()
 {
   global  $lang_tele, $lang_global, $output, $world_db, $realm_id, $mmfpm_db, $action_permission, $user_lvl;
@@ -231,7 +233,7 @@ function edit_tele()
 
   $id = $sql->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
- 
+
   $query = $sql->query("SELECT id, name, map, position_x, position_y, position_z, orientation FROM game_tele WHERE id = '$id'");
 
   if ($sql->num_rows($query) == 1)
@@ -263,7 +265,7 @@ function edit_tele()
                   <select name=\"new_map\">";
 
     $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-    $map_query = $sql->query("SELECT id, name01 from map order by id");
+    $map_query = $sql->query("SELECT id, name01 from dbc_map order by id");
     while ($map = $sql->fetch_row($map_query))
     {
       $output .= "
@@ -321,13 +323,14 @@ function edit_tele()
 }
 
 
-//########################################################################################################################
+//#############################################################################
 //  DO EDIT TELE LOCATION
-//########################################################################################################################
+//#############################################################################
 function do_edit_tele()
 {
   global $world_db, $realm_id, $action_permission;
   valid_login($action_permission['update']);
+
   if( empty($_GET['id']) || !isset($_GET['new_name']) || !isset($_GET['new_map']) || !isset($_GET['new_x'])
     || !isset($_GET['new_y'])|| !isset($_GET['new_z'])|| !isset($_GET['new_orientation']))
     redirect("tele.php?error=1");
@@ -362,9 +365,9 @@ function do_edit_tele()
 }
 
 
-//########################################################################################################################
+//#############################################################################
 //  ADD NEW TELE
-//########################################################################################################################
+//#############################################################################
 function add_tele()
 {
   global  $output, $lang_tele, $lang_global, $mmfpm_db, $action_permission;
@@ -386,7 +389,7 @@ function add_tele()
                   <td>
                     <select name=\"map\">";
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $map_query = $sql->query("SELECT id, name01 from map order by id");
+  $map_query = $sql->query("SELECT id, name01 from dbc_map order by id");
   while ($map = $sql->fetch_row($map_query))
     $output .= "
                     <option value=\"{$map[0]}\">{$map[0]} : {$map[1]}</option>";
@@ -432,9 +435,9 @@ function add_tele()
 }
 
 
-//########################################################################################################################
+//#############################################################################
 //  DO ADD  TELE LOCATION
-//########################################################################################################################
+//#############################################################################
 function do_add_tele()
 {
   global $world_db, $realm_id, $action_permission;
@@ -470,9 +473,9 @@ function do_add_tele()
 }
 
 
-//########################################################################################################################
+//#############################################################################
 // MAIN
-//########################################################################################################################
+//#############################################################################
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
 $output .= "
@@ -516,22 +519,22 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 switch ($action)
 {
-  case "browse_tele": 
+  case "browse_tele":
     browse_tele();
     break;
-  case "edit_tele": 
+  case "edit_tele":
     edit_tele();
     break;
- case "do_edit_tele": 
+ case "do_edit_tele":
     do_edit_tele();
     break;
- case "add_tele": 
+ case "add_tele":
     add_tele();
     break;
- case "do_add_tele": 
+ case "do_add_tele":
     do_add_tele();
     break;
- case "del_tele": 
+ case "del_tele":
     del_tele();
     break;
  default:

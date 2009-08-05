@@ -247,7 +247,7 @@ function char_main()
                   </a>";
       else
         $output .= "
-                  <img src=\"img/Char_INV/INV_empty_head.png\" class=\"icon_border_0\" alt=\"empty\" />";
+                  <img src=\"img/INV/INV_empty_head.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td class=\"half_line\" colspan=\"4\">
@@ -261,7 +261,7 @@ function char_main()
                   </a>";
       else
         $output .= "
-                  <img src=\"img/Char_INV/INV_empty_gloves.png\" class=\"icon_border_0\" alt=\"empty\" />";
+                  <img src=\"img/INV/INV_empty_gloves.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
               </tr>
@@ -274,7 +274,7 @@ function char_main()
                   </a>";
       else
         $output .= "
-                  <img src=\"img/Char_INV/INV_empty_neck.png\" class=\"icon_border_0\" alt=\"empty\" />";
+                  <img src=\"img/INV/INV_empty_neck.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td class=\"half_line\" colspan=\"4\">
@@ -288,7 +288,7 @@ function char_main()
                   </a>";
       else
         $output .= "
-                  <img src=\"img/Char_INV/INV_empty_waist.png\" class=\"icon_border_0\" alt=\"empty\" />";
+                  <img src=\"img/INV/INV_empty_waist.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
               </tr>
@@ -301,7 +301,7 @@ function char_main()
                   </a>";
       else
         $output .= "
-                  <img src=\"img/Char_INV/INV_empty_shoulder.png\" class=\"icon_border_0\" alt=\"empty\" />";
+                  <img src=\"img/INV/INV_empty_shoulder.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td class=\"half_line\" colspan=\"2\">
@@ -366,7 +366,7 @@ function char_main()
                   </a>";
       else
         $output .= "
-                  <img src=\"img/Char_INV/INV_empty_legs.png\" class=\"icon_border_0\" alt=\"empty\" />";
+                  <img src=\"img/INV/INV_empty_legs.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
               </tr>
@@ -379,7 +379,7 @@ function char_main()
                   </a>";
       else
         $output .= "
-                  <img src=\"img/Char_INV/INV_empty_chest_back.png\" class=\"icon_border_0\" alt=\"empty\" />";
+                  <img src=\"img/INV/INV_empty_chest_back.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td class=\"half_line\" colspan=\"2\" rowspan=\"3\" align=\"center\">
@@ -426,7 +426,7 @@ function char_main()
                   </a>";
       else
         $output .= "
-                  <img src=\"img/Char_INV/INV_empty_feet.png\" class=\"icon_border_0\" alt=\"empty\" />";
+                  <img src=\"img/INV/INV_empty_feet.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
               </tr>
@@ -438,7 +438,7 @@ function char_main()
                     <img src=\"{$equiped_items[5][1]}\" class=\"{$equiped_items[5][2]}\" alt=\"Chest\">
                   </a>";
       else
-        $output .= "<img src=\"img/Char_INV/INV_empty_chest_back.png\" class=\"icon_border_0\" alt=\"empty\" />";
+        $output .= "<img src=\"img/INV/INV_empty_chest_back.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td>";
@@ -448,7 +448,7 @@ function char_main()
                     <img src=\"{$equiped_items[11][1]}\" class=\"{$equiped_items[11][2]}\" alt=\"Finger1\">
                   </a>";
       else
-        $output .= "<img src=\"img/Char_INV/INV_empty_finger.png\" class=\"icon_border_0\" alt=\"empty\" />";
+        $output .= "<img src=\"img/INV/INV_empty_finger.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
               </tr>
@@ -460,7 +460,7 @@ function char_main()
                     <img src=\"{$equiped_items[4][1]}\" class=\"{$equiped_items[4][2]}\" alt=\"Shirt\">
                   </a>";
       else
-        $output .= "<img src=\"img/Char_INV/INV_empty_shirt.png\" class=\"icon_border_0\" alt=\"empty\" />";
+        $output .= "<img src=\"img/INV/INV_empty_shirt.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td>";
@@ -469,7 +469,7 @@ function char_main()
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_FINGER2\" target=\"_blank\">
                     <img src=\"{$equiped_items[12][1]}\" class=\"{$equiped_items[12][2]}\" alt=\"Finger2\">
                   </a>";
-      else $output .= "<img src=\"img/Char_INV/INV_empty_finger.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      else $output .= "<img src=\"img/INV/INV_empty_finger.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
               </tr>
@@ -480,7 +480,7 @@ function char_main()
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_TABARD\" target=\"_blank\">
                     <img src=\"{$equiped_items[19][1]}\" class=\"{$equiped_items[19][2]}\" alt=\"Tabard\">
                   </a>";
-      else $output .= "<img src=\"img/Char_INV/INV_empty_tabard.png\" class=\"icon_border_0\" alt=\"empty\" />";
+      else $output .= "<img src=\"img/INV/INV_empty_tabard.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td class=\"half_line\" colspan=\"2\" rowspan=\"2\" align=\"center\">
@@ -526,7 +526,7 @@ function char_main()
                     <img src=\"{$equiped_items[13][1]}\" class=\"{$equiped_items[13][2]}\" alt=\"Trinket1\">
                   </a>";
       else
-        $output .= "<img src=\"img/Char_INV/INV_empty_trinket.png\" class=\"icon_border_0\" alt=\"empty\" />";
+        $output .= "<img src=\"img/INV/INV_empty_trinket.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
               </tr>
@@ -538,7 +538,7 @@ function char_main()
                     <img src=\"{$equiped_items[9][1]}\" class=\"{$equiped_items[9][2]}\" alt=\"Wrist\">
                   </a>";
       else
-        $output .= "<img src=\"img/Char_INV/INV_empty_wrist.png\" class=\"icon_border_0\" alt=\"empty\" />";
+        $output .= "<img src=\"img/INV/INV_empty_wrist.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td>";
@@ -548,7 +548,7 @@ function char_main()
                     <img src=\"{$equiped_items[14][1]}\" class=\"{$equiped_items[14][2]}\" alt=\"Trinket2\">
                   </a>";
       else
-        $output .= "<img src=\"img/Char_INV/INV_empty_trinket.png\" class=\"icon_border_0\" alt=\"empty\" />";
+        $output .= "<img src=\"img/INV/INV_empty_trinket.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
               </tr>
@@ -561,7 +561,7 @@ function char_main()
                     <img src=\"{$equiped_items[16][1]}\" class=\"{$equiped_items[16][2]}\" alt=\"MainHand\">
                   </a>";
       else
-        $output .= "<img src=\"img/Char_INV/INV_empty_main_hand.png\" class=\"icon_border_0\" alt=\"empty\" />";
+        $output .= "<img src=\"img/INV/INV_empty_main_hand.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td width=\"15%\">";
@@ -571,7 +571,7 @@ function char_main()
                     <img src=\"{$equiped_items[17][1]}\" class=\"{$equiped_items[17][2]}\" alt=\"OffHand\">
                   </a>";
       else
-        $output .= "<img src=\"img/Char_INV/INV_empty_off_hand.png\" class=\"icon_border_0\" alt=\"empty\" />";
+        $output .= "<img src=\"img/INV/INV_empty_off_hand.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td width=\"15%\">";
@@ -581,7 +581,7 @@ function char_main()
                     <img src=\"{$equiped_items[18][1]}\" class=\"{$equiped_items[18][2]}\" alt=\"Ranged\">
                   </a>";
       else
-        $output .= "<img src=\"img/Char_INV/INV_empty_ranged.png\" class=\"icon_border_0\" alt=\"empty\" />";
+        $output .= "<img src=\"img/INV/INV_empty_ranged.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
                 </td>
                 <td width=\"15%\"></td>
@@ -868,7 +868,7 @@ function char_inv()
         {
           $output .= "
                     <div style=\"left:".(($pos+$dsp)%4*42)."px;top:".(floor(($pos+$dsp)/4)*41)."px;\">";
-        
+
           $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
                     <img src=\"".get_icon($item[0])."\" alt=\"\" />".($item[1] ? ($item[1]+1) : "")."
@@ -1452,9 +1452,11 @@ function char_achievements()
 function char_rep()
 {
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
-    $action_permission, $user_lvl, $user_name, 
-    $fact_id, $reputation_rank_length, $reputation_cap, $reputation_bottom, $reputation_rank,
-    $MIN_REPUTATION_RANK, $MAX_REPUTATION_RANK;
+    $action_permission, $user_lvl, $user_name;
+
+  require_once("libs/fact_lib.php");
+  $reputation_rank = fact_get_reputation_rank_arr();
+  $reputation_rank_length = fact_get_reputation_rank_length();
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -1506,8 +1508,6 @@ function char_rep()
           <font class=\"bold\">".htmlentities($char[1])." - ".get_player_race($char[2])." ".get_player_class($char[3])."</font>
           <br /><br />";
 
-      require_once("scripts/fact_tab.php");
-
       $temp_out = array
       (
         1 => array("<table class=\"lined\" style=\"width: 550px;\">
@@ -1545,12 +1545,12 @@ function char_rep()
           $faction  = $fact[0];
           $standing = $fact[1];
 
-          $rep_rank      = get_reputation_rank($faction, $standing, $race);
+          $rep_rank      = fact_get_reputation_rank($faction, $standing, $race);
           $rep_rank_name = $reputation_rank[$rep_rank];
           $rep_cap       = $reputation_rank_length[$rep_rank];
-          $rep           = get_reputation_at_rank($faction, $standing, $race);
-          $faction_name  = get_faction_name($faction);
-          $ft            = get_faction_tree($faction);
+          $rep           = fact_get_reputation_at_rank($faction, $standing, $race);
+          $faction_name  = fact_get_faction_name($faction);
+          $ft            = fact_get_faction_tree($faction);
 
           // not show alliance rep for horde and vice versa:
           if (!((((1 << ($race - 1)) & 690) && ($ft == 1 || $ft == 3))
@@ -1997,7 +1997,7 @@ function char_talent()
       if (get_player_class($char[3]) == 'Hunter')
         $output .= "
             <li><a href=\"char.php?id=$id&amp;action=char_pets\">{$lang_char['pets']}</a></li>";
-      $output .= "  
+      $output .= "
           </ul>
         </div>
         <div id=\"tab_content\">

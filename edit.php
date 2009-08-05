@@ -253,8 +253,8 @@ function doedit_user()
   $new_expansion = $sql->quote_smart(trim($_POST['expansion']));
 
   //make sure the mail is valid mail format
-  require_once("scripts/valid_lib.php");
-  if ((!is_email($new_mail))||(strlen($new_mail)  > 224))
+  require_once("libs/valid_lib.php");
+  if ((!valid_email($new_mail))||(strlen($new_mail)  > 224))
     redirect("edit.php?error=2");
 
   $sql->query("UPDATE account SET email='$new_mail', $new_pass expansion='$new_expansion' WHERE username = '$user_name'");
@@ -379,7 +379,7 @@ $output .= "
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-switch ($action) 
+switch ($action)
 {
   case "doedit_user":
     doedit_user();

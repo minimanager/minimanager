@@ -8,11 +8,11 @@
  * License: GNU General Public License v2(GPL)
  */
 
+
 require_once("header.php");
-valid_login($action_permission['read']);
 require_once("scripts/defines.php");
 require_once("scripts/get_lib.php");
-
+valid_login($action_permission['read']);
 
 //########################################################################################################################
 //  BROWSE CHARS
@@ -24,6 +24,7 @@ function browse_chars()
 
   $sql = new SQL;
   $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
   //==========================$_GET and SECURE========================
   $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
@@ -37,6 +38,7 @@ function browse_chars()
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end========================
+
   $search_by = '';
   $search_value = '';
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
@@ -75,7 +77,7 @@ function browse_chars()
       case "level":
         if (!is_numeric($search_value)) $search_value = 1;
         $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) = $search_value";
-      
+
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
@@ -176,7 +178,7 @@ function browse_chars()
       case "highest_rank":
         if (!is_numeric($search_value)) $search_value = 0;
         $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) = $search_value";
-      
+
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
@@ -212,9 +214,12 @@ function browse_chars()
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as gname
       FROM `characters` ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   }
+
   $all_record = $sql->result($query_1,0);
   unset($query_1);
+
   $this_page = $sql->num_rows($query) or die(error($lang_global['err_no_result']));
+
   //==========================top tage navigaion starts here========================
   $output .="
         <script type=\"text/javascript\" src=\"js/check.js\"></script>
@@ -234,7 +239,7 @@ function browse_chars()
               </td>
             </tr>
             <tr align=\"left\">
-              <td>  
+              <td>
                 <table class=\"hidden\">
                   <tr>
                     <td>
@@ -286,7 +291,7 @@ function browse_chars()
                 <th width=\"10%\"><a href=\"char_list.php?order_by=map&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['map']}</a></th>
                 <th width=\"10%\"><a href=\"char_list.php?order_by=zone&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['zone']}</th>
                 <th width=\"1%\"><a href=\"char_list.php?order_by=highest_rank&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='highest_rank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['honor_kills']}</a></th>
-                <th width=\"10%\"><a href=\"char_list.php?order_by=gname&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='gname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."Guild</a></th>
+                <th width=\"10%\"><a href=\"char_list.php?order_by=gname&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='gname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['guild']}</a></th>
                 <th width=\"1%\"><a href=\"char_list.php?order_by=logout_time&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='logout_time' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['lastseen']}</a></th>
                 <th width=\"1%\"><a href=\"char_list.php?order_by=online&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['online']}</a></th>";
   if ($showcountryflag)
@@ -361,6 +366,9 @@ function browse_chars()
               </tr>";
     }
   }
+  unset($char);
+  unset($result);
+
   $output .= "
 
               <tr>
@@ -388,7 +396,7 @@ function del_char_form()
 {
   global $lang_char_list, $lang_global, $output, $characters_db, $realm_id, $action_permission;
   valid_login($action_permission['delete']);
-  
+
   if(isset($_GET['check'])) $check = $_GET['check'];
     else redirect("char_list.php?error=1");
 
@@ -465,6 +473,7 @@ function dodel_char()
 
   $sql->close();
   unset($sql);
+
   $output .= "
         <center>";
   if (!$deleted_chars)

@@ -7,8 +7,9 @@
  * Email: *****
  * License: GNU General Public License v2(GPL)
  */
+
+
  require_once("header.php");
- session_start();
 
 //#####################################################################################################
 // DO REGISTER
@@ -19,8 +20,8 @@ function doregister(){
 
  if (($_POST['security_code']) != ($_SESSION['security_code'])) {
    redirect("register.php?err=13");
- }	
- 
+ }
+
  if ( empty($_POST['pass']) || empty($_POST['email']) || empty($_POST['username']) ) {
    redirect("register.php?err=1");
  }
@@ -30,131 +31,131 @@ function doregister(){
  $last_ip =  (getenv('HTTP_X_FORWARDED_FOR')) ? getenv('HTTP_X_FORWARDED_FOR') : getenv('REMOTE_ADDR');
 
  if (sizeof($valid_ip_mask)){
- 	$qFlag = 0;
-	$user_ip_mask = explode('.', $last_ip);
+  $qFlag = 0;
+  $user_ip_mask = explode('.', $last_ip);
 
-	foreach($valid_ip_mask as $mask){
-		$vmask = explode('.', $mask);
-		$v_count = 4;
-		$i = 0;
-		foreach($vmask as $range){
-			$vmask_h = explode('-', $range);
-			if (isset($vmask_h[1])){
-				if (($vmask_h[0]>=$user_ip_mask[$i]) && ($vmask_h[1]<=$user_ip_mask[$i])) $v_count--;
-			}else{
-				if ($vmask_h[0] == $user_ip_mask[$i]) $v_count--;
-				}
-			$i++;
-		}
-		if (!$v_count){
-			$qFlag++;
-			break;
-			}
-	}
-	if (!$qFlag) redirect("register.php?err=9&usr=$last_ip");
+  foreach($valid_ip_mask as $mask){
+    $vmask = explode('.', $mask);
+    $v_count = 4;
+    $i = 0;
+    foreach($vmask as $range){
+      $vmask_h = explode('-', $range);
+      if (isset($vmask_h[1])){
+        if (($vmask_h[0]>=$user_ip_mask[$i]) && ($vmask_h[1]<=$user_ip_mask[$i])) $v_count--;
+      }else{
+        if ($vmask_h[0] == $user_ip_mask[$i]) $v_count--;
+        }
+      $i++;
+    }
+    if (!$v_count){
+      $qFlag++;
+      break;
+      }
+  }
+  if (!$qFlag) redirect("register.php?err=9&usr=$last_ip");
  }
 
-	$sql = new SQL;
-	$sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sql = new SQL;
+  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-	$user_name = $sql->quote_smart(trim($_POST['username']));
-	$pass = $sql->quote_smart($_POST['pass']);
-	$pass1 = $sql->quote_smart($_POST['pass1']);
+  $user_name = $sql->quote_smart(trim($_POST['username']));
+  $pass = $sql->quote_smart($_POST['pass']);
+  $pass1 = $sql->quote_smart($_POST['pass1']);
 
-	//make sure username/pass at least 4 chars long and less than max
-	if ((strlen($user_name) < 4) || (strlen($user_name) > 15)){
-		$sql->close();
-     	redirect("register.php?err=5");
-   	}
+  //make sure username/pass at least 4 chars long and less than max
+  if ((strlen($user_name) < 4) || (strlen($user_name) > 15)){
+    $sql->close();
+      redirect("register.php?err=5");
+    }
 
-	require_once("scripts/valid_lib.php");
+  require_once("libs/valid_lib.php");
 
-	//make sure it doesnt contain non english chars.
-	if (!alphabetic($user_name)) {
-		$sql->close();
-     	redirect("register.php?err=6");
-   	}
+  //make sure it doesnt contain non english chars.
+  if (!valid_alphabetic($user_name)) {
+    $sql->close();
+      redirect("register.php?err=6");
+    }
 
-	//make sure the mail is valid mail format
-	$mail = $sql->quote_smart(trim($_POST['email']));
-	if ((!is_email($mail))||(strlen($mail) > 224)) {
-		$sql->close();
-     	redirect("register.php?err=7");
-   	}
+  //make sure the mail is valid mail format
+  $mail = $sql->quote_smart(trim($_POST['email']));
+  if ((!valid_email($mail))||(strlen($mail) > 224)) {
+    $sql->close();
+      redirect("register.php?err=7");
+    }
 
-	$per_ip = ($limit_acc_per_ip) ? "OR last_ip='$last_ip'" : "";
+  $per_ip = ($limit_acc_per_ip) ? "OR last_ip='$last_ip'" : "";
 
-	$result = $sql->query("SELECT ip FROM ip_banned WHERE ip = '$last_ip'");
-	//IP is in ban list
-	if ($sql->num_rows($result)){
-		$sql->close();
-    	redirect("register.php?err=8&usr=$last_ip");
-	}
-	//Email check
-	$result = $sql->query("SELECT username,email FROM account WHERE username='$user_name' OR email='$mail' $per_ip");
-	if ($sql->num_rows($result)){
-		$sql->close();
-		redirect("register.php?err=14");
-	}
+  $result = $sql->query("SELECT ip FROM ip_banned WHERE ip = '$last_ip'");
+  //IP is in ban list
+  if ($sql->num_rows($result)){
+    $sql->close();
+      redirect("register.php?err=8&usr=$last_ip");
+  }
+  //Email check
+  $result = $sql->query("SELECT username,email FROM account WHERE username='$user_name' OR email='$mail' $per_ip");
+  if ($sql->num_rows($result)){
+    $sql->close();
+    redirect("register.php?err=14");
+  }
 
-	//there is already someone with same account name
-	if ($sql->num_rows($result)){
-		$sql->close();
-    	redirect("register.php?err=3&usr=$user_name");
-	}else{
-    	if ($expansion_select)
-			$expansion = (isset($_POST['expansion'])) ? $sql->quote_smart($_POST['expansion']) : 0;
+  //there is already someone with same account name
+  if ($sql->num_rows($result)){
+    $sql->close();
+      redirect("register.php?err=3&usr=$user_name");
+  }else{
+      if ($expansion_select)
+      $expansion = (isset($_POST['expansion'])) ? $sql->quote_smart($_POST['expansion']) : 0;
         else $expansion = $defaultoption;
 
-		$result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
- 				VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$expansion)");
-		$sql->close();
+    $result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
+        VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$expansion)");
+    $sql->close();
 
-		setcookie ("terms", "", time() - 3600);
+    setcookie ("terms", "", time() - 3600);
 
-		if ($send_mail_on_creation){
-			require_once("scripts/mailer/class.phpmailer.php");
-			$mailer = new PHPMailer();
-			$mailer->Mailer = $mailer_type;
-			if ($mailer_type == "smtp"){
-				$mailer->Host = $smtp_cfg['host'];
-				$mailer->Port = $smtp_cfg['port'];
-				if($smtp_cfg['user'] != '') {
-					$mailer->SMTPAuth  = true;
-					$mailer->Username  = $smtp_cfg['user'];
-					$mailer->Password  =  $smtp_cfg['pass'];
-				}
-			}
+    if ($send_mail_on_creation){
+      require_once("scripts/mailer/class.phpmailer.php");
+      $mailer = new PHPMailer();
+      $mailer->Mailer = $mailer_type;
+      if ($mailer_type == "smtp"){
+        $mailer->Host = $smtp_cfg['host'];
+        $mailer->Port = $smtp_cfg['port'];
+        if($smtp_cfg['user'] != '') {
+          $mailer->SMTPAuth  = true;
+          $mailer->Username  = $smtp_cfg['user'];
+          $mailer->Password  =  $smtp_cfg['pass'];
+        }
+      }
 
-			if ($server_type)
-				$file_name = "mail_templates/mail_welcome_trinity.tpl";
-			else
-				$file_name = "mail_templates/mail_welcome_mangos.tpl";
-			$fh = fopen($file_name, 'r');
-			$subject = fgets($fh, 4096);
-			$body = fread($fh, filesize($file_name));
-			fclose($fh);
+      if ($server_type)
+        $file_name = "mail_templates/mail_welcome_trinity.tpl";
+      else
+        $file_name = "mail_templates/mail_welcome_mangos.tpl";
+      $fh = fopen($file_name, 'r');
+      $subject = fgets($fh, 4096);
+      $body = fread($fh, filesize($file_name));
+      fclose($fh);
 
-			$subject = str_replace("<title>", $title, $subject);
-			$body = str_replace("\n", "<br />", $body);
-			$body = str_replace("\r", " ", $body);
-			$body = str_replace("<username>", $user_name, $body);
-			$body = str_replace("<password>", $pass1, $body);
-			$body = str_replace("<base_url>", $_SERVER['SERVER_NAME'], $body);
+      $subject = str_replace("<title>", $title, $subject);
+      $body = str_replace("\n", "<br />", $body);
+      $body = str_replace("\r", " ", $body);
+      $body = str_replace("<username>", $user_name, $body);
+      $body = str_replace("<password>", $pass1, $body);
+      $body = str_replace("<base_url>", $_SERVER['SERVER_NAME'], $body);
 
-			$mailer->WordWrap = 50;
-			$mailer->From = $from_mail;
-			$mailer->FromName = "$title Admin";
-			$mailer->Subject = $subject;
-			$mailer->IsHTML(true);
-			$mailer->Body = $body;
-			$mailer->AddAddress($mail);
-			$mailer->Send();
-			$mailer->ClearAddresses();
-		}
+      $mailer->WordWrap = 50;
+      $mailer->From = $from_mail;
+      $mailer->FromName = "$title Admin";
+      $mailer->Subject = $subject;
+      $mailer->IsHTML(true);
+      $mailer->Body = $body;
+      $mailer->AddAddress($mail);
+      $mailer->Send();
+      $mailer->ClearAddresses();
+    }
 
-		if ($result) redirect("login.php?error=6");
- 		}
+    if ($result) redirect("login.php?error=6");
+    }
 }
 
 //#####################################################################################################
@@ -166,91 +167,91 @@ function register(){
  $output .= "<center>
   <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
   <script type=\"text/javascript\">
-		function do_submit_data () {
-			if (document.form.pass1.value != document.form.pass2.value){
-				alert('{$lang_register['diff_pass_entered']}');
-				return;
-			} else if (document.form.pass1.value.length > 225){
-				alert('{$lang_register['pass_too_long']}');
-				return;
-			} else {
-				document.form.pass.value = hex_sha1(document.form.username.value.toUpperCase()+':'+document.form.pass1.value.toUpperCase());
-				document.form.pass2.value = '0';
-				do_submit();
-			}
-		}
-		answerbox.btn_ok='{$lang_register['i_agree']}';
-		answerbox.btn_cancel='{$lang_register['i_dont_agree']}';
-		answerbox.btn_icon='';
-	</script>
-	<fieldset class=\"half_frame\">
-	<legend>{$lang_register['create_acc']}</legend>
-	<form method=\"post\" action=\"register.php?action=doregister\" name=\"form\">
-	<input type=\"hidden\" name=\"pass\" value=\"\" maxlength=\"256\" />
+    function do_submit_data () {
+      if (document.form.pass1.value != document.form.pass2.value){
+        alert('{$lang_register['diff_pass_entered']}');
+        return;
+      } else if (document.form.pass1.value.length > 225){
+        alert('{$lang_register['pass_too_long']}');
+        return;
+      } else {
+        document.form.pass.value = hex_sha1(document.form.username.value.toUpperCase()+':'+document.form.pass1.value.toUpperCase());
+        document.form.pass2.value = '0';
+        do_submit();
+      }
+    }
+    answerbox.btn_ok='{$lang_register['i_agree']}';
+    answerbox.btn_cancel='{$lang_register['i_dont_agree']}';
+    answerbox.btn_icon='';
+  </script>
+  <fieldset class=\"half_frame\">
+  <legend>{$lang_register['create_acc']}</legend>
+  <form method=\"post\" action=\"register.php?action=doregister\" name=\"form\">
+  <input type=\"hidden\" name=\"pass\" value=\"\" maxlength=\"256\" />
     <table class=\"flat\">
-	<tr>
-  	 <td valign=\"top\">{$lang_register['username']}:</td>
-   	<td><input type=\"text\" name=\"username\" size=\"45\" maxlength=\"14\" /><br />
-		{$lang_register['use_eng_chars_limited_len']}<br />
-	</td>
-	</tr>
-	<tr>
-  	 <td valign=\"top\">{$lang_register['password']}:</td>
-   	<td><input type=\"password\" name=\"pass1\" size=\"45\" maxlength=\"25\" /></td>
-	</tr>
-	<tr>
-  	 <td valign=\"top\">{$lang_register['confirm_password']}:</td>
-   	<td><input type=\"password\" name=\"pass2\" size=\"45\"  maxlength=\"25\" /><br />
-	{$lang_register['min_pass_len']}<br />
-	</td>
-	</tr>
-	<tr>
-  	 <td valign=\"top\">{$lang_register['email']}:</td>
-  	 <td><input type=\"text\" name=\"email\" size=\"45\" maxlength=\"225\" /><br />
-	 {$lang_register['use_valid_mail']}</td>
+  <tr>
+     <td valign=\"top\">{$lang_register['username']}:</td>
+    <td><input type=\"text\" name=\"username\" size=\"45\" maxlength=\"14\" /><br />
+    {$lang_register['use_eng_chars_limited_len']}<br />
+  </td>
+  </tr>
+  <tr>
+     <td valign=\"top\">{$lang_register['password']}:</td>
+    <td><input type=\"password\" name=\"pass1\" size=\"45\" maxlength=\"25\" /></td>
+  </tr>
+  <tr>
+     <td valign=\"top\">{$lang_register['confirm_password']}:</td>
+    <td><input type=\"password\" name=\"pass2\" size=\"45\"  maxlength=\"25\" /><br />
+  {$lang_register['min_pass_len']}<br />
+  </td>
+  </tr>
+  <tr>
+     <td valign=\"top\">{$lang_register['email']}:</td>
+     <td><input type=\"text\" name=\"email\" size=\"45\" maxlength=\"225\" /><br />
+   {$lang_register['use_valid_mail']}</td>
       </tr>";
   if ( $enable_captcha ) {
       $output .= "<tr><td></td>
-	  <td><img src=\"captcha/CaptchaSecurityImages.php?width=300&height=80&characters=6\" /><br /><br /></td>
-	  </tr>
-	  <tr>
-	  <td valign=\"top\">{$lang_captcha['security_code']}:</td>
-	  <td><input type=\"text\" name=\"security_code\" size=\"45\" /><br />
-	  </td>
-	  </tr>";
+    <td><img src=\"captcha/CaptchaSecurityImages.php?width=300&height=80&characters=6\" /><br /><br /></td>
+    </tr>
+    <tr>
+    <td valign=\"top\">{$lang_captcha['security_code']}:</td>
+    <td><input type=\"text\" name=\"security_code\" size=\"45\" /><br />
+    </td>
+    </tr>";
 }
   if ( $expansion_select ) {
       $output .= "<tr>
-  	 <td valign=\"top\">{$lang_register['acc_type']}:</td>
-  	 <td>
-	   <select name=\"expansion\">
-	    <option value=\"2\">{$lang_register['wotlk']}</option>
-	    <option value=\"1\">{$lang_register['tbc']}</option>
-	    <option value=\"0\">{$lang_register['classic']}</option>
-	   </select>
-	  - {$lang_register['acc_type_desc']}</td>
+     <td valign=\"top\">{$lang_register['acc_type']}:</td>
+     <td>
+     <select name=\"expansion\">
+      <option value=\"2\">{$lang_register['wotlk']}</option>
+      <option value=\"1\">{$lang_register['tbc']}</option>
+      <option value=\"0\">{$lang_register['classic']}</option>
+     </select>
+    - {$lang_register['acc_type_desc']}</td>
       </tr>";
 }
       $output .= "<tr><td colspan=\"2\"><hr /></td></tr>
-	<tr>
-  	 <td colspan=\"2\">{$lang_register['read_terms']}.</td>
-	</tr>
-	<tr><td colspan=\"2\"><hr /></td></tr>
-	<tr><td>";
+  <tr>
+     <td colspan=\"2\">{$lang_register['read_terms']}.</td>
+  </tr>
+  <tr><td colspan=\"2\"><hr /></td></tr>
+  <tr><td>";
 
-	$terms = "<textarea rows=\'18\' cols=\'80\' readonly=\'readonly\'>";
-	$fp = fopen("mail_templates/terms.tpl", 'r') or die (error("Couldn't Open terms.tpl File!"));
-	while (!feof($fp)) $terms .= fgets($fp, 1024);
-	fclose($fp);
-	$terms .= "</textarea>";
+  $terms = "<textarea rows=\'18\' cols=\'80\' readonly=\'readonly\'>";
+  $fp = fopen("mail_templates/terms.tpl", 'r') or die (error("Couldn't Open terms.tpl File!"));
+  while (!feof($fp)) $terms .= fgets($fp, 1024);
+  fclose($fp);
+  $terms .= "</textarea>";
 
-		makebutton($lang_register['create_acc_button'], "javascript:answerBox('{$lang_register['terms']}<br />$terms', 'javascript:do_submit_data()')",150);
+    makebutton($lang_register['create_acc_button'], "javascript:answerBox('{$lang_register['terms']}<br />$terms', 'javascript:do_submit_data()')",150);
 $output .= "</td><td>";
-		makebutton($lang_global['back'], "login.php", 328);
+    makebutton($lang_global['back'], "login.php", 328);
  $output .= "</td></tr>
     </table>
-	</form></fieldset>
-	<br /><br /></center>";
+  </form></fieldset>
+  <br /><br /></center>";
 }
 
 
@@ -260,29 +261,29 @@ $output .= "</td><td>";
 function pass_recovery(){
  global $lang_register, $lang_global, $output;
  $output .= "<center>
-	<fieldset class=\"half_frame\">
-	<legend>{$lang_register['recover_acc_password']}</legend>
-	<form method=\"post\" action=\"register.php?action=do_pass_recovery\" name=\"form\">
+  <fieldset class=\"half_frame\">
+  <legend>{$lang_register['recover_acc_password']}</legend>
+  <form method=\"post\" action=\"register.php?action=do_pass_recovery\" name=\"form\">
     <table class=\"flat\">
-	<tr>
-  	 <td valign=\"top\">{$lang_register['username']} :</td>
-   	<td><input type=\"text\" name=\"username\" size=\"45\" maxlength=\"14\" /><br />
-		{$lang_register['user_pass_rec_desc']}<br />
-	</td>
-	</tr>
-	<tr>
-  	 <td valign=\"top\">{$lang_register['email']} :</td>
-  	 <td><input type=\"text\" name=\"email\" size=\"45\" maxlength=\"225\" /><br />
-	 {$lang_register['mail_pass_rec_desc']}</td>
-	</tr>
-	<tr><td>";
-		makebutton($lang_register['recover_pass'], "javascript:do_submit()",150);
+  <tr>
+     <td valign=\"top\">{$lang_register['username']} :</td>
+    <td><input type=\"text\" name=\"username\" size=\"45\" maxlength=\"14\" /><br />
+    {$lang_register['user_pass_rec_desc']}<br />
+  </td>
+  </tr>
+  <tr>
+     <td valign=\"top\">{$lang_register['email']} :</td>
+     <td><input type=\"text\" name=\"email\" size=\"45\" maxlength=\"225\" /><br />
+   {$lang_register['mail_pass_rec_desc']}</td>
+  </tr>
+  <tr><td>";
+    makebutton($lang_register['recover_pass'], "javascript:do_submit()",150);
 $output .= "</td><td>";
-		makebutton($lang_global['back'], "javascript:window.history.back()", 328);
+    makebutton($lang_global['back'], "javascript:window.history.back()", 328);
  $output .= "</td></tr>
     </table>
-	</form></fieldset>
-	<br /><br /></center>";
+  </form></fieldset>
+  <br /><br /></center>";
 }
 
 //#####################################################################################################
@@ -303,50 +304,50 @@ function do_pass_recovery(){
 
  if ($sql->num_rows($result) == 1){
 
-	require_once("scripts/mailer/class.phpmailer.php");
-	$mail = new PHPMailer();
-	$mail->Mailer = $mailer_type;
-	if ($mailer_type == "smtp"){
-		$mail->Host = $smtp_cfg['host'];
-		$mail->Port = $smtp_cfg['port'];
-		if($smtp_cfg['user'] != '') {
-			$mail->SMTPAuth  = true;
-			$mail->Username  = $smtp_cfg['user'];
-			$mail->Password  =  $smtp_cfg['pass'];
-		}
-	}
+  require_once("scripts/mailer/class.phpmailer.php");
+  $mail = new PHPMailer();
+  $mail->Mailer = $mailer_type;
+  if ($mailer_type == "smtp"){
+    $mail->Host = $smtp_cfg['host'];
+    $mail->Port = $smtp_cfg['port'];
+    if($smtp_cfg['user'] != '') {
+      $mail->SMTPAuth  = true;
+      $mail->Username  = $smtp_cfg['user'];
+      $mail->Password  =  $smtp_cfg['pass'];
+    }
+  }
 
-	$file_name = "mail_templates/recover_password.tpl";
-	$fh = fopen($file_name, 'r');
-	$subject = fgets($fh, 4096);
-	$body = fread($fh, filesize($file_name));
-	fclose($fh);
+  $file_name = "mail_templates/recover_password.tpl";
+  $fh = fopen($file_name, 'r');
+  $subject = fgets($fh, 4096);
+  $body = fread($fh, filesize($file_name));
+  fclose($fh);
 
-	$body = str_replace("\n", "<br />", $body);
-	$body = str_replace("\r", " ", $body);
-	$body = str_replace("<username>", $user_name, $body);
-	$body = str_replace("<password>", substr(sha1(strtoupper($user_name)),0,7), $body);
-	$body = str_replace("<activate_link>",
-		$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?action=do_pass_activate&amp;h=".$sql->result($result, 0, 'sha_pass_hash')."&amp;p=".substr(sha1(strtoupper($user_name)),0,7), $body);
-	$body = str_replace("<base_url>", $_SERVER['HTTP_HOST'], $body);
+  $body = str_replace("\n", "<br />", $body);
+  $body = str_replace("\r", " ", $body);
+  $body = str_replace("<username>", $user_name, $body);
+  $body = str_replace("<password>", substr(sha1(strtoupper($user_name)),0,7), $body);
+  $body = str_replace("<activate_link>",
+    $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME']."?action=do_pass_activate&amp;h=".$sql->result($result, 0, 'sha_pass_hash')."&amp;p=".substr(sha1(strtoupper($user_name)),0,7), $body);
+  $body = str_replace("<base_url>", $_SERVER['HTTP_HOST'], $body);
 
-	$mail->WordWrap = 50;
-	$mail->From = $from_mail;
-	$mail->FromName = "$title Admin";
-	$mail->Subject = $subject;
-	$mail->IsHTML(true);
-	$mail->Body = $body;
-	$mail->AddAddress($email_addr);
+  $mail->WordWrap = 50;
+  $mail->From = $from_mail;
+  $mail->FromName = "$title Admin";
+  $mail->Subject = $subject;
+  $mail->IsHTML(true);
+  $mail->Body = $body;
+  $mail->AddAddress($email_addr);
 
-	if(!$mail->Send()) {
-		$mail->ClearAddresses();
-		redirect("register.php?action=pass_recovery&err=11&usr=".$mail->ErrorInfo);
-	} else {
-		$mail->ClearAddresses();
-		redirect("register.php?action=pass_recovery&err=12");
-		}
+  if(!$mail->Send()) {
+    $mail->ClearAddresses();
+    redirect("register.php?action=pass_recovery&err=11&usr=".$mail->ErrorInfo);
+  } else {
+    $mail->ClearAddresses();
+    redirect("register.php?action=pass_recovery&err=12");
+    }
 
- 	} else redirect("register.php?action=pass_recovery&err=10");
+  } else redirect("register.php?action=pass_recovery&err=10");
 }
 
 
@@ -367,16 +368,16 @@ function do_pass_activate(){
  $result = $sql->query("SELECT id,username FROM account WHERE sha_pass_hash = '$hash'");
 
  if ($sql->num_rows($result) == 1){
-	$username = $sql->result($result, 0, 'username');
-	$id = $sql->result($result, 0, 'id');
-	if (substr(sha1(strtoupper($sql->result($result, 0, 'username'))),0,7) == $pass){
-		$sql->query("UPDATE account SET sha_pass_hash=SHA1(CONCAT(UPPER('$username'),':',UPPER('$pass'))) WHERE id = '$id'");
-		redirect("login.php");
-		}
+  $username = $sql->result($result, 0, 'username');
+  $id = $sql->result($result, 0, 'id');
+  if (substr(sha1(strtoupper($sql->result($result, 0, 'username'))),0,7) == $pass){
+    $sql->query("UPDATE account SET sha_pass_hash=SHA1(CONCAT(UPPER('$username'),':',UPPER('$pass'))) WHERE id = '$id'");
+    redirect("login.php");
+    }
 
- 	} else redirect("register.php?action=pass_recovery&err=1");
+  } else redirect("register.php?action=pass_recovery&err=1");
 
-	redirect("register.php?action=pass_recovery&err=1");
+  redirect("register.php?action=pass_recovery&err=1");
 }
 
 
