@@ -66,7 +66,7 @@ $output .= "<script type=\"text/javascript\">
 
 while ($char = $sql->fetch_row($query))	{
 
-$guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[6].";"));
+$guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[8].";"));
 
   	$output .= " <tr>
 			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
@@ -125,7 +125,7 @@ $output .= "<script type=\"text/javascript\">
 
 while ($char = $sql->fetch_row($query))	{
 
-$guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[6].";"));
+$guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[8].";"));
 
   	$output .= " <tr>
 			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
