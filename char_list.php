@@ -287,7 +287,7 @@ function browse_chars()
                 <th width=\"10%\"><a href=\"char_list.php?order_by=zone&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['zone']}</th>
                 <th width=\"1%\"><a href=\"char_list.php?order_by=highest_rank&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='highest_rank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['honor_kills']}</a></th>
                 <th width=\"10%\"><a href=\"char_list.php?order_by=gname&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='gname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."Guild</a></th>
-                <th width=\"1%\"><a href=\"char_list.php?order_by=logout_time&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='logout_time' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."Last Seen</a></th>
+                <th width=\"1%\"><a href=\"char_list.php?order_by=logout_time&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='logout_time' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['lastseen']}</a></th>
                 <th width=\"1%\"><a href=\"char_list.php?order_by=online&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char_list['online']}</a></th>";
   if ($showcountryflag)
     $output .="
@@ -365,6 +365,7 @@ function browse_chars()
 
               <tr>
                 <td colspan=\"6\" align=\"left\" class=\"hidden\">";
+  if (($user_lvl >= $action_permission['delete'])||($owner_acc_name == $user_name))
                   makebutton($lang_char_list['del_selected_chars'], "javascript:do_submit('form1',0)\" type=\"wrn",220);
   $output .= "
                 </td>
@@ -438,9 +439,12 @@ function del_char_form()
 //########################################################################################################################
 function dodel_char()
 {
-  global $lang_global, $lang_char_list, $output, $characters_db, $realm_id, $action_permission;
-
+  global $lang_global, $lang_char_list, $output, $characters_db, $realm_id, $action_permission,
+    $server_type, $tab_del_user_characters, $tab_del_user_characters_trinity;
   valid_login($action_permission['delete']);
+
+  if ($server_type)
+    $tab_del_user_characters = $tab_del_user_characters_trinity;
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -495,6 +499,8 @@ $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 $output .= "
         <div class=\"top\">";
 
+$lang_char_list = lang_char_list();
+
 switch ($err)
 {
   case 1:
@@ -526,7 +532,6 @@ switch ($action)
     del_char_form();
     break;
   case "dodel_char":
-    require_once("scripts/backup_tab.php");
     dodel_char();
     break;
   default:
@@ -535,7 +540,7 @@ switch ($action)
 
 unset($action);
 unset($action_permission);
-//unset($lang_tele);
+unset($lang_char_list);
 
 require_once("footer.php");
 

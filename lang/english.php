@@ -581,8 +581,12 @@ $lang_item = array(
 	'HASTE_RATING' => 'Haste'
 	);
 
-$lang_char_list = array(
-	// ----- CHAR_LIST.PHP -----
+
+// ----- CHAR_LIST.PHP -----
+function lang_char_list()
+{
+  $lang_char_list = array
+  (
 	'cleanup' => 'CleanUp',
 	'by_name' => 'by Name',
 	'by_id' => 'by id',
@@ -618,8 +622,11 @@ $lang_char_list = array(
 	'search_results' => 'Search Results',
 	'browse_chars' => 'Browse Characters',
 	'chars_gold' => 'has &lt; Gold(C)',
-	'by_item' => 'has Item id'
-	);
+	'by_item' => 'has Item id',
+	'lastseen' => 'Last Seen',
+  );
+  return $lang_char_list;
+}
 
 $lang_cleanup = array(
 	// ----- CLEANUP.PHP -----

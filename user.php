@@ -393,10 +393,10 @@ valid_login($action_permission['delete']);
  $sql->close();
 
  $output .= "<br />{$lang_global['will_be_erased']}</font><br /><br />
-		<table class=\"hidden\">
+		<table width=\"300\" class=\"hidden\">
           <tr><td>";
-			makebutton($lang_global['yes'], "user.php?action=dodel_user$pass_array",120);
-			makebutton($lang_global['no'], "user.php",120);
+			makebutton($lang_global['yes'], "user.php?action=dodel_user$pass_array\" type=\"wrn" ,130);
+			makebutton($lang_global['no'], "user.php\" type=\"def" ,130);
  $output .= "</td></tr>
         </table></center><br />";
 
@@ -407,8 +407,8 @@ valid_login($action_permission['delete']);
 //  DO DELETE USER
 //#####################################################################################################
 function dodel_user() {
- global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,
-		$tab_del_user_characters,$tab_del_user_characters_trinity , $tab_del_user_realmd, $action_permission;
+ global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl, $server_type,
+		$tab_del_user_characters, $tab_del_user_characters_trinity, $tab_del_user_realmd, $action_permission;
  if ($server_type)
    $tab_del_user_characters = $tab_del_user_characters_trinity;
 
@@ -443,7 +443,7 @@ valid_login($action_permission['delete']);
  $output .= "<br /><br />";
  $output .= "<table class=\"hidden\">
           <tr><td>";
-			makebutton($lang_user['back_browsing'], "user.php", 130);
+			makebutton($lang_user['back_browsing'], "user.php", 220);
  $output .= "</td></tr>
         </table><br /></center>";
 }
@@ -453,7 +453,7 @@ valid_login($action_permission['delete']);
 //  DO BACKUP USER
 //#####################################################################################################
 function backup_user() {
- global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$backup_dir,$action_permission,
+ global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$backup_dir,$action_permission;
 
 valid_login($action_permission['insert']);
  $sql = new SQL;
