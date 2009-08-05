@@ -587,42 +587,42 @@ function lang_char_list()
 {
   $lang_char_list = array
   (
-  'characters' => 'Characters',
-  'cleanup' => 'CleanUp',
-  'by_name' => 'by Name',
-  'by_id' => 'by id',
-  'by_account' => 'by Account',
-  'by_level' => '= Level',
-  'greater_level' => '&lt; Level',
-  'by_guild' => 'in Guild',
-  'by_race_id' => 'by Race id',
-  'by_class_id' => 'by Class id',
-  'by_map_id' => 'on Map id',
-  'by_honor_kills' => '= H.Kills',
-  'greater_honor_kills' => '&lt; H.Kills',
-  'by_online' => 'by Online',
-  'chars_gold' => 'has &lt; Gold(C)',
-  'by_item' => 'has Item id',
-  'id' => 'ID',
-  'char_name' => 'Character Name',
   'account' => 'Account',
-  'race' => 'Race',
-  'class' => 'Class',
-  'level' => 'Level',
-  'map' => 'Map',
-  'zone' => 'Zone',
-  'honor_kills' => 'H.K',
-  'guild' => 'Guild',
-  'online' => 'Online',
-  'lastseen' => 'Last Seen',
-  'del_selected_chars' => 'Delete Checked Character(s)',
-  'tot_chars' => 'Total Characters',
-  'char_ids' => 'Character(s) id(s)',
-  'no_chars_del' => 'No Characters deleted!<br />Permission Error?<br />Online Characters cannot be deleted.',
-  'total' => 'Total',
-  'chars_deleted' => 'Characters deleted!',
   'back_browse_chars' => 'Back Browsing Characters',
   'browse_chars' => 'Browse Characters',
+  'by_account' => 'by Account',
+  'by_class_id' => 'by Class id',
+  'by_guild' => 'in Guild',
+  'by_honor_kills' => '= H.Kills',
+  'by_id' => 'by id',
+  'by_item' => 'has Item id',
+  'by_level' => '= Level',
+  'by_map_id' => 'on Map id',
+  'by_name' => 'by Name',
+  'by_online' => 'by Online',
+  'by_race_id' => 'by Race id',
+  'char_ids' => 'Character(s) id(s)',
+  'char_name' => 'Character Name',
+  'characters' => 'Characters',
+  'chars_deleted' => 'Characters deleted!',
+  'chars_gold' => 'has &lt; Gold(C)',
+  'class' => 'Class',
+  'cleanup' => 'CleanUp',
+  'del_selected_chars' => 'Delete Checked Character(s)',
+  'greater_honor_kills' => '&lt; H.Kills',
+  'greater_level' => '&lt; Level',
+  'guild' => 'Guild',
+  'honor_kills' => 'H.K',
+  'id' => 'ID',
+  'lastseen' => 'Last Seen',
+  'level' => 'Level',
+  'map' => 'Map',
+  'no_chars_del' => 'No Characters deleted!<br />Permission Error?<br />Online Characters cannot be deleted.',
+  'online' => 'Online',
+  'race' => 'Race',
+  'tot_chars' => 'Total Characters',
+  'total' => 'Total',
+  'zone' => 'Zone',
   );
   return $lang_char_list;
 }
@@ -658,38 +658,44 @@ $lang_cleanup = array(
   'no_arenateams_del' => 'No Arena Team(s) deleted!'
   );
 
-$lang_edit = array(
-  // ----- EDIT.PHP -----
-  'edit_acc' => 'Edit Your Account',
-  'id' => 'ID',
-  'username' => 'Username',
-  'password' => 'Password',
-  'mail' => 'Mail',
-  'gm_level' => 'GM level',
-  'last_ip' => 'Last IP',
-  'join_date' => 'Join Date',
-  'characters' => 'Characters on Realm',
-  'del_acc' => 'Delete Account',
-  'update' => 'Update Data',
-  'will_be_erased' => 'and all its Characters Will be erased from DB!',
-  'use_valid_email' => 'Tty providing a VALID Email Address!',
-  'data_updated' => 'Update action success!',
-  'error_updating' => 'Update action Error! - Non of the fields changed?',
-  'del_error' => 'Unexpected Delete Error.',
-  'edit_your_acc' => 'Edit Your Account',
-  'cms_options' => 'CMS Options',
-  'select_cms_template' => 'Select CMS Template',
-  'template' => 'Template',
-  'select_cms_layout_lang' => 'Select the CMS layout language',
-  'language' => 'Language',
-  'save' => 'Save',
-  'client_type' => 'Client Type',
-  'classic' => 'Classic',
-  'tbc' => 'TBC',
-  'wotlk' => 'WOTLK',
-  'tot_chars' => 'Total Characters',
-  'invited_by' => 'Invited By'
+
+// ----- EDIT.PHP -----
+function lang_edit()
+{
+  $lang_edit = array
+  (
+    'edit_acc' => 'Edit Your Account',
+    'id' => 'ID',
+    'username' => 'Username',
+    'password' => 'Password',
+    'mail' => 'Mail',
+    'invited_by' => 'Invited By',
+    'gm_level' => 'GM level',
+    'join_date' => 'Join Date',
+    'last_ip' => 'Last IP',
+    'client_type' => 'Client Type',
+    'classic' => 'Classic',
+    'tbc' => 'TBC',
+    'wotlk' => 'WOTLK',
+    'tot_chars' => 'Total Characters',
+    'characters' => 'Characters on Realm',
+    'update' => 'Update Data',
+    'del_acc' => 'Delete Account',
+    'cms_options' => 'CMS Options',
+    'select_cms_template' => 'Select CMS Template',
+    'language' => 'Language',
+    'select_cms_layout_lang' => 'Select the CMS layout language',
+    'template' => 'Template',
+    'use_valid_email' => 'Tty providing a VALID Email Address!',
+    'data_updated' => 'Update action success!',
+    'error_updating' => 'Update action Error! - Non of the fields changed?',
+    'del_error' => 'Unexpected Delete Error.',
+    'edit_your_acc' => 'Edit Your Account',
+    'save' => 'Save',
   );
+  return $lang_edit;
+}
+
 
 $lang_mail = array(
   // ----- MAIL.PHP -----
@@ -765,6 +771,7 @@ function lang_ssh()
   return $lang_ssh;
 }
 
+
 $lang_realm = array(
   // ----- REALM.PHP -----
   'add_realm' => 'Add Realm',
@@ -818,22 +825,22 @@ function lang_ticket()
 {
   $lang_ticket = array
   (
-  'id' => 'ID',
-  'sender' => 'Sender',
-  'ticket_text' => 'Ticket Text',
+  'browse_tickets' => 'Browse Tickets',
   'del_selected_tickets' => 'Delete Checked Ticket(s)',
-  'tot_tickets' => 'Total Tickets',
   'edit_reply' => 'Edit / Reply',
-  'ticket_id' => 'Ticket ID',
-  'submitted_by' => 'Submitted by',
-  'send_ingame_mail' => 'Send InGame Mail',
-  'update' => 'Update Ticket',
-  'ticket_updated' => 'Ticket Updated',
-  'ticked_deleted' => 'Tickets Deleted Successfully.',
-  'ticket_not_deleted' => 'No Tickets Deleted!',
   'edit_ticked' => 'Edit Ticket',
+  'id' => 'ID',
+  'send_ingame_mail' => 'Send InGame Mail',
+  'sender' => 'Sender',
+  'submitted_by' => 'Submitted by',
+  'ticked_deleted' => 'Tickets Deleted Successfully.',
+  'ticket_id' => 'Ticket ID',
+  'ticket_not_deleted' => 'No Tickets Deleted!',
+  'ticket_text' => 'Ticket Text',
   'ticket_update_err' => 'Error Updating Ticket',
-  'browse_tickets' => 'Browse Tickets'
+  'ticket_updated' => 'Ticket Updated',
+  'tot_tickets' => 'Total Tickets',
+  'update' => 'Update Ticket',
   );
   return $lang_ticket;
 }
@@ -945,33 +952,34 @@ function lang_tele()
 {
   $lang_tele = array
   (
-  'teleports' => 'Teleports',
-  'loc_name' => 'Location Name',
-  'loc_id' => 'Location ID',
-  'on_map' => 'On Map ID',
-  'id' => 'ID',
-  'name' => 'Name',
-  'map' => 'Map',
-  'x' => 'X',
-  'y' => 'Y',
-  'z' => 'Z',
-  'orientation' => 'Orientation',
-  'tot_locations' => 'Total Teleport locations',
+  'add_new' => 'Add New',
+  'add_new_tele' => 'Add New Teleport Location',
+  'delete_tele' => 'Delete',
   'edit_tele' => 'Edit Teleport Location',
+  'error_updating' => 'Error Updating',
+  'id' => 'ID',
+  'loc_id' => 'Location ID',
+  'loc_name' => 'Location Name',
+  'map' => 'Map',
+  'name' => 'Name',
+  'on_map' => 'On Map ID',
+  'orientation' => 'Orientation',
   'position_x' => 'Position X',
   'position_y' => 'Position Y',
   'position_z' => 'Position Z',
-  'update_tele' => 'Update Location',
-  'delete_tele' => 'Delete',
-  'tele_updated' => 'Location Updated',
   'search_results' => 'Search Results',
-  'error_updating' => 'Error Updating',
   'tele_locations' => 'Teleport Locations',
-  'add_new' => 'Add New',
-  'add_new_tele' => 'Add New Teleport Location',
+  'tele_updated' => 'Location Updated',
+  'teleports' => 'Teleports',
+  'tot_locations' => 'Total Teleport locations',
+  'update_tele' => 'Update Location',
+  'x' => 'X',
+  'y' => 'Y',
+  'z' => 'Z',
   );
   return $lang_tele;
 }
+
 
 $lang_command = array(
   // ----- COMMAND.PHP -----

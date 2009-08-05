@@ -27,6 +27,7 @@ function edit_user()
   $refguid = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = '$user_id';"));
   $refguid = $refguid[0];
   $referred_by = mysql_fetch_row(mysql_query("SELECT `name` FROM `{$characters_db[$realm_id]['name']}`.`characters` WHERE `guid` = '$refguid';"));
+  unset($refguid);
   $referred_by = $referred_by[0];
 
   if ($acc = $sql->fetch_row($result))
@@ -57,11 +58,11 @@ function edit_user()
                 </tr>
                 <tr>
                   <td>{$lang_edit['password']}</td>
-                  <td><input type=\"text\" name=\"user_pass\" size=\"43\" maxlength=\"40\" value=\"******\" /></td>
+                  <td><input type=\"text\" name=\"user_pass\" size=\"42\" maxlength=\"40\" value=\"******\" /></td>
                 </tr>
                 <tr>
                   <td>{$lang_edit['mail']}</td>
-                  <td><input type=\"text\" name=\"mail\" size=\"43\" maxlength=\"225\" value=\"$acc[0]\" /></td>
+                  <td><input type=\"text\" name=\"mail\" size=\"42\" maxlength=\"225\" value=\"$acc[0]\" /></td>
                 </tr>
                 <tr>
                   <td>{$lang_edit['invited_by']}:</td>
@@ -71,7 +72,8 @@ function edit_user()
                     $referred_by";
     else
       $output .= "
-                    <input type=\"text\" name=\"referredby\" size=\"43\" maxlength=\"12\" value=\"$referred_by\" />";
+                    <input type=\"text\" name=\"referredby\" size=\"42\" maxlength=\"12\" value=\"$referred_by\" />";
+    unset($referred_by);
     $output .= "
                   </td>
                 </tr>
@@ -129,7 +131,7 @@ function edit_user()
                   <td><a href=\"char.php?id=$char[0]\">$char[1]  - ".get_player_race($char[2])." ".get_player_class($char[3])." | lvl $char[4]</a></td>
                 </tr>";
     }
-
+    unset($result);
     $output .= "
                 <tr>
                   <td>";
@@ -231,6 +233,7 @@ function edit_user()
   else
     error($lang_global['err_no_records_found']);
   $sql->close();
+  unset($sql);
 }
 
 
@@ -262,12 +265,14 @@ function doedit_user()
   {
     doupdate_referral($mmfpm_db, $user_id);
     $sql->close();
+    unset($sql);
     redirect("edit.php?error=3");
   }
   else
   {
     doupdate_referral($mmfpm_db, $user_id);
     $sql->close();
+    unset($sql);
     redirect("edit.php?error=4");
   }
 }
@@ -348,6 +353,9 @@ $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
 $output .= "
         <div class=\"top\">";
+
+$lang_edit = lang_edit();
+
 switch ($err)
 {
   case 1:
@@ -374,6 +382,9 @@ switch ($err)
     $output .= "
           <h1>{$lang_edit['edit_your_acc']}</h1>";
 }
+
+unset($err);
+
 $output .= "
         </div>";
 
@@ -393,6 +404,10 @@ switch ($action)
   default:
     edit_user();
 }
+
+unset($action);
+unset($action_permission);
+unset($lang_edit);
 
 require_once("footer.php");
 
