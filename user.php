@@ -408,7 +408,7 @@ valid_login($action_permission['delete']);
 //#####################################################################################################
 function dodel_user() {
  global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,
-		$tab_del_user_characters, $tab_del_user_realmd, $action_permission;
+		$tab_del_user_characters,$tab_del_user_characters_trinity , $tab_del_user_realmd, $action_permission;
  if ($server_type)
    $tab_del_user_characters = $tab_del_user_characters_trinity;
 
@@ -453,9 +453,7 @@ valid_login($action_permission['delete']);
 //  DO BACKUP USER
 //#####################################################################################################
 function backup_user() {
- global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$backup_dir,$action_permission;
- if ($server_type)
-   $tab_backup_user_characters = $tab_backup_user_characters_trinity;
+ global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl,$backup_dir,$action_permission,
 
 valid_login($action_permission['insert']);
  $sql = new SQL;
@@ -465,6 +463,9 @@ valid_login($action_permission['insert']);
 	else redirect("user.php?error=1");
 
  require_once("scripts/backup_tab.php");
+ if ($server_type)
+   $tab_backup_user_characters = $tab_backup_user_characters_trinity;
+
  $subdir = "$backup_dir/accounts/".date("m_d_y_H_i_s")."_partial";
  mkdir($subdir, 0750);
 

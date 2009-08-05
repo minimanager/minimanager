@@ -13,7 +13,7 @@ require_once("backup_tab.php");
 //##########################################################################################
 //Delete character
 function del_char($guid,$realm){
-	global $characters_db, $realm_db, $user_lvl, $user_id, $tab_del_user_characters;
+	global $characters_db, $realm_db, $user_lvl, $user_id, $server_type, $tab_del_user_characters, $tab_del_user_characters_trinity;
  if ($server_type)
    $tab_del_user_characters = $tab_del_user_characters_trinity;
 
@@ -52,7 +52,7 @@ function del_char($guid,$realm){
 //##########################################################################################
 //Delete Account - return array(deletion_flag , number_of_chars_deleted)
 function del_acc($acc_id){
-	global $characters_db, $realm_db, $user_lvl, $user_id, $tab_del_user_characters, $tab_del_user_realmd;
+	global $characters_db, $realm_db, $user_lvl, $user_id, $tab_del_user_characters, $tab_del_user_characters_trinity, $tab_del_user_realmd;
  if ($server_type)
    $tab_del_user_characters = $tab_del_user_characters_trinity;
 	$del_char = 0;

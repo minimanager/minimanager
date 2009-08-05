@@ -12,7 +12,8 @@ require_once("header.php");
 valid_login($action_permission['read']);
 require_once("scripts/defines.php");
 require_once("scripts/get_lib.php");
- 
+
+
 //########################################################################################################################
 //  BROWSE CHARS
 //########################################################################################################################
@@ -28,7 +29,7 @@ function browse_chars()
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "guid";
-  if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="guid";
+  if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="guid";
 
   $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
@@ -385,7 +386,6 @@ function browse_chars()
 function del_char_form()
 {
   global $lang_char_list, $lang_global, $output, $characters_db, $realm_id, $action_permission;
-
   valid_login($action_permission['delete']);
   
   if(isset($_GET['check'])) $check = $_GET['check'];
@@ -419,11 +419,11 @@ function del_char_form()
               <br />{$lang_global['will_be_erased']}
             </font>
             <br /><br />
-            <table class=\"hidden\">
+            <table width=\"300\" class=\"hidden\">
               <tr>
                 <td>";
-                  makebutton($lang_global['yes'], "char_list.php?action=dodel_char$pass_array",120);
-                  makebutton($lang_global['no'], "char_list.php",120);
+                  makebutton($lang_global['yes'], "char_list.php?action=dodel_char$pass_array\" type=\"wrn",130);
+                  makebutton($lang_global['no'], "char_list.php\" type=\"def",130);
   $output .= "
                 </td>
               </tr>
@@ -475,7 +475,7 @@ function dodel_char()
           <table class=\"hidden\">
             <tr>
               <td>";
-                makebutton($lang_char_list['back_browse_chars'], "char_list.php", 250);
+                makebutton($lang_char_list['back_browse_chars'], "char_list.php", 220);
   $output .= "
               </td>
             </tr>
@@ -526,6 +526,7 @@ switch ($action)
     del_char_form();
     break;
   case "dodel_char":
+    require_once("scripts/backup_tab.php");
     dodel_char();
     break;
   default:
