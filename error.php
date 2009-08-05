@@ -24,7 +24,9 @@ $output .= "
                     <br />ERR!
                   </font>
                 </h1>
-                <br />$err<br />
+                <br />$err<br />";
+unset($err);
+$output .="
                 <br />
               </td>
             </tr>

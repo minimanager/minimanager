@@ -48,8 +48,12 @@ $lang_global = array(
 	'language_8' => 'Russian'
 	);
 
-$lang_login = array(
-	// ----- LOGIN.PHP -----
+
+// ----- LOGIN.PHP -----
+function lang_login()
+{
+  $lang_login = array
+  (
 	'login' => 'Login',
 	'username' => 'Username',
 	'password' => 'Password',
@@ -65,6 +69,8 @@ $lang_login = array(
 	'pass_recovery' => 'Lost Password?',
 	'after_registration' => 'Your account creation was successful!'
 	);
+  return $lang_login;
+}
 
 $lang_guild = array(
 	// ----- GUILD.PHP -----
@@ -169,10 +175,11 @@ $lang_index = array(
 	'using_db' => 'using db'
 	);
 
+// ----- HEADER.PHP -----
 function lang_header()
 {
   $lang_header = array
-  (	// ----- HEADER.PHP -----
+  (
 	'menu' => 'Menu',
 	'my_acc' => 'My Account',
 	'edit_my_acc' => 'Edit My Account',
@@ -219,11 +226,17 @@ function lang_header()
   return $lang_header;
 }
 
-$lang_footer = array(
-	// -----FOOTER.PHP -----
+
+// -----FOOTER.PHP -----
+function lang_footer()
+{
+  $lang_footer = array
+  (
 	'bugs_to_admin' => 'Problems and bug reports to',
 	'site_admin' => 'Site Admin'
-	);
+  );
+  return $lang_footer;
+}
 
 $lang_repair = array(
 	// ----- REPAIR.PHP -----
@@ -904,8 +917,12 @@ $lang_stat = array(
 	'on_statistics' => 'Online Statistics'
 	);
 
-$lang_tele = array(
-	// ----- TELE.PHP -----
+
+// ----- TELE.PHP -----
+function lang_tele()
+{
+  $lang_tele = array
+  (
 	'teleports' => 'Teleports',
 	'loc_name' => 'Location Name',
 	'loc_id' => 'Location ID',
@@ -931,7 +948,9 @@ $lang_tele = array(
 	'tele_locations' => 'Teleport Locations',
 	'add_new' => 'Add New',
 	'add_new_tele' => 'Add New Teleport Location'
-	);
+  );
+  return $lang_tele;
+}
 
 $lang_command = array(
 	// ----- COMMAND.PHP -----
@@ -4005,8 +4024,12 @@ $lang_captcha = array(
 	'invalid_code' => 'Invalid Code!'
 	);
 
-$lang_top = array(
-	// ----- TOP100.PHP -----
+
+// ----- TOP100.PHP -----
+function lang_top()
+{
+  $lang_top = array
+  (
 	'top100' => 'Top 100',
 	'name' => 'Name',
 	'race' => 'Race',
@@ -4020,6 +4043,8 @@ $lang_top = array(
 	'arena_points' => 'Arena',
 	'time_played' => 'Time Played',
 	'online' => 'Online'
-	);
+  );
+  return $lang_top;
+}
 
 ?>

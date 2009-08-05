@@ -9,21 +9,30 @@
  */
 
 
-$exp_lvl_arr = 
-  Array
-  (
-    0 => array(0, "Classic",                ""     ),
-    1 => array(1, "The Burning Crusade",    "TBC"  ),
-    2 => array(2, "Wrath of the Lich King", "WotLK")
-  );
+function id_get_exp_lvl()
+{
+  $exp_lvl_arr = 
+    Array
+    (
+      0 => array(0, "Classic",                ""     ),
+      1 => array(1, "The Burning Crusade",    "TBC"  ),
+      2 => array(2, "Wrath of the Lich King", "WotLK")
+    );
+  return $exp_lvl_arr;
+}
 
 
-$CHAR_FACTION =
-  array
-  (
-    0 => $lang_id_tab['Alliance'],
-    1 => $lang_id_tab['Horde']
-  );
+function id_get_char_faction()
+{
+  global $lang_id_tab;
+  $CHAR_FACTION =
+    array
+    (
+      0 => $lang_id_tab['Alliance'],
+      1 => $lang_id_tab['Horde']
+    );
+  return $CHAR_FACTION;
+}
 
 
 function id_get_char_race()
@@ -45,56 +54,60 @@ function id_get_char_race()
    return $CHAR_RACE;
 }
 
-
-$CHAR_RANK =
-  array
-  (
-    0 => array
+function id_get_char_rank()
+{
+  global $lang_id_tab;
+  $CHAR_RANK =
+    array
     (
-      '00' => $lang_id_tab['None'],
-      '01' => $lang_id_tab['None'],
-       0   => $lang_id_tab['None'],
-       1   => $lang_id_tab['Private'],
-       2   => $lang_id_tab['Corporal'],
-       3   => $lang_id_tab['Sergeant'],
-       4   => $lang_id_tab['Master_Sergeant'],
-       5   => $lang_id_tab['Sergeant_Major'],
-       6   => $lang_id_tab['Knight'],
-       7   => $lang_id_tab['Knight-Lieutenant'],
-       8   => $lang_id_tab['Knight-Captain'],
-       9   => $lang_id_tab['Knight-Champion'],
-      10   => $lang_id_tab['Lieutenant_Commander'],
-      11   => $lang_id_tab['Commander'],
-      12   => $lang_id_tab['Marshal'],
-      13   => $lang_id_tab['Field_Marshal'],
-      14   => $lang_id_tab['Grand_Marshal']
-    ),
-    1 => array
-    (
-      '00' => $lang_id_tab['None'],
-      '01' => $lang_id_tab['None'],
-       0   => $lang_id_tab['None'],
-       1   => $lang_id_tab['Scout'],
-       2   => $lang_id_tab['Grunt'],
-       3   => $lang_id_tab['Sergeant'],
-       4   => $lang_id_tab['Senior_Sergeant'],
-       5   => $lang_id_tab['First_Sergeant'],
-       6   => $lang_id_tab['Stone_Guard'],
-       7   => $lang_id_tab['Blood_Guard'],
-       8   => $lang_id_tab['Legionnare'],
-       9   => $lang_id_tab['Centurion'],
-      10   => $lang_id_tab['Champion'],
-      11   => $lang_id_tab['Lieutenant_General'],
-      12   => $lang_id_tab['General'],
-      13   => $lang_id_tab['Warlord'],
-      14   => $lang_id_tab['High_Warlord']
-    )
-  );
+      0 => array
+      (
+        '00' => $lang_id_tab['None'],
+        '01' => $lang_id_tab['None'],
+         0   => $lang_id_tab['None'],
+         1   => $lang_id_tab['Private'],
+         2   => $lang_id_tab['Corporal'],
+         3   => $lang_id_tab['Sergeant'],
+         4   => $lang_id_tab['Master_Sergeant'],
+         5   => $lang_id_tab['Sergeant_Major'],
+         6   => $lang_id_tab['Knight'],
+         7   => $lang_id_tab['Knight-Lieutenant'],
+         8   => $lang_id_tab['Knight-Captain'],
+         9   => $lang_id_tab['Knight-Champion'],
+        10   => $lang_id_tab['Lieutenant_Commander'],
+        11   => $lang_id_tab['Commander'],
+        12   => $lang_id_tab['Marshal'],
+        13   => $lang_id_tab['Field_Marshal'],
+        14   => $lang_id_tab['Grand_Marshal']
+      ),
+      1 => array
+      (
+        '00' => $lang_id_tab['None'],
+        '01' => $lang_id_tab['None'],
+         0   => $lang_id_tab['None'],
+         1   => $lang_id_tab['Scout'],
+         2   => $lang_id_tab['Grunt'],
+         3   => $lang_id_tab['Sergeant'],
+         4   => $lang_id_tab['Senior_Sergeant'],
+         5   => $lang_id_tab['First_Sergeant'],
+         6   => $lang_id_tab['Stone_Guard'],
+         7   => $lang_id_tab['Blood_Guard'],
+         8   => $lang_id_tab['Legionnare'],
+         9   => $lang_id_tab['Centurion'],
+        10   => $lang_id_tab['Champion'],
+        11   => $lang_id_tab['Lieutenant_General'],
+        12   => $lang_id_tab['General'],
+        13   => $lang_id_tab['Warlord'],
+        14   => $lang_id_tab['High_Warlord']
+      )
+    );
+  return $CHAR_RANK;
+}
 
 
 //#############################################################################
 //get GM level by ID
-function get_gm_level($id)
+function id_get_gm_level($id)
 {
   global $lang_id_tab, $gm_level_arr;
   if(isset($gm_level_arr[$id]))

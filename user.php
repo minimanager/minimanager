@@ -17,7 +17,7 @@ require_once("scripts/defines.php");
 //########################################################################################################################
 function browse_users() {
  global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name, $sql_search_limit, 
-   $gm_level_arr, $exp_lvl_arr, $action_permission, $showcountryflag, $expansion_select;
+   $gm_level_arr, $action_permission, $showcountryflag, $expansion_select;
 valid_login($action_permission['read']);
 
  $sql = new SQL;
@@ -137,11 +137,13 @@ makebutton($lang_user['cleanup'], "cleanup.php", 130);
            	
 			<td>".$gm_level_arr[$data[2]][2]."</td>";
    if ($expansion_select)
+    $exp_lvl_arr = id_get_exp_lvl();
     $output .="
 			<td>".$exp_lvl_arr[$data[10]][2]."</td>";
                 if ($user_lvl >= $action_permission['update']) $output .= "
 			<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>";
                 else $output .= "<td>***@***</td>";
+     unset($exp_lvl_arr);
 		$output .="<td class=\"small\">$data[4]</td>";
 		if (($user_lvl >= $action_permission['update'])||($user_name == $data[1])) $output .= "<td>$data[5]</td>";
 			else $output .= "<td>******</td>";
@@ -185,7 +187,7 @@ makebutton($lang_user['cleanup'], "cleanup.php", 130);
 //#######################################################################################################
 function search() {
  global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name, $sql_search_limit, 
-   $gm_level_arr, $exp_lvl_arr, $action_permission, $showcountryflag, $expansion_select;
+   $gm_level_arr, $action_permission, $showcountryflag, $expansion_select;
 valid_login($action_permission['read']);
  if(!isset($_GET['search_value']) || !isset($_GET['search_by'])) redirect("user.php?error=2");
 
@@ -311,11 +313,13 @@ valid_login($action_permission['read']);
            	
 			<td>".$gm_level_arr[$data[2]][2]."</td>";
    if ($expansion_select)
+     $exp_lvl_arr = id_get_exp_lvl();
     $output .="
 			<td>".$exp_lvl_arr[$data[10]][2]."</td>";
                 if ($user_lvl >= $action_permission['update']) $output .= "
 			<td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>";
                 else $output .= "<td>***@***</td>";
+    unset($exp_lvl_arr);
 		$output .="<td class=\"small\">$data[4]</td>";
 		if (($user_lvl >= $action_permission['update'])||($user_name == $data[1])) $output .= "<td>$data[5]</td>";
 			else $output .= "<td>******</td>";

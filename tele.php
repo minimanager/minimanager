@@ -16,7 +16,7 @@ valid_login($action_permission['read']);
 //########################################################################################################################
 function browse_tele()
 {
-  global $lang_tele, $lang_global, $output, $world_db, $realm_id, $itemperpage, $action_permission, $user_lvl, $search_by, $search_value;
+  global $lang_tele, $lang_global, $output, $world_db, $realm_id, $itemperpage, $action_permission, $user_lvl;
 
   $sql = new SQL;
   $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
@@ -35,30 +35,31 @@ function browse_tele()
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end========================
 
-  //==========================Browse/Search Guilds CHECK========================
+  //==========================Browse/Search CHECK========================
+  $search_by = '';
+  $search_value = '';
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
     $search_value = $sql->quote_smart($_GET['search_value']);
     $search_by = $sql->quote_smart($_GET['search_by']);
     $search_menu = array("name", "id", "map");
     if (!in_array($search_by, $search_menu)) $search_by = 'name';
-    
+    unset($search_menu);
+
     if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("tele.php?error=1");
-    //get total number of items
     $query_1 = $sql->query("SELECT count(*) FROM game_tele WHERE $search_by LIKE '%$search_value%'");
-    $all_record = $sql->result($query_1,0);
     $query = $sql->query("SELECT id, name, map, position_x, position_y, position_z, orientation 
       FROM game_tele WHERE $search_by LIKE '%$search_value%' ORDER BY $order_by $order_dir LIMIT  $start, $itemperpage");
   }
   else
   {
-    //get total number of items
     $query_1 = $sql->query("SELECT count(*) FROM game_tele");
-    $all_record = $sql->result($query_1,0);
     $query = $sql->query("SELECT id, name, map, position_x, position_y, position_z, orientation 
       FROM game_tele ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   }
-  $this_page = $sql->num_rows($query);
+
+  $all_record = $sql->result($query_1,0);
+  unset($query_1);
 
   //==========================top tage navigaion starts here========================
   $output .="
@@ -66,12 +67,12 @@ function browse_tele()
           <table class=\"top_hidden\">
             <tr>
               <td>";
-  ($search_by &&  $search_value) ? makebutton($lang_tele['teleports'], "tele.php\" type=\"def", 130) : $output .= "";
+  ($search_by && $search_value) ? makebutton($lang_tele['teleports'], "tele.php\" type=\"def", 130) : $output .= "";
   if($user_lvl >= $action_permission['insert'])
   {
     makebutton($lang_tele['add_new'], "tele.php?action=add_tele",130);
   }
-  ($search_by &&  $search_value) ? makebutton($lang_global['back'], "javascript:window.history.back()", 130) : $output .= "";
+  ($search_by && $search_value) ? makebutton($lang_global['back'], "javascript:window.history.back()", 130) : $output .= "";
   $output .= "
               </td>
               <td width=\"25%\" align=\"right\" rowspan=\"2\">";
@@ -127,6 +128,7 @@ function browse_tele()
               <th width=\"9%\"><a href=\"tele.php?order_by=position_z&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\"".($order_by=='position_z' ? " class=\"$order_dir\"" : "").">{$lang_tele['z']}</a></th>
               <th width=\"10%\"><a href=\"tele.php?order_by=orientation&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\"".($order_by=='orientation' ? " class=\"$order_dir\"" : "").">{$lang_tele['orientation']}</a></th>
             </tr>";
+  unset($start); unset($dir); unset($search_value); unset($search_by);
 
   while ($data = $sql->fetch_row($query))
   {
@@ -152,6 +154,8 @@ function browse_tele()
               <td>$data[6]</td>
             </tr>";
   }
+  unset($query);
+  unset($data);
 
   $output .= "
             <tr>
@@ -162,6 +166,7 @@ function browse_tele()
 ";
 
   $sql->close();
+  unset($sql);
 }
 
 
@@ -199,11 +204,13 @@ function del_tele()
   if ($sql->affected_rows() != 0)
   {
     $sql->close();
+    unset($sql);
     redirect("tele.php?error=3&order_by=$order_by&start=$start&dir=$dir");
   }
   else
   {
     $sql->close();
+    unset($sql);
     redirect("tele.php?error=5");
   }
 }
@@ -264,6 +271,8 @@ function edit_tele()
       if ($tele[2] == $map[0]) $output .= "selected=\"selected\" ";
         $output .= ">{$map[0]} : {$map[1]}</option>";
     }
+    unset($map);
+    unset($map_query);
     $output .= "
                    </select>
                  </td>
@@ -307,6 +316,7 @@ function edit_tele()
     error($lang_global['err_no_records_found']);
 
   $sql->close();
+  unset($sql);
 
 }
 
@@ -340,11 +350,13 @@ function do_edit_tele()
   if ($sql->affected_rows())
   {
     $sql->close();
+    unset($sql);
     redirect("tele.php?error=3");
   }
   else
   {
     $sql->close();
+    unset($sql);
     redirect("tele.php?error=5");
   }
 }
@@ -378,6 +390,10 @@ function add_tele()
   while ($map = $sql->fetch_row($map_query))
     $output .= "
                     <option value=\"{$map[0]}\">{$map[0]} : {$map[1]}</option>";
+  unset($map);
+  unset($map_query);
+  $sql->close();
+  unset($sql);
   $output .= "
                     </select>
                   </td>
@@ -442,11 +458,13 @@ function do_add_tele()
   if ($sql->affected_rows())
   {
     $sql->close();
+    unset($sql);
     redirect("tele.php?error=3");
   }
   else
   {
     $sql->close();
+    unset($sql);
     redirect("tele.php?error=5");
   }
 }
@@ -459,6 +477,9 @@ $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
 $output .= "
         <div class=\"top\">";
+
+$lang_tele = lang_tele();
+
 switch ($err)
 {
   case 1:
@@ -485,6 +506,9 @@ switch ($err)
     $output .= "
           <h1>{$lang_tele['tele_locations']}</h1>";
 }
+
+unset($err);
+
 $output .= "
         </div>";
 
@@ -514,5 +538,10 @@ switch ($action)
     browse_tele();
 }
 
+unset($action);
+unset($action_permission);
+unset($lang_tele);
+
 require_once("footer.php");
+
 ?>

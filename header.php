@@ -67,7 +67,7 @@ $output .= "
   <script type=\"text/javascript\" charset=\"utf-8\"></script>
   <script src=\"js/general.js\"></script>
   <script src=\"js/layout.js\"></script>
-  <script src=\"$tt_scrip\"></script>
+  <script src=\"$tt_script\"></script>
 
   <!--[if lte IE 7]>
     <style>
@@ -85,6 +85,7 @@ $output .= "
     <table class=\"table_top\">
       <tr>
         <td class=\"table_top_left\">";
+unset($tt_script);
 
 if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_SESSION['realm_id']))&& (!isset($_GET['err'])) )
 {
@@ -105,7 +106,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
   $user_id = $_SESSION['user_id'];
   $realm_id = (isset($_GET['r_id'])) ? (int)$_GET['r_id'] : $_SESSION['realm_id'];
 
-  $user_lvl_name = get_gm_level($user_lvl); 
+  $user_lvl_name = id_get_gm_level($user_lvl); 
 
   // get file we are executing
   $array = explode ( '/', $_SERVER['PHP_SELF']);
@@ -162,7 +163,6 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
   }
   unset($branch);
   unset($trunk);
-  unset($menu_array);
   unset($lookup_file);
 
   $output .= "
@@ -218,6 +218,7 @@ else
       </tr>
     </table>";
 }
+unset($menu_array);
 unset($lang_header);
 
 $output .= "

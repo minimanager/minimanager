@@ -18,7 +18,7 @@ require_once("scripts/get_lib.php");
 //########################################################################################################################
 function browse_chars()
 {
-  global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage, $search_by, $search_value,
+  global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
     $action_permission, $user_lvl, $user_name, $start, $showcountryflag;
 
   $sql = new SQL;
@@ -36,13 +36,15 @@ function browse_chars()
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end========================
-  
+  $search_by = '';
+  $search_value = '';
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
     $search_value = $sql->quote_smart($_GET['search_value']);
     $search_by = (isset($_GET['search_by'])) ? $sql->quote_smart($_GET['search_by']) : "name";
     $search_menu = array("name", "guid", "account", "level", "greater_level", "guild", "race", "class", "map", "highest_rank", "greater_rank", "online", "gold", "item");
     if (!in_array($search_by, $search_menu)) $search_by = 'name';
+    unset($search_menu);
 
     switch ($search_by)
     {
@@ -59,6 +61,7 @@ function browse_chars()
           $where_out .= $char[0];
         };
         $where_out .= ") ";
+        unset($result);
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
@@ -116,7 +119,8 @@ function browse_chars()
         $Q1 .= $guildid;
 
         $result = $sql->query($Q1);
-
+        unset($guildid)
+        unset($Q1);
         $where_out = "guid IN (0 ";
         while ($char = $sql->fetch_row($result))
         {
@@ -124,6 +128,7 @@ function browse_chars()
           $where_out .= $char[0];
         };
         $where_out .= ") ";
+        unset($result);
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
@@ -145,6 +150,7 @@ function browse_chars()
           $where_out .= $char[0];
         };
         $where_out .= ") ";
+        unset($result);
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
@@ -157,6 +163,7 @@ function browse_chars()
       case "greater_rank":
         if (!is_numeric($search_value)) $search_value = 0;
         $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) > $search_value";
+
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
@@ -205,6 +212,7 @@ function browse_chars()
       FROM `characters` ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   }
   $all_record = $sql->result($query_1,0);
+  unset($query_1);
   $this_page = $sql->num_rows($query) or die(error($lang_global['err_no_result']));
   //==========================top tage navigaion starts here========================
   $output .="
@@ -213,10 +221,10 @@ function browse_chars()
           <table class=\"top_hidden\">
             <tr>
               <td>";
-  ($search_by &&  $search_value) ? makebutton($lang_char_list['characters'], "char_list.php\" type=\"def", 130) : $output .= "";
+  ($search_by && $search_value) ? makebutton($lang_char_list['characters'], "char_list.php\" type=\"def", 130) : $output .= "";
   if($user_lvl >= $action_permission['delete'])
                 makebutton($lang_char_list['cleanup'], "cleanup.php", 130);
-  ($search_by &&  $search_value) ? makebutton($lang_global['back'], "javascript:window.history.back()", 130) : $output .= "";
+  ($search_by && $search_value) ? makebutton($lang_global['back'], "javascript:window.history.back()", 130) : $output .= "";
   $output .= "
               </td>
               <td align=\"right\" width=\"25%\" rowspan=\"2\">";
@@ -285,6 +293,7 @@ function browse_chars()
                 <th width=\"1%\">{$lang_global['country']}</th>";
   $output .="
               </tr>";
+  unset($start); unset($dir); unset($search_value); unset($search_by);
 
   $looping = ($this_page < $itemperpage) ? $this_page : $itemperpage;
 
@@ -482,8 +491,10 @@ function dodel_char()
 //########################################################################################################################
 
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+
 $output .= "
         <div class=\"top\">";
+
 switch ($err)
 {
   case 1:
@@ -494,14 +505,13 @@ switch ($err)
     $output .= "
           <h1><font class=\"error\">{$lang_global['err_no_search_passed']}</font></h1>";
     break;
-  case 3:
-     $output .= "
-          <h1>{$lang_char_list['search_results']}</h1>";
-     break;
   default:
     $output .= "
           <h1>{$lang_char_list['browse_chars']}</h1>";
 }
+
+unset($err);
+
 $output .= "
         </div>";
 
@@ -521,6 +531,10 @@ switch ($action)
   default:
     browse_chars();
 }
+
+unset($action);
+unset($action_permission);
+//unset($lang_tele);
 
 require_once("footer.php");
 

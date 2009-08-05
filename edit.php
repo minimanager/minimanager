@@ -77,7 +77,7 @@ function edit_user()
                 </tr>
                 <tr>
                   <td>{$lang_edit['gm_level']}</td>
-                  <td>".get_gm_level($acc[1])." ( $acc[1] )</td>
+                  <td>".id_get_gm_level($acc[1])." ( $acc[1] )</td>
                 </tr>
                 <tr>
                   <td>{$lang_edit['join_date']}</td>

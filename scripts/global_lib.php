@@ -26,11 +26,11 @@ if (function_exists ('date_default_timezone_set') )
 //work around for MSIE and wowhead tooltip display error
 //if (ereg("MSIE" , $_SERVER["HTTP_USER_AGENT"]))
 //{
-//  $tt_scrip = "";
+//  $tt_script = "";
 //}
 //else
 //{
-    $tt_scrip = "http://www.wowhead.com/widgets/power.js";
+    $tt_script = "http://www.wowhead.com/widgets/power.js";
 //}
 
 
@@ -107,9 +107,9 @@ function makebutton($xtext, $xlink, $xwidth)
 {
   global $output;
   $output .="
-<div>
-  <a class=\"button\" style=\"width:".$xwidth."px;\" href=\"$xlink\">$xtext</a>
-</div>";
+            <div>
+              <a class=\"button\" style=\"width:".$xwidth."px;\" href=\"$xlink\">$xtext</a>
+            </div>";
 }
 
 
@@ -121,9 +121,7 @@ function maketooltip($text, $link, $tip, $class, $target = "target=\"_self\"")
   //COMMENTED OUT SINCE WE WANT WOWHEAD TOOLTIPS ONLY
   //$output .="<a style=\"padding:2px;\" href=\"$link\" $target onmouseover=\"toolTip('".addslashes($tip)."','$class')\" onmouseout=\"toolTip()\">$text</a>";
 
-  //ADDED:
   $output .="<a style=\"padding:2px;\" href=\"$link\" $target>$text</a>";
-  //ENDOF ADDED
 }
 
 

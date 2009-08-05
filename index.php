@@ -249,11 +249,12 @@ if ($online)
       $country = $sql->fetch_row($nation);
     }
     $CHAR_RACE = id_get_char_race();
+    $CHAR_RANK = id_get_char_rank();
     $output .= "
             <tr>
               <td>
                 <a href=\"char.php?id=$char[0]\">
-                  <span onmousemove='toolTip(\"".get_gm_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>".htmlentities($char[1])."</span>
+                  <span onmousemove='toolTip(\"".id_get_gm_level($gm)."\",\"item_tooltip\")' onmouseout='toolTip()'>".htmlentities($char[1])."</span>
                 </a>
               </td>
               <td>
@@ -272,6 +273,7 @@ if ($online)
               <td>".get_map_name($char[5])."</td>
               <td>".get_zone_name($char[4])."</td>";
     unset($CHAR_RACE);
+    unset($CHAR_RANK);
     if ($server_type)
       $output .="
               <td>$cc</td>";

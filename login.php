@@ -216,6 +216,8 @@ if (isset($_COOKIE["uname"]) && isset($_COOKIE["p_hash"]) && isset($_COOKIE["rea
 
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
+$lang_login = lang_login();
+
 $output .= "
         <div class=\"top\">";
 switch ($err)

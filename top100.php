@@ -7,7 +7,7 @@ valid_login($action_permission['read']);
 
 function top100()
 {
-  global $lang_top, $output, $realm_id, $characters_db, $itemperpage, $CHAR_RANK, $CHAR_RACE;
+  global $lang_top, $output, $realm_id, $characters_db, $itemperpage;
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
@@ -37,6 +37,7 @@ function top100()
 
   $query_1 = $sql->query("SELECT count(*) FROM characters");
   $all_record = $sql->result($query_1,0);
+  unset($query_1);
   $all_record = (($all_record < 100) ? $all_record : 100);
 
   //==========================top tage navigaion starts here========================
@@ -51,6 +52,7 @@ function top100()
               </td>
               <td align=\"right\" width=\"30%\">";
   $output .= generate_pagination("top100.php?order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
+  unset($all_record);
   $output .= "
               </td>
             </tr>
@@ -99,6 +101,7 @@ function top100()
       $time .= " hours";
     }
     $CHAR_RACE = id_get_char_race();
+    $CHAR_RANK = id_get_char_rank();
     $output .= "
             <tr valign=top>
               <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
@@ -114,16 +117,15 @@ function top100()
               <td>$time</td>
               <td>".(($char[6]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
             </tr>";
-     unset($CHAR_RACE);
   }
-
   $output .= "
             </table>
           </center>
-          <br />
 ";
 
   $sql->close();
+  unset($sql);
+
 }
 
 //########################################################################################################################
@@ -131,8 +133,12 @@ function top100()
 //########################################################################################################################
 
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+
 $output .= "
         <div class=\"top\">";
+
+$lang_top = lang_top();
+
 switch ($err)
 {
   case 1:
@@ -141,6 +147,9 @@ switch ($err)
     $output .= "
           <h1>{$lang_top['top100']}</h1>";
 }
+
+unset($err);
+
 $output .= "
         </div>";
 
@@ -153,6 +162,10 @@ switch ($action)
   default :
     top100();
 }
+
+unset($action);
+unset($action_permission);
+unset($lang_top);
 
 require_once("footer.php");
 

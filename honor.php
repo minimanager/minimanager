@@ -15,6 +15,7 @@
 
  //global $lang_honor, $lang_global, $output, $characters_db, $realm_id, $itemperpage, $realm_db;
  $CHAR_RACE = id_get_char_race();
+ $CHAR_RANK = id_get_char_rank();
 
  $sql = new SQL;
  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -140,8 +141,8 @@ $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `gui
 }
 
 $output .= "</table><br /></fieldset>";
-  $sql->close();
-
+$sql->close();
+unset($sql);
 
 require_once("footer.php");
 ?>

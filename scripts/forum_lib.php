@@ -190,7 +190,7 @@ function gen_avatar_panel($level,$sex,$race,$class,$info=1,$gm=0){
 
 	if($gm>0){
 		require_once("scripts/id_tab.php");
-		$return .= get_gm_level($gm) . "<br />";
+		$return .= id_get_gm_level($gm) . "<br />";
 	}
 
 	if($info == 1){
