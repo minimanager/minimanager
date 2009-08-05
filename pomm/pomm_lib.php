@@ -2,22 +2,22 @@
 /*
  * Project Name: MiniManager for Mangos/Trinity Server
  * Date: 17.10.2006 inital version (0.0.1a)
- * Author: Q.SA (thanks to mirage666 for the original idea) 
+ * Author: Q.SA (thanks to mirage666 for the original idea)
  * Copyright: Q.SA
  * Email: *****
  * License: GNU General Public License v2(GPL)
  */
- 
+
 require_once("config.dist.php");
 require_once("config.php");
 require_once("../scripts/global_lib.php");
-require_once("../scripts/db_lib.php");
+require_once("../libs/db_lib.php");
 require_once("../scripts/get_lib.php");
 
 if (isset($_COOKIE["lang"])){
-	$lang = substr($_COOKIE["lang"],0,4);
-	if (!file_exists("../lang/$lang.php")) $lang = $language;
-	} else $lang = $language;
+  $lang = substr($_COOKIE["lang"],0,4);
+  if (!file_exists("../lang/$lang.php")) $lang = $language;
+  } else $lang = $language;
 require_once("../lang/$lang.php");
 
 require_once("../scripts/id_tab.php");
@@ -38,100 +38,100 @@ function get_player_position($x,$y,$map,$zone) {
    case 0:
     $pos['x'] = 569 - $ypos;
     $pos['y'] = 175 - $xpos;
-	break;
-	
-	case 530:
-	if (($zone == 3525) || ($zone == 3557) || ($zone == 3524)){
-		$pos['x'] = -162 - $ypos;
-		$pos['y'] = 75 - $xpos;
-	} else if (($zone == 3487) || ($zone == 3433) || ($zone == 3430)){
-				$pos['x'] = 528 - $ypos;
-				$pos['y'] = 218 - $xpos;
-				} else {
-						$pos['x'] = 484 - $ypos;
-						$pos['y'] = 272 - $xpos;
-				}
-	break;
+  break;
+
+  case 530:
+  if (($zone == 3525) || ($zone == 3557) || ($zone == 3524)){
+    $pos['x'] = -162 - $ypos;
+    $pos['y'] = 75 - $xpos;
+  } else if (($zone == 3487) || ($zone == 3433) || ($zone == 3430)){
+        $pos['x'] = 528 - $ypos;
+        $pos['y'] = 218 - $xpos;
+        } else {
+            $pos['x'] = 484 - $ypos;
+            $pos['y'] = 272 - $xpos;
+        }
+  break;
 
 case 70:
     $pos['x'] = 610;
-	$pos['y'] = 305;
+  $pos['y'] = 305;
 break;
 case 43:
     $pos['x'] = 190;
-	$pos['y'] = 275;
+  $pos['y'] = 275;
 break;
 case 229:
-	$pos['x'] = 582;
-	$pos['y'] = 300;
+  $pos['x'] = 582;
+  $pos['y'] = 300;
 break;
 case 230:
-	$pos['x'] = 582;
-	$pos['y'] = 300;
+  $pos['x'] = 582;
+  $pos['y'] = 300;
 break;
 case 409:
-	$pos['x'] = 582;
-	$pos['y'] = 302;
+  $pos['x'] = 582;
+  $pos['y'] = 302;
 break;
 case 469:
-	$pos['x'] = 582;
-	$pos['y'] = 301;
+  $pos['x'] = 582;
+  $pos['y'] = 301;
 break;
 case 489:
     $pos['x'] = 185;
-	$pos['y'] = 237;
+  $pos['y'] = 237;
 break;
 case 369:
-	$pos['x'] = 582;
-	$pos['y'] = 265;
+  $pos['x'] = 582;
+  $pos['y'] = 265;
 break;
 case 451:
-	$pos['x'] = 435;
-	$pos['y'] = 75;
+  $pos['x'] = 435;
+  $pos['y'] = 75;
 break;
 case 34:
-	$pos['x'] = 560;
-	$pos['y'] = 335;
+  $pos['x'] = 560;
+  $pos['y'] = 335;
 break;
 case 209:
-   	$pos['x'] = 200;
-	$pos['y'] = 370;
+    $pos['x'] = 200;
+  $pos['y'] = 370;
 break;
 case 35:
-	$pos['x'] = 561;
-	$pos['y'] = 336;
+  $pos['x'] = 561;
+  $pos['y'] = 336;
 break;
 case 449:
-	$pos['x'] = 560;
-	$pos['y'] = 335;
+  $pos['x'] = 560;
+  $pos['y'] = 335;
 break;
 case 47:
     $pos['x'] = 190;
-	$pos['y'] = 340;
+  $pos['y'] = 340;
 break;
 case 531:
     $pos['x'] = 120;
-	$pos['y'] = 410;
+  $pos['y'] = 410;
 break;
 case 509:
     $pos['x'] = 125;
-	$pos['y'] = 410;
+  $pos['y'] = 410;
 break;
 case 90:
-	$pos['x'] = 560;
-	$pos['y'] = 270;
+  $pos['x'] = 560;
+  $pos['y'] = 270;
 break;
 case 389:
-	$pos['x'] = 227;
-	$pos['y'] = 230;
+  $pos['x'] = 227;
+  $pos['y'] = 230;
 break;
 case 450:
-	$pos['x'] = 227;
-	$pos['y'] = 228;
+  $pos['x'] = 227;
+  $pos['y'] = 228;
 break;
 case 533:
-   	$pos['x'] = 640;
-	$pos['y'] = 130;
+    $pos['x'] = 640;
+  $pos['y'] = 130;
 break;
 case 532:
    $pos['x'] = 605;
@@ -243,19 +243,19 @@ case 48:
 break;
 case 129:
     $pos['x'] = 195;
-	$pos['y'] = 340;
+  $pos['y'] = 340;
 break;
 case 309:
     $pos['x'] = 605;
-	$pos['y'] = 385;
+  $pos['y'] = 385;
 break;
 case 429:
     $pos['x'] = 135;
-	$pos['y'] = 325;
+  $pos['y'] = 325;
 break;
 case 349:
     $pos['x'] = 100;
-	$pos['y'] = 275;
+  $pos['y'] = 275;
 break;
 case 560:
    $pos['x'] = 225;
@@ -293,7 +293,7 @@ case 566:
 case 568:
    return($lang_id_tab['zulaman']);
    break;
-*/	
+*/
    default:
     $pos['x'] = -1;
     $pos['y'] = -1;
