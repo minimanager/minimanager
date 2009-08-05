@@ -48,8 +48,12 @@ $lang_global = array(
 	'language_8' => 'Russian'
 	);
 
-$lang_login = array(
+
 	// ----- LOGIN.PHP -----
+function lang_login()
+{
+  $lang_login = array
+  (
 	'login' => 'Connexion',
 	'username' => 'Nom',
 	'password' => 'Mot de passe',
@@ -65,6 +69,8 @@ $lang_login = array(
 	'pass_recovery' => 'Mot de passe perdu ?',
 	'after_registration' => 'Votre compte a été crée avec succès!'
 	);
+  return $lang_login;
+}
 
 $lang_guild = array(
 	// ----- GUILD.PHP -----
@@ -168,55 +174,69 @@ $lang_index = array(
 	'trinity_rev' => 'Trinity Rev',
 	'using_db' => 'using db'
 	);
+
+// ----- HEADER.PHP -----
 function lang_header()
 {
-$lang_header = array(
-	// ----- HEADER.PHP -----
-	'main' => 'Portail',
-	'users' => 'Utilisateurs',
-	'accounts' => 'Comptes',
-	'characters' => 'Personnages',
-	'guilds' => 'Guildes',
-	'arena_teams' => 'Equipe d\'arène',
-	'banned_list' => 'Ban Liste',
-	'cleanup' => 'Purger',
-	'tools' => 'Outils',
-	'ssh_line' => 'Commande SSH',
-	'run_sql_patch' => 'Lancer un patch SQL',
-	'backup' => 'Sauvegarde',
-	'tickets' => 'Tickets',
-	'realm' => 'Royaume',
-	'add_motd' => 'Ajouter le message du jour',
-	'mail' => 'Email',
+  $lang_header = array
+  (
+	'menu' => 'Menu',
 	'my_acc' => 'Mon compte',
 	'edit_my_acc' => 'Editer mon compte',
-	'logout' => 'Se déconnecter',
-	'menu' => 'Menu',
-	'db' => 'DB',
-	'items' => 'Objets',
-	'statistics' => 'Statistiques',
-	'teleports' => 'Téléports',
-	'command' => 'Commande',
-	'creatures' => 'Creatures',
-	'player_map' => 'Carte des Joueurs',
-	'irc' => 'Applet IRC',
-	'repair' => 'Réparer',
-	'game_object' => 'Game Object',
+	'logout' => 'Logout',
+
+	'main' => 'Portail',
+	'tools' => 'Outils',
+	'db' => 'Base de données',
 	'forums' => 'Forums',
-	'honor' => 'Rang',
+
 	'auctionhouse' => 'Hôtel des ventes',
-	'events' => 'Events',
+	'arena_teams' => 'Equipes d\'arène',
+	'guilds' => 'Guildes',
+	'honor' => 'Rangs d\'Honneur',
+	'statistics' => 'Statistiques',
+	'events' => 'Evènements',
+	'instances' => 'Instances',
+	'top100' => 'TOP 100',
+	'player_map' => 'Carte des joueurs',
+
+	'accounts' => 'Comptes',
+	'characters' => 'Personnages',
+	'command' => 'Commandes',
+	'banned_list' => 'Liste des bannis',
+	'mail' => 'E-Mail',
+	'tickets' => 'Tickets',
+	'teleports' => 'Teleports',
+	'cleanup' => 'Purger',
+	'ssh_line' => 'Commandes SSH',
+	'run_sql_patch' => 'Exécuter un patch SQL ',
+	'add_motd' => 'Ajouter un message du jour',
+	'realm' => 'Royaume',
+	'irc' => 'Applet IRC',
+	
+	'items' => 'Items',
+	'creatures' => 'Creatures',
+	'game_object' => 'Objects',
+	'backup' => 'Sauvegarde',
+	'repair' => 'Réparer/Optimiser',
+
+	'users' => 'Utilisateurs',
 	'statistics_on' => 'Statistiques en ligne',
-	'instances' => 'Informations sur les instances',
-	'top100' => 'TOP 100'
-	);
+  );
   return $lang_header;
 }
-$lang_footer = array(
-	// -----FOOTER.PHP -----
+
+
+// -----FOOTER.PHP -----
+function lang_footer()
+{
+  $lang_footer = array
+  (
 	'bugs_to_admin' => 'Problèmes et bugs :',
 	'site_admin' => 'Administrateur du site'
-	);
+  );
+  return $lang_footer;
+}
 
 $lang_repair = array(
 	// ----- REPAIR.PHP -----
@@ -561,9 +581,12 @@ $lang_item = array(
 	'HASTE_RATING' => 'Vitesse'
 	);
 
-$lang_char_list = array(
-	// ----- CHAR_LIST.PHP -----
-	'cleanup' => 'Purger',
+// ----- CHAR_LIST.PHP -----
+function lang_char_list()
+{
+  $lang_char_list = array
+  (
+    'cleanup' => 'Purger',
 	'by_name' => 'par Nom',
 	'by_id' => 'par id d\'équipe d\'Arène',
 	'by_account' => 'par Compte',
@@ -598,8 +621,11 @@ $lang_char_list = array(
 	'search_results' => 'Rechercher',
 	'browse_chars' => 'Liste des personnages',
 	'chars_gold' => '&lt; Or (C)',
-	'by_item' => 'par ID d\'Objet'
-	);
+	'by_item' => 'par ID d\'Objet',
+	'lastseen' => 'Dernière connexion',	
+  );
+  return $lang_char_list;
+}
 
 $lang_cleanup = array(
 	// ----- CLEANUP.PHP -----
@@ -640,6 +666,7 @@ $lang_edit = array(
 	'password' => 'Mot de passe',
 	'mail' => 'Email',
 	'gm_level' => 'GM',
+	'last_ip' => 'Dernière IP',
 	'join_date' => 'Date d\'inscription',
 	'characters' => 'Personnages',
 	'del_acc' => 'Supprimer',
@@ -868,7 +895,8 @@ $lang_user = array(
 	'client_type' => 'Type de client',
 	'classic' => 'Classique',
 	'tbc' => 'TBC',
-	'wotlk' => 'WOTLK'
+	'wotlk' => 'WOTLK',
+	'invited_by' => 'Invité par',
 	);
 
 $lang_stat = array(
@@ -895,9 +923,14 @@ $lang_stat = array(
 	'on_statistics' => 'Statistiques en ligne'
 	);
 
-$lang_tele = array(
-	// ----- TELE.PHP -----
-	'loc_name' => 'Nom de l\'emplacement',
+
+// ----- TELE.PHP -----
+function lang_tele()
+{
+  $lang_tele = array
+  (
+	'teleports' => 'Téléports',    
+    'loc_name' => 'Nom de l\'emplacement',
 	'loc_id' => 'ID d\'Emplacement',
 	'on_map' => 'Sur la carte ID',
 	'id' => 'Id',
@@ -921,7 +954,9 @@ $lang_tele = array(
 	'tele_locations' => 'Emplacements de Téléport',
 	'add_new' => 'Ajoute nouveau',
 	'add_new_tele' => 'Ajouter un nouvel emplacement de Téléport'
-	);
+  );
+  return $lang_tele;
+}
 
 $lang_command = array(
 	// ----- COMMAND.PHP -----
@@ -3995,8 +4030,13 @@ $lang_captcha = array(
 	'invalid_code' => 'Code invalide!'
 	);
 
-$lang_top = array(
+
 	// ----- TOP100.PHP -----
+function lang_top()
+{
+  $lang_top = array
+  (
+	'top100' => 'Top 100',
 	'name' => 'Nom',
 	'race' => 'Race',
 	'class' => 'Classe',
@@ -4009,6 +4049,8 @@ $lang_top = array(
 	'arena_points' => 'Points d\'arène',
 	'time_played' => 'Temps de jeu',
 	'online' => 'En ligne'
-	);
+  );
+  return $lang_top;
+}
 
 ?>
