@@ -10,12 +10,12 @@
 
 require_once("header.php");
 
-$err = (isset($_GET['err'])) ? htmlentities($_GET['err'], ENT_QUOTES) : "Oopsy...";
+$err = (isset($_GET['err'])) ? ($_GET['err']) : "Oopsy...";
 
 $output .= "
         <center>
           <br />
-          <table width=\"300\" class=\"flat\">
+          <table width=\"400\" class=\"flat\">
             <tr>
               <td align=\"center\">
                 <h1>
@@ -28,18 +28,20 @@ $output .= "
                 <br />
               </td>
             </tr>
-          </table><br />
-          <table class=\"hidden\">
-            <tr>
-              <td>";
-                makebutton($lang_global['back'], "javascript:window.history.back()", 120);
-                makebutton($lang_global['home'], "index.php", 120);
-$output .= "
-              </td>
-            </tr>
           </table>
           <br />
-        </center>";
+            <table width=\"300\" class=\"hidden\">
+              <tr>
+                <td align=\"center\">";
+                  makebutton($lang_global['home'], "index.php", 130);
+                  makebutton($lang_global['back'], "javascript:window.history.back()", 130);
+$output .= "
+                </td>
+              </tr>
+            </table>
+          <br />
+        </center>
+";
 
 require_once("footer.php");
 

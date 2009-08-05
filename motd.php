@@ -71,6 +71,7 @@ function edit_motd()
   $result = $sql->query("SELECT content FROM bugreport WHERE id = '$id'");
   $msg = $sql->result($result, 0);
   $sql->close();
+  unset($sql);
  
   $output .= "
         <center>
@@ -126,6 +127,7 @@ function do_add_motd()
   if (strlen($msg) > 4096)
   {
     $sql->close();
+    unset($sql);
       redirect("motd.php?error=2");
   }
  
@@ -133,6 +135,7 @@ function do_add_motd()
 
   $sql->query("INSERT INTO bugreport (type, content) VALUES ('$by','$msg')");
   $sql->close();
+  unset($sql);
 
   redirect("index.php");
 }
@@ -160,6 +163,7 @@ function do_edit_motd()
   if (strlen($msg) > 4096)
   {
     $sql->close();
+    unset($sql);
       redirect("motd.php?error=2");
   }
 
@@ -168,6 +172,7 @@ function do_edit_motd()
 
   $sql->query("UPDATE bugreport SET type = '$by', content = '$msg' WHERE id = '$id'");
   $sql->close();
+  unset($sql);
 
   redirect("index.php");
 }
@@ -191,6 +196,7 @@ function delete_motd()
   $query = $sql->query("DELETE FROM bugreport WHERE id ='$id'");
  
   $sql->close();
+  unset($sql);
   redirect("index.php");
 }
 	

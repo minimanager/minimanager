@@ -248,6 +248,7 @@ if ($online)
       $nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
       $country = $sql->fetch_row($nation);
     }
+    $CHAR_RACE = id_get_char_race();
     $output .= "
             <tr>
               <td>
@@ -270,6 +271,7 @@ if ($online)
               </td>
               <td>".get_map_name($char[5])."</td>
               <td>".get_zone_name($char[4])."</td>";
+    unset($CHAR_RACE);
     if ($server_type)
       $output .="
               <td>$cc</td>";
@@ -289,6 +291,7 @@ if ($online)
 }
 
 $sql->close();
+unset($sql);
 
 require_once("footer.php");
 ?>

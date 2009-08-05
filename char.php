@@ -667,6 +667,7 @@ function char_main()
     error($lang_char['no_char_found']);
 
   $sql->close();
+  unset($sql);
 }
 
 
@@ -1128,6 +1129,7 @@ function char_inv()
     else
     {
       $sql->close();
+      unset($sql);
       error($lang_char['no_permission']);
     }
   }
@@ -1135,6 +1137,7 @@ function char_inv()
     error($lang_char['no_char_found']);
 
 $sql->close();
+unset($sql);
 }
 
 
@@ -1303,6 +1306,7 @@ function char_quest()
   else
   {
     $sql->close();
+    unset($sql);
     error($lang_char['no_permission']);
   }
 }
@@ -1310,6 +1314,7 @@ else
   error($lang_char['no_char_found']);
 
 $sql->close();
+unset($sql);
 }
 
 
@@ -1429,6 +1434,7 @@ function char_achievements()
     else
     {
       $sql->close();
+      unset($sql);
         error($lang_char['no_permission']);
     }
   }
@@ -1436,6 +1442,7 @@ function char_achievements()
     error($lang_char['no_char_found']);
 
   $sql->close();
+  unset($sql);
 }
 
 
@@ -1620,6 +1627,7 @@ function char_rep()
     else
     {
       $sql->close();
+      unset($sql);
       error($lang_char['no_permission']);
     }
   }
@@ -1627,6 +1635,7 @@ function char_rep()
     error($lang_char['no_char_found']);
 
   $sql->close();
+  unset($sql);
 }
 
 
@@ -1923,6 +1932,7 @@ function char_skill()
     error($lang_char['no_char_found']);
 
   $sql->close();
+  unset($sql);
 }
 
 
@@ -2264,12 +2274,14 @@ function char_pets()
     else
     {
       $sql->close();
+      unset($sql);
       error($lang_char['no_permission']);
     }
   }
   else
     error($lang_char['no_char_found']);
   $sql->close();
+  unset($sql);
 }
 
 

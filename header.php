@@ -16,14 +16,24 @@ if (file_exists("./scripts/config.php"))
 { if (file_exists("./scripts/config.dist.php")) 
     require_once("./scripts/config.dist.php");
   else
-    exit("<center><br><code>./scripts/config.dist.php</code> not found,<br> please restore <code>./scripts/config.dist.php</code>");
+    exit("<center><br><code>'./scripts/config.dist.php'</code> not found,<br> please restore <code>'./scripts/config.dist.php'</code></center>");
   require_once("./scripts/config.php");
 }
 else
-  exit("<center><br><code>./scripts/config.php</code> not found,<br> please copy <code>./scripts/config.dist.php</code> to <code>./scripts/config.php</code> and make appropriate changes.");
+  exit("<center><br><code>'./scripts/config.php'</code> not found,<br> please copy <code>'./scripts/config.dist.php'</code> to <code>'./scripts/config.php'</code> and make appropriate changes.");
 
-if($debug) $tot_queries = 0;
-require_once("./scripts/db_layer.php");
+//override PHP error reporting
+if ($debug > 1)
+  error_reporting (E_ALL);
+else
+  error_reporting (E_COMPILE_ERROR);
+
+if (isset($_COOKIE["css_template"]))
+{
+  if (is_dir("templates/".$_COOKIE["css_template"]))
+    if (is_file("templates/".$_COOKIE["css_template"]."/".$_COOKIE["css_template"]."_1024.css"))
+      $css_template = $_COOKIE["css_template"];
+}
 
 if (isset($_COOKIE["lang"]))
 {
@@ -34,19 +44,15 @@ if (isset($_COOKIE["lang"]))
 else
   $lang = $language;
 
-if (isset($_COOKIE["css_template"]))
-{
-  if (is_dir("templates/".$_COOKIE["css_template"]))
-    if (is_file("templates/".$_COOKIE["css_template"]."/".$_COOKIE["css_template"]."_1024.css"))
-      $css_template = $_COOKIE["css_template"];
-}
-
 require_once("./lang/$lang.php");
+
+if($debug) $tot_queries = 0;
+require_once("./scripts/db_lib.php");
+
 require_once("./scripts/global_lib.php");
 require_once("./scripts/id_tab.php");
 
 header("Content-Type: text/html; charset=".$site_encoding);
-
 //application/xhtml+xml
 $output .= "
 <!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
@@ -90,7 +96,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
 
   //temp workaround
   if (ini_get('memory_limit') < 16)
-  @ini_set('memory_limit', '16M');
+    @ini_set('memory_limit', '16M');
 
   //set user variables
   session_regenerate_id();
@@ -101,23 +107,16 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
 
   $user_lvl_name = get_gm_level($user_lvl); 
 
-  //override PHP error reporting
-  if ($debug)
-    error_reporting (E_ALL);
-  else
-    error_reporting (E_COMPILE_ERROR);
-
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  $result = $sql->query("SELECT id,name FROM `realmlist` LIMIT 10");
+  // get file we are executing
+  $array = explode ( '/', $_SERVER['PHP_SELF']);
+  $lookup_file = $array[sizeof($array)-1];
+  unset($array);
 
   $output .= "
           <div id=\"menuwrapper\">
             <ul id=\"menubar\">";
 
-  // get file we are executing
-  $array = explode ( '/', $_SERVER['PHP_SELF']);
-  $lookup_file = $array[sizeof($array)-1];
+  $lang_header = lang_header();
 
   foreach ($menu_array as $trunk)
   {
@@ -161,12 +160,20 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
       }
     }
   }
+  unset($branch);
+  unset($trunk);
+  unset($menu_array);
+  unset($lookup_file);
 
   $output .= "
               <li><a class=\"trigger\" href=\"edit.php\">{$lang_header['my_acc']}</a>
                 <ul>";
 
-  if ($sql->num_rows($result) > 1 && (count($server) >1))
+  $sql = new SQL;
+  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $result = $sql->query("SELECT id, name FROM `realmlist` LIMIT 10");
+
+  if ( $sql->num_rows($result) > 1 && (count($server) > 1) )
   {
     while ($realm = $sql->fetch_row($result))
     {
@@ -177,9 +184,14 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
                   <li><a href=\"realm.php?action=set_def_realm&amp;id=$realm[0]&amp;url={$_SERVER['PHP_SELF']}\">".htmlentities($set." ".$realm[1])."</a></li>";
       }
     }
+    unset($realm);
+    if (isset($set)) unset($set);
     $output .= "
                   <li><a href=\"#\">-------------------</a></li>";
   }
+  unset($result);
+  $sql->close();
+  unset($sql);
 
   $output .= "
                   <li><a href=\"edit.php\">{$lang_header['edit_my_acc']}</a></li>
@@ -196,7 +208,6 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
         <td class=\"table_top_right\"></td>
       </tr>
     </table>";
-  $sql->close();
 }
 else
 {
@@ -207,12 +218,11 @@ else
       </tr>
     </table>";
 }
+unset($lang_header);
 
 $output .= "
     <div id=\"version\">$version</div>
     <div id=\"body_main\">
-      <div class=\"bubble\">
-        <i class=\"tr\"></i>
-        <i class=\"tl\"></i>";
+      <div class=\"bubble\">";
 
 ?>

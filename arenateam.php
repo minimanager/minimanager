@@ -95,6 +95,7 @@ while ($data = $sql->fetch_row($query))	{
    </table></center>";
 
  $sql->close();
+ unset($sql);
 }
 
 //########################################################################################################################
@@ -189,6 +190,7 @@ while ($data = $sql->fetch_row($query))	{
    </table></center>";
 
  $sql->close();
+ unset($sql);
 }
 
 function count_days( $a, $b ) {
@@ -335,6 +337,7 @@ $output .= "<script type=\"text/javascript\">
 
  $output .= "</table><br />";
   $sql->close();
+  unset($sql);
 
  $output .= "<table class=\"hidden\">
           <tr><td>";
@@ -398,6 +401,7 @@ function rem_char_from_team(){
 	//$sql->query("DELETE FROM arena_team_member WHERE guid = '$guid'");
 
 	$sql->close();
+	unset($sql);
 	redirect("arenateam.php?action=view_arenateam&id=$arenateam_id");
 }
 

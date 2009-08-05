@@ -169,7 +169,8 @@ $lang_index = array(
 	'trinity_rev' => 'Trinity Rev',
 	'using_db' => 'using db'
 	);
-
+function lang_header()
+{
 $lang_header = array(
 	// ----- HEADER.PHP -----
 	'main' => 'Ana Menü',
@@ -210,7 +211,8 @@ $lang_header = array(
 	'instances' => 'Instances',
 	'top100' => 'TOP 100'
 	);
-
+  return $lang_header;
+}
 $lang_footer = array(
 	// -----FOOTER.PHP -----
 	'bugs_to_admin' => 'Problemler ve hata bildirimi için',

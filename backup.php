@@ -175,7 +175,7 @@ function dobackup(){
 	
 	move_uploaded_file($_FILES["uploaded_file"]["tmp_name"], "$backup_dir/$file_name_new") or die (error("{$lang_backup['upload_err_write_permission']} $backup_dir"));
 	if (file_exists("$backup_dir/$file_name_new")){
-		require_once("scripts/db_layer/sql_lib.php");
+		require_once("scripts/db_lib/sql_lib.php");
 		$use_db = addslashes($_POST['use_db']);
 		
 		if ($use_db == $realm_db['name']) $queries = run_sql_script($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name'], "$backup_dir/$file_name_new",true);
@@ -194,7 +194,7 @@ function dobackup(){
  			} else $file_name = addslashes($_POST['selected_file_name']);
 		
 		if (file_exists("$backup_dir/$file_name")){
-			require_once("scripts/db_layer/sql_lib.php");
+			require_once("scripts/db_lib/sql_lib.php");
 			$use_db = addslashes($_POST['use_db']);
 			
 			if ($use_db == $realm_db['name']) $queries = run_sql_script($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name'], "$backup_dir/$file_name",false);
@@ -222,7 +222,7 @@ function dobackup(){
 			fwrite($fp, "USE {$realm_db['name']};\n\n")or die (error($lang_backup['file_write_err']));
 			fclose($fp);
 			
-			require_once("scripts/db_layer/sql_lib.php");
+			require_once("scripts/db_lib/sql_lib.php");
 			
 			foreach ($tables_backup_realmd as $value) {
 				sql_table_dump ($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name'],$value,$struc_backup,"$backup_dir/$file_name_new");
@@ -276,7 +276,7 @@ function dobackup(){
 			fwrite($fp, "USE {$realm_db['name']};\n\n")or die (error($lang_backup['file_write_err']));
 			fclose($fp);
 			
-			require_once("scripts/db_layer/sql_lib.php");
+			require_once("scripts/db_lib/sql_lib.php");
 			
 			foreach ($tables_backup_realmd as $value) {
 				sql_table_dump ($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name'],$value,$struc_backup,"$backup_dir/$file_name_new");
@@ -429,6 +429,7 @@ function dobackup(){
 				}
 			}
 			$sql->close();
+			unset($sql);
 			redirect("backup.php?error=2");
 
  } else if (("load" == $backup_action)&&("acc_on_file" == $backup_from_to)){
@@ -443,7 +444,7 @@ function dobackup(){
 
 		$file_tmp = "$backup_dir/accounts/$file_dir/".$file_name."_$use_db.sql";
 		if (file_exists($file_tmp)){
-			require_once("scripts/db_layer/sql_lib.php");
+			require_once("scripts/db_lib/sql_lib.php");
 
 			if ($use_db == $realm_db['name']) $queries = run_sql_script($realm_db['addr'], $realm_db['user'], $realm_db['pass'],$realm_db['name'], "$backup_dir/accounts/$file_dir/$file_name.sql",true);
 			else {

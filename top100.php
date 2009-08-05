@@ -98,7 +98,7 @@ function top100()
       $time .= $hours;
       $time .= " hours";
     }
-
+    $CHAR_RACE = id_get_char_race();
     $output .= "
             <tr valign=top>
               <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
@@ -114,7 +114,7 @@ function top100()
               <td>$time</td>
               <td>".(($char[6]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
             </tr>";
-
+     unset($CHAR_RACE);
   }
 
   $output .= "

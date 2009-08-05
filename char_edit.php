@@ -220,12 +220,14 @@ $output .= "<table class=\"lined\">
  //case of non auth request
  } else {
 		$sql->close();
+		unset($sql);
 		error($lang_char['no_permission']);
 		exit();
 		}
 
 } else error($lang_char['no_char_found']);
 $sql->close();
+unset($sql);
 }
 
 
@@ -436,19 +438,23 @@ if ($sql->num_rows($result)){
 
 	$result = $sql->query("UPDATE `characters` SET data = '$data', name = '$new_name', $teleport totaltime = '$new_tot_time' WHERE guid = '$id'");
 	$sql->close();
+	unset($sql);
 
 	if ($result) redirect("char_edit.php?action=edit_char&id=$id&error=3");
 		else redirect("char_edit.php?action=edit_char&id=$id&error=4");
   } else {
 		$sql->close();
+		unset($sql);
 		error($lang_char['no_permission']);
 		}
  } else {
 		$sql->close();
+		unset($sql);
 		redirect("char_edit.php?action=edit_char&id=$id&error=2");
 		}
 } else error($lang_char['no_char_found']);
 $sql->close();
+unset($sql);
 }
 
 

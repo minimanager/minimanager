@@ -92,6 +92,7 @@ valid_login($action_permission['read']);
 	 </tr>
  </table></center><br/>";
  $sql->close();
+ unset($sql);
 }
 
 
@@ -116,9 +117,11 @@ valid_login($action_permission['delete']);
 
  if ($sql->affected_rows()) {
 	$sql->close();
+	unset($sql);
 	redirect("banned.php?error=3&ban_type=$ban_type");
     } else {
  	 $sql->close();
+ 	 unset($sql);
 	 redirect("banned.php?error=2&ban_type=$ban_type");
 	}
 }
@@ -206,12 +209,15 @@ valid_login($action_permission['insert']);
 
  if ($sql->affected_rows()) {
 	$sql->close();
+	unset($sql);
 	redirect("banned.php?error=3&ban_type=$ban_type");
 	} else {
 		$sql->close();
+		unset($sql);
 		redirect("banned.php?error=2&ban_type=$ban_type");
 	 }
  $sql->close();
+ unset($sql);
 }
 
 

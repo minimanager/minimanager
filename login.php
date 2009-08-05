@@ -38,6 +38,7 @@ function dologin()
     if ($sql->result($result1, 0))
     {
       $sql->close();
+      unset($sql);
       redirect("login.php?error=3");
     }
     else
@@ -55,12 +56,14 @@ function dologin()
         setcookie("p_hash", $user_pass, time()+60*60*24*7);
       }
       $sql->close();
+      unset($sql);
       redirect("index.php");
     }
   }
   else
   {
     $sql->close();
+    unset($sql);
     redirect("login.php?error=1");
   }
 }

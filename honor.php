@@ -13,7 +13,8 @@
  require_once("scripts/get_lib.php");
  require_once("scripts/defines.php");
 
- global $lang_honor, $lang_global, $output, $characters_db, $realm_id, $itemperpage, $realm_db;
+ //global $lang_honor, $lang_global, $output, $characters_db, $realm_id, $itemperpage, $realm_db;
+ $CHAR_RACE = id_get_char_race();
 
  $sql = new SQL;
  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);

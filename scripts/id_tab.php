@@ -26,20 +26,24 @@ $CHAR_FACTION =
   );
 
 
-$CHAR_RACE =
-  array
-  (
-     1 => array('human', 0),
-     2 => array('orc', 1),
-     3 => array('dwarf', 0),
-     4 => array('nightelf', 0),
-     5 => array('undead', 1),
-     6 => array('tauren', 1),
-     7 => array('gnome', 0),
-     8 => array('troll', 1),
-    10 => array('bloodelf', 1),
-    11 => array('draenei', 0)
-  );
+function id_get_char_race()
+{
+  $CHAR_RACE =
+    array
+    (
+       1 => array('human', 0),
+       2 => array('orc', 1),
+       3 => array('dwarf', 0),
+       4 => array('nightelf', 0),
+       5 => array('undead', 1),
+       6 => array('tauren', 1),
+       7 => array('gnome', 0),
+       8 => array('troll', 1),
+      10 => array('bloodelf', 1),
+      11 => array('draenei', 0)
+    );
+   return $CHAR_RACE;
+}
 
 
 $CHAR_RANK =
@@ -109,6 +113,7 @@ function get_map_name($id)
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $map_name = $sql->fetch_row($sql->query("SELECT `name01` FROM `map` WHERE `id`={$id} LIMIT 1"));
   $sql->close();
+  unset($sql);
   return $map_name[0];
 }
 
@@ -122,6 +127,7 @@ function get_zone_name($id)
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $zone_name = $sql->fetch_row($sql->query("SELECT `field_3` FROM `worldmaparea` WHERE `field_2`={$id} LIMIT 1"));
   $sql->close();
+  unset($sql);
   return $zone_name[0];
 }
 
@@ -135,6 +141,7 @@ function get_player_class($id)
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $class_name = $sql->fetch_row($sql->query("SELECT `field_4` FROM `chrclasses` WHERE `id`={$id} LIMIT 1"));
   $sql->close();
+  unset($sql);
   return $class_name[0];
 }
 
@@ -148,6 +155,7 @@ function get_player_race($id)
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $race_name = $sql->fetch_row($sql->query("SELECT `field_12` FROM `chrraces` WHERE `id`={$id} LIMIT 1"));
   $sql->close();
+  unset($sql);
   return $race_name[0];
 }
 
@@ -179,6 +187,7 @@ function get_skill_type($id)
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $skill_type = $sql->fetch_row($sql->query("SELECT `field_1` FROM `skillline` WHERE `id`={$id} LIMIT 1"));
   $sql->close();
+  unset($sql);
   return $skill_type[0];
 }
 
@@ -192,6 +201,7 @@ function get_skill_name($id)
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $skill_name = $sql->fetch_row($sql->query("SELECT `field_3` FROM `skillline` WHERE `id`={$id} LIMIT 1"));
   $sql->close();
+  unset($sql);
   return $skill_name[0];
 }
 
@@ -205,6 +215,7 @@ function get_achievement_name($id)
   $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $achievement_name = $sql->fetch_row($sql->query("SELECT `name01` FROM `achievement` WHERE `id`={$id} LIMIT 1"));
   $sql->close();
+  unset($sql);
   return $achievement_name[0];
 }
 

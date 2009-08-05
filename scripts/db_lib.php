@@ -11,19 +11,19 @@
 switch ($db_type)
 {
   case 'MySQL':
-    require_once("db_layer/mysql.php");
+    require_once("db_lib/mysql.php");
     break;
   case 'PgSQL':
-    require_once("db_layer/pgsql.php");
+    require_once("db_lib/pgsql.php");
     break;
   case 'MySQLi':
-    require_once("db_layer/mysqli.php");
+    require_once("db_lib/mysqli.php");
     break;
   case 'SQLLite':
-    require_once("db_layer/sqlite.php");
+    require_once("db_lib/sqlite.php");
     break;
   default:
-    error("'$db_type' is not a valid database type. Please check settings in config.php.");
+    exit("<center /><br /><code />'$db_type'</code> is not a valid database type.<br> Please check settings in <code>'./scripts/config.php'</code>.</center>");
     break;
 }
 

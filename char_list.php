@@ -366,6 +366,7 @@ function browse_chars()
 ";
 
   $sql->close();
+  unset($sql);
 }
 
 
@@ -403,6 +404,7 @@ function del_char_form()
   }
 
   $sql->close();
+  unset($sql);
 
   $output .= "
               <br />{$lang_global['will_be_erased']}
@@ -449,6 +451,7 @@ function dodel_char()
   }
 
   $sql->close();
+  unset($sql);
   $output .= "
         <center>";
   if (!$deleted_chars)

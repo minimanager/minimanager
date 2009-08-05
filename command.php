@@ -95,6 +95,7 @@ function print_commands_form()
        </center>";
 
 $sql->close();
+unset($sql);
 }
 
 
@@ -202,6 +203,7 @@ function doupdate_commands()
   }
 
   $sql->close();
+  unset($sql);
   redirect("command.php");
 }
 

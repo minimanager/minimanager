@@ -169,46 +169,55 @@ $lang_index = array(
 	'using_db' => 'using db'
 	);
 
-$lang_header = array(
-	// ----- HEADER.PHP -----
-	'main' => 'Main',
-	'users' => 'Users',
-	'accounts' => 'Accounts',
-	'characters' => 'Characters',
-	'guilds' => 'Guilds',
-	'arena_teams' => 'Arena Teams',
-	'banned_list' => 'Banned List',
-	'cleanup' => 'Cleanup',
-	'tools' => 'Tools',
-	'ssh_line' => 'SSH line',
-	'run_sql_patch' => 'Run SQL Patch',
-	'backup' => 'Backup',
-	'tickets' => 'Tickets',
-	'realm' => 'Realm',
-	'add_motd' => 'Add MOTD',
-	'mail' => 'Mail',
+function lang_header()
+{
+  $lang_header = array
+  (	// ----- HEADER.PHP -----
+	'menu' => 'Menu',
 	'my_acc' => 'My Account',
 	'edit_my_acc' => 'Edit My Account',
 	'logout' => 'Logout',
-	'menu' => 'Menu',
+
+	'main' => 'Main',
+	'tools' => 'Tools',
 	'db' => 'DataBase',
-	'items' => 'Items',
-	'statistics' => 'Statistics',
-	'teleports' => 'Teleports',
-	'command' => 'Commands',
-	'creatures' => 'Creatures',
-	'player_map' => 'Player Map',
-	'irc' => 'IRC Applet',
-	'repair' => 'Repair/Optimize',
-	'game_object' => 'Game Objects',
 	'forums' => 'Forums',
-	'honor' => 'Honor Rankings',
+
 	'auctionhouse' => 'Auction House',
+	'arena_teams' => 'Arena Teams',
+	'guilds' => 'Guilds',
+	'honor' => 'Honor Rankings',
+	'statistics' => 'Statistics',
 	'events' => 'Events',
-	'statistics_on' => 'Online Statistics',
 	'instances' => 'Instances',
-	'top100' => 'TOP 100'
-	);
+	'top100' => 'TOP 100',
+	'player_map' => 'Player Map',
+
+	'accounts' => 'Accounts',
+	'characters' => 'Characters',
+	'command' => 'Commands',
+	'banned_list' => 'Banned List',
+	'mail' => 'Mail',
+	'tickets' => 'Tickets',
+	'teleports' => 'Teleports',
+	'cleanup' => 'Cleanup',
+	'ssh_line' => 'SSH line',
+	'run_sql_patch' => 'Run SQL Patch',
+	'add_motd' => 'Add MOTD',
+	'realm' => 'Realm',
+	'irc' => 'IRC Applet',
+	
+	'items' => 'Items',
+	'creatures' => 'Creatures',
+	'game_object' => 'Game Objects',
+	'backup' => 'Backup',
+	'repair' => 'Repair/Optimize',
+
+	'users' => 'Users',
+	'statistics_on' => 'Online Statistics',
+  );
+  return $lang_header;
+}
 
 $lang_footer = array(
 	// -----FOOTER.PHP -----

@@ -62,6 +62,7 @@ function search() {
  $result = $sql->query("SELECT count(*) FROM creature_template");
  $tot_items = $sql->result($result, 0);
  $sql->close();
+ unset($sql);
 
 
  $output .= "<center>
@@ -357,6 +358,7 @@ else
   $output .= "</table></center><br />";
 
  $sql->close();
+ unset($sql);
 }
 
 
@@ -1339,8 +1341,10 @@ else {
         </table></center>";
 
  $sql->close();
+ unset($sql);
  } else {
 		$sql->close();
+		unset($sql);
 		error($lang_creature['item_not_found']);
 		exit();
 		}

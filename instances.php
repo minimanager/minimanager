@@ -79,6 +79,7 @@ function do_search()
         <br />";
 
   $sql->close();
+  unset($sql);
 }
 
 

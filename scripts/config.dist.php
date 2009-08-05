@@ -320,6 +320,10 @@ $menu_array = Array
 );
 
 
-$debug = false; //set to true if full php debugging requierd.
+$debug = 0; // 0 - no debug, only fatal errors. 
+            // 1 - show total queries, mem usage, and only fatal errors.
+            // 2 - show total queries, mem usage, and all errors.
+            // 3 - show total queries, mem usage, all errors, and list of all global vars.
+            // 4 - show total queries, mem usage, all errors, list of all global vars, and values of all global vars.
 
 ?>

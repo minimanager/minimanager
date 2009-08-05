@@ -478,6 +478,7 @@ default:
 }
 
  $sql->close();
+ unset($sql);
 }
 
 
@@ -556,6 +557,7 @@ default:
 }
 
  $sql->close();
+ unset($sql);
 
  $output .= "<center>";
  if ($type == "guild") {

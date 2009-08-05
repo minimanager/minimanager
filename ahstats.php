@@ -142,6 +142,7 @@ LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` c2 ON `c2`.`guid`
 	$output .= "</tr>";
  }
  $sql->close();
+ unset($sql);
 
  $output .= "<tr><td colspan=\"7\" class=\"hidden\" align=\"right\">{$lang_auctionhouse['total_auctions']} : $all_record</td></tr>
    </table></center>";
@@ -321,7 +322,7 @@ $result = $sql->query("SELECT `characters`.`name` AS `seller`, `auctionhouse`.`i
 	$output .= "</tr>";
  }
  $sql->close();
-
+ unset($sql);
  $output .= "<tr><td colspan=\"7\" class=\"hidden\" align=\"right\">{$lang_auctionhouse['tot_found']} : $tot_found {$lang_global['limit']} : $sql_search_limit</td></tr>
    </table></center>";
 }
