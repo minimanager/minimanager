@@ -8,6 +8,7 @@
  * License: GNU General Public License v2(GPL)
  */
 
+
 if ( !ini_get('session.auto_start') )
   session_start();
 

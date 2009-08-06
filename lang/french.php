@@ -742,30 +742,36 @@ function lang_motd()
 {
   $lang_motd = array
   (
-  'post_motd' => 'Envoyer le message du jour',
-  'post_rules' => 'Attention: la longueur est limitée à 255 caractères.<br />Les tags HTML sont utilisables.',
-  'err_max_len' => 'Taille limite dépassée',
-  'add_motd' => 'Ajouter le message du jour'
+    'post_motd' => 'Envoyer le message du jour',
+    'post_rules' => 'Attention: la longueur est limitée à 255 caractères.<br />Les tags HTML sont utilisables.',
+    'err_max_len' => 'Taille limite dépassée',
+    'add_motd' => 'Ajouter le message du jour'
   );
   return $lang_motd;
 }
 
 
-$lang_run_patch = array(
-  // -----RUN_PATCH.PHP -----
-  'err_in_line' => 'Erreur de syntaxe SQL à la ligne n° ',
-  'run_sql_file_only' => 'N\'exécutez que des .sql ou .qbquery',
-  'file_not_found' => 'Fichier non trouvé !',
-  'select_sql_file' => 'Sélectionnez le fichier SQL à ouvrir',
-  'max_filesize' => 'Taille maximale du fichier',
-  'open' => 'Ouvrir',
-  'run_rules' => 'Les requêtes suivantes vont être exécutées.<br />Soyez sûrs que chaque ligne se finit par le symbole \'&#059\'.',
-  'select_db' => 'Choississez la base de données à utiliser par défaut',
-  'run_sql' => '+ EXECUTER LE SQL +',
-  'query_executed' => 'requêtes SQL exécutées avec succès.',
-  'no_query_found' => 'Pas de résultats retournés / Pas de requêtes trouvées.',
-  'run_patch' => 'Exécuter le patch SQL'
+// -----RUN_PATCH.PHP -----
+function lang_run_patch()
+{
+  $lang_run_patch = array
+  (
+    'err_in_line' => 'Erreur de syntaxe SQL à la ligne n° ',
+    'run_sql_file_only' => 'N\'exécutez que des .sql ou .qbquery',
+    'file_not_found' => 'Fichier non trouvé !',
+    'select_sql_file' => 'Sélectionnez le fichier SQL à ouvrir',
+    'max_filesize' => 'Taille maximale du fichier',
+    'open' => 'Ouvrir',
+    'run_rules' => 'Les requêtes suivantes vont être exécutées.<br />Soyez sûrs que chaque ligne se finit par le symbole \'&#059\'.',
+    'select_db' => 'Choississez la base de données à utiliser par défaut',
+    'run_sql' => 'EXECUTER LE SQL',
+    'query_executed' => 'requêtes SQL exécutées avec succès.',
+    'no_query_found' => 'Pas de résultats retournés / Pas de requêtes trouvées.',
+    'run_patch' => 'Exécuter le patch SQL'
   );
+  return $lang_run_patch;
+}
+
 
 
 // ----- SSH.PHP -----
@@ -773,59 +779,64 @@ function lang_ssh()
 {
   $lang_ssh = array
   (
-  'server_offline' => 'Le serveur SSH/Telnet semble hors ligne!',
-  'config_server_properly' => 'Vérifiez que vous avez configuré le serveur SSH/Telnet correctement, et qu\'il est actuellement actif'
+    'server_offline' => 'Le serveur SSH/Telnet semble hors ligne!',
+    'config_server_properly' => 'Vérifiez que vous avez configuré le serveur SSH/Telnet correctement, et qu\'il est actuellement actif'
   );
   return $lang_ssh;
 }
 
 
-$lang_realm = array(
-  // ----- REALM.PHP -----
-  'add_realm' => 'Ajouter un royaume',
-  'tot_realms' => 'Nombre total de royaumes',
-  'name' => 'Nom',
-  'address' => 'Adresse',
-  'port' => 'Port',
-  'icon' => 'Icône',
-  'color' => 'Couleur',
-  'timezone' => 'Fuseau horaire',
-  'edit_realm' => 'Editer les données du royaume',
-  'id' => 'Id',
-  'update' => 'Mise à jour des données',
-  'realm_id' => 'ID du royaume',
-  'err_deleting' => 'Erreur de suppression du royaume',
-  'update_executed' => 'Mise à jour effectuée avec succès!',
-  'update_err' => 'Erreur de mise à jour !<br />(aucun champ modifié ?)',
-  'realm_data' => 'Données du royaume',
-  'online' => 'En ligne',
-  'tot_char' => 'Total de personnages',
-  'delete' => 'Effacer le royaume',
-  'normal' => 'Normal',
-  'pvp' => 'PVP',
-  'rp' => 'RP',
-  'rppvp' => 'RPPVP',
-  'ffapvp' => 'FFAPVP',
-  'development' => 'Dévellopement',
-  'united_states' => 'Américain',
-  'oceanic' => 'Océanie',
-  'latin_america' => 'Amérique latine',
-  'tournament' => 'Tournois',
-  'korea' => 'Coréen',
-  'english' => 'Anglais',
-  'german' => 'Allemand',
-  'french' => 'Français',
-  'spanish' => 'Espagnol',
-  'russian' => 'Russe',
-  'taiwan' => 'Taiwanais',
-  'china' => 'Chinois',
-  'test_server' => 'Serveur de test',
-  'qa_server' => 'QA Server',
-  'others' => 'Others',
-  'conf_from_file' => '** Ce monde ne semble pas avoir une configuration correcte dans le fichier config.php.<br />Soyez certain de le configurer correctement avant d\'utiliser sous CMS.',
-  'offline' => 'Hors Ligne',
-  'status' => 'Status'
+// ----- REALM.PHP -----
+function lang_realm()
+{
+  $lang_realm = array
+  (
+    'add_realm' => 'Ajouter un royaume',
+    'tot_realms' => 'Nombre total de royaumes',
+    'name' => 'Nom',
+    'address' => 'Adresse',
+    'port' => 'Port',
+    'icon' => 'Icône',
+    'color' => 'Couleur',
+    'timezone' => 'Fuseau horaire',
+    'edit_realm' => 'Editer les données du royaume',
+    'id' => 'Id',
+    'update' => 'Mise à jour des données',
+    'realm_id' => 'ID du royaume',
+    'err_deleting' => 'Erreur de suppression du royaume',
+    'update_executed' => 'Mise à jour effectuée avec succès!',
+    'update_err' => 'Erreur de mise à jour !<br />(aucun champ modifié ?)',
+    'realm_data' => 'Données du royaume',
+    'online' => 'En ligne',
+    'tot_char' => 'Total de personnages',
+    'delete' => 'Effacer le royaume',
+    'normal' => 'Normal',
+    'pvp' => 'PVP',
+    'rp' => 'RP',
+    'rppvp' => 'RPPVP',
+    'ffapvp' => 'FFAPVP',
+    'development' => 'Dévellopement',
+    'united_states' => 'Américain',
+    'oceanic' => 'Océanie',
+    'latin_america' => 'Amérique latine',
+    'tournament' => 'Tournois',
+    'korea' => 'Coréen',
+    'english' => 'Anglais',
+    'german' => 'Allemand',
+    'french' => 'Français',
+    'spanish' => 'Espagnol',
+    'russian' => 'Russe',
+    'taiwan' => 'Taiwanais',
+    'china' => 'Chinois',
+    'test_server' => 'Serveur de test',
+    'qa_server' => 'QA Server',
+    'others' => 'Others',
+    'conf_from_file' => '** Ce monde ne semble pas avoir une configuration correcte dans le fichier config.php.<br />Soyez certain de le configurer correctement avant d\'utiliser sous CMS.',
+    'offline' => 'Hors Ligne',
+    'status' => 'Status'
   );
+  return $lang_realm;
+}
 
 
 // ----- TICKET.PHP -----
@@ -4102,6 +4113,93 @@ function lang_top()
   'online' => 'En ligne'
   );
   return $lang_top;
+}
+
+
+function lang_forum()
+{
+  global $minfloodtime;
+
+  $lang_forum = Array
+  (
+    // BBCode you can replace this by images off course
+    "image" => "Image",
+    "url" => "Lien",
+    "url2" => "Lien avec alias",
+    "bold" => "Gras",
+    "italic" => "Italique",
+    "underline" => "Souligner",
+    "code" => "Code",
+    "quote" => "Citation",
+    "quote2" => "Citation avec nom",
+    "wrote" => "a écrit",
+    "color" => "Couleur",
+    "media" => "Media",
+    "YouTube" => "YouTube",
+
+    // forum_index
+    "forums" => "Forums",
+    "forum_index" => "Page d'accueil",
+    "you_are_here" => "Vous êtes ici",
+    "last_post_by" => "Dernier envoi par",
+    "in" => "dans",
+    "no_topics" => "Sans sujet...",
+    "topics" => "Sujets",
+
+    // view_forum
+    "no_such_forum" => "Mauvaise requete : Pas dans un tel forum",
+    "no_access" => "Mauvaise requete : Vous n'avez pas acces à ces données",
+    "new_topic" => "Nouveau sujet",
+    "annoucement" => "Annonce",
+    "sticky" => "Postit",
+    "pages" => "Pages",
+    "title" => "Titre du sujet",
+    "author" => "Auteur",
+    "pages" => "Pages",
+    "replies" => "Réponses",
+    "last_post" => "Dernier envoi",
+    "closed" => "Fermé",
+
+    // view_topic
+    "no_such_topic" => "Mauvaise requete : Pas de tels sujets",
+    "info" => "Info",
+    "text" => "Texte",
+    "yes" => "Oui",
+    "no" => "Non",
+    "at" => "Le",
+    "move" => "Envoyer",
+    "edit" => "Editer",
+    "delete" => "Supprimer",
+    "post" => "Envoyer",
+    "open" => "Ouvrir",
+    "close" => "Fermé",
+    "quick_reply" => "Réponse rapide",
+    "down" => "Bas",
+    "up" => "Haut",
+    "normal" => "Normale",
+
+    // delete_post
+    "delete_topic" => "Voulez-vous vraiment supprimer ce sujet et tous les messages s'y rapportant?",
+    "delete_post" => "Voulez-vous vraiment supprimer ce post?",
+    "back" => "Retour",
+    "confirm" => "Confirmer",
+
+    // add_topic
+    "topic_name" => "Nom du sujet",
+    "please_wait" => "Attendre svp $minfloodtime secondes avant de poster à nouveau.",
+
+    // do_add_topic
+    "name_too_long" => "Nom du sujet trop long!",
+    "name_too_short" => "Nom du sujet trop court!",
+    "msg_too_short" => "Message trop court!",
+
+    // edit_post
+    "no_such_post" => "Mauvaise requete : Pas de tel post",
+
+    // move_topic
+    "where" => "Ou voulez-vous envoyer ce sujet?"
+  );
+  return $lang_forum;
 }
 
 ?>

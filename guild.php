@@ -516,15 +516,15 @@ switch ($err)
     break;
   case 4:
     $output .= "
-          <h1>{$lang_guild['guild_search_result']}:</h1>";
+          <h1><font class=\"error\">{$lang_guild['guild_search_result']}:</font></h1>";
     break;
   case 5:
     $output .= "
-          <h1>{$lang_global['err_invalid_input']}:</h1>";
+          <h1><font class=\"error\">{$lang_global['err_invalid_input']}:</h1>";
     break;
   case 6:
     $output .= "
-          <h1>{$lang_global['err_no_permission']}:</h1>";
+          <h1><font class=\"error\">{$lang_global['err_no_permission']}:</font></h1>";
     break;
   default: //no error
     $output .= "

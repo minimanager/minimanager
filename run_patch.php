@@ -8,16 +8,16 @@
  * License: GNU General Public License v2(GPL)
  */
 
+
 require_once("header.php");
 valid_login($action_permission['delete']);
-
 
 //#####################################################################################################
 // DO UPLOAD/SUBMIT PATCH
 //#####################################################################################################
 function print_upload()
 {
-  global $lang_run_patch, $output, $realm_db, $world_db, $characters_db;
+  global $lang_run_patch, $output, $realm_db, $world_db, $characters_db, $mmfpm_db;
 
   if (isset($_FILES["uploaded_file"]["name"]))
   {
@@ -29,9 +29,9 @@ function print_upload()
     }
     else
       error($lang_run_patch['file_not_found']);
-   }
-   else
-     $buffer = "";
+  }
+  else
+    $buffer = "";
 
   $upload_max_filesize=ini_get("upload_max_filesize");
   if (eregi("([0-9]+)K",$upload_max_filesize,$tempregs))
@@ -44,30 +44,51 @@ function print_upload()
           {$lang_run_patch['select_sql_file']} :<br />
           {$lang_run_patch['max_filesize']} $upload_max_filesize bytes(".round ($upload_max_filesize/1024/1024)." Mbytes)<br />
           <table class=\"hidden\">
-			<tr><td>";
-	$output .= "<form enctype=\"multipart/form-data\" action=\"run_patch.php?action=print_upload\" method=\"post\" name=\"form\">
-				<input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"$upload_max_filesize\" />
-				<input type=\"file\" name=\"uploaded_file\" /></form></td><td>";
-					makebutton($lang_run_patch['open'], "javascript:do_submit()",100);
-	$output .= "</td></tr>
-			</table><hr />
-			<form action=\"run_patch.php?action=do_run_patch\" method=\"post\" name=\"form1\">
-				<table class=\"hidden\">
-				<tr>
-				 <td align=\"left\">{$lang_run_patch['run_rules']}</td>
-				 <td align=\"right\">{$lang_run_patch['select_db']}:
-				 <select name=\"use_db\">";
-	 foreach ($world_db as $db) $output .= "<option value=\"{$db['name']}\">{$db['name']}</option>";
-	 foreach ($characters_db as $db) $output .= "<option value=\"{$db['name']}\">{$db['name']}</option>";
-	 $output .= "<option value=\"{$realm_db['name']}\">{$realm_db['name']}</option>
-				 </select>
-				</td></tr>
-				<tr><td colspan=\"2\"><textarea name=\"query\" rows=\"14\" cols=\"93\">$buffer</textarea></td></tr>
-				<tr><td colspan=\"2\">";
-		makebutton($lang_run_patch['run_sql'], "javascript:do_submit('form1',0)",200);
-		 $output .= "</td></tr>
-					</table>
-				</form></center><br />";
+            <tr>
+              <td>";
+  $output .= "
+                <form enctype=\"multipart/form-data\" action=\"run_patch.php?action=print_upload\" method=\"post\" name=\"form\">
+                  <input type=\"hidden\" name=\"MAX_FILE_SIZE\" value=\"$upload_max_filesize\" />
+                  <input type=\"file\" name=\"uploaded_file\" />
+                </form>
+              </td>
+              <td>";
+                makebutton($lang_run_patch['open'], "javascript:do_submit()",130);
+  $output .= "
+              </td>
+            </tr>
+          </table>
+          <hr />
+          <form action=\"run_patch.php?action=do_run_patch\" method=\"post\" name=\"form1\">
+            <table class=\"hidden\">
+              <tr>
+                <td align=\"left\">{$lang_run_patch['run_rules']}</td>
+                <td align=\"right\">{$lang_run_patch['select_db']}:
+                  <select name=\"use_db\">";
+  foreach ($world_db as $db)
+    $output .= "
+                    <option value=\"{$db['name']}\">{$db['name']}</option>";
+  foreach ($characters_db as $db)
+    $output .= "
+                    <option value=\"{$db['name']}\">{$db['name']}</option>";
+  $output .= "
+                    <option value=\"{$realm_db['name']}\">{$realm_db['name']}</option>
+                    <option value=\"{$mmfpm_db['name']}\">{$mmfpm_db['name']}</option>
+                  </select>
+                </td>
+              </tr>
+              <tr><td colspan=\"2\"><textarea name=\"query\" rows=\"14\" cols=\"93\">$buffer</textarea></td></tr>
+              <tr>
+                <td colspan=\"2\">";
+                  makebutton($lang_run_patch['run_sql'], "javascript:do_submit('form1',0)\" type=\"wrn",130);
+  $output .= "
+                </td>
+              </tr>
+            </table>
+          </form>
+        </center>
+";
+
 }
 
 
@@ -131,6 +152,7 @@ function do_run_patch()
   }
 
 $sql->close();
+unset($sql);
 
 if ($queries)
   redirect("run_patch.php?error=2&tot=$good");
@@ -146,6 +168,9 @@ $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
 $output .= "
         <div class=\"top\">";
+
+$lang_run_patch = lang_run_patch();
+
 switch ($err)
 {
   case 1:
@@ -168,6 +193,9 @@ switch ($err)
     $output .= "
           <h1>{$lang_run_patch['run_patch']}</h1>";
 }
+
+unset($err);
+
 $output .= "
         </div>";
 
@@ -182,5 +210,10 @@ switch ($action)
     print_upload();
 }
 
+unset($action);
+unset($action_permission);
+unset($lang_run_patch);
+
 require_once("footer.php");
+
 ?>

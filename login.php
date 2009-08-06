@@ -93,22 +93,18 @@ function login()
             <form method=\"post\" action=\"login.php?action=dologin\" name=\"form\" onsubmit=\"return dologin()\">
               <input type=\"hidden\" name=\"pass\" value=\"\" maxlength=\"256\" />
               <table class=\"hidden\">
-                <tr align=\"left\">
-                  <td colspan=\"2\">{$lang_login['username']}:</td>
-                </tr>
-                <tr align=\"left\">
-                  <td colspan=\"2\"><input type=\"text\" name=\"user\" size=\"40\" maxlength=\"16\" /></td>
-                </tr>
-                <tr align=\"left\">
-                  <td colspan=\"2\">{$lang_login['password']}:</td>
-                </tr>
-                <tr align=\"left\">
-                  <td><input type=\"password\" name=\"login_pass\" size=\"24\" maxlength=\"40\" /></td>
-                  <td><input type=\"submit\" value=\"\" style=\"display:none\" />";
-                    makebutton($lang_login['login'], "javascript:dologin()",100);
-  $output .= "
+                <tr>
+                  <td>
+                    <hr />
                   </td>
+                </tr>
+                <tr align=\"right\">
+                  <td>{$lang_login['username']} : <input type=\"text\" name=\"user\" size=\"24\" maxlength=\"16\" /></td>
+                </tr>
+                <tr align=\"right\">
+                  <td>{$lang_login['password']} : <input type=\"password\" name=\"login_pass\" size=\"24\" maxlength=\"40\" /></td>
                 </tr>";
+
   $sql = new SQL;
   $link = $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
   $result = $sql->query("SELECT id,name FROM `realmlist` LIMIT 10");
@@ -116,8 +112,8 @@ function login()
   if ($sql->num_rows($result) > 1 && (count($server) >1))
   {
     $output .= "
-                <tr align=\"left\">
-                  <td colspan=\"2\">{$lang_login['select_realm']} :
+                <tr align=\"right\">
+                  <td>{$lang_login['select_realm']} :
                     <select name=\"realm\">";
     while ($realm = $sql->fetch_row($result))
       if(isset($server[$realm[0]]))
@@ -127,25 +123,45 @@ function login()
                     </select>
                   </td>
                 </tr>";
-    }
-    else
-      $output .= "
+  }
+  else
+    $output .= "
                 <input type=\"hidden\" name=\"realm\" value=\"".$sql->result($result, 0, 'id')."\" />";
-    $sql->close();
-    $output .= "
-                <tr align=\"left\">";
-    if ($remember_me_checked)
-      $output .= "
-                  <td colspan=\"2\"><input type=\"checkbox\" name=\"remember\" value=\"1\" checked=\"checked\" /> - {$lang_login['remember_me']}</td>";
-    else
-      $output .= "
-                  <td colspan=\"2\"><input type=\"checkbox\" name=\"remember\" value=\"1\" /> - {$lang_login['remember_me']}</td>";
-    $output .= "
+  $sql->close();
+  unset($sql);
+  $output .= "
+                <tr>
+                  <td>
+                  </td>
                 </tr>
-                <tr><td colspan=\"2\"><hr /></td></tr>
-                <tr align=\"left\">
-                  <td><a href=\"register.php\">{$lang_login['not_registrated']}</a></td>
+                <tr align=\"right\">";
+  if ($remember_me_checked)
+    $output .= "
+                  <td>{$lang_login['remember_me']} : <input type=\"checkbox\" name=\"remember\" value=\"1\" checked=\"checked\" /></td>";
+  else
+    $output .= "
+                  <td>{$lang_login['remember_me']} : <input type=\"checkbox\" name=\"remember\" value=\"1\" /></td>";
+  $output .= "
+                </tr>
+                <tr>
+                  <td>
+                  </td>
+                </tr>
+                <tr align=\"right\">
+                  <td width=\"290\">
+                    <input type=\"submit\" value=\"\" style=\"display:none\" />";
+                    makebutton($lang_login['not_registrated'], "register.php\" type=\"wrn",130);
+                    makebutton($lang_login['login'], "javascript:dologin()\" type=\"def",130);
+  $output .= "
+                  </td>
+                </tr>
+                <tr align=\"center\">
                   <td><a href=\"register.php?action=pass_recovery\">{$lang_login['pass_recovery']}</a></td>
+                </tr>
+                <tr>
+                  <td>
+                    <hr />
+                  </td>
                 </tr>
               </table>
               <script type=\"text/javascript\">

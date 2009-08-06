@@ -57,7 +57,7 @@ function lang_login()
   'login' => 'Login',
   'username' => 'Username',
   'password' => 'Password',
-  'not_registrated' => 'Not registered?',
+  'not_registrated' => 'Register',
   'bad_pass_user' => 'Invalid Username and/or Password!',
   'missing_pass_user' => 'Missing Username and/or Password!',
   'banned_acc' => 'Account Banned, Please contact Server Administrator',
@@ -66,7 +66,7 @@ function lang_login()
   'enter_valid_logon' => 'Please enter valid Username and Password:',
   'select_realm' => 'Select Realm',
   'remember_me' => 'Remember Me',
-  'pass_recovery' => 'Lost Password?',
+  'pass_recovery' => 'Forgot Your Password?',
   'after_registration' => 'Your account creation was successful!'
   );
   return $lang_login;
@@ -627,6 +627,7 @@ function lang_char_list()
   'no_chars_del' => 'No Characters deleted!<br />Permission Error?<br />Online Characters cannot be deleted.',
   'online' => 'Online',
   'race' => 'Race',
+  'search_results' => 'Search Result',
   'tot_chars' => 'Total Characters',
   'total' => 'Total',
   'zone' => 'Zone',
@@ -741,30 +742,35 @@ function lang_motd()
 {
   $lang_motd = array
   (
-  'post_motd' => 'Post Message of the Day',
-  'post_rules' => 'Notice: the length is limited to 255 chars.<br />HTML tags are usable.',
-  'err_max_len' => 'Max. length limit Exceeded',
-  'add_motd' => 'Add Message of the Day'
+    'post_motd' => 'Post Message of the Day',
+    'post_rules' => 'Notice: the length is limited to 255 chars.<br />HTML tags are usable.',
+    'err_max_len' => 'Max. length limit Exceeded',
+    'add_motd' => 'Add Message of the Day'
   );
   return $lang_motd;
 }
 
 
-$lang_run_patch = array(
-  // -----RUN_PATCH.PHP -----
-  'err_in_line' => 'SQL syntax error in query number ',
-  'run_sql_file_only' => 'You may only run .sql or .qbquery files.',
-  'file_not_found' => 'File Not Found!',
-  'select_sql_file' => 'Select SQL File to Open',
-  'max_filesize' => 'Max. Filesize',
-  'open' => 'Open',
-  'run_rules' => 'The following query(s) will be executed.<br />Make sure each query line ends with \'&#059\' sign.',
-  'select_db' => 'Select DB to be used by Default',
-  'run_sql' => '+++++ Run SQL +++++',
-  'query_executed' => 'SQL Query(s) Executed Successfully.',
-  'no_query_found' => 'Zero Result Returned / Non queries Found.',
-  'run_patch' => 'Run SQL Patch'
+// -----RUN_PATCH.PHP -----
+function lang_run_patch()
+{
+  $lang_run_patch = array
+  (
+    'err_in_line' => 'SQL syntax error in query number ',
+    'run_sql_file_only' => 'You may only run .sql or .qbquery files.',
+    'file_not_found' => 'File Not Found!',
+    'select_sql_file' => 'Select SQL File to Open',
+    'max_filesize' => 'Max. Filesize',
+    'open' => 'Open',
+    'run_rules' => 'The following query(s) will be executed.<br />Make sure each query line ends with \'&#059\' sign.',
+    'select_db' => 'Select DB to be used by Default',
+    'run_sql' => 'Run SQL',
+    'query_executed' => 'SQL Query(s) Executed Successfully.',
+    'no_query_found' => 'Zero Result Returned / Non queries Found.',
+    'run_patch' => 'Run SQL Patch'
   );
+  return $lang_run_patch;
+}
 
 
 // ----- SSH.PHP -----
@@ -779,52 +785,57 @@ function lang_ssh()
 }
 
 
-$lang_realm = array(
-  // ----- REALM.PHP -----
-  'add_realm' => 'Add Realm',
-  'tot_realms' => 'Total Realms',
-  'name' => 'Name',
-  'address' => 'Address',
-  'port' => 'Port',
-  'icon' => 'Icon',
-  'color' => 'Color',
-  'timezone' => 'Time Zone',
-  'edit_realm' => 'Edit Realm Data',
-  'id' => 'ID',
-  'update' => 'Update Data',
-  'realm_id' => 'Realm id',
-  'err_deleting' => 'Error Deleting Realm',
-  'update_executed' => 'Update action success!',
-  'update_err' => 'Update action Error!<br />Non of the fields changed?',
-  'realm_data' => 'Realm Data',
-  'online' => 'Online',
-  'tot_char' => 'Total Characters',
-  'delete' => 'Delete Realm',
-  'normal' => 'Normal',
-  'pvp' => 'PVP',
-  'rp' => 'RP',
-  'rppvp' => 'RPPVP',
-  'ffapvp' => 'FFAPVP',
-  'development' => 'Development',
-  'united_states' => 'United States',
-  'oceanic' => 'Oceanic',
-  'latin_america' => 'Latin America',
-  'tournament' => 'Tournament',
-  'korea' => 'Korea',
-  'english' => 'English',
-  'german' => 'German',
-  'french' => 'French',
-  'spanish' => 'Spanish',
-  'russian' => 'Russian',
-  'taiwan' => 'Taiwan',
-  'china' => 'China',
-  'test_server' => 'Test Server',
-  'qa_server' => 'QA Server',
-  'others' => 'Others',
-  'conf_from_file' => '** This realm appear not to have proper configuration in config.php file.<br />Make sure to properly configure it before using under CMS.',
-  'offline' => 'Offline',
-  'status' => 'Status'
+// ----- REALM.PHP -----
+function lang_realm()
+{
+  $lang_realm = array
+  (
+    'add_realm' => 'Add Realm',
+    'tot_realms' => 'Total Realms',
+    'name' => 'Name',
+    'address' => 'Address',
+    'port' => 'Port',
+    'icon' => 'Icon',
+    'color' => 'Color',
+    'timezone' => 'Time Zone',
+    'edit_realm' => 'Edit Realm Data',
+    'id' => 'ID',
+    'update' => 'Update Data',
+    'realm_id' => 'Realm id',
+    'err_deleting' => 'Error Deleting Realm',
+    'update_executed' => 'Update action success!',
+    'update_err' => 'Update action Error!<br />Non of the fields changed?',
+    'realm_data' => 'Realm Data',
+    'online' => 'Online',
+    'tot_char' => 'Total Characters',
+    'delete' => 'Delete Realm',
+    'normal' => 'Normal',
+    'pvp' => 'PVP',
+    'rp' => 'RP',
+    'rppvp' => 'RPPVP',
+    'ffapvp' => 'FFAPVP',
+    'development' => 'Development',
+    'united_states' => 'United States',
+    'oceanic' => 'Oceanic',
+    'latin_america' => 'Latin America',
+    'tournament' => 'Tournament',
+    'korea' => 'Korea',
+    'english' => 'English',
+    'german' => 'German',
+    'french' => 'French',
+    'spanish' => 'Spanish',
+    'russian' => 'Russian',
+    'taiwan' => 'Taiwan',
+    'china' => 'China',
+    'test_server' => 'Test Server',
+    'qa_server' => 'QA Server',
+    'others' => 'Others',
+    'conf_from_file' => '** This realm appear not to have proper configuration in config.php file.<br />Make sure to properly configure it before using under CMS.',
+    'offline' => 'Offline',
+    'status' => 'Status'
   );
+  return $lang_realm;
+}
 
 
 // ----- TICKET.PHP -----
@@ -4101,6 +4112,93 @@ function lang_top()
   'online' => 'Online'
   );
   return $lang_top;
+}
+
+
+function lang_forum()
+{
+  global $minfloodtime;
+
+  $lang_forum = Array
+  (
+    // BBCode you can replace this by images off course
+    "image" => "Image",
+    "url" => "Link",
+    "url2" => "Link with alias",
+    "bold" => "Bold",
+    "italic" => "Italic",
+    "underline" => "Underline",
+    "code" => "Code",
+    "quote" => "Quote",
+    "quote2" => "Quote with name",
+    "wrote" => "wrote",
+    "color" => "Color",
+    "media" => "Media",
+    "YouTube" => "YouTube",
+
+    // forum_index
+    "forums" => "Forums",
+    "forum_index" => "Forum Index",
+    "you_are_here" => "You are here",
+    "last_post_by" => "Last post by",
+    "in" => "in",
+    "no_topics" => "No topics...",
+    "topics" => "Topics",
+
+    // view_forum
+    "no_such_forum" => "Bad request : No such forum",
+    "no_access" => "Bad request : You have no access to this content",
+    "new_topic" => "New topic",
+    "annoucement" => "Annoucement",
+    "sticky" => "Sticky",
+    "pages" => "Pages",
+    "title" => "Topic Title",
+    "author" => "Author",
+    "pages" => "Pages",
+    "replies" => "Replies",
+    "last_post" => "Last Post",
+    "closed" => "Closed",
+
+    // view_topic
+    "no_such_topic" => "Bad request : No such topic",
+    "info" => "Info",
+    "text" => "Text",
+    "yes" => "Yes",
+    "no" => "No",
+    "at" => "at",
+    "move" => "Move",
+    "edit" => "Edit",
+    "delete" => "Delete",
+    "post" => "Post",
+    "open" => "Open",
+    "close" => "Close",
+    "quick_reply" => "Quick Reply Form",
+    "down" => "Down",
+    "up" => "Up",
+    "normal" => "Normal",
+
+    // delete_post
+    "delete_topic" => "Do you really want to delete this topic and all his sub-messages?",
+    "delete_post" => "Do you really want to delete this post?",
+    "back" => "Back",
+    "confirm" => "Confirm",
+
+    // add_topic
+    "topic_name" => "Topic name",
+    "please_wait" => "Please wait $minfloodtime seconds before posting again.",
+
+    // do_add_topic
+    "name_too_long" => "Topic name too long!",
+    "name_too_short" => "Topic name too short!",
+    "msg_too_short" => "Too short message!",
+
+    // edit_post
+    "no_such_post" => "Bad request : No such post",
+
+    // move_topic
+    "where" => "Where do you want to move this topic?",
+  );
+  return $lang_forum;
 }
 
 ?>
