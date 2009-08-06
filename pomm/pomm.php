@@ -1,17 +1,17 @@
 <?php
 ob_start("ob_gzhandler");
 /* 90
-	POMM  v1.3
-	Player Online Map for MangOs
+  POMM  v1.3
+  Player Online Map for MangOs
 
-	Show online players position on map. Update without refresh.
-	Show tooltip with location, race, class and level of player.
-	Show realm status.
+  Show online players position on map. Update without refresh.
+  Show tooltip with location, race, class and level of player.
+  Show realm status.
 
-	16.09.2006		http://pomm.da.ru/
-	
-	Created by mirage666 (c) (mailto:mirage666@pisem.net icq# 152263154)
-	2006-2009 Modified by killdozer.
+  16.09.2006    http://pomm.da.ru/
+
+  Created by mirage666 (c) (mailto:mirage666@pisem.net icq# 152263154)
+  2006-2009 Modified by killdozer.
 */
 
 require_once "pomm_conf.php";
@@ -24,200 +24,200 @@ if (test_realm()) $point=$img_base."realm_on.gif"; else $point=$img_base."realm_
 <style type="text/css">
 <!--
 body {
-	margin-left: 0px;
-	margin-top: 0px;
-	margin-right: 0px;
-	margin-bottom: 0px;
-	color: #EABA28;
-	background-color: #000000;
+  margin-left: 0px;
+  margin-top: 0px;
+  margin-right: 0px;
+  margin-bottom: 0px;
+  color: #EABA28;
+  background-color: #000000;
 }
 #world {
-	position: absolute;
-	height: 732px;
-	width: 966px;
-	left: 50%;
-	margin-left: -483px;
-	background-image: url(<?php echo $img_base ?>azeroth.jpg);
-	z-index: 10;
+  position: absolute;
+  height: 732px;
+  width: 966px;
+  left: 50%;
+  margin-left: -483px;
+  background-image: url(<?php echo $img_base ?>azeroth.jpg);
+  z-index: 10;
 }
 #outland {
-	visibility: hidden;
-	position: absolute;
-	height: 732px;
-	width: 966px;
-	left: 50%;
-	margin-left: -483px;
-	background-image: url(<?php echo $img_base ?>outland.jpg);
-	z-index: 5;
+  visibility: hidden;
+  position: absolute;
+  height: 732px;
+  width: 966px;
+  left: 50%;
+  margin-left: -483px;
+  background-image: url(<?php echo $img_base ?>outland.jpg);
+  z-index: 5;
 }
 #northrend {
-	visibility: hidden;
-	position: absolute;
-	height: 732px;
-	width: 966px;
-	left: 50%;
-	margin-left: -483px;
-	background-image: url(<?php echo $img_base ?>northrend.jpg);
-	z-index: 3;
+  visibility: hidden;
+  position: absolute;
+  height: 732px;
+  width: 966px;
+  left: 50%;
+  margin-left: -483px;
+  background-image: url(<?php echo $img_base ?>northrend.jpg);
+  z-index: 3;
 }
 #pointsOldworld {
-	position: absolute;
-	height: 732px;
-	width: 966px;
-	left: 50%;
-	margin-left: -483px;
-	z-index: 100;
+  position: absolute;
+  height: 732px;
+  width: 966px;
+  left: 50%;
+  margin-left: -483px;
+  z-index: 100;
 }
 #pointsOutland {
-	visibility: hidden;
-	position: absolute;
-	height: 732px;
-	width: 966px;
-	left: 50%;
-	margin-left: -483px;
-	z-index: 90;
+  visibility: hidden;
+  position: absolute;
+  height: 732px;
+  width: 966px;
+  left: 50%;
+  margin-left: -483px;
+  z-index: 90;
 }
 #pointsNorthrend {
-	visibility: hidden;
-	position: absolute;
-	height: 732px;
-	width: 966px;
-	left: 50%;
-	margin-left: -483px;
-	z-index: 80;
+  visibility: hidden;
+  position: absolute;
+  height: 732px;
+  width: 966px;
+  left: 50%;
+  margin-left: -483px;
+  z-index: 80;
 }
 #wow {
-	position: absolute;
-	height: 732px;
-	width: 966px;
-	left: 50%;
-	margin-left: -483px;
-	z-index: 20;
-	text-align: center;
-	clear: none;
-	float: none;
+  position: absolute;
+  height: 732px;
+  width: 966px;
+  left: 50%;
+  margin-left: -483px;
+  z-index: 20;
+  text-align: center;
+  clear: none;
+  float: none;
 }
 #info {
-	position: absolute;
-	height: 20px;
-	width: 966px;
-	left: 50%;
-	margin-left: -483px;
-	z-index: 30;
-	text-align: center;
+  position: absolute;
+  height: 20px;
+  width: 966px;
+  left: 50%;
+  margin-left: -483px;
+  z-index: 30;
+  text-align: center;
 }
 #info_bottom {
-	position: absolute;
-	height: 20px;
-	width: 966px;
-	left: 50%;
-	margin-top: 711px;
-	margin-left: -483px;
-	z-index: 120;
-	text-align: center;
+  position: absolute;
+  height: 20px;
+  width: 966px;
+  left: 50%;
+  margin-top: 711px;
+  margin-left: -483px;
+  z-index: 120;
+  text-align: center;
 }
 #timer {
-	font-family: arial;
-	font-size: 12px;
-	font-style: normal;
-	text-align: center;
-	font-weight: bold;
-	color: #E7CF07;
-	filter: Glow(Color=#000099, Strength=3);
+  font-family: arial;
+  font-size: 12px;
+  font-style: normal;
+  text-align: center;
+  font-weight: bold;
+  color: #E7CF07;
+  filter: Glow(Color=#000099, Strength=3);
 }
 #server_info {
-	font-family: Georgia, "Times New Roman", Times, serif;
-	font-size: 12px;
-	font-style: italic;
-	text-align: center;
-	font-weight: bold;
-	color: #FFFF99;
-	filter: Glow(Color=0, Strength=3);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 12px;
+  font-style: italic;
+  text-align: center;
+  font-weight: bold;
+  color: #FFFF99;
+  filter: Glow(Color=0, Strength=3);
 }
 #serverstatus {
-	visibility: <?php echo $show_status ? 'visible' : 'hidden'?>;
-	position: absolute;
-	height: 26px;
-	width: 966px;
-	margin-left: -483px;
-	left: 50%;
-	top: 97px;
-	text-align: center;
-	z-index: 25;
+  visibility: <?php echo $show_status ? 'visible' : 'hidden'?>;
+  position: absolute;
+  height: 26px;
+  width: 966px;
+  margin-left: -483px;
+  left: 50%;
+  top: 97px;
+  text-align: center;
+  z-index: 25;
 }
 #tip {
-	border: 0px solid #aaaaaa;
-	left: -1000px;
-	padding: 0px;
-	position: absolute;
-	top: -1000px;
-	z-index: 150;
+  border: 0px solid #aaaaaa;
+  left: -1000px;
+  padding: 0px;
+  position: absolute;
+  top: -1000px;
+  z-index: 150;
 }
 #must_login {
-	visibility: hidden;
-	position: absolute;
-	height: 20px;
-	width: 966px;
-	left: 50%;
-	margin-left: -483px;
-	margin-top: 358px;
-	text-align: center;
-	padding: 0px;
-	z-index: 140;
-} 
+  visibility: hidden;
+  position: absolute;
+  height: 20px;
+  width: 966px;
+  left: 50%;
+  margin-left: -483px;
+  margin-top: 358px;
+  text-align: center;
+  padding: 0px;
+  z-index: 140;
+}
 .statustext {
-	font-weight: normal;
-	color: #EABA28;
-	font-family: verdana, arial, sans-serif, helvetica;
-	font-size: 12px;
-	font-style: normal;
-	text-align: center;
-	padding: 0px;
-	background-image: url(<?php echo $img_base ?>status.gif);
+  font-weight: normal;
+  color: #EABA28;
+  font-family: verdana, arial, sans-serif, helvetica;
+  font-size: 12px;
+  font-style: normal;
+  text-align: center;
+  padding: 0px;
+  background-image: url(<?php echo $img_base ?>status.gif);
 }
 .tip_header {
-	background: #bb0000;
-	FONT-WEIGHT: bold;
-	color: #FFFFFF;
-	font-family: arial, helvetica, sans-serif;
-	font-size: 12px;
-	font-style: normal;
-	text-align: center;
-	padding: 0px;
+  background: #bb0000;
+  FONT-WEIGHT: bold;
+  color: #FFFFFF;
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  text-align: center;
+  padding: 0px;
 }
 .tip_head_text {
-	background: rgb(50,50,50);
-	FONT-WEIGHT: bold;
-	color: #DDDD33;
-	font-family: arial, helvetica, sans-serif;
-	font-size: 12px;
-	font-style: normal;
-	text-align: left;
-	padding: 0px;
+  background: rgb(50,50,50);
+  FONT-WEIGHT: bold;
+  color: #DDDD33;
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  text-align: left;
+  padding: 0px;
 }
 .tip_text {
-	background: #000000;
-	FONT-WEIGHT: normal;
-	color: #ffffff;
-	font-family: arial, helvetica, sans-serif;
-	font-size: 12px;
-	font-style: normal;
-	text-align: center;
-	padding: 0px;
+  background: #000000;
+  FONT-WEIGHT: normal;
+  color: #ffffff;
+  font-family: arial, helvetica, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  text-align: center;
+  padding: 0px;
 }
 .tip_worldinfo {
-	FONT-WEIGHT: normal;
-	color: #FFFF99;
-	font-family: Georgia, arial, helvetica, sans-serif;
-	font-size: 12px;
-	font-style: normal;
-	text-align: left;
-	padding: 0px;
+  FONT-WEIGHT: normal;
+  color: #FFFF99;
+  font-family: Georgia, arial, helvetica, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  text-align: left;
+  padding: 0px;
 }
 -->
 </style>
 </HEAD>
-<script language="JavaScript" src="JsHttpRequest/Js.js"></script>
+<script language="JavaScript" type=\"text/javascript\" src="JsHttpRequest/Js.js"></script>
 <SCRIPT LANGUAGE="javascript" TYPE="text/javascript">
 
 var current_map = 0;
@@ -236,15 +236,15 @@ var instances_x = new Array();
 var instances_y = new Array();
 
 instances_x[0] = {
-	2:0,13:0,17:0,30:762,33:712,34:732,35:732,36:712,37:0,43:245,44:0,47:238,48:172,70:833,90:738,
-	109:849,129:254,150:0,169:0,189:773,209:269,229:782,230:778,249:290,269:315,289:816,309:782,329:834, 
-	349:123,369:745,389:313,409:783,429:164,449:741,450:305,451:0,469:778,489:244,509:160,529:820,531:144,532:798,534:317,560:320,568:897,580:868,585:883,595:322
+  2:0,13:0,17:0,30:762,33:712,34:732,35:732,36:712,37:0,43:245,44:0,47:238,48:172,70:833,90:738,
+  109:849,129:254,150:0,169:0,189:773,209:269,229:782,230:778,249:290,269:315,289:816,309:782,329:834,
+  349:123,369:745,389:313,409:783,429:164,449:741,450:305,451:0,469:778,489:244,509:160,529:820,531:144,532:798,534:317,560:320,568:897,580:868,585:883,595:322
 }
 
 instances_y[0] = {
-	2:0,13:0,17:0,30:278,33:295,34:511,35:503,36:567,37:0,43:419,44:0,47:508,48:291,70:443,90:419,
-	109:551,129:516,150:0,169:0,189:216,209:568,229:481,230:484,249:514,269:601,289:258,309:589,329:203, 
-	349:432,369:497,389:348,409:484,429:496,449:508,450:352,451:0,469:480,489:364,509:607,529:321,531:603,532:569,534:596,560:606,568:172,580:26,585:16,595:601
+  2:0,13:0,17:0,30:278,33:295,34:511,35:503,36:567,37:0,43:419,44:0,47:508,48:291,70:443,90:419,
+  109:551,129:516,150:0,169:0,189:216,209:568,229:481,230:484,249:514,269:601,289:258,309:589,329:203,
+  349:432,369:497,389:348,409:484,429:496,449:508,450:352,451:0,469:480,489:364,509:607,529:321,531:603,532:569,534:596,560:606,568:172,580:26,585:16,595:601
 }
 
 instances_x[1] = { 540:593,542:586,543:593,544:588,545:393,546:399,547:388,548:399,550:683,552:680,553:672,554:669,555:495,556:506,557:495,558:483,562:443,564:740,565:485 }
@@ -324,17 +324,17 @@ function get_tipxy(tip_width, tip_height, x1, y1)
     ht = document.body.clientHeight;
   }
   if(x1+tip_width+15 < wd)
-	tipxy.x = x1+15;
+  tipxy.x = x1+15;
   else if(x1-tip_width-15 > 0)
-	tipxy.x = x1-tip_width-15;
+  tipxy.x = x1-tip_width-15;
   else
-	tipxy.x = wd/2-tip_width/2;
+  tipxy.x = wd/2-tip_width/2;
   if(y1+tip_height-5 < ht)
-	tipxy.y = y1-5;
+  tipxy.y = y1-5;
   else if(ht-tip_height-5 > 0)
-	tipxy.y = ht-tip_height-5;
+  tipxy.y = ht-tip_height-5;
   else
-	tipxy.y = 5;
+  tipxy.y = 5;
   //tipxy.x += getBodyScrollLeft();
   //tipxy.y += getBodyScrollTop();
   return tipxy;
@@ -389,8 +389,8 @@ function tip(object, type, onClick)
   var tipxy;
   t=document.getElementById("tip");
   if(window.opera)
-  { 
-    pointx=window.event.clientX; 
+  {
+    pointx=window.event.clientX;
     pointy=window.event.clientY;
   }
   else if(navigator.appName=="Netscape")
@@ -403,9 +403,9 @@ function tip(object, type, onClick)
     }
   }
   else
-  { 
-    pointx=window.event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft; 
-    pointy=window.event.clientY + document.documentElement.scrollTop + document.body.scrollTop; 
+  {
+    pointx=window.event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
+    pointy=window.event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
   }
   switch(type)
   {
@@ -430,17 +430,17 @@ function tip(object, type, onClick)
       tipxy = get_tipxy(t.offsetWidth, t.offsetHeight, pointx, pointy);
       break;
   }
-  t.style.left=tipxy.x + "px"; 
+  t.style.left=tipxy.x + "px";
   t.style.top=tipxy.y + "px";
-} 
+}
 
-function h_tip() { 
-  var t; 
-  t=document.getElementById("tip"); 
-  t.innerHTML=""; 
-  t.style.left="-1000px"; 
-  t.style.top="-1000px"; 
-} 
+function h_tip() {
+  var t;
+  t=document.getElementById("tip");
+  t.innerHTML="";
+  t.style.left="-1000px";
+  t.style.top="-1000px";
+}
 
 function get_player_position(x,y,m)
 {
