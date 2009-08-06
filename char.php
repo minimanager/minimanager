@@ -689,21 +689,21 @@ function char_inv()
   if (!is_numeric($id))
     $id = 0;
 
-  $result = $sql->query("SELECT account FROM `characters` WHERE guid = $id LIMIT 1");
+  $result = $sql->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1) AS UNSIGNED) AS gold FROM `characters` WHERE guid = $id LIMIT 1");
 
   if ($sql->num_rows($result))
   {
+    $char = $sql->fetch_row($result);
+
     $owner_acc_id = $sql->result($result, 0, 'account');
     $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    $query = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$owner_acc_id'");
-    $owner_gmlvl = $sql->result($query, 0, 'gmlevel');
-    $owner_name = $sql->result($query, 0, 'username');
+    $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+    $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
+    $owner_name = $sql->result($result, 0, 'username');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
       $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-      $result = $sql->query("SELECT name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1), SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1), mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id");
-      $char = $sql->fetch_row($result);
       $result = $sql->query("SELECT ci.bag,ci.slot,ci.item,ci.item_template, SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 15), ' ', -1) as stack_count FROM character_inventory ci INNER JOIN item_instance ii on ii.guid = ci.item WHERE ci.guid = $id ORDER BY ci.bag,ci.slot");
 
       $bag = array
@@ -793,7 +793,7 @@ function char_inv()
             </ul>
           </div>
           <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[0])." - ".get_player_race($char[1])." ".get_player_class($char[2])." (lvl {$char[4]})
+            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /> - lvl ".get_level_with_color($char[4])."</font>
             <br \>
             <br \>
             <table class=\"lined\" style=\"width: 700px;\">
@@ -912,9 +912,9 @@ function char_inv()
                       <div style=\"width:25px;margin:-21px 0px 0px 17px;font-size:14px\">$item[2]</div>
                     </div>";
       }
-      $money_gold = (int)($char[3]/10000);
-      $money_silver = (int)(($char[3]-$money_gold*10000)/100);
-      $money_cooper = (int)($char[3]-$money_gold*10000-$money_silver*100);
+      $money_gold = (int)($char[6]/10000);
+      $money_silver = (int)(($char[6]-$money_gold*10000)/100);
+      $money_cooper = (int)($char[6]-$money_gold*10000-$money_silver*100);
       $output .= "
                   </div>
                   <div style=\"text-align:right;width:168px;background-image:none;background-color:#393936;padding:2px;\">
