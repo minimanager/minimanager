@@ -762,7 +762,7 @@ function lang_run_patch()
     'select_sql_file' => 'Select SQL File to Open',
     'max_filesize' => 'Max. Filesize',
     'open' => 'Open',
-    'run_rules' => 'The following query(s) will be executed.<br />Make sure each query line ends with \'&#059\' sign.',
+    'run_rules' => 'The following query(s) will be executed.<br />Make sure each query line ends with \'&#059;\' sign.',
     'select_db' => 'Select DB to be used by Default',
     'run_sql' => 'Run SQL',
     'query_executed' => 'SQL Query(s) Executed Successfully.',
@@ -4059,8 +4059,8 @@ function lang_events()
     'total' => 'Total',
     'descr' => 'Event name',
     'start' => 'First Starting Time',
-    'occur' => 'Occurance<br><small>days/hours',
-    'length' => 'Length<br><small>days/hours',
+    'occur' => 'Occurance<br /><small>days/hours</small>',
+    'length' => 'Length<br /><small>days/hours</small>',
     'events' => 'Events',
   );
   return $lang_events;

@@ -85,7 +85,7 @@ function top100()
     $money_silver = (int)(($char[13]-$money_gold*10000)/100);
     $money_cooper = (int)($char[13]-$money_gold*10000-$money_silver*100);
 
-    $money = $money_gold."<img src=\"./img/gold.gif\" /> ".$money_silver."<img src=\"./img/silver.gif\" /> ".$money_cooper."<img src=\"./img/copper.gif\" /> ";
+    $money = $money_gold."<img src=\"./img/gold.gif\" alt=\"gold\" /> ".$money_silver."<img src=\"./img/silver.gif\" alt=\"silver\" /> ".$money_cooper."<img src=\"./img/copper.gif\" alt=\"copper\" /> ";
 
     $days = floor(round($char[5] / 3600)/24);
     $hours = round($char[5] / 3600) - ($days * 24);
@@ -103,14 +103,14 @@ function top100()
     $CHAR_RACE = id_get_char_race();
     $CHAR_RANK = id_get_char_rank();
     $output .= "
-            <tr valign=top>
+            <tr valign='top'>
               <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
-              <td><img src='img/c_icons/{$char[2]}-{$char[12]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-              <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+              <td><img src='img/c_icons/{$char[2]}-{$char[12]}.gif' alt=\"".get_player_race($char[2])."\" onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+              <td><img src='img/c_icons/{$char[3]}.gif' alt=\"".get_player_class($char[3])."\" onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
               <td>".get_level_with_color($char[9])."</td>
               <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[11]\">".htmlentities($guild_name[0])."</a></td>
               <td>$money</td>
-              <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[7])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[7],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
+              <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[7])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[7],$CHAR_RACE[$char[2]][1]).".gif' alt=\"\"></img></span></td>
               <td>$char[7]</td>
               <td>$char[8]</td>
               <td>$char[10]</td>

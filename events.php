@@ -55,10 +55,10 @@ function do_search()
           </table>
           <table class=\"lined\">
             <tr>
-               <th width=\"35%\"><a href=\"events.php?order_by=description&amp;start=$start&amp;dir=$dir\">".($order_by=='description' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_events['descr']}</a></th>
-               <th width=\"25%\"><a href=\"events.php?order_by=start_time&amp;start=$start&amp;dir=$dir\">".($order_by=='start_time' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_events['start']}</a></th>
-               <th width=\"20%\"><a href=\"events.php?order_by=occurence&amp;start=$start&amp;dir=$dir\">".($order_by=='occurence' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_events['occur']}</a></th>
-               <th width=\"20%\"><a href=\"events.php?order_by=length&amp;start=$start&amp;dir=$dir\">".($order_by=='length' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_events['length']}</a></th>
+               <th width=\"35%\"><a href=\"events.php?order_by=description&amp;start=$start&amp;dir=$dir\">".($order_by=='description' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_events['descr']}</a></th>
+               <th width=\"25%\"><a href=\"events.php?order_by=start_time&amp;start=$start&amp;dir=$dir\">".($order_by=='start_time' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_events['start']}</a></th>
+               <th width=\"20%\"><a href=\"events.php?order_by=occurence&amp;start=$start&amp;dir=$dir\">".($order_by=='occurence' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_events['occur']}</a></th>
+               <th width=\"20%\"><a href=\"events.php?order_by=length&amp;start=$start&amp;dir=$dir\">".($order_by=='length' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_events['length']}</a></th>
             </tr>";
   while ($events = $sql->fetch_row($result))
   {
@@ -89,8 +89,8 @@ function do_search()
       $event_duration .= " hours";
     }
     $output .= "
-            <tr valign=top>
-              <td align=left>$events[0]</td>
+            <tr valign='top'>
+              <td align='left'>$events[0]</td>
               <td>".$events[1]."</td>
               <td>$event_occurance</td>
               <td>$event_duration</td>

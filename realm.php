@@ -157,8 +157,8 @@ function edit_realm()
           <fieldset class=\"half_frame\">
             <legend>{$lang_realm['edit_realm']}</legend>
             <form method=\"get\" action=\"realm.php\" name=\"form\">
-              <input type=\"hidden\" name=\"action\" value=\"doedit_realm\">
-              <input type=\"hidden\" name=\"id\" value=\"$id\">
+              <input type=\"hidden\" name=\"action\" value=\"doedit_realm\" />
+              <input type=\"hidden\" name=\"id\" value=\"$id\" />
               <table class=\"flat\">
                 <tr>
                   <td>{$lang_realm['id']}</td>
@@ -220,6 +220,7 @@ function edit_realm()
                   <td>";
       $output .= (test_port($server[$realm[0]]['addr'],$server[$realm[0]]['game_port'])) ? $lang_realm['online'] : $lang_realm['offline'];
       $output .= "
+                  </td>
                 </tr>
                 <tr>
                   <td>{$lang_realm['tot_char']}</td>

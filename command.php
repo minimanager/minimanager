@@ -115,7 +115,7 @@ function update_commands()
   $output .= "
         <center>
           <form method=\"get\" action=\"command.php\" name=\"form\">
-            <input type=\"hidden\" name=\"action\" value=\"doupdate\">
+            <input type=\"hidden\" name=\"action\" value=\"doupdate\" />
               <table class=\"lined\" style=\"width: 720px;\">
                 <tr>
                   <th width=\"1%\"></th>";
@@ -139,8 +139,8 @@ function update_commands()
       $output .= "
                   <td><input type=\"radio\" name=\"change[".$commands[$i]."]\" value=\"".$j."\"";
       if ($check[$commands[$i]]==$j)
-        $output .= "checked=\"checked\"";
-      $output .= "></td>";
+        $output .= " checked=\"checked\"";
+      $output .= " /></td>";
     }
     $output .="</tr>";
   }

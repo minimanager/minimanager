@@ -5,8 +5,8 @@
   print "
       </div>
       <div id=\"body_buttom\">
-        <table class=\"table_buttom\">
-          <center>
+        <center>
+          <table class=\"table_buttom\">
             <tr>
               <td class=\"table_buttom_left\"></td>
               <td class=\"table_buttom_middle\">";
@@ -45,9 +45,10 @@
               </td>
               <td class=\"table_buttom_right\"></td>
             </tr>
-          </center>
-        </table>
-        <br />";
+          </table>
+        </center>
+        <br />
+";
   if($debug > 2)
   {
     echo "

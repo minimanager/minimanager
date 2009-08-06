@@ -33,15 +33,15 @@ function add_motd()
               </tr>
               <tr>
                 <td colspan=\"3\">
-                <textarea id=\"msg\" name=\"msg\" rows=\"10\" cols=\"80\"></textarea>
-              </td>
+                  <textarea id=\"msg\" name=\"msg\" rows=\"10\" cols=\"80\"></textarea>
+                </td>
               </tr>
               <tr>
                 <td>{$lang_motd['post_rules']}</td>
                 <td>";
                   makebutton($lang_motd['post_motd'], "javascript:do_submit()\" type=\"wrn",220);
   $output .= "
-                <td/>
+                </td>
                 <td>";
                   makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
   $output .= "
@@ -98,7 +98,7 @@ function edit_motd()
                 <td>";
                   makebutton($lang_motd['post_motd'], "javascript:do_submit()\" type=\"wrn",220);
   $output .= "
-                <td/>
+                </td>
                 <td>";
                   makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
   $output .= "

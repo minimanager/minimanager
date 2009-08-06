@@ -138,7 +138,7 @@ function browse_tele()
             <tr>";
     if($user_lvl >= $action_permission['delete'])
       $output .= "
-              <td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$data[1]}</font> <br /> ' + question, del_tele + $data[0]);\" style=\"cursor:pointer;\" /></td>";
+              <td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: &lt;font color=white&gt;{$data[1]}&lt;/font&gt;&lt;br /&gt; ' + question, del_tele + $data[0]);\" style=\"cursor:pointer;\" /></td>";
     $output .= "
               <td>$data[0]</td>
               <td>";
@@ -298,7 +298,7 @@ function edit_tele()
                <tr>
                  <td>";
     if($user_lvl >= $action_permission['delete'])
-      makebutton($lang_tele['delete_tele'], "#\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$tele[1]}</font> <br /> {$lang_global['are_you_sure']}', 'tele.php?action=del_tele&amp;id=$id');\" type=\"wrn",130);
+      makebutton($lang_tele['delete_tele'], "#\" onclick=\"answerBox('{$lang_global['delete']}: &lt;font color=white&gt;{$tele[1]}&lt;/font&gt; &lt;br /&gt; {$lang_global['are_you_sure']}', 'tele.php?action=del_tele&amp;id=$id');\" type=\"wrn",130);
     $output .= "
                  </td>
                  <td>";
@@ -392,7 +392,7 @@ function add_tele()
   $map_query = $sql->query("SELECT id, name01 from dbc_map order by id");
   while ($map = $sql->fetch_row($map_query))
     $output .= "
-                    <option value=\"{$map[0]}\">{$map[0]} : {$map[1]}</option>";
+                      <option value=\"{$map[0]}\">{$map[0]} : {$map[1]}</option>";
   unset($map);
   unset($map_query);
   $sql->close();

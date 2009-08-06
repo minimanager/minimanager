@@ -762,7 +762,7 @@ function lang_run_patch()
     'select_sql_file' => 'Sélectionnez le fichier SQL à ouvrir',
     'max_filesize' => 'Taille maximale du fichier',
     'open' => 'Ouvrir',
-    'run_rules' => 'Les requêtes suivantes vont être exécutées.<br />Soyez sûrs que chaque ligne se finit par le symbole \'&#059\'.',
+    'run_rules' => 'Les requêtes suivantes vont être exécutées.<br />Soyez sûrs que chaque ligne se finit par le symbole \'&#059;\'.',
     'select_db' => 'Choississez la base de données à utiliser par défaut',
     'run_sql' => 'EXECUTER LE SQL',
     'query_executed' => 'requêtes SQL exécutées avec succès.',

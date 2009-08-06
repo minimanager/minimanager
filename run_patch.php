@@ -97,7 +97,7 @@ function print_upload()
 //#####################################################################################################
 function do_run_patch()
 {
-  global $lang_run_patch, $output, $world_db, $realm_db, $characters_db;
+  global $lang_run_patch, $output, $world_db, $realm_db, $characters_db, $mmfpm_db;
 
   if (empty($_POST['query']) || empty($_POST['use_db']))
     redirect("run_patch.php?error=1");
@@ -110,6 +110,8 @@ function do_run_patch()
 
   if ($use_db == $realm_db['name'])
     $sql->db($realm_db['name']);
+  elseif ($use_db == $mmfpm_db['name'])
+    $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   else
   {
     foreach ($world_db as $db)

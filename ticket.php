@@ -78,8 +78,8 @@ function browse_tickets()
           </table>";
   $output .= "
           <form method=\"get\" action=\"ticket.php\" name=\"form\">
-            <input type=\"hidden\" name=\"action\" value=\"delete_tickets\">
-            <input type=\"hidden\" name=\"start\" value=\"$start\">
+            <input type=\"hidden\" name=\"action\" value=\"delete_tickets\" />
+            <input type=\"hidden\" name=\"start\" value=\"$start\" />
             <table class=\"lined\">
               <tr>";
   if($user_lvl >= $action_permission['delete'])
@@ -90,12 +90,12 @@ function browse_tickets()
                 <th width=\"7%\">{$lang_global['edit']}</th>";
   if ($server_type)
     $output .="
-                <th width=\"10%\"><a href=\"ticket.php?order_by=guid&amp;start=$start&amp;dir=$dir\">".($order_by=='guid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_ticket['id']}</a></th>
-                <th width=\"16%\"><a href=\"ticket.php?order_by=playerGuid&amp;start=$start&amp;dir=$dir\">".($order_by=='playerGuid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_ticket['sender']}</a></th>";
+                <th width=\"10%\"><a href=\"ticket.php?order_by=guid&amp;start=$start&amp;dir=$dir\">".($order_by=='guid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_ticket['id']}</a></th>
+                <th width=\"16%\"><a href=\"ticket.php?order_by=playerGuid&amp;start=$start&amp;dir=$dir\">".($order_by=='playerGuid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_ticket['sender']}</a></th>";
   else
     $output .="
-                <th width=\"10%\"><a href=\"ticket.php?order_by=ticket_id&amp;start=$start&amp;dir=$dir\">".($order_by=='ticket_id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_ticket['id']}</a></th>
-                <th width=\"16%\"><a href=\"ticket.php?order_by=guid&amp;start=$start&amp;dir=$dir\">".($order_by=='guid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_ticket['sender']}</a></th>";
+                <th width=\"10%\"><a href=\"ticket.php?order_by=ticket_id&amp;start=$start&amp;dir=$dir\">".($order_by=='ticket_id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_ticket['id']}</a></th>
+                <th width=\"16%\"><a href=\"ticket.php?order_by=guid&amp;start=$start&amp;dir=$dir\">".($order_by=='guid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_ticket['sender']}</a></th>";
   $output .="
                 <th width=\"60%\">{$lang_ticket['ticket_text']}</th>
               </tr>";
