@@ -37,19 +37,20 @@ function id_get_char_faction()
 
 function id_get_char_race()
 {
+  global $lang_id_tab;
   $CHAR_RACE =
     array
     (
-       1 => array('Human', 0),
-       2 => array('Orc', 1),
-       3 => array('Dwarf', 0),
-       4 => array('Mightelf', 0),
-       5 => array('Undead', 1),
-       6 => array('Tauren', 1),
-       7 => array('Gnome', 0),
-       8 => array('Troll', 1),
-      10 => array('Bloodelf', 1),
-      11 => array('Draenei', 0)
+       1 => array($lang_id_tab['human'], 0),
+       2 => array($lang_id_tab['orc'], 1),
+       3 => array($lang_id_tab['dwarf'], 0),
+       4 => array($lang_id_tab['nightelf'], 0),
+       5 => array($lang_id_tab['undead'], 1),
+       6 => array($lang_id_tab['tauren'], 1),
+       7 => array($lang_id_tab['gnome'], 0),
+       8 => array($lang_id_tab['troll'], 1),
+      10 => array($lang_id_tab['bloodelf'], 1),
+      11 => array($lang_id_tab['draenei'], 0)
     );
    return $CHAR_RACE;
 }
@@ -150,6 +151,7 @@ function get_zone_name($id)
 //get player class by its id
 function get_player_class($id)
 {
+  global $lang_id_tab;
   //global $mmfpm_db;
   //$sql = new SQL;
   //$sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
@@ -160,16 +162,16 @@ function get_player_class($id)
 
   $class = Array
   (
-    1  => array(1, 'Warrior',"",""),
-    2  => array(2, 'Paladin',"",""),
-    3  => array(3, 'Hunter',"",""),
-    4  => array(4, 'Rogue',"",""),
-    5  => array(5, 'Priest',"",""),
-    6  => array(6, 'Death Knight',"",""),
-    7  => array(7, 'Shaman',"",""),
-    8  => array(8, 'Mage',"",""),
-    9  => array(9, 'Warlock',"",""),
-    11 => array(11,'Druid',"","")
+    1  => array(1,$lang_id_tab['warrior'],"",""),
+	2  => array(2,$lang_id_tab['paladin'],"",""),
+	3  => array(3,$lang_id_tab['hunter'],"",""),
+	4  => array(4,$lang_id_tab['rogue'],"",""),
+	5  => array(5,$lang_id_tab['priest'],"",""),
+	6  => array(6,$lang_id_tab['death_knight'],"",""),
+	7  => array(7,$lang_id_tab['shaman'],"",""),
+	8  => array(8,$lang_id_tab['mage'],"",""),
+	9  => array(9,$lang_id_tab['warlock'],"",""),
+	11 => array(11,$lang_id_tab['druid'],"","")
   );
   return $class[$id][1];
 }
