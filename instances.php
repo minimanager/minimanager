@@ -89,6 +89,12 @@ function do_search()
   }
   $output .= "
             <tr>
+              <td colspan=\"5\" class=\"hidden\" align=\"right\" width=\"25%\">";
+  $output .= generate_pagination("instances.php?order_by=$order_by&amp;dir=".(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
+  $output .= "
+              </td>
+            </tr>
+            <tr>
               <td colspan=\"5\" class=\"hidden\" align=\"right\">{$lang_instances['total']} : $all_record</td>
             </tr>
           </table>

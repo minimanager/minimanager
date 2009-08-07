@@ -299,7 +299,6 @@ function browse_chars()
                 <th width=\"1%\">{$lang_global['country']}</th>";
   $output .="
               </tr>";
-  unset($start); unset($dir); unset($search_value); unset($search_by);
 
   $looping = ($this_page < $itemperpage) ? $this_page : $itemperpage;
 
@@ -370,7 +369,12 @@ function browse_chars()
   unset($result);
 
   $output .= "
-
+              <tr>
+                <td colspan=\"13\" align=\"right\" class=\"hidden\" width=\"25%\">";
+  $output .= generate_pagination("char_list.php?action=browse_chars&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
+  $output .= "
+                </td>
+              </tr>
               <tr>
                 <td colspan=\"6\" align=\"left\" class=\"hidden\">";
   if (($user_lvl >= $action_permission['delete'])||($owner_acc_name == $user_name))

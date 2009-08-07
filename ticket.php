@@ -70,7 +70,7 @@ function browse_tickets()
         <center>
           <table class=\"top_hidden\">
             <tr>
-              <td>";
+              <td width=\"25%\" align=\"right\">";
   $output .= generate_pagination("ticket.php?action=browse_tickets&amp;order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
   $output .= "
               </td>
@@ -118,7 +118,12 @@ function browse_tickets()
   unset($query);
   unset($ticket);
   $output .= "
-              <tr><td colspan=\"12\" class=\"hidden\"><br /></td></tr>
+              <tr>
+                <td colspan=\"5\" align=\"right\" class=\"hidden\" width=\"25%\">";
+  $output .= generate_pagination("ticket.php?action=browse_tickets&amp;order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
+  $output .= "
+                </td>
+              </tr>
               <tr>
                 <td colspan=\"3\" align=\"left\" class=\"hidden\">";
   if($user_lvl >= $action_permission['delete'])

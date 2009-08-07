@@ -159,28 +159,35 @@ $lang_register = array(
   'referrer_not_found' => 'Unfortunately the specified account was not found in our database.<br/>Please ensure you have entered a valid account name or leave the &quot;Invited by&quot;-field blank.',
   );
 
-$lang_index = array(
-  // ----- INDEX.PHP -----
-  'realm' => 'Realm',
-  'online' => 'Online',
-  'offline_or_let_high' => 'Offline or Latency too High',
-  'add_motd' => 'Add Message of the Day',
-  'delete' => 'Delete',
-  'tot_users_online' => 'Total Users Online',
-  'name' => 'Name',
-  'race' => 'Race',
-  'class' => 'Class',
-  'level' => 'Level',
-  'map' => 'Map',
-  'zone' => 'Zone',
-  'rank' => 'Rank',
-  'honor_kills' => 'H.K',
-  'latency' => 'Latency',
-  'a_latency' => 'Average Latency',
-  'guild' => 'Guild',
-  'trinity_rev' => 'Trinity Rev',
-  'using_db' => 'using db'
+
+// ----- INDEX.PHP -----
+function lang_index()
+{
+  $lang_index = array
+  (
+    'realm' => 'Realm',
+    'online' => 'Online',
+    'offline_or_let_high' => 'Offline or Latency too High',
+    'add_motd' => 'Add Message of the Day',
+    'delete' => 'Delete',
+    'tot_users_online' => 'Total Users Online',
+    'name' => 'Name',
+    'race' => 'Race',
+    'class' => 'Class',
+    'level' => 'Level',
+    'map' => 'Map',
+    'zone' => 'Zone',
+    'rank' => 'Rank',
+    'honor_kills' => 'H.K',
+    'latency' => 'Latency',
+    'a_latency' => 'Average Latency',
+    'guild' => 'Guild',
+    'trinity_rev' => 'Trinity Rev',
+    'using_db' => 'using db'
   );
+  return $lang_index;
+}
+
 
 // ----- HEADER.PHP -----
 function lang_header()
@@ -745,7 +752,8 @@ function lang_motd()
     'post_motd' => 'Post Message of the Day',
     'post_rules' => 'Notice: the length is limited to 255 chars.<br />HTML tags are usable.',
     'err_max_len' => 'Max. length limit Exceeded',
-    'add_motd' => 'Add Message of the Day'
+    'add_motd' => 'Add Message of the Day',
+    'edit_motd' => 'Edit Message of the Day',
   );
   return $lang_motd;
 }

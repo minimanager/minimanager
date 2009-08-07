@@ -166,9 +166,10 @@ $get_icons_from_web         = false; //wherever to get icons from the web in cas
 //---- New account creation Options ----
 
 $disable_acc_creation  = false;     // true = Do not allow new accounts to be created
-$expansion_select      = true;      // true = Shows option to select expansion or classic False = no option, WOTLK enabled by default
+$expansion_select      = true;      // true = Shows option to select expansion or classic. (false = no option, WOTLK enabled by default)
 $defaultoption         = 2;         // if the above is false then set what the default option will be (2 = WOTLK, 1 = TBC, 0 = Classic)
 $enable_captcha        = false;     // false = no security image check (enable for protection against 'bot' registrations)
+                                    // captcha needs php GD & FreeType Library support
 $send_mail_on_creation = false;     // true = send mail at account creation.
 $create_acc_locked     = 0;         // if set to '1' newly created accounts will be made locked to registered IP, disallowing user to login from other IPs.
 $validate_mail_host    = false;     // actualy make sure the mail host provided in email is valid/accessible host.
@@ -199,9 +200,29 @@ $showcountryflag     = true;
 $css_template        = "Sulfur";    // file/folder name of css tamplate to use from templates directory by default
 $language            = "english";   // default site language
 $timezone            = "UTC";       // default timezone (use your local timezone code)
-$gm_online           = "1";         // display GM Characters in the Online Character List (1 = enable, 0 = disable)
-$gm_online_count     = "1";         // include GM Characters in the Online User Count (1 = enable, 0 = disable)
+$gm_online           = "1";         // display GM Characters in the Online Character List and Player Map (1 = enable, 0 = disable)
+$gm_online_count     = "1";         // include GM Characters in the Online User Count and Player Map (1 = enable, 0 = disable)
 $motd_display_poster = "1";         // display the poserter info in the MOTD (1 = enable, 0 = disable)
+
+
+//#############################################################################
+//---- Player Map configuration ----
+
+// GM online options
+$map_gm_show_online_only_gmoff     = 0; // show GM point only if in '.gm off' [1/0]
+$map_gm_show_online_only_gmvisible = 0; // show GM point only if in '.gm visible on' [1/0]
+$map_gm_add_suffix                 = 1; // add '{GM}' to name [1/0]
+$map_status_gm_include_all         = 1; // include 'all GMs in game'/'who on map' [1/0]
+
+// status window options:
+$map_show_status = 1;                   // show server status window [1/0]
+$map_show_time   = 1;                   // Show autoupdate timer 1 - on, 0 - off
+$map_time        = 24;                  // Map autoupdate time (seconds), 0 - not update.
+
+// all times set in msec (do not set time < 1500 for show), 0 to disable.
+$map_time_to_show_uptime    = 3000;     // time to show uptime string
+$map_time_to_show_maxonline = 3000;     // time to show max online
+$map_time_to_show_gmonline  = 3000;     // time to show GM online
 
 
 //#############################################################################
@@ -241,11 +262,11 @@ $gm_level_arr =
 //#############################################################################
 // ---- Module and Security settings ----
 // --   Meaning of the columns : TARGET, LANG_TEXT, ( READ/VIEW , INSERT , UPDATE , DELETE ) min Permission GM LEVEL
-// --   Files excluded for this : Login.php, Pomm.php 
+// --   Files excluded for this : Login.php, Pomm.php
 // --   - Both files don't use header.php, so we can't include this method.. but its not a big deal
 //
 // --   - Updates will follow
-// -- 
+// --
 // --   Example: array("item.php", 'items',0,1,2,3),
 // --    level 0 can only view and search,
 // --    level 1 can add new items but cannot edit,
@@ -272,7 +293,7 @@ $menu_array = Array
     array("events.php", 'events',0,5,5,5),           // new security system implemented
     array("instances.php", 'instances',0,5,5,5),     // new security system implemented
     array("top100.php", 'top100',0,5,5,5),           // new security system implemented
-    array("javascript:void(0);\" onclick=\"window.open('./pomm/pomm.php?realmid=".(empty($_SESSION)?"":$_SESSION['realm_id'])."', 'pomm', 'Toolbar=0, Location=0, Directories=0, Status=0, Menubar=0, Scrollbar=0, Resizable=0, Copyhistory=1, Width=966, Height=732')", 'player_map',0,5,5,5),
+    array("javascript:void(0);\" onclick=\"window.open('./map/', 'map', 'toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=no, resizable=no, copyhistory=1, width=966, height=732')", 'player_map',0,5,5,5),
   ),
 ),
   array("#", 'tools', array
@@ -312,7 +333,7 @@ $menu_array = Array
     array("char.php", 'character',0,5,5,5),          // new security system implemented
     array("char_edit.php", 'char_edit',0,5,5,5),     // new security system implemented
     array("edit.php", 'MyAccount',0,5,5,5),          // new security system implemented
-    array("index.php", 'Startpage',0,5,5,5),
+    array("index.php", 'Startpage',0,5,5,5),         // new security system implemented
     array("stat_on.php", 'statistics',0,5,5,5),      // new security system implemented
     array("realm.php", 'realm',0,5,5,5),             // this last one is special, if this is not here, users are unable to switch realms
   ),                                                 // if READ is set to level 3, only level 3 and above can switch realms.
@@ -320,7 +341,7 @@ $menu_array = Array
 );
 
 
-$debug = 0; // 0 - no debug, only fatal errors. 
+$debug = 0; // 0 - no debug, only fatal errors.
             // 1 - show total queries, mem usage, and only fatal errors.
             // 2 - show total queries, mem usage, and all errors.
             // 3 - show total queries, mem usage, all errors, and list of all global vars.

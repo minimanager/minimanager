@@ -205,7 +205,7 @@ function browse_guilds()
   }
   $output .= "
                 <tr>
-                  <td colspan=\"6\" class=\"hidden\" align=\"right\">".generate_pagination("guild.php?action=brows_guilds&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start)."</td>
+                  <td colspan=\"6\" class=\"hidden\" align=\"right\"  width=\"25%\">".generate_pagination("guild.php?action=brows_guilds&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start)."</td>
                 </tr>
                 <tr>
                   <td colspan=\"6\" class=\"hidden\" align=\"right\">{$lang_guild['tot_guilds']} : $all_record</td>

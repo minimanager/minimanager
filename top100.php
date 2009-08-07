@@ -52,7 +52,6 @@ function top100()
               </td>
               <td align=\"right\" width=\"30%\">";
   $output .= generate_pagination("top100.php?order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
-  unset($all_record);
   $output .= "
               </td>
             </tr>
@@ -119,8 +118,15 @@ function top100()
             </tr>";
   }
   $output .= "
-            </table>
-          </center>
+            </tr>
+              <td colspan=\"12\" class=\"hidden\" align=\"right\" width=\"30%\">";
+    $output .= generate_pagination("top100.php?order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
+    unset($all_record);
+    $output .= "
+              </td>
+            </tr>
+          </table>
+        </center>
 ";
 
   $sql->close();

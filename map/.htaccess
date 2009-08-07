@@ -1,0 +1,7 @@
+#UTF8
+AddDefaultCharset utf8
+<IfModule mod_charset.c>
+    CharsetDisable on
+    CharsetRecodeMultipartForms Off
+</IfModule>
+php_value default_charset UTF-8

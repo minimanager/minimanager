@@ -1,232 +1,224 @@
 <?php
-ob_start("ob_gzhandler");
 /* 90
-  POMM  v1.3
-  Player Online Map for MangOs
+    POMM  v1.3
+    Player Online Map for MangOs
 
-  Show online players position on map. Update without refresh.
-  Show tooltip with location, race, class and level of player.
-  Show realm status.
+    Show online players position on map. Update without refresh.
+    Show tooltip with location, race, class and level of player.
+    Show realm status.
 
-  16.09.2006    http://pomm.da.ru/
+    16.09.2006      http://pomm.da.ru/
 
-  Created by mirage666 (c) (mailto:mirage666@pisem.net icq# 152263154)
-  2006-2009 Modified by killdozer.
+    Created by mirage666 (c) (mailto:mirage666@pisem.net icq# 152263154)
+    2006-2009 Modified by killdozer.
 */
 
 require_once "pomm_conf.php";
-require_once "lang_".$lang.".php";
+require_once "func.php";
 
-if (test_realm()) $point=$img_base."realm_on.gif"; else $point=$img_base."realm_off.gif";
+if (file_exists("map_".$lang.".php") && file_exists("zone_names_".$lang.".php"))
+  require_once "map_".$lang.".php";
+else
+  require_once "map_english.php";
+
+
 ?>
 <HTML><HEAD><title>'<?php echo $realm_name ?>' - online map</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <style type="text/css">
 <!--
 body {
-  margin-left: 0px;
-  margin-top: 0px;
-  margin-right: 0px;
-  margin-bottom: 0px;
-  color: #EABA28;
-  background-color: #000000;
+    margin-left: 0px;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    color: #EABA28;
+    background-color: #000000;
 }
 #world {
-  position: absolute;
-  height: 732px;
-  width: 966px;
-  left: 50%;
-  margin-left: -483px;
-  background-image: url(<?php echo $img_base ?>azeroth.jpg);
-  z-index: 10;
+    position: absolute;
+    height: 732px;
+    width: 966px;
+    left: 50%;
+    margin-left: -483px;
+    background-image: url(<?php echo $img_base ?>azeroth.jpg);
+    z-index: 10;
 }
 #outland {
-  visibility: hidden;
-  position: absolute;
-  height: 732px;
-  width: 966px;
-  left: 50%;
-  margin-left: -483px;
-  background-image: url(<?php echo $img_base ?>outland.jpg);
-  z-index: 5;
+    visibility: hidden;
+    position: absolute;
+    height: 732px;
+    width: 966px;
+    left: 50%;
+    margin-left: -483px;
+    background-image: url(<?php echo $img_base ?>outland.jpg);
+    z-index: 9;
 }
 #northrend {
-  visibility: hidden;
-  position: absolute;
-  height: 732px;
-  width: 966px;
-  left: 50%;
-  margin-left: -483px;
-  background-image: url(<?php echo $img_base ?>northrend.jpg);
-  z-index: 3;
+    visibility: hidden;
+    position: absolute;
+    height: 732px;
+    width: 966px;
+    left: 50%;
+    margin-left: -483px;
+    background-image: url(<?php echo $img_base ?>northrend.jpg);
+    z-index: 8;
 }
 #pointsOldworld {
-  position: absolute;
-  height: 732px;
-  width: 966px;
-  left: 50%;
-  margin-left: -483px;
-  z-index: 100;
+    position: absolute;
+    height: 732px;
+    width: 966px;
+    left: 50%;
+    margin-left: -483px;
+    z-index: 100;
 }
 #pointsOutland {
-  visibility: hidden;
-  position: absolute;
-  height: 732px;
-  width: 966px;
-  left: 50%;
-  margin-left: -483px;
-  z-index: 90;
+    visibility: hidden;
+    position: absolute;
+    height: 732px;
+    width: 966px;
+    left: 50%;
+    margin-left: -483px;
+    z-index: 99;
 }
 #pointsNorthrend {
-  visibility: hidden;
-  position: absolute;
-  height: 732px;
-  width: 966px;
-  left: 50%;
-  margin-left: -483px;
-  z-index: 80;
+    visibility: hidden;
+    position: absolute;
+    height: 732px;
+    width: 966px;
+    left: 50%;
+    margin-left: -483px;
+    z-index: 98;
 }
 #wow {
-  position: absolute;
-  height: 732px;
-  width: 966px;
-  left: 50%;
-  margin-left: -483px;
-  z-index: 20;
-  text-align: center;
-  clear: none;
-  float: none;
+    position: absolute;
+    height: 98px;
+    width: 200px;
+    left: 50%;
+    margin-left: -483px;
+    z-index: 101;
+    text-align: center;
+    clear: none;
+    float: none;
 }
 #info {
-  position: absolute;
-  height: 20px;
-  width: 966px;
-  left: 50%;
-  margin-left: -483px;
-  z-index: 30;
-  text-align: center;
+    position: absolute;
+    height: 16px;
+    width: 40px;
+    left: 50%;
+    margin-left: -20px;
+    z-index: 102;
+    text-align: center;
 }
 #info_bottom {
-  position: absolute;
-  height: 20px;
-  width: 966px;
-  left: 50%;
-  margin-top: 711px;
-  margin-left: -483px;
-  z-index: 120;
-  text-align: center;
+    position: absolute;
+    height: 20px;
+    width: 966px;
+    left: 50%;
+    margin-top: 711px;
+    margin-left: -483px;
+    z-index: 101;
+    text-align: center;
 }
 #timer {
-  font-family: arial;
-  font-size: 12px;
-  font-style: normal;
-  text-align: center;
-  font-weight: bold;
-  color: #E7CF07;
-  filter: Glow(Color=#000099, Strength=3);
+    font-family: arial;
+    font-size: 12px;
+    font-style: normal;
+    text-align: center;
+    font-weight: bold;
+    color: #E7CF07;
+    filter: Glow(Color=#000099, Strength=3);
 }
 #server_info {
-  font-family: Georgia, "Times New Roman", Times, serif;
-  font-size: 12px;
-  font-style: italic;
-  text-align: center;
-  font-weight: bold;
-  color: #FFFF99;
-  filter: Glow(Color=0, Strength=3);
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 12px;
+    font-style: italic;
+    text-align: center;
+    font-weight: bold;
+    color: #FFFF99;
+    filter: Glow(Color=0, Strength=3);
 }
 #serverstatus {
-  visibility: <?php echo $show_status ? 'visible' : 'hidden'?>;
-  position: absolute;
-  height: 26px;
-  width: 966px;
-  margin-left: -483px;
-  left: 50%;
-  top: 97px;
-  text-align: center;
-  z-index: 25;
+    visibility: <?php echo $show_status ? 'visible' : 'hidden'?>;
+    position: absolute;
+    height: 36px;
+    width: 156px;
+    margin-left: -78px;
+    left: 50%;
+    top: 97px;
+    text-align: center;
+    z-index: 101;
 }
 #tip {
-  border: 0px solid #aaaaaa;
-  left: -1000px;
-  padding: 0px;
-  position: absolute;
-  top: -1000px;
-  z-index: 150;
-}
-#must_login {
-  visibility: hidden;
-  position: absolute;
-  height: 20px;
-  width: 966px;
-  left: 50%;
-  margin-left: -483px;
-  margin-top: 358px;
-  text-align: center;
-  padding: 0px;
-  z-index: 140;
+    border: 0px solid #aaaaaa;
+    left: -1000px;
+    padding: 0px;
+    position: absolute;
+    top: -1000px;
+    z-index: 150;
 }
 .statustext {
-  font-weight: normal;
-  color: #EABA28;
-  font-family: verdana, arial, sans-serif, helvetica;
-  font-size: 12px;
-  font-style: normal;
-  text-align: center;
-  padding: 0px;
-  background-image: url(<?php echo $img_base ?>status.gif);
+    font-weight: normal;
+    color: #EABA28;
+    font-family: verdana, arial, sans-serif, helvetica;
+    font-size: 12px;
+    font-style: normal;
+    text-align: center;
+    padding: 0px;
+    background-image: url(<?php echo $img_base ?>status.gif);
 }
 .tip_header {
-  background: #bb0000;
-  FONT-WEIGHT: bold;
-  color: #FFFFFF;
-  font-family: arial, helvetica, sans-serif;
-  font-size: 12px;
-  font-style: normal;
-  text-align: center;
-  padding: 0px;
+    background: #bb0000;
+    FONT-WEIGHT: bold;
+    color: #FFFFFF;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    text-align: center;
+    padding: 0px;
 }
 .tip_head_text {
-  background: rgb(50,50,50);
-  FONT-WEIGHT: bold;
-  color: #DDDD33;
-  font-family: arial, helvetica, sans-serif;
-  font-size: 12px;
-  font-style: normal;
-  text-align: left;
-  padding: 0px;
+    background: rgb(50,50,50);
+    FONT-WEIGHT: bold;
+    color: #DDDD33;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    text-align: left;
+    padding: 0px;
 }
 .tip_text {
-  background: #000000;
-  FONT-WEIGHT: normal;
-  color: #ffffff;
-  font-family: arial, helvetica, sans-serif;
-  font-size: 12px;
-  font-style: normal;
-  text-align: center;
-  padding: 0px;
+    background: #000000;
+    FONT-WEIGHT: normal;
+    color: #ffffff;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    text-align: center;
+    padding: 0px;
 }
 .tip_worldinfo {
-  FONT-WEIGHT: normal;
-  color: #FFFF99;
-  font-family: Georgia, arial, helvetica, sans-serif;
-  font-size: 12px;
-  font-style: normal;
-  text-align: left;
-  padding: 0px;
+    FONT-WEIGHT: normal;
+    color: #FFFF99;
+    font-family: Georgia, arial, helvetica, sans-serif;
+    font-size: 12px;
+    font-style: normal;
+    text-align: left;
+    padding: 0px;
 }
 -->
 </style>
 </HEAD>
-<script language="JavaScript" type=\"text/javascript\" src="JsHttpRequest/Js.js"></script>
+<script language="JavaScript" TYPE="text/javascript" src="../Js/JsHttpRequest/Js.js"></script>
 <SCRIPT LANGUAGE="javascript" TYPE="text/javascript">
 
 var current_map = 0;
 var time = <?php echo $time ?>;
 var show_time=<?php echo $show_time ?>;
 var show_status=<?php echo $show_status ?>;
-var maps_count = <?php echo $maps_count ?>;
+var maps_count = <?php echo count($lang_defs['maps_names']); ?>;
 var maps_array = new Array(<?php echo $maps_for_points ?>);
-var maps_name_array = new Array(<?php echo $maps_names ?>);
+var maps_name_array = new Array(<?php echo "'".implode("','", $lang_defs['maps_names'])."'" ?>);
 
 var race_name = {<?php echo "0:''"; foreach($character_race as $id => $race) echo(", ".$id.":'".$race."'"); ?>}
 
@@ -236,33 +228,38 @@ var instances_x = new Array();
 var instances_y = new Array();
 
 instances_x[0] = {
-  2:0,13:0,17:0,30:762,33:712,34:732,35:732,36:712,37:0,43:245,44:0,47:238,48:172,70:833,90:738,
-  109:849,129:254,150:0,169:0,189:773,209:269,229:782,230:778,249:290,269:315,289:816,309:782,329:834,
-  349:123,369:745,389:313,409:783,429:164,449:741,450:305,451:0,469:778,489:244,509:160,529:820,531:144,532:798,534:317,560:320,568:897,580:868,585:883,595:322
+    2:0,13:0,17:0,30:762,33:712,34:732,35:732,36:712,37:0,43:245,44:0,47:238,48:172,70:833,90:738,
+    109:849,129:254,150:0,169:0,189:773,209:269,229:782,230:778,249:290,269:315,289:816,309:782,329:834,
+    349:123,369:745,389:308,409:783,429:164,449:741,450:305,451:0,469:778,489:244,509:160,529:820,531:144,532:798,534:317,560:320,568:897,572:750,580:868,585:883,595:322,618:313
 }
 
 instances_y[0] = {
-  2:0,13:0,17:0,30:278,33:295,34:511,35:503,36:567,37:0,43:419,44:0,47:508,48:291,70:443,90:419,
-  109:551,129:516,150:0,169:0,189:216,209:568,229:481,230:484,249:514,269:601,289:258,309:589,329:203,
-  349:432,369:497,389:348,409:484,429:496,449:508,450:352,451:0,469:480,489:364,509:607,529:321,531:603,532:569,534:596,560:606,568:172,580:26,585:16,595:601
+    2:0,13:0,17:0,30:278,33:295,34:511,35:503,36:567,37:0,43:419,44:0,47:508,48:291,70:443,90:419,
+    109:551,129:516,150:0,169:0,189:216,209:568,229:481,230:484,249:514,269:601,289:258,309:589,329:203,
+    349:432,369:497,389:352,409:484,429:496,449:508,450:352,451:0,469:480,489:364,509:607,529:321,531:603,532:569,534:596,560:606,568:172,572:245,580:26,585:16,595:601,618:348
 }
 
-instances_x[1] = { 540:593,542:586,543:593,544:588,545:393,546:399,547:388,548:399,550:683,552:680,553:672,554:669,555:495,556:506,557:495,558:483,562:443,564:740,565:485 }
-instances_y[1] = { 540:399,542:398,543:405,544:402,545:355,546:350,547:353,548:357,550:226,552:215,553:210,554:239,555:569,556:557,557:545,558:557,562:239,564:567,565:204 }
-instances_x[2] = { 533:568,574:749,575:751,576:161,578:159,599:553,600:605,601:395,602:575,604:740,608:480,615:491,616:155,619:400,624:363 }
-instances_y[2] = { 533:456,574:577,575:583,576:443,578:451,599:195,600:406,601:462,602:180,604:292,608:360,615:461,616:447,619:462,624:369 }
+instances_x[1] = { 540:593,542:586,543:593,544:588,545:393,546:399,547:388,548:399,550:683,552:680,553:672,554:669,555:495,556:506,557:495,558:483,559:408,562:443,564:740,565:485 }
+instances_y[1] = { 540:399,542:398,543:405,544:402,545:355,546:350,547:353,548:357,550:226,552:215,553:210,554:239,555:569,556:557,557:545,558:557,559:489,562:239,564:567,565:204 }
+instances_x[2] = { 533:568,574:749,575:751,576:161,578:159,599:553,600:605,601:395,602:575,603:559,604:740,608:470,615:491,616:155,617:457,619:400,624:363 }
+instances_y[2] = { 533:456,574:577,575:583,576:443,578:451,599:195,600:406,601:462,602:180,603:169,604:292,608:360,615:461,616:447,617:352,619:462,624:369 }
 
 var fade_colors = Array('C6B711','BDAF10','B7A910','B1A40F','AB9E0F','A4980E','9E920E','988C0D','92870D','8B800C','857B0B','7F750B','79700A','746B0A','6E6609','686009','625B08','5C5508','564F07','504A07','4A4406','443F05','3E3905','383404','312D04','2A2703','232002','1C1A02','141201','000000');
 var fade_cur_color = fade_colors.length-1;
-var status_text = Array('uptime','max online','OffLine');
-var status_data = Array(0,0,1);
+var status_text = Array('OffLine','DB connect error','uptime','max online','GM online');
+var status_data = Array(1,0,0,0);
 var status_process = Array();
 var status_cur_time = 0;
+var status_next_process = 0;
 var statusUpdateInterval = 50;
+var pointx;
+var pointy;
 
-function _status_action(text,action,time)
+function _status_action(text,status_data,text_type,action,time)
 {
-  this.text = text;
+  this.text_id = text;
+  this.status_data = status_data;
+  this.text_type = text_type;
   this.action = action;
   this.time = time;
 }
@@ -324,17 +321,17 @@ function get_tipxy(tip_width, tip_height, x1, y1)
     ht = document.body.clientHeight;
   }
   if(x1+tip_width+15 < wd)
-  tipxy.x = x1+15;
+    tipxy.x = x1+15;
   else if(x1-tip_width-15 > 0)
-  tipxy.x = x1-tip_width-15;
+    tipxy.x = x1-tip_width-15;
   else
-  tipxy.x = wd/2-tip_width/2;
+    tipxy.x = wd/2-tip_width/2;
   if(y1+tip_height-5 < ht)
-  tipxy.y = y1-5;
+    tipxy.y = y1-5;
   else if(ht-tip_height-5 > 0)
-  tipxy.y = ht-tip_height-5;
+    tipxy.y = ht-tip_height-5;
   else
-  tipxy.y = 5;
+    tipxy.y = 5;
   //tipxy.x += getBodyScrollLeft();
   //tipxy.y += getBodyScrollTop();
   return tipxy;
@@ -390,22 +387,13 @@ function tip(object, type, onClick)
   t=document.getElementById("tip");
   if(window.opera)
   {
-    pointx=window.event.clientX;
-    pointy=window.event.clientY;
+    pointx = window.event.clientX;
+    pointy = window.event.clientY;
   }
-  else if(navigator.appName=="Netscape")
+  else if(navigator.appName != "Netscape")
   {
-    document.onmousemove=function(e)
-    {
-      pointx = e.pageX;
-      pointy = e.pageY;
-      return true;
-    }
-  }
-  else
-  {
-    pointx=window.event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
-    pointy=window.event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
+    pointx = window.event.clientX + document.documentElement.scrollLeft + document.body.scrollLeft;
+    pointy = window.event.clientY + document.documentElement.scrollTop + document.body.scrollTop;
   }
   switch(type)
   {
@@ -631,7 +619,7 @@ function show(data)
     if(data[i].dead == 1)
       char = '<img src=\'<?php echo $img_base ?>dead.gif\' style=\'float:center\' border=0 width=18 height=18\>';
     else
-      char = '<img src=\'<?php echo $img_base ?>'+data[i].race+'-'+data[i].gender+'.gif\' style=\'float:center\' border=0 width=18 height=18\>';
+      char = '<img src=\'<?php echo $img_base2 ?>'+data[i].race+'-'+data[i].gender+'.gif\' style=\'float:center\' border=0 width=18 height=18\>';
     n=0;
     if(in_array(data[i].map, maps_array))
     {
@@ -663,7 +651,7 @@ function show(data)
       if(in_array(data[i].map, maps_array))
       {
         mpoints[n].faction = faction;
-        mpoints[point_count].single_text = data[i].zone+'<br\>Level '+data[i].level+'<br\>'+char+'&nbsp;<img src=\'<?php echo $img_base ?>'+data[i].cl+'.gif\' style=\'float:center\' border=0 width=18 height=18\><br\>'+race_name[data[i].race]+'<br/>'+class_name[data[i].cl]+'<br/>';
+        mpoints[point_count].single_text = data[i].zone+'<br\>'+data[i].level+' lvl<br\>'+char+'&nbsp;<img src=\'<?php echo $img_base2 ?>'+data[i].cl+'.gif\' style=\'float:center\' border=0 width=18 height=18\><br\>'+race_name[data[i].race]+'<br/>'+class_name[data[i].cl]+'<br/>';
         mpoints[point_count].x = pos.x;
         mpoints[point_count].y = pos.y;
       }
@@ -688,7 +676,7 @@ function show(data)
       mpoints[n].multi_text.first_members.push(mpoints[n].player-1);
       mpoints[n].current_leaderGuid = data[i].leaderGuid;
     }
-    mpoints[n].multi_text.text[mpoints[n].player-1] = '<td align=\'left\' valign=\'middle\'\>&nbsp;'+data[i].name+'</td\><td\>'+data[i].level+'</td\><td align=\'left\'\>'+char+'</td\><td align=\'left\'\ style=\'color: '+text_col+';\'>&nbsp;'+race_name[data[i].race]+'</td\><td align=\'left\'\>&nbsp;<img src=\'<?php echo $img_base ?>'+data[i].cl+'.gif\' style=\'float:center\' border=0 width=18 height=18\></td\><td align=\'left\'\>&nbsp;'+class_name[data[i].cl]+'&nbsp;</td\>';
+    mpoints[n].multi_text.text[mpoints[n].player-1] = '<td align=\'left\' valign=\'middle\'\>&nbsp;'+data[i].name+'</td\><td\>'+data[i].level+'</td\><td align=\'left\'\>'+char+'</td\><td align=\'left\'\ style=\'color: '+text_col+';\'>&nbsp;'+race_name[data[i].race]+'</td\><td align=\'left\'\>&nbsp;<img src=\'<?php echo $img_base2 ?>'+data[i].cl+'.gif\' style=\'float:center\' border=0 width=18 height=18\></td\><td align=\'left\'\>&nbsp;'+class_name[data[i].cl]+'&nbsp;</td\>';
     i++;
   }
 
@@ -722,33 +710,26 @@ function show(data)
     total_players_count[1] += horde_count[i];
   }
 
-  document.getElementById("server_info").innerHTML='<?php echo $realm_name ?> - online: <b style="color: rgb(100,100,100);" onMouseMove="tip(\'<tr\><td\><img src=\\\'<?php echo $img_base ?>hordeicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(210,50,30);\\\'\>Horde:</b\> <b\>'+total_players_count[1]+'</b\></td\></tr\><tr\><td\><img src=\\\'<?php echo $img_base ?>allianceicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(0,150,190);\\\'\>Alliance:</b\> <b\>'+total_players_count[0]+'</b\></td\></tr\>\',2,false);" onMouseOut="h_tip();">Total</b> '+eval(total_players_count[0]+total_players_count[1])+'';
+  document.getElementById("server_info").innerHTML='online: <b style="color: rgb(100,100,100);" onMouseMove="tip(\'<tr\><td\><img src=\\\'<?php echo $img_base ?>hordeicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(210,50,30);\\\'\><?php echo $lang_defs['faction'][1]; ?>:</b\> <b\>'+total_players_count[1]+'</b\></td\></tr\><tr\><td\><img src=\\\'<?php echo $img_base ?>allianceicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(0,150,190);\\\'\><?php echo $lang_defs['faction'][0]; ?>:</b\> <b\>'+total_players_count[0]+'</b\></td\></tr\>\',2,false);" onMouseOut="h_tip();"><?php echo $lang_defs['total']; ?></b> '+eval(total_players_count[0]+total_players_count[1])+'';
   for(i = 0; i < maps_count; i++)
   {
-    document.getElementById("server_info").innerHTML += ' - <b style="color: rgb(160,160,20); cursor:pointer;" onClick="switchworld('+i+');" onMouseMove="tip(\'<tr\><td\><img src=\\\'<?php echo $img_base ?>hordeicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(210,50,30);\\\'\>Horde:</b\> <b\>'+horde_count[i]+'</b\></td\></tr\><tr\><td\><img src=\\\'<?php echo $img_base ?>allianceicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(0,150,190);\\\'\>Alliance:</b\> <b\>'+alliance_count[i]+'</b\></td\></tr\>\',2,false);" onMouseOut="h_tip();">'+maps_name_array[i]+'</b\> '+players_count[i]+'';
+    document.getElementById("server_info").innerHTML += '&nbsp;<b style="color: rgb(160,160,20); cursor:pointer;" onClick="switchworld('+i+');" onMouseMove="tip(\'<tr\><td\><img src=\\\'<?php echo $img_base ?>hordeicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(210,50,30);\\\'\><?php echo $lang_defs['faction'][1]; ?>:</b\> <b\>'+horde_count[i]+'</b\></td\></tr\><tr\><td\><img src=\\\'<?php echo $img_base ?>allianceicon.gif\\\'\></td\><td\><b style=\\\'color: rgb(0,150,190);\\\'\><?php echo $lang_defs['faction'][0]; ?>:</b\> <b\>'+alliance_count[i]+'</b\></td\></tr\>\',2,false);" onMouseOut="h_tip();">'+maps_name_array[i]+'</b\> '+players_count[i]+'';
   }
 }
 
 function statusController(status_process_id,diff)
 {
-  if(status_data[2] == 0 && (status_process_id < status_process.length - 2))
-  {
-    // we are offline
-    status_process_id = status_process.length - 2;
-    fade_cur_color = fade_colors.length - 1;
-    status_cur_time = 0;
-  }
   var action = status_process[status_process_id].action;
   if(action)
   {
     var obj = document.getElementById("status");
-    var text_id = status_process[status_process_id].text;
-    if(text_id == 0)
+    var text_type = status_process[status_process_id].text_type;
+    if(text_type == 0)
     {
       var status_process_now = new Date();
       var status_process_diff = status_process_now.getTime() - status_process_started.getTime();
-      var objDate = new Date(status_data[0]*1000 + status_process_diff);
-      var days = parseInt(status_data[0]/86400);
+      var objDate = new Date(status_data[status_process[status_process_id].status_data]*1000 + status_process_diff);
+      var days = parseInt(status_data[status_process[status_process_id].status_data]/86400);
       var hours = objDate.getUTCHours();
       var min = objDate.getUTCMinutes();
       var sec = objDate.getUTCSeconds();
@@ -756,14 +737,14 @@ function statusController(status_process_id,diff)
       if(min < 10) min = '0'+min;
       if(sec < 10) sec = '0'+sec;
       if(days) days = days+' '; else days = '';
-      obj.innerHTML = status_text[text_id]+' - '+days+''+hours+':'+min+':'+sec;
+      obj.innerHTML = status_text[status_process[status_process_id].text_id]+' - '+days+''+hours+':'+min+':'+sec;
     }
-    else if(text_id == 1)
+    else if(text_type == 1)
     {
-      obj.innerHTML = status_text[text_id]+' - '+status_data[1];
+      obj.innerHTML = status_text[status_process[status_process_id].text_id]+' - '+status_data[status_process[status_process_id].status_data];
     }
     else
-      obj.innerHTML = status_text[text_id];
+      obj.innerHTML = status_text[status_process[status_process_id].text_id];
     switch(action)
     {
       case 1:
@@ -783,34 +764,69 @@ function statusController(status_process_id,diff)
     }
   }
   status_cur_time += diff;
-  if(status_cur_time >= status_process[status_process_id].time)
+  if(status_next_process || status_cur_time >= status_process[status_process_id].time)
   {
-    status_cur_time = 0;
-    status_process_id++;
-    if(status_data[2] == 1)
+    if(status_next_process)
+      status_cur_time = statusUpdateInterval*fade_colors.length;
+    else
+      status_cur_time = 0;
+    do
     {
-      if(status_process_id >= (status_process.length - 2))
-      {
+      status_process_id++;
+      if(status_process_id >= (status_process.length))
         status_process_id = 0;
-      }
-    }
-    else if(status_process_id >= status_process.length)
-    {
-      status_process_id = status_process.length - 2;
-    }
+    } while(status_next_process && status_process[status_process_id].action == 2);
+    status_next_process = 0;
   }
   setTimeout('statusController('+status_process_id+','+statusUpdateInterval+')', statusUpdateInterval);
+}
+
+function showNextStatusText()
+{
+  if(status_process.length > 2)
+    status_next_process = 1;
 }
 
 function statusInit()
 {
   var blinkTime = statusUpdateInterval*fade_colors.length;
-  status_process.push(new _status_action(0,1,<?php echo $time_to_show_uptime ?>));
-  status_process.push(new _status_action(0,2,blinkTime));
-  status_process.push(new _status_action(1,1,<?php echo $time_to_show_maxonline ?>));
-  status_process.push(new _status_action(1,2,blinkTime));
-  status_process.push(new _status_action(2,1,blinkTime));
-  status_process.push(new _status_action(2,2,blinkTime));
+  var time_to_show_uptime = <?php echo $time_to_show_uptime ?>;
+  var time_to_show_maxonline = <?php echo $time_to_show_maxonline ?>;
+  var time_to_show_gmonline = <?php echo $time_to_show_gmonline ?>;
+
+  // for first time
+  if(status_process.length == 0)
+    setTimeout('statusController(0,'+statusUpdateInterval+')', statusUpdateInterval);
+
+  status_process = new Array();
+  if(status_data[0] == 1) // online
+  {
+    if(time_to_show_uptime)
+    {
+      status_process.push(new _status_action(2,1,0,1,time_to_show_uptime));
+      status_process.push(new _status_action(2,1,0,2,blinkTime));
+    }
+    if(time_to_show_maxonline)
+    {
+      status_process.push(new _status_action(3,2,1,1,time_to_show_maxonline));
+      status_process.push(new _status_action(3,2,1,2,blinkTime));
+    }
+    if(time_to_show_gmonline)
+    {
+      status_process.push(new _status_action(4,3,1,1,time_to_show_gmonline));
+      status_process.push(new _status_action(4,3,1,2,blinkTime));
+    }
+  }
+  else if(status_data[0] == 0) // offline
+  {
+    status_process.push(new _status_action(0,0,2,1,blinkTime));
+    status_process.push(new _status_action(0,0,2,2,blinkTime));
+  }
+  else //DB connect error
+  {
+    status_process.push(new _status_action(1,0,2,1,blinkTime));
+    status_process.push(new _status_action(1,0,2,2,blinkTime));
+  }
 }
 
 function load_data()
@@ -824,30 +840,31 @@ function load_data()
       {
         if(req.responseJS.status)
         {
-          if(req.responseJS.status.uptime < status_data[0] || status_data[0] == 0)
+          if(status_data[0] != req.responseJS.status.online)
           {
-            status_process_started = new Date();
-            status_data[0] = req.responseJS.status.uptime;
-            status_data[1] = req.responseJS.status.maxplayers;
-          }
-          if(status_data[2] != req.responseJS.status.online)
-          {
-            status_data[2] = req.responseJS.status.online;
+            status_data[0] = req.responseJS.status.online;
             var obj = document.getElementById("statusIMG");
-            if(status_data[2] == 0)
+            if(status_data[0] != 1)
             {
               obj.src = "<?php echo $img_base ?>realm_off.gif"
             }
             else
               obj.src = "<?php echo $img_base ?>realm_on.gif"
           }
-          if(status_process.length == 0) { statusInit(); setTimeout('statusController(0,'+statusUpdateInterval+')', statusUpdateInterval); }
+          if(req.responseJS.status.uptime < status_data[1] || status_data[1] == 0)
+          {
+            status_process_started = new Date();
+            status_data[1] = req.responseJS.status.uptime;
+          }
+          status_data[2] = req.responseJS.status.maxplayers;
+          status_data[3] = req.responseJS.status.gmonline;
+          statusInit();
         }
       }
       show(req.responseJS.online);
     }
   }
-  req.open('GET', 'pomm_play.php?realmid=<?=$realmid;?>', true);
+  req.open('GET', 'pomm_play.php', true);
   req.send({ });
 }
 
@@ -882,16 +899,47 @@ function start()
 {
   reset();
   display();
-  if (navigator.appName=="Netscape")
+
+  if(navigator.appName=="Netscape")
   {
-    document.onmousemove=function(e) { x = e.pageX+15; y = e.pageY-10; return true }
+    document.onmousemove=function(e)
+    {
+      pointx = e.pageX;
+      pointy = e.pageY;
+      return true;
+    }
   }
 }
 </SCRIPT>
 <BODY onload=start()>
 
-<div id="serverstatus"><table align="center" border="0" cellspacing="0" cellpadding="0" width="156px" height="36px"><tr><td id="status" class="statustext"></td></tr></table></div><div id="tip"></div><div ID="pointsOldworld"></div><div ID="pointsOutland"></div><div ID="pointsNorthrend"></div><div ID="world"></div><div ID="outland"></div><div ID="northrend"></div><div ID="wow"><img src="<?php echo $point ?>" id="statusIMG" style="position: absolute; border: 0px; left: 382; top: 0;" onClick="window.location='<?php echo $_SERVER['PHP_SELF'] ?>'"></div><div ID="info"><center><table border="0" cellspacing="0" cellpadding="0" height="20"><tr><td valign="top" id="timer"></td></tr></table>
-</center></div><div id="must_login"><img src="<?php echo $img_base ?>mustlogin.gif"></div><div ID="info_bottom"><center>
-<table border="0" cellspacing="0" cellpadding="0" height="20" width="100%">
-<tr><td align="center" valign="top" id="server_info"></td></tr></table></center>
-</div></BODY></HTML>
+<div onMouseDown="showNextStatusText();" id="serverstatus">
+    <table align="center" border="0" cellspacing="0" cellpadding="0" width="156px" height="36px">
+        <tr><td id="status" class="statustext"></td></tr>
+    </table>
+</div>
+<div id="tip"></div>
+<div ID="pointsOldworld"></div>
+<div ID="pointsOutland"></div>
+<div ID="pointsNorthrend"></div>
+<div ID="world"></div>
+<div ID="outland"></div>
+<div ID="northrend"></div>
+<div ID="wow">
+    <img src="<?php echo $img_base ?>realm_on.gif" id="statusIMG" style="position: absolute; border: 0px; left: 382; top: 0;" onClick="window.location='<?php echo $_SERVER['PHP_SELF'] ?>'">
+</div>
+<div ID="info">
+    <center>
+    <table valign="top" border="0" cellspacing="0" cellpadding="0" height="16">
+        <tr><td id="timer"></td></tr>
+    </table>
+    </center>
+</div>
+<div ID="info_bottom">
+    <center>
+    <table border="0" cellspacing="0" cellpadding="0" height="20" width="100%">
+        <tr><td align="center" valign="top" id="server_info"></td></tr>
+    </table>
+    </center>
+</div>
+</BODY></HTML>

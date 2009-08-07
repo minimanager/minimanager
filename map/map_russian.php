@@ -26,6 +26,9 @@ $character_class = Array(
 	11 => 'Друид');
 
 $lang_defs = Array(
+	'maps_names' => Array('Азерот','Запределье','Нордскол'),
+	'total' => 'Всего',
+	'faction' => Array('Альянс', 'Орда'),
 	'name' => 'Имя',
 	'race' => 'Расса',
 	'class' => 'Класс',

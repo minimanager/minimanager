@@ -159,28 +159,36 @@ $lang_register = array(
   'referrer_not_found' => 'Malheureusement le compte spécifié n\'a pas été trouvé dans notre base de données.<br/>S\'il vous plait assurez vous d\'avoir entré un nom de compte valide ou laissez le champ &quot;Invité par&quot;-field vide.',
   );
 
-$lang_index = array(
-  // ----- INDEX.PHP -----
-  'realm' => 'Royaume',
-  'online' => 'En ligne',
-  'offline_or_let_high' => 'Hors ligne ou latence trop élevée',
-  'add_motd' => 'Ajouter le message du jour',
-  'delete' => 'Effacer le Royaume',
-  'tot_users_online' => 'Utilisateurs en ligne',
-  'name' => 'Nom',
-  'race' => 'Race',
-  'class' => 'Classe',
-  'level' => 'Niveau',
-  'map' => 'Map',
-  'zone' => 'Zone',
-  'rank' => 'Rang',
-  'honor_kills' => 'R.H.',
-  'latency' => 'Latence',
-  'a_latency' => 'Latence moyenne',
-  'guild' => 'Guilde',
-  'trinity_rev' => 'Trinity Rev',
-  'using_db' => 'using db'
+
+// ----- INDEX.PHP -----
+function lang_index()
+{
+  $lang_index = array
+  (
+    'realm' => 'Royaume',
+    'online' => 'En ligne',
+    'offline_or_let_high' => 'Hors ligne ou latence trop élevée',
+    'add_motd' => 'Ajouter le message du jour',
+    'delete' => 'Effacer le Royaume',
+    'tot_users_online' => 'Utilisateurs en ligne',
+    'name' => 'Nom',
+    'race' => 'Race',
+    'class' => 'Classe',
+    'level' => 'Niveau',
+    'map' => 'Map',
+    'zone' => 'Zone',
+    'rank' => 'Rang',
+    'honor_kills' => 'R.H.',
+    'latency' => 'Latence',
+    'a_latency' => 'Latence moyenne',
+    'guild' => 'Guilde',
+    'trinity_rev' => 'Trinity Rev',
+    'using_db' => 'using db',
   );
+  return $lang_index;
+}
+
+
 
 // ----- HEADER.PHP -----
 function lang_header()
@@ -745,7 +753,8 @@ function lang_motd()
     'post_motd' => 'Envoyer le message du jour',
     'post_rules' => 'Attention: la longueur est limitée à 255 caractères.<br />Les tags HTML sont utilisables.',
     'err_max_len' => 'Taille limite dépassée',
-    'add_motd' => 'Ajouter le message du jour'
+    'add_motd' => 'Ajouter le message du jour',
+    'edit_motd' => 'Editer le message du jour',
   );
   return $lang_motd;
 }

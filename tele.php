@@ -130,7 +130,6 @@ function browse_tele()
               <th width=\"9%\"><a href=\"tele.php?order_by=position_z&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\"".($order_by=='position_z' ? " class=\"$order_dir\"" : "").">{$lang_tele['z']}</a></th>
               <th width=\"10%\"><a href=\"tele.php?order_by=orientation&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\"".($order_by=='orientation' ? " class=\"$order_dir\"" : "").">{$lang_tele['orientation']}</a></th>
             </tr>";
-  unset($start); unset($dir); unset($search_value); unset($search_by);
 
   while ($data = $sql->fetch_row($query))
   {
@@ -160,6 +159,12 @@ function browse_tele()
   unset($data);
 
   $output .= "
+            <tr>
+              <td  colspan=\"7\" class=\"hidden\" align=\"right\" width=\"25%\">";
+  $output .= generate_pagination("tele.php?action=browse_tele&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
+  $output .= "
+              </td>
+            </tr>
             <tr>
               <td colspan=\"7\" class=\"hidden\" align=\"right\">{$lang_tele['tot_locations']} : $all_record</td>
             </tr>

@@ -227,6 +227,10 @@ switch ($err)
     $output .= "
           <h1><font class=\"error\">{$lang_motd['err_max_len']}</font></h1>";
     break;
+  case 3:
+    $output .= "
+          <h1>{$lang_motd['edit_motd']}</h1>";
+    break;
   default: //no error
     $output .= "
           <h1>{$lang_motd['add_motd']}</h1>";

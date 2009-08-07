@@ -15,14 +15,27 @@ class DBLayer
 			if (@mysql_select_db($db_name, $this->link_id))
 				return $this->link_id;
 			else
-				error('Unable to select database. MySQL reported: '.mysql_error(), __FILE__, __LINE__);
+            {
+				//error('Unable to select database. MySQL reported: '.mysql_error());
+                $this->close();
+            }
 		}
 		else
-			error('Unable to connect to MySQL server. MySQL reported: '.mysql_error(), __FILE__, __LINE__);
+			//error('Unable to connect to MySQL server. MySQL reported: '.mysql_error());
+
+        $this->link_id = false;
 	}
+
+    function isValid()
+    {
+        return $this->link_id;
+    }
 
 	function query($sql)
 	{
+        if(!$this->link_id)
+            return false;
+
 		$this->query_result = @mysql_query($sql, $this->link_id);
 
 		if ($this->query_result)
@@ -103,8 +116,8 @@ class DBLayer
 	function error()
 	{
 		$result['error_sql'] = @current(@end($this->saved_queries));
-		$result['error_no'] = @mysql_errno($this->link_id);
-		$result['error_msg'] = @mysql_error($this->link_id);
+		$result['error_no'] = $this->link_id ? @mysql_errno($this->link_id) : @mysql_errno();
+		$result['error_msg'] = $this->link_id ? @mysql_error($this->link_id) : @mysql_error();
 
 		return $result;
 	}
@@ -124,10 +137,9 @@ class DBLayer
 	}
 }
 
-function error($message, $file, $line, $db_error = false)
+function error($message)
 {
-	global $siteerrors;
-	$s = "\t\t".'Error: <strong>'.$message.'.</strong>'."\n";
+	$s = 'Error: <strong>'.$message.'.</strong>';
 	echo $s;
 }
 
