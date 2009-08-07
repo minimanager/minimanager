@@ -21,12 +21,12 @@ function print_commands_form()
 
   $levels = $gm_level_arr;
 
-  $sql = new SQL;
-  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
-  $query = $sql->query("SELECT name,help,`security` FROM command WHERE `security` <= $user_lvl");
+  $query = $sqlw->query("SELECT name,help,`security` FROM command WHERE `security` <= $user_lvl");
 
-  while ($data = $sql->fetch_row($query))
+  while ($data = $sqlw->fetch_row($query))
   {
     $tmp_output = "
         <tr>";
@@ -94,9 +94,6 @@ function print_commands_form()
            </form>
          <br />
        </center>";
-
-$sql->close();
-unset($sql);
 
 }
 
@@ -169,10 +166,10 @@ function doupdate_commands()
   global $lang_global, $output, $world_db, $realm_id, $action_permission;
   valid_login($action_permission['update']);
 
-  $sql = new SQL;
-  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
   if(isset($_GET['change']))
-    $change = $sql->quote_smart($_GET['change']);
+    $change = $sqlw->quote_smart($_GET['change']);
   else
     redirect("command.php?error=1");
 
@@ -180,11 +177,9 @@ function doupdate_commands()
 
   for ($i=0; $i<count($change); $i++)
   {
-    $query = $sql->query("UPDATE command SET `security` = '".$change[$commands[$i]]."' WHERE name= '$commands[$i]'");
+    $query = $sqlw->query("UPDATE command SET `security` = '".$change[$commands[$i]]."' WHERE name= '$commands[$i]'");
   }
 
-  $sql->close();
-  unset($sql);
   redirect("command.php");
 }
 

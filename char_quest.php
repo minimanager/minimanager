@@ -19,7 +19,7 @@ valid_login($action_permission['read']);
 //########################################################################################################################
 function char_quest()
 {
-  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $world_db, $characters_db,
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $world_db, $characters_db, $itemperpage,
     $action_permission, $user_lvl, $user_name, $quest_datasite;
 
   if (empty($_GET['id'])) error($lang_global['empty_fields']);
@@ -28,12 +28,22 @@ function char_quest()
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   $id = $sql->quote_smart($_GET['id']);
-  if (!is_numeric($id))
-    $id = 0;
+  if (!is_numeric($id)) $id = 0;
+
+  //==========================$_GET and SECURE=================================
+  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : 1;
+  if (!preg_match("/^[[:digit:]]{1,5}$/", $order_by)) $order_by=1;
+
   $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 0;
+  if (!preg_match("/^[01]{1}$/", $dir)) $dir=0;
+
+  //$order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
+  //==========================$_GET and SECURE end=============================
+
 
   $result = $sql->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id LIMIT 1");
 
@@ -75,119 +85,136 @@ function char_quest()
               <tr>";
       if ($user_lvl)
         $output .= "
-                <th width=\"10%\"><a href=\"char_quest.php?id=$id&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['quest_id']}</a></th>";
+                <th width=\"10%\"><a href=\"char_quest.php?id=$id&amp;start=$start&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['quest_id']}</a></th>";
       $output .= "
-                <th width=\"7%\"><a href=\"char_quest.php?id=$id&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['quest_level']}</a></th>
-                <th width=\"78%\"><a href=\"char_quest.php?id=$id&amp;order_by=2&amp;dir=$dir\">".($order_by==2 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['quest_title']}</a></th>
+                <th width=\"7%\"><a href=\"char_quest.php?id=$id&amp;start=$start&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['quest_level']}</a></th>
+                <th width=\"78%\"><a href=\"char_quest.php?id=$id&amp;start=$start&amp;order_by=2&amp;dir=$dir\">".($order_by==2 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['quest_title']}</a></th>
                 <th width=\"5%\"><img src=\"img/aff_qst.png\" width=\"14\" height=\"14\" border=\"0\" /></a></th>
               </tr>";
       $quests_1 = array();
       $quests_3 = array();
 
-      if ($sql->num_rows($result)){
-      while ($quest = $sql->fetch_row($result))
+      if ($sql->num_rows($result))
       {
-        $deplang = get_lang_id();
-        $query1 = $sql->query("SELECT QuestLevel,IFNULL(".($deplang<>0?"title_loc$deplang":"NULL").",`title`) as Title FROM `".$world_db[$realm_id]['name']."`.`quest_template` LEFT JOIN `".$world_db[$realm_id]['name']."`.`locales_quest` ON `quest_template`.`entry` = `locales_quest`.`entry` WHERE `quest_template`.`entry` ='$quest[0]'");
-        $quest_info = $sql->fetch_row($query1);
-        if($quest[1]==1)
-          array_push($quests_1, array($quest[0], $quest_info[0], $quest_info[1]));
-        else
-          array_push($quests_3, array($quest[0], $quest_info[0], $quest_info[1]));
-      }
-      aasort($quests_1, $order_by, $dir);
-      aasort($quests_3, $order_by, $dir);
+        while ($quest = $sql->fetch_row($result))
+        {
+          $deplang = get_lang_id();
+          $query1 = $sql->query("SELECT QuestLevel,IFNULL(".($deplang<>0?"title_loc$deplang":"NULL").",`title`) as Title FROM `".$world_db[$realm_id]['name']."`.`quest_template` LEFT JOIN `".$world_db[$realm_id]['name']."`.`locales_quest` ON `quest_template`.`entry` = `locales_quest`.`entry` WHERE `quest_template`.`entry` ='$quest[0]'");
+          $quest_info = $sql->fetch_row($query1);
+          if($quest[1]==1)
+            array_push($quests_1, array($quest[0], $quest_info[0], $quest_info[1]));
+          else
+            array_push($quests_3, array($quest[0], $quest_info[0], $quest_info[1]));
+        }
+        aasort($quests_1, $order_by, $dir);
+        aasort($quests_3, $order_by, $dir);
+        $all_record = count($quests_1);
 
-      foreach ($quests_3 as $data)
-      {
-        $output .= "
-              <tr>";
-        if($user_lvl)
+        foreach ($quests_3 as $data)
+        {
           $output .= "
-                <td>$data[0]</td>";
-        $output .= "
-                <td>($data[1])</td>
-                <td align=\"left\"><a href=\"$quest_datasite$data[0]\" target=\"_blank\">".htmlentities($data[2])."</a></td>
-                <td><img src=\"img/aff_qst.png\" width=\"14\" height=\"14\" /></td>
-              </tr>";
+                <tr>";
+          if($user_lvl)
+            $output .= "
+                  <td>$data[0]</td>";
+          $output .= "
+                  <td>($data[1])</td>
+                  <td align=\"left\"><a href=\"$quest_datasite$data[0]\" target=\"_blank\">".htmlentities($data[2])."</a></td>
+                  <td><img src=\"img/aff_qst.png\" width=\"14\" height=\"14\" /></td>
+                </tr>";
+        }
+        if(count($quests_1))
+          $output .= "
+              </table>
+              <table class=\"hidden\">
+                <tr>
+                  <td colspan=\"".($user_lvl ? "4" : "3")."\" align=\"right\">";
+                    $output .= generate_pagination("char_quest.php?id=$id&amp;start=$start&amp;order_by=$order_by&amp;dir=".!$dir."", $all_record, $itemperpage, $start);
+          $output .= "
+                  </td>
+                </tr>
+              </table>
+              <table class=\"lined\" style=\"width: 550px;\">";
+        $i=0;
+        foreach ($quests_1 as $data)
+        {
+          if($i<$start)
+          {
+          }
+          elseif($i<$start+$itemperpage)
+          {
+            $output .= "
+                <tr>";
+            if($user_lvl)
+              $output .= "
+                  <td>$data[0]</td>";
+            $output .= "
+                  <td>($data[1])</td>
+                  <td align=\"left\"><a href=\"$quest_datasite$data[0]\" target=\"_blank\">".htmlentities($data[2])."</a></td>
+                  <td><img src=\"img/aff_tick.png\" width=\"14\" height=\"14\" /></td>
+                </tr>";
+          }
+          $i++;
+        }
       }
-      if(count($quests_1))
+      else
         $output .= "
+                <tr>
+                  <td colspan=\"".($user_lvl ? "4" : "3")."\"><p>{$lang_char['no_act_quests']}</p></td>
+                </tr>";
+      $output .= "
+              </table>
+            </div><br />
+            <table class=\"hidden\">
               <tr>
-                <th class=\"title\" colspan=\"".($user_lvl ? "4" : "3")."\" align=\"left\"></th>
-              </tr>";
-      foreach ($quests_1 as $data)
+                <td>";
+                  makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
+      $output .= "
+                </td>
+                <td>";
+      if (($user_lvl >= $action_permission['delete']))
       {
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
         $output .= "
-              <tr>";
-        if($user_lvl)
-          $output .= "
-                <td>$data[0]</td>";
-        $output .= "
-                <td>($data[1])</td>
-                <td align=\"left\"><a href=\"$quest_datasite$data[0]\" target=\"_blank\">".htmlentities($data[2])."</a></td>
-                <td><img src=\"img/aff_tick.png\" width=\"14\" height=\"14\" /></td>
-              </tr>";
+                </td>
+                <td>";
       }
+      if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
+        $output .= "
+                </td>
+                <td>";
+      }
+      if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
+      {
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
+        $output .= "
+                </td>
+                <td>";
+      }
+      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
+      //end of admin options
+      $output .= "
+                </td>
+              </tr>
+            </table>
+            <br />
+          </center>
+";
     }
     else
-      $output .= "
-              <tr>
-                <td colspan=\"".($user_lvl ? "4" : "3")."\"><p>{$lang_char['no_act_quests']}</p></td>
-              </tr>";
-    $output .= "
-            </table>
-          </div><br />
-          <table class=\"hidden\">
-            <tr>
-              <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
-    $output .= "
-              </td>
-              <td>";
-    if (($user_lvl >= $action_permission['delete']))
     {
-      makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
-      $output .= "
-              </td>
-              <td>";
+      $sql->close();
+      unset($sql);
+      error($lang_char['no_permission']);
     }
-    if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
-    {
-      makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
-      $output .= "
-              </td>
-              <td>";
-    }
-    if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
-    {
-      makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
-      $output .= "
-              </td>
-              <td>";
-    }
-    makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
-    //end of admin options
-    $output .= "
-              </td>
-            </tr>
-          </table>
-          <br />
-        </center>
-";
   }
   else
-  {
-    $sql->close();
-    unset($sql);
-    error($lang_char['no_permission']);
-  }
-}
-else
-  error($lang_char['no_char_found']);
+    error($lang_char['no_char_found']);
 
-$sql->close();
-unset($sql);
+  $sql->close();
+  unset($sql);
 }
 
 

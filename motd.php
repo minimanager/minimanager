@@ -65,17 +65,15 @@ function edit_motd()
 
   if(!isset($_GET['id'])) redirect("motd.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlc->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
 
-  $result = $sql->query("SELECT content FROM bugreport WHERE id = '$id'");
-  $msg = $sql->result($result, 0);
+  $result = $sqlc->query("SELECT content FROM bugreport WHERE id = '$id'");
+  $msg = $sqlc->result($result, 0);
   unset($result);
-  $sql->close();
-  unset($sql);
 
   $output .= "
         <center>
@@ -123,24 +121,19 @@ function do_add_motd()
   if (empty($_POST['msg']))
     redirect("motd.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $msg = $sql->quote_smart($_POST['msg']);
+  $msg = $sqlc->quote_smart($_POST['msg']);
 
   if (strlen($msg) > 4096)
   {
-    $sql->close();
-    unset($sql);
     redirect("motd.php?error=2");
   }
 
   $by = date("m/d/y H:i:s")." Posted by: $user_name";
 
-  $sql->query("INSERT INTO bugreport (type, content) VALUES ('$by','$msg')");
-  $sql->close();
-  unset($sql);
-
+  $sqlc->query("INSERT INTO bugreport (type, content) VALUES ('$by','$msg')");
   redirect("index.php");
 }
 
@@ -156,29 +149,24 @@ function do_edit_motd()
   if (empty($_POST['msg']) || empty($_POST['id']))
    redirect("motd.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $msg = $sql->quote_smart($_POST['msg']);
-  $id = $sql->quote_smart($_POST['id']);
+  $msg = $sqlc->quote_smart($_POST['msg']);
+  $id = $sqlc->quote_smart($_POST['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("motd.php?error=1");
 
-  $by = $sql->result($sql->query("SELECT type FROM bugreport WHERE id = '$id'"), 0, 'type');
+  $by = $sqlc->result($sqlc->query("SELECT type FROM bugreport WHERE id = '$id'"), 0, 'type');
 
   if (strlen($msg) > 4096)
   {
-    $sql->close();
-    unset($sql);
-      redirect("motd.php?error=2");
+    redirect("motd.php?error=2");
   }
 
   $by = split("<br />", $by, 2);
   $by = "{$by[0]}<br />".date("m/d/y H:i:s")." Edited by: $user_name";
 
-  $sql->query("UPDATE bugreport SET type = '$by', content = '$msg' WHERE id = '$id'");
-  $sql->close();
-  unset($sql);
-
+  $sqlc->query("UPDATE bugreport SET type = '$by', content = '$msg' WHERE id = '$id'");
   redirect("index.php");
 }
 
@@ -193,16 +181,13 @@ function delete_motd()
 
   if (empty($_GET['id'])) redirect("index.php");
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlc->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("motd.php?error=1");
 
-  $query = $sql->query("DELETE FROM bugreport WHERE id ='$id'");
-
-  $sql->close();
-  unset($sql);
+  $query = $sqlc->query("DELETE FROM bugreport WHERE id ='$id'");
   redirect("index.php");
 }
 

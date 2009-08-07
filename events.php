@@ -20,27 +20,27 @@ function do_search()
 {
   global $lang_events, $output, $world_db, $realm_id, $itemperpage;
 
-  $sql = new SQL;
-  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "description";
+  $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : "description";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="description";
 
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlw->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
 
-  $query_1 = $sql->query("SELECT count(*) FROM game_event");
-  $result = $sql->query("SELECT description, start_time, end_time, occurence, length
+  $query_1 = $sqlw->query("SELECT count(*) FROM game_event");
+  $result = $sqlw->query("SELECT description, start_time, end_time, occurence, length
     FROM game_event WHERE start_time <> end_time ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-  $all_record = $sql->result($query_1,0);
+  $all_record = $sqlw->result($query_1,0);
   unset($query_1);
 
   $output .= "
@@ -60,7 +60,7 @@ function do_search()
                <th width=\"20%\"><a href=\"events.php?order_by=occurence&amp;start=$start&amp;dir=$dir\">".($order_by=='occurence' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_events['occur']}</a></th>
                <th width=\"20%\"><a href=\"events.php?order_by=length&amp;start=$start&amp;dir=$dir\">".($order_by=='length' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_events['length']}</a></th>
             </tr>";
-  while ($events = $sql->fetch_row($result))
+  while ($events = $sqlw->fetch_row($result))
   {
     $days = floor(round($events[3] / 60)/24);
     $hours = round($events[3] / 60) - ($days * 24);
@@ -110,8 +110,6 @@ function do_search()
         </center>
 ";
 
-  $sql->close();
-  unset($sql);
 
 }
 

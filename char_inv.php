@@ -25,29 +25,28 @@ function char_inv()
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-
-  $id = $sql->quote_smart($_GET['id']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
     $id = 0;
 
-  $result = $sql->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1) AS UNSIGNED) AS gold FROM `characters` WHERE guid = $id LIMIT 1");
+  $result = $sqlc->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1) AS UNSIGNED) AS gold FROM `characters` WHERE guid = $id LIMIT 1");
 
-  if ($sql->num_rows($result))
+  if ($sqlc->num_rows($result))
   {
-    $char = $sql->fetch_row($result);
+    $char = $sqlc->fetch_row($result);
 
-    $owner_acc_id = $sql->result($result, 0, 'account');
-    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
-    $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
-    $owner_name = $sql->result($result, 0, 'username');
+    $owner_acc_id = $sqlc->result($result, 0, 'account');
+    $result = $sqlr->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+    $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
+    $owner_name = $sqlr->result($result, 0, 'username');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
-      $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-      $result = $sql->query("SELECT ci.bag,ci.slot,ci.item,ci.item_template, SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 15), ' ', -1) as stack_count FROM character_inventory ci INNER JOIN item_instance ii on ii.guid = ci.item WHERE ci.guid = $id ORDER BY ci.bag,ci.slot");
+      $result = $sqlc->query("SELECT ci.bag,ci.slot,ci.item,ci.item_template, SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 15), ' ', -1) as stack_count FROM character_inventory ci INNER JOIN item_instance ii on ii.guid = ci.item WHERE ci.guid = $id ORDER BY ci.bag,ci.slot");
 
       $bag = array
       (
@@ -75,14 +74,14 @@ function char_inv()
       $equiped_bag_id = array(0,0,0,0,0);
       $equip_bnk_bag_id = array(0,0,0,0,0,0,0,0);
 
-      while ($slot = $sql->fetch_row($result))
+      while ($slot = $sqlc->fetch_row($result))
       {
         if ($slot[0] == 0 && $slot[1] > 18)
         {
           if($slot[1] < 23) // SLOT 19 TO 22 (Bags)
           {
             $bag_id[$slot[2]] = ($slot[1]-18);
-            $equiped_bag_id[$slot[1]-18] = array($slot[3], $sql->result($sql->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
+            $equiped_bag_id[$slot[1]-18] = array($slot[3], $sqlc->result($sqlc->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
           }
           elseif($slot[1] < 39) // SLOT 23 TO 38 (BackPack)
           {
@@ -97,7 +96,7 @@ function char_inv()
           elseif($slot[1] < 74) // SLOT 67 TO 73 (Bank Bags)
           {
             $bank_bag_id[$slot[2]] = ($slot[1]-66);
-            $equip_bnk_bag_id[$slot[1]-66] = array($slot[3], $sql->result($sql->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
+            $equip_bnk_bag_id[$slot[1]-66] = array($slot[3], $sqlc->result($sqlc->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
           }
         }
         else
@@ -471,16 +470,12 @@ function char_inv()
     }
     else
     {
-      $sql->close();
-      unset($sql);
       error($lang_char['no_permission']);
     }
   }
   else
     error($lang_char['no_char_found']);
 
-$sql->close();
-unset($sql);
 }
 
 

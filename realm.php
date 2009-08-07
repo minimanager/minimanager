@@ -23,24 +23,24 @@ function show_realm()
   $icon_type = get_icon_type();
   $timezone_type = get_timezone_type();
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
   //==========================$_GET and SECURE=================================
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "name";
+  $order_by = (isset($_GET['order_by'])) ? $sqlr->quote_smart($_GET['order_by']) : "name";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="name";
 
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlr->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
 
-  $result = $sql->query("SELECT `realmlist`.id AS rid,name,address,port,icon,color,timezone,
+  $result = $sqlr->query("SELECT `realmlist`.id AS rid,name,address,port,icon,color,timezone,
             (SELECT SUM(numchars) FROM realmcharacters WHERE realmid = rid)
             FROM `realmlist` ORDER BY $order_by $order_dir");
-  $total_realms = $sql->num_rows($result);
+  $total_realms = $sqlr->num_rows($result);
 
   $output .= "
         <center>
@@ -71,7 +71,7 @@ function show_realm()
               <th width=\"7%\"><a href=\"realm.php?order_by=timezone&amp;dir=$dir\"".($order_by=='timezone' ? " class=\"$order_dir\"" : "").">{$lang_realm['timezone']}</a></th>
             </tr>";
 
-   while ($realm = $sql->fetch_row($result))
+   while ($realm = $sqlr->fetch_row($result))
    {
      if($user_lvl >= $action_permission['delete'])
        $output .= "
@@ -121,9 +121,6 @@ function show_realm()
         </center>
 ";
 
-  $sql->close();
-  unset($sql);
-
 }
 
 
@@ -140,17 +137,17 @@ function edit_realm()
 
   if(!isset($_GET['id'])) redirect("realm.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlr->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
 
-  $result = $sql->query("SELECT realmlist.id AS rid,name,address,port,icon,color,timezone,
+  $result = $sqlr->query("SELECT realmlist.id AS rid,name,address,port,icon,color,timezone,
             (SELECT SUM(numchars) FROM realmcharacters WHERE realmid = rid)
             FROM realmlist WHERE id ='$id'");
 
-  if ($realm = $sql->fetch_row($result))
+  if ($realm = $sqlr->fetch_row($result))
   {
     $output .= "
         <center>
@@ -254,9 +251,6 @@ $output .= "
   else
     error($lang_global['err_no_result']);
 
-  $sql->close();
-  unset($sql);
-
 }
 
 
@@ -271,30 +265,26 @@ function doedit_realm()
   if( empty($_GET['new_name']) || empty($_GET['new_address']) || empty($_GET['new_port']) || empty($_GET['id']) )
    redirect("realm.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlr->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("realm.php?error=1");
-  $new_name = $sql->quote_smart($_GET['new_name']);
-  $new_address = $sql->quote_smart($_GET['new_address']);
-  $new_port = $sql->quote_smart($_GET['new_port']);
-  $new_icon = $sql->quote_smart($_GET['new_icon']);
-  $new_color = $sql->quote_smart($_GET['new_color']);
-  $new_timezone = $sql->quote_smart($_GET['new_timezone']);
+  $new_name = $sqlr->quote_smart($_GET['new_name']);
+  $new_address = $sqlr->quote_smart($_GET['new_address']);
+  $new_port = $sqlr->quote_smart($_GET['new_port']);
+  $new_icon = $sqlr->quote_smart($_GET['new_icon']);
+  $new_color = $sqlr->quote_smart($_GET['new_color']);
+  $new_timezone = $sqlr->quote_smart($_GET['new_timezone']);
 
-  $query = $sql->query("UPDATE realmlist SET name='$new_name', address ='$new_address' , port ='$new_port', icon ='$new_icon', color ='$new_color', timezone ='$new_timezone' WHERE id = '$id'");
+  $query = $sqlr->query("UPDATE realmlist SET name='$new_name', address ='$new_address' , port ='$new_port', icon ='$new_icon', color ='$new_color', timezone ='$new_timezone' WHERE id = '$id'");
 
-  if ($sql->affected_rows())
+  if ($sqlr->affected_rows())
   {
-    $sql->close();
-    unset($sql);
     redirect("realm.php?error=3");
   }
   else
   {
-    $sql->close();
-    unset($sql);
     redirect("realm.php?action=edit_realm&id=$id&error=4");
   }
 }
@@ -341,24 +331,20 @@ function dodel_realm()
 
   if(!isset($_GET['id'])) redirect("realm.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlr->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("realm.php?error=1");
 
-  $sql->query("DELETE FROM realmlist WHERE id = '$id'");
+  $sqlr->query("DELETE FROM realmlist WHERE id = '$id'");
 
-  if ($sql->affected_rows())
+  if ($sqlr->affected_rows())
   {
-    $sql->close();
-    unset($sql);
     redirect("realm.php");
   }
   else
   {
-    $sql->close();
-    unset($sql);
     redirect("realm.php?error=2");
   }
 }
@@ -372,14 +358,11 @@ function add_realm()
   global $realm_db, $action_permission;
   valid_login($action_permission['insert']);
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $result = $sql->query("INSERT INTO realmlist (id, name, address, port, icon, color, timezone)
+  $result = $sqlr->query("INSERT INTO realmlist (id, name, address, port, icon, color, timezone)
   VALUES (NULL,'MANGOS','127.0.0.1', 8085 ,0 ,0 ,1)");
-
-  $sql->close();
-  unset($sql);
 
   if ($result) redirect("realm.php");
   else redirect("realm.php?error=4");
@@ -394,16 +377,13 @@ function set_def_realm()
   global $realm_db, $action_permission;
   valid_login($action_permission['read']);
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $id = (isset($_GET['id'])) ? $sql->quote_smart($_GET['id']) : 1;
+  $id = (isset($_GET['id'])) ? $sqlr->quote_smart($_GET['id']) : 1;
 
-  $result = $sql->query("SELECT id FROM realmlist WHERE id ='$id'");
-  if ($sql->num_rows($result)) $_SESSION['realm_id'] = $id;
-
-  $sql->close();
-  unset($sql);
+  $result = $sqlr->query("SELECT id FROM realmlist WHERE id ='$id'");
+  if ($sqlr->num_rows($result)) $_SESSION['realm_id'] = $id;
 
   $url = (isset($_GET['url'])) ? $_GET['url'] : "index.php";
   redirect($url);

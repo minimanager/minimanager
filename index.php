@@ -22,15 +22,21 @@ function front()
   global $lang_global, $lang_index, $output, $realm_id, $realm_db, $world_db, $characters_db, $mmfpm_db, $server, $server_type,
     $showcountryflag, $motd_display_poster, $gm_online_count, $gm_online, $action_permission, $user_lvl;
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
   $output .= "
           <div class=\"top\">";
 
   if (test_port($server[$realm_id]['addr'],$server[$realm_id]['game_port']))
   {
-    $query = $sql->query("SELECT `starttime` FROM `uptime` WHERE `realmid` = $realm_id ORDER BY `starttime` DESC LIMIT 1");
+    $query = $sqlr->query("SELECT `starttime` FROM `uptime` WHERE `realmid` = $realm_id ORDER BY `starttime` DESC LIMIT 1");
     $getuptime = mysql_fetch_row($query);
     $uptimetime = time() - $getuptime[0];
 
@@ -83,34 +89,31 @@ function front()
   }
 
   //  This retrieves the actual database version from the database itself,  instead of hardcoding it into a string
-  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
-
   if ($server_type)
   {
-    $query_version = $sql->query("SELECT core_revision, db_version FROM version");
-    $version = $sql->fetch_array($query_version, 0);
+    $query_version = $sqlw->query("SELECT core_revision, db_version FROM version");
+    $version = $sqlw->fetch_array($query_version, 0);
     $output .= $lang_index['trinity_rev'] . ' ' . $version['core_revision'] . ' ' . $lang_index['using_db'] . ' ' . $version['db_version'] . '</div>';
     unset($query_version);
     unset($version);
   }
   else
   {
-    $query_db_version = $sql->query("SELECT version FROM db_version");
-    $db_rev = $sql->result($query_db_version, 0);
+    $query_db_version = $sqlw->query("SELECT version FROM db_version");
+    $db_rev = $sqlw->result($query_db_version, 0);
     $output .= "Mangos: {$server[$realm_id]['rev']} Using DB: $db_rev</div>";
     unset($query_db_version);
     unset($db_rev);
   }
 
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-  $sql->db($characters_db[$realm_id]['name']);
+  //$sql->db($characters_db[$realm_id]['name']);
 
   //MOTD part
-  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
-  $query_1 = $sql->query("SELECT count(*) FROM bugreport");
-  $all_record = $sql->result($query_1, 0);
+  $query_1 = $sqlc->query("SELECT count(*) FROM bugreport");
+  $all_record = $sqlc->result($query_1, 0);
   unset($query_1);
 
   if ($user_lvl > 0) $output .= "
@@ -133,8 +136,8 @@ function front()
 
   if($all_record)
   {
-    $result = $sql->query("SELECT id, type, content FROM bugreport ORDER BY id DESC LIMIT $start, 3");
-    while($post = $sql->fetch_row($result))
+    $result = $sqlc->query("SELECT id, type, content FROM bugreport ORDER BY id DESC LIMIT $start, 3");
+    while($post = $sqlc->fetch_row($result))
     {
       $output .= "
               <tr>
@@ -183,24 +186,24 @@ function front()
   if ($online)
   {
     //==========================$_GET and SECURE=================================
-    $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "name";
+    $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "name";
     if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="name";
 
-    $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+    $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
     if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
     $order_dir = ($dir) ? "ASC" : "DESC";
     $dir = ($dir) ? 0 : 1;
     //==========================$_GET and SECURE end=============================
 
-    $result = $sql->query("SELECT count(*) FROM `characters` WHERE `online`= 1".(($gm_online_count == "1") ? " AND `extra_flags`& 1 = 0" : ""));
-    $total_online = $sql->result($result, 0);
+    $result = $sqlc->query("SELECT count(*) FROM `characters` WHERE `online`= 1".(($gm_online_count == "1") ? " AND `extra_flags`& 1 = 0" : ""));
+    $total_online = $sqlc->result($result, 0);
     $order_side = "";
     if( !$user_lvl && !$server[$realm_id]['both_factions'])
     {
-      $result = $sql->query("SELECT race FROM `characters` WHERE account = '$user_id' AND totaltime = (SELECT MAX(totaltime) FROM `characters` WHERE account = '$user_id') LIMIT 1");
-      if ($sql->num_rows($result))
-        $order_side = (in_array($sql->result($result, 0, 'race'),array(2,5,6,8,10))) ? " AND race IN (2,5,6,8,10) " : " AND race IN (1,3,4,7,11) ";
+      $result = $sqlc->query("SELECT race FROM `characters` WHERE account = '$user_id' AND totaltime = (SELECT MAX(totaltime) FROM `characters` WHERE account = '$user_id') LIMIT 1");
+      if ($sqlc->num_rows($result))
+        $order_side = (in_array($sqlc->result($result, 0, 'race'),array(2,5,6,8,10))) ? " AND race IN (2,5,6,8,10) " : " AND race IN (1,3,4,7,11) ";
     }
     require_once("scripts/defines.php");
     $query = "
@@ -211,7 +214,7 @@ function front()
         mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender".
         ($server_type ? ", latency " : " ")."
         FROM `characters` WHERE `online`= 1 ".($gm_online ? "AND `extra_flags`& 1 = 0 " : "")."$order_side ORDER BY $order_by $order_dir";
-    $result = $sql->query($query);
+    $result = $sqlc->query($query);
     $output .= "
             <font class=\"bold\">{$lang_index['tot_users_online']}: $total_online</font>
             <br /><br />
@@ -234,15 +237,13 @@ function front()
     $output .= "
               </tr>";
 
-    while ($char = $sql->fetch_row($result))
+    while ($char = $sqlc->fetch_row($result))
     {
       $accid = $char[8];
-      $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-      $gmlvl = $sql->query("SELECT `gmlevel` FROM `account` WHERE `id`=$accid");
-      $gml = $sql->fetch_row($gmlvl);
+      $gmlvl = $sqlr->query("SELECT `gmlevel` FROM `account` WHERE `id`=$accid");
+      $gml = $sqlr->fetch_row($gmlvl);
       $gm = $gml[0];
-      $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-      $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`={$char[9]}"));
+      $guild_name = $sqlc->fetch_row($sqlc->query("SELECT `name` FROM `guild` WHERE `guildid`={$char[9]}"));
 
       if ($server_type)
       {
@@ -267,14 +268,12 @@ function front()
 
       if ($showcountryflag)
       {
-        $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-        $loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$accid';");
-        $location = $sql->fetch_row($loc);
+        $loc = $sqlr->query("SELECT `last_ip` FROM `account` WHERE `id`='$accid';");
+        $location = $sqlr->fetch_row($loc);
         $ip = $location[0];
 
-        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-        $nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
-        $country = $sql->fetch_row($nation);
+        $nation = $sqlm->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+        $country = $sqlm->fetch_row($nation);
       }
       $CHAR_RACE = id_get_char_race();
       $CHAR_RANK = id_get_char_rank();
@@ -326,9 +325,6 @@ function front()
           </center>
   ";
   }
-
-  $sql->close();
-  unset($sql);
 
 }
 

@@ -5,27 +5,31 @@ require_once("scripts/defines.php");
 require_once("scripts/get_lib.php");
 valid_login($action_permission['read']);
 
-function top100()
+function top100($realmid)
 {
-  global $lang_top, $output, $realm_id, $characters_db, $itemperpage;
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  global $lang_top, $output, $realm_db, $characters_db, $server, $itemperpage, $developer_test_mode;
+  $realm_id = $realmid;
+
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   //==========================$_GET and SECURE========================
-  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "honor";
+  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "honor";
   if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="guid";
 
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "DESC" : "DESC";
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end========================
 
-  $result = $sql->query("SELECT guid, name, race, class, account, totaltime, online,
+  $result = $sqlc->query("SELECT guid, name, race, class, account, totaltime, online,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS honor,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS kills,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
@@ -35,8 +39,8 @@ function top100()
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1) AS UNSIGNED) as money
     FROM `characters` ORDER BY $order_by $order_dir LIMIT  $start, $itemperpage");
 
-  $query_1 = $sql->query("SELECT count(*) FROM characters");
-  $all_record = $sql->result($query_1,0);
+  $query_1 = $sqlc->query("SELECT count(*) FROM characters");
+  $all_record = $sqlc->result($query_1,0);
   unset($query_1);
   $all_record = (($all_record < 100) ? $all_record : 100);
 
@@ -44,13 +48,40 @@ function top100()
   $output .="
         <script type=\"text/javascript\" src=\"js/check.js\"></script>
         <center>
-          <table class=\"top_hidden\">
+          <table class=\"top_hidden\">";
+  if($developer_test_mode)
+  {
+    $realms = $sqlr->query("SELECT count(*) FROM `realmlist`");
+    $tot_realms = $sqlr->result($realms, 0);
+    if ($tot_realms > 1 && (count($server) >1))
+    {
+      $output .= "
+
+            <tr>
+              <td colspan=\"2\" align=\"left\">";
+                makebutton('View', "javascript:do_submit('form".$realm_id."',0)",130);
+      $output .= "
+                <form action=\"top100.php\" method=\"get\" name=\"form".$realm_id."\">
+                  Number of Realms :
+                  <input type=\"hidden\" name=\"action\" value=\"realms\" />
+                  <select name=\"n_realms\">";
+      for($i=1;$i<=$tot_realms;$i++)
+        $output .= "
+                    <option value=\"$i\">".htmlentities($i)."</option>";
+      $output .= "
+                  </select>
+                </form>
+              </td>
+            </tr>";
+    }
+  }
+  $output .= "
             <tr>
               <td align=\"right\">Total: ";
   $output .= $all_record;
   $output .= "
               </td>
-              <td align=\"right\" width=\"30%\">";
+              <td align=\"right\" width=\"25%\">";
   $output .= generate_pagination("top100.php?order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
   $output .= "
               </td>
@@ -77,8 +108,8 @@ function top100()
 
   for ($i=0; $i<$itemperpage; $i++)
   {
-    $char = $sql->fetch_array($result);
-    $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[11].";"));
+    $char = $sqlc->fetch_array($result);
+    $guild_name = $sqlc->fetch_row($sqlc->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[11].";"));
 
     $money_gold = (int)($char[13]/10000);
     $money_silver = (int)(($char[13]-$money_gold*10000)/100);
@@ -119,7 +150,7 @@ function top100()
   }
   $output .= "
             </tr>
-              <td colspan=\"12\" class=\"hidden\" align=\"right\" width=\"30%\">";
+              <td colspan=\"12\" class=\"hidden\" align=\"right\" width=\"25%\">";
     $output .= generate_pagination("top100.php?order_by=$order_by&amp;dir=".!$dir, $all_record, $itemperpage, $start);
     unset($all_record);
     $output .= "
@@ -127,10 +158,9 @@ function top100()
             </tr>
           </table>
         </center>
+        <br />
 ";
 
-  $sql->close();
-  unset($sql);
 
 }
 
@@ -138,35 +168,68 @@ function top100()
 // MAIN
 //#############################################################################
 
-$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+//$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
-$output .= "
-        <div class=\"top\">";
+//$output .= "
+//        <div class=\"top\">";
 
 $lang_top = lang_top();
 
-switch ($err)
-{
-  case 1:
-    break;
-  default:
-    $output .= "
-          <h1>{$lang_top['top100']}</h1>";
-}
+//switch ($err)
+//{
+//  case 1:
+//    break;
+//  default:
+    //$output .= "
+    //      <h1>{$lang_top['top100']}</h1>";
+//}
 
-unset($err);
+//unset($err);
 
-$output .= "
-        </div>";
+//$output .= "
+//        </div>";
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 switch ($action)
 {
-  case "unknown" :
+  case "realms" :
+    if (isset($_GET['n_realms']))
+    {
+      $n_realms = $_GET['n_realms'];
+
+      $sqlr=new sql;
+      $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+      $realms = $sqlr->query("SELECT `id`, `name` FROM `realmlist` LIMIT 10");
+
+      if ($sqlr->num_rows($realms) > 1 && (count($server) >1))
+      {
+        for($i=1;$i<=$n_realms;$i++)
+        {
+          $realm = $sqlr->fetch_row($realms);
+          if(isset($server[$realm[0]]))
+          {
+            $output .= "<div class=\"top\"><h1>Top 100 of $realm[1]</h1></div>";
+            top100($realm[0]);
+          }
+        }
+      }
+      else
+      {
+        $output .= "<div class=\"top\"><h1>{$lang_top['top100']}]</h1></div>";
+        top100($realm_id);
+      }
+    }
+    else
+    {
+      $output .= "<div class=\"top\"><h1>{$lang_top['top100']}</h1></div>";
+      top100($realm_id);
+    }
+    unset($sql);
     break;
   default :
-    top100();
+    $output .= "<div class=\"top\"><h1>{$lang_top['top100']}</h1></div>";
+    top100($realm_id);
 }
 
 unset($action);

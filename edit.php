@@ -21,19 +21,21 @@ function edit_user()
   global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
     $lang_id_tab, $expansion_select;
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  $result = $sql->query("SELECT email,gmlevel,joindate,expansion,last_ip FROM account WHERE username ='$user_name'");
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $refguid = $sql->fetch_row($sql->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '$user_id'"));
+  $result = $sqlr->query("SELECT email,gmlevel,joindate,expansion,last_ip FROM account WHERE username ='$user_name'");
+  $refguid = $sqlm->fetch_row($sqlm->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '$user_id'"));
   $refguid = $refguid[0];
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-  $referred_by = $sql->fetch_row($sql->query("SELECT name FROM characters WHERE guid = '$refguid'"));
+  $referred_by = $sqlc->fetch_row($sqlc->query("SELECT name FROM characters WHERE guid = '$refguid'"));
   unset($refguid);
   $referred_by = $referred_by[0];
 
-  if ($acc = $sql->fetch_row($result))
+  if ($acc = $sqlc->fetch_row($result))
   {
     $output .= "
         <center>
@@ -113,21 +115,19 @@ function edit_user()
                   </td>
                 </tr>";
     }
-    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    $result = $sql->query("SELECT SUM(numchars) FROM realmcharacters WHERE acctid = '$user_id'");
+    $result = $sqlr->query("SELECT SUM(numchars) FROM realmcharacters WHERE acctid = '$user_id'");
     $output .= "
                 <tr>
                   <td>{$lang_edit['tot_chars']}</td>
-                  <td>".$sql->result($result, 0)."</td>
+                  <td>".$sqlr->result($result, 0)."</td>
                 </tr>";
-    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-    $result = $sql->query("SELECT guid,name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1), mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE account = $user_id");
+    $result = $sqlc->query("SELECT guid,name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1), mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE account = $user_id");
     $output .= "
                 <tr>
                   <td>{$lang_edit['characters']}</td>
-                  <td>".$sql->num_rows($result)."</td>
+                  <td>".$sqlc->num_rows($result)."</td>
                 </tr>";
-    while ($char = $sql->fetch_array($result))
+    while ($char = $sqlc->fetch_array($result))
     {
       $output .= "
                 <tr>
@@ -239,8 +239,7 @@ function edit_user()
   }
   else
     error($lang_global['err_no_records_found']);
-  $sql->close();
-  unset($sql);
+
 }
 
 
@@ -255,54 +254,50 @@ function doedit_user()
   if ( (!isset($_POST['pass'])||$_POST['pass'] === '') || (!isset($_POST['mail'])||$_POST['mail'] === '') ||(!isset($_POST['expansion'])||$_POST['expansion'] === '') )
     redirect("edit.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $new_pass = ($sql->quote_smart($_POST['pass']) != sha1(strtoupper($user_name).":******")) ? "sha_pass_hash='".$sql->quote_smart($_POST['pass'])."', " : "";
-  $new_mail = $sql->quote_smart(trim($_POST['mail']));
-  $new_expansion = $sql->quote_smart(trim($_POST['expansion']));
+  $new_pass = ($sqlr->quote_smart($_POST['pass']) != sha1(strtoupper($user_name).":******")) ? "sha_pass_hash='".$sqlr->quote_smart($_POST['pass'])."', " : "";
+  $new_mail = $sqlr->quote_smart(trim($_POST['mail']));
+  $new_expansion = $sqlr->quote_smart(trim($_POST['expansion']));
 
   //make sure the mail is valid mail format
   require_once("libs/valid_lib.php");
   if ((!valid_email($new_mail))||(strlen($new_mail)  > 224))
     redirect("edit.php?error=2");
 
-  $sql->query("UPDATE account SET email='$new_mail', $new_pass expansion='$new_expansion' WHERE username = '$user_name'");
-  if ($sql->affected_rows())
+  $sqlr->query("UPDATE account SET email='$new_mail', $new_pass expansion='$new_expansion' WHERE username = '$user_name'");
+  if ($sqlr->affected_rows())
   {
     doupdate_referral($mmfpm_db, $user_id);
-    $sql->close();
-    unset($sql);
     redirect("edit.php?error=3");
   }
   else
   {
     doupdate_referral($mmfpm_db, $user_id);
-    $sql->close();
-    unset($sql);
     redirect("edit.php?error=4");
   }
 }
 function doupdate_referral($mmfpm_db, $user_id)
 {
   global $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id;
-  $result = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = '$user_id';"));
+  $result = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = `$user_id`;"));
   $result = $result[0];
   if ($result == NULL)
   {
     $referredby = $_POST['referredby'];
-    $referred_by = mysql_fetch_row(mysql_query("SELECT `guid` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `name` = '$referredby';"));
+    $referred_by = mysql_fetch_row(mysql_query("SELECT `guid` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `name` = `$referredby`;"));
     $referred_by = $referred_by[0];
 
     if ($referred_by != NULL)
     {
-      $result = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `id` = (SELECT `account` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `guid`='$referred_by');"));
+      $result = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `id` = (SELECT `account` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `guid`=`$referred_by`);"));
       $result = $result[0];
       if ($result != NULL)
       {
         if ($result != $user_id)
         {
-          mysql_query("INSERT INTO `$mmfpm_db[name]`.`point_system_invites` (`PlayersAccount`, `InvitedBy`, `InviterAccount`) VALUES ('$user_id', '$referred_by', '$result');");
+          mysql_query("INSERT INTO `$mmfpm_db[name]`.`point_system_invites` (`PlayersAccount`, `InvitedBy`, `InviterAccount`) VALUES (`$user_id`, `$referred_by`, `$result`);");
           redirect("edit.php?error=3");
         }
       }

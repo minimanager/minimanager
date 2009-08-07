@@ -169,13 +169,13 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
               <li><a class=\"trigger\" href=\"edit.php\">{$lang_header['my_acc']}</a>
                 <ul>";
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  $result = $sql->query("SELECT id, name FROM `realmlist` LIMIT 10");
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $result = $sqlr->query("SELECT id, name FROM `realmlist` LIMIT 10");
 
-  if ( $sql->num_rows($result) > 1 && (count($server) > 1) )
+  if ( $sqlr->num_rows($result) > 1 && (count($server) > 1) )
   {
-    while ($realm = $sql->fetch_row($result))
+    while ($realm = $sqlr->fetch_row($result))
     {
       if(isset($server[$realm[0]]))
       {
@@ -190,8 +190,6 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
                   <li><a href=\"#\">-------------------</a></li>";
   }
   unset($result);
-  $sql->close();
-  unset($sql);
 
   $output .= "
                   <li><a href=\"edit.php\">{$lang_header['edit_my_acc']}</a></li>

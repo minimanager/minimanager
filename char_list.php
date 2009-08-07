@@ -22,17 +22,21 @@ function browse_chars()
   global $lang_char_list, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $itemperpage,
     $action_permission, $user_lvl, $user_name, $showcountryflag;
 
-  $sql = new SQL;
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
   //==========================$_GET and SECURE========================
-  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlr->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "guid";
+  $order_by = (isset($_GET['order_by'])) ? $sqlr->quote_smart($_GET['order_by']) : "guid";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="guid";
 
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlr->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
@@ -43,8 +47,8 @@ function browse_chars()
   $search_value = '';
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
-    $search_value = $sql->quote_smart($_GET['search_value']);
-    $search_by = (isset($_GET['search_by'])) ? $sql->quote_smart($_GET['search_by']) : "name";
+    $search_value = $sqlr->quote_smart($_GET['search_value']);
+    $search_by = (isset($_GET['search_by'])) ? $sqlr->quote_smart($_GET['search_by']) : "name";
     $search_menu = array("name", "guid", "account", "level", "greater_level", "guild", "race", "class", "map", "highest_rank", "greater_rank", "online", "gold", "item");
     if (!in_array($search_by, $search_menu)) $search_by = 'name';
     unset($search_menu);
@@ -54,11 +58,10 @@ function browse_chars()
       //need to get the acc id from other table since input comes as name
       case "account":
         if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("charlist.php?error=2");
-        $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-        $result = $sql->query("SELECT id FROM account WHERE username LIKE '%$search_value%' LIMIT $start, $itemperpage");
+        $result = $sqlr->query("SELECT id FROM account WHERE username LIKE '%$search_value%' LIMIT $start, $itemperpage");
 
         $where_out = " account IN (0 ";
-        while ($char = $sql->fetch_row($result))
+        while ($char = $sqlr->fetch_row($result))
         {
           $where_out .= " ,";
           $where_out .= $char[0];
@@ -112,20 +115,19 @@ function browse_chars()
 
       case "guild":
         if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("charlist.php?error=2");
-        $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-        $result = $sql->query("SELECT guildid FROM guild WHERE name LIKE '%$search_value%'");
-        $guildid = $sql->result($result, 0, 'guildid');
+        $result = $sqlc->query("SELECT guildid FROM guild WHERE name LIKE '%$search_value%'");
+        $guildid = $sqlc->result($result, 0, 'guildid');
 
         if (!$search_value)
           $guildid = 0;
         $Q1 = "SELECT guid FROM guild_member WHERE guildid = ";
         $Q1 .= $guildid;
 
-        $result = $sql->query($Q1);
+        $result = $sqlc->query($Q1);
         unset($guildid);
         unset($Q1);
         $where_out = "guid IN (0 ";
-        while ($char = $sql->fetch_row($result))
+        while ($char = $sqlc->fetch_row($result))
         {
           $where_out .= " ,";
           $where_out .= $char[0];
@@ -143,11 +145,10 @@ function browse_chars()
 
       case "item":
         if (!is_numeric($search_value)) $search_value = 0;
-        $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-        $result = $sql->query("SELECT guid FROM character_inventory WHERE item_template = '$search_value'");
+        $result = $sqlc->query("SELECT guid FROM character_inventory WHERE item_template = '$search_value'");
 
         $where_out = "guid IN (0 ";
-        while ($char = $sql->fetch_row($result))
+        while ($char = $sqlc->fetch_row($result))
         {
           $where_out .= " ,";
           $where_out .= $char[0];
@@ -199,15 +200,13 @@ function browse_chars()
         WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
     }
 
-    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-    $query_1 = $sql->query("SELECT count(*) FROM `characters` where $where_out");
-    $query = $sql->query($sql_query);
+    $query_1 = $sqlc->query("SELECT count(*) FROM `characters` where $where_out");
+    $query = $sqlc->query($sql_query);
   }
   else
   {
-    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-    $query_1 = $sql->query("SELECT count(*) FROM `characters`");
-    $query = $sql->query("SELECT guid,name,account,race,class,zone,map,
+    $query_1 = $sqlc->query("SELECT count(*) FROM `characters`");
+    $query = $sqlc->query("SELECT guid,name,account,race,class,zone,map,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
       online,CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
@@ -215,10 +214,10 @@ function browse_chars()
       FROM `characters` ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   }
 
-  $all_record = $sql->result($query_1,0);
+  $all_record = $sqlc->result($query_1,0);
   unset($query_1);
 
-  $this_page = $sql->num_rows($query) or die(error($lang_global['err_no_result']));
+  $this_page = $sqlc->num_rows($query) or die(error($lang_global['err_no_result']));
 
   //==========================top tage navigaion starts here========================
   $output .="
@@ -304,27 +303,24 @@ function browse_chars()
 
   for ($i=1; $i<=$looping; $i++)
   {
-    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    $char = $sql->fetch_row($query) or die(error($lang_global['err_no_user']));
+    $char = $sqlr->fetch_row($query) or die(error($lang_global['err_no_user']));
     // to disalow lower lvl gm to  view accounts of other gms
-    $result = $sql->query("SELECT gmlevel, username FROM account WHERE id ='$char[2]'");
-    $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
-    $owner_acc_name = $sql->result($result, 0, 'username');
+    $result = $sqlr->query("SELECT gmlevel, username FROM account WHERE id ='$char[2]'");
+    $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
+    $owner_acc_name = $sqlr->result($result, 0, 'username');
     $lastseen = date("Y-m-d G:i:s", $char[11]);
 
     if ($showcountryflag)
     {
-        $loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[2]';");
-        $location = $sql->fetch_row($loc);
+        $loc = $sqlr->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[2]';");
+        $location = $sqlr->fetch_row($loc);
         $ip = $location[0];
 
-        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-        $nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
-        $country = $sql->fetch_row($nation);
+        $nation = $sqlm->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+        $country = $sqlm->fetch_row($nation);
     }
 
-    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-    $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`={$char[12]}"));
+    $guild_name = $sqlc->fetch_row($sqlc->query("SELECT `name` FROM `guild` WHERE `guildid`={$char[12]}"));
 
     if (($user_lvl >= $owner_gmlvl)||($owner_acc_name == $user_name))
     {
@@ -388,8 +384,6 @@ function browse_chars()
         </center>
 ";
 
-  $sql->close();
-  unset($sql);
 }
 
 
@@ -414,19 +408,16 @@ function del_char_form()
             <font class=\"bold\">{$lang_char_list['char_ids']}: ";
   $pass_array = "";
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   for ($i=0; $i<count($check); $i++)
   {
-    $name = $sql->result($sql->query("SELECT name FROM `characters` WHERE guid = {$check[$i]}"),0);
+    $name = $sqlc->result($sqlc->query("SELECT name FROM `characters` WHERE guid = {$check[$i]}"),0);
     $output .= "
               <a href=\"char.php?id=$check[$i]\" target=\"_blank\">$name, </a>";
     $pass_array .= "&amp;check%5B%5D=$check[$i]";
   }
-
-  $sql->close();
-  unset($sql);
 
   $output .= "
               <br />{$lang_global['will_be_erased']}
@@ -458,10 +449,10 @@ function dodel_char()
   if ($server_type)
     $tab_del_user_characters = $tab_del_user_characters_trinity;
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  if(isset($_GET['check'])) $check = $sql->quote_smart($_GET['check']);
+  if(isset($_GET['check'])) $check = $sqlc->quote_smart($_GET['check']);
     else redirect("char_list.php?error=1");
 
   $deleted_chars = 0;
@@ -474,9 +465,6 @@ function dodel_char()
       if (del_char($check[$i], $realm_id)) $deleted_chars++;
     }
   }
-
-  $sql->close();
-  unset($sql);
 
   $output .= "
         <center>";

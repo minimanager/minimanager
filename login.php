@@ -21,33 +21,31 @@ function dologin()
   if ( empty($_POST['user']) || empty($_POST['pass']) )
     redirect("login.php?error=2");
 
-  $sql = new SQL;
-  $link = $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $link = $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $user_name  = $sql->quote_smart($_POST['user']);
-  $user_pass  = $sql->quote_smart($_POST['pass']);
+  $user_name  = $sqlr->quote_smart($_POST['user']);
+  $user_pass  = $sqlr->quote_smart($_POST['pass']);
 
   if (strlen($user_name) > 255 || strlen($user_pass) > 255)
     redirect("login.php?error=1");
 
-  $result = $sql->query("SELECT id,gmlevel,username FROM account WHERE username='$user_name' AND sha_pass_hash='$user_pass' ");
+  $result = $sqlr->query("SELECT id,gmlevel,username FROM account WHERE username='$user_name' AND sha_pass_hash='$user_pass' ");
 
-  if ($sql->num_rows($result) == 1)
+  if ($sqlr->num_rows($result) == 1)
   {
-    $id = $sql->result($result, 0, 'id');
-    $result1 = $sql->query("SELECT count(*) FROM account_banned WHERE id ='$id' AND active = '1'");
-    if ($sql->result($result1, 0))
+    $id = $sqlr->result($result, 0, 'id');
+    $result1 = $sqlr->query("SELECT count(*) FROM account_banned WHERE id ='$id' AND active = '1'");
+    if ($sqlr->result($result1, 0))
     {
-      $sql->close();
-      unset($sql);
       redirect("login.php?error=3");
     }
     else
     {
       $_SESSION['user_id'] = $id;
-      $_SESSION['uname'] = $sql->result($result, 0, 'username');
-      $_SESSION['user_lvl'] = $sql->result($result, 0, 'gmlevel');
-      $_SESSION['realm_id'] = $sql->quote_smart($_POST['realm']);
+      $_SESSION['uname'] = $sqlr->result($result, 0, 'username');
+      $_SESSION['user_lvl'] = $sqlr->result($result, 0, 'gmlevel');
+      $_SESSION['realm_id'] = $sqlr->quote_smart($_POST['realm']);
       $_SESSION['client_ip'] = ( !empty($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
 
       if (isset($_POST['remember'])&&$_POST['remember'] != '')
@@ -56,15 +54,11 @@ function dologin()
         setcookie("realm_id", $_SESSION['realm_id'], time()+60*60*24*7);
         setcookie("p_hash", $user_pass, time()+60*60*24*7);
       }
-      $sql->close();
-      unset($sql);
       redirect("index.php");
     }
   }
   else
   {
-    $sql->close();
-    unset($sql);
     redirect("login.php?error=1");
   }
 }
@@ -105,17 +99,17 @@ function login()
                   <td>{$lang_login['password']} : <input type=\"password\" name=\"login_pass\" size=\"24\" maxlength=\"40\" /></td>
                 </tr>";
 
-  $sql = new SQL;
-  $link = $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  $result = $sql->query("SELECT id,name FROM `realmlist` LIMIT 10");
+  $sqlr = new SQL;
+  $link = $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $result = $sqlr->query("SELECT id,name FROM `realmlist` LIMIT 10");
 
-  if ($sql->num_rows($result) > 1 && (count($server) >1))
+  if ($sqlr->num_rows($result) > 1 && (count($server) >1))
   {
     $output .= "
                 <tr align=\"right\">
                   <td>{$lang_login['select_realm']} :
                     <select name=\"realm\">";
-    while ($realm = $sql->fetch_row($result))
+    while ($realm = $sqlr->fetch_row($result))
       if(isset($server[$realm[0]]))
         $output .= "
                       <option value=\"$realm[0]\">".htmlentities($realm[1])."</option>";
@@ -126,9 +120,7 @@ function login()
   }
   else
     $output .= "
-                <input type=\"hidden\" name=\"realm\" value=\"".$sql->result($result, 0, 'id')."\" />";
-  $sql->close();
-  unset($sql);
+                <input type=\"hidden\" name=\"realm\" value=\"".$sqlr->result($result, 0, 'id')."\" />";
   $output .= "
                 <tr>
                   <td>
@@ -188,37 +180,31 @@ function do_cookie_login()
   if ( empty($_COOKIE['uname']) || empty($_COOKIE['p_hash']) || empty($_COOKIE['realm_id']))
     redirect("login.php?error=2");
 
-  $sql = new SQL;
-  $link = $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  $user_name = $sql->quote_smart($_COOKIE['uname']);
-  $user_pass  = $sql->quote_smart($_COOKIE['p_hash']);
-  $result = $sql->query("SELECT username,gmlevel,id FROM account WHERE username='$user_name' AND sha_pass_hash='$user_pass'");
-  if ($sql->num_rows($result))
+  $sqlr = new SQL;
+  $link = $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $user_name = $sqlr->quote_smart($_COOKIE['uname']);
+  $user_pass  = $sqlr->quote_smart($_COOKIE['p_hash']);
+  $result = $sqlr->query("SELECT username,gmlevel,id FROM account WHERE username='$user_name' AND sha_pass_hash='$user_pass'");
+  if ($sqlr->num_rows($result))
   {
-    $id = $sql->result($result, 0, 'id');
-    $result1 = $sql->query("SELECT count(*) FROM account_banned WHERE id ='$id'");
-    if ($sql->result($result1, 0))
+    $id = $sqlr->result($result, 0, 'id');
+    $result1 = $sqlr->query("SELECT count(*) FROM account_banned WHERE id ='$id'");
+    if ($sqlr->result($result1, 0))
     {
-      $sql->close();
-      unset($sql);
       redirect("login.php?error=3");
     }
     else
     {
       $_SESSION['user_id'] = $id;
-      $_SESSION['uname'] = $sql->result($result, 0, 'username');
-      $_SESSION['user_lvl'] = $sql->result($result, 0, 'gmlevel');
-      $_SESSION['realm_id'] = $sql->quote_smart($_COOKIE['realm_id']);
+      $_SESSION['uname'] = $sqlr->result($result, 0, 'username');
+      $_SESSION['user_lvl'] = $sqlr->result($result, 0, 'gmlevel');
+      $_SESSION['realm_id'] = $sqlr->quote_smart($_COOKIE['realm_id']);
       $_SESSION['client_ip'] = ( !empty($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
-      $sql->close();
-      unset($sql);
       redirect("index.php");
     }
   }
   else
   {
-    $sql->close();
-    unset($sql);
     setcookie ("uname", "", time() - 3600);
     setcookie ("realm_id", "", time() - 3600);
     setcookie ("p_hash", "", time() - 3600);

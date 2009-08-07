@@ -153,9 +153,6 @@ function do_run_patch()
     }
   }
 
-$sql->close();
-unset($sql);
-
 if ($queries)
   redirect("run_patch.php?error=2&tot=$good");
 else

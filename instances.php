@@ -11,34 +11,34 @@ function do_search()
 {
   global $lang_instances, $output, $world_db, $realm_id, $server_type, $itemperpage;
 
-  $sql = new SQL;
-  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "level_min";
+  $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : "level_min";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="level_min";
 
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlw->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
 
-  $query_1 = $sql->query("SELECT count(*) FROM instance_template");
+  $query_1 = $sqlw->query("SELECT count(*) FROM instance_template");
 
   if ($server_type)
-    $result = $sql->query("SELECT `map`, `level_min`, `level_max`, `maxPlayers` as maxplayers, `reset_delay`
+    $result = $sqlw->query("SELECT `map`, `level_min`, `level_max`, `maxPlayers` as maxplayers, `reset_delay`
     FROM `instance_template` JOIN access_requirement ON access_requirement.id = instance_template.access_id
     ORDER BY $order_by $order_dir LIMIT $start, $itemperpage;");
   else
-    $result = $sql->query("SELECT `map`, `levelMin` as level_min, `levelMax` as level_max, `maxPlayers` as maxplayers, `reset_delay`
+    $result = $sqlw->query("SELECT `map`, `levelMin` as level_min, `levelMax` as level_max, `maxPlayers` as maxplayers, `reset_delay`
     FROM `instance_template` ORDER BY $order_by $order_dir LIMIT $start, $itemperpage;");
 
-  $all_record = $sql->result($query_1,0);
+  $all_record = $sqlw->result($query_1,0);
   unset($query_1);
 
   $output .= "
@@ -60,10 +60,8 @@ function do_search()
               <th width=\"15%\"><a href=\"instances.php?order_by=reset_delay&amp;start=$start&amp;dir=$dir\">".($order_by=='reset_delay' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_instances['reset_delay']}</a></th>
             </tr>";
 
-  while ($instances = $sql->fetch_array($result))
+  while ($instances = $sqlw->fetch_array($result))
   {
-    //$instances = $sql->fetch_array($result);
-
     $days = floor(round($instances[4] / 3600)/24);
     $hours = round($instances[4] / 3600) - ($days * 24);
     $reset = "";
@@ -101,8 +99,6 @@ function do_search()
         </center>
 ";
 
-  $sql->close();
-  unset($sql);
 }
 
 

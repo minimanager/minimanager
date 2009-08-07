@@ -19,25 +19,25 @@ function browse_tickets()
 {
   global  $lang_global, $lang_ticket, $output, $characters_db, $realm_id, $itemperpage, $server_type, $action_permission, $user_lvl;
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
   if ($server_type)
   {
-    $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "guid";
+    $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "guid";
     if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="guid";
   }
   else
   {
-    $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "ticket_id";
+    $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "ticket_id";
     if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="ticket_id";
   }
 
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
@@ -46,20 +46,20 @@ function browse_tickets()
 
   //get total number of items
   if($server_type)
-    $query_1 = $sql->query("SELECT count(*) FROM gm_tickets");
+    $query_1 = $sqlc->query("SELECT count(*) FROM gm_tickets");
   else
-    $query_1 = $sql->query("SELECT count(*) FROM character_ticket");
-  $all_record = $sql->result($query_1,0);
+    $query_1 = $sqlc->query("SELECT count(*) FROM character_ticket");
+  $all_record = $sqlc->result($query_1,0);
   unset($query_1);
 
   if($server_type)
-    $query = $sql->query("SELECT gm_tickets.guid, gm_tickets.playerGuid, SUBSTRING_INDEX(gm_tickets.message,' ',6),`characters`.name
+    $query = $sqlc->query("SELECT gm_tickets.guid, gm_tickets.playerGuid, SUBSTRING_INDEX(gm_tickets.message,' ',6),`characters`.name
       FROM gm_tickets,`characters`
         LEFT JOIN gm_tickets k1 ON k1.`playerGuid`=`characters`.`guid`
           WHERE gm_tickets.playerGuid = `characters`.`guid`
             ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
  else
-   $query = $sql->query("SELECT character_ticket.ticket_id, character_ticket.guid, SUBSTRING_INDEX(character_ticket.ticket_text,' ',6), `characters`.name
+   $query = $sqlc->query("SELECT character_ticket.ticket_id, character_ticket.guid, SUBSTRING_INDEX(character_ticket.ticket_text,' ',6), `characters`.name
      FROM character_ticket,`characters`
        LEFT JOIN character_ticket k1 ON k1.`guid`=`characters`.`guid`
          WHERE character_ticket.guid = `characters`.`guid`
@@ -99,7 +99,7 @@ function browse_tickets()
   $output .="
                 <th width=\"60%\">{$lang_ticket['ticket_text']}</th>
               </tr>";
-  while ($ticket = $sql->fetch_row($query))
+  while ($ticket = $sqlc->fetch_row($query))
   {
     $output .= "
               <tr>";
@@ -138,8 +138,6 @@ function browse_tickets()
         </center>
 ";
 
-  $sql->close();
-  unset($sql);
 }
 
 
@@ -153,10 +151,10 @@ function delete_tickets()
 
   if(!isset($_GET['check'])) redirect("ticket.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $check = $sql->quote_smart($_GET['check']);
+  $check = $sqlc->quote_smart($_GET['check']);
 
   $deleted_tickets = 0;
   for ($i=0; $i<count($check); $i++)
@@ -164,15 +162,13 @@ function delete_tickets()
     if ($check[$i] != "" )
     {
       if ($server_type)
-        $query = $sql->query("DELETE FROM gm_tickets WHERE guid = '$check[$i]'");
+        $query = $sqlc->query("DELETE FROM gm_tickets WHERE guid = '$check[$i]'");
       else
-        $query = $sql->query("DELETE FROM character_ticket WHERE ticket_id = '$check[$i]'");
+        $query = $sqlc->query("DELETE FROM character_ticket WHERE ticket_id = '$check[$i]'");
       $deleted_tickets++;
     }
   }
 
-  $sql->close();
-  unset($sql);
   if ($deleted_tickets == 0)
     redirect("ticket.php?error=3");
   else
@@ -190,24 +186,24 @@ function edit_ticket()
 
   if(!isset($_GET['id'])) redirect("Location: ticket.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlc->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("ticket.php?error=1");
 
   if ($server_type)
-    $query = $sql->query("SELECT gm_tickets.playerGuid, gm_tickets.message text, `characters`.name
+    $query = $sqlc->query("SELECT gm_tickets.playerGuid, gm_tickets.message text, `characters`.name
       FROM gm_tickets,`characters`
         LEFT JOIN gm_tickets k1 ON k1.`playerGuid`=`characters`.`guid`
           WHERE gm_tickets.playerGuid = `characters`.`guid` AND gm_tickets.guid = '$id'");
   else
-    $query = $sql->query("SELECT character_ticket.guid, character_ticket.ticket_text, `characters`.name
+    $query = $sqlc->query("SELECT character_ticket.guid, character_ticket.ticket_text, `characters`.name
       FROM character_ticket,`characters`
         LEFT JOIN character_ticket k1 ON k1.`guid`=`characters`.`guid`
           WHERE character_ticket.guid = `characters`.`guid` AND character_ticket.ticket_id = '$id'");
 
-  if ($ticket = $sql->fetch_row($query))
+  if ($ticket = $sqlc->fetch_row($query))
   {
     $output .= "
         <center>
@@ -258,8 +254,6 @@ function edit_ticket()
   else
     error($lang_global['err_no_records_found']);
 
-  $sql->close();
-  unset($sql);
 }
 
 
@@ -274,28 +268,24 @@ function do_edit_ticket()
   if(empty($_POST['new_text']) || empty($_POST['id']) )
     redirect("ticket.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $new_text = $sql->quote_smart($_POST['new_text']);
-  $id = $sql->quote_smart($_POST['id']);
+  $new_text = $sqlc->quote_smart($_POST['new_text']);
+  $id = $sqlc->quote_smart($_POST['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("ticket.php?error=1");
 
   if ($server_type)
-    $query = $sql->query("UPDATE gm_tickets SET message='$new_text' WHERE guid = '$id'");
+    $query = $sqlc->query("UPDATE gm_tickets SET message='$new_text' WHERE guid = '$id'");
   else
-    $query = $sql->query("UPDATE character_ticket SET ticket_text='$new_text' WHERE ticket_id = '$id'");
+    $query = $sqlc->query("UPDATE character_ticket SET ticket_text='$new_text' WHERE ticket_id = '$id'");
 
-  if ($sql->affected_rows())
+  if ($sqlc->affected_rows())
   {
-    $sql->close();
-    unset($sql);
     redirect("ticket.php?error=5");
   }
   else
   {
-    $sql->close();
-    unset($sql);
     redirect("ticket.php?error=6");
   }
 }

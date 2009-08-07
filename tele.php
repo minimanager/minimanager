@@ -20,17 +20,17 @@ function browse_tele()
   global $lang_tele, $lang_global, $output, $world_db, $realm_id, $itemperpage,
     $action_permission, $user_lvl;
 
-  $sql = new SQL;
-  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "id";
+  $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : "id";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="id";
 
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlw->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
@@ -42,25 +42,25 @@ function browse_tele()
   $search_value = '';
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
-    $search_value = $sql->quote_smart($_GET['search_value']);
-    $search_by = $sql->quote_smart($_GET['search_by']);
+    $search_value = $sqlw->quote_smart($_GET['search_value']);
+    $search_by = $sqlw->quote_smart($_GET['search_by']);
     $search_menu = array("name", "id", "map");
     if (!in_array($search_by, $search_menu)) $search_by = 'name';
     unset($search_menu);
 
     if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("tele.php?error=1");
-    $query_1 = $sql->query("SELECT count(*) FROM game_tele WHERE $search_by LIKE '%$search_value%'");
-    $query = $sql->query("SELECT id, name, map, position_x, position_y, position_z, orientation
+    $query_1 = $sqlw->query("SELECT count(*) FROM game_tele WHERE $search_by LIKE '%$search_value%'");
+    $query = $sqlw->query("SELECT id, name, map, position_x, position_y, position_z, orientation
       FROM game_tele WHERE $search_by LIKE '%$search_value%' ORDER BY $order_by $order_dir LIMIT  $start, $itemperpage");
   }
   else
   {
-    $query_1 = $sql->query("SELECT count(*) FROM game_tele");
-    $query = $sql->query("SELECT id, name, map, position_x, position_y, position_z, orientation
+    $query_1 = $sqlw->query("SELECT count(*) FROM game_tele");
+    $query = $sqlw->query("SELECT id, name, map, position_x, position_y, position_z, orientation
       FROM game_tele ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   }
 
-  $all_record = $sql->result($query_1,0);
+  $all_record = $sqlw->result($query_1,0);
   unset($query_1);
 
   //=====================top tage navigaion starts here========================
@@ -131,7 +131,7 @@ function browse_tele()
               <th width=\"10%\"><a href=\"tele.php?order_by=orientation&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\"".($order_by=='orientation' ? " class=\"$order_dir\"" : "").">{$lang_tele['orientation']}</a></th>
             </tr>";
 
-  while ($data = $sql->fetch_row($query))
+  while ($data = $sqlw->fetch_row($query))
   {
     $output .= "
             <tr>";
@@ -172,8 +172,6 @@ function browse_tele()
         </center>
 ";
 
-  $sql->close();
-  unset($sql);
 }
 
 
@@ -187,37 +185,33 @@ function del_tele()
 
   if(!isset($_GET['id'])) redirect("Location: tele.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlw->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "id";
+  $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : "id";
   if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="id";
 
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlw->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
 
-  $sql->query("DELETE FROM game_tele WHERE id = '$id'");
-  if ($sql->affected_rows() != 0)
+  $sqlw->query("DELETE FROM game_tele WHERE id = '$id'");
+  if ($sqlw->affected_rows() != 0)
   {
-    $sql->close();
-    unset($sql);
     redirect("tele.php?error=3&order_by=$order_by&start=$start&dir=$dir");
   }
   else
   {
-    $sql->close();
-    unset($sql);
     redirect("tele.php?error=5");
   }
 }
@@ -233,17 +227,19 @@ function edit_tele()
 
   if(!isset($_GET['id'])) redirect("Location: tele.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlw->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
 
-  $query = $sql->query("SELECT id, name, map, position_x, position_y, position_z, orientation FROM game_tele WHERE id = '$id'");
+  $query = $sqlw->query("SELECT id, name, map, position_x, position_y, position_z, orientation FROM game_tele WHERE id = '$id'");
 
-  if ($sql->num_rows($query) == 1)
+  if ($sqlw->num_rows($query) == 1)
   {
-    $tele = $sql->fetch_row($query);
+    $tele = $sqlw->fetch_row($query);
     $output .= "
         <script type=\"text/javascript\">
           answerbox.btn_ok='{$lang_global['yes']}';
@@ -269,9 +265,8 @@ function edit_tele()
                 <td>
                   <select name=\"new_map\">";
 
-    $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-    $map_query = $sql->query("SELECT id, name01 from dbc_map order by id");
-    while ($map = $sql->fetch_row($map_query))
+    $map_query = $sqlm->query("SELECT id, name01 from dbc_map order by id");
+    while ($map = $sqlm->fetch_row($map_query))
     {
       $output .= "
                     <option value=\"{$map[0]}\" ";
@@ -322,9 +317,6 @@ function edit_tele()
   else
     error($lang_global['err_no_records_found']);
 
-  $sql->close();
-  unset($sql);
-
 }
 
 
@@ -340,31 +332,27 @@ function do_edit_tele()
     || !isset($_GET['new_y'])|| !isset($_GET['new_z'])|| !isset($_GET['new_orientation']))
     redirect("tele.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlw->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
 
-  $new_name = $sql->quote_smart($_GET['new_name']);
-  $new_map = $sql->quote_smart($_GET['new_map']);
-  $new_x = $sql->quote_smart($_GET['new_x']);
-  $new_y = $sql->quote_smart($_GET['new_y']);
-  $new_z = $sql->quote_smart($_GET['new_z']);
-  $new_orientation = $sql->quote_smart($_GET['new_orientation']);
+  $new_name = $sqlw->quote_smart($_GET['new_name']);
+  $new_map = $sqlw->quote_smart($_GET['new_map']);
+  $new_x = $sqlw->quote_smart($_GET['new_x']);
+  $new_y = $sqlw->quote_smart($_GET['new_y']);
+  $new_z = $sqlw->quote_smart($_GET['new_z']);
+  $new_orientation = $sqlw->quote_smart($_GET['new_orientation']);
 
-  $sql->query("UPDATE game_tele SET position_x='$new_x', position_y ='$new_y', position_z ='$new_z', orientation ='$new_orientation', map ='$new_map', name ='$new_name' WHERE id = '$id'");
+  $sqlw->query("UPDATE game_tele SET position_x='$new_x', position_y ='$new_y', position_z ='$new_z', orientation ='$new_orientation', map ='$new_map', name ='$new_name' WHERE id = '$id'");
 
-  if ($sql->affected_rows())
+  if ($sqlw->affected_rows())
   {
-    $sql->close();
-    unset($sql);
     redirect("tele.php?error=3");
   }
   else
   {
-    $sql->close();
-    unset($sql);
     redirect("tele.php?error=5");
   }
 }
@@ -377,7 +365,7 @@ function add_tele()
 {
   global  $output, $lang_tele, $lang_global, $mmfpm_db, $action_permission;
   valid_login($action_permission['insert']);
-  $sql = new SQL;
+  $sqlw = new SQL;
   $output .= "
         <center>
           <fieldset class=\"half_frame\">
@@ -393,15 +381,13 @@ function add_tele()
                   <td>{$lang_tele['on_map']}</td>
                   <td>
                     <select name=\"map\">";
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $map_query = $sql->query("SELECT id, name01 from dbc_map order by id");
-  while ($map = $sql->fetch_row($map_query))
+  $sqlw->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $map_query = $sqlw->query("SELECT id, name01 from dbc_map order by id");
+  while ($map = $sqlw->fetch_row($map_query))
     $output .= "
                       <option value=\"{$map[0]}\">{$map[0]} : {$map[1]}</option>";
   unset($map);
   unset($map_query);
-  $sql->close();
-  unset($sql);
   $output .= "
                     </select>
                   </td>
@@ -451,28 +437,24 @@ function do_add_tele()
     || !isset($_GET['y'])|| !isset($_GET['z'])|| !isset($_GET['orientation']))
     redirect("tele.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
-  $name = $sql->quote_smart($_GET['name']);
-  $map = $sql->quote_smart($_GET['map']);
-  $x = $sql->quote_smart($_GET['x']);
-  $y = $sql->quote_smart($_GET['y']);
-  $z = $sql->quote_smart($_GET['z']);
-  $orientation = $sql->quote_smart($_GET['orientation']);
+  $name = $sqlw->quote_smart($_GET['name']);
+  $map = $sqlw->quote_smart($_GET['map']);
+  $x = $sqlw->quote_smart($_GET['x']);
+  $y = $sqlw->quote_smart($_GET['y']);
+  $z = $sqlw->quote_smart($_GET['z']);
+  $orientation = $sqlw->quote_smart($_GET['orientation']);
 
-  $sql->query("INSERT INTO game_tele VALUES (NULL,'$x','$y', '$z' ,'$orientation' ,'$map' ,'$name')");
+  $sqlw->query("INSERT INTO game_tele VALUES (NULL,'$x','$y', '$z' ,'$orientation' ,'$map' ,'$name')");
 
-  if ($sql->affected_rows())
+  if ($sqlw->affected_rows())
   {
-    $sql->close();
-    unset($sql);
     redirect("tele.php?error=3");
   }
   else
   {
-    $sql->close();
-    unset($sql);
     redirect("tele.php?error=5");
   }
 }

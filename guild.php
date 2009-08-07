@@ -20,17 +20,19 @@ function browse_guilds()
 {
   global $lang_guild, $lang_global, $output, $realm_db, $characters_db, $realm_id, $itemperpage,
     $action_permission, $user_lvl, $user_id;
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "gid";
+  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "gid";
   if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="gid";
 
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
@@ -38,7 +40,7 @@ function browse_guilds()
   //==========================$_GET and SECURE end=============================
   //==========================MyGuild==========================================
 
-  $query_myGuild = $sql->query("SELECT g.guildid as gid, g.name, g.leaderguid AS lguid,
+  $query_myGuild = $sqlc->query("SELECT g.guildid as gid, g.name, g.leaderguid AS lguid,
     (SELECT name from characters where guid = lguid), (SELECT race in (2,5,6,8,10) from characters where guid = lguid) as faction,
     (select count(*) from characters where guid in (select guid from guild_member where guildid = lguid) and online = 1) as gonline,
     (select count(*) from guild_member where guildid = gid), SUBSTRING_INDEX(g.MOTD,' ',6), g.createdate,
@@ -62,11 +64,10 @@ function browse_guilds()
                 <th width=\"20%\">{$lang_guild['guild_motd']}</th>
                 <th width=\"15%\">{$lang_guild['create_date']}</th>
               </tr>";
-    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    while ($data = $sql->fetch_row($query_myGuild))
+    while ($data = $sqlr->fetch_row($query_myGuild))
     {
-      $result = $sql->query("SELECT gmlevel FROM account WHERE id ='$data[9]'");
-      $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
+      $result = $sqlr->query("SELECT gmlevel FROM account WHERE id ='$data[9]'");
+      $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
       $output .= "
               <tr>
                 <td>$data[0]</td>
@@ -86,7 +87,6 @@ function browse_guilds()
           </fieldset>
         </center>
         <br />";
-    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
   }
   //==========================MyGuild end======================================
   //==========================Browse/Search Guilds CHECK=======================
@@ -94,8 +94,8 @@ function browse_guilds()
   $search_value = '';
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
-    $search_by = $sql->quote_smart($_GET['search_by']);
-    $search_value = $sql->quote_smart($_GET['search_value']);
+    $search_by = $sqlc->quote_smart($_GET['search_by']);
+    $search_value = $sqlc->quote_smart($_GET['search_value']);
 
     $search_menu = array("name", "leadername", "guildid");
     if (!in_array($search_by, $search_menu)) $search_by = 'name';
@@ -104,30 +104,30 @@ function browse_guilds()
     {
       case "name":
         if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("guild.php?error=5");
-        $query = $sql->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
+        $query = $sqlc->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
           (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
           (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
           FROM guild as g left outer join characters as c on c.guid = g.leaderguid
           where g.name like '%$search_value%' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-        $query_count = $sql->query("SELECT 1 from guild where name like '%$search_value%'");
+        $query_count = $sqlc->query("SELECT 1 from guild where name like '%$search_value%'");
         break;
       case "leadername" :
         if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("guild.php?error=5");
-        $query = $sql->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
+        $query = $sqlc->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
           (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
           (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
           FROM guild as g left outer join characters as c on c.guid = g.leaderguid where g.leaderguid in
           (SELECT guid from characters where name like '%$search_value%') ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-        $query_count = $sql->query("SELECT 1 from guild where leaderguid in (select guid from characters where name like '%$search_value%')");
+        $query_count = $sqlc->query("SELECT 1 from guild where leaderguid in (select guid from characters where name like '%$search_value%')");
         break;
       case "guildid" :
         if (!preg_match('/^[[:digit:]]{1,12}$/', $search_value)) redirect("guild.php?error=5");
-        $query = $sql->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
+        $query = $sqlc->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
           (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
           (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
           FROM guild as g left outer join characters as c on c.guid = g.leaderguid
           where g.guildid = '$search_value' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-        $query_count = $sql->query("SELECT 1 from guild where guildid = '$search_value'");
+        $query_count = $sqlc->query("SELECT 1 from guild where guildid = '$search_value'");
         break;
       default :
         redirect("guild.php?error=2");
@@ -135,10 +135,10 @@ function browse_guilds()
   }
   else
   {
-    $query = $sql->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid, (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction, (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount FROM guild as g left outer join characters as c on c.guid = g.leaderguid ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
-    $query_count = $sql->query("SELECT 1 from guild");
+    $query = $sqlc->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid, (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction, (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount FROM guild as g left outer join characters as c on c.guid = g.leaderguid ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+    $query_count = $sqlc->query("SELECT 1 from guild");
   }
-  $all_record = $sql->num_rows($query_count);
+  $all_record = $sqlc->num_rows($query_count);
   //==========================Browse/Search Guilds CHECK end===================
   //==========================Browse/Search Guilds=============================
 
@@ -187,11 +187,10 @@ function browse_guilds()
                   <th width=\"15%\"><a href=\"guild.php?order_by=tot_chars&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='tot_chars' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['tot_members']}</a></th>
                   <th width=\"20%\"><a href=\"guild.php?order_by=createdate&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='createdate' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['create_date']}</a></th>
                 </tr>";
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  while ($data = $sql->fetch_row($query))
+  while ($data = $sqlr->fetch_row($query))
   {
-    $result = $sql->query("SELECT gmlevel FROM account WHERE id ='$data[7]'");
-    $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
+    $result = $sqlr->query("SELECT gmlevel FROM account WHERE id ='$data[7]'");
+    $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
     $output .= "
                 <tr>
                   <td>$data[0]</td>";
@@ -216,8 +215,6 @@ function browse_guilds()
           <br />";
   //==========================Browse/Search Guilds end=========================
 
-  $sql->close();
-  unset($sql);
 }
 
 
@@ -240,33 +237,35 @@ function view_guild()
     $action_permission, $user_lvl, $user_id;
   if(!isset($_GET['id'])) redirect("guild.php?error=1");
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $guild_id = $sql->quote_smart($_GET['id']);
+  $guild_id = $sqlc->quote_smart($_GET['id']);
   if(!preg_match("/^[[:digit:]]{1,10}$/", $guild_id)) redirect("guild.php?error=6");
 
   //==========================SQL INGUILD and GUILDLEADER======================
-  $q_inguild = $sql->query("select 1 from guild_member where guildid = '$guild_id' and guid in (select guid from characters where account = '$user_id')");
-  $inguild = $sql->result($q_inguild, 0, '1');
+  $q_inguild = $sqlc->query("select 1 from guild_member where guildid = '$guild_id' and guid in (select guid from characters where account = '$user_id')");
+  $inguild = $sqlc->result($q_inguild, 0, '1');
   if ( $user_lvl < $action_permission['update'] && !$inguild )
     redirect("guild.php?error=6");
 
-  $q_amIguildleader = $sql->query("select 1 from guild where guildid = '$guild_id' and leaderguid in (select guid from characters where account = '$user_id')");
-  $amIguildleader = $sql->result($q_amIguildleader, 0, '1');
+  $q_amIguildleader = $sqlc->query("select 1 from guild where guildid = '$guild_id' and leaderguid in (select guid from characters where account = '$user_id')");
+  $amIguildleader = $sqlc->result($q_amIguildleader, 0, '1');
 
-  $q_guildmemberCount = $sql->query("SELECT 1 from guild_member where guildid = '$guild_id'");
-  $guildmemberCount = $sql->num_rows($q_guildmemberCount);
+  $q_guildmemberCount = $sqlc->query("SELECT 1 from guild_member where guildid = '$guild_id'");
+  $guildmemberCount = $sqlc->num_rows($q_guildmemberCount);
   //====================SQL INGUILD and GUILDLEADER end========================
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sql->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : "mrank";
+  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "mrank";
   if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="mrank";
 
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";
@@ -275,12 +274,12 @@ function view_guild()
 
   require_once("scripts/defines.php");
 
-  $query = $sql->query("SELECT guildid, name, info, MOTD, createdate,
+  $query = $sqlc->query("SELECT guildid, name, info, MOTD, createdate,
     (select count(*) from guild_member where guildid = '$guild_id') as mtotal,
     (select count(*) from guild_member where guildid = '$guild_id' and guid in
     (select guid from characters where online = 1)) as monline
     FROM guild WHERE guildid = '$guild_id'");
-  $guild_data = $sql->fetch_row($query);
+  $guild_data = $sqlc->fetch_row($query);
 
   $output .= "
         <script type=\"text/javascript\">
@@ -329,7 +328,7 @@ function view_guild()
                       <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=clogout&amp;start=$start&amp;dir=$dir\">".($order_by=='clogout' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['llogin']}</a></th>
                       <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['online']}</a></th>
                     </tr>";
-  $members = $sql->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass,
+  $members = $sqlc->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(c.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS clevel,
     gm.rank AS mrank, (SELECT rname FROM guild_rank WHERE guildid ='$guild_id' AND rid = mrank+1) AS rname,
     gm.Pnote, gm.OFFnote,
@@ -338,11 +337,10 @@ function view_guild()
     FROM guild_member as gm left outer join characters as c on c.guid = gm.guid
     WHERE gm.guildid = '$guild_id' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
 
-  $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  while ($member = $sql->fetch_row($members))
+  while ($member = $sqlr->fetch_row($members))
   {
-    $result = $sql->query("SELECT gmlevel FROM account WHERE id ='$member[11]'");
-    $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
+    $result = $sqlr->query("SELECT gmlevel FROM account WHERE id ='$member[11]'");
+    $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
     $output .= "
                     <tr>";
     // gm, gildleader or own account! are allowed to remove from guild
@@ -373,8 +371,6 @@ function view_guild()
               </tr>
             </table>
             <br />";
-  $sql->close();
-  unset($sql);
   $output .= "
             <table class=\"hidden\">
               <tr>
@@ -410,10 +406,10 @@ function del_guild()
     redirect("guild.php?error=1");
   if (!preg_match('/^[[:digit:]]{1,12}$/', $id))
     redirect("guild.php?error=5");
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-  $q_amIguildleader = $sql->query("select 1 from guild where guildid = '$id' and leaderguid in (select guid from characters where account = '$user_id')");
-  $amIguildleader = $sql->result($q_amIguildleader, 0, '1');
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $q_amIguildleader = $sqlc->query("select 1 from guild where guildid = '$id' and leaderguid in (select guid from characters where account = '$user_id')");
+  $amIguildleader = $sqlc->result($q_amIguildleader, 0, '1');
   if ($user_lvl < $action_permission['delete'] && !$amIguildleader)
     redirect("guild.php?error=6");
   $output .= "
@@ -443,8 +439,6 @@ function del_guild()
         <br />
 ";
 
-  $sql->close();
-  unset($sql);
 }
 
 
@@ -469,25 +463,23 @@ function rem_char_from_guild()
     redirect("guild.php?error=1");
   if (!preg_match('/^[[:digit:]]{1,12}$/', $guld_id))
     redirect("guild.php?error=5");
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-  $q_amIguildleaderOrSelfRemoval = $sql->query("select 1 from guild as g left outer join guild_member as gm on gm.guildid = g.guildid
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $q_amIguildleaderOrSelfRemoval = $sqlc->query("select 1 from guild as g left outer join guild_member as gm on gm.guildid = g.guildid
                                    where g.guildid = '$guld_id' and
                                    (g.leaderguid in (select guid from characters where account = '$user_id')
                                    or gm.guid in (select guid from characters where account = '$user_id' and guid = '$guid'))");
-  $amIguildleaderOrSelfRemoval = $sql->result($q_amIguildleaderOrSelfRemoval, 0, '1');
+  $amIguildleaderOrSelfRemoval = $sqlc->result($q_amIguildleaderOrSelfRemoval, 0, '1');
   if ($user_lvl < $action_permission['delete'] && !$amIguildleaderOrSelfRemoval )
     redirect("guild.php?error=6");
-  $char_data = $sql->query("SELECT data FROM `characters` WHERE guid = '$guid'");
-  $data = $sql->result($char_data, 0, 'data');
+  $char_data = $sqlc->query("SELECT data FROM `characters` WHERE guid = '$guid'");
+  $data = $sqlc->result($char_data, 0, 'data');
   $data = explode(' ',$data);
   $data[CHAR_DATA_OFFSET_GUILD_ID] = 0;
   $data[CHAR_DATA_OFFSET_GUILD_RANK] = 0;
   $data = implode(' ',$data);
-  $sql->query("UPDATE `characters` SET data = '$data' WHERE guid = '$guid'");
-  $sql->query("DELETE FROM guild_member WHERE guid = '$guid'");
-  $sql->close();
-  unset($sql);
+  $sqlc->query("UPDATE `characters` SET data = '$data' WHERE guid = '$guid'");
+  $sqlc->query("DELETE FROM guild_member WHERE guid = '$guid'");
   redirect("guild.php?action=view_guild&amp;id=$guld_id");
 }
 
