@@ -28,7 +28,7 @@ function edit_user()
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $result = $sqlr->query("SELECT email,gmlevel,joindate,expansion,last_ip FROM account WHERE username ='$user_name'");
+  $result = $sqlr->query("SELECT email, gmlevel, joindate, expansion, last_ip FROM account WHERE username = '$user_name'");
   $refguid = $sqlm->fetch_row($sqlm->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '$user_id'"));
   $refguid = $refguid[0];
   $referred_by = $sqlc->fetch_row($sqlc->query("SELECT name FROM characters WHERE guid = '$refguid'"));
@@ -115,13 +115,16 @@ function edit_user()
                   </td>
                 </tr>";
     }
-    $result = $sqlr->query("SELECT SUM(numchars) FROM realmcharacters WHERE acctid = '$user_id'");
+    $result = $sqlr->query("SELECT SUM(numchars) FROM realmcharacters WHERE acctid = $user_id");
     $output .= "
                 <tr>
                   <td>{$lang_edit['tot_chars']}</td>
                   <td>".$sqlr->result($result, 0)."</td>
                 </tr>";
-    $result = $sqlc->query("SELECT guid,name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1), mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE account = $user_id");
+    $result = $sqlc->query("SELECT guid, name, race, class,
+    SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1),
+    mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+    FROM characters WHERE account = '$user_id'");
     $output .= "
                 <tr>
                   <td>{$lang_edit['characters']}</td>
@@ -266,7 +269,7 @@ function doedit_user()
   if ((!valid_email($new_mail))||(strlen($new_mail)  > 224))
     redirect("edit.php?error=2");
 
-  $sqlr->query("UPDATE account SET email='$new_mail', $new_pass expansion='$new_expansion' WHERE username = '$user_name'");
+  $sqlr->query("UPDATE account SET email = '$new_mail', $new_pass expansion = '$new_expansion' WHERE username = '$user_name'");
   if ($sqlr->affected_rows())
   {
     doupdate_referral($mmfpm_db, $user_id);
@@ -281,25 +284,33 @@ function doedit_user()
 function doupdate_referral($mmfpm_db, $user_id)
 {
   global $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id;
-  $result = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = `$user_id`;"));
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+  $result = $sqlm->fetch_row($sqlm->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '$user_id'"));
   $result = $result[0];
+
   if ($result == NULL)
   {
     $referredby = $_POST['referredby'];
-    $referred_by = mysql_fetch_row(mysql_query("SELECT `guid` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `name` = `$referredby`;"));
+    $referred_by = $sqlc->fetch_row($sqlc->query("SELECT guid FROM characters WHERE name = '$referredby'"));
     $referred_by = $referred_by[0];
 
     if ($referred_by != NULL)
     {
-      $result = mysql_fetch_row(mysql_query("SELECT `id` FROM `$realm_db[name]`.`account` WHERE `id` = (SELECT `account` FROM `{$characters_db[$realm_id][name]}`.`characters` WHERE `guid`=`$referred_by`);"));
+      $char = $sqlc->fetch_row($sqlc->query("SELECT account FROM characters WHERE guid = '$referred_by'"));
+      $result = $sqlr->fetch_row($sqlr->query("SELECT id FROM account WHERE id = '$char'"));
       $result = $result[0];
-      if ($result != NULL)
+      if ($result != $user_id)
       {
-        if ($result != $user_id)
-        {
-          mysql_query("INSERT INTO `$mmfpm_db[name]`.`point_system_invites` (`PlayersAccount`, `InvitedBy`, `InviterAccount`) VALUES (`$user_id`, `$referred_by`, `$result`);");
-          redirect("edit.php?error=3");
-        }
+        $sqlm->query("INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('$user_id', '$referred_by', '$result')");
+        redirect("edit.php?error=3");
       }
       else
         redirect("edit.php?error=4");
