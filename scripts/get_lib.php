@@ -8,6 +8,7 @@
  * License: GNU General Public License v2(GPL)
  */
 
+
 //##########################################################################################
 //get name from realmlist.name
 
@@ -28,6 +29,7 @@ function get_realm_name($realm_id)
 
 //##########################################################################################
 //get DBC Language from config
+
 function get_lang_id() {
   # DBC Language Settings
   # 0 = English
@@ -84,6 +86,7 @@ function get_lang_id() {
 
 //##########################################################################################
 //get item name from item_template.entry
+
 function get_item_name($item_id){
  global $lang_global, $world_db, $realm_id;
  if($item_id){
@@ -102,6 +105,7 @@ function get_item_name($item_id){
 
 //##########################################################################################
 //generate item tooltip from item_template.entry
+
 function get_item_tooltip($item_id){
  global $lang_global, $lang_item, $lang_id_tab, $world_db, $realm_id, $language;
  if($item_id){
@@ -948,6 +952,7 @@ function get_aura_icon($auraid)
 
 //##########################################################################################
 //generate item border from item_template.entry
+
 function get_item_border($item_id){
   global $lang_global, $lang_id_tab, $world_db, $realm_id;
   if($item_id){

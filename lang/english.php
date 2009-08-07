@@ -712,36 +712,41 @@ function lang_edit()
 }
 
 
-$lang_mail = array(
-  // ----- MAIL.PHP -----
-  'mail_type' => 'Mail Type',
-  'mail_options' => 'Mail Options',
-  'email' => 'Email',
-  'ingame_mail' => 'InGame Mail',
-  'send' => 'Send',
-  'recipient' => 'Recipient',
-  'subject' => 'Subject',
-  'group_send' => 'Group Send',
-  'both' => 'Both',
-  'gm_level' => 'GM Level',
-  'locked_accouns' => 'Locked Accouns',
-  'banned_accounts' => 'Banned Accounts',
-  'char_level' => 'Character Level',
-  'online' => 'Online',
-  'attachments' => 'Attachments (ingame only)',
-  'money' => 'Money',
-  'item' => 'Item (id)',
-  'stack' => 'Stack',
-  'mail_body' => 'Mail Body',
-  'dont_use_both_groupsend_and_to' => '* Notice: If You are using \'Group Send\' option, make sure to leave \'Recipient\' field blank.',
-  'mail_sent' => 'Mail Sent Successfully.',
-  'mail_err' => 'Mail Error',
-  'no_recipient_found' => 'No Mail Recipient Found.',
-  'use_name_or_email' => 'Use Character name in case of inGame Mail - Email address in case of email.',
-  'option_unavailable' => 'You cannot use this option at current configurations.',
-  'use_currect_option' => 'Some of the \'Group Send\' options can be used only with \'inGame mail\' or \'Email\' but not with both.',
-  'send_mail' => 'Send Mail'
+// ----- MAIL.PHP -----
+function lang_mail()
+{
+  $lang_mail = array
+  (
+    'mail_type' => 'Mail Type',
+    'recipient' => 'Recipient',
+    'subject' => 'Subject',
+    'email' => 'Email',
+    'ingame_mail' => 'InGame Mail',
+    'dont_use_both_groupsend_and_to' => '* Notice: If You are using \'Group Send\' option, make sure to leave \'Recipient\' field blank.',
+    'group_send' => 'Group Send',
+    'both' => 'Both',
+    'gm_level' => 'GM Level',
+    'locked_accouns' => 'Locked Accouns',
+    'banned_accounts' => 'Banned Accounts',
+    'char_level' => 'Character Level',
+    'online' => 'Online',
+    'attachments' => 'Attachments (ingame only)',
+    'money' => 'Money',
+    'item' => 'Item (id)',
+    'stack' => 'Stack',
+    'mail_body' => 'Mail Body',
+    'send' => 'Send',
+    'mail_sent' => 'Mail Sent Successfully.',
+    'mail_err' => 'Mail Error',
+    'no_recipient_found' => 'No Mail Recipient Found.',
+    'use_name_or_email' => 'Use Character name in case of inGame Mail - Email address in case of email.',
+    'option_unavailable' => 'You cannot use this option at current configurations.',
+    'use_currect_option' => 'Some of the \'Group Send\' options can be used only with \'inGame mail\' or \'Email\' but not with both.',
+    'send_mail' => 'Send Mail',
+    'result' => 'InGame Mail Result',
   );
+  return $lang_mail;
+}
 
 
 // ----- MOTD.PHP -----

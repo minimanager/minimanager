@@ -16,7 +16,7 @@ valid_login($action_permission['update']);
 // print mail form
 function print_mail_form()
 {
-  global $lang_mail,$output;
+  global $lang_mail, $output;
 
   $to = (isset($_GET['to'])) ? $_GET['to'] : NULL;
   $type = (isset($_GET['type'])) ? $_GET['type'] :"email";
@@ -265,8 +265,9 @@ function send_mail()
 
       $value = NULL;
       for($i=0;$i<(count($body));$i++)
-      $value .= $body[$i]."  ";
+      $value .= $body[$i]." ";
       $body=$value;
+      $body = str_replace("\r", " ", $body);
 
       if($to)
       {
@@ -377,6 +378,8 @@ $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 $output .= "
         <div class=\"top\">";
 
+$lang_mail = lang_mail();
+
 switch ($err)
 {
   case 1:
@@ -404,12 +407,14 @@ switch ($err)
     break;
   case 6:
     $output .= "
-          <h1><font class=\"error\">InGame Mail Result</font></h1>";
+          <h1><font class=\"error\">{$lang_mail['result']}</font></h1>";
     break;
   default: //no error
     $output .= "
           <h1>{$lang_mail['send_mail']}</h1>";
 }
+unset($err);
+
 $output .= "
         </div>";
 
@@ -426,6 +431,10 @@ switch ($action)
   default:
     print_mail_form();
 }
+
+unset($action);
+unset($action_permission);
+unset($lang_mail);
 
 require_once("footer.php");
 

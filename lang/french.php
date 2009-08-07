@@ -712,36 +712,41 @@ function lang_edit()
 }
 
 
-$lang_mail = array(
-  // ----- MAIL.PHP -----
-  'mail_type' => 'Mail Type',
-  'mail_options' => 'Mail Options',
-  'email' => 'Email',
-  'ingame_mail' => 'Mail dans le jeu',
-  'send' => 'Envoyer',
-  'recipient' => 'Destinataire',
-  'subject' => 'Sujet',
-  'group_send' => 'Envoi de masse',
-  'both' => 'Les deux',
-  'gm_level' => 'GM',
-  'locked_accouns' => 'Compte bloqué',
-  'banned_accounts' => 'Compte banni',
-  'char_level' => 'Niveau de personnage',
-  'online' => 'En ligne',
-  'attachments' => 'Pièces jointes (IG seulement)',
-  'money' => 'Argent',
-  'item' => 'Item',
-  'stack' => 'Empilement',
-  'mail_body' => 'Corps du message',
-  'dont_use_both_groupsend_and_to' => '* Attention: Si vous utilisez l\'option envoi de groupe, laissez le champs destinataire vide.',
-  'mail_sent' => 'Mail envoyé avec succès.',
-  'mail_err' => 'Erreur d\'envoi',
-  'no_recipient_found' => 'Pas de destinataire trouvé.',
-  'use_name_or_email' => 'Utilisez le nom du personnage dans le cas d\'envoi de mail dans le jeu - l\'adresse email dans le cas contraire.',
-  'option_unavailable' => 'Vous ne pouvez pas utiliser cette option avec la configuration actuelle.',
-  'use_currect_option' => 'Certaines options de l\'envoi de groupe ne peuvent être utilisées que lors d\'envoi dans le jeu ou par mail mais ps les deux en même temps.',
-  'send_mail' => 'Envoyer l\'email'
+// ----- MAIL.PHP -----
+function lang_mail()
+{
+  $lang_mail = array
+  (
+    'mail_type' => 'Mail Type',
+    'email' => 'Email',
+    'ingame_mail' => 'Mail dans le jeu',
+    'send' => 'Envoyer',
+    'recipient' => 'Destinataire',
+    'subject' => 'Sujet',
+    'group_send' => 'Envoi de masse',
+    'both' => 'Les deux',
+    'gm_level' => 'GM',
+    'locked_accouns' => 'Compte bloqué',
+    'banned_accounts' => 'Compte banni',
+    'char_level' => 'Niveau de personnage',
+    'online' => 'En ligne',
+    'attachments' => 'Pièces jointes (IG seulement)',
+    'money' => 'Argent',
+    'item' => 'Item',
+    'stack' => 'Empilement',
+    'mail_body' => 'Corps du message',
+    'dont_use_both_groupsend_and_to' => '* Attention: Si vous utilisez l\'option envoi de groupe, laissez le champs destinataire vide.',
+    'mail_sent' => 'Mail envoyé avec succès.',
+    'mail_err' => 'Erreur d\'envoi',
+    'no_recipient_found' => 'Pas de destinataire trouvé.',
+    'use_name_or_email' => 'Utilisez le nom du personnage dans le cas d\'envoi de mail dans le jeu - l\'adresse email dans le cas contraire.',
+    'option_unavailable' => 'Vous ne pouvez pas utiliser cette option avec la configuration actuelle.',
+    'use_currect_option' => 'Certaines options de l\'envoi de groupe ne peuvent être utilisées que lors d\'envoi dans le jeu ou par mail mais ps les deux en même temps.',
+    'send_mail' => 'Envoyer l\'email',
+    'result' => 'InGame Mail Result',
   );
+  return $lang_mail;
+}
 
 
 // ----- MOTD.PHP -----
