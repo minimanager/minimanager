@@ -254,10 +254,7 @@ function send_mail()
         redirect("mail.php?error=1");
       break;
     case "ingame_mail":
-
       require_once("scripts/gen_lib.php");
-
-
       if($to)
       {
         //single Recipient
@@ -265,7 +262,9 @@ function send_mail()
         if ($sqlc->num_rows($result) == 1)
         {
           $receiver = $sqlc->result($result, 0, 'name');
-          send_ingame_mail($realm_id, $receiver, $subject, $body, $att_gold, $att_item, $att_stack);
+          $mails = array();
+          array_push($mails, array($receiver, $subject, $body, $att_gold, $att_item, $att_stack));
+          send_ingame_group_mail($realm_id, $mails);
         }
         else
         {
@@ -301,9 +300,11 @@ function send_mail()
           default:
             redirect("mail.php?error=5");
         }
+        $mails = array();
         foreach ($char_array as $receiver)
         {
-          send_ingame_mail($realm_id, $receiver, $subject, $body, $att_gold, $att_item, $att_stack, 1);
+          array_push($mails, array($receiver, $subject, $body, $att_gold, $att_item, $att_stack));
+          send_ingame_group_mail($realm_id, $mails);
         }
         redirect("mail.php?error=2");
       }
