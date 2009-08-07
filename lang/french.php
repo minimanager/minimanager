@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos/Trinity
  * License: GNU General Public License v2(GPL)
  * Language: French
- * Supported Minimanager Revision: r264
+ * Supported Minimanager Revision: r278
  * Translator: fra298
  */
 
@@ -35,8 +35,8 @@ $lang_global = array(
   'are_you_sure' => 'ETES-VOUS SUR ?',
   'will_be_erased' => 'et tous ses personnages seront supprimés de la base de données!',
   'unlinked' => 'Unlinked',
-  'country' => 'Country',
-  'language_select' => 'Select Language',
+  'country' => 'Pays',
+  'language_select' => 'Selection du language',
   'language_0' => 'English',
   'language_1' => 'Korean',
   'language_2' => 'French',
@@ -197,7 +197,7 @@ function lang_header()
   'menu' => 'Menu',
   'my_acc' => 'Mon compte',
   'edit_my_acc' => 'Editer mon compte',
-  'logout' => 'Logout',
+  'logout' => 'Se deconnecter',
 
   'main' => 'Portail',
   'tools' => 'Outils',
@@ -300,7 +300,7 @@ $lang_backup = array(
 
 $lang_banned = array(
   // ----- BANNED.PHP -----
-  'add_to_banned' => 'Ajouté à la liste des bannis',
+  'add_to_banned' => 'Ajouter à la liste des bannis',
   'tot_banned' => 'Total Bannis',
   'ip_acc' => 'IP / Compte',
   'will_be_removed_from_banned' => 'Sera retiré de la Ban Liste',
@@ -317,8 +317,8 @@ $lang_banned = array(
   'ban_type' => 'Type de Ban',
   'account' => 'Compte / Facturation',
   'ip' => 'IP',
-  'ban_time' => 'Banni pour quantité de (heures)',
-  'entry' => 'Entry',
+  'ban_time' => 'Banni pour  (heures)',
+  'entry' => 'Entrée',
   'acc_not_found' => 'Compte non trouvé'
   );
 
@@ -326,8 +326,8 @@ $lang_char = array(
   // ----- CHAR.PHP -----
   'online' => 'En ligne',
   'offline' => 'Hors Ligne',
-  'username' => 'Username',
-  'acc_id' => 'Account ID',
+  'username' => 'Nom du compte',
+  'acc_id' => 'ID du compte',
   'guild_leader' => 'Maître de guilde',
   'guild' => 'Guilde',
   'rank' => 'Rang',
@@ -363,12 +363,12 @@ $lang_char = array(
   'quest_id' => 'Quest ID',
   'quest_level' => 'lvl',
   'quest_title' => 'Titre de Quête',
-  'classskills' => 'Class Skills',
+  'classskills' => 'Compétences de classe',
   'professions' => 'Professions',
-  'secondaryskills' => 'Secondary Skills',
-  'weaponskills' => 'Weapon Skills',
-  'armorproficiencies' => 'Armor Proficiencies',
-  'languages' => 'Languages',
+  'secondaryskills' => 'Compétences secondaires',
+  'weaponskills' => 'Compétences d\armes',
+  'armorproficiencies' => 'Compétences en armure',
+  'languages' => 'Langues',
   'skills' => 'Compétences',
   'skill_id' => 'ID',
   'skill_name' => 'Compétence',
@@ -530,7 +530,7 @@ $lang_item = array(
   'bag' => 'Sac',
   'health' => 'Santé',
   'mana' => 'Mana',
-  'energy' => 'Energy',
+  'energy' => 'Energie',
   'rage' => 'Rage',
   'runic' => 'Puissance Runique',
   'res_arcane' => 'Rés. Arcane',
@@ -550,7 +550,7 @@ $lang_item = array(
   'class' => 'Classe',
   'slots' => 'Emplacements',
   'charges' => 'Charge(s)',
-  'socket_bonus' => 'Socket Bonus',
+  'socket_bonus' => 'µBonus de sertissage',
   'potion' => 'Potion',
   'scroll' => 'Parchemin',
   'bandage' => 'Bandage',
@@ -896,7 +896,7 @@ $lang_user = array(
   'email' => 'Email',
   'join_date' => 'Date d\'inscription',
   'banned' => 'Ban',
-  'banned_reason' => 'Ban Reason',
+  'banned_reason' => 'Raison du ban',
   'ip' => 'IP',
   'failed_logins' => 'Conn. échouées',
   'locked' => 'Bloqué',
