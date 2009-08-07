@@ -10,7 +10,7 @@
 
 
 require_once("header.php");
-require_once("scripts/bbcode_lib.php");
+require_once("libs/bbcode_lib.php");
 valid_login($action_permission['insert']);
 
 //#############################################################################

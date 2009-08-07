@@ -29,6 +29,9 @@ function char_inv()
   $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+
   $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
     $id = 0;
@@ -81,7 +84,7 @@ function char_inv()
           if($slot[1] < 23) // SLOT 19 TO 22 (Bags)
           {
             $bag_id[$slot[2]] = ($slot[1]-18);
-            $equiped_bag_id[$slot[1]-18] = array($slot[3], $sqlc->result($sqlc->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
+            $equiped_bag_id[$slot[1]-18] = array($slot[3], $sqlw->result($sqlw->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
           }
           elseif($slot[1] < 39) // SLOT 23 TO 38 (BackPack)
           {
@@ -96,7 +99,7 @@ function char_inv()
           elseif($slot[1] < 74) // SLOT 67 TO 73 (Bank Bags)
           {
             $bank_bag_id[$slot[2]] = ($slot[1]-66);
-            $equip_bnk_bag_id[$slot[1]-66] = array($slot[3], $sqlc->result($sqlc->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
+            $equip_bnk_bag_id[$slot[1]-66] = array($slot[3], $sqlw->result($sqlw->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
           }
         }
         else

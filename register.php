@@ -389,8 +389,12 @@ $err = (isset($_GET['err'])) ? $_GET['err'] : NULL;
 if (isset($_GET['usr'])) $usr = $_GET['usr'];
     else $usr = NULL;
 
+$lang_captcha = lang_captcha();
+
 $output .=  "<div class=\"top\">";
-switch ($err) {
+
+switch ($err)
+{
 case 1:
    $output .= "<h1><font class=\"error\">{$lang_global['empty_fields']}</font></h1>";
    break;
@@ -436,6 +440,9 @@ case 14:
 default:
    $output .= "<h1><font class=\"error\">{$lang_register['fill_all_fields']}</font></h1>";
 }
+
+unset($err);
+
 $output .= "</div>";
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
@@ -456,6 +463,10 @@ case "do_pass_activate":
 default:
     register();
 }
+
+unset($action);
+unset($action_permission);
+unset($lang_captcha);
 
 require_once("footer.php");
 ?>

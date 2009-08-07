@@ -11,7 +11,7 @@
 
 function id_get_exp_lvl()
 {
-  $exp_lvl_arr = 
+  $exp_lvl_arr =
     Array
     (
       0 => array(0, "Classic",                ""     ),
@@ -40,19 +40,20 @@ function id_get_char_race()
   $CHAR_RACE =
     array
     (
-       1 => array('human', 0),
-       2 => array('orc', 1),
-       3 => array('dwarf', 0),
-       4 => array('nightelf', 0),
-       5 => array('undead', 1),
-       6 => array('tauren', 1),
-       7 => array('gnome', 0),
-       8 => array('troll', 1),
-      10 => array('bloodelf', 1),
-      11 => array('draenei', 0)
+       1 => array('Human', 0),
+       2 => array('Orc', 1),
+       3 => array('Dwarf', 0),
+       4 => array('Mightelf', 0),
+       5 => array('Undead', 1),
+       6 => array('Tauren', 1),
+       7 => array('Gnome', 0),
+       8 => array('Troll', 1),
+      10 => array('Bloodelf', 1),
+      11 => array('Draenei', 0)
     );
    return $CHAR_RACE;
 }
+
 
 function id_get_char_rank()
 {
@@ -149,13 +150,28 @@ function get_zone_name($id)
 //get player class by its id
 function get_player_class($id)
 {
-  global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $class_name = $sql->fetch_row($sql->query("SELECT `field_4` FROM `dbc_chrclasses` WHERE `id`={$id} LIMIT 1")); //needs to be improved with new tables
-  $sql->close();
-  unset($sql);
-  return $class_name[0];
+  //global $mmfpm_db;
+  //$sql = new SQL;
+  //$sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  //$class_name = $sql->fetch_row($sql->query("SELECT `field_4` FROM `dbc_chrclasses` WHERE `id`={$id} LIMIT 1")); //needs to be improved with new tables
+  //$sql->close();
+  //unset($sql);
+  //return $class_name[0];
+
+  $class = Array
+  (
+    1  => array(1, 'Warrior',"",""),
+    2  => array(2, 'Paladin',"",""),
+    3  => array(3, 'Hunter',"",""),
+    4  => array(4, 'Rogue',"",""),
+    5  => array(5, 'Priest',"",""),
+    6  => array(6, 'Death Knight',"",""),
+    7  => array(7, 'Shaman',"",""),
+    8  => array(8, 'Mage',"",""),
+    9  => array(9, 'Warlock',"",""),
+    11 => array(11,'Druid',"","")
+  );
+  return $class[$id][1];
 }
 
 
@@ -163,13 +179,15 @@ function get_player_class($id)
 //get player race by its id
 function get_player_race($id)
 {
-  global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $race_name = $sql->fetch_row($sql->query("SELECT `field_12` FROM `dbc_chrraces` WHERE `id`={$id} LIMIT 1")); //we need to use either db or function id_get_char_race, if from db we need to determine side (alliance or horde) as that info isnt present in chrraces.dbc
-  $sql->close();
-  unset($sql);
-  return $race_name[0];
+  //global $mmfpm_db;
+  //$sql = new SQL;
+  //$sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  //$race_name = $sql->fetch_row($sql->query("SELECT `field_12` FROM `dbc_chrraces` WHERE `id`={$id} LIMIT 1")); //we need to use either db or function id_get_char_race, if from db we need to determine side (alliance or horde) as that info isnt present in chrraces.dbc
+  //$sql->close();
+  //unset($sql);
+  //return $race_name[0];
+  $CHAR_RACE = id_get_char_race();
+  return $CHAR_RACE[$id][0];
 }
 
 
@@ -231,6 +249,7 @@ function get_achievement_name($id)
   unset($sql);
   return $achievement_name[0];
 }
+
 
 //#############################################################################
 //get avatar image dir by char level, gender. race and class

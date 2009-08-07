@@ -25,24 +25,25 @@ function char_achievements()
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
     $id = 0;
 
-  $result = $sql->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id LIMIT 1");
+  $result = $sqlc->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id LIMIT 1");
 
-  if ($sql->num_rows($result))
+  if ($sqlc->num_rows($result))
   {
-    $char = $sql->fetch_row($result);
+    $char = $sqlc->fetch_row($result);
 
-    $owner_acc_id = $sql->result($result, 0, 'account');
-    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
-    $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
-    $owner_name = $sql->result($result, 0, 'username');
+    $owner_acc_id = $sqlc->result($result, 0, 'account');
+    $result = $sqlr->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+    $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
+    $owner_name = $sqlr->result($result, 0, 'username');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
@@ -73,10 +74,9 @@ function char_achievements()
               <th width=\"22%\">{$lang_char['achievement_date']}</th>
             </tr>";
 
-      $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-      $result = $sql->query("SELECT achievement,date FROM character_achievement WHERE guid =$id");
+      $result = $sqlc->query("SELECT achievement,date FROM character_achievement WHERE guid =$id");
 
-      while ($data = $sql->fetch_row($result))
+      while ($data = $sqlc->fetch_row($result))
       {
         $output .="
              <tr>
@@ -129,16 +129,12 @@ function char_achievements()
     }
     else
     {
-      $sql->close();
-      unset($sql);
-        error($lang_char['no_permission']);
+      error($lang_char['no_permission']);
     }
   }
   else
     error($lang_char['no_char_found']);
 
-  $sql->close();
-  unset($sql);
 }
 
 

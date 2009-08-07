@@ -4034,14 +4034,17 @@ function lang_instances()
   return $lang_instances;
 }
 
-$lang_captcha = array(
-  // ----- FORM.PHP -----
-  'security_image' => 'Security Image',
-  'security_code' => 'Security Code',
-  'imput_security_code' => 'Please Input the Security Code',
-  'submit' => 'Submit',
-  'invalid_code' => 'Invalid Code!'
+
+// ----- FORM.PHP -----
+function lang_captcha()
+{
+  $lang_captcha = array
+  (
+    'security_code' => 'Security Code',
+    'invalid_code' => 'Invalid Code!'
   );
+  return $lang_captcha;
+}
 
 
 // ----- TOP100.PHP -----

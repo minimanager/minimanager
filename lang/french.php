@@ -78,7 +78,7 @@ function lang_guild()
 {
   $lang_guild = array
   (
-    'my_guild' => 'Ma Guilde',
+    'my_guilds' => 'Ma Guilde',
     'id' => 'ID',
     'guild_name' => 'Nom de la guilde',
     'guild_leader' => 'Maître de guilde',
@@ -4034,17 +4034,20 @@ function lang_instances()
   return $lang_instances;
 }
 
-$lang_captcha = array(
-  // ----- FORM.PHP -----
-  'security_image' => 'Image de sécurité',
-  'security_code' => 'Code de sécurité',
-  'imput_security_code' => 'S\'il vous plait, entrez le code de sécurité',
-  'submit' => 'Soumettre',
-  'invalid_code' => 'Code invalide!'
+
+// ----- FORM.PHP -----
+function lang_captcha()
+{
+  $lang_captcha = array
+  (
+    'security_code' => 'Code de sécurité',
+    'invalid_code' => 'Code invalide!'
   );
+  return $lang_captcha;
+}
 
 
-  // ----- TOP100.PHP -----
+// ----- TOP100.PHP -----
 function lang_top()
 {
   $lang_top = array
