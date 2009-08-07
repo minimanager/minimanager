@@ -101,6 +101,9 @@ $server = Array
     'game_port'     => 8085,        // Game Server port
     'term_type'     => "SSH",       // Terminal type - ("SSH"/"Telnet")
     'term_port'     => 22,          // Terminal port
+    'telnet_port'   => 3443,        // Telnet port - Telnet settins are needed for sending InGame Mail.
+    'telnet_user'   => "USER",      // Telnet username, must be all CAPS
+    'telnet_pass'   => "pass",      // Telnet password
     'rev'           => "rev. ",     // MaNGOS/Trinity rev. used
     'both_factions' => true         // Allow to see opponent faction characters. Affects only players.
   ),

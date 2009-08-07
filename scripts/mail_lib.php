@@ -8,14 +8,12 @@ function get_char_name($id)
 
   if($id)
   {
-    $sql_0 = new SQL;
-    $sql_0->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+    $sqlc = new SQL;
+    $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-    $result = $sql_0->query("SELECT `name` FROM `characters` WHERE `guid` = '$id'");
-    $player_name = $sql_0->result($result, 0);
+    $result = $sqlc->query("SELECT `name` FROM `characters` WHERE `guid` = '$id'");
+    $player_name = $sqlc->result($result, 0);
 
-    $sql_0->close();
-    unset($sql);
     return $player_name;
   }
   else
@@ -29,14 +27,12 @@ function get_mail_text($id)
 
   if($id)
   {
-    $sql_0 = new SQL;
-    $sql_0->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+    $sqlc = new SQL;
+    $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-    $result = $sql_0->query("SELECT `text` FROM `item_text` WHERE `id` = '$id'");
-    $text_subject = $sql_0->result($result, 0);
+    $result = $sqlc->query("SELECT `text` FROM `item_text` WHERE `id` = '$id'");
+    $text_subject = $sqlc->result($result, 0);
 
-    $sql_0->close();
-    unset($sql);
     return $text_subject;
   }
   else

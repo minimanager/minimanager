@@ -8,44 +8,82 @@
  * License: GNU General Public License v2(GPL)
  */
 
+
 //##########################################################################################
-//SEND INGAME MAIL - SAFE TO USE ONLY WHILE SERVER IS OFFLINE
-function send_ingame_mail($to, $from, $subject, $body, $gold = 0, $item = 0, $stack = 1){
-	global $lang_global, $characters_db, $realm_id;
+//SEND INGAME MAIL BY TELNET
+//
+// Xiong Guoy
+// 2009-08-08
+function send_ingame_mail($realm_id, $to, $subject, $body, $gold = 0, $item = 0, $stack = 1, $group = 0)
+{
+  require_once("./libs/telnet_lib.php");
+  global $server;
+  $telnet = new telnet_lib();
+  $telnet->show_connect_error=0;
 
-	$sql_0 = new SQL;
-	$sql_0->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $result = $telnet->Connect($server[$realm_id]['addr'],$server[$realm_id]['telnet_user'],$server[$realm_id]['telnet_pass']);
 
-	$result = $sql_0->query("SELECT MAX(`id`) FROM item_text");
-	$item_page_id = ($sql_0->result($result, 0)) + 1;
-	$result = $sql_0->query("INSERT INTO item_text (id, text) VALUES ($item_page_id,'$body')");
+  switch ($result)
+  {
+    case 0:
+      if ($gold && $item)
+      {
+        $mess_str1 = "send money ".$to." \"".$subject."\" \"".$body."\" ".$gold."";
+        $telnet->DoCommand($mess_str1, $result1);
 
-	$result = $sql_0->query("SELECT MAX(`id`) FROM mail");
-	$mail_id = ($sql_0->result($result, 0)) + 1;
+        $mess_str = $mess_str1;
+        $result = $result1;
 
-    $item_guid = ($item) ? gen_item_instance($to, $item, $stack) : 0;
+        $mess_str2 = "send item ".$to." \"".$subject."\" \"".$body."\" ".$item.(($stack > 1) ? "[:count".$stack."]" : " ");
+        $telnet->DoCommand($mess_str2, $result2);
 
-    if ($item == 0) {
-         $has_items = 0;
-    } else {
-         $has_items = 1;
-    }
+        $mess_str .= "<br />".$mess_str2;
+        $result .= "".$result2;
+      }
+      elseif ($gold)
+      {
+        $mess_str = "send money ".$to." \"".$subject."\" \"".$body."\" ".$gold."";
+        $telnet->DoCommand($mess_str, $result);
+      }
+      elseif ($item)
+      {
+        $mess_str = "send item ".$to." \"".$subject."\" \"".$body."\" ".$item.(($stack > 1) ? "[:count".$stack."]" : " ");
+        $telnet->DoCommand($mess_str, $result);
+      }
+      else
+      {
+        $mess_str = "send mail ".$to." \"".$subject."\" \"".$body."\"";
+        $telnet->DoCommand($mess_str, $result);
+      }
 
-    $result = $sql_0->query("INSERT INTO mail (id,messageType,stationery,mailTemplateId,sender,receiver,subject,itemTextId,has_items,expire_time,deliver_time,money,cod,checked)
-	    VALUES ($mail_id, 0, 61, 0, '$from', '$to', '$subject', '$item_page_id', '$has_items', '".(time() + (30*24*3600))."','".(time()+5)."', '$gold', 0, 0)");
+      $result = str_replace("mangos>","",$result);
+      $result = str_replace(array("\r\n", "\n", "\r"), '<br />', $result);
+      $mess_str .= "<br /><br />".$result;
+      if($group)
+      {
+      }
+      else
+        redirect("mail.php?action=result&error=6&mess=$mess_str");
+      $telnet->Disconnect();
+      break;
+    case 1:
+      $mess_str = "Connect failed: Unable to open network connection";
+      redirect("mail.php?action=result&error=6&mess=$mess_str");
+      break;
+    case 2:
+      $mess_str = "Connect failed: Unknown host";
+      redirect("mail.php?action=result&error=6&mess=$mess_str");
+      break;
+    case 3:
+      $mess_str = "Connect failed: Login failed";
+      redirect("mail.php?action=result&error=6&mess=$mess_str");
+      break;
+    case 4:
+      $mess_str = "Connect failed: Your PHP version does not support PHP Telnet";
+      redirect("mail.php?action=result&error=6&mess=$mess_str");
+      break;
+  }
 
- 	if ($has_items) {
-		$result = $sql_0->query("INSERT INTO mail_items (mail_id,item_guid,item_template,receiver)
-		       VALUES ($mail_id, '$item_guid', '$item', '$to')");
-	}
-
-	if ($result) {
-	      $sql_0->close();
-          return $mail_id;
-	} else {
-			$sql_0->close();
-			return 0;
-			}
 }
 
 
@@ -61,14 +99,14 @@ function gen_item_instance($owner, $item_id, $stack){
  $guid = $sql_1->result($result, 0) + 1;
 
  $result = $sql_1->query("SELECT flags,stackable,MaxDurability,spellcharges_1,spellcharges_2,
-							spellcharges_3,spellcharges_4,spellcharges_5 FROM `".$world_db[$realm_id]['name']."`.`item_template`
-							WHERE entry = '$item_id'");
+              spellcharges_3,spellcharges_4,spellcharges_5 FROM `".$world_db[$realm_id]['name']."`.`item_template`
+              WHERE entry = '$item_id'");
  $item_template = $sql_1->fetch_row($result);
 
  if ($item_template[1] <= 1) $stack = 1;
 
  $item_data = array(
-	'OBJECT_FIELD_GUID'               => $guid,
+  'OBJECT_FIELD_GUID'               => $guid,
     'OBJECT_FIELD_TYPE'               => '1073741936 3',
     'OBJECT_FIELD_ENTRY'              => $item_id,
     'OBJECT_FIELD_SCALE_X'            => '1065353216',
@@ -98,12 +136,12 @@ function gen_item_instance($owner, $item_id, $stack){
  $result = $sql_1->query("INSERT INTO item_instance (guid, owner_guid, data) VALUES ($guid, '$owner','$data')");
 
  if ($result) {
-	$sql_1->close();
-	return $guid;
+  $sql_1->close();
+  return $guid;
  } else {
-		$sql_1->close();
-		return 0;
-		}
+    $sql_1->close();
+    return 0;
+    }
 }
 
 
