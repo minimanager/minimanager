@@ -130,7 +130,7 @@ function send_mail()
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $body = $sqlc->quote_smart($_POST['body']);
+  $body = $_GET['body'];
   $subject = $sqlc->quote_smart($_POST['subject']);
 
   if(isset($_POST['to'])&&($_POST['to'] != ''))
@@ -179,6 +179,7 @@ function send_mail()
       $mail->Subject = $subject;
       $mail->IsHTML(true);
 
+      $body = str_replace(array("\r\n", "\n", "\r"), '<br />', $body);
       $body = str_replace("\n", "<br />", $body);
       $body = str_replace("\r", " ", $body);
       $body = preg_replace( "/([^\/=\"\]])((http|ftp)+(s)?:\/\/[^<>\s]+)/i", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>",  $body);
@@ -304,8 +305,8 @@ function send_mail()
         foreach ($char_array as $receiver)
         {
           array_push($mails, array($receiver, $subject, $body, $att_gold, $att_item, $att_stack));
-          send_ingame_group_mail($realm_id, $mails);
         }
+        send_ingame_group_mail($realm_id, $mails);
         redirect("mail.php?error=2");
       }
       break;
