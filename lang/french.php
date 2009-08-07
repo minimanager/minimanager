@@ -189,7 +189,6 @@ function lang_index()
 }
 
 
-
 // ----- HEADER.PHP -----
 function lang_header()
 {
@@ -780,7 +779,6 @@ function lang_run_patch()
   );
   return $lang_run_patch;
 }
-
 
 
 // ----- SSH.PHP -----
@@ -3941,62 +3939,6 @@ $lang_id_tab = array(
   'PET_ABILITY_THUNDERSTOMP_RANK_3' => 'Grondeterre Rang 3',
   'PET_ABILITY_THUNDERSTOMP_RANK_4' => 'Grondeterre Rang 4',
   'PET_ABILITY_WARP' => 'Distortion',
-  // ----- character auras -----
-  'CHAR_AURA_ARCANE_INTELLECT_RANK_1' => 'Intelligence des arcanes Rang 1',
-  'CHAR_AURA_ARCANE_INTELLECT_RANK_2' => 'Intelligence des arcanes Rang 2',
-  'CHAR_AURA_ARCANE_INTELLECT_RANK_3' => 'Intelligence des arcanes Rang 3',
-  'CHAR_AURA_ARCANE_INTELLECT_RANK_4' => 'Intelligence des arcanes Rang 4',
-  'CHAR_AURA_ARCANE_INTELLECT_RANK_5' => 'Intelligence des arcanes Rang 5',
-  'CHAR_AURA_ARCANE_INTELLECT_RANK_6' => 'Intelligence des arcanes Rang 6',
-  'CHAR_AURA_ASPECT_OF_THE_BEAST' => 'Aspect de la bete',
-  'CHAR_AURA_ASPECT_OF_THE_CHEETAH' => 'Aspect du guépard',
-  'CHAR_AURA_ASPECT_OF_THE_MONKEY' => 'Aspect du singe',
-  'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_1' => 'Aspect du faucon Rang 1',
-  'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_2' => 'Aspect du faucon Rang 2',
-  'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_3' => 'Aspect du faucon Rang 3',
-  'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_4' => 'Aspect du faucon Rang 4',
-  'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_5' => 'Aspect du faucon Rang 5',
-  'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_6' => 'Aspect du faucon Rang 6',
-  'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_7' => 'Aspect du faucon Rang 7',
-  'CHAR_AURA_ASPECT_OF_THE_HAWK_RANK_8' => 'Aspect du faucon Rang 8',
-  'CHAR_AURA_ASPECT_OF_THE_WILD_RANK_1' => 'Aspect of the Wild Rank 1',//TODO
-  'CHAR_AURA_ASPECT_OF_THE_WILD_RANK_2' => 'Aspect of the Wild Rank 2',
-  'CHAR_AURA_ASPECT_OF_THE_WILD_RANK_3' => 'Aspect of the Wild Rank 3',
-  'CHAR_AURA_ASPECT_OF_THE_PACK' => 'Aspect de la meute',
-  'CHAR_AURA_ASPECT_OF_THE_VIPER' => 'Aspect de la Viper',
-  'CHAR_AURA_FIND_HERBS' => 'Détection des herbes',
-  'CHAR_AURA_FROST_ARMOR_RANK_1' => 'Armure de givre Rang 1',
-  'CHAR_AURA_FROST_ARMOR_RANK_2' => 'Armure de givre Rang 2',
-  'CHAR_AURA_FROST_ARMOR_RANK_3' => 'Armure de givre Rang 3',
-  'CHAR_AURA_FROST_ARMOR_RANK_4' => 'Armure de givre Rang 4',
-  'CHAR_AURA_FROST_ARMOR_RANK_5' => 'Armure de givre Rang 5',
-  'CHAR_AURA_FIND_MINERALS' => 'Découverte de gisements',
-  'CHAR_AURA_MAGE_ARMOR_RANK_1' => 'Armur de mage Rang 1',
-  'CHAR_AURA_MAGE_ARMOR_RANK_2' => 'Armur de mage Rang 2',
-  'CHAR_AURA_MAGE_ARMOR_RANK_3' => 'Armur de mage Rang 3',
-  'CHAR_AURA_MAGE_ARMOR_RANK_4' => 'Armur de mage Rang 4',
-  'CHAR_AURA_MARK_OF_THE_WILD_RANK_1' => 'Marque du Fauve Rang 1',
-  'CHAR_AURA_MARK_OF_THE_WILD_RANK_2' => 'Marque du Fauve Rang 2',
-  'CHAR_AURA_MARK_OF_THE_WILD_RANK_3' => 'Marque du Fauve Rang 3',
-  'CHAR_AURA_MARK_OF_THE_WILD_RANK_4' => 'Marque du Fauve Rang 4',
-  'CHAR_AURA_MARK_OF_THE_WILD_RANK_5' => 'Marque du Fauve Rang 5',
-  'CHAR_AURA_MARK_OF_THE_WILD_RANK_6' => 'Marque du Fauve Rang 6',
-  'CHAR_AURA_MARK_OF_THE_WILD_RANK_7' => 'Marque du Fauve Rang 7',
-  'CHAR_AURA_MARK_OF_THE_WILD_RANK_8' => 'Marque du Fauve Rang 8',
-  'CHAR_AURA_MOLTEN_ARMOR' => 'Armure de Magma',
-  'CHAR_AURA_SUMMON_FELSTEED' => 'invocation d\'un Palefroi Corrompu',
-  'CHAR_AURA_TRACK_DEMONS' => 'Détection des Demons',
-  'CHAR_AURA_TRACK_BEASTS' => 'Détection des Betes',
-  'CHAR_AURA_TRACK_DRAGONKIN' => 'Track Dragonkin',
-  'CHAR_AURA_TRACK_ELEMENTALS' => 'Track Elementals', //TODO
-  'CHAR_AURA_TRACK_GIANTS' => 'Détéction des Geants',
-  'CHAR_AURA_TRACK_HIDDEN' => 'Detection de l\'invisibilité',
-  'CHAR_AURA_TRACK_HUMANOIDS' => 'Pistage des humanoides',
-  'CHAR_AURA_TRACK_UNDEAD' => 'Détection des Morts vivants',
-  'CHAR_AURA_TRUESHOT_AURA_RANK_1' => 'Aura de précision Rang 1',
-  'CHAR_AURA_TRUESHOT_AURA_RANK_2' => 'Aura de précision Rang 2',
-  'CHAR_AURA_TRUESHOT_AURA_RANK_3' => 'Aura de précision Rang 3',
-  'CHAR_AURA_TRUESHOT_AURA_RANK_4' => 'Aura de précision Rang 4',
   'unknown' => 'Unknown'
   );
 

@@ -331,6 +331,13 @@ $menu_array = Array
     array("forum.php", 'forums',0,5,5,5),            // has own level security, but has yet to honor the new security system.
     array("javascript:void(0);\" onclick=\"window.open('./forum.html', 'forum')", 'forums',0,0,0,0),
     array("char.php", 'character',0,5,5,5),          // new security system implemented
+    array("char_inv.php", 'character',0,5,5,5),      // new security system implemented
+    array("char_quest.php", 'character',0,5,5,5),    // new security system implemented
+    array("char_achieve.php", 'character',0,5,5,5),  // new security system implemented
+    array("char_skill.php", 'character',0,5,5,5),    // new security system implemented
+    array("char_talent.php", 'character',0,5,5,5),   // new security system implemented
+    array("char_rep.php", 'character',0,5,5,5),      // new security system implemented
+    array("char_pets.php", 'character',0,5,5,5),     // new security system implemented
     array("char_edit.php", 'char_edit',0,5,5,5),     // new security system implemented
     array("edit.php", 'MyAccount',0,5,5,5),          // new security system implemented
     array("index.php", 'Startpage',0,5,5,5),         // new security system implemented
