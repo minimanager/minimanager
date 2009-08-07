@@ -39,13 +39,13 @@ function send_ingame_group_mail($realm_id, $massmails)
           $mess_str1 = "send money ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[3]."";
           $telnet->DoCommand($mess_str1, $result1);
 
-          $mess_str = $mess_str1."<br >";
+          $mess_str .= $mess_str1."<br >";
           $result .= $result1."";
 
           $mess_str1 = "send item ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[4].(($mails[5] > 1) ? "[:count".$mails[5]."]" : " ");
           $telnet->DoCommand($mess_str1, $result1);
 
-          $mess_str = $mess_str1."<br >";
+          $mess_str .= $mess_str1."<br >";
           $result .= $result1."";
         }
         elseif ($mails[3])
@@ -53,7 +53,7 @@ function send_ingame_group_mail($realm_id, $massmails)
           $mess_str1 = "send money ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[3]."";
           $telnet->DoCommand($mess_str1, $result1);
 
-          $mess_str = $mess_str1."<br >";
+          $mess_str .= $mess_str1."<br >";
           $result .= $result1."";
         }
         elseif ($mails[4])
@@ -61,7 +61,7 @@ function send_ingame_group_mail($realm_id, $massmails)
           $mess_str1 = "send item ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[4].(($mails[5] > 1) ? "[:count".$mails[5]."]" : " ");
           $telnet->DoCommand($mess_str1, $result1);
 
-          $mess_str = $mess_str1."<br >";
+          $mess_str .= $mess_str1."<br >";
           $result .= $result1."";
         }
         else
@@ -69,7 +69,7 @@ function send_ingame_group_mail($realm_id, $massmails)
           $mess_str1 = "send mail ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\"";
           $telnet->DoCommand($mess_str1, $result1);
 
-          $mess_str = $mess_str1."<br >";
+          $mess_str .= $mess_str1."<br >";
           $result .= $result1."";
         }
       }

@@ -130,7 +130,7 @@ function send_mail()
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $body = $sqlc->quote_smart($_POST['body']);
+  $body = explode("\n",$_POST['body']);
   $subject = $sqlc->quote_smart($_POST['subject']);
 
   if(isset($_POST['to'])&&($_POST['to'] != ''))
@@ -174,11 +174,15 @@ function send_mail()
         }
       }
 
+      $value = NULL;
+      for($i=0;$i<(count($body));$i++)
+        $value .= $body[$i]."\r\n";
+      $body=$value;
+
       $mail->From = $from_mail;
       $mail->FromName = $user_name;
       $mail->Subject = $subject;
       $mail->IsHTML(true);
-
 
       $body = str_replace("\n", "<br />", $body);
       $body = str_replace("\r", " ", $body);
@@ -236,6 +240,7 @@ function send_mail()
             break;
           default:
             redirect("mail.php?error=5");
+            break;
         }
         foreach ($email_array as $mail_addr)
         {
@@ -257,6 +262,12 @@ function send_mail()
       break;
     case "ingame_mail":
       require_once("scripts/gen_lib.php");
+
+      $value = NULL;
+      for($i=0;$i<(count($body));$i++)
+      $value .= $body[$i]."  ";
+      $body=$value;
+
       if($to)
       {
         //single Recipient
@@ -273,6 +284,7 @@ function send_mail()
           redirect("mail.php?error=4");
         }
         redirect("mail.php?error=2");
+        break;
       }
       elseif(isset($group_value))
       {
