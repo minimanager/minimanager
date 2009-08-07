@@ -103,7 +103,7 @@ function get_item_name($item_id){
 //##########################################################################################
 //generate item tooltip from item_template.entry
 function get_item_tooltip($item_id){
- global $lang_global, $lang_item, $lang_id_tab, $world_db, $realm_id, $itemset_id, $language;
+ global $lang_global, $lang_item, $lang_id_tab, $world_db, $realm_id, $language;
  if($item_id){
   $sql_1 = new SQL;
   $sql_1->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
@@ -949,7 +949,7 @@ function get_aura_icon($auraid)
 //##########################################################################################
 //generate item border from item_template.entry
 function get_item_border($item_id){
-  global $lang_global, $lang_id_tab, $world_db, $realm_id, $itemset_id;
+  global $lang_global, $lang_id_tab, $world_db, $realm_id;
   if($item_id){
     $sql_2 = new SQL;
     $sql_2->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
