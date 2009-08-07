@@ -13,14 +13,13 @@
     2006-2009 Modified by killdozer.
 */
 
-require_once "pomm_conf.php";
-require_once "func.php";
+require_once("pomm_conf.php");
+require_once("func.php");
 
 if (file_exists("map_".$lang.".php") && file_exists("zone_names_".$lang.".php"))
-  require_once "map_".$lang.".php";
+  require_once("map_".$lang.".php");
 else
-  require_once "map_english.php";
-
+  require_once("map_english.php");
 
 ?>
 <HTML><HEAD><title>'<?php echo $realm_name ?>' - online map</title>
@@ -209,7 +208,7 @@ body {
 -->
 </style>
 </HEAD>
-<script language="JavaScript" TYPE="text/javascript" src="../Js/JsHttpRequest/Js.js"></script>
+<script language="JavaScript" TYPE="text/javascript" src="../js/JsHttpRequest/Js.js"></script>
 <SCRIPT LANGUAGE="javascript" TYPE="text/javascript">
 
 var current_map = 0;

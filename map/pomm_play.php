@@ -13,13 +13,13 @@
     2006-2009 Modified by killdozer.
 */
 
-require_once "pomm_conf.php";
-require_once "func.php";
+require_once("pomm_conf.php");
+require_once("func.php");
 
 if (file_exists("map_".$lang.".php") && file_exists("zone_names_".$lang.".php"))
-  require_once "map_".$lang.".php";
+  require_once("map_".$lang.".php");
 else
-  require_once "map_english.php";
+  require_once("map_english.php");
 
 $_RESULT = NULL;
 
@@ -30,7 +30,7 @@ $Alliance_races = 0x44D;
 $outland_inst   = array(540,542,543,544,545,546,547,548,550,552,553,554,555,556,557,558,559,562,564,565);
 $northrend_inst = array(533,574,575,576,578,599,600,601,602,603,604,608,615,616,617,619,624);
 
-require_once "../Js/JsHttpRequest/Php.php";
+require_once "../js/JsHttpRequest/Php.php";
 $JsHttpRequest = new Subsys_JsHttpRequest_Php("utf-8");
 
 $realm_db = new DBLayer($hostr, $userr, $passwordr, $dbr);
