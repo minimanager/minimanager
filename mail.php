@@ -130,7 +130,7 @@ function send_mail()
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $body = $_GET['body'];
+  $body = $sqlc->quote_smart($_POST['body']);
   $subject = $sqlc->quote_smart($_POST['subject']);
 
   if(isset($_POST['to'])&&($_POST['to'] != ''))
@@ -179,9 +179,10 @@ function send_mail()
       $mail->Subject = $subject;
       $mail->IsHTML(true);
 
-      $body = str_replace(array("\r\n", "\n", "\r"), '<br />', $body);
+
       $body = str_replace("\n", "<br />", $body);
       $body = str_replace("\r", " ", $body);
+      $body = str_replace(array("\r\n", "\n", "\r"), '<br />', $body);
       $body = preg_replace( "/([^\/=\"\]])((http|ftp)+(s)?:\/\/[^<>\s]+)/i", "\\1<a href=\"\\2\" target=\"_blank\">\\2</a>",  $body);
       $body = preg_replace('/([^\/=\"\]])(www\.)(\S+)/', '\\1<a href="http://\\2\\3" target="_blank">\\2\\3</a>', $body);
 
