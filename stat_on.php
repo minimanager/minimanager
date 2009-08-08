@@ -152,7 +152,7 @@ if ($total_chars)
   {
     $height = ($race[$id[0]][3])*4;
     $output .= "
-                      <td><a href=\"stat_on.php?race={$id[0]}\" class=\"graph_link\">{$race[$id[0]][3]}%<img src=\"./templates/$css_template/column.gif\" width=\"69\" height=\"$height\" alt=\"{$race[$id[0]][2]}\" /></a></td>";
+                      <td><a href=\"stat_on.php?race={$id[0]}\" class=\"graph_link\">{$race[$id[0]][3]}%<img src=\"./themes/$theme/column.gif\" width=\"69\" height=\"$height\" alt=\"{$race[$id[0]][2]}\" /></a></td>";
   }
   $output .= "
                     </tr>
@@ -190,7 +190,7 @@ if ($total_chars)
   {
     $height = ($class[$id[0]][3])*4;
     $output .= "
-                      <td><a href=\"stat_on.php?class={$id[0]}\" class=\"graph_link\">{$class[$id[0]][3]}%<img src=\"./templates/$css_template/column.gif\" width=\"69\" height=\"$height\" alt=\"{$class[$id[0]][2]}\" /></a></td>";
+                      <td><a href=\"stat_on.php?class={$id[0]}\" class=\"graph_link\">{$class[$id[0]][3]}%<img src=\"./themes/$theme/column.gif\" width=\"69\" height=\"$height\" alt=\"{$class[$id[0]][2]}\" /></a></td>";
   }
   $output .= "
                     </tr>
@@ -229,7 +229,7 @@ if ($total_chars)
   {
     $height = ($level[$id[0]][4])*4;
     $output .= "
-                      <td><a href=\"stat_on.php?level={$id[1]}\" class=\"graph_link\">{$level[$id[0]][4]}%<img src=\"./templates/$css_template/column.gif\" width=\"77\" height=\"$height\" alt=\"{$level[$id[0]][3]}\" /></a></td>";
+                      <td><a href=\"stat_on.php?level={$id[1]}\" class=\"graph_link\">{$level[$id[0]][4]}%<img src=\"./themes/$theme/column.gif\" width=\"77\" height=\"$height\" alt=\"{$level[$id[0]][3]}\" /></a></td>";
   }
   $output .= "
                     </tr>
