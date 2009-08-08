@@ -28,11 +28,11 @@ if ($debug > 1)
 else
   error_reporting (E_COMPILE_ERROR);
 
-if (isset($_COOKIE["css_template"]))
+if (isset($_COOKIE["theme"]))
 {
-  if (is_dir("templates/".$_COOKIE["css_template"]))
-    if (is_file("templates/".$_COOKIE["css_template"]."/".$_COOKIE["css_template"]."_1024.css"))
-      $css_template = $_COOKIE["css_template"];
+  if (is_dir("themes/".$_COOKIE["theme"]))
+    if (is_file("themes/".$_COOKIE["theme"]."/".$_COOKIE["theme"]."_1024.css"))
+      $theme = $_COOKIE["theme"];
 }
 
 if (isset($_COOKIE["lang"]))
@@ -61,8 +61,8 @@ $output .= "
   <title>$title</title>
   <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$site_encoding\" />
   <meta http-equiv=\"Content-Type\" content=\"text/javascript; charset=$site_encoding\" />
-  <link rel=\"stylesheet\" type=\"text/css\" href=\"templates/".$css_template."/".$css_template."_1024.css\" title=\"1024\" />
-  <link rel=\"stylesheet\" type=\"text/css\" href=\"templates/".$css_template."/".$css_template."_1280.css\" title=\"1280\" />
+  <link rel=\"stylesheet\" type=\"text/css\" href=\"themes/".$theme."/".$theme."_1024.css\" title=\"1024\" />
+  <link rel=\"stylesheet\" type=\"text/css\" href=\"themes/".$theme."/".$theme."_1280.css\" title=\"1280\" />
   <link rel=\"SHORTCUT ICON\" href=\"img/favicon.ico\" />
   <script type=\"text/javascript\" charset=\"utf-8\"></script>
   <script type=\"text/javascript\" src=\"js/general.js\"></script>

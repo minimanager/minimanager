@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos/Trinity
  * License: GNU General Public License v2(GPL)
  * Language: French
- * Supported Minimanager Revision: r278
+ * Supported Minimanager Revision: r288
  * Translator: fra298
  */
 
@@ -384,6 +384,9 @@ function lang_char()
   'talent_value' => 'Valeur',
   // -----char_friends.php---
   'friends' => 'Friends',
+  'friendof' => 'Friends of',
+  'ignored' => 'Ignored',
+  'ignoredby' => 'Ignored by',
   'name' => 'Nom',
   'race' => 'Race',
   'class' => 'Classe',
@@ -711,10 +714,10 @@ function lang_edit()
     'error_updating' => 'Erreur à la mise à jour',
     'del_error' => 'Erreur de suppression.',
     'edit_your_acc' => 'Editer votre compte',
-    'cms_options' => 'CMS Options',
-    'select_cms_template' => 'Choisir le modèle de CMS',
-    'template' => 'Modèle',
-    'select_cms_layout_lang' => 'Sélection de la langue du CMS',
+    'theme_options' => 'Theme Options',
+    'select_theme' => 'Choisir le modèle de',
+    'theme' => 'Modèle',
+    'select_layout_lang' => 'Sélection de la langue du',
     'language' => 'Langue',
     'save' => 'Sauver',
     'client_type' => 'Type de client',

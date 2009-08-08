@@ -200,7 +200,7 @@ $title               = "MiniManager for Mangos/Trinity Server";
 $itemperpage         = 25;
 $showcountryflag     = true;
 
-$css_template        = "Sulfur";    // file/folder name of css tamplate to use from templates directory by default
+$theme              = "Sulfur";    // file/folder name of theme to use from themes directory by default
 $language            = "english";   // default site language
 $timezone            = "UTC";       // default timezone (use your local timezone code)
 $gm_online           = "1";         // display GM Characters in the Online Character List and Player Map (1 = enable, 0 = disable)

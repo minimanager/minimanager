@@ -136,7 +136,7 @@ function edit_user()
                 <tr>
                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'---></td>
                   <td>
-                    <a href=\"char.php?id=$char[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> 
+                    <a href=\"char.php?id=$char[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
                     <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".get_level_with_color($char[4])."</a>
                   </td>
                 </tr>";
@@ -158,10 +158,10 @@ function edit_user()
           </fieldset>
           <br />
           <fieldset style=\"width: 550px;\">
-            <legend>{$lang_edit['cms_options']}</legend>
+            <legend>{$lang_edit['theme_options']}</legend>
             <table class=\"hidden\" style=\"width: 450px;\">
               <tr>
-                <td align=\"left\">{$lang_edit['select_cms_layout_lang']} :</td>
+                <td align=\"left\">{$lang_edit['select_layout_lang']} :</td>
                 <td align=\"right\">
                   <form action=\"edit.php\" method=\"get\" name=\"form1\">
                     <input type=\"hidden\" name=\"action\" value=\"lang_set\" />
@@ -200,23 +200,23 @@ function edit_user()
                 </td>
               </tr>
               <tr>
-                <td align=\"left\">{$lang_edit['select_cms_template']} :</td>
+                <td align=\"left\">{$lang_edit['select_theme']} :</td>
                 <td align=\"right\">
                   <form action=\"edit.php\" method=\"get\" name=\"form2\">
-                    <input type=\"hidden\" name=\"action\" value=\"template_set\" />
-                    <select name=\"template\">
-                      <optgroup label=\"{$lang_edit['template']}\">";
-    if (is_dir("./templates"))
+                    <input type=\"hidden\" name=\"action\" value=\"theme_set\" />
+                    <select name=\"theme\">
+                      <optgroup label=\"{$lang_edit['theme']}\">";
+    if (is_dir("./themes"))
     {
-      if ($dh = opendir("./templates"))
+      if ($dh = opendir("./themes"))
       {
         while (($file = readdir($dh)) != false)
         {
-          if (($file != '.')&&($file != '..')&&($file != '.htaccess')&&($file != 'index.html')&&($file != '.svn')&&($file != 'pomm.css'))
+          if (($file != '.')&&($file != '..')&&($file != '.htaccess')&&($file != 'index.html')&&($file != '.svn'))
           {
             $output .= "
                         <option value=\"$file\"";
-            if (isset($_COOKIE["css_template"]) && ($_COOKIE["css_template"] == $file))
+            if (isset($_COOKIE["theme"]) && ($_COOKIE["theme"] == $file))
               $output .= " selected=\"selected\" ";
             $output .= ">$file</option>";
           }
@@ -340,18 +340,18 @@ function lang_set()
 
 
 //###############################################################################################################
-// SET DEFAULT INTERFACE TEMPLATE
+// SET DEFAULT INTERFACE THEME
 //###############################################################################################################
-function template_set()
+function theme_set()
 {
-  if (empty($_GET['template']))
+  if (empty($_GET['theme']))
     redirect("edit.php?error=1");
   else
-    $tmpl = addslashes($_GET['template']);
+    $tmpl = addslashes($_GET['theme']);
 
   if ($tmpl)
   {
-    setcookie("css_template", $tmpl, time()+3600*24*30*6); //six month
+    setcookie("theme", $tmpl, time()+3600*24*30*6); //six month
     redirect("edit.php");
   }
   else
@@ -411,8 +411,8 @@ switch ($action)
   case "lang_set":
     lang_set();
     break;
-  case "template_set":
-    template_set();
+  case "theme_set":
+    theme_set();
     break;
   default:
     edit_user();

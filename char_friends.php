@@ -124,7 +124,7 @@ function char_friends()
     {
       $output .= "
                   <tr>
-                    <th colspan=\"7\" align=\"left\">Friend of</th>
+                    <th colspan=\"7\" align=\"left\">{$lang_char['friendof']}</th>
                   </tr>
                   <tr>
                     <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
@@ -168,7 +168,7 @@ function char_friends()
     {
       $output .= "
                   <tr>
-                    <th colspan=\"7\" align=\"left\">Ignored</th>
+                    <th colspan=\"7\" align=\"left\">{$lang_char['ignored']}</th>
                   </tr>
                   <tr>
                     <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
@@ -204,7 +204,7 @@ function char_friends()
     {
       $output .= "
                   <tr>
-                    <th colspan=\"7\" align=\"left\">Ignored by</th>
+                    <th colspan=\"7\" align=\"left\">{$lang_char['ignoredby']}</th>
                   </tr>
                   <tr>
                     <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
