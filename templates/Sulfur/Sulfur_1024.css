@@ -668,6 +668,14 @@ tr td.rep0 {color:#cc2222}
 	clear: both;
 }
 
+#tab_content2 {
+	padding: 10px;
+	border: 1px solid #d4d4d4;
+	background: #484848;
+	width: 700px;
+	clear: both;
+}
+
 /*** Java layer tabs ***/
 .jtabs {
 	margin: 0;
