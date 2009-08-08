@@ -20,7 +20,7 @@ function top100($realmid)
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "honor";
-  if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="guid";
+  if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="honor";
 
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;

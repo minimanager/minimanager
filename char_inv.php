@@ -124,17 +124,12 @@ function char_inv()
         <center>
           <div id=\"tab\">
             <ul>
-              <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
-              <li id=\"selected\"><a href=\"char_inv.php?id=$id\">{$lang_char['inventory']}</a></li>
-              <li><a href=\"char_quest.php?id=$id\">{$lang_char['quests']}</a></li>
-              <li><a href=\"char_achieve.php?id=$id\">{$lang_char['achievements']}</a></li>
-              <li><a href=\"char_skill.php?id=$id\">{$lang_char['skills']}</a></li>
-              <li><a href=\"char_talent.php?id=$id\">{$lang_char['talents']}</a></li>
-              <li><a href=\"char_rep.php?id=$id\">{$lang_char['reputation']}</a></li>";
-      if (get_player_class($char[3]) == 'Hunter')
-        $output .= "
-              <li><a href=\"char_pets.php?id=$id\">{$lang_char['pets']}</a></li>";
-      $output .= "
+            <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
+            <li id=\"selected\"><a href=\"char_inv.php?id=$id\">{$lang_char['inventory']}</a></li>
+            <li><a href=\"char_talent.php?id=$id\">{$lang_char['talents']}</a></li>
+            <li><a href=\"char_achieve.php?id=$id\">{$lang_char['achievements']}</a></li>
+            <li><a href=\"char_quest.php?id=$id\">{$lang_char['quests']}</a></li>
+            <li><a href=\"char_friends.php?id=$id\">{$lang_char['friends']}</a></li>
             </ul>
           </div>
           <div id=\"tab_content\">
@@ -439,22 +434,21 @@ function char_inv()
       $output .= "
               </td>
               <td>";
-
-      if (($user_lvl >= $action_permission['delete']))
+      if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
         makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
         $output .= "
             </td>
             <td>";
       }
-      if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
+      if ((($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))||($owner_name == $user_name))
       {
         makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
               </td>
               <td>";
       }
-      if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
+      if ($user_lvl >= $action_permission['update'])
       {
         makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
         $output .= "
@@ -472,9 +466,7 @@ function char_inv()
 ";
     }
     else
-    {
       error($lang_char['no_permission']);
-    }
   }
   else
     error($lang_char['no_char_found']);
@@ -488,6 +480,8 @@ function char_inv()
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
+$lang_char = lang_char();
+
 switch ($action)
 {
   case "unknown":
@@ -495,6 +489,10 @@ switch ($action)
   default:
     char_inv();
 }
+
+unset($action);
+unset($action_permission);
+unset($lang_char);
 
 require_once("footer.php");
 

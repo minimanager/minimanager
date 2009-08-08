@@ -322,8 +322,12 @@ $lang_banned = array(
   'acc_not_found' => 'Compte non trouvé'
   );
 
-$lang_char = array(
-  // ----- CHAR.PHP -----
+
+// ----- CHAR.PHP -----
+function lang_char()
+{
+  $lang_char = array
+  (
   'online' => 'En ligne',
   'offline' => 'Hors Ligne',
   'username' => 'Nom du compte',
@@ -378,6 +382,15 @@ $lang_char = array(
   'talent_id' => 'ID',
   'talent_name' => 'Nom du Talent',
   'talent_value' => 'Valeur',
+  // -----char_friends.php---
+  'friends' => 'Friends',
+  'name' => 'Nom',
+  'race' => 'Race',
+  'class' => 'Classe',
+  'level' => 'Niveau',
+  'map' => 'Map',
+  'zone' => 'Zone',
+  'online' => 'En ligne',
   // --- skill_rank_array ---
   'apprentice' => 'Apprenti',
   'journeyman' => 'Compagnon',
@@ -410,6 +423,9 @@ $lang_char = array(
   'achievement_date' => 'Date',
   'no_com_achievements' => 'Aucun Haut Fait accompli'
   );
+  return $lang_char;
+}
+
 
 $lang_item = array(
   // ----- ITEM TOOLTIP -----

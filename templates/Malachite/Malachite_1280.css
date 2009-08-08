@@ -112,6 +112,10 @@ table.stat_hidden {
 	width: 900px;
 }
 
+#tab_content2 {
+	width: 860px;
+}
+
 /*** Java layer tabs ***/
 
 .jtabs a  {

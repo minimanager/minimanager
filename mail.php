@@ -68,7 +68,7 @@ function print_mail_form()
                     </select>
                     <select name=\"group_sign\">
                       <option value=\"=\">=</option>
-                      <option value=\"<\">&lt;</option>
+                      <option value=\"&lt;\">&lt;</option>
                       <option value=\">\">&gt;</option>
                       <option value=\"!=\">!=</option>
                     </select>

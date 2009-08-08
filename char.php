@@ -179,19 +179,34 @@ function char_main()
       {
         $output .= "
               <li><a href=\"char_inv.php?id=$id\">{$lang_char['inventory']}</a></li>
-              <li><a href=\"char_quest.php?id=$id\">{$lang_char['quests']}</a></li>
-              <li><a href=\"char_achieve.php?id=$id\">{$lang_char['achievements']}</a></li>
-              <li><a href=\"char_skill.php?id=$id\">{$lang_char['skills']}</a></li>
               <li><a href=\"char_talent.php?id=$id\">{$lang_char['talents']}</a></li>
-              <li><a href=\"char_rep.php?id=$id\">{$lang_char['reputation']}</a></li>";
-        if (get_player_class($char[3]) == 'Hunter' )
-          $output .= "
-              <li><a href=\"char_pets.php?id=$id\">{$lang_char['pets']}</a></li>";
-      }
-      $output .= "
-            </ul>
+              <li><a href=\"char_achieve.php?id=$id\">{$lang_char['achievements']}</a></li>
+              <li><a href=\"char_quest.php?id=$id\">{$lang_char['quests']}</a></li>
+              <li><a href=\"char_friends.php?id=$id\">{$lang_char['friends']}</a></li>
+             </ul>
           </div>
           <div id=\"tab_content\">
+            <div id=\"tab\">
+              <ul>
+                <li id=\"selected\"><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>";
+        if (get_player_class($char[3]) == 'Hunter' )
+          $output .= "
+                <li><a href=\"char_pets.php?id=$id\">{$lang_char['pets']}</a></li>";
+        $output .= "
+                <li><a href=\"char_rep.php?id=$id\">{$lang_char['reputation']}</a></li>
+                <li><a href=\"char_skill.php?id=$id\">{$lang_char['skills']}</a></li>";
+      }
+      else
+        $output .="
+             </ul>
+          </div>
+          <div id=\"tab_content\">
+            <div id=\"tab\">
+              <ul>";
+      $output .="
+              </ul>
+            </div>
+            <div id=\"tab_content2\">
             <table class=\"lined\" style=\"width: 580px;\">
               <tr>
                 <td colspan=\"2\">
@@ -587,9 +602,7 @@ function char_main()
                 <td width=\"15%\"></td>
                 <td></td>
               </tr>
-            </table>
-            <br />";
-
+            </table>";
       if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
       {
         //total time played
@@ -607,51 +620,46 @@ function char_main()
                   {$lang_char['tot_paly_time']}: $tot_days {$lang_char['days']} $total_hours {$lang_char['hours']} $total_min {$lang_char['min']}
                 </td>
               </tr>
-            </table>
+            </table>";
+     }
+     $output .= "
           </div>
-          <br />";
-
-        $output .= "
+          <br />
+          </div>
+          <br />
           <table class=\"hidden\">
             <tr>
               <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
-        $output .= "
-              </td>
-              <td>";
-
-        if (($user_lvl >= $action_permission['delete']))
-        {
-          makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
-          $output .= "
-              </td>
-              <td>";
-        }
-        if (($user_lvl >= $action_permission['delete'])||($owner_name == $user_name))
-        {
-          makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
-          $output .= "
-              </td>
-              <td>";
-        }
-        if (($user_lvl >= $action_permission['update'])||($owner_name == $user_name))
-        {
-          makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
-          $output .= "
-              </td>
-              <td>";
-        }
-        makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
-        //end of admin options
-      }
-      else
+      if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
       {
-        $output .= "
-          <table class=\"hidden\">
-            <tr>
-              <td>";
-        makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
+              makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
+      $output .= "
+            </td>
+            <td>";
       }
+      if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
+      {
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
+        $output .= "
+            </td>
+            <td>";
+      }
+      if ((($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))||($owner_name == $user_name))
+      {
+        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
+        $output .= "
+            </td>
+            <td>";
+      }
+      if ($user_lvl >= $action_permission['update'])
+      {
+        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
+        $output .= "
+            </td>
+            <td>";
+      }
+      //end of admin options
+      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       $output .= "
               </td>
             </tr>
@@ -666,8 +674,6 @@ function char_main()
   else
     error($lang_char['no_char_found']);
 
-  $sql->close();
-  unset($sql);
 }
 
 
@@ -677,6 +683,8 @@ function char_main()
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
+$lang_char = lang_char();
+
 switch ($action)
 {
   case "unknown":
@@ -684,6 +692,10 @@ switch ($action)
   default:
     char_main();
 }
+
+unset($action);
+unset($action_permission);
+unset($lang_char);
 
 require_once("footer.php");
 
