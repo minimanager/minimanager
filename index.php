@@ -196,7 +196,7 @@ function front()
     $dir = ($dir) ? 0 : 1;
     //==========================$_GET and SECURE end=============================
 
-    $result = $sqlc->query("SELECT count(*) FROM `characters` WHERE `online`= 1".(($gm_online_count == "1") ? " AND `extra_flags`&1 = 0" : ""));
+    $result = $sqlc->query("SELECT count(*) FROM `characters` WHERE `online`= 1".(($gm_online_count == "0") ? " AND `extra_flags`&1 = 0" : ""));
     $total_online = $sqlc->result($result, 0);
     $order_side = "";
     if( !$user_lvl && !$server[$realm_id]['both_factions'])
@@ -213,7 +213,7 @@ function front()
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as gname,
         mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender".
         ($server_type ? ", latency " : " ")."
-        FROM `characters` WHERE `online`= 1 ".($gm_online == "1" ? "AND `extra_flags`&1 = 0 " : "")."$order_side ORDER BY $order_by $order_dir";
+        FROM `characters` WHERE `online`= 1 ".($gm_online == "0" ? "AND `extra_flags`&1 = 0 " : "")."$order_side ORDER BY $order_by $order_dir";
     $result = $sqlc->query($query);
     $output .= "
             <font class=\"bold\">{$lang_index['tot_users_online']}: $total_online</font>
