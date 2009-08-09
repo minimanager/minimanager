@@ -92,7 +92,7 @@ if($developer_test_mode && $allow_anony && (!isset($_SESSION['logged_in'])))
   $_SESSION['user_lvl'] = -1;
   $_SESSION['uname'] = $anony_uname;
   $_SESSION['user_id'] = -1;
-  $_SESSION['realm_id'] = 1;
+  $_SESSION['realm_id'] = $anony_realm_id;
   $_SESSION['client_ip'] = ( !empty($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
 }
 
@@ -183,7 +183,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
   $result = $sqlr->query("SELECT id, name FROM `realmlist` LIMIT 10");
 
-  if ( $sqlr->num_rows($result) > 1 && (count($server) > 1) )
+  if ( $sqlr->num_rows($result) > 1 && (count($server) > 1) && (count($characters_db) > 1))
   {
     while ($realm = $sqlr->fetch_row($result))
     {

@@ -25,12 +25,21 @@ function char_inv()
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+  if (empty($_GET['realm']))
+    $realmid = $realm_id;
+  else
+  {
+    $realmid = $sqlr->quote_smart($_GET['realm']);
+    if (!is_numeric($realmid)) $realmid = $realm_id;
+  }
+
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
   $sqlw = new SQL;
-  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw->connect($world_db[$realmid]['addr'], $world_db[$realmid]['user'], $world_db[$realmid]['pass'], $world_db[$realmid]['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
@@ -84,7 +93,7 @@ function char_inv()
           if($slot[1] < 23) // SLOT 19 TO 22 (Bags)
           {
             $bag_id[$slot[2]] = ($slot[1]-18);
-            $equiped_bag_id[$slot[1]-18] = array($slot[3], $sqlw->result($sqlw->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
+            $equiped_bag_id[$slot[1]-18] = array($slot[3], $sqlw->result($sqlw->query("SELECT ContainerSlots FROM `".$world_db[$realmid]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
           }
           elseif($slot[1] < 39) // SLOT 23 TO 38 (BackPack)
           {
@@ -99,7 +108,7 @@ function char_inv()
           elseif($slot[1] < 74) // SLOT 67 TO 73 (Bank Bags)
           {
             $bank_bag_id[$slot[2]] = ($slot[1]-66);
-            $equip_bnk_bag_id[$slot[1]-66] = array($slot[3], $sqlw->result($sqlw->query("SELECT ContainerSlots FROM `".$world_db[$realm_id]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
+            $equip_bnk_bag_id[$slot[1]-66] = array($slot[3], $sqlw->result($sqlw->query("SELECT ContainerSlots FROM `".$world_db[$realmid]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
           }
         }
         else
@@ -124,12 +133,12 @@ function char_inv()
         <center>
           <div id=\"tab\">
             <ul>
-            <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
-            <li id=\"selected\"><a href=\"char_inv.php?id=$id\">{$lang_char['inventory']}</a></li>
-            <li><a href=\"char_talent.php?id=$id\">{$lang_char['talents']}</a></li>
-            <li><a href=\"char_achieve.php?id=$id\">{$lang_char['achievements']}</a></li>
-            <li><a href=\"char_quest.php?id=$id\">{$lang_char['quests']}</a></li>
-            <li><a href=\"char_friends.php?id=$id\">{$lang_char['friends']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
+            <li id=\"selected\"><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
+            <li><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
+            <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
+            <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
+            <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
             </ul>
           </div>
           <div id=\"tab_content\">
@@ -436,7 +445,7 @@ function char_inv()
               <td>";
       if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
         $output .= "
             </td>
             <td>";

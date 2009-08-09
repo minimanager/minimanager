@@ -29,11 +29,21 @@ function char_rep()
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'],
-    $characters_db[$realm_id]['name']);
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+  if (empty($_GET['realm']))
+    $realmid = $realm_id;
+  else
+  {
+    $realmid = $sqlr->quote_smart($_GET['realm']);
+    if (!is_numeric($realmid)) $realmid = $realm_id;
+  }
+
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'],
+    $characters_db[$realmid]['name']);
+
   $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
     $id = 0;
@@ -57,24 +67,24 @@ function char_rep()
         <center>
           <div id=\"tab\">
             <ul>
-              <li id=\"selected\"><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
-              <li><a href=\"char_inv.php?id=$id\">{$lang_char['inventory']}</a></li>
-              <li><a href=\"char_talent.php?id=$id\">{$lang_char['talents']}</a></li>
-              <li><a href=\"char_achieve.php?id=$id\">{$lang_char['achievements']}</a></li>
-              <li><a href=\"char_quest.php?id=$id\">{$lang_char['quests']}</a></li>
-              <li><a href=\"char_friends.php?id=$id\">{$lang_char['friends']}</a></li>
+              <li id=\"selected\"><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
+              <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
+              <li><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
+              <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
+              <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
+              <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
              </ul>
           </div>
           <div id=\"tab_content\">
             <div id=\"tab\">
               <ul>
-                <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>";
+                <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>";
       if( get_player_class($char[3]) == 'Hunter' )
         $output .= "
-                <li><a href=\"char_pets.php?id=$id\">{$lang_char['pets']}</a></li>";
+                <li><a href=\"char_pets.php?id=$id&amp;realm=$realmid\">{$lang_char['pets']}</a></li>";
       $output .= "
-                <li id=\"selected\"><a href=\"char_rep.php?id=$id\">{$lang_char['reputation']}</a></li>
-                <li><a href=\"char_skill.php?id=$id\">{$lang_char['skills']}</a></li>
+                <li id=\"selected\"><a href=\"char_rep.php?id=$id&amp;realm=$realmid\">{$lang_char['reputation']}</a></li>
+                <li><a href=\"char_skill.php?id=$id&amp;realm=$realmid\">{$lang_char['skills']}</a></li>
               </ul>
             </div>
             <div id=\"tab_content2\">
@@ -275,7 +285,7 @@ function char_rep()
                 <td>";
       if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
-                  makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
+                  makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
         $output .= "
                 </td>
                 <td>";

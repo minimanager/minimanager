@@ -70,7 +70,7 @@ function dologin()
 //#################################################################################################
 function login()
 {
-  global $lang_global, $lang_login, $output, $realm_db, $server, $remember_me_checked;
+  global $lang_global, $lang_login, $output, $realm_db, $characters_db, $server, $remember_me_checked;
 
   $output .= "
         <center>
@@ -104,7 +104,7 @@ function login()
   $link = $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
   $result = $sqlr->query("SELECT id,name FROM `realmlist` LIMIT 10");
 
-  if ($sqlr->num_rows($result) > 1 && (count($server) >1))
+  if ($sqlr->num_rows($result) > 1 && (count($server) > 1) && (count($characters_db) > 1))
   {
     $output .= "
                 <tr align=\"right\">

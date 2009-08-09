@@ -373,5 +373,6 @@ $developer_test_mode =  false;
 
 $allow_anony         =  false;
 $anony_uname         = "Guest";
+$anony_realm_id      =  1
 
 ?>

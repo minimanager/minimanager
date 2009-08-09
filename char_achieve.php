@@ -25,10 +25,19 @@ function char_achievements()
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+  if (empty($_GET['realm']))
+    $realmid = $realm_id;
+  else
+  {
+    $realmid = $sqlr->quote_smart($_GET['realm']);
+    if (!is_numeric($realmid)) $realmid = $realm_id;
+  }
+
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
@@ -72,12 +81,12 @@ function char_achievements()
       <center>
         <div id=\"tab\">
           <ul>
-            <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
-            <li><a href=\"char_inv.php?id=$id\">{$lang_char['inventory']}</a></li>
-            <li><a href=\"char_talent.php?id=$id\">{$lang_char['talents']}</a></li>
-            <li id=\"selected\"><a href=\"char_achieve.php?id=$id\">{$lang_char['achievements']}</a></li>
-            <li><a href=\"char_quest.php?id=$id\">{$lang_char['quests']}</a></li>
-            <li><a href=\"char_friends.php?id=$id\">{$lang_char['friends']}</a></li>
+            <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
+            <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
+            <li><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
+            <li id=\"selected\"><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
+            <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
+            <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
           </ul>
         </div>
         <div id=\"tab_content\">
@@ -86,14 +95,14 @@ function char_achievements()
           <table class=\"lined\" style=\"width: 550px;\">
             <tr>
               <td width=\"100%\" align=\"right\" colspan=\"2\">";
-      $output .= generate_pagination("char_achieve.php?id=$id&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
+      $output .= generate_pagination("char_achieve.php?id=$id&amp;realm=$realmid&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
       $output .= "
               </td>
             </tr>
             <tr>";
       $output .= "
               <th width=\"78%\">{$lang_char['achievement_title']}</th>
-              <th width=\"22%\"><a href=\"char_achieve.php?id=$id&amp;order_by=date&amp;start=$start&amp;dir=$dir\"".($order_by=='date' ? " class=\"$order_dir\"" : "").">{$lang_char['achievement_date']}</a></th>
+              <th width=\"22%\"><a href=\"char_achieve.php?id=$id&amp;realm=$realmid&amp;order_by=date&amp;start=$start&amp;dir=$dir\"".($order_by=='date' ? " class=\"$order_dir\"" : "").">{$lang_char['achievement_date']}</a></th>
             </tr>";
 
       while ($data = $sqlc->fetch_row($result))
@@ -117,7 +126,7 @@ function char_achievements()
               <td>";
       if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
-                makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
+                makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
         $output .= "
               </td>
               <td>";

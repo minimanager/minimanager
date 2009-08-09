@@ -19,7 +19,7 @@ require_once("scripts/get_lib.php");
 function edit_user()
 {
   global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
-    $lang_id_tab, $expansion_select;
+    $lang_id_tab, $expansion_select, $server, $developer_test_mode;
 
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -121,18 +121,52 @@ function edit_user()
                   <td>{$lang_edit['tot_chars']}</td>
                   <td>".$sqlr->result($result, 0)."</td>
                 </tr>";
-    $result = $sqlc->query("SELECT guid, name, race, class,
-    SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1),
-    mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
-    FROM characters WHERE account = '$user_id'");
-    $output .= "
+    $realms = $sqlr->query("SELECT id, name FROM realmlist");
+    if ($developer_test_mode && ($sqlr->num_rows($realms) > 1 && (count($server) > 1) && (count($characters_db) > 1)))
+    {
+      while ($realm = $sqlr->fetch_array($realms))
+      {
+        $sqlc->connect($characters_db[$realm[0]]['addr'], $characters_db[$realm[0]]['user'], $characters_db[$realm[0]]['pass'], $characters_db[$realm[0]]['name']);
+        $result = $sqlc->query("SELECT guid, name, race, class,
+          SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1),
+          mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+          FROM characters WHERE account = '$user_id'");
+
+        $output .= "
+                  <tr>
+                    <td>{$lang_edit['characters']} ".get_realm_name($realm[0])."</td>
+                    <td>".$sqlc->num_rows($result)."</td>
+                  </tr>";
+
+        while ($char = $sqlc->fetch_array($result))
+        {
+          $output .= "
+                  <tr>
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'---></td>
+                    <td>
+                      <a href=\"char.php?id=$char[0]&amp;realm=$realm[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
+                      <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".get_level_with_color($char[4])."</a>
+                    </td>
+                  </tr>";
+        }
+      }
+      unset($realm);
+    }
+    else
+    {
+      $result = $sqlc->query("SELECT guid, name, race, class,
+        SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1),
+        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+        FROM characters WHERE account = '$user_id'");
+
+      $output .= "
                 <tr>
                   <td>{$lang_edit['characters']}</td>
                   <td>".$sqlc->num_rows($result)."</td>
-                </tr>";
-    while ($char = $sqlc->fetch_array($result))
-    {
-      $output .= "
+            </tr>";
+      while ($char = $sqlc->fetch_array($result))
+      {
+        $output .= "
                 <tr>
                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'---></td>
                   <td>
@@ -140,8 +174,10 @@ function edit_user()
                     <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".get_level_with_color($char[4])."</a>
                   </td>
                 </tr>";
+      }
     }
     unset($result);
+    unset($realms);
     $output .= "
                 <tr>
                   <td>";

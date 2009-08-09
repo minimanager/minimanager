@@ -25,10 +25,19 @@ function char_friends()
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+  if (empty($_GET['realm']))
+    $realmid = $realm_id;
+  else
+  {
+    $realmid = $sqlr->quote_smart($_GET['realm']);
+    if (!is_numeric($realmid)) $realmid = $realm_id;
+  }
+
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
@@ -71,12 +80,12 @@ function char_friends()
           </script>
           <div id=\"tab\">
             <ul>
-              <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
-              <li><a href=\"char_inv.php?id=$id\">{$lang_char['inventory']}</a></li>
-              <li><a href=\"char_talent.php?id=$id\">{$lang_char['talents']}</a></li>
-              <li><a href=\"char_achieve.php?id=$id\">{$lang_char['achievements']}</a></li>
-              <li><a href=\"char_quest.php?id=$id\">{$lang_char['quests']}</a></li>
-              <li id=\"selected\"><a href=\"char_friends.php?id=$id\">{$lang_char['friends']}</a></li>
+              <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
+              <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
+              <li><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
+              <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
+              <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
+              <li id=\"selected\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
             </ul>
           </div>
           <div id=\"tab_content\">
@@ -99,13 +108,13 @@ function char_friends()
                       <th colspan=\"7\" align=\"left\">{$lang_char['friends']}</th>
                     </tr>
                     <tr>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['race']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['class']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['level']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['map']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=zone&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['zone']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['online']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['race']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['class']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['level']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['map']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=zone&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['zone']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['online']}</a></th>
                     </tr>";
 
         while ($data = $sqlc->fetch_row($result))
@@ -145,13 +154,13 @@ function char_friends()
                       <th colspan=\"7\" align=\"left\">{$lang_char['friendof']}</th>
                     </tr>
                     <tr>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['race']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['class']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['level']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['map']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=zone&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['zone']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['online']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['race']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['class']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['level']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['map']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=zone&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['zone']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['online']}</a></th>
                     </tr>";
 
         while ($data = $sqlc->fetch_row($result))
@@ -186,7 +195,7 @@ function char_friends()
                     </script>";
       $result = $sqlc->query("SELECT name, race, class, map, zone,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, online, account
+        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, online, account, guid
         FROM `characters` WHERE guid in (SELECT friend FROM character_social WHERE guid =$id and flags > 1) ORDER BY $order_by $order_dir");
 
       if($sqlc->num_rows($result))
@@ -196,13 +205,13 @@ function char_friends()
                       <th colspan=\"7\" align=\"left\">{$lang_char['ignored']}</th>
                     </tr>
                     <tr>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['race']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['class']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['level']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['map']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=zone&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['zone']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['online']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['race']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['class']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['level']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['map']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=zone&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['zone']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['online']}</a></th>
                     </tr>";
 
         while ($data = $sqlc->fetch_row($result))
@@ -214,7 +223,7 @@ function char_friends()
                       <td>";
           if($user_lvl >= $char_gm_level[0])
             $output .="
-                        <a href=\"char.php?id=$data[8]\">".$data[0]."</a>";
+                        <a href=\"char.php?id=$data[9]\">".$data[0]."</a>";
           else
             $output .=$data[0];
 
@@ -231,7 +240,7 @@ function char_friends()
 
       $result = $sqlc->query("SELECT name, race, class, map, zone,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, online, account
+        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, online, account, guid
         FROM `characters` WHERE guid in (SELECT guid FROM character_social WHERE friend =$id and flags > 1) ORDER BY $order_by $order_dir");
 
       if($sqlc->num_rows($result))
@@ -241,13 +250,13 @@ function char_friends()
                       <th colspan=\"7\" align=\"left\">{$lang_char['ignoredby']}</th>
                     </tr>
                     <tr>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['race']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['class']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['level']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['map']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=zone&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['zone']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['online']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['race']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['class']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['level']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['map']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=zone&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['zone']}</a></th>
+                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['online']}</a></th>
                     </tr>";
 
         while ($data = $sqlc->fetch_row($result))
@@ -259,7 +268,7 @@ function char_friends()
                       <td>";
           if($user_lvl >= $char_gm_level[0])
             $output .="
-                        <a href=\"char.php?id=$data[8]\">".$data[0]."</a>";
+                        <a href=\"char.php?id=$data[9]\">".$data[0]."</a>";
           else
             $output .=$data[0];
 
@@ -289,7 +298,7 @@ function char_friends()
               <td>";
       if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
-                makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
+                makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
         $output .= "
               </td>
               <td>";

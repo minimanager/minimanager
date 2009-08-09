@@ -25,48 +25,56 @@ function char_skill()
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'],
-    $characters_db[$realm_id]['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  if (empty($_GET['realm']))
+    $realmid = $realm_id;
+  else
+  {
+    $realmid = $sqlr->quote_smart($_GET['realm']);
+    if (!is_numeric($realmid)) $realmid = $realm_id;
+  }
+
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'],
+    $characters_db[$realmid]['name']);
+
+  $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
     $id = 0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) : 1;
-  $dir = (isset($_GET['dir'])) ? $sql->quote_smart($_GET['dir']) : 1;
+  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
   $dir = ($dir) ? 0 : 1;
 
-  $result = $sql->query("SELECT account FROM `characters` WHERE guid = $id LIMIT 1");
+  $result = $sqlc->query("SELECT account FROM `characters` WHERE guid = $id LIMIT 1");
 
-  if ($sql->num_rows($result))
+  if ($sqlc->num_rows($result))
   {
-    $char = $sql->fetch_row($result);
+    $char = $sqlc->fetch_row($result);
 
-    $owner_acc_id = $sql->result($result, 0, 'account');
-    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
-    $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
-    $owner_name = $sql->result($result, 0, 'username');
+    $owner_acc_id = $sqlc->result($result, 0, 'account');
+    $result = $sqlr->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+    $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
+    $owner_name = $sqlr->result($result, 0, 'username');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
-      $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-
-      $result = $sql->query("SELECT data, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id");
-      $char = $sql->fetch_row($result);
+      $result = $sqlc->query("SELECT data, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id");
+      $char = $sqlc->fetch_row($result);
       $char_data = explode(' ',$char[0]);
 
       $output .= "
         <center>
           <div id=\"tab\">
             <ul>
-              <li id=\"selected\"><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>
-              <li><a href=\"char_inv.php?id=$id\">{$lang_char['inventory']}</a></li>
-              <li><a href=\"char_talent.php?id=$id\">{$lang_char['talents']}</a></li>
-              <li><a href=\"char_achieve.php?id=$id\">{$lang_char['achievements']}</a></li>
-              <li><a href=\"char_quest.php?id=$id\">{$lang_char['quests']}</a></li>
-              <li><a href=\"char_friends.php?id=$id\">{$lang_char['friends']}</a></li>
+              <li id=\"selected\"><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
+              <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
+              <li><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
+              <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
+              <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
+              <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
              </ul>
           </div>
           <div id=\"tab_content\">
@@ -74,11 +82,11 @@ function char_skill()
               <ul>";
       if( get_player_class($char[3]) == 'Hunter' )
         $output .= "
-                <li><a href=\"char.php?id=$id\">{$lang_char['char_sheet']}</a></li>";
+                <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>";
       $output .= "
-                <li><a href=\"char_pets.php?id=$id\">{$lang_char['pets']}</a></li>
-                <li><a href=\"char_rep.php?id=$id\">{$lang_char['reputation']}</a></li>
-                <li id=\"selected\"><a href=\"char_skill.php?id=$id\">{$lang_char['skills']}</a></li>
+                <li><a href=\"char_pets.php?id=$id&amp;realm=$realmid\">{$lang_char['pets']}</a></li>
+                <li><a href=\"char_rep.php?id=$id&amp;realm=$realmid\">{$lang_char['reputation']}</a></li>
+                <li id=\"selected\"><a href=\"char_skill.php?id=$id&amp;realm=$realmid\">{$lang_char['skills']}</a></li>
               </ul>
             </div>
             <div id=\"tab_content2\">
@@ -89,9 +97,9 @@ function char_skill()
               <th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['skills']}</th>
             </tr>
             <tr>
-              ".($user_lvl ? "<th><a href=\"char_skill.php?id=$id&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['skill_id']}</a></th>" : "")."
-              <th align=\"right\"><a href=\"char_skill.php?id=$id&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\"  /> " : "")."{$lang_char['skill_name']}</a></th>
-              <th><a href=\"char_skill.php?id=$id&amp;order_by=2&amp;dir=$dir\">".($order_by==2 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['skill_value']}</a></th>
+              ".($user_lvl ? "<th><a href=\"char_skill.php?id=$id&amp;realm=$realmid&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['skill_id']}</a></th>" : "")."
+              <th align=\"right\"><a href=\"char_skill.php?id=$id&amp;realm=$realmid&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\"  /> " : "")."{$lang_char['skill_name']}</a></th>
+              <th><a href=\"char_skill.php?id=$id&amp;realm=$realmid&amp;order_by=2&amp;dir=$dir\">".($order_by==2 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['skill_value']}</a></th>
             </tr>";
 
       $skill_array = array();
@@ -279,7 +287,7 @@ function char_skill()
               <td>";
       if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
+        makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
         $output .= "
             </td>
             <td>";
