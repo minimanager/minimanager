@@ -19,7 +19,7 @@ valid_login($action_permission['read']);
 //########################################################################################################################
 function char_achievements()
 {
-  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db, $itemperpage,
     $action_permission, $user_lvl, $user_name;
 
   if (empty($_GET['id']))
@@ -34,7 +34,23 @@ function char_achievements()
   if (!is_numeric($id))
     $id = 0;
 
-  $result = $sqlc->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id LIMIT 1");
+  //==========================$_GET and SECURE=================================
+  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
+  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+
+  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "date";
+  if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="id";
+
+  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 0;
+  if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
+
+  $order_dir = ($dir) ? "ASC" : "DESC";
+  $dir = ($dir) ? 0 : 1;
+  //==========================$_GET and SECURE end=============================
+
+  $result = $sqlc->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
+    mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+    FROM `characters` WHERE guid = $id LIMIT 1");
 
   if ($sqlc->num_rows($result))
   {
@@ -47,6 +63,11 @@ function char_achievements()
 
     if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
+      $result = $sqlc->query("SELECT achievement,date FROM character_achievement WHERE guid =$id ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      $query_1 = $sqlc->query("SELECT count(*) FROM character_achievement WHERE guid =$id");
+      $all_record = $sqlc->result($query_1,0);
+      unset($query_1);
+
       $output .= "
       <center>
         <div id=\"tab\">
@@ -60,46 +81,50 @@ function char_achievements()
           </ul>
         </div>
         <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /> - lvl ".get_level_with_color($char[4])."</font>
+          <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
           <br /><br />
           <table class=\"lined\" style=\"width: 550px;\">
+            <tr>
+              <td width=\"100%\" align=\"right\" colspan=\"2\">";
+      $output .= generate_pagination("char_achieve.php?id=$id&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
+      $output .= "
+              </td>
+            </tr>
             <tr>";
       $output .= "
               <th width=\"78%\">{$lang_char['achievement_title']}</th>
-              <th width=\"22%\">{$lang_char['achievement_date']}</th>
+              <th width=\"22%\"><a href=\"char_achieve.php?id=$id&amp;order_by=date&amp;start=$start&amp;dir=$dir\"".($order_by=='date' ? " class=\"$order_dir\"" : "").">{$lang_char['achievement_date']}</a></th>
             </tr>";
-
-      $result = $sqlc->query("SELECT achievement,date FROM character_achievement WHERE guid =$id");
 
       while ($data = $sqlc->fetch_row($result))
       {
         $output .="
-             <tr>
-               <td align=\"left\"><a href=\"http://www.wowhead.com/?achievement=".$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a></td>
-               <td>".date("n-j-o", $data['1'])."</td>
-             </tr>";
+            <tr>
+              <td align=\"left\"><a href=\"http://www.wowhead.com/?achievement=".$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a></td>
+              <td>".date("n-j-o", $data['1'])."</td>
+            </tr>";
       }
       $output .= "
-           </table>
-         </div>
-       <br />
-       <table class=\"hidden\">
-         <tr>
-           <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
+          </table>
+        </div>
+        <br />
+        <table class=\"hidden\">
+          <tr>
+            <td>";
+              makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
       $output .= "
               </td>
               <td>";
       if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
+                makebutton($lang_char['edit_button'], "char_edit.php?id=$id",130);
         $output .= "
-            </td>
-            <td>";
+              </td>
+              <td>";
       }
       if ((($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))||($owner_name == $user_name))
       {
-        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
+                makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
               </td>
               <td>";

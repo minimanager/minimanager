@@ -22,39 +22,36 @@ function char_main()
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $characters_db, $server, $mmfpm_db,
     $action_permission, $user_lvl, $user_name, $user_id, $item_datasite, $talent_datasite, $showcountryflag;
 
-  valid_login($action_permission['read']);
-
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'],
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'],
     $characters_db[$realm_id]['name']);
-
-  $id = $sql->quote_smart($_GET['id']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
     $id = 0;
 
-  $result = $sql->query("SELECT account, race FROM `characters` WHERE guid = $id LIMIT 1");
+  $result = $sqlc->query("SELECT account, race FROM `characters` WHERE guid = $id LIMIT 1");
 
-  if ($sql->num_rows($result))
+  if ($sqlc->num_rows($result))
   {
     //resrict by owner's gmlvl
-    $owner_acc_id = $sql->result($result, 0, 'account');
-    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    $query = $sql->query("SELECT gmlevel,username FROM account WHERE id = $owner_acc_id");
-    $owner_gmlvl = $sql->result($query, 0, 'gmlevel');
-    $owner_name = $sql->result($query, 0, 'username');
-
-    $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'],
-      $characters_db[$realm_id]['name']);
+    $owner_acc_id = $sqlc->result($result, 0, 'account');
+    $query = $sqlr->query("SELECT gmlevel,username FROM account WHERE id = $owner_acc_id");
+    $owner_gmlvl = $sqlr->result($query, 0, 'gmlevel');
+    $owner_name = $sqlr->result($query, 0, 'username');
 
     if(!$user_lvl && !$server[$realm_id]['both_factions'])
     {
-      $side_p = (in_array($sql->result($result, 0, 'race'),array(2,5,6,8,10))) ? 1 : 2;
-      $result_1 = $sql->query("SELECT race FROM `characters` WHERE account = $user_id LIMIT 1");
-      if ($sql->num_rows($result))
-        $side_v = (in_array($sql->result($result_1, 0, 'race'), array(2,5,6,8,10))) ? 1 : 2;
+      $side_p = (in_array($sqlc->result($result, 0, 'race'),array(2,5,6,8,10))) ? 1 : 2;
+      $result_1 = $sqlc->query("SELECT race FROM `characters` WHERE account = $user_id LIMIT 1");
+      if ($sqlc->num_rows($result))
+        $side_v = (in_array($sqlc->result($result_1, 0, 'race'), array(2,5,6,8,10))) ? 1 : 2;
       else
         $side_v = 0;
       unset($result_1);
@@ -67,22 +64,22 @@ function char_main()
 
     if ($user_lvl >= $owner_gmlvl && (($side_v == $side_p) || !$side_v))
     {
-      $result = $sql->query("SELECT data, name, race, class, zone, map, online, totaltime,
+      $result = $sqlc->query("SELECT data, name, race, class, zone, map, online, totaltime,
         mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender,
         account FROM `characters` WHERE guid = $id");
-      $char = $sql->fetch_row($result);
+      $char = $sqlc->fetch_row($result);
       $char_data = explode(' ',$char[0]);
 
       $online = ($char[6]) ? $lang_char['online'] : $lang_char['offline'];
 
       if($char_data[CHAR_DATA_OFFSET_GUILD_ID])
       {
-        $query = $sql->query("SELECT name FROM guild WHERE guildid ='{$char_data[CHAR_DATA_OFFSET_GUILD_ID]}'");
-        $guild_name = $sql->result($query, 0, 'name');
+        $query = $sqlc->query("SELECT name FROM guild WHERE guildid ='{$char_data[CHAR_DATA_OFFSET_GUILD_ID]}'");
+        $guild_name = $sqlc->result($query, 0, 'name');
         $guild_name = "<a href=\"guild.php?action=view_guild&amp;error=3&amp;id={$char_data[CHAR_DATA_OFFSET_GUILD_ID]}\" >$guild_name</a>";
         $mrank = $char_data[CHAR_DATA_OFFSET_GUILD_RANK] + 1;
-        $guild_rank_query = $sql->query("SELECT rname FROM guild_rank WHERE guildid ='{$char_data[CHAR_DATA_OFFSET_GUILD_ID]}' AND rid='{$mrank}'");
-        $guild_rank = $sql->result($guild_rank_query, 0, 'rname');
+        $guild_rank_query = $sqlc->query("SELECT rname FROM guild_rank WHERE guildid ='{$char_data[CHAR_DATA_OFFSET_GUILD_ID]}' AND rid='{$mrank}'");
+        $guild_rank = $sqlc->result($guild_rank_query, 0, 'rname');
       }
       else
       {
@@ -211,32 +208,30 @@ function char_main()
               <tr>
                 <td colspan=\"2\">
                   <div>
-                    <img src=".get_image_dir($char_data[CHAR_DATA_OFFSET_LEVEL],$char[8],$char[2],$char[3],0)." alt=\"avatar\">
+                    <img src=\"".get_image_dir($char_data[CHAR_DATA_OFFSET_LEVEL],$char[8],$char[2],$char[3],0)."\" alt=\"avatar\" />
                   </div>
                   <div>";
 
-      $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-      $a_results = $sql->query("SELECT DISTINCT spell FROM `character_aura` WHERE guid = $id");
-      if ($sql->num_rows($a_results))
+      $a_results = $sqlc->query("SELECT DISTINCT spell FROM `character_aura` WHERE guid = $id");
+      if ($sqlc->num_rows($a_results))
       {
-        while ($aura = $sql->fetch_row($a_results))
+        while ($aura = $sqlc->fetch_row($a_results))
         {
            $output .= "
                     <a style=\"padding:2px;\" href=\"$talent_datasite$aura[0]\" target=\"_blank\">
-                      <img src=\"".get_aura_icon($aura[0])."\" alt=\"".$aura[0]."\" width=24 height=24>
+                      <img src=\"".get_aura_icon($aura[0])."\" alt=\"".$aura[0]."\" width=\"24\" height=\"24\" />
                     </a>";
         }
       }
 
       if ($showcountryflag)
       {
-        $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-        $loc = $sql->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[9]';");
-        $location = $sql->fetch_row($loc);
+        $loc = $sqlr->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[9]';");
+        $location = $sqlr->fetch_row($loc);
         $ip = $location[0];
-        $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-        $nation = $sql->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
-        $country = $sql->fetch_row($nation);
+
+        $nation = $sqlm->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
+        $country = $sqlm->fetch_row($nation);
       }
 
       $output .="
@@ -244,7 +239,7 @@ function char_main()
                 </td>
                 <td colspan=\"4\">
                   <font class=\"bold\">
-                    ".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[8]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /> - lvl ".get_level_with_color($char_data[CHAR_DATA_OFFSET_LEVEL])."
+                    ".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[8]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char_data[CHAR_DATA_OFFSET_LEVEL])."
                   </font>
                   <br />{$lang_char['guild']}: $guild_name | {$lang_char['rank']}: ".htmlentities($guild_rank)."
                   <br />".(($char[6]) ? "<img src=\"img/up.gif\" onmousemove='toolTip(\"Online\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"online\" />" : "<img src=\"img/down.gif\" onmousemove='toolTip(\"Offline\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"offline\" />");
@@ -258,7 +253,7 @@ function char_main()
       if (!empty($equiped_items[1][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_HEAD\" target=\"_blank\">
-                    <img src=\"{$equiped_items[1][1]}\" class=\"{$equiped_items[1][2]}\" alt=\"Head\">
+                    <img src=\"{$equiped_items[1][1]}\" class=\"{$equiped_items[1][2]}\" alt=\"Head\" />
                   </a>";
       else
         $output .= "
@@ -272,7 +267,7 @@ function char_main()
       if (!empty($equiped_items[10][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_GLOVES\" target=\"_blank\">
-                    <img src=\"{$equiped_items[10][1]}\" class=\"{$equiped_items[10][2]}\" alt=\"Gloves\">
+                    <img src=\"{$equiped_items[10][1]}\" class=\"{$equiped_items[10][2]}\" alt=\"Gloves\" />
                   </a>";
       else
         $output .= "
@@ -285,7 +280,7 @@ function char_main()
       if (!empty($equiped_items[2][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_NECK\" target=\"_blank\">
-                    <img src=\"{$equiped_items[2][1]}\" class=\"{$equiped_items[2][2]}\" alt=\"Neck\">
+                    <img src=\"{$equiped_items[2][1]}\" class=\"{$equiped_items[2][2]}\" alt=\"Neck\" />
                   </a>";
       else
         $output .= "
@@ -299,7 +294,7 @@ function char_main()
       if (!empty($equiped_items[6][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_BELT\" target=\"_blank\">
-                    <img src=\"{$equiped_items[6][1]}\" class=\"{$equiped_items[6][2]}\" alt=\"Belt\">
+                    <img src=\"{$equiped_items[6][1]}\" class=\"{$equiped_items[6][2]}\" alt=\"Belt\" />
                   </a>";
       else
         $output .= "
@@ -312,7 +307,7 @@ function char_main()
       if (!empty($equiped_items[3][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_SHOULDER\" target=\"_blank\">
-                    <img src=\"{$equiped_items[3][1]}\" class=\"{$equiped_items[3][2]}\" alt=\"Shoulder\">
+                    <img src=\"{$equiped_items[3][1]}\" class=\"{$equiped_items[3][2]}\" alt=\"Shoulder\" />
                   </a>";
       else
         $output .= "
@@ -377,7 +372,7 @@ function char_main()
       if (!empty($equiped_items[7][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_LEGS\" target=\"_blank\">
-                    <img src=\"{$equiped_items[7][1]}\" class=\"{$equiped_items[7][2]}\" alt=\"Legs\">
+                    <img src=\"{$equiped_items[7][1]}\" class=\"{$equiped_items[7][2]}\" alt=\"Legs\" />
                   </a>";
       else
         $output .= "
@@ -390,7 +385,7 @@ function char_main()
       if (!empty($equiped_items[15][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_BACK\" target=\"_blank\">
-                    <img src=\"{$equiped_items[15][1]}\" class=\"{$equiped_items[15][2]}\" alt=\"Back\">
+                    <img src=\"{$equiped_items[15][1]}\" class=\"{$equiped_items[15][2]}\" alt=\"Back\" />
                   </a>";
       else
         $output .= "
@@ -437,7 +432,7 @@ function char_main()
       if (!empty($equiped_items[8][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_FEET\" target=\"_blank\">
-                    <img src=\"{$equiped_items[8][1]}\" class=\"{$equiped_items[8][2]}\" alt=\"Feet\">
+                    <img src=\"{$equiped_items[8][1]}\" class=\"{$equiped_items[8][2]}\" alt=\"Feet\" />
                   </a>";
       else
         $output .= "
@@ -450,7 +445,7 @@ function char_main()
       if (!empty($equiped_items[5][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_CHEST\" target=\"_blank\">
-                    <img src=\"{$equiped_items[5][1]}\" class=\"{$equiped_items[5][2]}\" alt=\"Chest\">
+                    <img src=\"{$equiped_items[5][1]}\" class=\"{$equiped_items[5][2]}\" alt=\"Chest\" />
                   </a>";
       else
         $output .= "<img src=\"img/INV/INV_empty_chest_back.png\" class=\"icon_border_0\" alt=\"empty\" />";
@@ -460,7 +455,7 @@ function char_main()
       if (!empty($equiped_items[11][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_FINGER1\" target=\"_blank\">
-                    <img src=\"{$equiped_items[11][1]}\" class=\"{$equiped_items[11][2]}\" alt=\"Finger1\">
+                    <img src=\"{$equiped_items[11][1]}\" class=\"{$equiped_items[11][2]}\" alt=\"Finger1\" />
                   </a>";
       else
         $output .= "<img src=\"img/INV/INV_empty_finger.png\" class=\"icon_border_0\" alt=\"empty\" />";
@@ -472,7 +467,7 @@ function char_main()
       if (!empty($equiped_items[4][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_SHIRT\" target=\"_blank\">
-                    <img src=\"{$equiped_items[4][1]}\" class=\"{$equiped_items[4][2]}\" alt=\"Shirt\">
+                    <img src=\"{$equiped_items[4][1]}\" class=\"{$equiped_items[4][2]}\" alt=\"Shirt\" />
                   </a>";
       else
         $output .= "<img src=\"img/INV/INV_empty_shirt.png\" class=\"icon_border_0\" alt=\"empty\" />";
@@ -482,7 +477,7 @@ function char_main()
       if (!empty($equiped_items[12][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_FINGER2\" target=\"_blank\">
-                    <img src=\"{$equiped_items[12][1]}\" class=\"{$equiped_items[12][2]}\" alt=\"Finger2\">
+                    <img src=\"{$equiped_items[12][1]}\" class=\"{$equiped_items[12][2]}\" alt=\"Finger2\" />
                   </a>";
       else $output .= "<img src=\"img/INV/INV_empty_finger.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
@@ -493,7 +488,7 @@ function char_main()
       if (!empty($equiped_items[19][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_TABARD\" target=\"_blank\">
-                    <img src=\"{$equiped_items[19][1]}\" class=\"{$equiped_items[19][2]}\" alt=\"Tabard\">
+                    <img src=\"{$equiped_items[19][1]}\" class=\"{$equiped_items[19][2]}\" alt=\"Tabard\" />
                   </a>";
       else $output .= "<img src=\"img/INV/INV_empty_tabard.png\" class=\"icon_border_0\" alt=\"empty\" />";
       $output .= "
@@ -538,7 +533,7 @@ function char_main()
       if (!empty($equiped_items[13][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_TRINKET1\" target=\"_blank\">
-                    <img src=\"{$equiped_items[13][1]}\" class=\"{$equiped_items[13][2]}\" alt=\"Trinket1\">
+                    <img src=\"{$equiped_items[13][1]}\" class=\"{$equiped_items[13][2]}\" alt=\"Trinket1\" />
                   </a>";
       else
         $output .= "<img src=\"img/INV/INV_empty_trinket.png\" class=\"icon_border_0\" alt=\"empty\" />";
@@ -550,7 +545,7 @@ function char_main()
       if (!empty($equiped_items[9][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_WRIST\" target=\"_blank\">
-                    <img src=\"{$equiped_items[9][1]}\" class=\"{$equiped_items[9][2]}\" alt=\"Wrist\">
+                    <img src=\"{$equiped_items[9][1]}\" class=\"{$equiped_items[9][2]}\" alt=\"Wrist\" />
                   </a>";
       else
         $output .= "<img src=\"img/INV/INV_empty_wrist.png\" class=\"icon_border_0\" alt=\"empty\" />";
@@ -560,7 +555,7 @@ function char_main()
       if (!empty($equiped_items[14][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_TRINKET2\" target=\"_blank\">
-                    <img src=\"{$equiped_items[14][1]}\" class=\"{$equiped_items[14][2]}\" alt=\"Trinket2\">
+                    <img src=\"{$equiped_items[14][1]}\" class=\"{$equiped_items[14][2]}\" alt=\"Trinket2\" />
                   </a>";
       else
         $output .= "<img src=\"img/INV/INV_empty_trinket.png\" class=\"icon_border_0\" alt=\"empty\" />";
@@ -573,7 +568,7 @@ function char_main()
       if (!empty($equiped_items[16][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_MAIN_HAND\" target=\"_blank\">
-                    <img src=\"{$equiped_items[16][1]}\" class=\"{$equiped_items[16][2]}\" alt=\"MainHand\">
+                    <img src=\"{$equiped_items[16][1]}\" class=\"{$equiped_items[16][2]}\" alt=\"MainHand\" />
                   </a>";
       else
         $output .= "<img src=\"img/INV/INV_empty_main_hand.png\" class=\"icon_border_0\" alt=\"empty\" />";
@@ -583,7 +578,7 @@ function char_main()
       if (!empty($equiped_items[17][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_OFF_HAND\" target=\"_blank\">
-                    <img src=\"{$equiped_items[17][1]}\" class=\"{$equiped_items[17][2]}\" alt=\"OffHand\">
+                    <img src=\"{$equiped_items[17][1]}\" class=\"{$equiped_items[17][2]}\" alt=\"OffHand\" />
                   </a>";
       else
         $output .= "<img src=\"img/INV/INV_empty_off_hand.png\" class=\"icon_border_0\" alt=\"empty\" />";
@@ -593,7 +588,7 @@ function char_main()
       if (!empty($equiped_items[18][1]))
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite$EQU_RANGED\" target=\"_blank\">
-                    <img src=\"{$equiped_items[18][1]}\" class=\"{$equiped_items[18][2]}\" alt=\"Ranged\">
+                    <img src=\"{$equiped_items[18][1]}\" class=\"{$equiped_items[18][2]}\" alt=\"Ranged\" />
                   </a>";
       else
         $output .= "<img src=\"img/INV/INV_empty_ranged.png\" class=\"icon_border_0\" alt=\"empty\" />";
