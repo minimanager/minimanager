@@ -20,10 +20,20 @@ function browse_guilds()
 {
   global $lang_guild, $lang_global, $output, $realm_db, $characters_db, $realm_id, $itemperpage,
     $action_permission, $user_lvl, $user_id;
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+  if (empty($_GET['realm']))
+    $realmid = $realm_id;
+  else
+  {
+    $realmid = $sqlr->quote_smart($_GET['realm']);
+    if (!is_numeric($realmid)) $realmid = $realm_id;
+  }
+
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
@@ -71,8 +81,8 @@ function browse_guilds()
       $output .= "
               <tr>
                 <td>$data[0]</td>
-                <td><a href=\"guild.php?action=view_guild&amp;id=$data[0]\">$data[1]</a></td>";
-      $output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($data[3])."</td>" : "<td><a href=\"char.php?id=$data[2]\">".htmlentities($data[3])."</a></td>";
+                <td><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$data[0]\">$data[1]</a></td>";
+      $output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($data[3])."</td>" : "<td><a href=\"char.php?id=$data[2]&amp;realm=$realmid\">".htmlentities($data[3])."</a></td>";
       $output .= "
                 <td><img src=\"img/".($data[4]==0 ? "alliance" : "horde")."_small.gif\" alt=\"\" /></td>
                 <td>$data[5]/$data[6]</td>
@@ -103,7 +113,7 @@ function browse_guilds()
     switch($search_by)
     {
       case "name":
-        if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("guild.php?error=5");
+        if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("guild.php?error=5&amp;realm=$realmid");
         $query = $sqlc->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
           (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
           (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
@@ -112,7 +122,7 @@ function browse_guilds()
         $query_count = $sqlc->query("SELECT 1 from guild where name like '%$search_value%'");
         break;
       case "leadername" :
-        if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("guild.php?error=5");
+        if (preg_match('/^[\t\v\b\f\a\n\r\\\"\'\? <>[](){}_=+-|!@#$%^&*~`.,0123456789\0]{1,30}$/', $search_value)) redirect("guild.php?error=5&amp;realm=$realmid");
         $query = $sqlc->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
           (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
           (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
@@ -121,7 +131,7 @@ function browse_guilds()
         $query_count = $sqlc->query("SELECT 1 from guild where leaderguid in (select guid from characters where name like '%$search_value%')");
         break;
       case "guildid" :
-        if (!preg_match('/^[[:digit:]]{1,12}$/', $search_value)) redirect("guild.php?error=5");
+        if (!preg_match('/^[[:digit:]]{1,12}$/', $search_value)) redirect("guild.php?error=5&amp;realm=$realmid");
         $query = $sqlc->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
           (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
           (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
@@ -130,7 +140,7 @@ function browse_guilds()
         $query_count = $sqlc->query("SELECT 1 from guild where guildid = '$search_value'");
         break;
       default :
-        redirect("guild.php?error=2");
+        redirect("guild.php?error=2&amp;realm=$realmid");
     }
   }
   else
@@ -146,11 +156,11 @@ function browse_guilds()
         <table class=\"top_hidden\" align=\"center\">
           <tr>
             <td width =\"200\">";
-  ($search_by &&  $search_value) ? makebutton($lang_guild['show_guilds'], "guild.php\" type=\"def", 130) : $output .= "";
+  ($search_by &&  $search_value) ? makebutton($lang_guild['show_guilds'], "guild.php?realm=$realmid\" type=\"def", 130) : $output .= "";
   $output .= "
             </td>
             <td align=\"right\">
-              <form action=\"guild.php\" method=\"get\" name=\"form\">
+              <form action=\"guild.php?realm=$realmid\" method=\"get\" name=\"form\">
                 <input type=\"hidden\" name=\"action\" value=\"browse_guilds\" />
                 <input type=\"hidden\" name=\"error\" value=\"4\" />
                 <input type=\"text\" size=\"42\" name=\"search_value\" value=\"{$search_value}\" />
@@ -168,7 +178,7 @@ function browse_guilds()
           </tr>
           <tr>
             <td colspan=\"3\" align=\"right\">";
-  $output .= generate_pagination("guild.php?action=brows_guilds&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start);
+  $output .= generate_pagination("guild.php?action=brows_guilds&amp;realm=$realmid&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start);
   $output .= "
             </td>
           </tr>
@@ -180,12 +190,12 @@ function browse_guilds()
             <legend>{$lang_guild['browse_guilds']}</legend>
               <table class=\"lined\" align=\"center\">
                 <tr>
-                  <th width=\"5%\"><a href=\"guild.php?order_by=gid&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='gid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['id']}</a></th>
-                  <th width=\"30%\"><a href=\"guild.php?order_by=name&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['guild_name']}</a></th>
-                  <th width=\"20%\"><a href=\"guild.php?order_by=lname&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='lname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['guild_leader']}</a></th>
-                  <th width=\"10%\"><a href=\"guild.php?order_by=lfaction&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='lfaction' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['guild_faction']}</a></th>
-                  <th width=\"15%\"><a href=\"guild.php?order_by=tot_chars&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='tot_chars' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['tot_members']}</a></th>
-                  <th width=\"20%\"><a href=\"guild.php?order_by=createdate&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='createdate' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['create_date']}</a></th>
+                  <th width=\"5%\"><a href=\"guild.php?order_by=gid&amp;realm=$realmid&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='gid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['id']}</a></th>
+                  <th width=\"30%\"><a href=\"guild.php?order_by=name&amp;realm=$realmid&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['guild_name']}</a></th>
+                  <th width=\"20%\"><a href=\"guild.php?order_by=lname&amp;realm=$realmid&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='lname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['guild_leader']}</a></th>
+                  <th width=\"10%\"><a href=\"guild.php?order_by=lfaction&amp;realm=$realmid&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='lfaction' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['guild_faction']}</a></th>
+                  <th width=\"15%\"><a href=\"guild.php?order_by=tot_chars&amp;realm=$realmid&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='tot_chars' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['tot_members']}</a></th>
+                  <th width=\"20%\"><a href=\"guild.php?order_by=createdate&amp;realm=$realmid&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='createdate' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['create_date']}</a></th>
                 </tr>";
   while ($data = $sqlr->fetch_row($query))
   {
@@ -194,8 +204,8 @@ function browse_guilds()
     $output .= "
                 <tr>
                   <td>$data[0]</td>";
-    $output .= ($user_lvl >= $action_permission['update']) ? "<td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$data[0]\">".htmlentities($data[1])."</a></td>" : "<td>".htmlentities($data[1])."</td>";
-    $output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($data[3])."</td>" : "<td><a href=\"char.php?id=$data[2]\">".htmlentities($data[3])."</a></td>";
+    $output .= ($user_lvl >= $action_permission['update']) ? "<td><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;error=3&amp;id=$data[0]\">".htmlentities($data[1])."</a></td>" : "<td>".htmlentities($data[1])."</td>";
+    $output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($data[3])."</td>" : "<td><a href=\"char.php?id=$data[2]&amp;realm=$realmid\">".htmlentities($data[3])."</a></td>";
     $output .= "
                   <td><img src=\"img/".($data[4]==0 ? "alliance" : "horde")."_small.gif\" alt=\"\" /></td>
                   <td>$data[5]</td>
@@ -204,7 +214,7 @@ function browse_guilds()
   }
   $output .= "
                 <tr>
-                  <td colspan=\"6\" class=\"hidden\" align=\"right\"  width=\"25%\">".generate_pagination("guild.php?action=brows_guilds&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start)."</td>
+                  <td colspan=\"6\" class=\"hidden\" align=\"right\"  width=\"25%\">".generate_pagination("guild.php?action=brows_guilds&amp;realm=$realmid&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start)."</td>
                 </tr>
                 <tr>
                   <td colspan=\"6\" class=\"hidden\" align=\"right\">{$lang_guild['tot_guilds']} : $all_record</td>
@@ -235,21 +245,30 @@ function view_guild()
 {
   global $lang_guild, $lang_global, $output, $realm_db, $characters_db, $realm_id, $itemperpage,
     $action_permission, $user_lvl, $user_id;
-  if(!isset($_GET['id'])) redirect("guild.php?error=1");
+  if(!isset($_GET['id'])) redirect("guild.php?error=1&amp;realm=$realmid");
 
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
+  if (empty($_GET['realm']))
+    $realmid = $realm_id;
+  else
+  {
+    $realmid = $sqlr->quote_smart($_GET['realm']);
+    if (!is_numeric($realmid)) $realmid = $realm_id;
+  }
+
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+
   $guild_id = $sqlc->quote_smart($_GET['id']);
-  if(!preg_match("/^[[:digit:]]{1,10}$/", $guild_id)) redirect("guild.php?error=6");
+  if(!preg_match("/^[[:digit:]]{1,10}$/", $guild_id)) redirect("guild.php?error=6&amp;realm=$realmid");
 
   //==========================SQL INGUILD and GUILDLEADER======================
   $q_inguild = $sqlc->query("select 1 from guild_member where guildid = '$guild_id' and guid in (select guid from characters where account = '$user_id')");
   $inguild = $sqlc->result($q_inguild, 0, '1');
   if ( $user_lvl < $action_permission['update'] && !$inguild )
-    redirect("guild.php?error=6");
+    redirect("guild.php?error=6&amp;realm=$realmid");
 
   $q_amIguildleader = $sqlc->query("select 1 from guild where guildid = '$guild_id' and leaderguid in (select guid from characters where account = '$user_id')");
   $amIguildleader = $sqlc->result($q_amIguildleader, 0, '1');
@@ -312,21 +331,21 @@ function view_guild()
                   </table>
                 </td>
               </tr>
-              <div align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start)."</div>
+              <div align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start)."</div>
               <tr>
                 <td>
                   <table class=\"lined\">
                     <tr>
                       <th width=\"3%\">{$lang_guild['remove']}</th>
-                      <th width=\"21%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=cname&amp;start=$start&amp;dir=$dir\">".($order_by=='cname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['name']}</a></th>
-                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=crace&amp;start=$start&amp;dir=$dir\">".($order_by=='crace' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['race']}</a></th>
-                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=class&amp;start=$start&amp;dir=$dir\">".($order_by=='cclass' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['class']}</a></th>
-                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=clevel&amp;start=$start&amp;dir=$dir\">".($order_by=='clevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['level']}</a></th>
-                      <th width=\"21%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=mrank&amp;start=$start&amp;dir=$dir\">".($order_by=='mrank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['rank']}</a></th>
+                      <th width=\"21%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=cname&amp;start=$start&amp;dir=$dir\">".($order_by=='cname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['name']}</a></th>
+                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=crace&amp;start=$start&amp;dir=$dir\">".($order_by=='crace' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['race']}</a></th>
+                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=class&amp;start=$start&amp;dir=$dir\">".($order_by=='cclass' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['class']}</a></th>
+                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=clevel&amp;start=$start&amp;dir=$dir\">".($order_by=='clevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['level']}</a></th>
+                      <th width=\"21%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=mrank&amp;start=$start&amp;dir=$dir\">".($order_by=='mrank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['rank']}</a></th>
                       <th width=\"14%\">{$lang_guild['pnote']}</th>
                       <th width=\"14%\">{$lang_guild['offnote']}</th>
-                      <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=clogout&amp;start=$start&amp;dir=$dir\">".($order_by=='clogout' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['llogin']}</a></th>
-                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['online']}</a></th>
+                      <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=clogout&amp;start=$start&amp;dir=$dir\">".($order_by=='clogout' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['llogin']}</a></th>
+                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['online']}</a></th>
                     </tr>";
   $members = $sqlc->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(c.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS clevel,
@@ -346,13 +365,13 @@ function view_guild()
     // gm, gildleader or own account! are allowed to remove from guild
     $output .= ($user_lvl >= $action_permission['delete'] || $amIguildleader || $member[11] == $user_id) ? "
                       <td>
-                        <img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: &lt;font color=white&gt;{$member[1]}&lt;/font&gt;&lt;br /&gt;{$lang_global['are_you_sure']}', 'guild.php?action=rem_char_from_guild&amp;id=$member[0]&amp;guld_id=$guild_id');\" style=\"cursor:pointer;\" />
+                        <img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: &lt;font color=white&gt;{$member[1]}&lt;/font&gt;&lt;br /&gt;{$lang_global['are_you_sure']}', 'guild.php?action=rem_char_from_guild&amp;realm=$realmid&amp;id=$member[0]&amp;guld_id=$guild_id');\" style=\"cursor:pointer;\" />
                       </td>" : "
                       <td>
                       </td>";
     $output .= ($user_lvl < $owner_gmlvl ) ? "
                       <td>".htmlentities($member[1])."</td>" : "
-                      <td><a href=\"char.php?id=$member[0]\">".htmlentities($member[1])."</a></td>";
+                      <td><a href=\"char.php?id=$member[0]&amp;realm=$realmid\">".htmlentities($member[1])."</a></td>";
     $output .= "
                       <td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".get_player_race($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".get_player_class($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
@@ -377,12 +396,12 @@ function view_guild()
                 <td>";
   if ($user_lvl >= $action_permission['delete'] || $amIguildleader)
   {
-                  makebutton($lang_guild['del_guild'], "guild.php?action=del_guild&amp;id=$guild_id\" type=\"wrn", 130);
+                  makebutton($lang_guild['del_guild'], "guild.php?action=del_guild&amp;realm=$realmid&amp;id=$guild_id\" type=\"wrn", 130);
     $output .= "
                 </td>
                 <td>";
   }
-                  makebutton($lang_guild['show_guilds'], "guild.php\" type=\"def", 130);
+                  makebutton($lang_guild['show_guilds'], "guild.php?realm=$realmid\" type=\"def", 130);
   $output .= "
                 </td>
               </tr>
@@ -400,18 +419,30 @@ function del_guild()
 {
   global $lang_guild, $lang_global, $output, $characters_db, $realm_id,
     $action_permission, $user_lvl, $user_id;
+
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+  if (empty($_GET['realm']))
+    $realmid = $realm_id;
+  else
+  {
+    $realmid = $sqlr->quote_smart($_GET['realm']);
+    if (!is_numeric($realmid)) $realmid = $realm_id;
+  }
+
   if(isset($_GET['id']))
     $id = $_GET['id'];
   else
-    redirect("guild.php?error=1");
+    redirect("guild.php?error=1&amp;realm=$realmid");
   if (!preg_match('/^[[:digit:]]{1,12}$/', $id))
-    redirect("guild.php?error=5");
+    redirect("guild.php?error=5&amp;realm=$realmid");
   $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
   $q_amIguildleader = $sqlc->query("select 1 from guild where guildid = '$id' and leaderguid in (select guid from characters where account = '$user_id')");
   $amIguildleader = $sqlc->result($q_amIguildleader, 0, '1');
   if ($user_lvl < $action_permission['delete'] && !$amIguildleader)
-    redirect("guild.php?error=6");
+    redirect("guild.php?error=6&amp;realm=$realmid");
   $output .= "
         <center>
           <h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1>
@@ -429,7 +460,7 @@ function del_guild()
   $output .= "
                 </td>
                 <td>";
-                  makebutton($lang_global['no'], "guild.php?action=view_guild&amp;id=$id\" type=\"def",130);
+                  makebutton($lang_global['no'], "guild.php?action=view_guild&amp;realm=$realmid&amp;id=$id\" type=\"def",130);
   $output .= "
                 </td>
               </tr>
@@ -451,27 +482,38 @@ function rem_char_from_guild()
 
   require_once("scripts/defines.php");
 
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+  if (empty($_GET['realm']))
+    $realmid = $realm_id;
+  else
+  {
+    $realmid = $sqlr->quote_smart($_GET['realm']);
+    if (!is_numeric($realmid)) $realmid = $realm_id;
+  }
+
   if(isset($_GET['id']))
     $guid = $_GET['id'];
   else
-    redirect("guild.php?error=1");
+    redirect("guild.php?error=1&amp;realm=$realmid");
   if (!preg_match('/^[[:digit:]]{1,12}$/', $guid))
-    redirect("guild.php?error=5");
+    redirect("guild.php?error=5&amp;realm=$realmid");
   if(isset($_GET['guld_id']))
     $guld_id = $_GET['guld_id'];
   else
-    redirect("guild.php?error=1");
+    redirect("guild.php?error=1&amp;realm=$realmid");
   if (!preg_match('/^[[:digit:]]{1,12}$/', $guld_id))
-    redirect("guild.php?error=5");
+    redirect("guild.php?error=5&amp;realm=$realmid");
   $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
   $q_amIguildleaderOrSelfRemoval = $sqlc->query("select 1 from guild as g left outer join guild_member as gm on gm.guildid = g.guildid
                                    where g.guildid = '$guld_id' and
                                    (g.leaderguid in (select guid from characters where account = '$user_id')
                                    or gm.guid in (select guid from characters where account = '$user_id' and guid = '$guid'))");
   $amIguildleaderOrSelfRemoval = $sqlc->result($q_amIguildleaderOrSelfRemoval, 0, '1');
   if ($user_lvl < $action_permission['delete'] && !$amIguildleaderOrSelfRemoval )
-    redirect("guild.php?error=6");
+    redirect("guild.php?error=6&amp;realm=$realmid");
   $char_data = $sqlc->query("SELECT data FROM `characters` WHERE guid = '$guid'");
   $data = $sqlc->result($char_data, 0, 'data');
   $data = explode(' ',$data);
@@ -480,7 +522,7 @@ function rem_char_from_guild()
   $data = implode(' ',$data);
   $sqlc->query("UPDATE `characters` SET data = '$data' WHERE guid = '$guid'");
   $sqlc->query("DELETE FROM guild_member WHERE guid = '$guid'");
-  redirect("guild.php?action=view_guild&amp;id=$guld_id");
+  redirect("guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guld_id");
 }
 
 

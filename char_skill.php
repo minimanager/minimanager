@@ -90,17 +90,17 @@ function char_skill()
               </ul>
             </div>
             <div id=\"tab_content2\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /> - lvl ".get_level_with_color($char[4])."</font>
-          <br /><br />
-          <table class=\"lined\" style=\"width: 600px;\">
-            <tr>
-              <th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['skills']}</th>
-            </tr>
-            <tr>
-              ".($user_lvl ? "<th><a href=\"char_skill.php?id=$id&amp;realm=$realmid&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['skill_id']}</a></th>" : "")."
-              <th align=\"right\"><a href=\"char_skill.php?id=$id&amp;realm=$realmid&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\"  /> " : "")."{$lang_char['skill_name']}</a></th>
-              <th><a href=\"char_skill.php?id=$id&amp;realm=$realmid&amp;order_by=2&amp;dir=$dir\">".($order_by==2 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['skill_value']}</a></th>
-            </tr>";
+              <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
+              <br /><br />
+              <table class=\"lined\" style=\"width: 600px;\">
+                <tr>
+                  <th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['skills']}</th>
+                </tr>
+                <tr>
+                  ".($user_lvl ? "<th><a href=\"char_skill.php?id=$id&amp;realm=$realmid&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['skill_id']}</a></th>" : "")."
+                  <th align=\"right\"><a href=\"char_skill.php?id=$id&amp;realm=$realmid&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['skill_name']}</a></th>
+                  <th><a href=\"char_skill.php?id=$id&amp;realm=$realmid&amp;order_by=2&amp;dir=$dir\">".($order_by==2 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['skill_value']}</a></th>
+                </tr>";
 
       $skill_array = array();
       $class_array = array();
@@ -171,148 +171,148 @@ function char_skill()
       {
         $max = ($data[2] < $char[4]*5) ? $char[4]*5 : $data[2];
         $output .= "
-            <tr>
-              ".($user_lvl ? "<td>$data[0]</td>" : "")."
-              <td align=\"right\">$data[1]</td>
-              <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(450*$data[2]/$max)-450)."px;\">
-                <span>$data[2]/$max</span>
-              </td>
-            </tr>";
+                <tr>
+                  ".($user_lvl ? "<td>$data[0]</td>" : "")."
+                  <td align=\"right\">$data[1]</td>
+                  <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(450*$data[2]/$max)-450)."px;\">
+                    <span>$data[2]/$max</span>
+                  </td>
+                </tr>";
       }
 
       if(count($class_array))
         $output .= "
-            <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['classskills']}</th></tr>";
+                <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['classskills']}</th></tr>";
       foreach ($class_array as $data)
       {
         $max = ($data[2] < $char[4]*5) ? $char[4]*5 : $data[2];
         $output .= "
-            <tr>
-              ".($user_lvl ? "<td>$data[0]</td>" : "")."
-              <td align=\"right\">$data[1]</td>
-              <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: 0px;\">
-              </td>
-            </tr>";
+                <tr>
+                  ".($user_lvl ? "<td>$data[0]</td>" : "")."
+                  <td align=\"right\">$data[1]</td>
+                  <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: 0px;\">
+                  </td>
+                </tr>";
       }
 
       if(count($prof_1_array))
         $output .= "
-            <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['professions']}</th></tr>";
+                <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['professions']}</th></tr>";
       foreach ($prof_1_array as $data)
       {
         $max = ($data[2]<76 ? 75 : ($data[2]<151 ? 150 : ($data[2]<226 ? 225 : ($data[2]<301 ? 300 : ($data[2]<376 ? 375 : ($data[2]<376 ? 375 : 450))))));
         $output .= "
-            <tr>
-              ".($user_lvl ? "<td>$data[0]</td>" : "")."
-              <td align=\"right\"><a href=\"{$skill_datasite}11.$data[0]\" target=\"_blank\">$data[1]</a></td>
-              <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(450*$data[2]/$max)-450)."px;\">
-              <span>$data[2]/$max ({$skill_rank_array[$max]})</span>
-              </td>
-            </tr>";
+                <tr>
+                  ".($user_lvl ? "<td>$data[0]</td>" : "")."
+                  <td align=\"right\"><a href=\"{$skill_datasite}11.$data[0]\" target=\"_blank\">$data[1]</a></td>
+                  <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(450*$data[2]/$max)-450)."px;\">
+                  <span>$data[2]/$max ({$skill_rank_array[$max]})</span>
+                  </td>
+                </tr>";
       }
 
       if(count($prof_2_array))
         $output .= "
-            <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['secondaryskills']}</th></tr>";
+                <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['secondaryskills']}</th></tr>";
       foreach ($prof_2_array as $data)
       {
         $max = ($data[2]<76 ? 75 : ($data[2]<151 ? 150 : ($data[2]<226 ? 225 : ($data[2]<301 ? 300 : ($data[2]<376 ? 375 : ($data[2]<376 ? 375 : 450))))));
         $output .= "
-            <tr>
-              ".($user_lvl ? "<td>$data[0]</td>" : "")."
-              <td align=\"right\"><a href=\"{$skill_datasite}9.$data[0]\" target=\"_blank\">$data[1]</a></td>
-              <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(450*$data[2]/$max)-450)."px;\">
-                <span>$data[2]/$max ({$skill_rank_array[$max]})</span>
-              </td>
-            </tr>";
+                <tr>
+                  ".($user_lvl ? "<td>$data[0]</td>" : "")."
+                  <td align=\"right\"><a href=\"{$skill_datasite}9.$data[0]\" target=\"_blank\">$data[1]</a></td>
+                  <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(450*$data[2]/$max)-450)."px;\">
+                    <span>$data[2]/$max ({$skill_rank_array[$max]})</span>
+                  </td>
+                </tr>";
       }
 
       if(count($weapon_array))
         $output .= "
-            <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['weaponskills']}</th></tr>";
+                <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['weaponskills']}</th></tr>";
       foreach ($weapon_array as $data)
       {
         $max = ($data[2] < $char[4]*5) ? $char[4]*5 : $data[2];
         $output .= "
-            <tr>
-              ".($user_lvl ? "<td>$data[0]</td>" : "")."
-              <td align=\"right\">$data[1]</td>
-              <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(450*$data[2]/$max)-450)."px;\">
-                <span>$data[2]/$max</span>
-              </td>
-            </tr>";
+                <tr>
+                  ".($user_lvl ? "<td>$data[0]</td>" : "")."
+                  <td align=\"right\">$data[1]</td>
+                  <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(450*$data[2]/$max)-450)."px;\">
+                    <span>$data[2]/$max</span>
+                  </td>
+                </tr>";
       }
 
       if(count($armor_array))
         $output .= "
-            <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['armorproficiencies']}</th></tr>";
+                <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['armorproficiencies']}</th></tr>";
       foreach ($armor_array as $data)
       {
         $max = ($data[2] < $char[4]*5) ? $char[4]*5 : $data[2];
         $output .= "
-            <tr>
-              ".($user_lvl ? "<td>$data[0]</td>" : "")."
-              <td align=\"right\">$data[1]</td>
-              <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: 0px;\">
-              </td>
-            </tr>";
+                <tr>
+                  ".($user_lvl ? "<td>$data[0]</td>" : "")."
+                  <td align=\"right\">$data[1]</td>
+                  <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: 0px;\">
+                  </td>
+                </tr>";
       }
 
       if(count($language_array))
         $output .= "
-            <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['languages']}</th></tr>";
+                <tr><th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['languages']}</th></tr>";
       foreach ($language_array as $data)
       {
         $max = ($data[2] < $char[4]*5) ? $char[4]*5 : $data[2];
         $output .= "
-            <tr>
-              ".($user_lvl ? "<td>$data[0]</td>" : "")."
-              <td align=\"right\">$data[1]</td>
-              <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(450*$data[2]/$max)-450)."px;\">
-                <span>$data[2]/$max</span>
-              </td>
-            </tr>";
+                <tr>
+                  ".($user_lvl ? "<td>$data[0]</td>" : "")."
+                  <td align=\"right\">$data[1]</td>
+                  <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(450*$data[2]/$max)-450)."px;\">
+                    <span>$data[2]/$max</span>
+                  </td>
+                </tr>";
       }
 
       $output .= "
-          </table>
-        </div>
-        <br />
-        <table class=\"hidden\">
-          <tr>
-            <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
+              </table>
+            </div>
+            <br />
+            <table class=\"hidden\">
+              <tr>
+                <td>";
+                  makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
       $output .= "
-              </td>
-              <td>";
+                </td>
+                <td>";
       if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
+                  makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
         $output .= "
-            </td>
-            <td>";
+                </td>
+                <td>";
       }
       if ((($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))||($owner_name == $user_name))
       {
-        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
+                  makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
-              </td>
-              <td>";
+                </td>
+                <td>";
       }
       if ($user_lvl >= $action_permission['update'])
       {
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
+                  makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
         $output .= "
-              </td>
-              <td>";
+                </td>
+                <td>";
       }
-      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
-      //end of admin options
+                    makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       $output .= "
-              </td>
-            </tr>
-          </table>
-          <br />
+                </td>
+              </tr>
+            </table>
+            <br />
+          </div>
         </center>
 ";
     }

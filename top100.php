@@ -134,11 +134,11 @@ function top100($realmid)
     $CHAR_RANK = id_get_char_rank();
     $output .= "
             <tr valign='top'>
-              <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
+              <td><a href=\"char.php?id=$char[0]&amp;realm=$realm_id\">".htmlentities($char[1])."</a></td>
               <td><img src='img/c_icons/{$char[2]}-{$char[12]}.gif' alt=\"".get_player_race($char[2])."\" onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
               <td><img src='img/c_icons/{$char[3]}.gif' alt=\"".get_player_class($char[3])."\" onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
               <td>".get_level_with_color($char[9])."</td>
-              <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[11]\">".htmlentities($guild_name[0])."</a></td>
+              <td><a href=\"guild.php?action=view_guild&amp;realm=$realm_id&amp;error=3&amp;id=$char[11]\">".htmlentities($guild_name[0])."</a></td>
               <td>$money</td>
               <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[7])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[7],$CHAR_RACE[$char[2]][1]).".gif' alt=\"\"></img></span></td>
               <td>$char[7]</td>

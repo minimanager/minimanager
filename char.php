@@ -85,7 +85,7 @@ function char_main()
       {
         $query = $sqlc->query("SELECT name FROM guild WHERE guildid ='{$char_data[CHAR_DATA_OFFSET_GUILD_ID]}'");
         $guild_name = $sqlc->result($query, 0, 'name');
-        $guild_name = "<a href=\"guild.php?action=view_guild&amp;error=3&amp;id={$char_data[CHAR_DATA_OFFSET_GUILD_ID]}\" >$guild_name</a>";
+        $guild_name = "<a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;error=3&amp;id={$char_data[CHAR_DATA_OFFSET_GUILD_ID]}\" >$guild_name</a>";
         $mrank = $char_data[CHAR_DATA_OFFSET_GUILD_RANK] + 1;
         $guild_rank_query = $sqlc->query("SELECT rname FROM guild_rank WHERE guildid ='{$char_data[CHAR_DATA_OFFSET_GUILD_ID]}' AND rid='{$mrank}'");
         $guild_rank = $sqlc->result($guild_rank_query, 0, 'rname');

@@ -72,20 +72,20 @@ function char_talent()
 
       $output .= "
         <center>
-          <div id=\"tab\">
-          <ul>
-            <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
-            <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
-            <li id=\"selected\"><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
-            <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
-            <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
-            <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
-          </ul>
-        </div>
-        <div id=\"tab_content\">
+            <div id=\"tab\">
+            <ul>
+              <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
+              <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
+              <li id=\"selected\"><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
+              <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
+              <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
+              <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
+            </ul>
+          </div>
+          <div id=\"tab_content\">
             <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /> - lvl ".get_level_with_color($char[4])."</font>
-          <br /><br />
-          <table class=\"lined\" style=\"width: 550px;\">";
+            <br /><br />
+            <table class=\"lined\" style=\"width: 550px;\">";
 
 // This is WIP for talent tabs
 //            <tr>
@@ -105,10 +105,10 @@ function char_talent()
 //              </tr>
 
       $output .="
-            <tr>
-              <th><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['talent_id']}</a></th>
-              <th align=left><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['talent_name']}</a></th>
-            </tr>";
+              <tr>
+                <th><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['talent_id']}</a></th>
+                <th align=left><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['talent_name']}</a></th>
+              </tr>";
 
       $talents_1 = array();
 
@@ -127,18 +127,18 @@ function char_talent()
         foreach ($talents_1 as $data)
         {
           $output .= "
-            <tr>
-              <td>$data[0]</td>
-              <td align=left>
-                <a style=\"padding:2px;\" href=\"$talent_datasite$data[0]\" target=\"_blank\">
-                  <img src=\"".get_aura_icon($data[0])."\" alt=\"\" />
-                </a>
-                <a href=\"$talent_datasite$data[0]\" target=\"_blank\">$data[1]</a>
-              </td>";
+              <tr>
+                <td>$data[0]</td>
+                <td align=left>
+                  <a style=\"padding:2px;\" href=\"$talent_datasite$data[0]\" target=\"_blank\">
+                    <img src=\"".get_aura_icon($data[0])."\" alt=\"\" />
+                  </a>
+                  <a href=\"$talent_datasite$data[0]\" target=\"_blank\">$data[1]</a>
+                </td>";
           if ($GMP)
             $talent_sum = gmp_add($talent_sum,sprintf('%s',get_talent_value($data[0])));
           $output .= "
-            </tr>";
+              </tr>";
         }
 
         $playerclass = strtolower(get_player_class($char[3]));
@@ -166,46 +166,45 @@ function char_talent()
         }
         if ($GMP)
           $output .= "
-              <tr>
-                <td>
-                  <a href=\"".$talent_calculator_datasite.$char[3]."&tal=".str_pad(sprintf('%s',gmp_strval($talent_sum)), "0", "0", STR_PAD_LEFT)."\" target=\"_blank\">Talent Calculator</a>
-                </td>
-              </tr>";
-
+                <tr>
+                  <td>
+                    <a href=\"".$talent_calculator_datasite.$char[3]."&tal=".str_pad(sprintf('%s',gmp_strval($talent_sum)), "0", "0", STR_PAD_LEFT)."\" target=\"_blank\">Talent Calculator</a>
+                  </td>
+                </tr>";
       }
       $output .= "
-            </table>
-          </div>
-          <br />
-          <table class=\"hidden\">
-            <tr>
-              <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
+              </table>
+            </div>
+            <br />
+            <table class=\"hidden\">
+              <tr>
+                <td>";
+                  makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
       $output .= "
-              </td>
-              <td>";
+                </td>
+                <td>";
       if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
+                  makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
         $output .= "
-            </td>
-            <td>";
+              </td>
+              <td>";
       }
       if ((($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))||($owner_name == $user_name))
       {
-        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
+                makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
               </td>
               <td>";
       }
       if ($user_lvl >= $action_permission['update'])
       {
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
+                makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
         $output .= "
               </td>
               <td>";
       }
-      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
+                makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       //end of admin options
       $output .= "
               </td>
