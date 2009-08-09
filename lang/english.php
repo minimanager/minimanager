@@ -252,21 +252,29 @@ function lang_footer()
   return $lang_footer;
 }
 
-$lang_repair = array(
-  // ----- REPAIR.PHP -----
-  'repair_optimize' => 'Repair / Optimize Tables',
-  'repair' => 'Repair',
-  'optimize' => 'Optimize',
-  'start' => 'Start',
-  'repair_finished' => 'Repair / Optimization Finished',
-  'no_table_selected' => 'No Table(s) Selected',
-  'table_name' => 'Table Name',
-  'status' => 'Status',
-  'num_records' => 'Number of Records',
-  'tables' => 'Tables',
-  'select_tables' => 'Select Tables the operation to be performed on.',
-  'repair_error' => 'Error'
+
+// ----- REPAIR.PHP -----
+function lang_repair()
+{
+  $lang_repair = array
+  (
+    'repair_optimize' => 'Repair / Optimize Tables',
+    'repair' => 'Repair',
+    'optimize' => 'Optimize',
+    'start' => 'Start',
+    'repair_finished' => 'Repair / Optimization Finished',
+    'no_table_selected' => 'No Table(s) Selected',
+    'table_name' => 'Table Name',
+    'status' => 'Status',
+    'num_records' => 'Number of Records',
+    'tables' => 'Tables',
+    'select_tables' => 'Select Tables the operation to be performed on.',
+    'repair_error' => 'Error',
+    'showhide' => 'Show/Hide',
   );
+  return $lang_repair;
+}
+
 
 $lang_backup = array(
   // ----- BACKUP.PHP -----
@@ -1048,7 +1056,8 @@ function lang_command()
     'syntax' => 'Syntax',
     'description' => 'Description',
     'change_level' => 'Change Checked Command(s) Level',
-    'save' => 'Save'
+    'save' => 'Save',
+    'showhide' => 'show/hide',
   );
   return $lang_command;
 }

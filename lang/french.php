@@ -252,21 +252,29 @@ function lang_footer()
   return $lang_footer;
 }
 
-$lang_repair = array(
-  // ----- REPAIR.PHP -----
-  'repair_optimize' => 'Réparer / Optimiser Tables',
-  'repair' => 'Réparer',
-  'optimize' => 'Optimiser',
-  'start' => 'First Starting Time',
-  'repair_finished' => 'Réparation / Optimisation terminée',
-  'no_table_selected' => 'Aucune table sélectionnée',
-  'table_name' => 'Nom de Table',
-  'status' => 'Status',
-  'num_records' => 'Nombre d\'Enregistrements',
-  'tables' => 'Tables',
-  'select_tables' => 'Choisir les tables sur lesquelles les opérations doivent se porter.',
-  'repair_error' => 'Erreur'
+
+// ----- REPAIR.PHP -----
+function lang_repair()
+{
+  $lang_repair = array
+  (
+    'repair_optimize' => 'Réparer / Optimiser Tables',
+    'repair' => 'Réparer',
+    'optimize' => 'Optimiser',
+    'start' => 'First Starting Time',
+    'repair_finished' => 'Réparation / Optimisation terminée',
+    'no_table_selected' => 'Aucune table sélectionnée',
+    'table_name' => 'Nom de Table',
+    'status' => 'Status',
+    'num_records' => 'Nombre d\'Enregistrements',
+    'tables' => 'Tables',
+    'select_tables' => 'Choisir les tables sur lesquelles les opérations doivent se porter.',
+    'repair_error' => 'Erreur',
+    'showhide' => 'Show/Hide',
   );
+  return $lang_repair;
+}
+
 
 $lang_backup = array(
   // ----- BACKUP.PHP -----
@@ -1048,7 +1056,8 @@ function lang_command()
   'syntax' => 'Syntaxe',
   'description' => 'Description',
   'change_level' => 'Changer le niveau des commandes cochées',
-  'save' => 'Sauver'
+  'save' => 'Sauver',
+  'showhide' => 'show/hide',
   );
   return $lang_command;
 }

@@ -210,7 +210,7 @@ function front()
       SELECT guid,name,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, account,
-        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as gname,
         mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender".
         ($server_type ? ", latency " : " ")."
         FROM `characters` WHERE `online`= 1 ".($gm_online ? "AND `extra_flags`& 1 = 0 " : "")."$order_side ORDER BY $order_by $order_dir";
@@ -225,7 +225,7 @@ function front()
                 <th width=\"5%\"><a href=\"index.php?order_by=class&amp;dir=$dir\"".($order_by=='class' ? " class=\"$order_dir\"" : "").">{$lang_index['class']}</a></th>
                 <th width=\"5%\"><a href=\"index.php?order_by=level&amp;dir=$dir\"".($order_by=='level' ? " class=\"$order_dir\"" : "").">{$lang_index['level']}</a></th>
                 <th width=\"5%\"><a href=\"index.php?order_by=highest_rank&amp;dir=$dir\"".($order_by=='highest_rank' ? " class=\"$order_dir\"" : "").">{$lang_index['rank']}</a></th>
-                <th width=\"15%\"><a href=\"index.php?order_by=GNAME&amp;dir=$dir\"".($order_by=='GNAME' ? " class=\"$order_dir\"" :"").">{$lang_index['guild']}</a></th>
+                <th width=\"15%\"><a href=\"index.php?order_by=gname&amp;dir=$dir\"".($order_by=='gname' ? " class=\"$order_dir\"" :"").">{$lang_index['guild']}</a></th>
                 <th width=\"20%\"><a href=\"index.php?order_by=map&amp;dir=$dir\"".($order_by=='map' ? " class=\"$order_dir\"" : "").">{$lang_index['map']}</a></th>
                 <th width=\"25%\"><a href=\"index.php?order_by=zone&amp;dir=$dir\"".($order_by=='zone' ? " class=\"$order_dir\"" : "").">{$lang_index['zone']}</a></th>";
     if ($server_type)

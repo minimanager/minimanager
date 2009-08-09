@@ -19,13 +19,13 @@ function showHide(id,force){
 	st = o.style;
 	
 	if(force != undefined){
-		st.display = (force) ? 'block' : 'none';
+		st.display = (force) ? 'table' : 'none';
 		return
 	}
 	// if the style.display value is blank we try to figure it out here
 	if(st.display == '' && o.offsetWidth != undefined && o.offsetHeight != undefined)
-		st.display = (o.offsetWidth != 0 && o.offsetHeight != 0) ? 'block' : 'none';
-	st.display = (st.display == '' || st.display == 'block') ? 'none' : 'block';
+		st.display = (o.offsetWidth != 0 && o.offsetHeight != 0) ? 'table' : 'none';
+	st.display = (st.display == '' || st.display == 'table') ? 'none' : 'table';
 }
 
 /*

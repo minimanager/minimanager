@@ -54,45 +54,45 @@ function print_commands_form()
   unset($query);
 
   $output .= "
-         <center>
-           <form method=\"get\" action=\"command.php\" name=\"form\">
-             <input type=\"hidden\" name=\"action\" value=\"update\" />";
+        <center>
+          <form method=\"get\" action=\"command.php\" name=\"form\">
+            <input type=\"hidden\" name=\"action\" value=\"update\" />";
   for ($i=0; $i<=$user_lvl; $i++)
   {
     $output .= "
-             <fieldset class=\"full_frame\">
-               <legend>".(($user_lvl) ? "<a href=\"#\" onclick=\"showHide('{$levels[$i][1]}')\">{$levels[$i][1]}</a>" : "{$levels[$i][1]}")."</legend>
-                 <div id=\"{$levels[$i][1]}\">";
-    $output .="
-               <br />
-                 <table class=\"lined\" style=\"width: 720px;text-align: left;\">
-                   <tr style=\"text-align: center;\">
-                     <th width=\"2%\"></th>
-                     <th width=\"13%\">{$lang_command['command']}</th>
-                     <th width=\"20%\">{$lang_command['syntax']}</th>
-                     <th width=\"65%\">{$lang_command['description']}</th>
-                   </tr>" . $levels[$i][3];
+                  <table style=\"width: 720px; text-align: left; class=\"lined\">
+                    <tr>
+                      <th>
+                        <a href=\"#\" onclick=\"showHide('{$levels[$i][1]}')\">{$levels[$i][1]} {$lang_command['showhide']}</a>
+                      </th>
+                    </tr>
+                  </table>
+                  <table id=\"{$levels[$i][1]}\" class=\"lined\" style=\"width: 720px; text-align: left; display: none\">
+                    <tr style=\"text-align: center;\">
+                      <th width=\"2%\"></th>
+                      <th width=\"13%\">{$lang_command['command']}</th>
+                      <th width=\"20%\">{$lang_command['syntax']}</th>
+                      <th width=\"65%\">{$lang_command['description']}</th>
+                    </tr>" . $levels[$i][3];
     if($user_lvl >= $action_permission['update'])
     {
       $output .= "
-                 </table>
-                 <br />
-                 <table class=\"hidden\" style=\"width: 720px;\">
-                   <tr>
-                     <td>";
+                  </table>
+                  <br />
+                  <table class=\"hidden\" style=\"width: 720px;\">
+                    <tr>
+                      <td>";
                        makebutton($lang_command['change_level'], "javascript:do_submit()",280);
       $output .="
-                     </td>
-                   </tr>";
+                      </td>
+                    </tr>";
     }
     $output .= "
-                 </table>
-               </div>
-             </fieldset>";
+                  </table>
+                  <br />";
   }
   $output .= "
-           </form>
-         <br />
+            </form>
        </center>";
 
 }

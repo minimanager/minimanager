@@ -152,13 +152,10 @@ function char_friends()
     }
 
       $output .= "
-                </table>
                 <script type=\"text/javascript\">
                   if (getBrowserWidth() > 1024)
-                    document.write(\"</td><td>\");
-                </script>
-                <table class=\"lined\" style=\"width: 1%;\">";
-
+                    document.write(\"</table></td><td><table class='lined' style='width: 1%;'>\");
+                </script>";
       $result = $sqlc->query("SELECT name, race, class, map, zone,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
       mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, online
