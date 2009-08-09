@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos/Trinity
  * License: GNU General Public License v2(GPL)
  * Language: French
- * Supported Minimanager Revision: r288
+ * Supported Minimanager Revision: r294
  * Translator: fra298
  */
 
@@ -270,7 +270,7 @@ function lang_repair()
     'tables' => 'Tables',
     'select_tables' => 'Choisir les tables sur lesquelles les opérations doivent se porter.',
     'repair_error' => 'Erreur',
-    'showhide' => 'Show/Hide',
+    'showhide' => 'Montrer/Cacher',
   );
   return $lang_repair;
 }
@@ -391,10 +391,10 @@ function lang_char()
   'talent_name' => 'Nom du Talent',
   'talent_value' => 'Valeur',
   // -----char_friends.php---
-  'friends' => 'Friends',
-  'friendof' => 'Friends of',
-  'ignored' => 'Ignored',
-  'ignoredby' => 'Ignored by',
+  'friends' => 'Ami(s)',
+  'friendof' => 'Ami de',
+  'ignored' => 'Ignoré',
+  'ignoredby' => 'Ignoré par',
   'name' => 'Nom',
   'race' => 'Race',
   'class' => 'Classe',
@@ -1044,20 +1044,20 @@ function lang_command()
 {
   $lang_command = array
   (
-  'command_list' => 'Commandes disponibles',
-  'level0' => 'Joueur',
-  'level1' => 'Modérateur',
-  'level2' => 'Maître de jeu',
-  'level3' => 'Bug Tracker',
-  'level4' => 'Administrator',
-  'level5' => 'Opérateur système',
-  'level6' => 'Inconnu',
-  'command' => 'Commande',
-  'syntax' => 'Syntaxe',
-  'description' => 'Description',
-  'change_level' => 'Changer le niveau des commandes cochées',
-  'save' => 'Sauver',
-  'showhide' => 'show/hide',
+    'command_list' => 'Commandes disponibles',
+    'level0' => 'Joueur',
+    'level1' => 'Modérateur',
+    'level2' => 'Maître de jeu',
+    'level3' => 'Bug Tracker',
+    'level4' => 'Administrator',
+    'level5' => 'Opérateur système',
+    'level6' => 'Inconnu',
+    'command' => 'Commande',
+    'syntax' => 'Syntaxe',
+    'description' => 'Description',
+    'change_level' => 'Changer le niveau des commandes cochées',
+    'save' => 'Sauver',
+    'showhide' => 'Montrer/Cacher',
   );
   return $lang_command;
 }
