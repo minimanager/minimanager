@@ -47,6 +47,7 @@ function dologin()
       $_SESSION['user_lvl'] = $sqlr->result($result, 0, 'gmlevel');
       $_SESSION['realm_id'] = $sqlr->quote_smart($_POST['realm']);
       $_SESSION['client_ip'] = ( !empty($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
+      $_SESSION['logged_in'] = true;
 
       if (isset($_POST['remember'])&&$_POST['remember'] != '')
       {

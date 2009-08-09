@@ -252,6 +252,7 @@ $backup_dir = "./backup";    // make sure webserver have the permission to write
 $gm_level_arr =
   Array
   (
+   -1 => array(-1,'Guest',      ''     ,''),   // DO NOT change this, unless you know what you are doing, or being told to do so
     0 => array(0, 'Player',     ''     ,''),
     1 => array(1, 'Moderator',  'Mod'  ,''),
     2 => array(2, 'Gamemaster', 'GM'   ,''),   // change the name and alias as required
@@ -341,7 +342,7 @@ $menu_array = Array
     array("char_talent.php", 'character',0,5,5,5),   // new security system implemented
     array("char_rep.php", 'character',0,5,5,5),      // new security system implemented
     array("char_pets.php", 'character',0,5,5,5),     // new security system implemented
-    array("char_friends.php", 'character',0,5,5,5),    // new security system implemented
+    array("char_friends.php", 'character',0,5,5,5),  // new security system implemented
     array("char_edit.php", 'char_edit',0,5,5,5),     // new security system implemented
     array("edit.php", 'MyAccount',0,5,5,5),          // new security system implemented
     array("index.php", 'Startpage',0,5,5,5),         // new security system implemented
@@ -357,5 +358,20 @@ $debug = 0; // 0 - no debug, only fatal errors.
             // 2 - show total queries, mem usage, and all errors.
             // 3 - show total queries, mem usage, all errors, and list of all global vars.
             // 4 - show total queries, mem usage, all errors, list of all global vars, and values of all global vars.
+
+
+//#############################################################################
+//---- Under Development ----
+//
+// These are either place holders for future stuff
+// or stuff that are currently under development
+// do not set or change any of these in here or in config.php
+// unless you know what you are doing or were being told to do so
+// no support are given to these 'features'
+
+$developer_test_mode =  false;
+
+$allow_anony         =  false;
+$anony_uname         = "Guest";
 
 ?>

@@ -29,11 +29,11 @@ function print_commands_form()
   while ($data = $sqlw->fetch_row($query))
   {
     $tmp_output = "
-        <tr>";
+              <tr>";
     $tmp_output .=
           ($user_lvl >= $action_permission['update']) ? "<td><input type=\"checkbox\" name=\"check[$data[0]]\" value=\"$data[2]\" /></td>" : "<td></td>";
     $tmp_output .= "
-          <td align=\"left\">.$data[0]</td>";
+                <td align=\"left\">.$data[0]</td>";
     $comm = explode("\r\n",$data[1],2);
     $syntax = ereg_replace("[a-zA-Z ]+:* *\.".$data[0]." *", "", str_replace("/", "<br />",$comm[0]));
     if (isset($comm[1]))
@@ -45,9 +45,9 @@ function print_commands_form()
       $description = isset($comm[1]) ? $comm[1] : " ";
     }
     $tmp_output .="
-          <td>".htmlentities($syntax)."</td>
-          <td>".htmlentities($description)."</td>
-        </tr>";
+                <td>".htmlentities($syntax)."</td>
+                <td>".htmlentities($description)."</td>
+              </tr>";
     $levels[$data[2]][3] .= $tmp_output;
   }
   unset($data);
@@ -60,40 +60,40 @@ function print_commands_form()
   for ($i=0; $i<=$user_lvl; $i++)
   {
     $output .= "
-                  <table style=\"width: 720px; text-align: left; class=\"lined\">
-                    <tr>
-                      <th>
-                        <a href=\"#\" onclick=\"showHide('{$levels[$i][1]}')\">{$levels[$i][1]} {$lang_command['showhide']}</a>
-                      </th>
-                    </tr>
-                  </table>
-                  <table id=\"{$levels[$i][1]}\" class=\"lined\" style=\"width: 720px; text-align: left; display: none\">
-                    <tr style=\"text-align: center;\">
-                      <th width=\"2%\"></th>
-                      <th width=\"13%\">{$lang_command['command']}</th>
-                      <th width=\"20%\">{$lang_command['syntax']}</th>
-                      <th width=\"65%\">{$lang_command['description']}</th>
-                    </tr>" . $levels[$i][3];
+            <table style=\"width: 720px; text-align: left;\" class=\"lined\">
+              <tr>
+                <th>
+                  <a href=\"#\" onclick=\"showHide('{$levels[$i][1]}')\">{$levels[$i][1]} {$lang_command['showhide']}</a>
+                </th>
+              </tr>
+            </table>
+            <table id=\"{$levels[$i][1]}\" class=\"lined\" style=\"width: 720px; text-align: left; display: none\">
+              <tr style=\"text-align: center;\">
+                <th width=\"2%\"></th>
+                <th width=\"13%\">{$lang_command['command']}</th>
+                <th width=\"20%\">{$lang_command['syntax']}</th>
+                <th width=\"65%\">{$lang_command['description']}</th>
+              </tr>" . $levels[$i][3];
     if($user_lvl >= $action_permission['update'])
     {
       $output .= "
-                  </table>
-                  <br />
-                  <table class=\"hidden\" style=\"width: 720px;\">
-                    <tr>
-                      <td>";
-                       makebutton($lang_command['change_level'], "javascript:do_submit()",280);
+            </table>
+            <br />
+            <table class=\"hidden\" style=\"width: 720px;\">
+              <tr>
+                <td>";
+                    makebutton($lang_command['change_level'], "javascript:do_submit()",280);
       $output .="
-                      </td>
-                    </tr>";
+                </td>
+              </tr>";
     }
     $output .= "
-                  </table>
-                  <br />";
+            </table>
+            <br />";
   }
   $output .= "
-            </form>
-       </center>";
+          </form>
+        </center>";
 
 }
 

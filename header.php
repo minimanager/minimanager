@@ -87,6 +87,15 @@ $output .= "
         <td class=\"table_top_left\">";
 unset($tt_script);
 
+if($developer_test_mode && $allow_anony && (!isset($_SESSION['logged_in'])))
+{
+  $_SESSION['user_lvl'] = -1;
+  $_SESSION['uname'] = $anony_uname;
+  $_SESSION['user_id'] = -1;
+  $_SESSION['realm_id'] = 1;
+  $_SESSION['client_ip'] = ( !empty($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
+}
+
 if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_SESSION['realm_id']))&& (!isset($_GET['err'])) )
 {
   if(ini_get('max_execution_time') < 1800)
@@ -119,6 +128,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
 
   $lang_header = lang_header();
 
+  $action_permission=array();
   foreach ($menu_array as $trunk)
   {
     if ($trunk[1] != "invisible") // ignore "invisible array" this is for setting security read/write values for not accessible elements not in the navbar!
@@ -191,9 +201,14 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
   }
   unset($result);
 
-  $output .= "
+  if($developer_test_mode && $allow_anony && !isset($_SESSION['logged_in']))
+    $output .= "
+                  <li><a href=\"login.php\">Login</a></li>";
+  else
+    $output .= "
                   <li><a href=\"edit.php\">{$lang_header['edit_my_acc']}</a></li>
-                  <li><a href=\"logout.php\">{$lang_header['logout']}</a></li>
+                  <li><a href=\"logout.php\">{$lang_header['logout']}</a></li>";
+  $output .= "
                 </ul>
               </li>
             </ul>
