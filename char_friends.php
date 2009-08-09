@@ -89,7 +89,7 @@ function char_friends()
 
       $result = $sqlc->query("SELECT name, race, class, map, zone,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, online, account
+        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, online, account, guid
         FROM `characters` WHERE guid in (SELECT friend FROM character_social WHERE guid =$id and flags <= 1) ORDER BY $order_by $order_dir");
 
       if($sqlc->num_rows($result))
@@ -117,7 +117,7 @@ function char_friends()
                       <td>";
           if($user_lvl >= $char_gm_level[0])
             $output .="
-                        <a href=\"char.php?id=$data[8]\">".$data[0]."</a>";
+                        <a href=\"char.php?id=$data[9]\">".$data[0]."</a>";
           else
             $output .=$data[0];
 
@@ -134,7 +134,7 @@ function char_friends()
 
       $result = $sqlc->query("SELECT name, race, class, map, zone,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, online, account
+        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, online, account, guid
         FROM `characters` WHERE guid in (SELECT guid FROM character_social WHERE friend =$id and flags <= 1) ORDER BY $order_by $order_dir");
 
 
@@ -163,7 +163,7 @@ function char_friends()
                       <td>";
           if($user_lvl >= $char_gm_level[0])
             $output .="
-                        <a href=\"char.php?id=$data[8]\">".$data[0]."</a>";
+                        <a href=\"char.php?id=$data[9]\">".$data[0]."</a>";
           else
             $output .=$data[0];
 
