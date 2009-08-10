@@ -21,7 +21,7 @@ function char_talent()
 {
   require_once("libs/talent_lib.php");
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db, $mmfpm_db,
-    $action_permission, $user_lvl, $user_name, $talent_datasite, $talent_calculator_datasite;
+    $action_permission, $user_lvl, $user_name, $spell_datasite, $talent_calculator_datasite;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -130,10 +130,10 @@ function char_talent()
               <tr>
                 <td>$data[0]</td>
                 <td align=\"left\">
-                  <a style=\"padding:2px;\" href=\"$talent_datasite$data[0]\" target=\"_blank\">
+                  <a style=\"padding:2px;\" href=\"$spell_datasite$data[0]\" target=\"_blank\">
                     <img src=\"".get_spell_icon($data[0])."\" alt=\"\" />
                   </a>
-                  <a href=\"$talent_datasite$data[0]\" target=\"_blank\">$data[1]</a>
+                  <a href=\"$spell_datasite$data[0]\" target=\"_blank\">$data[1]</a>
                 </td>";
           if ($GMP)
             $talent_sum = gmp_add($talent_sum,sprintf('%s',get_talent_value($data[0])));

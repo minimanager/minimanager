@@ -20,7 +20,7 @@ valid_login($action_permission['read']);
 function char_main()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $characters_db, $server, $mmfpm_db,
-    $action_permission, $user_lvl, $user_name, $user_id, $item_datasite, $talent_datasite, $showcountryflag;
+    $action_permission, $user_lvl, $user_name, $user_id, $item_datasite, $spell_datasite , $showcountryflag;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -231,7 +231,7 @@ function char_main()
         while ($aura = $sqlc->fetch_row($a_results))
         {
            $output .= "
-                    <a style=\"padding:2px;\" href=\"$talent_datasite$aura[0]\" target=\"_blank\">
+                    <a style=\"padding:2px;\" href=\"$spell_datasite $aura[0]\" target=\"_blank\">
                       <img src=\"".get_spell_icon($aura[0])."\" alt=\"".$aura[0]."\" width=\"24\" height=\"24\" />
                     </a>";
         }

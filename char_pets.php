@@ -20,7 +20,7 @@ function char_pets()
 {
 
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
-    $action_permission, $user_lvl, $user_name, $talent_datasite, $pet_ability;
+    $action_permission, $user_lvl, $user_name, $spell_datasite, $pet_ability;
 
   if (empty($_GET['id'])) error($lang_global['empty_fields']);
 
@@ -124,7 +124,7 @@ function char_pets()
            while ($ability = $sql->fetch_row($ability_results))
            {
                 $output .= "
-                     <a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_spell_name($ability[0])." ".get_spell_rank($ability[0])."</font>','item_tooltip')\" onmouseout=\"toolTip()\" target=\"_blank\">
+                     <a style=\"padding:2px;\" href=\"$spell_datasite$ability[0]\" target=\"_blank\">
                        <img src=\"".get_spell_icon($ability[0])."\" alt=\"".$ability[0]."\">
                     </a>";
              

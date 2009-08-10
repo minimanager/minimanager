@@ -159,7 +159,6 @@ $quest_datasite             = "http://$tt_lang.wowhead.com/?quest=";
 $creature_datasite          = "http://$tt_lang.wowhead.com/?npc=";
 $spell_datasite             = "http://$tt_lang.wowhead.com/?spell=";
 $skill_datasite             = "http://$tt_lang.wowhead.com/?spells=";
-$talent_datasite            = "http://$tt_lang.wowhead.com/?spell=";
 $go_datasite                = "http://$tt_lang.wowhead.com/?object=";
 $talent_calculator_datasite = "http://www.wowarmory.com/talent-calc.xml?cid=";
 $get_icons_from_web         =  false; //wherever to get icons from the web in case they are missing in /img/INV dir.
