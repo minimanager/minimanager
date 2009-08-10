@@ -18,7 +18,6 @@ valid_login($action_permission['read']);
 //########################################################################################################################^M
 function char_pets()
 {
-
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
     $action_permission, $user_lvl, $user_name, $spell_datasite, $pet_ability;
 
@@ -35,29 +34,27 @@ function char_pets()
     if (!is_numeric($realmid)) $realmid = $realm_id;
   }
 
-  $sql = new SQL;
-  $sql->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
 
-  $id = $sql->quote_smart($_GET['id']);
+  $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
     $id = 0;
 
-  $result = $sql->query("SELECT account FROM `characters` WHERE guid = $id LIMIT 1");
+  $result = $sqlc->query("SELECT account FROM `characters` WHERE guid = $id LIMIT 1");
 
-  if ($sql->num_rows($result))
+  if ($sqlc->num_rows($result))
   {
-    $char = $sql->fetch_row($result);
+    $char = $sqlc->fetch_row($result);
 
-    $owner_acc_id = $sql->result($result, 0, 'account');
-    $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    $result = $sql->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
-    $owner_gmlvl = $sql->result($result, 0, 'gmlevel');
-    $owner_name = $sql->result($result, 0, 'username');
+    $owner_acc_id = $sqlc->result($result, 0, 'account');
+    $result = $sqlr->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+    $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
+    $owner_name = $sqlr->result($result, 0, 'username');
 
     if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
-      $sql->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
-      $result = $sql->query("SELECT id,level,exp,name,curhappiness FROM `character_pet` WHERE owner = $id");
+      $result = $sqlc->query("SELECT id,level,exp,name,curhappiness FROM `character_pet` WHERE owner = $id");
       $output .= "
         <center>
           <div id=\"tab\">
@@ -81,9 +78,9 @@ function char_pets()
             </div>
             <div id=\"tab_content2\">";
 
-      if ($sql->num_rows($result))
+      if ($sqlc->num_rows($result))
       {
-        while($pet = $sql->fetch_row($result))
+        while($pet = $sqlc->fetch_row($result))
         {
           $happiness = floor($pet[4]/333000);
           switch ($happiness)
@@ -103,42 +100,42 @@ function char_pets()
           }
           $pet_next_lvl_xp = floor(xp_to_level($pet[1])/4);
           $output .= "
-            <font class=\"bold\">$pet[3] - lvl ".get_level_with_color($pet[1])."
-              <a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>$hap_text</font>','item_tooltip')\" onmouseout=\"toolTip()\"><img src=\"img/pet/happiness_$hap_val.jpg\"></a>
-              <br />
-              <br />
-            </font>
-            <table class=\"lined\" style=\"width: 550px;\">
-              <tr>
-                <td align=right>Exp:</td>
-                <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(385*$pet[2]/$pet_next_lvl_xp)-385)."px;\">
-                  <span>$pet[2]/$pet_next_lvl_xp</span>
-                </td>
-              </tr>
-              <tr>
-                <td align=right>Pet Abilities:</td>
-                <td align=left>";
-         $ability_results = $sql->query("SELECT spell FROM `pet_spell` WHERE guid = '$pet[0]' and active > 1"); // active = 0 is unused and active = 1 probably some passive auras, i dont know diference between values 129 and 193, need to check mangos source
-         if ($sql->num_rows($ability_results))
-         {
-           while ($ability = $sql->fetch_row($ability_results))
-           {
-                $output .= "
-                     <a style=\"padding:2px;\" href=\"$spell_datasite$ability[0]\" target=\"_blank\">
-                       <img src=\"".get_spell_icon($ability[0])."\" alt=\"".$ability[0]."\">
+              <font class=\"bold\">$pet[3] - lvl ".get_level_with_color($pet[1])."
+                <a style=\"padding:2px;\" onmouseover=\"toolTip('&lt;font color=\'white\'&gt;$hap_text&lt;/font&gt;','item_tooltip')\" onmouseout=\"toolTip()\"><img src=\"img/pet/happiness_$hap_val.jpg\" alt=\"\" /></a>
+                <br />
+                <br />
+              </font>
+              <table class=\"lined\" style=\"width: 550px;\">
+                <tr>
+                  <td align=\"right\">Exp:</td>
+                  <td valign=\"top\" class=\"bar skill_bar\" style=\"background-position: ".(round(385*$pet[2]/$pet_next_lvl_xp)-385)."px;\">
+                    <span>$pet[2]/$pet_next_lvl_xp</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td align=\"right\">Pet Abilities:</td>
+                  <td align=\"left\">";
+          $ability_results = $sqlc->query("SELECT spell FROM `pet_spell` WHERE guid = '$pet[0]' and active > 1"); // active = 0 is unused and active = 1 probably some passive auras, i dont know diference between values 129 and 193, need to check mangos source
+          if ($sqlc->num_rows($ability_results))
+          {
+            while ($ability = $sqlc->fetch_row($ability_results))
+            {
+              $output .= "
+                    <a style=\"padding:2px;\" href=\"$spell_datasite$ability[0]\" target=\"_blank\">
+                      <img src=\"".get_spell_icon($ability[0])."\" alt=\"".$ability[0]."\" />
                     </a>";
-             
-           }
-         }
-         $output .= "
-                </td>
-              </tr>
-            </table>
-            <br /><br />";
-       }
-    }
+            }
+          }
+          $output .= "
+                  </td>
+                </tr>
+              </table>
+              <br /><br />";
+        }
+      }
 
-    $output .= "
+      $output .= "
+            </div>
           </div>
           <br />
           <table class=\"hidden\">
