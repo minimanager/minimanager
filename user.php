@@ -422,7 +422,7 @@ valid_login($action_permission['delete']);
 
  $deleted_acc = 0;
  $deleted_chars = 0;
- require_once("scripts/del_lib.php");
+ require_once("libs/del_lib.php");
 
  for ($i=0; $i<count($check); $i++) {
     if ($check[$i] != "" ) {
@@ -462,7 +462,7 @@ valid_login($action_permission['insert']);
  if(isset($_GET['check'])) $check = $sql->quote_smart($_GET['check']);
   else redirect("user.php?error=1");
 
- require_once("scripts/backup_tab.php");
+ require_once("libs/tab_lib.php");
  if ($server_type)
    $tab_backup_user_characters = $tab_backup_user_characters_trinity;
 

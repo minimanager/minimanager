@@ -456,7 +456,7 @@ function dodel_char()
     else redirect("char_list.php?error=1");
 
   $deleted_chars = 0;
-  require_once("./scripts/del_lib.php");
+  require_once("./libs/del_lib.php");
 
   for ($i=0; $i<count($check); $i++)
   {

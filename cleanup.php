@@ -12,7 +12,7 @@ require_once("header.php");
 require_once("scripts/defines.php");
 
 // override default security : guild.php (guild leader deletes guild)
-if(!isset($_POST['override']) || $_POST['override'] != '1') 
+if(!isset($_POST['override']) || $_POST['override'] != '1')
   valid_login($action_permission['delete']);
 
 
@@ -24,39 +24,39 @@ function cleanup(){
 
  $output .= "<center>
  <fieldset style=\"width: 740px;\">
-	<legend>{$lang_cleanup['cleanup_options']}</legend>
-	<table class=\"hidden\">
+  <legend>{$lang_cleanup['cleanup_options']}</legend>
+  <table class=\"hidden\">
     <tr><td>
-	<form action=\"cleanup.php\" method=\"get\" name=\"form\">
-	   <input type=\"hidden\" name=\"action\" value=\"run_cleanup\" />
-	   <select name=\"cleanup_by\">
-		<optgroup label=\"{$lang_cleanup['clean_chars']}\">
-			<option value=\"char_lvl\">{$lang_cleanup['char_level']}</option>
-			<option value=\"totaltime\">{$lang_cleanup['tot_play_time']}</option>
-		</optgroup>
-		<optgroup label=\"{$lang_cleanup['clean_acc']}\">
-			<option value=\"last_login\">{$lang_cleanup['last_login_time']}</option>
-			<option value=\"failed_login\">{$lang_cleanup['failed_logins']}</option>
-			<option value=\"banned\">{$lang_cleanup['banned']}</option>
-			<option value=\"locked\">{$lang_cleanup['locked']}</option>
-			<option value=\"num_of_char_in_acc\">{$lang_cleanup['chars_in_acc']}</option>
-		</optgroup>
-		<optgroup label=\"{$lang_cleanup['clean_guilds']}\">
-			<option value=\"num_of_char_in_guild\">{$lang_cleanup['chars_in_guild']}</option>
-		</optgroup>
-	   </select>
-	   <select name=\"cleanup_sign\">
-		<option value=\"=\">=</option>
-		<option value=\"<\"><</option>
-		<option value=\"<=\"><=</option>
-		<option value=\">\">></option>
-		<option value=\">=\">>=</option>
-		<option value=\"!=\">!=</option>
-	   </select>
-	   <input type=\"text\" size=\"25\" maxlength=\"40\" name=\"cleanup_value\" />
-	   </td><td>";
-			makebutton($lang_cleanup['run_cleanup'], "javascript:do_submit()",100);
-			makebutton($lang_global['back'], "javascript:window.history.back()",100);
+  <form action=\"cleanup.php\" method=\"get\" name=\"form\">
+     <input type=\"hidden\" name=\"action\" value=\"run_cleanup\" />
+     <select name=\"cleanup_by\">
+    <optgroup label=\"{$lang_cleanup['clean_chars']}\">
+      <option value=\"char_lvl\">{$lang_cleanup['char_level']}</option>
+      <option value=\"totaltime\">{$lang_cleanup['tot_play_time']}</option>
+    </optgroup>
+    <optgroup label=\"{$lang_cleanup['clean_acc']}\">
+      <option value=\"last_login\">{$lang_cleanup['last_login_time']}</option>
+      <option value=\"failed_login\">{$lang_cleanup['failed_logins']}</option>
+      <option value=\"banned\">{$lang_cleanup['banned']}</option>
+      <option value=\"locked\">{$lang_cleanup['locked']}</option>
+      <option value=\"num_of_char_in_acc\">{$lang_cleanup['chars_in_acc']}</option>
+    </optgroup>
+    <optgroup label=\"{$lang_cleanup['clean_guilds']}\">
+      <option value=\"num_of_char_in_guild\">{$lang_cleanup['chars_in_guild']}</option>
+    </optgroup>
+     </select>
+     <select name=\"cleanup_sign\">
+    <option value=\"=\">=</option>
+    <option value=\"<\"><</option>
+    <option value=\"<=\"><=</option>
+    <option value=\">\">></option>
+    <option value=\">=\">>=</option>
+    <option value=\"!=\">!=</option>
+     </select>
+     <input type=\"text\" size=\"25\" maxlength=\"40\" name=\"cleanup_value\" />
+     </td><td>";
+      makebutton($lang_cleanup['run_cleanup'], "javascript:do_submit()",100);
+      makebutton($lang_global['back'], "javascript:window.history.back()",100);
  $output .= "</td></tr>
         </table><br /></fieldset><br /><br /></center>";
 }
@@ -87,32 +87,32 @@ switch ($cleanup_by) {
 
  $output .= "<center>";
  if ($total_chars){
-	$output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
-	$output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
-				<input type=\"hidden\" name=\"type\" value=\"char\" />
-				<font class=\"bold\">{$lang_cleanup['chars_id']}: ";
+  $output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
+  $output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
+        <input type=\"hidden\" name=\"type\" value=\"char\" />
+        <font class=\"bold\">{$lang_cleanup['chars_id']}: ";
 
-	$pass_array = "";
+  $pass_array = "";
 
-	 while($char = $sql->fetch_row($result)){
-		$output .= "<a href=\"char.php?id=$char[0]\" target=\"_blank\">$char[0], </a>";
-		$pass_array .= "-$char[0]";
-		}
-	$output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
-	$output .= "<br />{$lang_cleanup['tot_of']} $total_chars {$lang_global['will_be_erased']}</font><br /><br />";
-	$output .= "<table class=\"hidden\">
- 	         <tr><td>";
-				makebutton($lang_global['yes'], "javascript:do_submit()",120);
-				makebutton($lang_global['no'], "cleanup.php",120);
-	$output .= "</td></tr>
-     	   </table>
-		</form>";
+   while($char = $sql->fetch_row($result)){
+    $output .= "<a href=\"char.php?id=$char[0]\" target=\"_blank\">$char[0], </a>";
+    $pass_array .= "-$char[0]";
+    }
+  $output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
+  $output .= "<br />{$lang_cleanup['tot_of']} $total_chars {$lang_global['will_be_erased']}</font><br /><br />";
+  $output .= "<table class=\"hidden\">
+           <tr><td>";
+        makebutton($lang_global['yes'], "javascript:do_submit()",120);
+        makebutton($lang_global['no'], "cleanup.php",120);
+  $output .= "</td></tr>
+         </table>
+    </form>";
  } else {
-	$output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
-	 $output .= "<table class=\"hidden\">
+  $output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
+   $output .= "<table class=\"hidden\">
           <tr><td>";
-				makebutton($lang_global['go_back'], "cleanup.php",120);
-	 $output .= "</td></tr>
+        makebutton($lang_global['go_back'], "cleanup.php",120);
+   $output .= "</td></tr>
         </table>";
  }
  $output .= "</center><br />";
@@ -128,32 +128,32 @@ break;
 
   $output .= "<center>";
   if ($total_accounts){
-	$output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
-	$output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
-				<input type=\"hidden\" name=\"type\" value=\"acc\" />
-				<font class=\"bold\">{$lang_cleanup['acc_ids']}: ";
+  $output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
+  $output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
+        <input type=\"hidden\" name=\"type\" value=\"acc\" />
+        <font class=\"bold\">{$lang_cleanup['acc_ids']}: ";
 
   $pass_array = "";
 
   while($acc = $sql->fetch_row($result)){
-	$output .= "<a href=\"user.php?action=edit_user&amp;id=$acc[0]\" target=\"_blank\">$acc[0], </a>";
-	$pass_array .= "-$acc[0]";
-	}
+  $output .= "<a href=\"user.php?action=edit_user&amp;id=$acc[0]\" target=\"_blank\">$acc[0], </a>";
+  $pass_array .= "-$acc[0]";
+  }
   $output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
   $output .= "<br />{$lang_cleanup['tot_of']} $total_accounts {$lang_global['will_be_erased']}</font><br /><br />";
   $output .= "<table class=\"hidden\">
- 	         <tr><td>";
-				makebutton($lang_global['yes'], "javascript:do_submit()",120);
-				makebutton($lang_global['no'], "cleanup.php",120);
+           <tr><td>";
+        makebutton($lang_global['yes'], "javascript:do_submit()",120);
+        makebutton($lang_global['no'], "cleanup.php",120);
   $output .= "</td></tr>
-        	</table>
-		</form>";
+          </table>
+    </form>";
  } else {
-	$output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
-	$output .= "<table class=\"hidden\">
+  $output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
+  $output .= "<table class=\"hidden\">
           <tr><td>";
-				makebutton($lang_global['go_back'], "cleanup.php",120);
-	 $output .= "</td></tr>
+        makebutton($lang_global['go_back'], "cleanup.php",120);
+   $output .= "</td></tr>
         </table>";
  }
  $output .= "</center><br />";
@@ -169,33 +169,33 @@ case "failed_login":
 
  $output .= "<center>";
  if ($total_accounts){
-	$output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
-	$output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
-				<input type=\"hidden\" name=\"type\" value=\"acc\" />
-				<font class=\"bold\">{$lang_cleanup['acc_ids']}: ";
+  $output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
+  $output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
+        <input type=\"hidden\" name=\"type\" value=\"acc\" />
+        <font class=\"bold\">{$lang_cleanup['acc_ids']}: ";
 
  $pass_array = "";
 
  while($acc = $sql->fetch_row($result)){
-		$output .= "<a href=\"user.php?action=edit_user&amp;id=$acc[0]\" target=\"_blank\">$acc[0], </a>";
-		$pass_array .= "-$acc[0]";
-		}
+    $output .= "<a href=\"user.php?action=edit_user&amp;id=$acc[0]\" target=\"_blank\">$acc[0], </a>";
+    $pass_array .= "-$acc[0]";
+    }
 
  $output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
  $output .= "<br />{$lang_cleanup['tot_of']} $total_accounts {$lang_global['will_be_erased']}</font><br /><br />";
  $output .= "<table class=\"hidden\">
- 	         <tr><td>";
-				makebutton($lang_global['yes'], "javascript:do_submit()",120);
-				makebutton($lang_global['no'], "cleanup.php",120);
-	$output .= "</td></tr>
-        	</table>
-			</form>";
+           <tr><td>";
+        makebutton($lang_global['yes'], "javascript:do_submit()",120);
+        makebutton($lang_global['no'], "cleanup.php",120);
+  $output .= "</td></tr>
+          </table>
+      </form>";
  } else {
-	$output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
-	$output .= "<table class=\"hidden\">
+  $output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
+  $output .= "<table class=\"hidden\">
           <tr><td>";
-				makebutton($lang_global['go_back'], "cleanup.php",120);
-	$output .= "</td></tr>
+        makebutton($lang_global['go_back'], "cleanup.php",120);
+  $output .= "</td></tr>
         </table>";
  }
  $output .= "</center><br />";
@@ -211,33 +211,33 @@ case "banned":
 
  $output .= "<center>";
  if ($total_accounts){
-	$output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
-	$output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
-				<input type=\"hidden\" name=\"type\" value=\"acc\" />
-				<font class=\"bold\">{$lang_cleanup['acc_ids']}: ";
+  $output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
+  $output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
+        <input type=\"hidden\" name=\"type\" value=\"acc\" />
+        <font class=\"bold\">{$lang_cleanup['acc_ids']}: ";
 
-	$pass_array = "";
+  $pass_array = "";
 
-	while($acc = $sql->fetch_row($result)){
-		$output .= "<a href=\"user.php?action=edit_user&amp;id=$acc[0]\" target=\"_blank\">$acc[0], </a>";
-		$pass_array .= "-$acc[0]";
-		}
+  while($acc = $sql->fetch_row($result)){
+    $output .= "<a href=\"user.php?action=edit_user&amp;id=$acc[0]\" target=\"_blank\">$acc[0], </a>";
+    $pass_array .= "-$acc[0]";
+    }
 
-	$output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
-	$output .= "<br />{$lang_cleanup['tot_of']} $total_accounts {$lang_global['will_be_erased']}</font><br /><br />";
-	$output .= " <table class=\"hidden\">
- 	         <tr><td>";
-				makebutton($lang_global['yes'], "javascript:do_submit()",120);
-				makebutton($lang_global['no'], "cleanup.php",120);
-	$output .= "</td></tr>
-        	</table>
-			</form>";
+  $output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
+  $output .= "<br />{$lang_cleanup['tot_of']} $total_accounts {$lang_global['will_be_erased']}</font><br /><br />";
+  $output .= " <table class=\"hidden\">
+           <tr><td>";
+        makebutton($lang_global['yes'], "javascript:do_submit()",120);
+        makebutton($lang_global['no'], "cleanup.php",120);
+  $output .= "</td></tr>
+          </table>
+      </form>";
  } else {
-	$output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
-	$output .= "<table class=\"hidden\">
+  $output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
+  $output .= "<table class=\"hidden\">
           <tr><td>";
-				makebutton($lang_global['go_back'], "cleanup.php",120);
-	$output .= "</td></tr>
+        makebutton($lang_global['go_back'], "cleanup.php",120);
+  $output .= "</td></tr>
         </table>";
  }
   $output .= "</center><br />";
@@ -252,33 +252,33 @@ case "totaltime":
 
  $output .= "<center>";
  if ($total_chars){
-	$output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
-	$output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
-				<input type=\"hidden\" name=\"type\" value=\"char\" />
-				<font class=\"bold\">{$lang_cleanup['chars_id']}: ";
+  $output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
+  $output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
+        <input type=\"hidden\" name=\"type\" value=\"char\" />
+        <font class=\"bold\">{$lang_cleanup['chars_id']}: ";
 
-	$pass_array = "";
+  $pass_array = "";
 
-	while($char = $sql->fetch_row($result)){
-		$output .= "<a href=\"char.php?id=$char[0]\" target=\"_blank\">$char[0], </a>";
-		$pass_array .= "-$char[0]";
-		}
+  while($char = $sql->fetch_row($result)){
+    $output .= "<a href=\"char.php?id=$char[0]\" target=\"_blank\">$char[0], </a>";
+    $pass_array .= "-$char[0]";
+    }
 
-	$output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
-	$output .= "<br />{$lang_cleanup['tot_of']} $total_chars {$lang_global['will_be_erased']}</font><br /><br />";
-	$output .= " <table class=\"hidden\">
- 	         <tr><td>";
-				makebutton($lang_global['yes'], "javascript:do_submit()",120);
-				makebutton($lang_global['no'], "cleanup.php",120);
-	$output .= "</td></tr>
-        	</table>
-			</form>";
+  $output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
+  $output .= "<br />{$lang_cleanup['tot_of']} $total_chars {$lang_global['will_be_erased']}</font><br /><br />";
+  $output .= " <table class=\"hidden\">
+           <tr><td>";
+        makebutton($lang_global['yes'], "javascript:do_submit()",120);
+        makebutton($lang_global['no'], "cleanup.php",120);
+  $output .= "</td></tr>
+          </table>
+      </form>";
  } else {
-	$output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
-	$output .= "<table class=\"hidden\">
+  $output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
+  $output .= "<table class=\"hidden\">
           <tr><td>";
-				makebutton($lang_global['go_back'], "cleanup.php",120);
-	 $output .= "</td></tr>
+        makebutton($lang_global['go_back'], "cleanup.php",120);
+   $output .= "</td></tr>
         </table>";
  }
   $output .= "</center><br />";
@@ -294,33 +294,33 @@ case "locked":
 
  $output .= "<center>";
  if ($total_accounts){
-	$output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
-	$output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
-				<input type=\"hidden\" name=\"type\" value=\"acc\" />
-				<font class=\"bold\">{$lang_cleanup['acc_ids']}: ";
+  $output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
+  $output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
+        <input type=\"hidden\" name=\"type\" value=\"acc\" />
+        <font class=\"bold\">{$lang_cleanup['acc_ids']}: ";
 
-	$pass_array = "";
+  $pass_array = "";
 
-	while($acc = $sql->fetch_row($result)){
-		$output .= "<a href=\"user.php?action=edit_user&amp;id=$acc[0]\" target=\"_blank\">$acc[0], </a>";
-		$pass_array .= "-$acc[0]";
-		}
+  while($acc = $sql->fetch_row($result)){
+    $output .= "<a href=\"user.php?action=edit_user&amp;id=$acc[0]\" target=\"_blank\">$acc[0], </a>";
+    $pass_array .= "-$acc[0]";
+    }
 
-	$output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
-	$output .= "<br />{$lang_cleanup['tot_of']} $total_accounts {$lang_global['will_be_erased']}</font><br /><br />";
-	$output .= "<table class=\"hidden\">
- 	         <tr><td>";
-				makebutton($lang_global['yes'], "javascript:do_submit()",120);
-				makebutton($lang_global['no'], "cleanup.php",120);
-	$output .= "</td></tr>
-        	</table>
-			</form>";
+  $output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
+  $output .= "<br />{$lang_cleanup['tot_of']} $total_accounts {$lang_global['will_be_erased']}</font><br /><br />";
+  $output .= "<table class=\"hidden\">
+           <tr><td>";
+        makebutton($lang_global['yes'], "javascript:do_submit()",120);
+        makebutton($lang_global['no'], "cleanup.php",120);
+  $output .= "</td></tr>
+          </table>
+      </form>";
  } else {
-	$output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
-	$output .= "<table class=\"hidden\">
+  $output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
+  $output .= "<table class=\"hidden\">
           <tr><td>";
-				makebutton($lang_global['go_back'], "cleanup.php",120);
-	 $output .= "</td></tr>
+        makebutton($lang_global['go_back'], "cleanup.php",120);
+   $output .= "</td></tr>
         </table>";
  }
   $output .= "</center><br />";
@@ -336,67 +336,67 @@ case "num_of_char_in_acc":
  $acc_output_array = array();
 
  while($acc = $sql->fetch_row($result)){
-	$total_chars_in_acc = 0;
-	foreach ($characters_db as $db){
-		$sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
+  $total_chars_in_acc = 0;
+  foreach ($characters_db as $db){
+    $sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
 
-		$query = $sql->query("SELECT count(*) FROM `characters` WHERE account = '$acc[0]'");
-		$total_chars_in_acc = $total_chars_in_acc + $sql->result($query, 0);
-	}
+    $query = $sql->query("SELECT count(*) FROM `characters` WHERE account = '$acc[0]'");
+    $total_chars_in_acc = $total_chars_in_acc + $sql->result($query, 0);
+  }
 
-	switch ($cleanup_sign){
-		case "=":
-		if($total_chars_in_acc == $cleanup_value) array_push($acc_output_array, $acc[0]);
-		break;
-		case "<":
-		if($total_chars_in_acc < $cleanup_value) array_push($acc_output_array, $acc[0]);
-		break;
-		case "<=":
-		if($total_chars_in_acc <= $cleanup_value) array_push($acc_output_array, $acc[0]);
-		break;
-		case ">":
-		if($total_chars_in_acc > $cleanup_value) array_push($acc_output_array, $acc[0]);
-		break;
-		case ">=":
-		if($total_chars_in_acc >= $cleanup_value) array_push($acc_output_array, $acc[0]);
-		break;
-		case "!=":
-		if($total_chars_in_acc <> $cleanup_value) array_push($acc_output_array, $acc[0]);
-		break;
-		default:
-  		redirect("cleanup.php?error=1");
-		}
+  switch ($cleanup_sign){
+    case "=":
+    if($total_chars_in_acc == $cleanup_value) array_push($acc_output_array, $acc[0]);
+    break;
+    case "<":
+    if($total_chars_in_acc < $cleanup_value) array_push($acc_output_array, $acc[0]);
+    break;
+    case "<=":
+    if($total_chars_in_acc <= $cleanup_value) array_push($acc_output_array, $acc[0]);
+    break;
+    case ">":
+    if($total_chars_in_acc > $cleanup_value) array_push($acc_output_array, $acc[0]);
+    break;
+    case ">=":
+    if($total_chars_in_acc >= $cleanup_value) array_push($acc_output_array, $acc[0]);
+    break;
+    case "!=":
+    if($total_chars_in_acc <> $cleanup_value) array_push($acc_output_array, $acc[0]);
+    break;
+    default:
+      redirect("cleanup.php?error=1");
+    }
  }
 
  $output .= "<center>";
  if ($acc_output_array){
-	$output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
-	$output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
-				<input type=\"hidden\" name=\"type\" value=\"acc\" />
-				<font class=\"bold\">{$lang_cleanup['acc_ids']}: ";
+  $output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
+  $output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
+        <input type=\"hidden\" name=\"type\" value=\"acc\" />
+        <font class=\"bold\">{$lang_cleanup['acc_ids']}: ";
 
-	$pass_array = "";
+  $pass_array = "";
 
-	for ($i = 0; $i < count($acc_output_array); $i++){
-		$output .= "<a href=\"user.php?action=edit_user&amp;id=$acc_output_array[$i]\" target=\"_blank\">$acc_output_array[$i], </a>";
-		$pass_array .= "-$acc_output_array[$i]";
-		}
+  for ($i = 0; $i < count($acc_output_array); $i++){
+    $output .= "<a href=\"user.php?action=edit_user&amp;id=$acc_output_array[$i]\" target=\"_blank\">$acc_output_array[$i], </a>";
+    $pass_array .= "-$acc_output_array[$i]";
+    }
 
-	$output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
-	$output .= "<br />{$lang_cleanup['tot_of']} ".count($acc_output_array)." {$lang_global['will_be_erased']}</font><br /><br />";
-	$output .= " <table class=\"hidden\">
- 	         <tr><td>";
-				makebutton($lang_global['yes'], "javascript:do_submit()",120);
-				makebutton($lang_global['no'], "cleanup.php",120);
-	$output .= "</td></tr>
-        	</table>
-			</form>";
+  $output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
+  $output .= "<br />{$lang_cleanup['tot_of']} ".count($acc_output_array)." {$lang_global['will_be_erased']}</font><br /><br />";
+  $output .= " <table class=\"hidden\">
+           <tr><td>";
+        makebutton($lang_global['yes'], "javascript:do_submit()",120);
+        makebutton($lang_global['no'], "cleanup.php",120);
+  $output .= "</td></tr>
+          </table>
+      </form>";
  } else {
-	$output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
-	$output .= "<table class=\"hidden\">
+  $output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
+  $output .= "<table class=\"hidden\">
           <tr><td>";
-				makebutton($lang_global['go_back'], "cleanup.php",120);
-	 $output .= "</td></tr>
+        makebutton($lang_global['go_back'], "cleanup.php",120);
+   $output .= "</td></tr>
         </table>";
  }
   $output .= "</center><br />";
@@ -412,62 +412,62 @@ case "num_of_char_in_guild":
  $guild_output_array = array();
 
  while($guild = $sql->fetch_row($result)){
-	$query = $sql->query("SELECT count(*) FROM guild_member WHERE guildid = '$guild[0]'");
-	$total_chars_in_guild = $sql->result($query, 0);
+  $query = $sql->query("SELECT count(*) FROM guild_member WHERE guildid = '$guild[0]'");
+  $total_chars_in_guild = $sql->result($query, 0);
 
-	switch ($cleanup_sign){
-		case "=":
-		if($total_chars_in_guild == $cleanup_value) array_push($guild_output_array, $guild[0]);
-		break;
-		case "<":
-		if($total_chars_in_guild < $cleanup_value) array_push($guild_output_array, $guild[0]);
-		break;
-		case "<=":
-		if($total_chars_in_guild <= $cleanup_value) array_push($guild_output_array, $guild[0]);
-		break;
-		case ">":
-		if($total_chars_in_guild > $cleanup_value) array_push($guild_output_array, $guild[0]);
-		break;
-		case ">=":
-		if($total_chars_in_guild >= $cleanup_value) array_push($guild_output_array, $guild[0]);
-		break;
-		case "!=":
-		if($total_chars_in_guild <> $cleanup_value) array_push($guild_output_array, $guild[0]);
-		break;
-		default:
-  		redirect("cleanup.php?error=1");
-		}
+  switch ($cleanup_sign){
+    case "=":
+    if($total_chars_in_guild == $cleanup_value) array_push($guild_output_array, $guild[0]);
+    break;
+    case "<":
+    if($total_chars_in_guild < $cleanup_value) array_push($guild_output_array, $guild[0]);
+    break;
+    case "<=":
+    if($total_chars_in_guild <= $cleanup_value) array_push($guild_output_array, $guild[0]);
+    break;
+    case ">":
+    if($total_chars_in_guild > $cleanup_value) array_push($guild_output_array, $guild[0]);
+    break;
+    case ">=":
+    if($total_chars_in_guild >= $cleanup_value) array_push($guild_output_array, $guild[0]);
+    break;
+    case "!=":
+    if($total_chars_in_guild <> $cleanup_value) array_push($guild_output_array, $guild[0]);
+    break;
+    default:
+      redirect("cleanup.php?error=1");
+    }
  }
 
  $output .= "<center>";
  if ($guild_output_array){
-	$output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
-	$output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
-				<input type=\"hidden\" name=\"type\" value=\"guild\" />
-				<font class=\"bold\">{$lang_cleanup['guilds_id']}: ";
+  $output .= "<h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />";
+  $output .= "<form action=\"cleanup.php?action=docleanup\" method=\"post\" name=\"form\">
+        <input type=\"hidden\" name=\"type\" value=\"guild\" />
+        <font class=\"bold\">{$lang_cleanup['guilds_id']}: ";
 
-	$pass_array = "";
+  $pass_array = "";
 
-	for ($i=0; $i < count($guild_output_array); $i++){
-		$output .= "<a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$guild_output_array[$i]\" target=\"_blank\">$guild_output_array[$i], </a>";
-		$pass_array .= "-$guild_output_array[$i]";
-		}
+  for ($i=0; $i < count($guild_output_array); $i++){
+    $output .= "<a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$guild_output_array[$i]\" target=\"_blank\">$guild_output_array[$i], </a>";
+    $pass_array .= "-$guild_output_array[$i]";
+    }
 
-	$output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
-	$output .= "<br />{$lang_cleanup['tot_of']} ".count($guild_output_array)." {$lang_global['will_be_erased']}</font><br /><br />";
-	$output .= " <table class=\"hidden\">
- 	         <tr><td>";
-				makebutton($lang_global['yes'], "javascript:do_submit()",120);
-				makebutton($lang_global['no'], "cleanup.php",120);
-	$output .= "</td></tr>
-        	</table>
-			</form>";
+  $output .= "<input type=\"hidden\" name=\"check\" value=\"$pass_array\" />";
+  $output .= "<br />{$lang_cleanup['tot_of']} ".count($guild_output_array)." {$lang_global['will_be_erased']}</font><br /><br />";
+  $output .= " <table class=\"hidden\">
+           <tr><td>";
+        makebutton($lang_global['yes'], "javascript:do_submit()",120);
+        makebutton($lang_global['no'], "cleanup.php",120);
+  $output .= "</td></tr>
+          </table>
+      </form>";
  } else {
-	$output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
-	$output .= "<table class=\"hidden\">
+  $output .= "<h1><font class=\"error\">{$lang_global['err_no_records_found']}</font></h1><br />";
+  $output .= "<table class=\"hidden\">
           <tr><td>";
-				makebutton($lang_global['go_back'], "cleanup.php",120);
-	 $output .= "</td></tr>
+        makebutton($lang_global['go_back'], "cleanup.php",120);
+   $output .= "</td></tr>
         </table>";
  }
  $output .= "</center><br />";
@@ -487,7 +487,7 @@ default:
 //################################################################################################
 function docleanup(){
  global $lang_cleanup, $lang_global, $output, $realm_db, $characters_db, $realm_id, $user_lvl,
-		$tab_del_user_characters, $tab_del_user_characters_trinity, $tab_del_user_realmd;
+    $tab_del_user_characters, $tab_del_user_characters_trinity, $tab_del_user_realmd;
 
  if ($server_type)
    $tab_del_user_characters = $tab_del_user_characters_trinity;
@@ -499,37 +499,37 @@ function docleanup(){
 
  $type = $sql->quote_smart($_POST['type']);
  if(isset($_POST['check']) && $_POST['check'] != '') {
-		$check = $sql->quote_smart($_POST['check']);
-		$check = explode('-',$check);
-	} else redirect("cleanup.php?error=1");
+    $check = $sql->quote_smart($_POST['check']);
+    $check = explode('-',$check);
+  } else redirect("cleanup.php?error=1");
 
  $deleted_acc = 0;
  $deleted_chars = 0;
  $deleted_gulds = 0;
 
- require_once("./scripts/del_lib.php");
+ require_once("./libs/del_lib.php");
 
 switch ($type){
  //we deleting account array
  case "acc":
-	for ($i = 1; $i < count($check); $i++) {
-		if ($check[$i] != "" ) {
-			list($flag,$del_char) = del_acc($check[$i]);
-			if ($flag) {
-				$deleted_acc++;
-				$deleted_chars += $del_char;
-			}
-		}
+  for ($i = 1; $i < count($check); $i++) {
+    if ($check[$i] != "" ) {
+      list($flag,$del_char) = del_acc($check[$i]);
+      if ($flag) {
+        $deleted_acc++;
+        $deleted_chars += $del_char;
+      }
+    }
 }
 break;
 
 //we deleting character array
 case "char":
-	 for ($i = 1; $i < count($check); $i++) {
-		if ($check[$i] != "" ) {
-			if (del_char($check[$i], $realm_id)) $deleted_chars++;
-		}
-	}
+   for ($i = 1; $i < count($check); $i++) {
+    if ($check[$i] != "" ) {
+      if (del_char($check[$i], $realm_id)) $deleted_chars++;
+    }
+  }
  break;
 
  //cleaning guilds
@@ -537,9 +537,9 @@ case "char":
 
  for ($i = 1; $i < count($check); $i++) {
     if ($check[$i] != "" ) {
-		if (del_guild($check[$i], $realm_id)) $deleted_gulds++;
-		}
-	}
+    if (del_guild($check[$i], $realm_id)) $deleted_gulds++;
+    }
+  }
  break;
 
  //cleaning arena teams
@@ -547,9 +547,9 @@ case "char":
 
   for ($i = 1; $i < count($check); $i++) {
      if ($check[$i] != "" ) {
- 		if (del_arenateam($check[$i], $realm_id)) $deleted_arenateams++;
- 		}
- 	}
+    if (del_arenateam($check[$i], $realm_id)) $deleted_arenateams++;
+    }
+  }
  break;
 
 default:
@@ -561,24 +561,24 @@ default:
 
  $output .= "<center>";
  if ($type == "guild") {
-	if (!$deleted_gulds) $output .= "<h1><font class=\"error\">{$lang_cleanup['no_guilds_del']}</font></h1>";
-		else $output .= "<h1><font class=\"error\">{$lang_cleanup['total']} <font color=blue>$deleted_gulds</font> {$lang_cleanup['guilds_deleted']}</font></h1>";
+  if (!$deleted_gulds) $output .= "<h1><font class=\"error\">{$lang_cleanup['no_guilds_del']}</font></h1>";
+    else $output .= "<h1><font class=\"error\">{$lang_cleanup['total']} <font color=blue>$deleted_gulds</font> {$lang_cleanup['guilds_deleted']}</font></h1>";
 } else {
 if ($type == "arenateam") {
-	if (!$deleted_arenateams) $output .= "<h1><font class=\"error\">{$lang_cleanup['no_arenateams_del']}</font></h1>";
-		else $output .= "<h1><font class=\"error\">{$lang_cleanup['total']} <font color=blue>$deleted_arenateams</font> {$lang_cleanup['arenateams_deleted']}</font></h1>";
+  if (!$deleted_arenateams) $output .= "<h1><font class=\"error\">{$lang_cleanup['no_arenateams_del']}</font></h1>";
+    else $output .= "<h1><font class=\"error\">{$lang_cleanup['total']} <font color=blue>$deleted_arenateams</font> {$lang_cleanup['arenateams_deleted']}</font></h1>";
   } else {
    if (($deleted_acc+$deleted_chars) == 0) $output .= "<h1><font class=\"error\">{$lang_cleanup['no_acc_chars_deleted']}</font></h1>";
      else {
-  	  $output .= "<h1><font class=\"error\">{$lang_cleanup['total']} <font color=blue>$deleted_acc</font> {$lang_cleanup['accs_deleted']}</font></h1><br />";
-	  $output .= "<h1><font class=\"error\">{$lang_cleanup['total']} <font color=blue>$deleted_chars</font> {$lang_cleanup['chars_deleted']}</font></h1>";
-	  }
-	}
+      $output .= "<h1><font class=\"error\">{$lang_cleanup['total']} <font color=blue>$deleted_acc</font> {$lang_cleanup['accs_deleted']}</font></h1><br />";
+    $output .= "<h1><font class=\"error\">{$lang_cleanup['total']} <font color=blue>$deleted_chars</font> {$lang_cleanup['chars_deleted']}</font></h1>";
+    }
+  }
 }
  $output .= "<br /><br />";
  $output .= "<table class=\"hidden\">
           <tr><td>";
-				makebutton($lang_cleanup['back_cleaning'], "cleanup.php", 200);
+        makebutton($lang_cleanup['back_cleaning'], "cleanup.php", 200);
  $output .= "</td></tr>
         </table><br /></center>";
 }
@@ -604,11 +604,11 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 switch ($action) {
 case "run_cleanup":
-	run_cleanup();
-	break;
+  run_cleanup();
+  break;
 case "docleanup":
-	docleanup();
-	break;
+  docleanup();
+  break;
 default:
     cleanup();
 }

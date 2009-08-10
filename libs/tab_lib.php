@@ -70,7 +70,8 @@ $tables_backup_characters = Array
   "petition_sign",
 );
 
-$tables_backup_characters_trinity = Array(
+$tables_backup_characters_trinity = Array
+(
   "arena_team",
   "arena_team_member",
   "arena_team_stats",
@@ -121,19 +122,25 @@ $tables_backup_characters_trinity = Array(
 );
 
 //list of tables in realmd db you need to delete data on user deletion
-$tab_del_user_realmd = Array(
+$tab_del_user_realmd = Array
+(
     Array("realmcharacters","acctid"),
     Array("account_banned","id"),
     Array("account","id"),
 );
 
+$tab_del_user_char = Array
+(
+    Array("account_data","account"),
+);
 
 //list of tables in realmd db you need to backup data on single user backup
 $tab_backup_user_realmd = $tab_del_user_realmd;
 
 
 //list of tables in characters db you need to delete data from on user deletion
-$tab_del_user_characters = Array(
+$tab_del_user_characters = Array
+(
   Array("arena_team_member","guid"),
   Array("auctionhouse","itemowner"),
   Array("character_achievement","guid"),
@@ -179,7 +186,8 @@ $tab_del_user_characters = Array(
 $tab_backup_user_characters = $tab_del_user_characters;
 
 
-$tab_del_user_characters_trinity = Array(
+$tab_del_user_characters_trinity = Array
+(
   Array("arena_team_member","guid"),
   Array("auctionhouse","itemowner"),
   Array("character_achievement","guid"),
