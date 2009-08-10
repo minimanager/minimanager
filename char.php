@@ -131,6 +131,10 @@ function char_main()
       $EQU_RANGED    = $char_data[CHAR_DATA_OFFSET_EQU_RANGED];
       $EQU_TABARD    = $char_data[CHAR_DATA_OFFSET_EQU_TABARD];
 /*
+
+// reserved incase we want to use back minimanagers' built in tooltip, instead of wowheads'
+// minimanagers' item tooltip needs updating, but it can show enchantments and sockets.
+
       $equiped_items = array(
          1 => array(($EQU_HEAD      ? get_item_tooltip($EQU_HEAD)      : 0),($EQU_HEAD      ? get_item_icon($EQU_HEAD)      : 0),($EQU_HEAD      ? get_item_border($EQU_HEAD)      : 0)),
          2 => array(($EQU_NECK      ? get_item_tooltip($EQU_NECK)      : 0),($EQU_NECK      ? get_item_icon($EQU_NECK)      : 0),($EQU_NECK      ? get_item_border($EQU_NECK)      : 0)),

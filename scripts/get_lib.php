@@ -699,7 +699,6 @@ function get_item_icon($itemid)
       {
         if(file_exists("img/item_icons/$item.jpg"))
         {
-          $sql_3->close();
           return "img/item_icons/$item.jpg";
         }
       }
@@ -754,8 +753,7 @@ function get_item_icon($itemid)
 
     if (file_exists("img/item_icons/$item.jpg"))
     {
-      $sql_3->query("INSERT IGNORE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
-      $sql_3->close();
+      $sql_3->query("REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
       return "img/item_icons/$item.jpg";
     }
 
@@ -786,8 +784,7 @@ function get_item_icon($itemid)
 
     if (file_exists("img/item_icons/$item.jpg"))
     {
-      $sql_3->query("INSERT IGNORE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
-      $sql_3->close();
+      $sql_3->query("REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
       return "img/item_icons/$item.jpg";
     }
 
@@ -799,8 +796,7 @@ function get_item_icon($itemid)
 
     if (file_exists("img/item_icons/$item.jpg"))
     {
-      $sql_3->query("INSERT IGNORE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
-      $sql_3->close();
+      $sql_3->query("REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
       return "img/item_icons/$item.jpg";
     }
     else
@@ -838,7 +834,6 @@ function get_spell_icon($auraid)
       {
         if(file_exists("img/item_icons/$aura.jpg"))
         {
-          $sql_4->close();
           return "img/item_icons/$aura.jpg";
         }
       }
@@ -893,8 +888,7 @@ function get_spell_icon($auraid)
 
     if (file_exists("img/item_icons/$aura.jpg"))
     {
-      $sql_4->query("INSERT IGNORE INTO dbc_spellicon (id, name) VALUES ('$displayid','$aura')");
-      $sql_4->close();
+      $sql_4->query("REPLACE INTO dbc_spellicon (id, name) VALUES ('$displayid','$aura')");
       return "img/item_icons/$aura.jpg";
     }
 
@@ -925,8 +919,7 @@ function get_spell_icon($auraid)
 
     if (file_exists("img/item_icons/$aura.jpg"))
     {
-      $sql_4->query("INSERT IGNORE INTO dbc_spellicon (id, name) VALUES ('displayid','$aura')");
-      $sql_4->close();
+      $sql_4->query("REPLACE INTO dbc_spellicon (id, name) VALUES ('displayid','$aura')");
       return "img/item_icons/$aura.jpg";
     }
 
@@ -938,8 +931,7 @@ function get_spell_icon($auraid)
 
     if (file_exists("img/item_icons/$aura.jpg"))
     {
-      $sql_4->query("INSERT IGNORE INTO dbc_spellicon (id, name) VALUES ('displayid','$aura')");
-      $sql_4->close();
+      $sql_4->query("REPLACE INTO dbc_spellicon (id, name) VALUES ('displayid','$aura')");
       return "img/item_icons/$aura.jpg";
     }
     else

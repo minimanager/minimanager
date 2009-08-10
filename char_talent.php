@@ -83,7 +83,7 @@ function char_talent()
             </ul>
           </div>
           <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /> - lvl ".get_level_with_color($char[4])."</font>
+            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
             <br /><br />
             <table class=\"lined\" style=\"width: 550px;\">";
 
@@ -106,8 +106,8 @@ function char_talent()
 
       $output .="
               <tr>
-                <th><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['talent_id']}</a></th>
-                <th align=left><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_char['talent_name']}</a></th>
+                <th><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['talent_id']}</a></th>
+                <th align=\"left\"><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['talent_name']}</a></th>
               </tr>";
 
       $talents_1 = array();
@@ -129,7 +129,7 @@ function char_talent()
           $output .= "
               <tr>
                 <td>$data[0]</td>
-                <td align=left>
+                <td align=\"left\">
                   <a style=\"padding:2px;\" href=\"$talent_datasite$data[0]\" target=\"_blank\">
                     <img src=\"".get_spell_icon($data[0])."\" alt=\"\" />
                   </a>
@@ -142,6 +142,10 @@ function char_talent()
         }
 
         $playerclass = strtolower(get_player_class($char[3]));
+        /*
+
+        // reserved till we get to calculate talent points using the new data we have in db
+
         switch ($playerclass)
         {
           case "shaman":
@@ -164,6 +168,7 @@ function char_talent()
             $padlength = 67;
             break;
         }
+
         if ($GMP)
           $output .= "
                 <tr>
@@ -171,6 +176,7 @@ function char_talent()
                     <a href=\"".$talent_calculator_datasite.$char[3]."&tal=".str_pad(sprintf('%s',gmp_strval($talent_sum)), "0", "0", STR_PAD_LEFT)."\" target=\"_blank\">Talent Calculator</a>
                   </td>
                 </tr>";
+        */
       }
       $output .= "
               </table>
@@ -205,7 +211,6 @@ function char_talent()
               <td>";
       }
                 makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
-      //end of admin options
       $output .= "
               </td>
             </tr>
