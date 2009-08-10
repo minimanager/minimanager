@@ -238,6 +238,17 @@ function get_skill_name($id)
   return $skill_name[0];
 }
 
+//#############################################################################
+//get spell name by its id
+function get_spell_name($id)
+{
+  global $mmfpm_db;
+  $sql = new SQL;
+  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $spell_name = $sql->fetch_row($sql->query("SELECT `spellname_loc0` FROM `dbc_spell` WHERE `spellID`={$id} LIMIT 1"));
+  return $spell_name[0];
+}
+
 
 //#############################################################################
 //get achievement name by its id

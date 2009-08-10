@@ -1756,18 +1756,6 @@ function talent_id()
 }
 
 
-function get_talent_name($id)
-{
-  global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $talent_name = $sql->fetch_row($sql->query("SELECT `spellname_loc0` FROM `dbc_spell` WHERE `spellID`={$id} LIMIT 1"));
-  $sql->close();
-  unset($sql);
-  return $talent_name[0];
-}
-
-
 function get_talent_tab($id)
 {
   global $mmfpm_db;

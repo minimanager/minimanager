@@ -117,7 +117,7 @@ function char_talent()
         while ($talent = $sqlc->fetch_row($result))
         {
           if(get_talent_value($talent[0]))
-            array_push($talents_1, array($talent[0], get_talent_name($talent[0])));
+            array_push($talents_1, array($talent[0], get_spell_name($talent[0])));
         }
         aasort($talents_1, $order_by, $dir);
 
