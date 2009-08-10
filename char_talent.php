@@ -21,7 +21,7 @@ function char_talent()
 {
   require_once("libs/talent_lib.php");
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db, $mmfpm_db,
-    $action_permission, $user_lvl, $user_name, $spell_datasite, $talent_calculator_datasite;
+    $action_permission, $user_lvl, $user_name, $spell_datasite, $talent_calculator_datasite, $developer_test_mode, $new_talent_tab;
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -37,11 +37,14 @@ function char_talent()
     if (!is_numeric($realmid)) $realmid = $realm_id;
   }
 
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
   //check for php gmp extension
-  if (extension_loaded('gmp'))
-    $GMP=1;
-  else
-    $GMP=0;
+  //if (extension_loaded('gmp'))
+  //  $GMP=1;
+  //else
+  //  $GMP=0;
   //end of gmp check
 
   $sqlc = new SQL;
@@ -55,7 +58,9 @@ function char_talent()
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 0;
   $dir = ($dir) ? 0 : 1;
 
-  $result = $sqlc->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id LIMIT 1");
+  $result = $sqlc->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
+    mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+    FROM `characters` WHERE guid = $id LIMIT 1");
 
   if ($sqlc->num_rows($result))
   {
@@ -86,66 +91,101 @@ function char_talent()
             <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
             <br /><br />
             <table class=\"lined\" style=\"width: 550px;\">";
-
-// This is WIP for talent tabs
-//            <tr>
-//              <div id=\"tab\">
-//                <ul>";
-//                  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-//                  $tabs = $sql->query("SELECT `name_loc0` FROM `dbc_talenttab` WHERE `classes` = $char[3] ORDER BY `order` ASC");
-//                  $tab1 = $sql->fetch_row($tabs);
-//                  $tab2 = $sql->fetch_row($tabs);
-//                  $tab3 = $sql->fetch_row($tabs);
-//                  $output .="
-//                    <li id=\"selected\"><a href=\"#\">".$tab1[0]."</a></li>
-//                    <li><a href=\"#\">".$tab2[0]."</a></li>
-//                    <li><a href=\"#\">".$tab3[0]."</a></li>
-//                  </ul>
-//                </div>
-//              </tr>
-
-      $output .="
-              <tr>
-                <th><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['talent_id']}</a></th>
-                <th align=\"left\"><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['talent_name']}</a></th>
-              </tr>";
-
-      $talents_1 = array();
-
-      if ($sqlc->num_rows($result))
+      if($developer_test_mode && $new_talent_tab)
       {
-        while ($talent = $sqlc->fetch_row($result))
+        $tabs = array();
+        if ($sqlc->num_rows($result))
         {
-          if(get_talent_value($talent[0]))
-            array_push($talents_1, array($talent[0], get_spell_name($talent[0])));
+          while ($talent = $sqlc->fetch_row($result))
+          {
+            if($tab = $sqlm->fetch_row($sqlm->query("SELECT tab, row, col from dbc_talent where rank5 = $talent[0]")))
+              $tabs[$tab[0]][$tab[1]][$tab[2]] = array($talent[0],'5');
+            elseif($tab = $sqlm->fetch_row($sqlm->query("SELECT tab, row, col from dbc_talent where rank4 = $talent[0]")))
+              $tabs[$tab[0]][$tab[1]][$tab[2]] = array($talent[0],'4');
+            elseif($tab = $sqlm->fetch_row($sqlm->query("SELECT tab, row, col from dbc_talent where rank3 = $talent[0]")))
+              $tabs[$tab[0]][$tab[1]][$tab[2]] = array($talent[0],'3');
+            elseif($tab = $sqlm->fetch_row($sqlm->query("SELECT tab, row, col from dbc_talent where rank2 = $talent[0]")))
+              $tabs[$tab[0]][$tab[1]][$tab[2]] = array($talent[0],'2');
+            elseif($tab = $sqlm->fetch_row($sqlm->query("SELECT tab, row, col from dbc_talent where rank1 = $talent[0]")))
+              $tabs[$tab[0]][$tab[1]][$tab[2]] = array($talent[0],'1');
+          }
+          $output .="
+                <tr valign=\"top\">";
+          foreach ($tabs as $data)
+          {
+            $output .="
+                  <td>
+                    <table style=\"width: 0px;\">";
+            for($i=0;$i<11;$i++)
+            {
+              $output .="
+                      <tr>";
+              for($j=0;$j<4;$j++)
+              {
+                if(isset($data[$i][$j]))
+                  $output .="
+                        <td>
+                          <a href=\"$spell_datasite".$data[$i][$j][0]."\" target=\"_blank\">
+                            <img src=\"".get_spell_icon($data[$i][$j][0])."\" width=\"36\" height=\"36\" alt=\"\" />
+                          </a>
+                        </td>";
+                else
+                  $output .="
+                        <td>
+                          <a href=#>
+                            <img src=\"img/blank.gif\" width=\"36\" height=\"36\" alt=\"\" />
+                          </a>
+                        </td>";
+              }
+              $output .="
+                      </tr>";
+            }
+            $output .="
+                    </table>
+                  </td>";
+          }
         }
-        aasort($talents_1, $order_by, $dir);
-
-        if ($GMP)
-          $talent_sum = gmp_init(0);
-
-        foreach ($talents_1 as $data)
+        $output .= "
+                </tr>";
+      }
+      else
+      {
+        $output .="
+                <tr>
+                  <th><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['talent_id']}</a></th>
+                  <th align=\"left\"><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['talent_name']}</a></th>
+                </tr>";
+        $talents_1 = array();
+        if ($sqlc->num_rows($result))
         {
-          $output .= "
-              <tr>
-                <td>$data[0]</td>
-                <td align=\"left\">
-                  <a style=\"padding:2px;\" href=\"$spell_datasite$data[0]\" target=\"_blank\">
-                    <img src=\"".get_spell_icon($data[0])."\" alt=\"\" />
-                  </a>
-                  <a href=\"$spell_datasite$data[0]\" target=\"_blank\">$data[1]</a>
-                </td>";
-          if ($GMP)
-            $talent_sum = gmp_add($talent_sum,sprintf('%s',get_talent_value($data[0])));
-          $output .= "
-              </tr>";
+          while ($talent = $sqlc->fetch_row($result))
+          {
+            if(get_talent_value($talent[0]))
+              array_push($talents_1, array($talent[0], get_spell_name($talent[0])));
+          }
+          aasort($talents_1, $order_by, $dir);
+          //if ($GMP)
+          //  $talent_sum = gmp_init(0);
+          foreach ($talents_1 as $data)
+          {
+            $output .= "
+                <tr>
+                  <td>$data[0]</td>
+                  <td align=\"left\">
+                    <a style=\"padding:2px;\" href=\"$spell_datasite$data[0]\" target=\"_blank\">
+                      <img src=\"".get_spell_icon($data[0])."\" alt=\"\" />
+                    </a>
+                    <a href=\"$spell_datasite$data[0]\" target=\"_blank\">$data[1]</a>
+                  </td>";
+            //if ($GMP)
+            //  $talent_sum = gmp_add($talent_sum,sprintf('%s',get_talent_value($data[0])));
+            $output .= "
+                </tr>";
+          }
         }
-
-        $playerclass = strtolower(get_player_class($char[3]));
         /*
-
         // reserved till we get to calculate talent points using the new data we have in db
-
+        $playerclass = strtolower(get_player_class($char[3]));
         switch ($playerclass)
         {
           case "shaman":
@@ -168,7 +208,6 @@ function char_talent()
             $padlength = 67;
             break;
         }
-
         if ($GMP)
           $output .= "
                 <tr>
@@ -179,19 +218,19 @@ function char_talent()
         */
       }
       $output .= "
-              </table>
-            </div>
-            <br />
-            <table class=\"hidden\">
-              <tr>
-                <td>";
-                  makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
+            </table>
+          </div>
+          <br />
+          <table class=\"hidden\">
+            <tr>
+              <td>";
+                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
       $output .= "
-                </td>
-                <td>";
+              </td>
+              <td>";
       if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
-                  makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
+                makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
         $output .= "
               </td>
               <td>";

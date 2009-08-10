@@ -377,10 +377,13 @@ $debug = 0; // 0 - no debug, only fatal errors.
 
 $developer_test_mode =  false;
 
-$multi_realm_mode    =  1;
+$multi_realm_mode    =  true;
+
+$new_talent_tab      =  true;
 
 $allow_anony         =  false;
 $anony_uname         = "Guest";
-$anony_realm_id      =  1
+$anony_realm_id      =  1;
+
 
 ?>
