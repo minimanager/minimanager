@@ -11,7 +11,6 @@
 
 require_once("header.php");
 require_once("scripts/get_lib.php");
-require_once("scripts/pets.php");
 valid_login($action_permission['read']);
 
 //########################################################################################################################^M
@@ -119,17 +118,16 @@ function char_pets()
               <tr>
                 <td align=right>Pet Abilities:</td>
                 <td align=left>";
-         $ability_results = $sql->query("SELECT spell FROM `pet_spell` WHERE guid = '$pet[0]'");
+         $ability_results = $sql->query("SELECT spell FROM `pet_spell` WHERE guid = '$pet[0]' and active > 1"); // active = 0 is unused and active = 1 probably some passive auras, i dont know diference between values 129 and 193, need to check mangos source
          if ($sql->num_rows($ability_results))
          {
            while ($ability = $sql->fetch_row($ability_results))
            {
-             if( isset($pet_ability[$ability[0]]) )
-             {   $output .= "
-                     <a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_pet_ability_name($ability[0])."<br />Training Points: ".get_pet_ability_trainvalue($ability[0])."<br />Id: $ability[0]</font>','item_tooltip')\" onmouseout=\"toolTip()\" target=\"_blank\">
+                $output .= "
+                     <a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_spell_name($ability[0])." ".get_spell_rank($ability[0])."</font>','item_tooltip')\" onmouseout=\"toolTip()\" target=\"_blank\">
                        <img src=\"".get_spell_icon($ability[0])."\" alt=\"".$ability[0]."\">
                     </a>";
-             }
+             
            }
          }
          $output .= "
