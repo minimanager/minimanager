@@ -127,7 +127,7 @@ function char_pets()
              if( isset($pet_ability[$ability[0]]) )
              {   $output .= "
                      <a style=\"padding:2px;\" onmouseover=\"toolTip('<font color=\'white\'>".get_pet_ability_name($ability[0])."<br />Training Points: ".get_pet_ability_trainvalue($ability[0])."<br />Id: $ability[0]</font>','item_tooltip')\" onmouseout=\"toolTip()\" target=\"_blank\">
-                       <img src=\"img/pet/".get_pet_ability_image($ability[0])."\" alt=\"".$ability[0]."\">
+                       <img src=\"".get_spell_icon($ability[0])."\" alt=\"".$ability[0]."\">
                     </a>";
              }
            }

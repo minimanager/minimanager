@@ -672,7 +672,7 @@ function get_item_tooltip($item_id){
 //##########################################################################################
 //get item icon - if icon not exists in item_icons folder D/L it from web.
 
-function get_icon($itemid)
+function get_item_icon($itemid)
 {
   global $lang_global, $realm_id, $world_db, $proxy_cfg, $get_icons_from_web, $mmfpm_db;
 
@@ -814,7 +814,7 @@ function get_icon($itemid)
 //##########################################################################################
 //get aura icon - if icon not exists in item_icons folder D/L it from web.
 
-function get_aura_icon($auraid)
+function get_spell_icon($auraid)
 {
   global $proxy_cfg, $get_icons_from_web, $mmfpm_db;
   $sql_4 = new SQL;

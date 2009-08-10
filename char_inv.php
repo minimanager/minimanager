@@ -153,7 +153,7 @@ function char_inv()
       {
         $output .="
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[1][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equiped_bag_id[1][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[1][0])."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} I<br />
@@ -166,7 +166,7 @@ function char_inv()
       {
         $output .="
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[2][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equiped_bag_id[2][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[2][0])."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} II<br />
@@ -179,7 +179,7 @@ function char_inv()
       {
         $output .="
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[3][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equiped_bag_id[3][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[3][0])."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} III<br />
@@ -192,7 +192,7 @@ function char_inv()
       {
         $output .="
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[4][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equiped_bag_id[4][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[4][0])."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} IV<br />
@@ -220,7 +220,7 @@ function char_inv()
 
           $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
-                    <img src=\"".get_icon($item[0])."\" alt=\"\" />".($item[1] ? ($item[1]+1) : "")."
+                    <img src=\"".get_item_icon($item[0])."\" alt=\"\" />".($item[1] ? ($item[1]+1) : "")."
                   </a>";
           $item[2] = $item[2] == 1 ? '' : $item[2];
           $output .= "
@@ -236,7 +236,7 @@ function char_inv()
               </tr>
               <tr>
                 <th colspan=\"2\" align=\"left\">
-                  <img class=\"bag_icon\" src=\"".get_icon(3960)."\" alt=\"\" align=\"absmiddle\" style=\"margin-left:100px;\" />
+                  <img class=\"bag_icon\" src=\"".get_item_icon(3960)."\" alt=\"\" align=\"absmiddle\" style=\"margin-left:100px;\" />
                   <font style=\"margin-left:30px;\">{$lang_char['backpack']}</font>
                 </th>
                 <th colspan=\"2\">
@@ -253,7 +253,7 @@ function char_inv()
                     <div style=\"left:".($pos%4*42)."px;top:".(floor($pos/4)*41)."px;\">";
         $output .= "
                       <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
-                        <img src=\"".get_icon($item[0])."\" alt=\"\" />".($item[1] ? ($item[1]+1) : "")."
+                        <img src=\"".get_item_icon($item[0])."\" alt=\"\" />".($item[1] ? ($item[1]+1) : "")."
                       </a>";
         $item[2] = $item[2] == 1 ? '' : $item[2];
         $output .= "
@@ -284,7 +284,7 @@ function char_inv()
                     <div style=\"left:".($pos%7*43)."px;top:".(floor($pos/7)*41)."px;\">";
         $output .= "
                       <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
-                        <img src=\"".get_icon($item[0])."\" class=\"inv_icon\" alt=\"\" />
+                        <img src=\"".get_item_icon($item[0])."\" class=\"inv_icon\" alt=\"\" />
                       </a>";
         $item[2] = $item[2] == 1 ? '' : $item[2];
         $output .= "
@@ -303,7 +303,7 @@ function char_inv()
       {
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[1][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equip_bnk_bag_id[1][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[1][0])."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} I<br />
@@ -316,7 +316,7 @@ function char_inv()
       {
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[2][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equip_bnk_bag_id[2][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[2][0])."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} II<br />
@@ -329,7 +329,7 @@ function char_inv()
       {
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[3][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equip_bnk_bag_id[3][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[3][0])."\" alt=\"\" />
                   </a>";
                   $output .= "
                   {$lang_item['bag']} III<br />
@@ -342,7 +342,7 @@ function char_inv()
       {
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[4][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equip_bnk_bag_id[4][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[4][0])."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} IV<br />
@@ -364,7 +364,7 @@ function char_inv()
           {
             $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[5][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equip_bnk_bag_id[5][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[5][0])."\" alt=\"\" />
                   </a>";
             $output .= "
                   {$lang_item['bag']} V<br />
@@ -377,7 +377,7 @@ function char_inv()
           {
             $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[6][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equip_bnk_bag_id[6][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[6][0])."\" alt=\"\" />
                   </a>";
             $output .= "
                   {$lang_item['bag']} VI<br />
@@ -390,7 +390,7 @@ function char_inv()
           {
             $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[7][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_icon($equip_bnk_bag_id[7][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[7][0])."\" alt=\"\" />
                   </a>";
             $output .= "
                   {$lang_item['bag']} VII<br />
@@ -417,7 +417,7 @@ function char_inv()
                     <div style=\"left:".(($pos+$dsp)%4*43)."px;top:".(floor(($pos+$dsp)/4)*41)."px;\">";
           $output .= "
                       <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
-                        <img src=\"".get_icon($item[0])."\" alt=\"\" />
+                        <img src=\"".get_item_icon($item[0])."\" alt=\"\" />
                       </a>";
           $item[2] = $item[2] == 1 ? '' : $item[2];
           $output .= "

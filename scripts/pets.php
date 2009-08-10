@@ -174,11 +174,5 @@ global $lang_pet_ability, $pet_ability;
 	else return 0;
 }
 
-function get_pet_ability_image($id){
-global $lang_pet_ability, $pet_ability;
-	if( isset($pet_ability[$id][3]) ) return $pet_ability[$id][3];
-	else return 'missing.jpg';
-}
-
 
 ?>

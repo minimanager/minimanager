@@ -131,7 +131,7 @@ function char_talent()
                 <td>$data[0]</td>
                 <td align=left>
                   <a style=\"padding:2px;\" href=\"$talent_datasite$data[0]\" target=\"_blank\">
-                    <img src=\"".get_aura_icon($data[0])."\" alt=\"\" />
+                    <img src=\"".get_spell_icon($data[0])."\" alt=\"\" />
                   </a>
                   <a href=\"$talent_datasite$data[0]\" target=\"_blank\">$data[1]</a>
                 </td>";
