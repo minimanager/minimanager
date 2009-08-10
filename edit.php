@@ -19,7 +19,7 @@ require_once("scripts/get_lib.php");
 function edit_user()
 {
   global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
-    $lang_id_tab, $expansion_select, $server, $developer_test_mode;
+    $lang_id_tab, $expansion_select, $server, $developer_test_mode, $multi_realm_mode;
 
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -122,7 +122,7 @@ function edit_user()
                   <td>".$sqlr->result($result, 0)."</td>
                 </tr>";
     $realms = $sqlr->query("SELECT id, name FROM realmlist");
-    if ($developer_test_mode && ($sqlr->num_rows($realms) > 1 && (count($server) > 1) && (count($characters_db) > 1)))
+    if ($developer_test_mode && $multi_realm_mode && ($sqlr->num_rows($realms) > 1 && (count($server) > 1) && (count($characters_db) > 1)))
     {
       while ($realm = $sqlr->fetch_array($realms))
       {

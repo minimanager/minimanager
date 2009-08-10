@@ -371,6 +371,8 @@ $debug = 0; // 0 - no debug, only fatal errors.
 
 $developer_test_mode =  false;
 
+$multi_realm_mode    = 1;
+
 $allow_anony         =  false;
 $anony_uname         = "Guest";
 $anony_realm_id      =  1

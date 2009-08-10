@@ -127,6 +127,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
             <ul id=\"menubar\">";
 
   $lang_header = lang_header();
+  $lang_login = lang_login();
 
   $action_permission=array();
   foreach ($menu_array as $trunk)
@@ -203,7 +204,8 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
 
   if($developer_test_mode && $allow_anony && !isset($_SESSION['logged_in']))
     $output .= "
-                  <li><a href=\"login.php\">Login</a></li>";
+                  <li><a href=\"register.php\">{$lang_login['not_registrated']}</a></li>
+                  <li><a href=\"login.php\">{$lang_login['login']}</a></li>";
   else
     $output .= "
                   <li><a href=\"edit.php\">{$lang_header['edit_my_acc']}</a></li>

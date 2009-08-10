@@ -6,6 +6,23 @@
       </div>
       <div id=\"body_buttom\">
         <center>
+";
+  if($developer_test_mode && $allow_anony && !isset($_SESSION['logged_in']))
+  {
+    $lang_login = lang_login();
+    $output ="
+          <table>
+            <tr>
+              <td>
+                <a class=\"button\" style=\"width:130px;\" href=\"register.php\">Register</a>
+                <a class=\"button\" style=\"width:130px;\" href=\"login.php\">Login</a>
+              </td>
+            </tr>
+          </table>";
+    echo $output;
+    unset($output);
+  }
+  print "
           <table class=\"table_buttom\">
             <tr>
               <td class=\"table_buttom_left\"></td>

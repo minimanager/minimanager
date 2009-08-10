@@ -7,7 +7,7 @@ valid_login($action_permission['read']);
 
 function top100($realmid)
 {
-  global $lang_top, $output, $realm_db, $characters_db, $server, $itemperpage, $developer_test_mode;
+  global $lang_top, $output, $realm_db, $characters_db, $server, $itemperpage, $developer_test_mode, $multi_realm_mode;
   $realm_id = $realmid;
 
   $sqlr = new SQL;
@@ -49,7 +49,7 @@ function top100($realmid)
         <script type=\"text/javascript\" src=\"js/check.js\"></script>
         <center>
           <table class=\"top_hidden\">";
-  if($developer_test_mode)
+  if($developer_test_mode && $multi_realm_mode)
   {
     $realms = $sqlr->query("SELECT count(*) FROM `realmlist`");
     $tot_realms = $sqlr->result($realms, 0);
