@@ -109,6 +109,7 @@ function id_get_char_rank()
 
 //#############################################################################
 //get GM level by ID
+
 function id_get_gm_level($id)
 {
   global $lang_id_tab, $gm_level_arr;
@@ -121,57 +122,54 @@ function id_get_gm_level($id)
 
 //#############################################################################
 //get map name by its id
+
 function get_map_name($id)
 {
   global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $map_name = $sql->fetch_row($sql->query("SELECT `name01` FROM `dbc_map` WHERE `id`={$id} LIMIT 1"));
-  $sql->close();
-  unset($sql);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $map_name = $sqlm->fetch_row($sqlm->query("SELECT `name01` FROM `dbc_map` WHERE `id`={$id} LIMIT 1"));
   return $map_name[0];
 }
 
 
 //#############################################################################
 //get zone name by its id
+
 function get_zone_name($id)
 {
   global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $zone_name = $sql->fetch_row($sql->query("SELECT `name` FROM `dbc_zones` WHERE `id` = {$id} LIMIT 1")); //This table does not exist on dbc files, it was taken from CSWOWD
-  $sql->close();
-  unset($sql);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $zone_name = $sqlm->fetch_row($sqlm->query("SELECT `name` FROM `dbc_zones` WHERE `id` = {$id} LIMIT 1")); //This table does not exist on dbc files, it was taken from CSWOWD
   return $zone_name[0];
 }
 
 
 //#############################################################################
 //get player class by its id
+
 function get_player_class($id)
 {
   global $lang_id_tab;
   //global $mmfpm_db;
-  //$sql = new SQL;
-  //$sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  //$class_name = $sql->fetch_row($sql->query("SELECT `field_4` FROM `dbc_chrclasses` WHERE `id`={$id} LIMIT 1")); //needs to be improved with new tables
-  //$sql->close();
-  //unset($sql);
+  //$sqlm = new SQL;
+  //$sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  //$class_name = $sqlm->fetch_row($sqlm->query("SELECT `field_4` FROM `dbc_chrclasses` WHERE `id`={$id} LIMIT 1")); //needs to be improved with new tables
   //return $class_name[0];
 
   $class = Array
   (
     1  => array(1,$lang_id_tab['warrior'],"",""),
-	2  => array(2,$lang_id_tab['paladin'],"",""),
-	3  => array(3,$lang_id_tab['hunter'],"",""),
-	4  => array(4,$lang_id_tab['rogue'],"",""),
-	5  => array(5,$lang_id_tab['priest'],"",""),
-	6  => array(6,$lang_id_tab['death_knight'],"",""),
-	7  => array(7,$lang_id_tab['shaman'],"",""),
-	8  => array(8,$lang_id_tab['mage'],"",""),
-	9  => array(9,$lang_id_tab['warlock'],"",""),
-	11 => array(11,$lang_id_tab['druid'],"","")
+    2  => array(2,$lang_id_tab['paladin'],"",""),
+    3  => array(3,$lang_id_tab['hunter'],"",""),
+    4  => array(4,$lang_id_tab['rogue'],"",""),
+    5  => array(5,$lang_id_tab['priest'],"",""),
+    6  => array(6,$lang_id_tab['death_knight'],"",""),
+    7  => array(7,$lang_id_tab['shaman'],"",""),
+    8  => array(8,$lang_id_tab['mage'],"",""),
+    9  => array(9,$lang_id_tab['warlock'],"",""),
+    11 => array(11,$lang_id_tab['druid'],"","")
   );
   return $class[$id][1];
 }
@@ -179,14 +177,13 @@ function get_player_class($id)
 
 //#############################################################################
 //get player race by its id
+
 function get_player_race($id)
 {
   //global $mmfpm_db;
-  //$sql = new SQL;
-  //$sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  //$race_name = $sql->fetch_row($sql->query("SELECT `field_12` FROM `dbc_chrraces` WHERE `id`={$id} LIMIT 1")); //we need to use either db or function id_get_char_race, if from db we need to determine side (alliance or horde) as that info isnt present in chrraces.dbc
-  //$sql->close();
-  //unset($sql);
+  //$sqlm = new SQL;
+  //$sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  //$race_name = $sqlm->fetch_row($sqlm->query("SELECT `field_12` FROM `dbc_chrraces` WHERE `id`={$id} LIMIT 1")); //we need to use either db or function id_get_char_race, if from db we need to determine side (alliance or horde) as that info isnt present in chrraces.dbc
   //return $race_name[0];
   $CHAR_RACE = id_get_char_race();
   return $CHAR_RACE[$id][0];
@@ -195,6 +192,7 @@ function get_player_race($id)
 
 //#############################################################################
 //get pvp rank ID by honor point
+
 function pvp_ranks($honor=0, $faction=0)
 {
   $rank = '0'.$faction;
@@ -216,69 +214,82 @@ function pvp_ranks($honor=0, $faction=0)
 function get_skill_type($id)
 {
   global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $skill_type = $sql->fetch_row($sql->query("SELECT `Category` FROM `dbc_skillline` WHERE `id`={$id} LIMIT 1")); //This table came from CSWOWD as its fields are named
-  $sql->close();
-  unset($sql);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $skill_type = $sqlm->fetch_row($sqlm->query("SELECT `Category` FROM `dbc_skillline` WHERE `id`={$id} LIMIT 1")); //This table came from CSWOWD as its fields are named
   return $skill_type[0];
 }
 
 
 //#############################################################################
 //get skill name by its id
+
 function get_skill_name($id)
 {
   global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $skill_name = $sql->fetch_row($sql->query("SELECT `Name` FROM `dbc_skillline` WHERE `id`={$id} LIMIT 1")); //This table came from CSWOWD as its fields are named
-  $sql->close();
-  unset($sql);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $skill_name = $sqlm->fetch_row($sqlm->query("SELECT `Name` FROM `dbc_skillline` WHERE `id`={$id} LIMIT 1")); //This table came from CSWOWD as its fields are named
   return $skill_name[0];
 }
 
 
 //#############################################################################
 //get spell name by its id
+
 function get_spell_name($id)
 {
   global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $spell_name = $sql->fetch_row($sql->query("SELECT `spellname_loc0` FROM `dbc_spell` WHERE `spellID`={$id} LIMIT 1"));
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $spell_name = $sqlm->fetch_row($sqlm->query("SELECT `spellname_loc0` FROM `dbc_spell` WHERE `spellID`={$id} LIMIT 1"));
   return $spell_name[0];
 }
 
 
 //#############################################################################
 //get spell name by its id
+
 function get_spell_rank($id)
 {
   global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $spell_rank = $sql->fetch_row($sql->query("SELECT `rank_loc0` FROM `dbc_spell` WHERE `spellID`={$id} LIMIT 1"));
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $spell_rank = $sqlm->fetch_row($sqlm->query("SELECT `rank_loc0` FROM `dbc_spell` WHERE `spellID`={$id} LIMIT 1"));
   return $spell_rank[0];
 }
 
 
 //#############################################################################
+//get item set name by its id
+
+ function get_itemset_name($id)
+{
+  global $mmfpm_db;
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $itemset = $sqlm->fetch_row($sqlm->query("SELECT `name_loc0` FROM `dbc_itemset` WHERE `itemsetID`={$id} LIMIT 1"));
+  return $itemset[0];
+}
+
+
+
+//#############################################################################
 //get achievement name by its id
+
 function get_achievement_name($id)
 {
   global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $achievement_name = $sql->fetch_row($sql->query("SELECT `name01` FROM `dbc_achievement` WHERE `id`={$id} LIMIT 1"));
-  $sql->close();
-  unset($sql);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $achievement_name = $sqlm->fetch_row($sqlm->query("SELECT `name01` FROM `dbc_achievement` WHERE `id`={$id} LIMIT 1"));
   return $achievement_name[0];
 }
 
 
 //#############################################################################
 //get avatar image dir by char level, gender. race and class
+
 function get_image_dir($level,$sex,$race,$class,$gm=0)
 {
   $return = "";
@@ -308,5 +319,6 @@ function get_image_dir($level,$sex,$race,$class,$gm=0)
   }
   return $return;
 };
+
 
 ?>

@@ -261,8 +261,6 @@ function send_mail()
         redirect("mail.php?error=1");
       break;
     case "ingame_mail":
-      require_once("scripts/gen_lib.php");
-
       $value = NULL;
       for($i=0;$i<(count($body));$i++)
       $value .= $body[$i]." ";
@@ -278,7 +276,7 @@ function send_mail()
           $receiver = $sqlc->result($result, 0, 'name');
           $mails = array();
           array_push($mails, array($receiver, $subject, $body, $att_gold, $att_item, $att_stack));
-          send_ingame_group_mail($realm_id, $mails);
+          send_ingame_mail($realm_id, $mails);
         }
         else
         {
@@ -320,12 +318,102 @@ function send_mail()
         {
           array_push($mails, array($receiver, $subject, $body, $att_gold, $att_item, $att_stack));
         }
-        send_ingame_group_mail($realm_id, $mails);
+        send_ingame_mail($realm_id, $mails);
         redirect("mail.php?error=2");
       }
       break;
     default:
       redirect("mail.php?error=1");
+  }
+
+}
+
+
+//##########################################################################################
+//SEND INGAME MAIL BY TELNET
+//
+// Xiong Guoy
+// 2009-08-08
+function send_ingame_mail($realm_id, $massmails)
+{
+  require_once("./libs/telnet_lib.php");
+  global $server;
+  $telnet = new telnet_lib();
+  $telnet->show_connect_error=0;
+
+  //$massmails array format
+  //($to, $subject, $body, $gold = 0, $item = 0, $stack = 1)
+
+  $result = $telnet->Connect($server[$realm_id]['addr'],$server[$realm_id]['telnet_user'],$server[$realm_id]['telnet_pass']);
+
+  switch ($result)
+  {
+    case 0:
+      $mess_str = '';
+      $result = '';
+      foreach($massmails as $mails)
+      {
+        if ($mails[3] && $mails[4])
+        {
+          $mess_str1 = "send money ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[3]."";
+          $telnet->DoCommand($mess_str1, $result1);
+
+          $mess_str .= $mess_str1."<br >";
+          $result .= $result1."";
+
+          $mess_str1 = "send item ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[4].(($mails[5] > 1) ? "[:count".$mails[5]."]" : " ");
+          $telnet->DoCommand($mess_str1, $result1);
+
+          $mess_str .= $mess_str1."<br >";
+          $result .= $result1."";
+        }
+        elseif ($mails[3])
+        {
+          $mess_str1 = "send money ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[3]."";
+          $telnet->DoCommand($mess_str1, $result1);
+
+          $mess_str .= $mess_str1."<br >";
+          $result .= $result1."";
+        }
+        elseif ($mails[4])
+        {
+          $mess_str1 = "send item ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[4].(($mails[5] > 1) ? "[:count".$mails[5]."]" : " ");
+          $telnet->DoCommand($mess_str1, $result1);
+
+          $mess_str .= $mess_str1."<br >";
+          $result .= $result1."";
+        }
+        else
+        {
+          $mess_str1 = "send mail ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\"";
+          $telnet->DoCommand($mess_str1, $result1);
+
+          $mess_str .= $mess_str1."<br >";
+          $result .= $result1."";
+        }
+      }
+      $result = str_replace("mangos>","",$result);
+      $result = str_replace(array("\r\n", "\n", "\r"), '<br />', $result);
+      $mess_str .= "<br /><br />".$result;
+      $telnet->Disconnect();
+      redirect("mail.php?action=result&error=6&mess=$mess_str");
+      break;
+    case 1:
+      $mess_str = "Connect failed: Unable to open network connection";
+      redirect("mail.php?action=result&error=6&mess=$mess_str");
+      break;
+    case 2:
+      $mess_str = "Connect failed: Unknown host";
+      redirect("mail.php?action=result&error=6&mess=$mess_str");
+      break;
+    case 3:
+      $mess_str = "Connect failed: Login failed";
+      redirect("mail.php?action=result&error=6&mess=$mess_str");
+      break;
+    case 4:
+      $mess_str = "Connect failed: Your PHP version does not support PHP Telnet";
+      redirect("mail.php?action=result&error=6&mess=$mess_str");
+      break;
   }
 
 }

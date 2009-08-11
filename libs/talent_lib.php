@@ -7,7 +7,6 @@
 
 function talent_id()
 {
-  global $lang_id_tab;
   $talent_id = Array
   (
     //druid talents
@@ -1756,18 +1755,6 @@ function talent_id()
 }
 
 
-function get_talent_tab($id)
-{
-  global $mmfpm_db;
-  $sql = new SQL;
-  $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $talent_tab = $sql->fetch_row($sql->query("SELECT `tab` FROM `dbc_talent` WHERE `rank1`={$id} LIMIT 1"));
-  $sql->close();
-  unset($sql);
-  return $talent_tab[0];
-}
-
-
 function get_talent_value($id)
 {
   global $lang_id_tab;
@@ -1778,5 +1765,6 @@ function get_talent_value($id)
   else
     return 0;
 }
+
 
 ?>

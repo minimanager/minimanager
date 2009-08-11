@@ -98,7 +98,7 @@ function char_pets()
               $hap_text = "Unhappy";
               $hap_val = 0;
           }
-          $pet_next_lvl_xp = floor(xp_to_level($pet[1])/4);
+          $pet_next_lvl_xp = floor(get_xp_to_level($pet[1])/4);
           $output .= "
               <font class=\"bold\">$pet[3] - lvl ".get_level_with_color($pet[1])."
                 <a style=\"padding:2px;\" onmouseover=\"toolTip('&lt;font color=\'white\'&gt;$hap_text&lt;/font&gt;','item_tooltip')\" onmouseout=\"toolTip()\"><img src=\"img/pet/happiness_$hap_val.jpg\" alt=\"\" /></a>

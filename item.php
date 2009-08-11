@@ -9,7 +9,7 @@
  */
 require_once("header.php");
  valid_login($action_permission['read']);
-require_once("scripts/itemset_tab.php");
+require_once("scripts/id_tab.php");
 require_once("scripts/get_lib.php");
 
 function makeinfocell($text,$tooltip){

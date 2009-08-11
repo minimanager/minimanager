@@ -70,6 +70,7 @@ function del_char($guid,$realm)
   return false;
 }
 
+
 //##########################################################################################
 //Delete Account - return array(deletion_flag , number_of_chars_deleted)
 function del_acc($acc_id)
@@ -178,6 +179,7 @@ function del_guild($guid,$realm)
   }
 }
 
+
 //##########################################################################################
 //Delete Arena Team
 function del_arenateam($guid,$realm)
@@ -202,5 +204,6 @@ function del_arenateam($guid,$realm)
     return false;
   }
 }
+
 
 ?>
