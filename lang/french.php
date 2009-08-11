@@ -986,29 +986,34 @@ function lang_user()
 }
 
 
-$lang_stat = array(
-  // ----- STAT.PHP -----
-  'srv_statistics' => 'Statistiques Serveur',
-  'general_info' => 'Information Générale',
-  'tot_accounts' => 'Total Comptes',
-  'total_of' => 'Il y a un total de',
-  'gms_one_for' => 'GMs, un pour chaque',
-  'players' => 'Joueurs',
-  'tot_chars_on_realm' => 'Total de personnages sur le royaume',
-  'average_of' => 'Une moyenne de ',
-  'chars_per_acc' => 'Personnages par compte',
-  'horde' => 'Horde',
-  'alliance' => 'Alliance',
-  'chars_by_race' => 'Répartition de personnage par Race',
-  'chars_by_class' => 'Répartition de personnage par Classe',
-  'chars_by_level' => 'Répartition de personnage par Niveau',
-  'reset' => 'Réinitialiser les Filtres',
-  'avg_uptime' => 'Uptime Moyen du Serveur',
-  'max_uptime' => 'Uptime Maximum du Serveur',
-  'uptime_prec' => ' Pourcentage d\'Uptime depuis le premier lancement',
-  'unique_ip' => 'IPs Unique pour les dernières 24H',
-  'on_statistics' => 'Statistiques en ligne'
+// ----- STAT.PHP -----
+function lang_stat()
+{
+  $lang_stat = array
+  (
+    'srv_statistics' => 'Statistiques Serveur',
+    'general_info' => 'Information Générale',
+    'tot_accounts' => 'Total Comptes',
+    'total_of' => 'Il y a un total de',
+    'gms_one_for' => 'GMs, un pour chaque',
+    'players' => 'Joueurs',
+    'tot_chars_on_realm' => 'Total de personnages sur le royaume',
+    'average_of' => 'Une moyenne de ',
+    'chars_per_acc' => 'Personnages par compte',
+    'horde' => 'Horde',
+    'alliance' => 'Alliance',
+    'chars_by_race' => 'Répartition de personnage par Race',
+    'chars_by_class' => 'Répartition de personnage par Classe',
+    'chars_by_level' => 'Répartition de personnage par Niveau',
+    'reset' => 'Réinitialiser les Filtres',
+    'avg_uptime' => 'Uptime Moyen du Serveur',
+    'max_uptime' => 'Uptime Maximum du Serveur',
+    'uptime_prec' => ' Pourcentage d\'Uptime depuis le premier lancement',
+    'unique_ip' => 'IPs Unique pour les dernières 24H',
+    'on_statistics' => 'Statistiques en ligne'
   );
+  return $lang_stat;
+}
 
 
 // ----- TELE.PHP -----

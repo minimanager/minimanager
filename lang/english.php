@@ -985,29 +985,35 @@ function lang_user()
   return $lang_user;
 }
 
-$lang_stat = array(
-  // ----- STAT.PHP -----
-  'srv_statistics' => 'Server Statistics',
-  'general_info' => 'General Information',
-  'tot_accounts' => 'Total Accounts',
-  'total_of' => 'There is total of',
-  'gms_one_for' => 'GMs, One for every',
-  'players' => 'Players',
-  'tot_chars_on_realm' => 'Total Characters on Realm',
-  'average_of' => 'An average of',
-  'chars_per_acc' => 'Characters per Account',
-  'horde' => 'Horde',
-  'alliance' => 'Alliance',
-  'chars_by_race' => 'Character Share by Race',
-  'chars_by_class' => 'Character Share by Class',
-  'chars_by_level' => 'Character Share by Level',
-  'reset' => 'Reset Filters',
-  'avg_uptime' => 'Average Server Uptime',
-  'max_uptime' => 'Maximum Server Uptime',
-  'uptime_prec' => ' Uptime percentage since first run',
-  'unique_ip' => 'Unique IPs last 24 Hour',
-  'on_statistics' => 'Online Statistics'
+
+// ----- STAT.PHP -----
+function lang_stat()
+{
+$lang_stat = array
+  (
+    'srv_statistics' => 'Server Statistics',
+    'general_info' => 'General Information',
+    'tot_accounts' => 'Total Accounts',
+    'total_of' => 'There is total of',
+    'gms_one_for' => 'GMs, One for every',
+    'players' => 'Players',
+    'tot_chars_on_realm' => 'Total Characters on Realm',
+    'average_of' => 'An average of',
+    'chars_per_acc' => 'Characters per Account',
+    'horde' => 'Horde',
+    'alliance' => 'Alliance',
+    'chars_by_race' => 'Character Share by Race',
+    'chars_by_class' => 'Character Share by Class',
+    'chars_by_level' => 'Character Share by Level',
+    'reset' => 'Reset Filters',
+    'avg_uptime' => 'Average Server Uptime',
+    'max_uptime' => 'Maximum Server Uptime',
+    'uptime_prec' => ' Uptime percentage since first run',
+    'unique_ip' => 'Unique IPs last 24 Hour',
+    'on_statistics' => 'Online Statistics'
   );
+  return $lang_stat;
+}
 
 
 // ----- TELE.PHP -----

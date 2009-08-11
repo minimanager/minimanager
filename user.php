@@ -18,7 +18,7 @@ valid_login($action_permission['read']);
 //########################################################################################################################
 function browse_users()
 {
-  global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name, $sql_search_limit,
+  global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name,
    $gm_level_arr, $action_permission, $showcountryflag, $expansion_select;
 
   $sqlr = new SQL;
