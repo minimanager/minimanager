@@ -319,6 +319,7 @@ $menu_array = array
       array(    "realm.php",         'realm', 0,5,5,5), // new security system implemented
       array(     "motd.php",      'add_motd', 0,5,5,5), // new security system implemented
       array(      "irc.php",           'irc', 0,5,5,5), // new security system implemented
+	  array(   "spelld.php",        'spelld', 3,0,3,0), // new security system implemented
     ),
   ),
   array
