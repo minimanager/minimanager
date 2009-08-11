@@ -191,7 +191,7 @@ function get_lang_id()
 
 function get_item_icon($itemid)
 {
-  global $mmfpm_db, $proxy_cfg, $get_icons_from_web;
+  global $mmfpm_db, $proxy_cfg, $get_icons_from_web, $item_icons;
 
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
@@ -212,9 +212,9 @@ function get_item_icon($itemid)
 
       if ($item)
       {
-        if(file_exists("img/item_icons/$item.jpg"))
+        if(file_exists("$item_icons/$item.jpg"))
         {
-          return "img/item_icons/$item.jpg";
+          return "$item_icons/$item.jpg";
         }
       }
       else
@@ -266,10 +266,10 @@ function get_item_icon($itemid)
       $item = $icon_name;
     }
 
-    if (file_exists("img/item_icons/$item.jpg"))
+    if (file_exists("$item_icons/$item.jpg"))
     {
       $sqlm->query("REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
-      return "img/item_icons/$item.jpg";
+      return "$item_icons/$item.jpg";
     }
 
     //get the icon itself
@@ -297,22 +297,22 @@ function get_item_icon($itemid)
         break;
     }
 
-    if (file_exists("img/item_icons/$item.jpg"))
+    if (file_exists("$item_icons/$item.jpg"))
     {
       $sqlm->query("REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
-      return "img/item_icons/$item.jpg";
+      return "$item_icons/$item.jpg";
     }
 
-    $img_file = fopen("img/item_icons/$item.jpg", 'wb');
+    $img_file = fopen("$item_icons/$item.jpg", 'wb');
     while (!feof($fp))
       fwrite($img_file,fgets($fp, 4096));
     fclose($fp);
     fclose($img_file);
 
-    if (file_exists("img/item_icons/$item.jpg"))
+    if (file_exists("$item_icons/$item.jpg"))
     {
       $sqlm->query("REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
-      return "img/item_icons/$item.jpg";
+      return "$item_icons/$item.jpg";
     }
     else
       return "img/INV/INV_blank_32.gif";
@@ -327,7 +327,7 @@ function get_item_icon($itemid)
 
 function get_spell_icon($auraid)
 {
-  global $proxy_cfg, $get_icons_from_web, $mmfpm_db;
+  global $proxy_cfg, $get_icons_from_web, $mmfpm_db, $item_icons;
 
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
@@ -348,9 +348,9 @@ function get_spell_icon($auraid)
 
       if ($aura)
       {
-        if(file_exists("img/item_icons/$aura.jpg"))
+        if(file_exists("$item_icons/$aura.jpg"))
         {
-          return "img/item_icons/$aura.jpg";
+          return "$item_icons/$aura.jpg";
         }
       }
       else
@@ -402,10 +402,10 @@ function get_spell_icon($auraid)
       $aura = $aura_icon_name;
     }
 
-    if (file_exists("img/item_icons/$aura.jpg"))
+    if (file_exists("$item_icons/$aura.jpg"))
     {
       $sqlm->query("REPLACE INTO dbc_spellicon (id, name) VALUES ('$displayid','$aura')");
-      return "img/item_icons/$aura.jpg";
+      return "$item_icons/$aura.jpg";
     }
 
     //get the icon itself
@@ -433,22 +433,22 @@ function get_spell_icon($auraid)
         break;
     }
 
-    if (file_exists("img/item_icons/$aura.jpg"))
+    if (file_exists("$item_icons/$aura.jpg"))
     {
       $sqlm->query("REPLACE INTO dbc_spellicon (id, name) VALUES ('displayid','$aura')");
-      return "img/item_icons/$aura.jpg";
+      return "$item_icons/$aura.jpg";
     }
 
-    $img_file = fopen("img/item_icons/$aura.jpg", 'wb');
+    $img_file = fopen("$item_icons/$aura.jpg", 'wb');
     while (!feof($fp))
       fwrite($img_file,fgets($fp, 4096));
     fclose($fp);
     fclose($img_file);
 
-    if (file_exists("img/item_icons/$aura.jpg"))
+    if (file_exists("$item_icons/$aura.jpg"))
     {
       $sqlm->query("REPLACE INTO dbc_spellicon (id, name) VALUES ('displayid','$aura')");
-      return "img/item_icons/$aura.jpg";
+      return "$item_icons/$aura.jpg";
     }
     else
       return "img/INV/INV_blank_32.gif";

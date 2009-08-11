@@ -161,7 +161,8 @@ $spell_datasite             = "http://$tt_lang.wowhead.com/?spell=";
 $skill_datasite             = "http://$tt_lang.wowhead.com/?spells=";
 $go_datasite                = "http://$tt_lang.wowhead.com/?object=";
 $talent_calculator_datasite = "http://www.wowarmory.com/talent-calc.xml?cid=";
-$get_icons_from_web         =  false; //wherever to get icons from the web in case they are missing in /img/INV dir.
+$get_icons_from_web         =  false;           // wherever to get icons from the web.
+$item_icons                 = "img/item_icons"; // and this is where it will save to and get from.
 
 
 //#############################################################################
@@ -352,6 +353,7 @@ $menu_array = array
       array(   "char_edit.php",  'char_edit', 0,5,5,5), // new security system implemented
       array(        "edit.php",  'MyAccount', 0,5,5,5), // new security system implemented
       array(       "index.php",  'Startpage', 0,5,5,5), // new security system implemented
+      array(   "guildbank.php",  'guildbank', 0,5,5,5), // under development
       array(      "spelld.php",     'spelld', 0,5,5,5), // under development (Trinity)
       array(       "realm.php",      'realm', 0,5,5,5), // this last one is special, if this is not here, users are unable to switch realms
     ),                                                  // if READ is set to level 3, only level 3 and above can switch realms.
@@ -380,6 +382,8 @@ $developer_test_mode =  false;
 $multi_realm_mode    =  true;
 
 $new_talent_tab      =  true;
+
+$guild_bank          =  true;
 
 $allow_anony         =  false;
 $anony_uname         = "Guest";
