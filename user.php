@@ -698,6 +698,8 @@ function edit_user()
 
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
@@ -706,9 +708,10 @@ function edit_user()
   $result = $sqlr->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion FROM account WHERE id = '$id'");
   $data = $sqlr->fetch_row($result);
 
-  $refguid = mysql_fetch_row(mysql_query("SELECT `InvitedBy` FROM `$mmfpm_db[name]`.`point_system_invites` WHERE `PlayersAccount` = '$data[0]';"));
+  $refguid = $sqlm->fetch_row($sqlm->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '$data[0]'"));
   $refguid = $refguid[0];
-  $referred_by = mysql_fetch_row(mysql_query("SELECT `name` FROM `{$characters_db[$realm_id]['name']}`.`characters` WHERE `guid` = '$refguid';"));
+  $referred_by = $sqlc->fetch_row($sqlc->query("SELECT name FROM characters WHERE guid = '$refguid'"));
+  unset($refguid);
   $referred_by = $referred_by[0];
 
   if ($sqlr->num_rows($result))
