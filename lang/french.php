@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos/Trinity
  * License: GNU General Public License v2(GPL)
  * Language: French
- * Supported Minimanager Revision: r309
+ * Supported Minimanager Revision: r313
  * Translator: fra298
  */
 
@@ -306,29 +306,35 @@ $lang_backup = array(
   'save_all_realms' => 'Sauver les données de tous les royaumes'
   );
 
-$lang_banned = array(
-  // ----- BANNED.PHP -----
-  'add_to_banned' => 'Ajouter à la liste des bannis',
-  'tot_banned' => 'Total Bannis',
-  'ip_acc' => 'IP / Compte',
-  'will_be_removed_from_banned' => 'Sera retiré de la Ban Liste',
-  'ban_entry' => 'Bannir IP / Compte',
-  'err_del_entry' => 'Erreur à l\'effacement du banni',
-  'updated' => 'Données mises à jour avec succès',
-  'banned_list' => 'Ban Liste',
-  'bandate' => 'Date du Ban',
-  'unbandate' => 'Date du Déban',
-  'bannedby' => 'Banni par',
-  'banreason' => 'Raison',
-  'banned_ips' => 'IPs bannies',
-  'banned_accounts' => 'Compte banni',
-  'ban_type' => 'Type de Ban',
-  'account' => 'Compte / Facturation',
-  'ip' => 'IP',
-  'ban_time' => 'Banni pour  (heures)',
-  'entry' => 'Entrée',
-  'acc_not_found' => 'Compte non trouvé'
+
+// ----- BANNED.PHP -----
+function lang_banned()
+{
+  $lang_banned = array
+  (
+    'add_to_banned' => 'Ajouter à la liste des bannis',
+    'tot_banned' => 'Total Bannis',
+    'ip_acc' => 'IP / Compte',
+    'will_be_removed_from_banned' => 'Sera retiré de la Ban Liste',
+    'ban_entry' => 'Bannir IP / Compte',
+    'err_del_entry' => 'Erreur à l\'effacement du banni',
+    'updated' => 'Données mises à jour avec succès',
+    'banned_list' => 'Ban Liste',
+    'bandate' => 'Date du Ban',
+    'unbandate' => 'Date du Déban',
+    'bannedby' => 'Banni par',
+    'banreason' => 'Raison',
+    'banned_ips' => 'IPs bannies',
+    'banned_accounts' => 'Compte banni',
+    'ban_type' => 'Type de Ban',
+    'account' => 'Compte / Facturation',
+    'ip' => 'IP',
+    'ban_time' => 'Banni pour  (heures)',
+    'entry' => 'Entrée',
+    'acc_not_found' => 'Compte non trouvé'
   );
+  return $lang_banned;
+}
 
 
 // ----- CHAR.PHP -----

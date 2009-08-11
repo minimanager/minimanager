@@ -306,29 +306,35 @@ $lang_backup = array(
   'save_all_realms' => 'Save data from all Realms'
   );
 
-$lang_banned = array(
-  // ----- BANNED.PHP -----
-  'add_to_banned' => 'Add to Banned Lists',
-  'tot_banned' => 'Total Banned',
-  'ip_acc' => 'Ip / Account',
-  'will_be_removed_from_banned' => 'Will be removed from Banned List',
-  'ban_entry' => 'Ban IP / Account',
-  'err_del_entry' => 'Error deleting banned entry',
-  'updated' => 'Update action success!',
-  'banned_list' => 'Banned List',
-  'bandate' => 'Ban Date',
-  'unbandate' => 'Unban Date',
-  'bannedby' => 'Banned by',
-  'banreason' => 'Reason',
-  'banned_ips' => 'Banned IPs',
-  'banned_accounts' => 'Banned Accounts',
-  'ban_type' => 'Ban Type',
-  'account' => 'Account',
-  'ip' => 'IP',
-  'ban_time' => 'Ban for amount of (hours)',
-  'entry' => 'Entry (Acc. name / IP)',
-  'acc_not_found' => 'Account Not Found'
+
+// ----- BANNED.PHP -----
+function lang_banned()
+{
+  $lang_banned = array
+  (
+    'add_to_banned' => 'Add to Banned Lists',
+    'tot_banned' => 'Total Banned',
+    'ip_acc' => 'Ip / Account',
+    'will_be_removed_from_banned' => 'Will be removed from Banned List',
+    'ban_entry' => 'Ban IP / Account',
+    'err_del_entry' => 'Error deleting banned entry',
+    'updated' => 'Update action success!',
+    'banned_list' => 'Banned List',
+    'bandate' => 'Ban Date',
+    'unbandate' => 'Unban Date',
+    'bannedby' => 'Banned by',
+    'banreason' => 'Reason',
+    'banned_ips' => 'Banned IPs',
+    'banned_accounts' => 'Banned Accounts',
+    'ban_type' => 'Ban Type',
+    'account' => 'Account',
+    'ip' => 'IP',
+    'ban_time' => 'Ban for amount of (hours)',
+    'entry' => 'Entry (Acc. name / IP)',
+    'acc_not_found' => 'Account Not Found'
   );
+  return $lang_banned;
+}
 
 
 // ----- CHAR.PHP -----
