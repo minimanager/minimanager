@@ -31,7 +31,7 @@ function browse_users()
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlr->quote_smart($_GET['order_by']) : "id";
-  if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="id";
+  if (!preg_match("/^[_[:lower:]]{1,15}$/", $order_by)) $order_by="id";
 
   $dir = (isset($_GET['dir'])) ? $sqlr->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
@@ -61,7 +61,7 @@ function browse_users()
         $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
           FROM account WHERE id = 0 ";
         $count_query = "SELECT count(*) FROM account WHERE id = 0 ";
-        $que = $sql->query("SELECT id FROM account_banned");
+        $que = $sqlr->query("SELECT id FROM account_banned");
         while ($banned = $sqlr->fetch_row($que))
         {
           $sql_query .= "OR id =$banned[0] ";
@@ -110,8 +110,11 @@ function browse_users()
   // cleanup unknown working condition
   //if($user_lvl >= $action_permission['delete'])
   //              makebutton($lang_user['cleanup'], "cleanup.php", 130);
-  ($search_by && $search_value) ? makebutton($lang_user['user_list'], "user.php", 130) : $output .="";
+  if ($search_by && $search_value)
+  {
+                makebutton($lang_user['user_list'], "user.php", 130);
                 makebutton($lang_global['back'], "javascript:window.history.back()", 130);
+  }
   $output .= "
               </td>
               <td align=\"right\" width=\"25%\" rowspan=\"2\">";
@@ -172,20 +175,20 @@ function browse_users()
     $output .= "
                 <th width=\"1%\"></th>";
   $output .="
-                <th width=\"5%\"><a href=\"user.php?order_by=id&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['id']}</a></th>
-                <th width=\"21%\"><a href=\"user.php?order_by=username&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['username']}</a></th>
-                <th width=\"5%\"><a href=\"user.php?order_by=gmlevel&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='gmlevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['gm_level']}</a></th>";
+                <th width=\"5%\"><a href=\"user.php?order_by=id&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['id']}</a></th>
+                <th width=\"21%\"><a href=\"user.php?order_by=username&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['username']}</a></th>
+                <th width=\"5%\"><a href=\"user.php?order_by=gmlevel&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='gmlevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['gm_level']}</a></th>";
   if ($expansion_select)
     $output .="
-                <th width=\"5%\"><a href=\"user.php?order_by=expansion&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='expansion' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."EXP</a></th>";
+                <th width=\"5%\"><a href=\"user.php?order_by=expansion&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='expansion' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."EXP</a></th>";
   $output .="
-                <th width=\"16%\"><a href=\"user.php?order_by=email&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['email']}</a></th>
-                <th width=\"14%\"><a href=\"user.php?order_by=joindate&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='joindate' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['join_date']}</a></th>
-                <th width=\"10%\"><a href=\"user.php?order_by=last_ip&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='last_ip' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['ip']}</a></th>
-                <th width=\"5%\"><a href=\"user.php?order_by=failed_logins&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='failed_logins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['failed_logins']}</a></th>
-                <th width=\"3%\"><a href=\"user.php?order_by=locked&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='locked' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['locked']}</a></th>
-                <th width=\"14%\"><a href=\"user.php?order_by=last_login&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='last_login' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['last_login']}</a></th>
-                <th width=\"3%\"><a href=\"user.php?order_by=online&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_user['online']}</a></th>";
+                <th width=\"16%\"><a href=\"user.php?order_by=email&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['email']}</a></th>
+                <th width=\"14%\"><a href=\"user.php?order_by=joindate&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='joindate' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['join_date']}</a></th>
+                <th width=\"10%\"><a href=\"user.php?order_by=last_ip&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='last_ip' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['ip']}</a></th>
+                <th width=\"5%\"><a href=\"user.php?order_by=failed_logins&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='failed_logins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['failed_logins']}</a></th>
+                <th width=\"3%\"><a href=\"user.php?order_by=locked&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='locked' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['locked']}</a></th>
+                <th width=\"14%\"><a href=\"user.php?order_by=last_login&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='last_login' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['last_login']}</a></th>
+                <th width=\"3%\"><a href=\"user.php?order_by=online&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['online']}</a></th>";
   if ($showcountryflag)
     $output .="
                 <th width=\"3%\">{$lang_global['country']}</th>";
@@ -262,7 +265,10 @@ function browse_users()
   }
   $output .= "
                <tr>
-                 <td colspan=\"12\" class=\"hidden\"><br /></td>
+                 <td  colspan=\"12\" class=\"hidden\" align=\"right\" width=\"25%\">";
+  $output .= generate_pagination("user.php?action=brows_user&amp;order_by=$order_by&amp;dir=".!$dir.( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
+  $output .= "
+                 </td>
                </tr>
                <tr>
                  <td colspan=\"8\" align=\"left\" class=\"hidden\">";
@@ -286,43 +292,58 @@ function browse_users()
 //#######################################################################################################
 //  DELETE USER
 //#######################################################################################################
-function del_user() {
-global $lang_global, $lang_user, $output, $realm_db, $action_permission;
-valid_login($action_permission['delete']);
- if(isset($_GET['check'])) $check = $_GET['check'];
-  else redirect("user.php?error=1");
+function del_user()
+{
+  global $lang_global, $lang_user, $output, $realm_db, $action_permission;
+  valid_login($action_permission['delete']);
+  if(isset($_GET['check'])) $check = $_GET['check'];
+    else redirect("user.php?error=1");
 
- $pass_array = "";
+  $pass_array = "";
 
- //skip to backup
- if (isset($_GET['backup_op'])&&($_GET['backup_op'] == 1)){
-  for ($i=0; $i<count($check); $i++){
-    $pass_array .= "&check%5B%5D=$check[$i]";
+  //skip to backup
+  if (isset($_GET['backup_op'])&&($_GET['backup_op'] == 1))
+  {
+    for ($i=0; $i<count($check); $i++)
+    {
+      $pass_array .= "&check%5B%5D=$check[$i]";
     }
-  redirect("user.php?action=backup_user$pass_array");
+    redirect("user.php?action=backup_user$pass_array");
   }
 
- $output .= "<center><img src=\"img/warn_red.gif\" width=\"48\" height=\"48\" alt=\"\" />
-      <h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />
-      <font class=\"bold\">{$lang_user['acc_ids']}: ";
+  $output .= "
+        <center>
+          <img src=\"img/warn_red.gif\" width=\"48\" height=\"48\" alt=\"\" />
+          <h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1>
+          <br />
+          <font class=\"bold\">{$lang_user['acc_ids']}: ";
 
- $sql = new SQL;
- $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
- for ($i=0; $i<count($check); $i++){
-  $username = $sql->result($sql->query("SELECT username FROM `account` WHERE id = {$check[$i]}"),0);
-  $output .= "<a href=\"user.php?action=edit_user&amp;id=$check[$i]\" target=\"_blank\">$username, </a>";
-  $pass_array .= "&amp;check%5B%5D=$check[$i]";
+  for ($i=0; $i<count($check); $i++)
+  {
+    $username = $sqlr->result($sqlr->query("SELECT username FROM `account` WHERE id = {$check[$i]}"),0);
+    $output .= "
+          <a href=\"user.php?action=edit_user&amp;id=$check[$i]\" target=\"_blank\">$username, </a>";
+    $pass_array .= "&amp;check%5B%5D=$check[$i]";
   }
- $sql->close();
 
- $output .= "<br />{$lang_global['will_be_erased']}</font><br /><br />
-    <table width=\"300\" class=\"hidden\">
-          <tr><td>";
-      makebutton($lang_global['yes'], "user.php?action=dodel_user$pass_array\" type=\"wrn" ,130);
-      makebutton($lang_global['no'], "user.php\" type=\"def" ,130);
- $output .= "</td></tr>
-        </table></center><br />";
+  $output .= "
+          <br />{$lang_global['will_be_erased']}</font>
+          <br /><br />
+          <table width=\"300\" class=\"hidden\">
+            <tr>
+              <td>";
+                makebutton($lang_global['yes'], "user.php?action=dodel_user$pass_array\" type=\"wrn" ,130);
+                makebutton($lang_global['no'], "user.php\" type=\"def" ,130);
+  $output .= "
+              </td>
+            </tr>
+          </table>
+        <br />
+        </center>
+";
 
 }
 
@@ -330,46 +351,65 @@ valid_login($action_permission['delete']);
 //#####################################################################################################
 //  DO DELETE USER
 //#####################################################################################################
-function dodel_user() {
- global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl, $server_type,
+function dodel_user()
+{
+  global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $user_lvl, $server_type,
     $tab_del_user_characters, $tab_del_user_characters_trinity, $tab_del_user_realmd, $action_permission;
- if ($server_type)
-   $tab_del_user_characters = $tab_del_user_characters_trinity;
+  valid_login($action_permission['delete']);
+  if ($server_type)
+    $tab_del_user_characters = $tab_del_user_characters_trinity;
 
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-valid_login($action_permission['delete']);
- $sql = new SQL;
- $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+  if(isset($_GET['check']))
+    $check = $sqlr->quote_smart($_GET['check']);
+  else
+    redirect("user.php?error=1");
 
- if(isset($_GET['check'])) $check = $sql->quote_smart($_GET['check']);
-  else redirect("user.php?error=1");
+  $deleted_acc = 0;
+  $deleted_chars = 0;
+  require_once("libs/del_lib.php");
 
- $deleted_acc = 0;
- $deleted_chars = 0;
- require_once("libs/del_lib.php");
-
- for ($i=0; $i<count($check); $i++) {
-    if ($check[$i] != "" ) {
-    list($flag,$del_char) = del_acc($check[$i]);
-    if ($flag) {
-      $deleted_acc++;
-      $deleted_chars += $del_char;
+  for ($i=0; $i<count($check); $i++)
+  {
+    if ($check[$i] != "" )
+    {
+      list($flag,$del_char) = del_acc($check[$i]);
+      if ($flag)
+      {
+        $deleted_acc++;
+        $deleted_chars += $del_char;
+      }
     }
   }
- }
- $sql->close();
- $output .= "<center>";
- if ($deleted_acc == 0) $output .= "<h1><font class=\"error\">{$lang_user['no_acc_deleted']}</font></h1>";
-   else {
-  $output .= "<h1><font class=\"error\">{$lang_user['total']} <font color=blue>$deleted_acc</font> {$lang_user['acc_deleted']}</font><br /></h1>";
-  $output .= "<h1><font class=\"error\">{$lang_user['total']} <font color=blue>$deleted_chars</font> {$lang_user['char_deleted']}</font></h1>";
+  $output .= "
+        <center>";
+  if ($deleted_acc == 0)
+    $output .= "
+          <h1><font class=\"error\">{$lang_user['no_acc_deleted']}</font></h1>";
+  else
+  {
+    $output .= "
+          <h1><font class=\"error\">{$lang_user['total']} <font color=blue>$deleted_acc</font> {$lang_user['acc_deleted']}</font><br /></h1>";
+    $output .= "
+          <h1><font class=\"error\">{$lang_user['total']} <font color=blue>$deleted_chars</font> {$lang_user['char_deleted']}</font></h1>";
   }
- $output .= "<br /><br />";
- $output .= "<table class=\"hidden\">
-          <tr><td>";
-      makebutton($lang_user['back_browsing'], "user.php", 220);
- $output .= "</td></tr>
-        </table><br /></center>";
+  $output .= "
+          <br /><br />";
+  $output .= "
+          <table class=\"hidden\">
+            <tr>
+              <td>";
+                makebutton($lang_user['back_browsing'], "user.php", 220);
+  $output .= "
+              </td>
+            </tr>
+          </table>
+          <br />
+        </center>
+";
+
 }
 
 
@@ -629,16 +669,16 @@ function doadd_new()
   //make sure it doesnt contain non english chars.
   if (!valid_alphabetic($new_user))
     redirect("user.php?action=add_new&error=9");
-  $result = $sql->query("SELECT username FROM account WHERE username = '$new_user'");
+  $result = $sqlc->query("SELECT username FROM account WHERE username = '$new_user'");
   //there is already someone with same username
-  if ($sql->num_rows($result))
+  if ($sqlc->num_rows($result))
     redirect("user.php?action=add_new&error=7");
   else
     $last_ip = "0.0.0.0";
-  $new_mail = (isset($_GET['new_mail'])) ? $sql->quote_smart(trim($_GET['new_mail'])) : NULL;
-  $locked = (isset($_GET['new_locked'])) ? $sql->quote_smart($_GET['new_locked']) : 0;
-  $expansion = (isset($_GET['new_expansion'])) ? $sql->quote_smart($_GET['new_expansion']) : 0;
-  $result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
+  $new_mail = (isset($_GET['new_mail'])) ? $sqlc->quote_smart(trim($_GET['new_mail'])) : NULL;
+  $locked = (isset($_GET['new_locked'])) ? $sqlc->quote_smart($_GET['new_locked']) : 0;
+  $expansion = (isset($_GET['new_expansion'])) ? $sqlc->quote_smart($_GET['new_expansion']) : 0;
+  $result = $sqlc->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
     VALUES ('$new_user','$pass',0 ,'$new_mail',now() ,'$last_ip',0, $locked ,NULL, 0, $expansion)");
   if ($result)
     redirect("user.php?error=5");
@@ -677,9 +717,10 @@ function edit_user()
         <center>
           <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
           <script type=\"text/javascript\">
+          <!--
             function do_submit_data ()
             {
-              if ((document.form.username.value != '$data[1]')&&(document.form.new_pass.value == '******'))
+              if ((document.form.username.value != '$data[1]') && (document.form.new_pass.value == '******'))
               {
                 alert('If you are changing Username, The password must be changed too.');
                 return;
@@ -691,6 +732,7 @@ function edit_user()
                 do_submit();
               }
             }
+          !-->
           </script>
           <fieldset style=\"width: 550px;\">
             <legend>{$lang_user['edit_acc']}</legend>
@@ -726,7 +768,7 @@ function edit_user()
                 <td>{$lang_user['email']}</td>";
   if($user_lvl >= $action_permission['update'])
     $output .="
-                <td><input type=\"text\" name=\"mail\" size=\"42\" maxlength=\"225\"value=\"$data[3]\" /></td>";
+                <td><input type=\"text\" name=\"mail\" size=\"42\" maxlength=\"225\" value=\"$data[3]\" /></td>";
   else
     $output.="
                 <td>***@***.***</td>";
@@ -779,7 +821,7 @@ function edit_user()
                 <td>{$lang_user['last_ip']}</td>";
   if($user_lvl >= $action_permission['update'])
     $output .="
-                <td>$data[5]<a href=\"banned.php?action=do_add_entry&amp;entry=$data[5]&amp;bantime=3600&amp;ban_type=ip_banned\"> <- {$lang_user['ban_this_ip']}</a></td>";
+                <td>$data[5]<a href=\"banned.php?action=do_add_entry&amp;entry=$data[5]&amp;bantime=3600&amp;ban_type=ip_banned\"> &lt;- {$lang_user['ban_this_ip']}</a></td>";
   else
     $output .= "
                 <td>***.***.***.***</td>";
@@ -1068,6 +1110,9 @@ $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
 $output .= "
         <div class=\"top\">";
+
+$lang_user = lang_user();
+
 switch ($err)
 {
   case 1:
@@ -1138,6 +1183,7 @@ switch ($err)
     $output .= "
           <h1>{$lang_user['browse_acc']}</h1>";
 }
+unset($err);
 
 $output .= "
         </div>";
@@ -1176,6 +1222,10 @@ switch ($action)
   default:
     browse_users();
 }
+
+unset($action);
+unset($action_permission);
+unset($lang_user);
 
 require_once("footer.php");
 
