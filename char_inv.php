@@ -142,9 +142,9 @@ function char_inv()
             </ul>
           </div>
           <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' /> - lvl ".get_level_with_color($char[4])."</font>
-            <br \>
-            <br \>
+            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
+            <br />
+            <br />
             <table class=\"lined\" style=\"width: 700px;\">
               <tr>
                 <th>";
@@ -159,7 +159,7 @@ function char_inv()
                   {$lang_item['bag']} I<br />
                   <font class=\"small\">({$equiped_bag_id[1][1]} {$lang_item['slots']})</font>";
       }
-        $output .= "
+      $output .= "
                 </th>
                 <th>";
       if($equiped_bag_id[2])
@@ -172,7 +172,7 @@ function char_inv()
                   {$lang_item['bag']} II<br />
                   <font class=\"small\">({$equiped_bag_id[2][1]} {$lang_item['slots']})</font>";
       }
-        $output .= "
+      $output .= "
                 </th>
                 <th>";
       if($equiped_bag_id[3])
@@ -185,7 +185,7 @@ function char_inv()
                   {$lang_item['bag']} III<br />
                   <font class=\"small\">({$equiped_bag_id[3][1]} {$lang_item['slots']})</font>";
       }
-        $output .= "
+      $output .= "
                 </th>
                 <th>";
       if($equiped_bag_id[4])
@@ -236,7 +236,7 @@ function char_inv()
               </tr>
               <tr>
                 <th colspan=\"2\" align=\"left\">
-                  <img class=\"bag_icon\" src=\"".get_item_icon(3960)."\" alt=\"\" align=\"absmiddle\" style=\"margin-left:100px;\" />
+                  <img class=\"bag_icon\" src=\"".get_item_icon(3960)."\" alt=\"\" align=\"middle\" style=\"margin-left:100px;\" />
                   <font style=\"margin-left:30px;\">{$lang_char['backpack']}</font>
                 </th>
                 <th colspan=\"2\">
@@ -268,9 +268,9 @@ function char_inv()
                   </div>
                   <div style=\"text-align:right;width:168px;background-image:none;background-color:#393936;padding:2px;\">
                     <b>
-      $money_gold     <img src=\"img/gold.gif\" alt=\"\" align=\"absmiddle\" />
-      $money_silver   <img src=\"img/silver.gif\" alt=\"\" align=\"absmiddle\" />
-      $money_cooper   <img src=\"img/copper.gif\" alt=\"\" align=\"absmiddle\" />
+                      $money_gold   <img src=\"img/gold.gif\" alt=\"\" align=\"middle\" />
+                      $money_silver <img src=\"img/silver.gif\" alt=\"\" align=\"middle\" />
+                      $money_cooper <img src=\"img/copper.gif\" alt=\"\" align=\"middle\" />
                     </b>";
       $output .= "
                   </div>
@@ -292,7 +292,6 @@ function char_inv()
                       <div style=\"width:25px;margin:-21px 0px 0px 17px;font-size:14px\">$item[2]</div>
                     </div>";
       }
-
       $output .= "
                   </div>
                 </td>
@@ -403,7 +402,6 @@ function char_inv()
               </tr>
               <tr>";
         }
-
         $output .= "
                 <td class=\"bank\" align=\"center\">
                   <div style=\"width:".(4*43)."px;height:".(ceil($equip_bnk_bag_id[$t][1]/4)*41)."px;\">";
@@ -429,7 +427,6 @@ function char_inv()
                   </div>
                 </td>";
       }
-
       $output .= "
                 <td class=\"bank\"></td>
               </tr>
@@ -445,27 +442,26 @@ function char_inv()
               <td>";
       if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
       {
-        makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
+                makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
         $output .= "
-            </td>
-            <td>";
+              </td>
+              <td>";
       }
       if ((($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))||($owner_name == $user_name))
       {
-        makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
+                makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
         $output .= "
               </td>
               <td>";
       }
       if ($user_lvl >= $action_permission['update'])
       {
-        makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
+                makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
         $output .= "
               </td>
               <td>";
       }
-      makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
-      //end of admin options
+                makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
       $output .= "
               </td>
             </tr>

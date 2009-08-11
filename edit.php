@@ -9,9 +9,9 @@
  */
 
 require_once("header.php");
-valid_login($action_permission['read']);
 require_once("scripts/defines.php");
 require_once("scripts/get_lib.php");
+valid_login($action_permission['read']);
 
 //##############################################################################################################
 // EDIT USER
@@ -78,7 +78,6 @@ function edit_user()
     else
       $output .= "
                     <input type=\"text\" name=\"referredby\" size=\"42\" maxlength=\"12\" value=\"$referred_by\" />";
-    unset($referred_by);
     $output .= "
                   </td>
                 </tr>
@@ -287,10 +286,12 @@ function edit_user()
 //#############################################################################################################
 function doedit_user()
 {
-  global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
-  $lang_id_tab;
+  global $output, $realm_db, $realm_id, $user_name;
 
-  if ( (!isset($_POST['pass'])||$_POST['pass'] === '') || (!isset($_POST['mail'])||$_POST['mail'] === '') ||(!isset($_POST['expansion'])||$_POST['expansion'] === '') )
+  if ( (!isset($_POST['pass'])||($_POST['pass'] === ''))
+    && (!isset($_POST['mail'])||($_POST['mail'] === ''))
+    && (!isset($_POST['expansion'])||($_POST['expansion'] === ''))
+    && (!isset($_POST['referredby'])||($_POST['referredby'] === '')) )
     redirect("edit.php?error=1");
 
   $sqlr = new SQL;
@@ -299,6 +300,7 @@ function doedit_user()
   $new_pass = ($sqlr->quote_smart($_POST['pass']) != sha1(strtoupper($user_name).":******")) ? "sha_pass_hash='".$sqlr->quote_smart($_POST['pass'])."', " : "";
   $new_mail = $sqlr->quote_smart(trim($_POST['mail']));
   $new_expansion = $sqlr->quote_smart(trim($_POST['expansion']));
+  $referredby = $sqlr->quote_smart(trim($_POST['referredby']));
 
   //make sure the mail is valid mail format
   require_once("libs/valid_lib.php");
@@ -306,26 +308,23 @@ function doedit_user()
     redirect("edit.php?error=2");
 
   $sqlr->query("UPDATE account SET email = '$new_mail', $new_pass expansion = '$new_expansion' WHERE username = '$user_name'");
-  if ($sqlr->affected_rows())
+  if (doupdate_referral($referredby) || $sqlr->affected_rows())
   {
-    doupdate_referral($mmfpm_db, $user_id);
     redirect("edit.php?error=3");
   }
   else
   {
-    doupdate_referral($mmfpm_db, $user_id);
     redirect("edit.php?error=4");
   }
 }
-function doupdate_referral($mmfpm_db, $user_id)
+
+function doupdate_referral($referredby)
 {
-  global $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id;
+  global $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_id;
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
@@ -334,7 +333,6 @@ function doupdate_referral($mmfpm_db, $user_id)
 
   if ($result == NULL)
   {
-    $referredby = $_POST['referredby'];
     $referred_by = $sqlc->fetch_row($sqlc->query("SELECT guid FROM characters WHERE name = '$referredby'"));
     $referred_by = $referred_by[0];
 
@@ -346,10 +344,10 @@ function doupdate_referral($mmfpm_db, $user_id)
       if ($result != $user_id)
       {
         $sqlm->query("INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES ('$user_id', '$referred_by', '$result')");
-        redirect("edit.php?error=3");
+        return true;
       }
       else
-        redirect("edit.php?error=4");
+        return false;
     }
   }
 }

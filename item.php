@@ -318,7 +318,7 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
         <td>";
   $output .= "
                     <a style=\"padding:2px;\" href=\"$item_datasite$item[0]\" target=\"_blank\">
-                      <img src=\"".get_icon($item[0])."\" class=\"".get_item_border($item[0])."\" alt=\"\">
+                      <img src=\"".get_item_icon($item[0])."\" class=\"".get_item_border($item[0])."\" alt=\"\">
                   </a>";
   $output .="</td>
         <td>";
@@ -2207,7 +2207,7 @@ $output .= "</tr></table><br /><br />
     $cel_counter++;
     $tooltip = get_item_name($item[0])." ($item[0])<br />{$lang_item_edit['drop_chance']}: $item[1]%<br />{$lang_item_edit['quest_drop_chance']}: $item[2]%<br />{$lang_item_edit['drop_chance']}: $item[3]-$item[4]<br />{$lang_item_edit['lootcondition']}: $item[5]<br />{$lang_item_edit['condition_value1']}: $item[6]<br />{$lang_item_edit['condition_value2']}: $item[7]";
     $output .= "<td>";
-    $output .= maketooltip("<img src=\"".get_icon($item[0])."\" class=\"icon_border\" alt=\"\" />", "$item_datasite$item[0]", $tooltip, "item_tooltip");
+    $output .= maketooltip("<img src=\"".get_item_icon($item[0])."\" class=\"icon_border\" alt=\"\" />", "$item_datasite$item[0]", $tooltip, "item_tooltip");
     $output .= "<br /><input type=\"checkbox\" name=\"del_de_items[]\" value=\"$item[0]\" /></td>";
 
     if ($cel_counter >= 16) {
