@@ -15,7 +15,7 @@ valid_login($action_permission['read']);
 $output .= "
         <center>
           <br />
-            <applet code=\"IRCApplet.class\" archive=\"js/irc/irc.jar,js/irc/pixx.jar\" width=\"780\" height=\"400\">
+            <applet code=\"IRCApplet.class\" archive=\"libs/js/irc/irc.jar,libs/js/irc/pixx.jar\" width=\"780\" height=\"400\">
               <param name=\"nick\" value=\"$user_name\" />
               <param name=\"alternatenick\" value=\"".$user_name."_tmp\" />
               <param name=\"name\" value=\"$user_name\" />

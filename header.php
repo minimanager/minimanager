@@ -65,8 +65,8 @@ $output .= "
   <link rel=\"stylesheet\" type=\"text/css\" href=\"themes/".$theme."/".$theme."_1280.css\" title=\"1280\" />
   <link rel=\"SHORTCUT ICON\" href=\"img/favicon.ico\" />
   <script type=\"text/javascript\" charset=\"utf-8\"></script>
-  <script type=\"text/javascript\" src=\"js/general.js\"></script>
-  <script type=\"text/javascript\" src=\"js/layout.js\"></script>
+  <script type=\"text/javascript\" src=\"libs/js/general.js\"></script>
+  <script type=\"text/javascript\" src=\"libs/js/layout.js\"></script>
   <script type=\"text/javascript\" src=\"$tt_script\"></script>
 
   <!--[if lte IE 7]>

@@ -208,7 +208,7 @@ body {
 -->
 </style>
 </HEAD>
-<script language="JavaScript" TYPE="text/javascript" src="../js/JsHttpRequest/Js.js"></script>
+<script language="JavaScript" TYPE="text/javascript" src="../libs/js/JsHttpRequest/Js.js"></script>
 <SCRIPT LANGUAGE="javascript" TYPE="text/javascript">
 
 var current_map = 0;

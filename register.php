@@ -114,7 +114,7 @@ function doregister(){
     setcookie ("terms", "", time() - 3600);
 
     if ($send_mail_on_creation){
-      require_once("scripts/mailer/class.phpmailer.php");
+      require_once("libs/mailer/class.phpmailer.php");
       $mailer = new PHPMailer();
       $mailer->Mailer = $mailer_type;
       if ($mailer_type == "smtp"){
@@ -212,7 +212,7 @@ function register(){
       </tr>";
   if ( $enable_captcha ) {
       $output .= "<tr><td></td>
-    <td><img src=\"captcha/CaptchaSecurityImages.php?width=300&height=80&characters=6\" /><br /><br /></td>
+    <td><img src=\"libs/captcha/CaptchaSecurityImages.php?width=300&height=80&characters=6\" /><br /><br /></td>
     </tr>
     <tr>
     <td valign=\"top\">{$lang_captcha['security_code']}:</td>
@@ -304,7 +304,7 @@ function do_pass_recovery(){
 
  if ($sql->num_rows($result) == 1){
 
-  require_once("scripts/mailer/class.phpmailer.php");
+  require_once("libs/mailer/class.phpmailer.php");
   $mail = new PHPMailer();
   $mail->Mailer = $mailer_type;
   if ($mailer_type == "smtp"){

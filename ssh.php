@@ -19,7 +19,7 @@ if (test_port($server[$realm_id]['addr'],$server[$realm_id]['term_port']))
   $output .= "
         <center>
           <br />
-          <applet codebase=\".\" archive=\"js/ssh.jar\"
+          <applet codebase=\".\" archive=\"libs/js/ssh.jar\"
             code=\"de.mud.jta.Applet\" width=\"780\" height=\"350\">
             <param name=\"plugins\" value=\"Status,Socket,{$server[$realm_id]['term_type']},Terminal\" />
             <param name=\"Socket.host\" value=\"{$server[$realm_id]['addr']}\" />

@@ -159,7 +159,7 @@ function send_mail()
   {
     case "email":
 
-      require_once("scripts/mailer/class.phpmailer.php");
+      require_once("libs/mailer/class.phpmailer.php");
       $mail = new PHPMailer();
       $mail->Mailer = $mailer_type;
       if ($mailer_type == "smtp")

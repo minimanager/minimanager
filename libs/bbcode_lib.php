@@ -87,7 +87,7 @@ function add_bbcode_editor()
   $bbcode_colors = bbcode_colors();
   $bbcode_emoticons = bbcode_emoticons();
   $output .= "
-        <script type=\"text/javascript\" src=\"js/bbcode.js\"></script>
+        <script type=\"text/javascript\" src=\"libs/js/bbcode.js\"></script>
         <div style=\"display:block\">
           <select>
             <option>".$bbcode_fonts[0]."</option>";
