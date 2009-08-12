@@ -56,7 +56,6 @@ function top100($realmid)
     if ($tot_realms > 1 && (count($server) >1))
     {
       $output .= "
-
             <tr>
               <td colspan=\"2\" align=\"left\">";
                 makebutton('View', "javascript:do_submit('form".$realm_id."',0)",130);
@@ -157,8 +156,8 @@ function top100($realmid)
               </td>
             </tr>
           </table>
+          <br />
         </center>
-        <br />
 ";
 
 

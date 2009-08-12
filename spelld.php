@@ -74,8 +74,8 @@ function browse_spells()
               <td>";
   if ($user_lvl >= $action_permission['insert'])
                 makebutton($lang_spelld['add_spell'], "spelld.php?action=add_new\" type=\"wrn", 130);
-  ($search_by && $search_value) ? makebutton($lang_spelld['spell_list'], "spelld.php", 130) : $output .= "";
                 makebutton($lang_global['back'], "javascript:window.history.back()", 130);
+  ($search_by && $search_value) ? makebutton($lang_spelld['spell_list'], "spelld.php", 130) : $output .= "";
   $output .= "
               </td>
               <td align=\"right\" width=\"25%\">";
@@ -89,13 +89,12 @@ function browse_spells()
                   <tr>
                     <td>
                       <form action=\"spelld.php\" method=\"get\" name=\"form\">
-                        <input type=\"hidden\" name=\"action\" value=\"browse_spells\" />
                         <input type=\"hidden\" name=\"error\" value=\"3\" />
-                        <input type=\"text\" size=\"30\" maxlength=\"64\" name=\"search_value\" />
+                        <input type=\"text\" size=\"24\" maxlength=\"64\" name=\"search_value\" value=\"$search_value\" />
                         <select name=\"search_by\">
-                          <option value=\"entry\">{$lang_spelld['by_id']}</option>
-                          <option value=\"disable_mask\">{$lang_spelld['by_disable']}</option>
-                          <option value=\"comment\">{$lang_spelld['by_comment']}</option>
+                          <option value=\"entry\"".($search_by == 'entry' ? " selected=\"selected\"" : "").">{$lang_spelld['by_id']}</option>
+                          <option value=\"disable_mask\"".($search_by == 'disable_mask' ? " selected=\"selected\"" : "").">{$lang_spelld['by_disable']}</option>
+                          <option value=\"comment\"".($search_by == 'comment' ? " selected=\"selected\"" : "").">{$lang_spelld['by_comment']}</option>
                         </select>
                       </form>
                     </td>
@@ -360,9 +359,6 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 switch ($action)
 {
-  case "browse_spells":
-    browse_spells();
-    break;
   case "add_new":
     add_new();
     break;

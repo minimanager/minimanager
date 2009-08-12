@@ -97,14 +97,15 @@ $server = array
 (                                   // if more than one realm used, even if they are on same system new subarray MUST be added.
   1 => array
   (                                 // position in array must represent realmd ID, same as in $world_db
-    'addr'          => "127.0.0.1", // Game Server IP - Must be external address
+    'addr'          => "127.0.0.1", // Game Server IP, as seen by MiniManager, from your webhost
+    'addr_wan'      => "127.0.0.1", // Game Server IP, as seen by clients - Must be external address
     'game_port'     =>  8085,       // Game Server port
     'term_type'     => "SSH",       // Terminal type - ("SSH"/"Telnet")
     'term_port'     =>  22,         // Terminal port
     'telnet_port'   =>  3443,       // Telnet port - Telnet settins are needed for sending InGame Mail.
     'telnet_user'   => "USER",      // Telnet username, must be all CAPS
     'telnet_pass'   => "pass",      // Telnet password
-    'rev'           => "rev. ",     // MaNGOS/Trinity rev. used
+    'rev'           => "rev. ",     // MaNGOS rev. used (Trinity does not need this)
     'both_factions' =>  true        // Allow to see opponent faction characters. Affects only players.
   ),
 );

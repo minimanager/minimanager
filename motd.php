@@ -33,13 +33,13 @@ function add_motd()
               </tr>
               <tr>
                 <td colspan=\"3\">
-                  <textarea id=\"msg\" name=\"msg\" rows=\"10\" cols=\"80\"></textarea>
+                  <textarea id=\"msg\" name=\"msg\" rows=\"26\" cols=\"97\"></textarea>
                 </td>
               </tr>
               <tr>
                 <td>{$lang_motd['post_rules']}</td>
                 <td>";
-                  makebutton($lang_motd['post_motd'], "javascript:do_submit()\" type=\"wrn",220);
+                  makebutton($lang_motd['post_motd'], "javascript:do_submit()\" type=\"wrn",230);
   $output .= "
                 </td>
                 <td>";
@@ -88,13 +88,13 @@ function edit_motd()
               </tr>
               <tr>
                 <td colspan=\"3\">
-                  <textarea id=\"msg\" name=\"msg\" rows=\"10\" cols=\"80\">$msg</textarea>
+                  <textarea id=\"msg\" name=\"msg\" rows=\"26\" cols=\"97\">$msg</textarea>
                 </td>
               </tr>
               <tr>
                 <td>{$lang_motd['post_rules']}</td>
                 <td>";
-                  makebutton($lang_motd['post_motd'], "javascript:do_submit()\" type=\"wrn",220);
+                  makebutton($lang_motd['post_motd'], "javascript:do_submit()\" type=\"wrn",230);
   $output .= "
                 </td>
                 <td>";

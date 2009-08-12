@@ -881,7 +881,7 @@ function lang_realm()
     'test_server' => 'Serveur de test',
     'qa_server' => 'QA Server',
     'others' => 'Others',
-    'conf_from_file' => '** Ce monde ne semble pas avoir une configuration correcte dans le fichier config.php.<br />Soyez certain de le configurer correctement avant d\'utiliser sous CMS.',
+    'conf_from_file' => '** Ce monde ne semble pas avoir une configuration correcte dans le fichier config.php.<br />Soyez certain de le configurer correctement avant d\'utiliser.',
     'offline' => 'Hors Ligne',
     'status' => 'Status'
   );

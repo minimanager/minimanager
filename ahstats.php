@@ -21,8 +21,8 @@ function browse_auctions()
   global $lang_auctionhouse, $lang_global, $lang_item, $output, $characters_db, $world_db, $realm_id,
     $itemperpage, $item_datasite, $server, $user_lvl, $user_id;
 
-  $red = "#DD5047";
-  $blue = "#0097CD";
+  $red = "\"#DD5047\"";
+  $blue = "\"#0097CD\"";
   $sidecolor = array(1 => $blue,2 => $red,3 => $blue,4 => $blue,5 => $red,6 => $red,7 => $blue,8 => $red,10 => $red);
   $hiddencols = array(1,8,9,10);
 
@@ -247,13 +247,13 @@ function browse_auctions()
           </table>
           <table class=\"lined\">
             <tr>
-              <th width=\"10%\"><a href=\"ahstats.php?order_by=itemowner&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='itemowner' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_auctionhouse['seller']}</a></th>
-              <th width=\"20%\"><a href=\"ahstats.php?order_by=item_template&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='item_template' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_auctionhouse['item']}</a></th>
-              <th width=\"15%\"><a href=\"ahstats.php?order_by=buyoutprice&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='buyoutprice' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_auctionhouse['buyoutprice']}</a></th>
-              <th width=\"15%\"><a href=\"ahstats.php?order_by=time&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='time' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_auctionhouse['timeleft']}</a></th>
-              <th width=\"10%\"><a href=\"ahstats.php?order_by=buyguid&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='buyguid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_auctionhouse['buyer']}</a></th>
-              <th width=\"15%\"><a href=\"ahstats.php?order_by=lastbid&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='lastbid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_auctionhouse['lastbid']}</a></th>
-              <th width=\"15%\"><a href=\"ahstats.php?order_by=startbid&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='startbid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_auctionhouse['firstbid']}</a></th>
+              <th width=\"10%\"><a href=\"ahstats.php?order_by=itemowner&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='itemowner' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_auctionhouse['seller']}</a></th>
+              <th width=\"20%\"><a href=\"ahstats.php?order_by=item_template&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='item_template' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_auctionhouse['item']}</a></th>
+              <th width=\"15%\"><a href=\"ahstats.php?order_by=buyoutprice&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='buyoutprice' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_auctionhouse['buyoutprice']}</a></th>
+              <th width=\"15%\"><a href=\"ahstats.php?order_by=time&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='time' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_auctionhouse['timeleft']}</a></th>
+              <th width=\"10%\"><a href=\"ahstats.php?order_by=buyguid&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='buyguid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_auctionhouse['buyer']}</a></th>
+              <th width=\"15%\"><a href=\"ahstats.php?order_by=lastbid&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='lastbid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_auctionhouse['lastbid']}</a></th>
+              <th width=\"15%\"><a href=\"ahstats.php?order_by=startbid&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='startbid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_auctionhouse['firstbid']}</a></th>
             </tr>";
 
   while ($rows = $sqlc->fetch_row($result))
@@ -278,10 +278,10 @@ function browse_auctions()
           $s = floor($value/100);
           $value -= $s*100;
           $c = $value;
-          $value = $g."<img src=\"./img/gold.gif\" /> ".$s."<img src=\"./img/silver.gif\" /> ".$c."<img src=\"./img/copper.gif\" /> ";
+          $value = $g."<img src=\"./img/gold.gif\" alt=\"\" /> ".$s."<img src=\"./img/silver.gif\" alt=\"\" /> ".$c."<img src=\"./img/copper.gif\" alt=\"\" /> ";
           break;
         case 2:
-          $value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip,'item_tooltip')\"><img src=\"".get_item_icon($rows[1])."\" class=\"".get_item_border($rows[1])."\" alt=\"$value\"><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</img></a>";
+          $value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip,'item_tooltip')\"><img src=\"".get_item_icon($rows[1])."\" class=\"".get_item_border($rows[1])."\" alt=\"$value\" /><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</a>";
           break;
         case 0:
           $value = "<b>".((!empty($rows[9])) ? "<font color=".$sidecolor[$rows[9]].">".htmlentities($value)."</font>" : "N/A")."</b>";

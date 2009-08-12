@@ -881,7 +881,7 @@ function lang_realm()
     'test_server' => 'Test Server',
     'qa_server' => 'QA Server',
     'others' => 'Others',
-    'conf_from_file' => '** This realm appear not to have proper configuration in config.php file.<br />Make sure to properly configure it before using under CMS.',
+    'conf_from_file' => '** This realm appear not to have proper configuration in config.php file.<br />Make sure to properly configure it before using.',
     'offline' => 'Offline',
     'status' => 'Status'
   );
@@ -924,7 +924,7 @@ function lang_user()
     'cleanup' => 'CleanUp',
     'backup' => 'Backup',
     'by_name' => 'by Name',
-    'by_expansion' => 'by Expansion Acc.',
+    'by_expansion' => 'by Expansion ID',
     'by_id' => 'by ID',
     'by_gm_level' => '= GM Level',
     'greater_gm_level' => '&lt; GM Level',

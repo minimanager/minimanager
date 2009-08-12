@@ -77,7 +77,7 @@ function print_upload()
                   </select>
                 </td>
               </tr>
-              <tr><td colspan=\"2\"><textarea name=\"query\" rows=\"14\" cols=\"93\">$buffer</textarea></td></tr>
+              <tr><td colspan=\"2\"><textarea name=\"query\" rows=\"26\" cols=\"97\">$buffer</textarea></td></tr>
               <tr>
                 <td colspan=\"2\">";
                   makebutton($lang_run_patch['run_sql'], "javascript:do_submit('form1',0)\" type=\"wrn",130);

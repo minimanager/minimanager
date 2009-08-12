@@ -48,8 +48,8 @@ function show_realm()
             <tr>
               <td>";
   if($user_lvl >= $action_permission['insert'])
-    makebutton($lang_realm['add_realm'], "realm.php?action=add_realm",135);
-  makebutton($lang_global['back'], "javascript:window.history.back()",135);
+    makebutton($lang_realm['add_realm'], "realm.php?action=add_realm",130);
+  makebutton($lang_global['back'], "javascript:window.history.back()",130);
   $output .= "
               </td>
               <td align=\"right\">{$lang_realm['tot_realms']} : $total_realms</td>
@@ -362,7 +362,7 @@ function add_realm()
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
   $result = $sqlr->query("INSERT INTO realmlist (id, name, address, port, icon, color, timezone)
-  VALUES (NULL,'MANGOS','127.0.0.1', 8085 ,0 ,0 ,1)");
+  VALUES (NULL,'".(($server_type) ? TRINITY : MANGOS)."','127.0.0.1', 8085 ,0 ,0 ,1)");
 
   if ($result) redirect("realm.php");
   else redirect("realm.php?error=4");
@@ -370,7 +370,7 @@ function add_realm()
 
 
 //####################################################################################################
-// SET REALM TO DEFAULT IN CMS
+// SET REALM TO DEFAULT
 //####################################################################################################
 function set_def_realm()
 {

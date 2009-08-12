@@ -69,16 +69,16 @@ function browse_tele()
           <table class=\"top_hidden\">
             <tr>
               <td>";
-  ($search_by && $search_value) ? makebutton($lang_tele['teleports'], "tele.php\" type=\"def", 130) : $output .= "";
   if($user_lvl >= $action_permission['insert'])
   {
     makebutton($lang_tele['add_new'], "tele.php?action=add_tele",130);
   }
-  ($search_by && $search_value) ? makebutton($lang_global['back'], "javascript:window.history.back()", 130) : $output .= "";
+                makebutton($lang_global['back'], "javascript:window.history.back()", 130);
+  ($search_by && $search_value) ? makebutton($lang_tele['teleports'], "tele.php\" type=\"def", 130) : $output .= "";
   $output .= "
               </td>
               <td width=\"25%\" align=\"right\" rowspan=\"2\">";
-  $output .= generate_pagination("tele.php?action=browse_tele&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
+  $output .= generate_pagination("tele.php?order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
   $output .= "
               </td>
             </tr>
@@ -88,9 +88,8 @@ function browse_tele()
                   <tr>
                     <td>
                       <form action=\"tele.php\" method=\"get\" name=\"form\">
-                        <input type=\"hidden\" name=\"action\" value=\"browse_tele\" />
                         <input type=\"hidden\" name=\"error\" value=\"4\" />
-                        <input type=\"text\" size=\"42\" name=\"search_value\" value=\"{$search_value}\" />
+                        <input type=\"text\" size=\"24\" name=\"search_value\" value=\"$search_value\" />
                         <select name=\"search_by\">
                           <option value=\"name\"".($search_by == 'name' ? " selected=\"selected\"" : "").">{$lang_tele['loc_name']}</option>
                           <option value=\"id\"".($search_by == 'id' ? " selected=\"selected\"" : "").">{$lang_tele['loc_id']}</option>
@@ -99,7 +98,7 @@ function browse_tele()
                       </form>
                     </td>
                     <td>";
-                      makebutton($lang_global['search'], "javascript:do_submit()",130);
+                      makebutton($lang_global['search'], "javascript:do_submit()",80);
   $output .= "
                     </td>
                   </tr>
@@ -161,7 +160,7 @@ function browse_tele()
   $output .= "
             <tr>
               <td  colspan=\"7\" class=\"hidden\" align=\"right\" width=\"25%\">";
-  $output .= generate_pagination("tele.php?action=browse_tele&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
+  $output .= generate_pagination("tele.php?order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
   $output .= "
               </td>
             </tr>
@@ -506,25 +505,22 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 switch ($action)
 {
-  case "browse_tele":
-    browse_tele();
-    break;
   case "edit_tele":
     edit_tele();
     break;
- case "do_edit_tele":
+  case "do_edit_tele":
     do_edit_tele();
     break;
- case "add_tele":
+  case "add_tele":
     add_tele();
     break;
- case "do_add_tele":
+  case "do_add_tele":
     do_add_tele();
     break;
- case "del_tele":
+  case "del_tele":
     del_tele();
     break;
- default:
+  default:
     browse_tele();
 }
 

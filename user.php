@@ -110,15 +110,15 @@ function browse_users()
   // cleanup unknown working condition
   //if($user_lvl >= $action_permission['delete'])
   //              makebutton($lang_user['cleanup'], "cleanup.php", 130);
+                makebutton($lang_global['back'], "javascript:window.history.back()", 130);
   if ($search_by && $search_value)
   {
                 makebutton($lang_user['user_list'], "user.php", 130);
-                makebutton($lang_global['back'], "javascript:window.history.back()", 130);
   }
   $output .= "
               </td>
               <td align=\"right\" width=\"25%\" rowspan=\"2\">";
-  $output .= generate_pagination("user.php?action=brows_user&amp;order_by=$order_by&amp;dir=".!$dir.( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
+  $output .= generate_pagination("user.php?order_by=$order_by&amp;dir=".!$dir.( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
   $output .= "
               </td>
             </tr>
@@ -128,9 +128,8 @@ function browse_users()
                   <tr>
                     <td>
                       <form action=\"user.php\" method=\"get\" name=\"form\">
-                        <input type=\"hidden\" name=\"action\" value=\"search\" />
                         <input type=\"hidden\" name=\"error\" value=\"3\" />
-                        <input type=\"text\" size=\"42\" maxlength=\"50\" name=\"search_value\" />
+                        <input type=\"text\" size=\"24\" maxlength=\"50\" name=\"search_value\" value=\"$search_value\" />
                         <select name=\"search_by\">
                           <option value=\"username\"".($search_by == 'username' ? " selected=\"selected\"" : "").">{$lang_user['by_name']}</option>
                           <option value=\"id\"".($search_by == 'id' ? " selected=\"selected\"" : "").">{$lang_user['by_id']}</option>
@@ -266,16 +265,16 @@ function browse_users()
   $output .= "
                <tr>
                  <td  colspan=\"12\" class=\"hidden\" align=\"right\" width=\"25%\">";
-  $output .= generate_pagination("user.php?action=brows_user&amp;order_by=$order_by&amp;dir=".!$dir.( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
+  $output .= generate_pagination("user.php?order_by=$order_by&amp;dir=".!$dir.( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
   $output .= "
                  </td>
                </tr>
                <tr>
                  <td colspan=\"8\" align=\"left\" class=\"hidden\">";
   if($user_lvl >= $action_permission['delete'])
-                   makebutton($lang_user['del_selected_users'], "javascript:do_submit('form1',0)",220);
+                   makebutton($lang_user['del_selected_users'], "javascript:do_submit('form1',0)\" type=\"wrn",230);
   if($user_lvl >= $action_permission['insert'])
-                   makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",220);
+                   makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",230);
   $output .= "
                  </td>
                 <td colspan=\"4\" align=\"right\" class=\"hidden\">{$lang_user['tot_acc']} : $all_record</td>
@@ -401,7 +400,7 @@ function dodel_user()
           <table class=\"hidden\">
             <tr>
               <td>";
-                makebutton($lang_user['back_browsing'], "user.php", 220);
+                makebutton($lang_user['back_browsing'], "user.php", 230);
   $output .= "
               </td>
             </tr>
@@ -595,19 +594,19 @@ function add_new()
               <table class=\"flat\">
                 <tr>
                   <td>{$lang_user['username']}</td>
-                  <td><input type=\"text\" name=\"new_user\" size=\"42\" maxlength=\"15\" value=\"New_Account\" /></td>
+                  <td><input type=\"text\" name=\"new_user\" size=\"24\" maxlength=\"15\" value=\"New_Account\" /></td>
                 </tr>
                 <tr>
                   <td>{$lang_user['password']}</td>
-                  <td><input type=\"text\" name=\"new_pass1\" size=\"42\" maxlength=\"25\" value=\"123456\" /></td>
+                  <td><input type=\"text\" name=\"new_pass1\" size=\"24\" maxlength=\"25\" value=\"123456\" /></td>
                 </tr>
                 <tr>
                   <td>{$lang_user['confirm']}</td>
-                  <td><input type=\"text\" name=\"new_pass2\" size=\"42\" maxlength=\"25\" value=\"123456\" /></td>
+                  <td><input type=\"text\" name=\"new_pass2\" size=\"24\" maxlength=\"25\" value=\"123456\" /></td>
                 </tr>
                 <tr>
                   <td>{$lang_user['email']}</td>
-                  <td><input type=\"text\" name=\"new_mail\" size=\"42\" maxlength=\"225\" value=\"none@mail.com\" /></td>
+                  <td><input type=\"text\" name=\"new_mail\" size=\"24\" maxlength=\"225\" value=\"none@mail.com\" /></td>
                 </tr>
                 <tr>
                   <td>{$lang_user['locked']}</td>
@@ -1128,7 +1127,7 @@ switch ($err)
     break;
   case 3:
     $output .= "
-          <h1>{$lang_user['search_results']}</h1>";
+          <h1><font class=\"error\">{$lang_user['search_results']}</font></h1>";
     break;
   case 4:
     $output .= "
@@ -1195,12 +1194,6 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 switch ($action)
 {
-  case "browse_users":
-    browse_users();
-    break;
-  case "search":
-    browse_users();
-    break;
   case "add_new":
     add_new();
     break;

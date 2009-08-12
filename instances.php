@@ -78,7 +78,7 @@ function do_search()
 
     $output .= "
             <tr valign=top>
-              <td><span onmousemove='toolTip(\"MapID:".$instances[0]."\",\"item_tooltip\")' onmouseout='toolTip()'/>".get_map_name($instances[0])."</span></td>
+              <td>".get_map_name($instances[0])." ($instances[0])</td>
               <td>$instances[1]</td>
               <td>$instances[2]</td>
               <td>$instances[3]</td>
