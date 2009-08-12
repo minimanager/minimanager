@@ -20,7 +20,7 @@ valid_login($action_permission['read']);
 function front()
 {
   global $lang_global, $lang_index, $output, $realm_id, $realm_db, $world_db, $characters_db, $mmfpm_db, $server, $server_type,
-    $showcountryflag, $motd_display_poster, $gm_online_count, $gm_online, $action_permission, $user_lvl;
+    $showcountryflag, $motd_display_poster, $gm_online_count, $gm_online, $action_permission, $user_lvl, $user_id;
 
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);

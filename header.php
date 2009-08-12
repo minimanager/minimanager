@@ -184,6 +184,8 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
 
   if ( $sqlr->num_rows($result) > 1 && (count($server) > 1) && (count($characters_db) > 1))
   {
+    $output .= "
+                  <li><a href=\"#\">{$lang_header['realms']}</a></li>";
     while ($realm = $sqlr->fetch_row($result))
     {
       if(isset($server[$realm[0]]))
@@ -195,8 +197,6 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
     }
     unset($realm);
     if (isset($set)) unset($set);
-    $output .= "
-                  <li><a href=\"#\">-------------------</a></li>";
   }
   unset($result);
 
@@ -205,9 +205,36 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
                   <li><a href=\"register.php\">{$lang_login['not_registrated']}</a></li>
                   <li><a href=\"login.php\">{$lang_login['login']}</a></li>";
   else
+  {
+    $sqlc = new SQL;
+    $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+    require_once("scripts/defines.php");
+    require_once("scripts/get_lib.php");
+    $result = $sqlc->query("SELECT guid, name, race, class,
+      SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1),
+      mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+      FROM characters WHERE account = '$user_id'");
+    if($sqlc->num_rows($result))
+    {
+      $output .= "
+                  <li><a href=\"#\">{$lang_header['my_characters']}</a></li>";
+
+      while ($char = $sqlc->fetch_array($result))
+      {
+        $output .= "
+                    <li>
+                      <a href=\"char.php?id=$char[0]\">
+                        <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' alt=\"\" /><img src='img/c_icons/{$char[3]}.gif' alt=\"\"/>
+                        $char[1]
+                      </a>
+                    </li>";
+      }
+    }
     $output .= "
+                  <li><a href=\"#\">{$lang_header['account']}</a></li>
                   <li><a href=\"edit.php\">{$lang_header['edit_my_acc']}</a></li>
                   <li><a href=\"logout.php\">{$lang_header['logout']}</a></li>";
+  }
   $output .= "
                 </ul>
               </li>

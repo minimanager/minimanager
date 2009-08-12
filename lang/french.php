@@ -196,7 +196,14 @@ function lang_header()
   $lang_header = array
   (
   'menu' => 'Menu',
+
   'my_acc' => 'Mon compte',
+
+  // please check the length at 'My Account' Menu
+  'realms' => '-----Royaumes----',
+  'my_characters' => '---Personnages---',
+  'account' => '------Compte-----',
+
   'edit_my_acc' => 'Editer mon compte',
   'logout' => 'Se deconnecter',
 
