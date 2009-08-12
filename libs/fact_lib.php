@@ -126,6 +126,9 @@ function fact_get_fact_id()
 }
 
 
+//#############################################################################
+//get reputation ranks lengths - http://www.wowwiki.com/Reputation
+
 function fact_get_reputation_rank_length()
 {
   $reputation_rank_length = array
@@ -134,6 +137,9 @@ function fact_get_reputation_rank_length()
   return $reputation_rank_length;
 }
 
+
+//#############################################################################
+//get reputation ranks by its id - http://www.wowwiki.com/Reputation
 
 function fact_get_reputation_rank_arr()
 {
@@ -153,17 +159,22 @@ function fact_get_reputation_rank_arr()
 }
 
 
-function fact_get_faction_name($fid)
-{
-  global $lang_id_tab;
-  $fact_id = fact_get_fact_id();
+//#############################################################################
+//get faction name by its id
 
-  if( isset($fact_id[$fid]))
-    return $fact_id[$fid][0];
-  else
-    return($lang_id_tab['unknown']);
+function fact_get_faction_name($id)
+{
+  global $mmfpm_db;
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $faction_name = $sqlm->fetch_row($sqlm->query("SELECT `field_19` FROM `dbc_faction` WHERE `id` = $id LIMIT 1"));
+  return $faction_name[0];
+
 }
 
+
+//#############################################################################
+//get faction tree by its id - needs to be redone
 
 function fact_get_faction_tree($fid)
 {
@@ -175,50 +186,67 @@ function fact_get_faction_tree($fid)
     return 0;
 }
 
+//#############################################################################
+//get faction name by its id
 
-function fact_get_base_reputation($fid, $race)
+function fact_get_base_reputation($id)
 {
-  $fact_id = fact_get_fact_id();
-
-  if(!isset($fact_id[$fid]))
+  global $mmfpm_db;
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $faction_base_reputation = $sqlm->fetch_row($sqlm->query("SELECT `field_1`, `field_2`, `field_3`, `field_4`, `field_5`, `field_10`, `field_11`, `field_12`, `field_13` FROM `dbc_faction` WHERE `id` = $id LIMIT 1"));
+  if(!isset($faction_base_reputation[$id]))
     return 0;
-
   for ($i = 0; $i < 4; $i++)
   {
-    if ($fact_id[$fid][4 + $i] & (1 << ($race-1)))
-      return $fact_id[$fid][8 + $i];
+    if ($faction_base_reputation[$fid][4 + $i] & (1 << ($race-1)))
+      return $faction_base_reputation[$fid][8 + $i];
   }
-  // in faction.dbc exist factions with (RepListId >=0, listed in character reputation list) with all BaseRepMask[i]==0
   return 0;
 }
 
 
-function fact_get_reputation($fid, $standing, $race)
+//#############################################################################
+//get reputation by its id
+
+function fact_get_reputation($id, $standing, $race)
 {
-  return fact_get_base_reputation($fid, $race) + $standing;
+  return fact_get_base_reputation($id, $race) + $standing;
 }
 
 
-function fact_get_reputation_rank($fid,  $standing, $race)
+//#############################################################################
+//get reputation rank by its id
+
+function fact_get_reputation_rank($id,  $standing, $race)
 {
-  $reputation = fact_get_reputation($fid, $standing, $race);
+  $reputation = fact_get_reputation($id, $standing, $race);
     return fact_reputation_to_rank($reputation);
 }
 
 
-function fact_get_reputation_at_rank($fid,  $standing, $race)
+//#############################################################################
+//get reputation at rank by its id
+
+function fact_get_reputation_at_rank($id,  $standing, $race)
 {
-  $reputation = fact_get_reputation($fid, $standing, $race);
+  $reputation = fact_get_reputation($id, $standing, $race);
     return fact_reputation_at_rank($reputation);
 }
 
 
-function fact_get_base_reputation_rank($fid, $race)
+//#############################################################################
+//get base reputation rank by its id
+
+function fact_get_base_reputation_rank($id, $race)
 {
-  $reputation = fact_get_base_reputation($fid, $race);
+  $reputation = fact_get_base_reputation($id, $race);
     return fact_reputation_to_rank($reputation);
 }
 
+
+//#############################################################################
+//get reputation at to rank by its id - http://github.com/mangos/mangos/blob/fcc2bfc52bab344de0a60c95dcbbdc55d2d226ba/src/game/ReputationMgr.h
 
 function fact_reputation_at_to_rank($standing, $type)
 {
@@ -240,12 +268,16 @@ function fact_reputation_at_to_rank($standing, $type)
   return (($type) ? 0 : $MIN_REPUTATION_RANK);
 }
 
+//#############################################################################
+//get reputation to rank by its id
 
 function fact_reputation_to_rank($standing)
 {
   return fact_reputation_at_to_rank($standing, 0);
 }
 
+//#############################################################################
+//get reputation at rank by its id
 
 function fact_reputation_at_rank($standing)
 {
