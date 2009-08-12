@@ -176,12 +176,12 @@ function fact_get_faction_name($id)
 //#############################################################################
 //get faction tree by its id - needs to be redone
 
-function fact_get_faction_tree($fid)
+function fact_get_faction_tree($id)
 {
   $fact_id = fact_get_fact_id();
 
-  if( isset($fact_id[$fid]))
-    return $fact_id[$fid][2];
+  if( isset($fact_id[$id]))
+    return $fact_id[$id][2];
   else
     return 0;
 }
@@ -197,10 +197,10 @@ function fact_get_base_reputation($id)
   $faction_base_reputation = $sqlm->fetch_row($sqlm->query("SELECT `field_1`, `field_2`, `field_3`, `field_4`, `field_5`, `field_10`, `field_11`, `field_12`, `field_13` FROM `dbc_faction` WHERE `id` = $id LIMIT 1"));
   if(!isset($faction_base_reputation[$id]))
     return 0;
-  for ($i = 0; $i < 4; $i++)
+  for ($i = 0; $i <= 4; $i++)
   {
-    if ($faction_base_reputation[$fid][4 + $i] & (1 << ($race-1)))
-      return $faction_base_reputation[$fid][8 + $i];
+    if ($faction_base_reputation[$id][0 + $i] & (1 << ($race-1)))
+      return $faction_base_reputation[$id][5 + $i];
   }
   return 0;
 }

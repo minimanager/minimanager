@@ -9,13 +9,13 @@
  */
 
  require_once("header.php");
- valid_login($action_permission['read']);
- require_once("scripts/get_lib.php");
  require_once("scripts/defines.php");
+ require_once("libs/char_lib.php");
+  valid_login($action_permission['read']);
 
  //global $lang_honor, $lang_global, $output, $characters_db, $realm_id, $itemperpage, $realm_db;
- $CHAR_RACE = id_get_char_race();
- $CHAR_RANK = id_get_char_rank();
+ $CHAR_RACE = get_char_race();
+ $CHAR_RANK = get_char_pvp_rank();
 
  $sql = new SQL;
  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -70,8 +70,8 @@ $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `gui
 
   	$output .= " <tr>
 			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
-		 	 <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
-		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
+		 	 <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_char_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
+		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_char_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
 			 <td>".get_level_with_color($char[6])."</td>
 			 <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
 			 <td>$char[4]</td>
@@ -129,8 +129,8 @@ $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `gui
 
   	$output .= " <tr>
 			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
-		 	 <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
-		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
+		 	 <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_char_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
+		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_char_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
 			 <td>".get_level_with_color($char[6])."</td>
 		     <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
 			 <td>$char[4]</td>

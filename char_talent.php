@@ -10,8 +10,8 @@
 
 
 require_once("header.php");
-require_once("scripts/get_lib.php");
 require_once("scripts/defines.php");
+require_once("libs/char_lib.php");
 valid_login($action_permission['read']);
 
 //########################################################################################################################
@@ -89,7 +89,7 @@ function char_talent()
             </ul>
           </div>
           <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
+            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_char_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_char_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
             <br /><br />
             <table class=\"lined\" style=\"width: 550px;\">";
       if($developer_test_mode && $new_talent_tab)
@@ -186,7 +186,7 @@ function char_talent()
         }
         /*
         // reserved till we get to calculate talent points using the new data we have in db
-        $playerclass = strtolower(get_player_class($char[3]));
+        $playerclass = strtolower(get_char_class($char[3]));
         switch ($playerclass)
         {
           case "shaman":

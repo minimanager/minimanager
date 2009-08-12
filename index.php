@@ -12,6 +12,7 @@
 require_once("header.php");
 require_once("scripts/get_lib.php");
 require_once("libs/bbcode_lib.php");
+require_once("libs/char_lib.php");
 valid_login($action_permission['read']);
 
 //#############################################################################
@@ -273,8 +274,8 @@ function front()
         $nation = $sqlm->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
         $country = $sqlm->fetch_row($nation);
       }
-      $CHAR_RACE = id_get_char_race();
-      $CHAR_RANK = id_get_char_rank();
+      $CHAR_RACE = get_char_race();
+      $CHAR_RANK = get_char_pvp_rank();
       $output .= "
               <tr>
                 <td>";
@@ -289,10 +290,10 @@ function front()
       $output .="
                 </td>
                 <td>
-                  <img src='img/c_icons/{$char[2]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
+                  <img src='img/c_icons/{$char[2]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_char_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
                 </td>
                 <td>
-                  <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
+                  <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_char_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
                 </td>
                 <td>".get_level_with_color($char[7])."</td>
                 <td>

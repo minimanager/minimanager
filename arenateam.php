@@ -11,7 +11,7 @@
 
 require_once("header.php");
 require_once("scripts/defines.php");
-require_once("scripts/get_lib.php");
+require_once("libs/char_lib.php");
 valid_login($action_permission['read']);
 
 //########################################################################################################################
@@ -293,8 +293,8 @@ function view_team()
         $ws_pct = $member[6];
       $output .= "
                 <td><a href=\"char.php?id=$member[0]\">".htmlentities($member[1])."</a></td>
-                <td><img src='img/c_icons/{$online[0]}-{$online[6]}.gif' onmousemove='toolTip(\"".get_player_race($online[0])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-                <td><img src='img/c_icons/{$online[1]}.gif' onmousemove='toolTip(\"".get_player_class($online[1])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+                <td><img src='img/c_icons/{$online[0]}-{$online[6]}.gif' onmousemove='toolTip(\"".get_char_race($online[0])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+                <td><img src='img/c_icons/{$online[1]}.gif' onmousemove='toolTip(\"".get_char_class($online[1])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td>$member[2]</td>
                 <td>".get_days_with_color($online[4])."</td>
                 <td>".(($online[2]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>

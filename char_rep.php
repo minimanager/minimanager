@@ -10,8 +10,8 @@
 
 
 require_once("header.php");
-require_once("scripts/get_lib.php");
 require_once("scripts/defines.php");
+require_once("libs/char_lib.php");
 valid_login($action_permission['read']);
 
 //########################################################################################################################
@@ -79,7 +79,7 @@ function char_rep()
             <div id=\"tab\">
               <ul>
                 <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>";
-      if( get_player_class($char[3]) == 'Hunter' )
+      if( get_char_class($char[3]) == 'Hunter' )
         $output .= "
                 <li><a href=\"char_pets.php?id=$id&amp;realm=$realmid\">{$lang_char['pets']}</a></li>";
       $output .= "
@@ -88,7 +88,7 @@ function char_rep()
               </ul>
             </div>
             <div id=\"tab_content2\">
-              <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
+              <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_char_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_char_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
               <br /><br />";
 
       $temp_out = array

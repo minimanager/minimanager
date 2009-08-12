@@ -10,7 +10,7 @@
 
 
 require_once("header.php");
-require_once("scripts/get_lib.php");
+require_once("libs/char_lib.php");
 valid_login($action_permission['read']);
 
 //########################################################################################################################^M

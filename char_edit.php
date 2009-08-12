@@ -8,10 +8,11 @@
  * License: GNU General Public License v2(GPL)
  */
 
+ 
 require_once("header.php");
-valid_login($action_permission['delete']);
-require_once("scripts/get_lib.php");
 require_once("scripts/defines.php");
+require_once("libs/char_lib.php");
+valid_login($action_permission['delete']);
 
 //########################################################################################################################
 //  PRINT  EDIT FORM
@@ -43,7 +44,7 @@ if ($sql->num_rows($result)){
  if ($user_lvl >= $owner_gmlvl){
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $result = $sql->query("SELECT guid,account,data,name,race,class,position_x,position_y,map,online,totaltime,position_z,zone  FROM `characters` WHERE guid = '$id'");
+  $result = $sql->query("SELECT guid,account,data,name,race,class,position_x,position_y,map,online,totaltime,position_z,zone, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender  FROM `characters` WHERE guid = '$id'");
   $char = $sql->fetch_row($result);
   $char_data = explode(' ',$char[2]);
 
@@ -80,7 +81,7 @@ $output .= "<center>
   <input type=\"hidden\" name=\"id\" value=\"$id\" />
   <table class=\"lined\">
   <tr>
-    <td colspan=\"8\"><font class=\"bold\"><input type=\"text\" name=\"name\" size=\"14\" maxlength=\"12\" value=\"$char[3]\" /> - ".get_player_race($char[4])." ".get_player_class($char[5])." lvl {$char_data[CHAR_DATA_OFFSET_LEVEL]}</font><br />$online</td>
+    <td colspan=\"8\"><font class=\"bold\"><input type=\"text\" name=\"name\" size=\"14\" maxlength=\"12\" value=\"$char[3]\" /> - <img src='img/c_icons/{$char[4]}-{$char[14]}.gif' onmousemove='toolTip(\"".get_char_race($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[5]}.gif' onmousemove='toolTip(\"".get_char_class($char[5])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[13])."</font><br />$online</td>
 </tr>
 <tr>
  <td colspan=\"8\">".get_map_name($char[9])." - ".get_zone_name($char[12])."</td>

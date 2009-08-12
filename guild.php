@@ -10,7 +10,7 @@
 
 
 require_once("header.php");
-require_once("scripts/get_lib.php");
+require_once("libs/char_lib.php");
 valid_login($action_permission['read']);
 
 //#############################################################################
@@ -380,8 +380,8 @@ function view_guild()
                       <td>".htmlentities($member[1])."</td>" : "
                       <td><a href=\"char.php?id=$member[0]&amp;realm=$realmid\">".htmlentities($member[1])."</a></td>";
     $output .= "
-                      <td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".get_player_race($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".get_player_class($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".get_char_race($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".get_char_class($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td>".get_level_with_color($member[4])."</td>
                       <td>".htmlentities($member[6])." (".$member[5].")</td>
                       <td>".htmlentities($member[7])."</td>
