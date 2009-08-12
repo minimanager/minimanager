@@ -798,7 +798,7 @@ function edit_user()
                   <select name=\"gmlevel\">";
     foreach ($gm_level_arr as $level)
     {
-      if (($level[0] < $user_lvl)||($data[1] == $user_name))
+      if (($level[0] > -1) && ($level[0] < $user_lvl))
       {
         $output .= "
                     <option value=\"{$level[0]}\" ";

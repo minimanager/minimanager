@@ -52,11 +52,11 @@ function show_list()
             <tr>
               <td>";
   if($user_lvl >= $action_permission['insert'])
-    makebutton($lang_banned['add_to_banned'], "banned.php?action=add_entry",180);
+    makebutton($lang_banned['add_to_banned'], "banned.php?action=add_entry\" type=\"wrn",180);
   if ($ban_type === "account_banned")
-    makebutton($lang_banned['banned_ips'], "banned.php?ban_type=ip_banned",180);
-  else makebutton($lang_banned['banned_accounts'], "banned.php?ban_type=account_banned",180);
-  makebutton($lang_global['back'], "javascript:window.history.back()",140);
+    makebutton($lang_banned['banned_ips'], "banned.php?ban_type=ip_banned",130);
+  else makebutton($lang_banned['banned_accounts'], "banned.php?ban_type=account_banned",130);
+  makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
   $output .= "
               </td>
               <td align=\"right\">".generate_pagination("banned.php?action=show_list&amp;order_by=$order_by&amp;ban_type=$ban_type&amp;dir=".!$dir, $all_record, $itemperpage, $start)."</td>
@@ -172,23 +172,23 @@ function add_entry()
                 </tr>
                 <tr>
                   <td>{$lang_banned['entry']}</td>
-                  <td><input type=\"text\" name=\"entry\" size=\"40\" maxlength=\"20\" value=\"\" /></td>
+                  <td><input type=\"text\" name=\"entry\" size=\"24\" maxlength=\"20\" value=\"\" /></td>
                 </tr>
                 <tr>
                   <td>{$lang_banned['ban_time']}</td>
-                  <td><input type=\"text\" name=\"bantime\" size=\"40\" maxlength=\"16\" value=\"1\" /></td>
+                  <td><input type=\"text\" name=\"bantime\" size=\"24\" maxlength=\"40\" value=\"1\" /></td>
                 </tr>
                 <tr>
                   <td>{$lang_banned['banreason']}</td>
-                  <td><input type=\"text\" name=\"banreason\" size=\"40\" maxlength=\"255\" value=\"\" /></td>
+                  <td><input type=\"text\" name=\"banreason\" size=\"24\" maxlength=\"255\" value=\"\" /></td>
                 </tr>
                 <tr>
                   <td>";
-                    makebutton($lang_banned['ban_entry'], "javascript:do_submit()",150);
+                    makebutton($lang_banned['ban_entry'], "javascript:do_submit()\" type=\"wrn",180);
   $output .= "
                   </td>
                   <td>";
-                    makebutton($lang_global['back'], "banned.php",295);
+                    makebutton($lang_global['back'], "banned.php\" type=\"def",130);
   $output .= "
                   </td>
                 </tr>
