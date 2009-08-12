@@ -1740,29 +1740,35 @@ $lang_game_object = array(
   'data_desc' => 'Data fields specific for different type field values. Each type has unique fields.<br />For more informaton visit https://svn.mangosproject.org/trac /MaNGOS/wiki/Database /gameobject_template'
   );
 
-$lang_auctionhouse = array(
-  // ----- AHSTATS.PHP -----
-  'auctionhouse' => 'Auction House',
-  'seller' => 'Seller',
-  'item' => 'Item',
-  'buyoutprice' => 'Buyout price',
-  'timeleft' => 'Time Left',
-  'buyer' => 'Buyer',
-  'lastbid' => 'Last Bid',
-  'firstbid' => 'First Bid',
-  'dayshortcut' => 'D',
-  'hourshortcut' => 'H',
-  'mnshortcut' => 'mn',
-  'total_auctions' => 'Total Auctions',
-  'search_results' => 'Search Results',
-  'auction_over' => 'Auction Over',
-  'all' => 'All',
-  'item_id' => 'Item Id',
-  'item_name' => 'Item Name',
-  'seller_name' => 'Seller Name',
-  'buyer_name' => 'Buyer Name',
-  'tot_found' => 'Total Items Found'
+
+// ----- AHSTATS.PHP -----
+function lang_auctionhouse()
+{
+  $lang_auctionhouse = array
+  (
+    'auctionhouse' => 'Auction House',
+    'seller' => 'Seller',
+    'buyer' => 'Buyer',
+    'item' => 'Item',
+    'buyoutprice' => 'Buyout price',
+    'timeleft' => 'Time Left',
+    'lastbid' => 'Last Bid',
+    'firstbid' => 'First Bid',
+    'dayshortcut' => 'D',
+    'hourshortcut' => 'H',
+    'mnshortcut' => 'mn',
+    'total_auctions' => 'Total Auctions',
+    'search_results' => 'Search Results',
+    'auction_over' => 'Auction Over',
+    'all' => 'All',
+    'item_id' => 'Item Id',
+    'item_name' => 'Item Name',
+    'seller_name' => 'Seller Name',
+    'buyer_name' => 'Buyer Name',
   );
+  return $lang_auctionhouse;
+}
+
 
 $lang_id_tab = array(
   // ----- ID_TAB.PHP -----

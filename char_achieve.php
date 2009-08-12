@@ -104,7 +104,7 @@ function char_achievements()
       $output .= "
               <th width=\"25%\">{$lang_char['achievement_category']}</th>
               <th width=\"60%\">{$lang_char['achievement_title']}</th>
-			  <th width=\"5%\">{$lang_char['achievement_points']}</th>
+              <th width=\"5%\">{$lang_char['achievement_points']}</th>
               <th width=\"10%\"><a href=\"char_achieve.php?id=$id&amp;realm=$realmid&amp;order_by=date&amp;start=$start&amp;dir=$dir\"".($order_by=='date' ? " class=\"$order_dir\"" : "").">{$lang_char['achievement_date']}</a></th>
             </tr>";
 
@@ -113,8 +113,8 @@ function char_achievements()
         $output .="
             <tr>
               <td>".get_achievement_category($data[0])."</td>
-              <td align=\"left\"><a href=\"http://www.wowhead.com/?achievement=".$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a><BR>".get_achievement_reward($data[0])."</td>
-			  <td>".get_achievement_points($data[0])." <img src=\"img/money_achievement.gif\" alt=\"\" /></td>
+              <td align=\"left\"><a href=\"http://www.wowhead.com/?achievement=".$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a><br />".get_achievement_reward($data[0])."</td>
+              <td>".get_achievement_points($data[0])." <img src=\"img/money_achievement.gif\" alt=\"\" /></td>
               <td>".date("n-j-o", $data['1'])."</td>
             </tr>";
       }

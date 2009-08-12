@@ -1740,29 +1740,35 @@ $lang_game_object = array(
   'data_desc' => 'Champs spécifiques pour des valeurs de champs de type différent. Chaque type a un champ unique.<br />Pour plus d\'infos, visitez https://svn.mangosproject.org/trac /MaNGOS/wiki/Database /gameobject_template'
   );
 
-$lang_auctionhouse = array(
-  // ----- AHSTATS.PHP -----
-  'auctionhouse' => 'Hôtel des ventes',
-  'seller' => 'Vendeur',
-  'item' => 'Item',
-  'buyoutprice' => 'Prix de Rachat',
-  'timeleft' => 'Temps restant',
-  'buyer' => 'Acheteur',
-  'lastbid' => 'Dernière Enchère',
-  'firstbid' => 'Première Enchère',
-  'dayshortcut' => 'J',
-  'hourshortcut' => 'H',
-  'mnshortcut' => 'mn',
-  'total_auctions' => 'Total Enchères',
-  'search_results' => 'Rechercher',
-  'auction_over' => 'Enchère terminée',
-  'all' => 'Tout',
-  'item_id' => 'Item Id',
-  'item_name' => 'Nom de l\'Item',
-  'seller_name' => 'Nom du vendeur',
-  'buyer_name' => 'Nom de l\'acheteur',
-  'tot_found' => 'Total trouvé'
+
+// ----- AHSTATS.PHP -----
+function lang_auctionhouse()
+{
+  $lang_auctionhouse = array
+  (
+    'auctionhouse' => 'Hôtel des ventes',
+    'seller' => 'Vendeur',
+    'item' => 'Item',
+    'buyoutprice' => 'Prix de Rachat',
+    'timeleft' => 'Temps restant',
+    'buyer' => 'Acheteur',
+    'lastbid' => 'Dernière Enchère',
+    'firstbid' => 'Première Enchère',
+    'dayshortcut' => 'J',
+    'hourshortcut' => 'H',
+    'mnshortcut' => 'mn',
+    'total_auctions' => 'Total Enchères',
+    'search_results' => 'Rechercher',
+    'auction_over' => 'Enchère terminée',
+    'all' => 'Tout',
+    'item_id' => 'Item Id',
+    'item_name' => 'Nom de l\'Item',
+    'seller_name' => 'Nom du vendeur',
+    'buyer_name' => 'Nom de l\'acheteur',
   );
+  return $lang_auctionhouse;
+}
+
 
 $lang_id_tab = array(
   // ----- ID_TAB.PHP -----
