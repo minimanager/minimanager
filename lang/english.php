@@ -434,10 +434,13 @@ function lang_char()
     'move_to' => 'Teleport to (.tele location name)',
     'max_acc' => 'The account you are trying to move this character to has the max ammount of players in it.',
     'no_tp_location' => 'No teleport location found using provided name.',
+    // ---- char_achieve.php ----
     'achievements' => 'Achievements',
     'achievement_id' => 'ID',
+    'achievement_category' => 'Category',
     'achievement_title' => 'Achievement Title',
     'achievement_date' => 'Date',
+    'achievement_points' => 'Points',
     'no_com_achievements' => 'No Achievements Completed'
   );
   return $lang_char;

@@ -434,10 +434,13 @@ function lang_char()
   'move_to' => 'Téleporter vers (.tele location name)',
   'max_acc' => 'Le compte vers lequel vous essayez de déplacer ce personnage a atteint le nombre de personnages maximum autorisé.',
   'no_tp_location' => 'Aucun emplacement de téléport trouvé avec ce nom.',
+  // ---- char_achieve.php ----
   'achievements' => 'Hauts Faits',
   'achievement_id' => 'ID',
+  'achievement_category' => 'catégorie',
   'achievement_title' => 'Haut Fait',
   'achievement_date' => 'Date',
+  'achievement_points' => 'Points',
   'no_com_achievements' => 'Aucun Haut Fait accompli'
   );
   return $lang_char;
@@ -2038,4 +2041,38 @@ function lang_forum()
   return $lang_forum;
 }
 
+$lang_spelld = array(
+	'spells' => 'Spell(s) Disabled',
+	'search_results' => 'Search result',
+	'entry' => 'Spell ID',
+	'disable_mask' => 'Disable mask',
+	'comment' => 'Spell name',
+	'add_spell' => 'Add spell',
+	'by_id' => 'by spell ID',
+	'by_disable' => 'by mask',
+	'by_comment' => 'by spell name',
+	'tot_spell' => 'Total Spells',
+	'del_selected_spells' => 'Delete checked spell(s)',
+	'spell_list' => 'Spell(s) List',
+	'tot_found' => 'Total spells found',
+	'spell_ids' => 'Spell(s) ID(s)',
+	'back_browsing' => 'Back',
+	'spell_not_deleted' => 'No spell deleted!',
+	'spell_deleted' => 'Spell deleted!',
+	'add_new_spell' => 'Add new spell',
+	'to_short' => 'Comment to short/long',
+	'exists' => 'Already in db',
+	'spell_added' => 'New Spell Added',
+    'entry2' => 'Spell ID (numbers only)',
+    'disable_mask2' => 'Spell Disable Mask (Check table)',
+    'comment2' => 'Spell name (max 64 chars)',
+    'wrong_fields' => 'Some Fields Wrong',
+    'err_add_entry' => 'Adding New Spell Fail',
+	'disabled_p' => ' Spell disabled for players',
+	'disabled_crea_npc_pets' => ' Spell disabled for creatures/npc/pets ',
+	'disabled_p_crea_npc_pets' => ' Spell disabled for players and creatures/npc/pets ',
+	'value' => ' Value ',
+	'type' => ' Type ',
+	'dm_exp' => 'Spell Disable Mask - Specifies who the spell is disabled for.'
+	);
 ?>

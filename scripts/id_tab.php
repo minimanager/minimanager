@@ -210,31 +210,6 @@ function pvp_ranks($honor=0, $faction=0)
 
 
 //#############################################################################
-//get skill type by its id
-function get_skill_type($id)
-{
-  global $mmfpm_db;
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $skill_type = $sqlm->fetch_row($sqlm->query("SELECT `Category` FROM `dbc_skillline` WHERE `id`={$id} LIMIT 1")); //This table came from CSWOWD as its fields are named
-  return $skill_type[0];
-}
-
-
-//#############################################################################
-//get skill name by its id
-
-function get_skill_name($id)
-{
-  global $mmfpm_db;
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $skill_name = $sqlm->fetch_row($sqlm->query("SELECT `Name` FROM `dbc_skillline` WHERE `id`={$id} LIMIT 1")); //This table came from CSWOWD as its fields are named
-  return $skill_name[0];
-}
-
-
-//#############################################################################
 //get spell name by its id
 
 function get_spell_name($id)
@@ -270,20 +245,6 @@ function get_spell_rank($id)
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $itemset = $sqlm->fetch_row($sqlm->query("SELECT `name_loc0` FROM `dbc_itemset` WHERE `itemsetID`={$id} LIMIT 1"));
   return $itemset[0];
-}
-
-
-
-//#############################################################################
-//get achievement name by its id
-
-function get_achievement_name($id)
-{
-  global $mmfpm_db;
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $achievement_name = $sqlm->fetch_row($sqlm->query("SELECT `name01` FROM `dbc_achievement` WHERE `id`={$id} LIMIT 1"));
-  return $achievement_name[0];
 }
 
 

@@ -12,6 +12,7 @@
 require_once("header.php");
 require_once("scripts/get_lib.php");
 require_once("scripts/defines.php");
+require_once("libs/archieve_lib.php");
 valid_login($action_permission['read']);
 
 //########################################################################################################################
@@ -92,24 +93,28 @@ function char_achievements()
         <div id=\"tab_content\">
           <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
           <br /><br />
-          <table class=\"lined\" style=\"width: 550px;\">
+          <table class=\"lined\" style=\"width: 750px;\">
             <tr>
-              <td width=\"100%\" align=\"right\" colspan=\"2\">";
+              <td width=\"100%\" align=\"right\" colspan=\"4\">";
       $output .= generate_pagination("char_achieve.php?id=$id&amp;realm=$realmid&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
       $output .= "
               </td>
             </tr>
             <tr>";
       $output .= "
-              <th width=\"78%\">{$lang_char['achievement_title']}</th>
-              <th width=\"22%\"><a href=\"char_achieve.php?id=$id&amp;realm=$realmid&amp;order_by=date&amp;start=$start&amp;dir=$dir\"".($order_by=='date' ? " class=\"$order_dir\"" : "").">{$lang_char['achievement_date']}</a></th>
+              <th width=\"25%\">{$lang_char['achievement_category']}</th>
+              <th width=\"60%\">{$lang_char['achievement_title']}</th>
+			  <th width=\"5%\">{$lang_char['achievement_points']}</th>
+              <th width=\"10%\"><a href=\"char_achieve.php?id=$id&amp;realm=$realmid&amp;order_by=date&amp;start=$start&amp;dir=$dir\"".($order_by=='date' ? " class=\"$order_dir\"" : "").">{$lang_char['achievement_date']}</a></th>
             </tr>";
 
       while ($data = $sqlc->fetch_row($result))
       {
         $output .="
             <tr>
-              <td align=\"left\"><a href=\"http://www.wowhead.com/?achievement=".$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a></td>
+              <td>".get_achievement_category($data[0])."</td>
+              <td align=\"left\"><a href=\"http://www.wowhead.com/?achievement=".$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a><BR>".get_achievement_reward($data[0])."</td>
+			  <td>".get_achievement_points($data[0])." <img src=\"img/money_achievement.gif\" alt=\"\" /></td>
               <td>".date("n-j-o", $data['1'])."</td>
             </tr>";
       }

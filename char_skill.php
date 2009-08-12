@@ -12,6 +12,7 @@
 require_once("header.php");
 require_once("scripts/get_lib.php");
 require_once("scripts/defines.php");
+require_once("libs/skill_lib.php");
 valid_login($action_permission['read']);
 
 //########################################################################################################################
