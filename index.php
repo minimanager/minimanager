@@ -106,8 +106,6 @@ function front()
     unset($db_rev);
   }
 
-  //$sql->db($characters_db[$realm_id]['name']);
-
   //MOTD part
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
   if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;

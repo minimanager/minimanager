@@ -35,6 +35,16 @@ if (function_exists ('date_default_timezone_set') )
 
 
 //#############################################################################
+// loading of wowhead tool tip script
+function wowhead_tt()
+{
+ global $output, $tt_script;
+ $output .="<script type=\"text/javascript\" src=\"$tt_script\"></script>";
+
+}
+
+
+//#############################################################################
 //validates sessions' vars and restricting access to given level
 function valid_login($restrict_lvl)
 {
@@ -94,7 +104,7 @@ function aasort(&$array, $field, $order = false)
   $order = ($order ? '<' : '>');
   usort
   (
-    $array, 
+    $array,
     create_function('$a, $b',
       'return ($a['.$field.'] == $b['.$field.'] ? 0 :($a['.$field.'] '.$order.' $b['.$field.']) ? 1 : -1);')
   );
@@ -166,7 +176,7 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $add
           }
         }
         $page_string .= ( $on_page < $total_pages - 4 ) ? " ... " : ", ";
-      } 
+      }
       else
       {
         $page_string .= " ... ";

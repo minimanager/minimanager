@@ -19,6 +19,8 @@ require_once("scripts/defines.php");
 function edit_char() {
  global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $action_permission, $user_lvl,
     $item_datasite;
+  wowhead_tt();
+
 valid_login($action_permission['delete']);
 if (empty($_GET['id'])) error($lang_global['empty_fields']);
 

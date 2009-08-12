@@ -21,6 +21,7 @@ function char_inv()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
     $action_permission, $user_lvl, $user_name, $item_datasite;
+  wowhead_tt();
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);

@@ -191,11 +191,13 @@ function get_lang_id()
 
 function get_item_icon($itemid)
 {
-  global $mmfpm_db, $proxy_cfg, $get_icons_from_web, $item_icons;
+  global $mmfpm_db, $world_db, $realm_id, $proxy_cfg, $get_icons_from_web, $item_icons;
 
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $result = $sqlm->query("SELECT `displayid` FROM `dbc_item` WHERE `entry` = $itemid LIMIT 1");
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $result = $sqlw->query("SELECT `displayid` FROM `item_template` WHERE `entry` = $itemid LIMIT 1");
 
   if ($result)
     $displayid = $sqlm->result($result, 0);

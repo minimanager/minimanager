@@ -8,6 +8,7 @@
  * License: GNU General Public License v2(GPL)
  */
 
+
 include("header.php");
 valid_login($action_permission['read']);
 
@@ -113,7 +114,7 @@ function update_commands()
         <center>
           <form method=\"get\" action=\"command.php\" name=\"form\">
             <input type=\"hidden\" name=\"action\" value=\"doupdate\" />
-              <table class=\"lined\" style=\"width: 720px;\">
+              <table class=\"lined\" style=\"width: 700px;\">
                 <tr>
                   <th width=\"1%\"></th>";
   for ($i=0; $i<=$user_lvl; $i++)

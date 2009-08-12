@@ -21,6 +21,7 @@ function char_quest()
 {
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $world_db, $characters_db, $itemperpage,
     $action_permission, $user_lvl, $user_name, $quest_datasite;
+  wowhead_tt();
 
   if (empty($_GET['id'])) error($lang_global['empty_fields']);
 

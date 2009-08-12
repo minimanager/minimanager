@@ -20,6 +20,7 @@ function browse_auctions()
 {
   global $lang_auctionhouse, $lang_global, $lang_item, $output, $characters_db, $world_db, $realm_id,
     $itemperpage, $item_datasite, $server, $user_lvl, $user_id;
+  wowhead_tt();
 
   $red = "\"#DD5047\"";
   $blue = "\"#0097CD\"";

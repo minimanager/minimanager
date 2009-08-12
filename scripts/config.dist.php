@@ -154,13 +154,14 @@ $proxy_cfg = Array
 //#############################################################################
 //---- External Links ----
 
-$tt_lang                    = "www"; // wowhead tooltip language. choices are 'fr', 'de', 'es' (for 'en' use www)
+$tt_lang                    = "www"; // wowhead tooltip language. choices are 'fr', 'de', 'es', 'ru' (for 'en' use www)
 $item_datasite              = "http://$tt_lang.wowhead.com/?item=";
 $quest_datasite             = "http://$tt_lang.wowhead.com/?quest=";
 $creature_datasite          = "http://$tt_lang.wowhead.com/?npc=";
 $spell_datasite             = "http://$tt_lang.wowhead.com/?spell=";
 $skill_datasite             = "http://$tt_lang.wowhead.com/?spells=";
 $go_datasite                = "http://$tt_lang.wowhead.com/?object=";
+$achievement_datasite       = "http://$tt_lang.wowhead.com/?achievement=";
 $talent_calculator_datasite = "http://www.wowarmory.com/talent-calc.xml?cid=";
 $get_icons_from_web         =  false;           // wherever to get icons from the web.
 $item_icons                 = "img/item_icons"; // and this is where it will save to and get from.

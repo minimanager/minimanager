@@ -219,7 +219,7 @@ $output .= "</td></tr>
 function do_search() {
  global $lang_global, $lang_creature, $output, $world_db, $realm_id, $creature_datasite, $sql_search_limit,
     $creature_type, $creature_npcflag, $language;
-
+  wowhead_tt();
 
 $sql = new SQL;
 $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
@@ -368,6 +368,7 @@ else
 function do_insert_update($do_insert) {
  global $lang_global, $lang_creature, $output, $world_db, $realm_id, $creature_datasite,$item_datasite,
     $quest_datasite, $lang_id_tab, $spell_datasite, $lang_item,$language, $action_permission, $user_lvl, $locales_search_option;
+  wowhead_tt();
 
  require_once("./scripts/get_lib.php");
 

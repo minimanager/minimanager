@@ -23,6 +23,7 @@ function guild_bank()
 {
   global $lang_global, $lang_guildbank, $output, $characters_db, $realm_id, $item_datasite, $item_icons,
     $developer_test_mode, $guild_bank;
+  wowhead_tt();
 
   if (empty($_GET['id'])) error($lang_global['empty_fields']);
 

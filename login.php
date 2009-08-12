@@ -16,7 +16,7 @@ require_once("header.php");
 //#############################################################################
 function dologin()
 {
-  global $lang_global, $realm_db;
+  global $realm_db;
 
   if ( empty($_POST['user']) || empty($_POST['pass']) )
     redirect("login.php?error=2");
@@ -70,7 +70,7 @@ function dologin()
 //#################################################################################################
 function login()
 {
-  global $lang_global, $lang_login, $output, $realm_db, $characters_db, $server, $remember_me_checked;
+  global $lang_login, $output, $realm_db, $characters_db, $server, $remember_me_checked;
 
   $output .= "
         <center>
@@ -176,7 +176,7 @@ function login()
 //#################################################################################################
 function do_cookie_login()
 {
-  global $lang_global, $realm_db;
+  global $realm_db;
 
   if ( empty($_COOKIE['uname']) || empty($_COOKIE['p_hash']) || empty($_COOKIE['realm_id']))
     redirect("login.php?error=2");

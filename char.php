@@ -21,6 +21,7 @@ function char_main()
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $characters_db, $server, $mmfpm_db,
     $action_permission, $user_lvl, $user_name, $user_id, $item_datasite, $spell_datasite , $showcountryflag;
+  wowhead_tt();
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);

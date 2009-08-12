@@ -10,6 +10,7 @@ valid_login($action_permission['update']);
 function do_search()
 {
   global $lang_global, $output, $itemperpage, $item_datasite, $mangos_db, $characters_db, $realm_id;
+  wowhead_tt();
 
   $sql = new SQL;
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -118,6 +119,7 @@ $sql->close();
 //########################################################################################################################
 function search() {
  global $lang_global, $output, $itemperpage, $item_datasite, $mangos_db, $characters_db, $realm_id, $sql_search_limit;
+  wowhead_tt();
 
  if(!isset($_GET['search_value']) || !isset($_GET['search_by'])) redirect("mail_on.php?error=2");
 

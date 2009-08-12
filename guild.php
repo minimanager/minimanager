@@ -66,13 +66,13 @@ function browse_guilds()
             <legend>{$lang_guild['my_guilds']}</legend>
             <table class=\"lined\" align=\"center\">
               <tr>
-                <th width=\"5%\">{$lang_guild['id']}</th>
-                <th width=\"25%\">{$lang_guild['guild_name']}</th>
-                <th width=\"15%\">{$lang_guild['guild_leader']}</th>
-                <th width=\"10%\">{$lang_guild['guild_faction']}</th>
+                <th width=\"1%\">{$lang_guild['id']}</th>
+                <th width=\"20%\">{$lang_guild['guild_name']}</th>
+                <th width=\"10%\">{$lang_guild['guild_leader']}</th>
+                <th width=\"1%\">{$lang_guild['guild_faction']}</th>
                 <th width=\"10%\">{$lang_guild['tot_m_online']}</th>
                 <th width=\"20%\">{$lang_guild['guild_motd']}</th>
-                <th width=\"15%\">{$lang_guild['create_date']}</th>
+                <th width=\"20%\">{$lang_guild['create_date']}</th>
               </tr>";
     while ($data = $sqlr->fetch_row($query_myGuild))
     {
@@ -95,8 +95,9 @@ function browse_guilds()
     $output .= "
             </table>
           </fieldset>
+          <br />
         </center>
-        <br />";
+";
   }
   //==========================MyGuild end======================================
   //==========================Browse/Search Guilds CHECK=======================
@@ -153,42 +154,46 @@ function browse_guilds()
   //==========================Browse/Search Guilds=============================
 
   $output .="
-        <table class=\"top_hidden\" align=\"center\">
-          <tr>
-            <td width =\"200\">";
+        <center>
+          <table class=\"top_hidden\">
+            <tr align=\"left\">
+              <td>
+                <table class=\"hidden\">
+                  <tr>
+                    <td>
+                      <form action=\"guild.php?realm=$realmid\" method=\"get\" name=\"form\">
+                        <input type=\"hidden\" name=\"error\" value=\"4\" />
+                        <input type=\"text\" size=\"24\" name=\"search_value\" value=\"{$search_value}\" />
+                        <select name=\"search_by\">
+                          <option value=\"name\"".($search_by == 'name' ? " selected=\"selected\"" : "").">{$lang_guild['by_name']}</option>
+                          <option value=\"leadername\"".($search_by == 'leadername' ? " selected=\"selected\"" : "").">{$lang_guild['by_guild_leader']}</option>
+                          <option value=\"guildid\"".($search_by == 'guildid' ? " selected=\"selected\"" : "").">{$lang_guild['by_id']}</option>
+                        </select>
+                      </form>
+                    </td>
+                    <td width=\"300\">";
+              makebutton($lang_global['search'], "javascript:do_submit()",80);
   ($search_by &&  $search_value) ? makebutton($lang_guild['show_guilds'], "guild.php?realm=$realmid\" type=\"def", 130) : $output .= "";
   $output .= "
-            </td>
-            <td align=\"right\">
-              <form action=\"guild.php?realm=$realmid\" method=\"get\" name=\"form\">
-                <input type=\"hidden\" name=\"action\" value=\"browse_guilds\" />
-                <input type=\"hidden\" name=\"error\" value=\"4\" />
-                <input type=\"text\" size=\"42\" name=\"search_value\" value=\"{$search_value}\" />
-                <select name=\"search_by\">
-                  <option value=\"name\"".($search_by == 'name' ? " selected=\"selected\"" : "").">{$lang_guild['by_name']}</option>
-                  <option value=\"leadername\"".($search_by == 'leadername' ? " selected=\"selected\"" : "").">{$lang_guild['by_guild_leader']}</option>
-                  <option value=\"guildid\"".($search_by == 'guildid' ? " selected=\"selected\"" : "").">{$lang_guild['by_id']}</option>
-                </select>
-              </form>
-            </td>
-            <td>";
-              makebutton($lang_global['search'], "javascript:do_submit()",130);
-  $output .= "
-            </td>
-          </tr>
-          <tr>
-            <td colspan=\"3\" align=\"right\">";
-  $output .= generate_pagination("guild.php?action=brows_guilds&amp;realm=$realmid&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start);
-  $output .= "
-            </td>
-          </tr>
-        </table>";
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </center>";
   //==========================top tage navigaion ENDS here ====================
   $output .= "
         <center>
           <fieldset>
             <legend>{$lang_guild['browse_guilds']}</legend>
               <table class=\"lined\" align=\"center\">
+                <tr class=\"hidden\">
+                  <td colspan=\"6\" class=\"hidden\" align=\"right\" width=\"25%\">";
+      $output .= generate_pagination("guild.php?action=brows_guilds&amp;realm=$realmid&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start);
+      $output .= "
+                  </td>
+                </tr>
                 <tr>
                   <th width=\"5%\"><a href=\"guild.php?order_by=gid&amp;realm=$realmid&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='gid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['id']}</a></th>
                   <th width=\"30%\"><a href=\"guild.php?order_by=name&amp;realm=$realmid&amp;start=$start&amp;dir=$dir".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['guild_name']}</a></th>
@@ -214,19 +219,19 @@ function browse_guilds()
   }
   $output .= "
                 <tr>
-                  <td colspan=\"6\" class=\"hidden\" align=\"right\"  width=\"25%\">".generate_pagination("guild.php?action=brows_guilds&amp;realm=$realmid&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start)."</td>
+                  <td colspan=\"6\" class=\"hidden\" align=\"right\" width=\"25%\">".generate_pagination("guild.php?action=brows_guilds&amp;realm=$realmid&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start)."</td>
                 </tr>
                 <tr>
                   <td colspan=\"6\" class=\"hidden\" align=\"right\">{$lang_guild['tot_guilds']} : $all_record</td>
                 </tr>
               </table>
             </fieldset>
+            <br />
           </center>
-          <br />";
-  //==========================Browse/Search Guilds end=========================
+";
 
 }
-
+  //==========================Browse/Search Guilds end=========================
 
 function count_days( $a, $b )
 {
@@ -331,21 +336,23 @@ function view_guild()
                   </table>
                 </td>
               </tr>
-              <div align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start)."</div>
+              <tr>
+                <td align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start)."</td>
+              </tr>
               <tr>
                 <td>
                   <table class=\"lined\">
                     <tr>
-                      <th width=\"3%\">{$lang_guild['remove']}</th>
-                      <th width=\"21%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=cname&amp;start=$start&amp;dir=$dir\">".($order_by=='cname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['name']}</a></th>
-                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=crace&amp;start=$start&amp;dir=$dir\">".($order_by=='crace' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['race']}</a></th>
-                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=class&amp;start=$start&amp;dir=$dir\">".($order_by=='cclass' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['class']}</a></th>
-                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=clevel&amp;start=$start&amp;dir=$dir\">".($order_by=='clevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['level']}</a></th>
-                      <th width=\"21%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=mrank&amp;start=$start&amp;dir=$dir\">".($order_by=='mrank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['rank']}</a></th>
-                      <th width=\"14%\">{$lang_guild['pnote']}</th>
-                      <th width=\"14%\">{$lang_guild['offnote']}</th>
+                      <th width=\"1%\">{$lang_guild['remove']}</th>
+                      <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=cname&amp;start=$start&amp;dir=$dir\">".($order_by=='cname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['name']}</a></th>
+                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=crace&amp;start=$start&amp;dir=$dir\">".($order_by=='crace' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['race']}</a></th>
+                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=class&amp;start=$start&amp;dir=$dir\">".($order_by=='cclass' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['class']}</a></th>
+                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=clevel&amp;start=$start&amp;dir=$dir\">".($order_by=='clevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['level']}</a></th>
+                      <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=mrank&amp;start=$start&amp;dir=$dir\">".($order_by=='mrank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['rank']}</a></th>
+                      <th width=\"15%\">{$lang_guild['pnote']}</th>
+                      <th width=\"15%\">{$lang_guild['offnote']}</th>
                       <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=clogout&amp;start=$start&amp;dir=$dir\">".($order_by=='clogout' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['llogin']}</a></th>
-                      <th width=\"3%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['online']}</a></th>
+                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['online']}</a></th>
                     </tr>";
   $members = $sqlc->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(c.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS clevel,
@@ -387,6 +394,9 @@ function view_guild()
   $output .= "
                   </table>
                 </td>
+              </tr>
+              <tr>
+                <td align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start)."</td>
               </tr>
             </table>
             <br />";
@@ -581,9 +591,6 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 switch ($action)
 {
-  case "browse_guilds":
-    browse_guilds();
-    break;
   case "view_guild":
     view_guild();
     break;

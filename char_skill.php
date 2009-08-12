@@ -22,6 +22,7 @@ function char_skill()
 {
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
     $action_permission, $user_lvl, $user_name, $skill_datasite;
+  wowhead_tt();
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -93,7 +94,7 @@ function char_skill()
             <div id=\"tab_content2\">
               <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
               <br /><br />
-              <table class=\"lined\" style=\"width: 600px;\">
+              <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th class=\"title\" colspan=\"".($user_lvl ? "3" : "2")."\" align=\"left\">{$lang_char['skills']}</th>
                 </tr>

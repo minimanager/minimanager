@@ -237,6 +237,8 @@ $output .= "</select></td>
 function do_search() {
  global $lang_global, $lang_item, $lang_item_edit, $output, $world_db, $realm_id, $item_datasite, $sql_search_limit, $action_permission, $user_lvl;
  valid_login($action_permission['read']);
+  wowhead_tt();
+
  $deplang = get_lang_id();
  if(($_POST['class'] == "-1")&&($_POST['Quality'] == "-1")&&($_POST['InventoryType'] == "-1")&&($_POST['bonding'] == "-1")
   &&(!isset($_POST['entry'])||$_POST['entry'] === '')&&(!isset($_POST['name'])||$_POST['name'] === '')&&(!isset($_POST['displayid'])||$_POST['displayid'] === '')&&(!isset($_POST['RequiredLevel'])||$_POST['RequiredLevel'] === '')
@@ -343,6 +345,7 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
 function add_new() {
  global $lang_global, $lang_item, $lang_id_tab, $lang_item_edit, $output, $item_datasite, $action_permission, $user_lvl;
 valid_login($action_permission['update']);
+  wowhead_tt();
 
  $output .= "<script type=\"text/javascript\" src=\"js/tab.js\"></script>
    <center>
@@ -1172,6 +1175,8 @@ $output .= "<div id=\"pane7\">
 function edit() {
  global $lang_global, $lang_item_templ, $lang_item, $lang_item_edit, $output, $world_db, $realm_id,
     $item_datasite, $lang_id_tab, $quest_datasite, $action_permission, $user_lvl;
+  wowhead_tt();
+
 valid_login($action_permission['update']);
 
  if (!isset($_GET['entry'])) redirect("item.php?error=1");

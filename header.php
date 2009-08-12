@@ -67,7 +67,6 @@ $output .= "
   <script type=\"text/javascript\" charset=\"utf-8\"></script>
   <script type=\"text/javascript\" src=\"libs/js/general.js\"></script>
   <script type=\"text/javascript\" src=\"libs/js/layout.js\"></script>
-  <script type=\"text/javascript\" src=\"$tt_script\"></script>
 
   <!--[if lte IE 7]>
     <style>
@@ -85,7 +84,6 @@ $output .= "
     <table class=\"table_top\">
       <tr>
         <td class=\"table_top_left\">";
-unset($tt_script);
 
 if($developer_test_mode && $allow_anony && (!isset($_SESSION['logged_in'])))
 {

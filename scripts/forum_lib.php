@@ -43,6 +43,7 @@ function ajtBBCode(Tag, fTag){
 
 function bbcode_callbacks_wow($item){
   global $item_datasite, $lang_id_tab;
+  wowhead_tt();
   require_once("scripts/id_tab.php");
   require_once("scripts/get_lib.php");
   return "<a href=\"$item_datasite{$item[1]}\" target=\"_blank\"

@@ -226,14 +226,15 @@ function browse_chars()
           <table class=\"top_hidden\">
             <tr>
               <td>";
+  // cleanup unknown working condition
+  //if($user_lvl >= $action_permission['delete'])
+  //              makebutton($lang_char_list['cleanup'], "cleanup.php", 130);
+                makebutton($lang_global['back'], "javascript:window.history.back()", 130);
   ($search_by && $search_value) ? makebutton($lang_char_list['characters'], "char_list.php\" type=\"def", 130) : $output .= "";
-  if($user_lvl >= $action_permission['delete'])
-                makebutton($lang_char_list['cleanup'], "cleanup.php", 130);
-  ($search_by && $search_value) ? makebutton($lang_global['back'], "javascript:window.history.back()", 130) : $output .= "";
   $output .= "
               </td>
               <td align=\"right\" width=\"25%\" rowspan=\"2\">";
-  $output .= generate_pagination("char_list.php?action=browse_chars&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
+  $output .= generate_pagination("char_list.php?order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
   $output .= "
               </td>
             </tr>
@@ -243,9 +244,8 @@ function browse_chars()
                   <tr>
                     <td>
                       <form action=\"char_list.php\" method=\"get\" name=\"form\">
-                        <input type=\"hidden\" name=\"action\" value=\"browse_chars\" />
                         <input type=\"hidden\" name=\"error\" value=\"3\" />
-                        <input type=\"text\" size=\"42\" maxlength=\"50\" name=\"search_value\" value=\"{$search_value}\" />
+                        <input type=\"text\" size=\"24\" maxlength=\"50\" name=\"search_value\" value=\"{$search_value}\" />
                         <select name=\"search_by\">
                           <option value=\"name\"".($search_by == 'name' ? " selected=\"selected\"" : "").">{$lang_char_list['by_name']}</option>
                           <option value=\"guid\"".($search_by == 'guid' ? " selected=\"selected\"" : "").">{$lang_char_list['by_id']}</option>
@@ -265,7 +265,7 @@ function browse_chars()
                       </form>
                     </td>
                     <td>";
-                      makebutton($lang_global['search'], "javascript:do_submit()",130);
+                      makebutton($lang_global['search'], "javascript:do_submit()",80);
   $output .= "
                     </td>
                   </tr>
@@ -367,7 +367,7 @@ function browse_chars()
   $output .= "
               <tr>
                 <td colspan=\"13\" align=\"right\" class=\"hidden\" width=\"25%\">";
-  $output .= generate_pagination("char_list.php?action=browse_chars&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
+  $output .= generate_pagination("char_list.php?order_by=$order_by&amp;dir=".(($dir) ? 0 : 1).( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
   $output .= "
                 </td>
               </tr>
@@ -530,9 +530,6 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 switch ($action)
 {
-  case "browse_chars":
-    browse_chars();
-    break;
   case "del_char_form":
     del_char_form();
     break;

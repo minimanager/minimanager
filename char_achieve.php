@@ -21,7 +21,8 @@ valid_login($action_permission['read']);
 function char_achievements()
 {
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db, $itemperpage,
-    $action_permission, $user_lvl, $user_name;
+    $action_permission, $user_lvl, $user_name, $achievement_datasite;
+  wowhead_tt();
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
@@ -93,7 +94,7 @@ function char_achievements()
         <div id=\"tab_content\">
           <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_player_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_player_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
           <br /><br />
-          <table class=\"lined\" style=\"width: 750px;\">
+          <table class=\"lined\" style=\"width: 550px;\">
             <tr>
               <td width=\"100%\" align=\"right\" colspan=\"4\">";
       $output .= generate_pagination("char_achieve.php?id=$id&amp;realm=$realmid&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
@@ -113,9 +114,9 @@ function char_achievements()
         $output .="
             <tr>
               <td>".get_achievement_category($data[0])."</td>
-              <td align=\"left\"><a href=\"http://www.wowhead.com/?achievement=".$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a><br />".get_achievement_reward($data[0])."</td>
+              <td align=\"left\"><a href=\"".$achievement_datasite.$data[0]."\" target=\"_blank\">".get_achievement_name($data[0])."</a><br />".get_achievement_reward($data[0])."</td>
               <td>".get_achievement_points($data[0])." <img src=\"img/money_achievement.gif\" alt=\"\" /></td>
-              <td>".date("n-j-o", $data['1'])."</td>
+              <td>".date("o-m-d", $data['1'])."</td>
             </tr>";
       }
       $output .= "

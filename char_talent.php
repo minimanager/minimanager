@@ -22,6 +22,7 @@ function char_talent()
   require_once("libs/talent_lib.php");
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db, $mmfpm_db,
     $action_permission, $user_lvl, $user_name, $spell_datasite, $talent_calculator_datasite, $developer_test_mode, $new_talent_tab;
+  wowhead_tt();
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);

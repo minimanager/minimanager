@@ -20,6 +20,7 @@ function char_pets()
 {
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
     $action_permission, $user_lvl, $user_name, $spell_datasite, $pet_ability;
+  wowhead_tt();
 
   if (empty($_GET['id'])) error($lang_global['empty_fields']);
 

@@ -125,6 +125,8 @@ $output .= "</td></tr>
 function do_search() {
  global $lang_global, $lang_game_object, $output, $world_db, $realm_id, $go_datasite, $sql_search_limit,
     $go_type;
+  wowhead_tt();
+
   require_once("./scripts/get_lib.php");
   $deplang = get_lang_id();
 
@@ -361,6 +363,7 @@ $output .= "<div id=\"pane1\"><br /><br />
 function edit() {
  global $lang_global, $lang_game_object, $output, $world_db, $realm_id, $item_datasite, $go_datasite,
     $go_type, $quest_datasite;
+  wowhead_tt();
 
  if (!isset($_GET['entry'])) redirect("game_object.php?error=1");
 
