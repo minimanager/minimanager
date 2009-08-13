@@ -8,9 +8,10 @@
 //#############################################################################
 //get character race and side table
 
-function get_race_names_n_sides_tab()
+function char_char_get_race_names_n_sides_tab()
 {
   global $lang_id_tab;
+
   $race_names_n_sides_tab =
     array
     (
@@ -23,8 +24,9 @@ function get_race_names_n_sides_tab()
        7 => array($lang_id_tab['gnome'],    0),
        8 => array($lang_id_tab['troll'],    1),
       10 => array($lang_id_tab['bloodelf'], 1),
-      11 => array($lang_id_tab['draenei'],  0)
+      11 => array($lang_id_tab['draenei'],  0),
     );
+
    return $race_names_n_sides_tab;
 }
 
@@ -32,15 +34,17 @@ function get_race_names_n_sides_tab()
 //#############################################################################
 //get character side name by side id
 
-function get_side_name($side_id)
+function char_get_side_name($side_id)
 {
   global $lang_id_tab;
+
   $side_names =
     array
     (
       0 => $lang_id_tab['Alliance'],
-      1 => $lang_id_tab['Horde']
+      1 => $lang_id_tab['Horde'],
     );
+
   return $side_names[$side_id];
 }
 
@@ -48,9 +52,10 @@ function get_side_name($side_id)
 //#############################################################################
 //get character side id by race id
 
-function get_side_id($race_id)
+function char_get_side_id($race_id)
 {
-  $race_sides = get_race_names_n_sides_tab();
+  $race_sides = char_char_get_race_names_n_sides_tab();
+
   return $race_sides[$race_id][1];
 }
 
@@ -58,9 +63,10 @@ function get_side_id($race_id)
 //#############################################################################
 //get character race name by race id
 
-function get_race_name($race_id)
+function char_get_race_name($race_id)
 {
-  $race_names = get_race_names_n_sides_tab();
+  $race_names = char_char_get_race_names_n_sides_tab();
+
   return $race_names[$race_id][0];
 }
 
@@ -68,9 +74,10 @@ function get_race_name($race_id)
 //#############################################################################
 //get player class name by class id
 
-function get_class_name($class_id)
+function char_get_class_name($class_id)
 {
   global $lang_id_tab;
+
   $class_names =
     array
     (
@@ -85,6 +92,7 @@ function get_class_name($class_id)
        9  => $lang_id_tab['warlock'],
        11 => $lang_id_tab['druid'],
     );
+
     return $class_names[$class_id];
 }
 
@@ -92,9 +100,10 @@ function get_class_name($class_id)
 //#############################################################################
 //get player honor rank name by side and honor points
 
-function get_pvp_rank_name($honor_points=0, $side_id=0)
+function char_get_pvp_rank_name($honor_points=0, $side_id=0)
 {
   global $lang_id_tab;
+
   $rank_names =
     array
     (
@@ -116,7 +125,7 @@ function get_pvp_rank_name($honor_points=0, $side_id=0)
         11   => $lang_id_tab['Commander'],
         12   => $lang_id_tab['Marshal'],
         13   => $lang_id_tab['Field_Marshal'],
-        14   => $lang_id_tab['Grand_Marshal']
+        14   => $lang_id_tab['Grand_Marshal'],
       ),
       1 => array
       (
@@ -136,80 +145,83 @@ function get_pvp_rank_name($honor_points=0, $side_id=0)
         11   => $lang_id_tab['Lieutenant_General'],
         12   => $lang_id_tab['General'],
         13   => $lang_id_tab['Warlord'],
-        14   => $lang_id_tab['High_Warlord']
+        14   => $lang_id_tab['High_Warlord'],
       )
     );
-    return $rank_names[$side_id][get_pvp_rank_id($honor_points, $side_id)];
+
+    return $rank_names[$side_id][char_get_pvp_rank_id($honor_points, $side_id)];
 }
 
 
 //#############################################################################
 //get pvp rank ID by honor point
 
-function get_pvp_rank_id($honor_points=0, $side_id=0)
+function char_get_pvp_rank_id($honor_points=0, $side_id=0)
 {
   $rank_id = '0'.$side_id;
+
   if($honor_points > 0)
   {
-     if($honor_points < 2000)
-       $rank_id = 1;
-     else
-       $rank_id = ceil($honor_points / 5000) + 1;
+    if($honor_points < 2000)
+      $rank_id = 1;
+    else
+      $rank_id = ceil($honor_points / 5000) + 1;
   }
+
   if ($rank_id > 14)
     $rank_id = 14;
+
   return $rank_id;
-};
+}
 
 
 //#############################################################################
-//get avatar image dir by char level, gender. race and class
+//get avatar image by char level, gender, race, class and gm level
 
-function get_avatar_img($level, $gender, $race, $class,$gm=0)
+function char_get_avatar_img($level, $gender, $race, $class,$gm=0)
 {
-  $return = "";
   if ($gm > 0)
   {
     if(file_exists("img/avatars/bliz/$gm.gif"))
-      $return .= "img/avatars/bliz/$gm.gif";
+      $avatar = "img/avatars/bliz/$gm.gif";
     else
-      $return .= "img/avatars/bliz/bliz.gif";
+      $avatar = "img/avatars/bliz/bliz.gif";
   }
   elseif($level < 60)
   {
-    $return .= "img/avatars/np/$gender-$race-$class.gif";
+    $avatar = "img/avatars/np/$gender-$race-$class.gif";
   }
   elseif($level < 70)
   {
-    $return .= "img/avatars/60/$gender-$race-$class.gif";
+    $avatar = "img/avatars/60/$gender-$race-$class.gif";
   }
   else
-    $return .= "img/avatars/70/$gender-$race-$class.gif";
+    $avatar = "img/avatars/70/$gender-$race-$class.gif";
 
-  return $return;
-};
+  return $avatar;
+}
 
 
 //#############################################################################
 //set color per Level range
 
-function get_level_with_color($lvl)
+function char_get_level_color($lvl)
 {
   if($lvl < 40)
   {
     if($lvl < 20)
     {
       if($lvl < 10)
-        $level = '<font color="#FFFFFF">'.$lvl.'</font>';
+        $level_color = '<font color="#FFFFFF">'.$lvl.'</font>';
       else
-        $level = '<font color="#858585">'.$lvl.'</font>';
+        $level_color = '<font color="#858585">'.$lvl.'</font>';
     }
     else
     {
       if($lvl < 30)
-        $level = '<font color="#339900">'.$lvl.'</font>';
+        $level_color = '<font color="#339900">'.$lvl.'</font>';
       else
-        $level = '<font color="#3300CC">'.$lvl.'</font>';
+        $level_color = '<font color="#3300CC">'.$lvl.'</font>';
     }
   }
   else
@@ -217,25 +229,25 @@ function get_level_with_color($lvl)
     if($lvl < 60)
     {
       if($lvl < 50)
-        $level = '<font color="#C552FF">'.$lvl.'</font>';
+        $level_color = '<font color="#C552FF">'.$lvl.'</font>';
       else
-        $level = '<font color="#FFF280">'.$lvl.'</font>';
+        $level_color = '<font color="#FFF280">'.$lvl.'</font>';
     }
     else
     {
       if($lvl < 70)
-        $level = '<font color="#FFF280">'.$lvl.'</font>';
+        $level_color = '<font color="#FFF280">'.$lvl.'</font>';
       else
       {
         if($lvl < 80)
-          $level = '<font color="#FF0000">'.$lvl.'</font>';
+          $level_color = '<font color="#FF0000">'.$lvl.'</font>';
         else
-          $level = '<font color="#000000">'.$lvl.'</font>';
+          $level_color = '<font color="#000000">'.$lvl.'</font>';
       }
     }
   }
 
-  return $level;
+  return $level_color;
 }
 
 /*

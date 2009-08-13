@@ -1,11 +1,9 @@
 <?php
 
-//require_once("config.dist.php");
-//require_once("config.php");
 
 //array of talent ids, name, talent calculator value
 
-function talent_id()
+function talent_get_id_tab()
 {
   $talent_id = Array
   (
@@ -1755,12 +1753,12 @@ function talent_id()
 }
 
 
-function get_talent_value($id)
+function talent_get_value($id)
 {
-  $talent_id = talent_id();
+  $talent_id_tab = talent_get_id_tab();
 
-  if(isset($talent_id[$id][2]))
-    return $talent_id[$id][2];
+  if(isset($talent_id_tab[$id][2]))
+    return $talent_id_tab[$id][2];
   else
     return 0;
 }

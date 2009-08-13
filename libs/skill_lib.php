@@ -7,7 +7,8 @@
 
 //#############################################################################
 //get skill type by its id
-function get_skill_type($id)
+
+function skill_get_type($id)
 {
   global $mmfpm_db;
   $sqlm = new SQL;
@@ -20,7 +21,7 @@ function get_skill_type($id)
 //#############################################################################
 //get skill name by its id
 
-function get_skill_name($id)
+function skill_get_name($id)
 {
   global $mmfpm_db;
   $sqlm = new SQL;

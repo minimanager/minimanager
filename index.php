@@ -141,7 +141,7 @@ function front()
       $output .= "
               <tr>
                 <td align=\"left\" class=\"large\">
-                  <blockquote>".bbcode2html($post[2])."</blockquote>
+                  <blockquote>".bbcode_bbc2html($post[2])."</blockquote>
                  </td>
               </tr>
               <tr>";
@@ -288,14 +288,14 @@ function front()
       $output .="
                 </td>
                 <td>
-                  <img src='img/c_icons/{$char[2]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
+                  <img src='img/c_icons/{$char[2]}-{$char[10]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
                 </td>
                 <td>
-                  <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
+                  <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
                 </td>
-                <td>".get_level_with_color($char[7])."</td>
+                <td>".char_get_level_color($char[7])."</td>
                 <td>
-                  <span onmouseover='toolTip(\"".get_pvp_rank_name($char[6], get_side_id($char[2]))."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".get_pvp_rank_id($char[6], get_side_id($char[2])).".gif' alt=\"\" /></span>
+                  <span onmouseover='toolTip(\"".char_get_pvp_rank_name($char[6], char_get_side_id($char[2]))."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".char_get_pvp_rank_id($char[6], char_get_side_id($char[2])).".gif' alt=\"\" /></span>
                 </td>
                 <td>
                   <a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[9]\">$guild_name[0]</a>

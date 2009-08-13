@@ -9,6 +9,9 @@
  */
 
 
+//#############################################################################
+// faction id and rep table
+
 function fact_get_fact_id()
 {
   $fact_id = Array
@@ -186,6 +189,7 @@ function fact_get_faction_tree($id)
     return 0;
 }
 
+
 //#############################################################################
 //get faction name by its id
 
@@ -246,7 +250,8 @@ function fact_get_base_reputation_rank($id, $race)
 
 
 //#############################################################################
-//get reputation at to rank by its id - http://github.com/mangos/mangos/blob/fcc2bfc52bab344de0a60c95dcbbdc55d2d226ba/src/game/ReputationMgr.h
+//get reputation at to rank by its id
+//- http://github.com/mangos/mangos/blob/fcc2bfc52bab344de0a60c95dcbbdc55d2d226ba/src/game/ReputationMgr.h
 
 function fact_reputation_at_to_rank($standing, $type)
 {

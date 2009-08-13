@@ -89,7 +89,7 @@ function char_talent()
             </ul>
           </div>
           <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
+            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char[4])."</font>
             <br /><br />
             <table class=\"lined\" style=\"width: 550px;\">";
       if($developer_test_mode && $new_talent_tab)
@@ -161,7 +161,7 @@ function char_talent()
         {
           while ($talent = $sqlc->fetch_row($result))
           {
-            if(get_talent_value($talent[0]))
+            if(talent_get_value($talent[0]))
               array_push($talents_1, array($talent[0], get_spell_name($talent[0])));
           }
           aasort($talents_1, $order_by, $dir);
@@ -179,14 +179,14 @@ function char_talent()
                     <a href=\"$spell_datasite$data[0]\" target=\"_blank\">$data[1]</a>
                   </td>";
             //if ($GMP)
-            //  $talent_sum = gmp_add($talent_sum,sprintf('%s',get_talent_value($data[0])));
+            //  $talent_sum = gmp_add($talent_sum,sprintf('%s',talent_get_value($data[0])));
             $output .= "
                 </tr>";
           }
         }
         /*
         // reserved till we get to calculate talent points using the new data we have in db
-        $playerclass = strtolower(get_class_name($char[3]));
+        $playerclass = strtolower(char_get_class_name($char[3]));
         switch ($playerclass)
         {
           case "shaman":

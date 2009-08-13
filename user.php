@@ -956,8 +956,8 @@ function edit_user()
               <tr>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'---></td>
                 <td>
-                      <a href=\"char.php?id=$char[0]&amp;realm=$realm[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
-                      <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".get_level_with_color($char[4])."</a>
+                      <a href=\"char.php?id=$char[0]&amp;realm=$realm[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
+                      <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".char_get_level_color($char[4])."</a>
                 </td>
               </tr>";
         }
@@ -982,8 +982,8 @@ function edit_user()
                 <tr>
                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'---></td>
                   <td>
-                    <a href=\"char.php?id=$char[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
-                    <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".get_level_with_color($char[4])."</a>
+                    <a href=\"char.php?id=$char[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
+                    <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".char_get_level_color($char[4])."</a>
                   </td>
                 </tr>";
       }

@@ -8,7 +8,7 @@
 //#############################################################################
 //get achievement name by its id
 
-function get_achievement_name($id)
+function achieve_get_name($id)
 {
   global $mmfpm_db;
   $sqlm = new SQL;
@@ -21,7 +21,7 @@ function get_achievement_name($id)
 //#############################################################################
 //get achievement category name by its id
 
-function get_achievement_category($id)
+function achieve_get_category($id)
 {
   global $mmfpm_db;
   $sqlm = new SQL;
@@ -36,7 +36,7 @@ function get_achievement_category($id)
 //#############################################################################
 //get achievement reward name by its id
 
-function get_achievement_reward($id)
+function achieve_get_reward($id)
 {
   global $mmfpm_db;
   $sqlm = new SQL;
@@ -50,7 +50,7 @@ function get_achievement_reward($id)
 //#############################################################################
 //get achievement points name by its id
 
-function get_achievement_points($id)
+function achieve_get_points($id)
 {
   global $mmfpm_db;
   $sqlm = new SQL;

@@ -89,7 +89,7 @@ function char_friends()
             </ul>
           </div>
           <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
+            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char[4])."</font>
             <br /><br />
             <table class=\"hidden\"  style=\"width: 1%;\">
               <tr valign=\"top\">
@@ -131,9 +131,9 @@ function char_friends()
             $output .=$data[0];
 
           $output .="</td>
-                      <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td>".get_level_with_color($data[5])."</td>
+                      <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".char_get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".char_get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td>".char_get_level_color($data[5])."</td>
                       <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3])."</span></td>
                       <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4])."</span></td>
                       <td>".(($data[7]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
@@ -177,9 +177,9 @@ function char_friends()
             $output .=$data[0];
 
           $output .="</td>
-                      <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td>".get_level_with_color($data[5])."</td>
+                      <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".char_get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".char_get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td>".char_get_level_color($data[5])."</td>
                       <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3])."</span></td>
                       <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4])."</span></td>
                       <td>".(($data[7]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
@@ -228,9 +228,9 @@ function char_friends()
             $output .=$data[0];
 
           $output .="</td>
-                      <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td>".get_level_with_color($data[5])."</td>
+                      <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".char_get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".char_get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td>".char_get_level_color($data[5])."</td>
                       <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3])."</span></td>
                       <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4])."</span></td>
                       <td>".(($data[7]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
@@ -273,9 +273,9 @@ function char_friends()
             $output .=$data[0];
 
           $output .="</td>
-                      <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td>".get_level_with_color($data[5])."</td>
+                      <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".char_get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".char_get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td>".char_get_level_color($data[5])."</td>
                       <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3])."</span></td>
                       <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4])."</span></td>
                       <td>".(($data[7]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>

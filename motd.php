@@ -27,7 +27,7 @@ function add_motd()
             <table class=\"top_hidden\">
               <tr>
                 <td colspan=\"3\">";
-                  add_bbcode_editor();
+                  bbcode_add_editor();
   $output .= "
                 </td>
               </tr>
@@ -82,7 +82,7 @@ function edit_motd()
             <table class=\"top_hidden\">
               <tr>
                 <td colspan=\"3\">";
-                  add_bbcode_editor();
+                  bbcode_add_editor();
   $output .= "
                 </td>
               </tr>

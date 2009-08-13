@@ -77,10 +77,11 @@ function bbcode_emoticons()
     13=> Array (":O",    "yikes",   "15","15"),
     14=> Array (":lol:", "lol",     "15","15"),
   );
-return $bbcode_emoticons;
+  return $bbcode_emoticons;
 }
 
-function add_bbcode_editor()
+
+function bbcode_add_editor()
 {
   global $output;
   $bbcode_fonts = bbcode_fonts();
@@ -138,7 +139,8 @@ function add_bbcode_editor()
         </div>";
 }
 
-function bbcode2html($text)
+
+function bbcode_bbc2html($text)
 {
   $bbcode_emoticons = bbcode_emoticons();
   // By BlackWizard, http://www.phpcs.com/codes/BBCODE-SIMPLEMENT_17638.aspx

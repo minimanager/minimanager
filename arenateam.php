@@ -311,8 +311,8 @@ function view_team()
         $ws_pct = $member[6];
       $output .= "
                 <td><a href=\"char.php?id=$member[0]\">".htmlentities($member[1])."</a></td>
-                <td><img src='img/c_icons/{$member[8]}-{$member[13]}.gif' onmousemove='toolTip(\"".get_race_name($member[8])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-                <td><img src='img/c_icons/{$member[9]}.gif' onmousemove='toolTip(\"".get_class_name($member[9])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+                <td><img src='img/c_icons/{$member[8]}-{$member[13]}.gif' onmousemove='toolTip(\"".char_get_race_name($member[8])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+                <td><img src='img/c_icons/{$member[9]}.gif' onmousemove='toolTip(\"".char_get_class_name($member[9])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td>$member[2]</td>
                 <td>".get_days_with_color($member[12])."</td>
                 <td>".(($member[10]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>

@@ -82,7 +82,7 @@ function char_skill()
           <div id=\"tab_content\">
             <div id=\"tab\">
               <ul>";
-      if( get_class_name($char[3]) == 'Hunter' )
+      if( char_get_class_name($char[3]) == 'Hunter' )
         $output .= "
                 <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>";
       $output .= "
@@ -92,7 +92,7 @@ function char_skill()
               </ul>
             </div>
             <div id=\"tab_content2\">
-              <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[4])."</font>
+              <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char[4])."</font>
               <br /><br />
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
@@ -124,38 +124,38 @@ function char_skill()
 
       for ($i = CHAR_DATA_OFFSET_SKILL_DATA; $i <= CHAR_DATA_OFFSET_SKILL_DATA+384 ; $i+=3)
       {
-        if (($char_data[$i])&&(get_skill_name($char_data[$i] & 0x0000FFFF )))
+        if (($char_data[$i])&&(skill_get_name($char_data[$i] & 0x0000FFFF )))
         {
           $temp = unpack("S", pack("L", $char_data[$i+1]));
           $skill = ($char_data[$i] & 0x0000FFFF);
 
-          if (get_skill_type($skill) == 6)
+          if (skill_get_type($skill) == 6)
           {
-            array_push($weapon_array , array(($user_lvl ? $skill : ''), get_skill_name($skill), $temp[1]));
+            array_push($weapon_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
           }
-          elseif (get_skill_type($skill) == 7)
+          elseif (skill_get_type($skill) == 7)
           {
-            array_push($class_array , array(($user_lvl ? $skill : ''), get_skill_name($skill), $temp[1]));
+            array_push($class_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
           }
-          elseif (get_skill_type($skill) == 8)
+          elseif (skill_get_type($skill) == 8)
           {
-            array_push($armor_array , array(($user_lvl ? $skill : ''), get_skill_name($skill), $temp[1]));
+            array_push($armor_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
           }
-          elseif (get_skill_type($skill) == 9)
+          elseif (skill_get_type($skill) == 9)
           {
-            array_push($prof_2_array , array(($user_lvl ? $skill : ''), get_skill_name($skill), $temp[1]));
+            array_push($prof_2_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
           }
-          elseif (get_skill_type($skill) == 10)
+          elseif (skill_get_type($skill) == 10)
           {
-            array_push($language_array , array(($user_lvl ? $skill : ''), get_skill_name($skill), $temp[1]));
+            array_push($language_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
           }
-          elseif (get_skill_type($skill) == 11)
+          elseif (skill_get_type($skill) == 11)
           {
-            array_push($prof_1_array , array(($user_lvl ? $skill : ''), get_skill_name($skill), $temp[1]));
+            array_push($prof_1_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
           }
           else
           {
-            array_push($skill_array , array(($user_lvl ? $skill : ''), get_skill_name($skill), $temp[1]));
+            array_push($skill_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
           }
         }
       }

@@ -380,9 +380,9 @@ function view_guild()
                       <td>".htmlentities($member[1])."</td>" : "
                       <td><a href=\"char.php?id=$member[0]&amp;realm=$realmid\">".htmlentities($member[1])."</a></td>";
     $output .= "
-                      <td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".get_race_name($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".get_class_name($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td>".get_level_with_color($member[4])."</td>
+                      <td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".char_get_race_name($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td>".char_get_level_color($member[4])."</td>
                       <td>".htmlentities($member[6])." (".$member[5].")</td>
                       <td>".htmlentities($member[7])."</td>
                       <td>".htmlentities($member[8])."</td>
