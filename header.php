@@ -52,7 +52,7 @@ require_once 'lang/'.$lang.'.php';
 require_once 'libs/db_lib.php';
 
 require_once 'scripts/global_lib.php';
-require_once 'scripts/id_tab.php';
+require_once 'scripts/get_lib.php';
 //---------------------Headers' header-----------------------------------------
 // sets encoding defined in config for language support
 header('Content-Type: text/html; charset='.$site_encoding);

@@ -16,6 +16,7 @@ function lang_guildbank()
 
 require_once("header.php");
 require_once("scripts/get_lib.php");
+require_once("libs/item_lib.php");
 valid_login($action_permission['read']);
 
 //########################################################################################################################

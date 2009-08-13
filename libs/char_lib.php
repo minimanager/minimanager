@@ -303,4 +303,68 @@ function char_get_level_color($lvl)
 */
 
 
+//#############################################################################
+// for calc next level xp
+function xp_Diff($lvl)
+{
+  if( $lvl < 29 )
+    return 0;
+  if( $lvl == 29 )
+    return 1;
+  if( $lvl == 30 )
+    return 3;
+  if( $lvl == 31 )
+    return 6;
+  else
+    return (5*($lvl-30));
+}
+
+function mxp($lvl)
+{
+  if ($lvl < 60)
+  {
+    return (45 + (5*$lvl));
+  }
+  else
+  {
+     return (235 + (5*$lvl));
+  }
+}
+
+function get_xp_to_level($lvl)
+{
+  $RATE_XP_PAST_70 = 1;
+  $xp = 0;
+  if ($lvl < 60)
+  {
+    $xp = (8*$lvl + xp_Diff($lvl)) * mxp($lvl);
+  }
+  elseif ($lvl == 60)
+  {
+    $xp = (155 + mxp($lvl) * (1344 - 70 - ((69 - $lvl) * (7 + (69 - $lvl) * 8 - 1)/2)));
+  }
+  elseif ($lvl < 70)
+  {
+    $xp = (155 + mxp($lvl) * (1344 - ((69-$lvl) * (7 + (69 - $lvl) * 8 - 1)/2)));
+  }
+  else
+  {
+    // level higher than 70 is not supported
+    $xp = (779700 * (pow($RATE_XP_PAST_70, $lvl - 69)));
+    return (($xp < 0x7fffffff) ? $xp : 0x7fffffff);
+  }
+  // The $xp to Level is always rounded to the nearest 100 points (50 rounded to high).
+  $xp = (($xp + 50) / 100) * 100;                  // use additional () for prevent free association operations in C++
+
+  if (($lvl > 10) && ($lvl < 60))                  // compute discount added in 2.3.x
+  {
+    $discount = ($lvl < 28) ? ($lvl - 10) : 18;
+    $xp = ($xp * (100 - $discount)) / 100;         // apply discount
+    $xp = ($xp / 100) * 100;                       // floor to hundreds
+  }
+
+  return $xp;
+}
+
+
 ?>

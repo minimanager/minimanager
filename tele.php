@@ -2,6 +2,7 @@
 
 
 require_once("header.php");
+require_once("libs/map_zone_lib.php");
 valid_login($action_permission['read']);
 
 //#############################################################################

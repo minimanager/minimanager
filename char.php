@@ -4,6 +4,9 @@
 require_once("header.php");
 require_once("scripts/defines.php");
 require_once("libs/char_lib.php");
+require_once("libs/item_lib.php");
+require_once("libs/spell_lib.php");
+require_once("libs/map_zone_lib.php");
 valid_login($action_permission['read']);
 
 //########################################################################################################################
@@ -224,7 +227,7 @@ function char_main()
         while ($aura = $sqlc->fetch_row($a_results))
         {
            $output .= "
-                    <a style=\"padding:2px;\" href=\"$spell_datasite $aura[0]\" target=\"_blank\">
+                    <a style=\"padding:2px;\" href=\"$spell_datasite$aura[0]\" target=\"_blank\">
                       <img src=\"".get_spell_icon($aura[0])."\" alt=\"".$aura[0]."\" width=\"24\" height=\"24\" />
                     </a>";
         }

@@ -7,6 +7,7 @@ require_once 'scripts/defines.php';
 require_once 'scripts/get_lib.php';
 require_once 'libs/char_lib.php';
 // minimum permission to view page
+require_once("libs/spell_lib.php");
 valid_login($action_permission['read']);
 
 //########################################################################################################################
