@@ -1,13 +1,4 @@
 <?php
-/*
- * Project Name: MiniManager for Mangos/Trinity Server
- * Date: 6.8.2009 inital version (0.0.1a)
- * Author: playon2007
- * Copyright: playon2007
- * Special thanks to : xiongguoy
- * Email: *****
- * License: GNU General Public License v2(GPL)
- */
 
 
 require_once("header.php");
