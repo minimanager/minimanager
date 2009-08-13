@@ -1,5 +1,6 @@
 <?php
 
+
 function bbcode_editor_js(){
   //By Tucefa, http://www.4claverie.com/forums/index.php?showtopic=3904
   return "<script type=\"text/javascript\">

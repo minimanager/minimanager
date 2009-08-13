@@ -1,16 +1,10 @@
 <?php
-/*
- * Project Name: MiniManager for Mangos/Trinity Server
- * Date: 17.10.2006 inital version (0.0.1a)
- * Author: Q.SA
- * Copyright: Q.SA
- * Email: *****
- * License: GNU General Public License v2(GPL)
- * modded by melefire for rev 4500 and up
- */
+
+
 require_once("header.php");
-valid_login($action_permission['read']);
 include_once("scripts/get_lib.php");
+valid_login($action_permission['read']);
+
 
 // return npcflag
 function get_npcflag($flag){

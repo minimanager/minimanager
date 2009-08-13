@@ -1,5 +1,6 @@
 <?php
 
+
 function lang_guildbank()
 {
   $lang_guildbank = array
@@ -16,6 +17,7 @@ function lang_guildbank()
 require_once("header.php");
 require_once("scripts/get_lib.php");
 valid_login($action_permission['read']);
+
 //########################################################################################################################
 // GUILD BANK
 //########################################################################################################################

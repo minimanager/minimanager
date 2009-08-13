@@ -1,15 +1,4 @@
 <?php
-/*
- * Project Name: MiniManager for Mangos/Trinity Server
- * Date: 17.10.2006 inital version (0.0.1a)
- * Author: Q.SA
- * Copyright: Q.SA
- * Email: *****
- * License: GNU General Public License v2(GPL)
- *
- * Updated by Shnappie to work with 3 databases
- * instead of 2 supported by version of Q.SA
- */
 
 
 //#############################################################################

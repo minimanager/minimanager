@@ -1,8 +1,4 @@
 <?php
-/*
- * Project Name: MiniManager for Mangos/Trinity Server
- * License: GNU General Public License v2(GPL)
- */
 
 
 //#############################################################################

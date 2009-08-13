@@ -1,14 +1,5 @@
 <?php
-/*
- * Project Name: MiniManager for Mangos/Trinity Server
- * Date: 17.10.2006 inital version (0.0.1a)
- * Author: Q.SA
- * Copyright: Q.SA
- * Email: *****
- * License: GNU General Public License (GPL)
- *
- * Forum modification, by Jiboo.
- */
+
 
 $maxqueries = 20; // Max topic / post by pages
 $minfloodtime = 15; // Minimum time beetween two post

@@ -69,7 +69,8 @@ THANKS:
  educational tool.
 - Guys from www.javassh.org for providing basic source for the terminal.
 - PHPMailer Team http://phpmailer.sourceforge.net/ for providing mail class.
-- To mirage666 (mailto:mirage666@pisem.net) for basic POMM code.
+- To Antone Roundy for PHPTelnet 1.1.
+- To mirage666 (mailto:mirage666@pisem.net) for basic POMM code and killdozer for updated version.
 - To Paul Johnston for JavaScript implementation of the Secure Hash Algorithm, SHA-1.
 - To guys from http://particletree.com for Dynamic Resolution Dependent Layout javascript code.
 - To people from http://www.pjirc.com/ for irc java applet.

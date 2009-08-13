@@ -1,12 +1,4 @@
 <?php
-/*
- * Project Name: MiniManager for Mangos/Trinity Server
- * Date: 21.02.2007 version (0.0.9a)
- * Author: t0chiro (command.php)
- * Copyright: t0chiro(command.php)
- * Email: *****
- * License: GNU General Public License v2(GPL)
- */
 
 
 include("header.php");

@@ -1,12 +1,5 @@
 <?php
-/*
- * Project Name: MiniManager for Mangos/Trinity Server
- * Date: 17.10.2006 inital version (0.0.1a)
- * Author: Q.SA
- * Copyright: Q.SA
- * Email: *****
- * License: GNU General Public License v2(GPL)
- */
+
 
 if (!function_exists('mysql_connect'))
   die('This PHP environment doesn\'t have MySQL support built in.');

@@ -1,5 +1,6 @@
 <?php
 
+
 require_once("header.php");
 require_once("scripts/defines.php");
 require_once("libs/char_lib.php");

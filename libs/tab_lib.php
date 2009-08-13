@@ -1,12 +1,5 @@
 <?php
-/*
- * Project Name: MiniManager for Mangos/Trinity Server
- * Date: 17.10.2006 inital version (0.0.1a)
- * Author: Q.SA
- * Copyright: Q.SA
- * Email: *****
- * License: GNU General Public License v2(GPL)
- */
+
 
 //list of tables in realmd db will be saved on Global backup
 $tables_backup_realmd = Array
