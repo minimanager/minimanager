@@ -1,38 +1,47 @@
 <?php
 
 
-require_once("header.php");
-require_once("scripts/defines.php");
-require_once("libs/char_lib.php");
+// page header, and any additional required libraries
+require_once 'header.php';
+require_once 'scripts/defines.php';
+require_once 'scripts/get_lib.php';
+require_once 'libs/char_lib.php';
+// minimum permission to view page
 valid_login($action_permission['read']);
 
 //########################################################################################################################
 // SHOW CHARACTER TALENTS
 //########################################################################################################################
-function char_talent()
+function char_talent(&$sqlr, &$sqlc)
 {
-  require_once("libs/talent_lib.php");
+  // we shall load this one locally, no need to load in global, it contains a huge array
+  require_once 'libs/talent_lib.php';
   global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db, $mmfpm_db,
     $action_permission, $user_lvl, $user_name, $spell_datasite, $talent_calculator_datasite, $developer_test_mode, $new_talent_tab;
+  // this page uses wowhead tooltops
   wowhead_tt();
 
+  // we need at least an id or we would have nothing to show
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-
+  // this is multi realm support, as of writing still under development
+  //  this page is already implementing it
   if (empty($_GET['realm']))
     $realmid = $realm_id;
   else
   {
     $realmid = $sqlr->quote_smart($_GET['realm']);
-    if (!is_numeric($realmid)) $realmid = $realm_id;
+    if (is_numeric($realmid))
+      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+    else
+      $realmid = $realm_id;
   }
 
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
+  // gmp reserved for talent tree calculation for use with 3rd party talent calculators
   //check for php gmp extension
   //if (extension_loaded('gmp'))
   //  $GMP=1;
@@ -40,12 +49,11 @@ function char_talent()
   //  $GMP=0;
   //end of gmp check
 
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
-
+  //-------------------SQL Injection Prevention--------------------------------
+  // no point going further if we don have a valid ID
   $id = $sqlc->quote_smart($_GET['id']);
-  if (!is_numeric($id))
-    $id = 0;
+  if (is_numeric($id));
+  else error($lang_global['empty_fields']);
 
   $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 1;
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 0;
@@ -66,7 +74,7 @@ function char_talent()
 
     if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
-      $result = $sqlc->query("SELECT spell FROM `character_spell` WHERE guid = $id AND active = 1 ORDER BY spell DESC");
+      $result = $sqlc->query("SELECT spell FROM `character_spell` WHERE guid = $id AND active = 1 ORDER BY spell ASC");
 
       $output .= "
         <center>
@@ -89,18 +97,36 @@ function char_talent()
         $tabs = array();
         if ($sqlc->num_rows($result))
         {
-          while ($talent = $sqlc->fetch_row($result))
+          $i = 0;
+          while (($talent = $sqlc->fetch_assoc($result)) && ($i < 120))
           {
-            if($tab = $sqlm->fetch_row($sqlm->query("SELECT tab, row, col from dbc_talent where rank5 = $talent[0]")))
-              $tabs[$tab[0]][$tab[1]][$tab[2]] = array($talent[0],'5');
-            elseif($tab = $sqlm->fetch_row($sqlm->query("SELECT tab, row, col from dbc_talent where rank4 = $talent[0]")))
-              $tabs[$tab[0]][$tab[1]][$tab[2]] = array($talent[0],'4');
-            elseif($tab = $sqlm->fetch_row($sqlm->query("SELECT tab, row, col from dbc_talent where rank3 = $talent[0]")))
-              $tabs[$tab[0]][$tab[1]][$tab[2]] = array($talent[0],'3');
-            elseif($tab = $sqlm->fetch_row($sqlm->query("SELECT tab, row, col from dbc_talent where rank2 = $talent[0]")))
-              $tabs[$tab[0]][$tab[1]][$tab[2]] = array($talent[0],'2');
-            elseif($tab = $sqlm->fetch_row($sqlm->query("SELECT tab, row, col from dbc_talent where rank1 = $talent[0]")))
-              $tabs[$tab[0]][$tab[1]][$tab[2]] = array($talent[0],'1');
+
+            if($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col from dbc_talent where rank5 = '.$talent['spell'].' LIMIT 1')))
+            {
+              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'5');
+              ++$i;
+            }
+            elseif($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col from dbc_talent where rank4 = '.$talent['spell'].' LIMIT 1')))
+            {
+              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'4');
+              ++$i;
+            }
+            elseif($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col from dbc_talent where rank3 = '.$talent['spell'].' LIMIT 1')))
+            {
+              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'3');
+              ++$i;
+            }
+            elseif($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col from dbc_talent where rank2 = '.$talent['spell'].' LIMIT 1')))
+            {
+              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'2');
+              ++$i;
+            }
+            elseif($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col from dbc_talent where rank1 = '.$talent['spell'].' LIMIT 1')))
+            {
+              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'1');
+              ++$i;
+            }
+
           }
           $output .="
                 <tr valign=\"top\">";
@@ -109,17 +135,17 @@ function char_talent()
             $output .="
                   <td>
                     <table style=\"width: 0px;\">";
-            for($i=0;$i<11;$i++)
+            for($i=0;$i<11;++$i)
             {
               $output .="
                       <tr>";
-              for($j=0;$j<4;$j++)
+              for($j=0;$j<4;++$j)
               {
                 if(isset($data[$i][$j]))
                   $output .="
                         <td>
                           <a href=\"$spell_datasite".$data[$i][$j][0]."\" target=\"_blank\">
-                            <img src=\"".get_spell_icon($data[$i][$j][0])."\" width=\"36\" height=\"36\" alt=\"\" />
+                            <img src=\"".get_spell_icon($data[$i][$j][0], $sqlm)."\" width=\"36\" height=\"36\" alt=\"\" />
                           </a>
                         </td>";
                 else
@@ -154,7 +180,7 @@ function char_talent()
           while ($talent = $sqlc->fetch_row($result))
           {
             if(talent_get_value($talent[0]))
-              array_push($talents_1, array($talent[0], get_spell_name($talent[0])));
+              array_push($talents_1, array($talent[0], get_spell_name($talent[0], $sqlm)));
           }
           aasort($talents_1, $order_by, $dir);
           //if ($GMP)
@@ -166,7 +192,7 @@ function char_talent()
                   <td>$data[0]</td>
                   <td align=\"left\">
                     <a style=\"padding:2px;\" href=\"$spell_datasite$data[0]\" target=\"_blank\">
-                      <img src=\"".get_spell_icon($data[0])."\" alt=\"\" />
+                      <img src=\"".get_spell_icon($data[0], $sqlm)."\" alt=\"\" />
                     </a>
                     <a href=\"$spell_datasite$data[0]\" target=\"_blank\">$data[1]</a>
                   </td>";
@@ -264,20 +290,16 @@ function char_talent()
 // MAIN
 //########################################################################################################################
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+// action variable reserved for future use
+//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 $lang_char = lang_char();
 
-switch ($action)
-{
+// we getting links to realm database and character database left behind by header
+// header does not need them anymore, might as well reuse the link
+char_talent($sqlr, $sqlc);
 
-  case "unknown":
-    break;
-  default:
-    char_talent();
-}
-
-unset($action);
+//unset($action);
 unset($action_permission);
 unset($lang_char);
 

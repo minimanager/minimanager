@@ -153,14 +153,20 @@ function get_lang_id()
 //#############################################################################
 //get item icon - if icon not exists in item_icons folder D/L it from web.
 
-function get_item_icon($itemid)
+function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
 {
   global $mmfpm_db, $world_db, $realm_id, $proxy_cfg, $get_icons_from_web, $item_icons;
 
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $sqlw = new SQL;
-  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  // not all functions that call this function will pass reference to existing SQL links
+  // so we need to check and overload when needed
+  if(empty($sqlm) && empty($splw))
+  {
+    $sqlm = new SQL;
+    $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+    $sqlw = new SQL;
+    $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  }
+
   $result = $sqlw->query("SELECT `displayid` FROM `item_template` WHERE `entry` = $itemid LIMIT 1");
 
   if ($result)
@@ -291,12 +297,18 @@ function get_item_icon($itemid)
 //#############################################################################
 //get aura icon - if icon not exists in item_icons folder D/L it from web.
 
-function get_spell_icon($auraid)
+function get_spell_icon($auraid, &$sqlm=0)
 {
   global $proxy_cfg, $get_icons_from_web, $mmfpm_db, $item_icons;
 
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  // not all functions that call this function will pass reference to existing SQL links
+  // so we need to check and overload when needed
+  if(empty($sqlm))
+  {
+    $sqlm = new SQL;
+    $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  }
+
   $result = $sqlm->query("SELECT `spellicon` FROM `dbc_spell` WHERE `spellID`=$auraid LIMIT 1");
 
   if ($result)

@@ -1,58 +1,79 @@
 <?php
 
 
-require_once("header.php");
-require_once("scripts/defines.php");
-require_once("libs/char_lib.php");
+// page header, and any additional required libraries
+require_once 'header.php';
+require_once 'scripts/defines.php';
+require_once 'scripts/get_lib.php';
+require_once 'libs/char_lib.php';
+// minimum permission to view page
 valid_login($action_permission['read']);
 
 //########################################################################################################################
 // SHOW INV. AND BANK ITEMS
 //########################################################################################################################
-function char_inv()
+function char_inv(&$sqlr, &$sqlc)
 {
-  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db,
+  global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $world_db, $characters_db, $mmfpm_db,
     $action_permission, $user_lvl, $user_name, $item_datasite;
+  // this page uses wowhead tooltops
   wowhead_tt();
 
+  // we need at least an id or we would have nothing to show
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-
+  // this is multi realm support, as of writing still under development
+  //  this page is already implementing it
   if (empty($_GET['realm']))
     $realmid = $realm_id;
   else
   {
     $realmid = $sqlr->quote_smart($_GET['realm']);
-    if (!is_numeric($realmid)) $realmid = $realm_id;
+    if (is_numeric($realmid))
+      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+    else
+      $realmid = $realm_id;
   }
 
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
-  $sqlw = new SQL;
-  $sqlw->connect($world_db[$realmid]['addr'], $world_db[$realmid]['user'], $world_db[$realmid]['pass'], $world_db[$realmid]['name']);
-
+  //-------------------SQL Injection Prevention--------------------------------
+  // no point going further if we don have a valid ID
   $id = $sqlc->quote_smart($_GET['id']);
-  if (!is_numeric($id))
-    $id = 0;
+  if (is_numeric($id));
+  else error($lang_global['empty_fields']);
 
-  $result = $sqlc->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1) AS UNSIGNED) AS gold FROM `characters` WHERE guid = $id LIMIT 1");
+  // getting character data from database
+  $result = $sqlc->query('SELECT account, name, race, class,
+    CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) AS UNSIGNED) AS level,
+    mid(lpad( hex( CAST(substring_index(substring_index(data, " ", '.(CHAR_DATA_OFFSET_GENDER+1).'), " ",-1) as unsigned) ), 8, 0), 4, 1) as gender,
+    CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GOLD+1).'), " ", -1) AS UNSIGNED) AS gold
+    FROM characters WHERE guid = '.$id.' LIMIT 1');
 
+  // no point going further if character does not exist
   if ($sqlc->num_rows($result))
   {
-    $char = $sqlc->fetch_row($result);
+    $char = $sqlc->fetch_assoc($result);
 
+    // we get user permissions first
     $owner_acc_id = $sqlc->result($result, 0, 'account');
-    $result = $sqlr->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+    $result = $sqlr->query('SELECT gmlevel, username FROM account WHERE id = '.$char['account'].'');
     $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
     $owner_name = $sqlr->result($result, 0, 'username');
 
+    // check user permission
     if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
-      $result = $sqlc->query("SELECT ci.bag,ci.slot,ci.item,ci.item_template, SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', 15), ' ', -1) as stack_count FROM character_inventory ci INNER JOIN item_instance ii on ii.guid = ci.item WHERE ci.guid = $id ORDER BY ci.bag,ci.slot");
+      // main data that we need for this page, character inventory
+      $result = $sqlc->query('SELECT ci.bag, ci.slot, ci.item, ci.item_template,
+        SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", 15), " ", -1) as stack_count
+        FROM character_inventory ci INNER JOIN item_instance ii on ii.guid = ci.item
+        WHERE ci.guid = '.$id.' ORDER BY ci.bag,ci.slot');
 
+      //---------------Page Specific Data Starts Here--------------------------
+      // lets start processing first before we display anything
+      //  we have lots to do for inventory
+
+      // character bags, 1 main + 4 additional
       $bag = array
       (
         0=>array(),
@@ -62,6 +83,7 @@ function char_inv()
         4=>array()
       );
 
+      // character bang, 1 main + 7 additional
       $bank = array
       (
         0=>array(),
@@ -74,10 +96,22 @@ function char_inv()
         7=>array()
       );
 
+      // this is where we will put items that are in main bank
       $bank_bag_id = array();
+      // this is where we will put items that are in main bag
       $bag_id = array();
+      // this is where we will put items that are in character bags, 4 arrays, 1 for each
       $equiped_bag_id = array(0,0,0,0,0);
+      // this is where we will put items that are in bank bangs, 7 arrays, 1 for each
       $equip_bnk_bag_id = array(0,0,0,0,0,0,0,0);
+
+// developer note: Xiong Guoy 2009-08-14
+// note to self:
+//  i left off here, just finish passing sql link by reference to get_item_icon
+// todo: code optimization, documentation
+
+      $sqlw = new SQL;
+      $sqlw->connect($world_db[$realmid]['addr'], $world_db[$realmid]['user'], $world_db[$realmid]['pass'], $world_db[$realmid]['name']);
 
       while ($slot = $sqlc->fetch_row($result))
       {
@@ -135,18 +169,21 @@ function char_inv()
             </ul>
           </div>
           <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char[4])."</font>
+            <font class=\"bold\">".htmlentities($char['name'])." - <img src='img/c_icons/{$char['race']}-{$char['gender']}.gif' onmousemove='toolTip(\"".char_get_race_name($char['race'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char['class']}.gif' onmousemove='toolTip(\"".char_get_class_name($char['class'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char['level'])."</font>
             <br />
             <br />
             <table class=\"lined\" style=\"width: 700px;\">
               <tr>
                 <th>";
 
+      $sqlm = new SQL;
+      $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
       if($equiped_bag_id[1])
       {
         $output .="
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[1][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[1][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[1][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} I<br />
@@ -159,7 +196,7 @@ function char_inv()
       {
         $output .="
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[2][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[2][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[2][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} II<br />
@@ -172,7 +209,7 @@ function char_inv()
       {
         $output .="
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[3][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[3][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[3][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} III<br />
@@ -185,7 +222,7 @@ function char_inv()
       {
         $output .="
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[4][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[4][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[4][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} IV<br />
@@ -213,7 +250,7 @@ function char_inv()
 
           $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
-                    <img src=\"".get_item_icon($item[0])."\" alt=\"\" />".($item[1] ? ($item[1]+1) : "")."
+                    <img src=\"".get_item_icon($item[0], $sqlm, $sqlw)."\" alt=\"\" />".($item[1] ? ($item[1]+1) : "")."
                   </a>";
           $item[2] = $item[2] == 1 ? '' : $item[2];
           $output .= "
@@ -229,7 +266,7 @@ function char_inv()
               </tr>
               <tr>
                 <th colspan=\"2\" align=\"left\">
-                  <img class=\"bag_icon\" src=\"".get_item_icon(3960)."\" alt=\"\" align=\"middle\" style=\"margin-left:100px;\" />
+                  <img class=\"bag_icon\" src=\"".get_item_icon(3960, $sqlm, $sqlw)."\" alt=\"\" align=\"middle\" style=\"margin-left:100px;\" />
                   <font style=\"margin-left:30px;\">{$lang_char['backpack']}</font>
                 </th>
                 <th colspan=\"2\">
@@ -246,7 +283,7 @@ function char_inv()
                     <div style=\"left:".($pos%4*42)."px;top:".(floor($pos/4)*41)."px;\">";
         $output .= "
                       <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
-                        <img src=\"".get_item_icon($item[0])."\" alt=\"\" />".($item[1] ? ($item[1]+1) : "")."
+                        <img src=\"".get_item_icon($item[0], $sqlm, $sqlw)."\" alt=\"\" />".($item[1] ? ($item[1]+1) : "")."
                       </a>";
         $item[2] = $item[2] == 1 ? '' : $item[2];
         $output .= "
@@ -254,9 +291,9 @@ function char_inv()
                       <div style=\"width:25px;margin:-21px 0px 0px 17px;font-size:14px\">$item[2]</div>
                     </div>";
       }
-      $money_gold = (int)($char[6]/10000);
-      $money_silver = (int)(($char[6]-$money_gold*10000)/100);
-      $money_cooper = (int)($char[6]-$money_gold*10000-$money_silver*100);
+      $money_gold = (int)($char['gold']/10000);
+      $money_silver = (int)(($char['gold']-$money_gold*10000)/100);
+      $money_cooper = (int)($char['gold']-$money_gold*10000-$money_silver*100);
       $output .= "
                   </div>
                   <div style=\"text-align:right;width:168px;background-image:none;background-color:#393936;padding:2px;\">
@@ -277,7 +314,7 @@ function char_inv()
                     <div style=\"left:".($pos%7*43)."px;top:".(floor($pos/7)*41)."px;\">";
         $output .= "
                       <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
-                        <img src=\"".get_item_icon($item[0])."\" class=\"inv_icon\" alt=\"\" />
+                        <img src=\"".get_item_icon($item[0], $sqlm, $sqlw)."\" class=\"inv_icon\" alt=\"\" />
                       </a>";
         $item[2] = $item[2] == 1 ? '' : $item[2];
         $output .= "
@@ -295,7 +332,7 @@ function char_inv()
       {
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[1][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[1][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[1][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} I<br />
@@ -308,7 +345,7 @@ function char_inv()
       {
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[2][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[2][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[2][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} II<br />
@@ -321,7 +358,7 @@ function char_inv()
       {
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[3][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[3][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[3][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
                   $output .= "
                   {$lang_item['bag']} III<br />
@@ -334,7 +371,7 @@ function char_inv()
       {
         $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[4][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[4][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[4][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
         $output .= "
                   {$lang_item['bag']} IV<br />
@@ -356,7 +393,7 @@ function char_inv()
           {
             $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[5][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[5][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[5][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
             $output .= "
                   {$lang_item['bag']} V<br />
@@ -369,7 +406,7 @@ function char_inv()
           {
             $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[6][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[6][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[6][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
             $output .= "
                   {$lang_item['bag']} VI<br />
@@ -382,7 +419,7 @@ function char_inv()
           {
             $output .= "
                   <a style=\"padding:2px;\" href=\"$item_datasite{$equip_bnk_bag_id[7][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[7][0])."\" alt=\"\" />
+                    <img class=\"bag_icon\" src=\"".get_item_icon($equip_bnk_bag_id[7][0], $sqlm, $sqlw)."\" alt=\"\" />
                   </a>";
             $output .= "
                   {$lang_item['bag']} VII<br />
@@ -408,7 +445,7 @@ function char_inv()
                     <div style=\"left:".(($pos+$dsp)%4*43)."px;top:".(floor(($pos+$dsp)/4)*41)."px;\">";
           $output .= "
                       <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
-                        <img src=\"".get_item_icon($item[0])."\" alt=\"\" />
+                        <img src=\"".get_item_icon($item[0], $sqlm, $sqlw)."\" alt=\"\" />
                       </a>";
           $item[2] = $item[2] == 1 ? '' : $item[2];
           $output .= "
@@ -449,7 +486,7 @@ function char_inv()
       }
       if ($user_lvl >= $action_permission['update'])
       {
-                makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
+                makebutton($lang_char['send_mail'], 'mail.php?type=ingame_mail&amp;to='.$char['name'].'',130);
         $output .= "
               </td>
               <td>";
@@ -476,19 +513,17 @@ function char_inv()
 // MAIN
 //########################################################################################################################
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+// action variable reserved for future use
+//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
+// load language
 $lang_char = lang_char();
 
-switch ($action)
-{
-  case "unknown":
-    break;
-  default:
-    char_inv();
-}
+// we getting links to realm database and character database left behind by header
+// header does not need them anymore, might as well reuse the link
+char_inv($sqlr, $sqlc);
 
-unset($action);
+//unset($action);
 unset($action_permission);
 unset($lang_char);
 

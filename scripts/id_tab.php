@@ -59,11 +59,16 @@ function get_zone_name($id)
 //#############################################################################
 //get spell name by its id
 
-function get_spell_name($id)
+function get_spell_name($id, &$sqlm=0)
 {
   global $mmfpm_db;
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  // not all functions that call this function will pass reference to existing SQL links
+  // so we need to check and overload when needed
+  if(empty($sqlm))
+  {
+    $sqlm = new SQL;
+    $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  }
   $spell_name = $sqlm->fetch_row($sqlm->query("SELECT `spellname_loc0` FROM `dbc_spell` WHERE `spellID`={$id} LIMIT 1"));
   return $spell_name[0];
 }
