@@ -1844,9 +1844,9 @@ $lang_id_tab = array(
 
 $lang_arenateam = array(
   // ----- ARENATEAM.PHP -----
-  'by_name' => 'par Nom',
-  'by_team_leader' => 'par Leader',
-  'by_id' => 'par id d\'équipe d\'Arène',
+  'by_name' => 'par Nom d\'équipe',
+  'by_team_leader' => 'par Leader d\'équipe',
+  'by_id' => 'par id d\'équipe',
   'id' => 'Id',
   'arenateam_id' => 'Id d\'équipe d\'Arène',
   'arenateam_name' => 'Nom d\'équipe d\'Arène',

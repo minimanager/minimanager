@@ -81,7 +81,7 @@ function browse_guilds()
       $output .= "
               <tr>
                 <td>$data[0]</td>
-                <td><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$data[0]\">$data[1]</a></td>";
+                <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$data[0]\">$data[1]</a></td>";
       $output .= ($user_lvl < $owner_gmlvl ) ? "<td>".htmlentities($data[3])."</td>" : "<td><a href=\"char.php?id=$data[2]&amp;realm=$realmid\">".htmlentities($data[3])."</a></td>";
       $output .= "
                 <td><img src=\"img/".($data[4]==0 ? "alliance" : "horde")."_small.gif\" alt=\"\" /></td>
@@ -344,15 +344,15 @@ function view_guild()
                   <table class=\"lined\">
                     <tr>
                       <th width=\"1%\">{$lang_guild['remove']}</th>
-                      <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=cname&amp;start=$start&amp;dir=$dir\">".($order_by=='cname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['name']}</a></th>
-                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=crace&amp;start=$start&amp;dir=$dir\">".($order_by=='crace' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['race']}</a></th>
-                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=class&amp;start=$start&amp;dir=$dir\">".($order_by=='cclass' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['class']}</a></th>
-                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=clevel&amp;start=$start&amp;dir=$dir\">".($order_by=='clevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['level']}</a></th>
-                      <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=mrank&amp;start=$start&amp;dir=$dir\">".($order_by=='mrank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['rank']}</a></th>
+                      <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=cname&amp;start=$start&amp;dir=$dir\">".($order_by=='cname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['name']}</a></th>
+                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=crace&amp;start=$start&amp;dir=$dir\">".($order_by=='crace' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['race']}</a></th>
+                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=class&amp;start=$start&amp;dir=$dir\">".($order_by=='cclass' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['class']}</a></th>
+                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=clevel&amp;start=$start&amp;dir=$dir\">".($order_by=='clevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['level']}</a></th>
+                      <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=mrank&amp;start=$start&amp;dir=$dir\">".($order_by=='mrank' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['rank']}</a></th>
                       <th width=\"15%\">{$lang_guild['pnote']}</th>
                       <th width=\"15%\">{$lang_guild['offnote']}</th>
-                      <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=clogout&amp;start=$start&amp;dir=$dir\">".($order_by=='clogout' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['llogin']}</a></th>
-                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['online']}</a></th>
+                      <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=clogout&amp;start=$start&amp;dir=$dir\">".($order_by=='clogout' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['llogin']}</a></th>
+                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['online']}</a></th>
                     </tr>";
   $members = $sqlc->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(c.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS clevel,
@@ -380,8 +380,8 @@ function view_guild()
                       <td>".htmlentities($member[1])."</td>" : "
                       <td><a href=\"char.php?id=$member[0]&amp;realm=$realmid\">".htmlentities($member[1])."</a></td>";
     $output .= "
-                      <td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".get_char_race($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                      <td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".get_char_class($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td><img src='img/c_icons/{$member[2]}-{$member[9]}.gif' onmousemove='toolTip(\"".get_race_name($member[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                      <td><img src='img/c_icons/{$member[3]}.gif' onmousemove='toolTip(\"".get_class_name($member[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td>".get_level_with_color($member[4])."</td>
                       <td>".htmlentities($member[6])." (".$member[5].")</td>
                       <td>".htmlentities($member[7])."</td>
@@ -396,7 +396,7 @@ function view_guild()
                 </td>
               </tr>
               <tr>
-                <td align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start)."</td>
+                <td align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start)."</td>
               </tr>
             </table>
             <br />";

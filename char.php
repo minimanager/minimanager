@@ -200,7 +200,7 @@ function char_main()
             <div id=\"tab\">
               <ul>
                 <li id=\"selected\"><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>";
-        if (get_char_class($char[3]) == 'Hunter' )
+        if (get_class_name($char[3]) == 'Hunter' )
           $output .= "
                 <li><a href=\"char_pets.php?id=$id&amp;realm=$realmid\">{$lang_char['pets']}</a></li>";
         $output .= "
@@ -222,7 +222,7 @@ function char_main()
               <tr>
                 <td colspan=\"2\">
                   <div>
-                    <img src=\"".get_image_dir($char_data[CHAR_DATA_OFFSET_LEVEL],$char[8],$char[2],$char[3],0)."\" alt=\"avatar\" />
+                    <img src=\"".get_avatar_img($char_data[CHAR_DATA_OFFSET_LEVEL],$char[8],$char[2],$char[3],0)."\" alt=\"avatar\" />
                   </div>
                   <div>";
 
@@ -253,7 +253,7 @@ function char_main()
                 </td>
                 <td colspan=\"4\">
                   <font class=\"bold\">
-                    ".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[8]}.gif' onmousemove='toolTip(\"".get_char_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_char_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char_data[CHAR_DATA_OFFSET_LEVEL])."
+                    ".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[8]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char_data[CHAR_DATA_OFFSET_LEVEL])."
                   </font>
                   <br />{$lang_char['guild']}: $guild_name | {$lang_char['rank']}: ".htmlentities($guild_rank)."
                   <br />".(($char[6]) ? "<img src=\"img/up.gif\" onmousemove='toolTip(\"Online\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"online\" />" : "<img src=\"img/down.gif\" onmousemove='toolTip(\"Offline\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"offline\" />");

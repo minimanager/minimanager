@@ -42,7 +42,7 @@ function ajtBBCode(Tag, fTag){
 }
 
 function bbcode_callbacks_wow($item){
-  global $item_datasite, $lang_id_tab;
+  global $item_datasite;
   wowhead_tt();
   require_once("scripts/id_tab.php");
   require_once("scripts/get_lib.php");
@@ -163,7 +163,7 @@ function get_side(){
 }
 
 function gen_avatar_panel($level,$sex,$race,$class,$info=1,$gm=0){
-  global $lang_index, $lang_id_tab, $gm_level_arr;
+  global $lang_index;
   $return = "<div border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\" background: transparent url(img/avatars/";
   if ($gm>0 && file_exists("img/avatars/bliz/$gm.gif"))
     $return .= "bliz/$gm.gif";
@@ -195,11 +195,11 @@ function gen_avatar_panel($level,$sex,$race,$class,$info=1,$gm=0){
   }
 
   if($info == 1){
-    require_once("scripts/id_tab.php");
+    require_once("libs/char_lib.php");
     $return .= "<div style=\"margin-top:2px;\">
-    <a href=\"#\" onmouseover=\"toolTip('{$lang_index["class"]} : ".get_player_class($class)."','item_tooltip')\" onmouseout=\"toolTip()\">
+    <a href=\"#\" onmouseover=\"toolTip('{$lang_index["class"]} : ".get_class_name($class)."','item_tooltip')\" onmouseout=\"toolTip()\">
     <img src=\"img/c_icons/$class.gif\" border=\"0\" alt=\"\" /></a>
-    <a href=\"#\" onmouseover=\"toolTip('{$lang_index["race"]} : ".get_player_race($race)."','item_tooltip')\" onmouseout=\"toolTip()\">
+    <a href=\"#\" onmouseover=\"toolTip('{$lang_index["race"]} : ".get_race_name($race)."','item_tooltip')\" onmouseout=\"toolTip()\">
     <img src=\"img/c_icons/$race-$sex.gif\" border=\"0\" alt=\"\" /></a>";
   }
 

@@ -84,7 +84,7 @@ function output_dmgtype_options($dmg_type_offset){
 //  PRINT  ITEM SEARCH FORM
 //########################################################################################################################
 function search() {
- global $lang_global, $lang_item, $lang_item_edit, $lang_id_tab, $output, $mmfpm_db, $world_db, $realm_id, $action_permission, $user_lvl;
+ global $lang_global, $lang_item, $lang_item_edit, $output, $mmfpm_db, $world_db, $realm_id, $action_permission, $user_lvl;
 valid_login($action_permission['read']);
 
  $sql = new SQL;

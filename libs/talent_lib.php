@@ -1757,7 +1757,6 @@ function talent_id()
 
 function get_talent_value($id)
 {
-  global $lang_id_tab;
   $talent_id = talent_id();
 
   if(isset($talent_id[$id][2]))

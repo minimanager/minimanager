@@ -45,25 +45,50 @@ function browse_teams()
   {
     $search_value = $sqlc->quote_smart($_GET['search_value']);
     $search_by = $sqlc->quote_smart($_GET['search_by']);
-    $search_menu = array('atname', 'lguid', 'atid');
-    if (!array_key_exists($search_by, $search_menu)) $search_by = 'atname';
+    $search_menu = array('atname', 'leadername', 'atid');
+    if (!in_array($search_by, $search_menu)) $search_by = 'atid';
 
-    if ($search_by == "leadername")
+    switch($search_by)
     {
-      $temp = $sqlc->query("SELECT guid FROM `characters` WHERE name LIKE '$search_value'");
-      $search_value = $sqlc->result($temp, 0, 'guid');
+      case "atname":
+        $query = $sqlc->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, arena_team.captainguid AS lguid,
+          arena_team.type AS attype,
+          (SELECT name FROM `characters` WHERE guid = lguid) AS lname,(SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid = atid) AS tot_chars,
+          rating AS atrating, games as atgames, wins as atwins
+          FROM arena_team, arena_team_stats
+          WHERE arena_team.arenateamid = arena_team_stats.arenateamid
+          AND arena_team.name LIKE '%$search_value%'
+          ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+      $query_1 = $sqlc->query("SELECT count(*) FROM arena_team
+          WHERE arena_team.name LIKE '%$search_value%'");
+        break;
+      case "leadername":
+        $query = $sqlc->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, arena_team.captainguid AS lguid,
+          arena_team.type AS attype,
+          (SELECT name FROM `characters` WHERE guid = lguid) AS lname,(SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid = atid) AS tot_chars,
+          rating AS atrating, games as atgames, wins as atwins
+          FROM arena_team, arena_team_stats
+          WHERE arena_team.arenateamid = arena_team_stats.arenateamid
+          AND arena_team.captainguid in
+          (SELECT guid from characters where name like '%$search_value%')
+          ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+        $query_1 = $sqlc->query("SELECT count(*) FROM arena_team
+          WHERE arena_team.captainguid in
+          (SELECT guid from characters where name like '%$search_value%')");
+        break;
+      case "atid":
+        $query = $sqlc->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, arena_team.captainguid AS lguid,
+          arena_team.type AS attype,
+          (SELECT name FROM `characters` WHERE guid = lguid) AS lname,(SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid = atid) AS tot_chars,
+          rating AS atrating, games as atgames, wins as atwins
+          FROM arena_team, arena_team_stats
+          WHERE arena_team.arenateamid = arena_team_stats.arenateamid
+          AND arena_team.arenateamid ='$search_value'
+          ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+        $query_1 = $sqlc->query("SELECT count(*) FROM arena_team
+            arena_team.arenateamid ='$search_value'");
+        break;
     }
-    $query_1 = $sqlc->query("SELECT count(*) FROM arena_team, arena_team_stats
-      WHERE arena_team.arenateamid = arena_team_stats.arenateamid
-      AND $search_by LIKE '%$search_value%'");
-    $query = $sqlc->query("SELECT arena_team.arenateamid AS atid, arena_team.name AS atname, arena_team.captainguid AS lguid,
-      arena_team.type AS attype,
-      (SELECT name FROM `characters` WHERE guid = lguid) AS lname,(SELECT COUNT(*) FROM  arena_team_member WHERE arenateamid = atid) AS tot_chars,
-      rating AS atrating, games as atgames, wins as atwins
-      FROM arena_team, arena_team_stats
-      WHERE arena_team.arenateamid = arena_team_stats.arenateamid
-      AND $search_by LIKE '%$search_value%'
-      ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   }
   else
   {
@@ -75,8 +100,8 @@ function browse_teams()
       FROM arena_team, arena_team_stats
       WHERE arena_team.arenateamid = arena_team_stats.arenateamid
       ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+    $query_1 = $sqlc->query("SELECT count(*) FROM arena_team");
   }
-  $query_1 = $sqlc->query("SELECT count(*) FROM arena_team");
   $all_record = $sqlc->result($query_1,0);
   unset($query_1);
   $this_page = $sqlc->num_rows($query);
@@ -99,10 +124,10 @@ function browse_teams()
                     <td>
                       <form action=\"arenateam.php\" method=\"get\" name=\"form\">
                         <input type=\"hidden\" name=\"error\" value=\"4\" />
-                        <input type=\"text\" size=\"24\" name=\"search_value\" />
+                        <input type=\"text\" size=\"24\" name=\"search_value\" value=\"{$search_value}\"/>
                         <select name=\"search_by\">
                           <option value=\"atname\"".($search_by == 'atname' ? " selected=\"selected\"" : "").">{$lang_arenateam['by_name']}</option>
-                          <option value=\"lguid\"".($search_by == 'lguid' ? " selected=\"selected\"" : "").">{$lang_arenateam['by_team_leader']}</option>
+                          <option value=\"leadername\"".($search_by == 'leadername' ? " selected=\"selected\"" : "").">{$lang_arenateam['by_team_leader']}</option>
                           <option value=\"atid\"".($search_by == 'atid' ? " selected=\"selected\"" : "").">{$lang_arenateam['by_id']}</option>
                         </select>
                       </form>
@@ -127,7 +152,7 @@ function browse_teams()
             <tr>
               <th width=\"1%\"><a href=\"arenateam.php?order_by=atid&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='atid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['id']}</a></th>
               <th width=\"1%\"><a href=\"arenateam.php?order_by=atname&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='atname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['arenateam_name']}</a></th>
-              <th width=\"1%\"><a href=\"arenateam.php?order_by=l_name&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='l_name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['captain']}</a></th>
+              <th width=\"1%\"><a href=\"arenateam.php?order_by=lname&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='lname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['captain']}</a></th>
               <th width=\"1%\"><a href=\"arenateam.php?order_by=attype&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='attype' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['type']}</a></th>
               <th width=\"1%\"><a href=\"arenateam.php?order_by=tot_chars&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='tot_chars' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['members']}</a></th>
               <th width=\"1%\"><a href=\"arenateam.php?order_by=arenateam_online&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='arenateam_online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_arenateam['arenateam_online']}</a></th>
@@ -153,7 +178,7 @@ function browse_teams()
             </tr>";
   }
   $output .= "
-            <tr><td colspan=\"6\" class=\"hidden\" align=\"right\">{$lang_arenateam['tot_teams']} : $all_record</td></tr>
+            <tr><td colspan=\"9\" class=\"hidden\" align=\"right\">{$lang_arenateam['tot_teams']} : $all_record</td></tr>
           </table>
         </center>";
 
@@ -173,7 +198,7 @@ function count_days( $a, $b ) {
 //########################################################################################################################
 function view_team()
 {
-  global $lang_arenateam, $lang_global, $output, $characters_db, $realm_id, $user_lvl;
+  global $lang_arenateam, $lang_global, $output, $characters_db, $realm_id, $action_permission, $user_lvl, $user_id;
 
   if(!isset($_GET['id'])) redirect("arenateam.php?error=1");
 
@@ -197,7 +222,9 @@ function view_team()
   $members = $sqlc->query("SELECT arena_team_member.guid,`characters`.name,
     SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', $rating_offset), ' ', -1) AS personal_rating,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-    arena_team_member.played_week, arena_team_member.wons_week, arena_team_member.played_season, arena_team_member.wons_season
+    arena_team_member.played_week, arena_team_member.wons_week, arena_team_member.played_season, arena_team_member.wons_season,
+    `characters`.race, `characters`.class, `characters`.online, `characters`.account, `characters`.logout_time,
+    mid(lpad( hex( CAST(substring_index(substring_index(`data`,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
     FROM arena_team_member,`characters`
     LEFT JOIN arena_team_member k1 ON k1.`guid`=`characters`.`guid` AND k1.`arenateamid`='$arenateam_id'
     WHERE arena_team_member.arenateamid = '$arenateam_id' AND arena_team_member.guid=`characters`.guid
@@ -220,9 +247,9 @@ function view_team()
           answerbox.btn_cancel='{$lang_global['no']}';
         </script>
         <center>
-          <fieldset style=\"width: 720px;\">
+          <fieldset>
             <legend>{$lang_arenateam['arenateam']} ({$arenateam_data[2]}v{$arenateam_data[2]})</legend>
-            <table class=\"lined\" style=\"width: 720px;\">
+            <table class=\"lined\" style=\"width: 100%;\">
               <tr class=\"bold\">
                 <td colspan=\"13\">".htmlentities($arenateam_data[1])."</td>
               </tr>
@@ -246,13 +273,8 @@ function view_team()
               <tr>
                 <td colspan=\"13\">{$lang_arenateam['standings']} {$arenateamstats_data[6]} ({$arenateamstats_data[1]})</td>
               </tr>
-              <tr>";
-  if ($user_lvl > 2)
-  {
-    $output .= "
-                <th width=\"1%\">{$lang_arenateam['remove']}</th>";
-       }
-    $output .= "
+              <tr>
+                <th width=\"1%\">{$lang_arenateam['remove']}</th>
                 <th width=\"1%\">{$lang_arenateam['name']}</th>
                 <th width=\"1%\">Race</th>
                 <th width=\"1%\">Class</th>
@@ -269,20 +291,16 @@ function view_team()
 
     while ($member = $sqlc->fetch_row($members))
     {
-      $query = $sqlc->query("SELECT `race`,`class`,`online`, `account`, `logout_time`,
-        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
-        FROM `characters`
-        WHERE `guid` = '$member[0]';");
-      $online = $sqlc->fetch_row($query);
-      $accid = $online[3];
+      $accid = $member[11];
       $output .= "
               <tr>";
-      if ($user_lvl > 2)
-      {
+      if($user_lvl >= $action_permission['delete'] || $accid == $user_id)
         $output .= "
                 <td><img src=\"img/aff_cross.png\" alt=\"\" onclick=\"answerBox('{$lang_global['delete']}: <font color=white>{$member[1]}</font><br />{$lang_global['are_you_sure']}', 'arenateam.php?action=rem_char_from_team&amp;id=$member[0]&amp;arenateam_id=$arenateam_id');\" style=\"cursor:pointer;\" /></td>";
-      }
+      else
+        $output .= "
+                <td>&nbsp;
+                </td>";
       if($member[4])
         $ww_pct = round((10000 * $member[5]) / $member[4]) / 100;
       else
@@ -293,11 +311,11 @@ function view_team()
         $ws_pct = $member[6];
       $output .= "
                 <td><a href=\"char.php?id=$member[0]\">".htmlentities($member[1])."</a></td>
-                <td><img src='img/c_icons/{$online[0]}-{$online[6]}.gif' onmousemove='toolTip(\"".get_char_race($online[0])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
-                <td><img src='img/c_icons/{$online[1]}.gif' onmousemove='toolTip(\"".get_char_class($online[1])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+                <td><img src='img/c_icons/{$member[8]}-{$member[13]}.gif' onmousemove='toolTip(\"".get_race_name($member[8])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
+                <td><img src='img/c_icons/{$member[9]}.gif' onmousemove='toolTip(\"".get_class_name($member[9])."\",\"item_tooltip\")' onmouseout='toolTip()' /></td>
                 <td>$member[2]</td>
-                <td>".get_days_with_color($online[4])."</td>
-                <td>".(($online[2]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
+                <td>".get_days_with_color($member[12])."</td>
+                <td>".(($member[10]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
                 <td>$member[4]</td>
                 <td>$member[5]</td>
                 <td>$ww_pct %</td>
@@ -312,7 +330,7 @@ function view_team()
             <table class=\"hidden\">
               <tr>
                 <td>";
-    if ($user_lvl > 2)
+    if($user_lvl >= $action_permission['delete'])
     {
       makebutton($lang_arenateam['del_team'], "arenateam.php?action=del_team&amp;id=$arenateam_id\" type=\"wrn", 180);
       $output .= "
@@ -335,7 +353,6 @@ function view_team()
     $output .= "
             </table>
           </fieldset>
-          <br />
         </center>
 ";
 
@@ -436,12 +453,6 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 switch ($action)
 {
-  case "browse_teams":
-    browse_teams();
-    break;
-  case "search":
-    search();
-    break;
   case "view_team":
     view_team();
     break;

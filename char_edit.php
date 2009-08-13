@@ -8,7 +8,7 @@
  * License: GNU General Public License v2(GPL)
  */
 
- 
+
 require_once("header.php");
 require_once("scripts/defines.php");
 require_once("libs/char_lib.php");
@@ -81,7 +81,7 @@ $output .= "<center>
   <input type=\"hidden\" name=\"id\" value=\"$id\" />
   <table class=\"lined\">
   <tr>
-    <td colspan=\"8\"><font class=\"bold\"><input type=\"text\" name=\"name\" size=\"14\" maxlength=\"12\" value=\"$char[3]\" /> - <img src='img/c_icons/{$char[4]}-{$char[14]}.gif' onmousemove='toolTip(\"".get_char_race($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[5]}.gif' onmousemove='toolTip(\"".get_char_class($char[5])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[13])."</font><br />$online</td>
+    <td colspan=\"8\"><font class=\"bold\"><input type=\"text\" name=\"name\" size=\"14\" maxlength=\"12\" value=\"$char[3]\" /> - <img src='img/c_icons/{$char[4]}-{$char[14]}.gif' onmousemove='toolTip(\"".get_race_name($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[5]}.gif' onmousemove='toolTip(\"".get_class_name($char[5])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".get_level_with_color($char[13])."</font><br />$online</td>
 </tr>
 <tr>
  <td colspan=\"8\">".get_map_name($char[9])." - ".get_zone_name($char[12])."</td>

@@ -14,8 +14,6 @@
   valid_login($action_permission['read']);
 
  //global $lang_honor, $lang_global, $output, $characters_db, $realm_id, $itemperpage, $realm_db;
- $CHAR_RACE = get_char_race();
- $CHAR_RANK = get_char_pvp_rank();
 
  $sql = new SQL;
  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
@@ -24,27 +22,27 @@
  $order_by = (isset($_GET['order_by'])) ? $sql->quote_smart($_GET['order_by']) :"honor";
 
  $query = $sql->query("SELECT
-				guid,name,race,class,
-				CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS honor ,
-				CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS kills,
-				CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-				CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_ARENA_POINTS+1)."), ' ', -1) AS UNSIGNED) AS arena,
-				CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
-				mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
-				FROM `characters`
-				where race in (1,3,4,7,11)
-				ORDER BY $order_by DESC
-				LIMIT 25;");
+        guid,name,race,class,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS honor ,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS kills,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_ARENA_POINTS+1)."), ' ', -1) AS UNSIGNED) AS arena,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
+        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+        FROM `characters`
+        where race in (1,3,4,7,11)
+        ORDER BY $order_by DESC
+        LIMIT 25;");
 
  $this_page = $sql->num_rows($query);
 
 $output .= "<script type=\"text/javascript\">
-	answerbox.btn_ok='{$lang_global['yes_low']}';
-	answerbox.btn_cancel='{$lang_global['no']}';
+  answerbox.btn_ok='{$lang_global['yes_low']}';
+  answerbox.btn_cancel='{$lang_global['no']}';
  </script>
  <center>
  <fieldset style=\"width: 776px;\">
-	<legend><img src='img/alliance.gif' /></legend>
+  <legend><img src='img/alliance.gif' /></legend>
 
  <table class=\"lined\" style=\"width: 705px;\">
 
@@ -57,55 +55,55 @@ $output .= "<script type=\"text/javascript\">
     <th width=\"7%\">{$lang_honor['race']}</th>
     <th width=\"7%\">{$lang_honor['class']}</th>
     <th width=\"7%\">{$lang_honor['level']}</th>
-	<th width=\"5%\"><a href=\"honor.php?order_by=honor\"".($order_by=='honor' ? " class=DESC" : "").">{$lang_honor['honor']}</a></th>
-	<th width=\"5%\"><a href=\"honor.php?order_by=honor\"".($order_by=='honor' ? " class=DESC" : "").">{$lang_honor['honor points']}</a></th>
-	<th width=\"5%\"><a href=\"honor.php?order_by=kills\"".($order_by=='kills' ? " class=DESC" : "").">Kills</a></th>
-	<th width=\"5%\"><a href=\"honor.php?order_by=arena\"".($order_by=='arena' ? " class=DESC" : "").">AP</a></th>
+  <th width=\"5%\"><a href=\"honor.php?order_by=honor\"".($order_by=='honor' ? " class=DESC" : "").">{$lang_honor['honor']}</a></th>
+  <th width=\"5%\"><a href=\"honor.php?order_by=honor\"".($order_by=='honor' ? " class=DESC" : "").">{$lang_honor['honor points']}</a></th>
+  <th width=\"5%\"><a href=\"honor.php?order_by=kills\"".($order_by=='kills' ? " class=DESC" : "").">Kills</a></th>
+  <th width=\"5%\"><a href=\"honor.php?order_by=arena\"".($order_by=='arena' ? " class=DESC" : "").">AP</a></th>
     <th width=\"30%\">{$lang_honor['guild']}</th>
   </tr>";
 
-while ($char = $sql->fetch_row($query))	{
+while ($char = $sql->fetch_row($query)) {
 
 $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[8].";"));
 
-  	$output .= " <tr>
-			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
-		 	 <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_char_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
-		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_char_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
-			 <td>".get_level_with_color($char[6])."</td>
-			 <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
-			 <td>$char[4]</td>
-			 <td>$char[5]</td>
-			 <td>$char[7]</td>
-			 <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[8]\">".htmlentities($guild_name[0])."</a></td>
- 			 </tr>";
+    $output .= " <tr>
+       <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
+       <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
+         <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
+       <td>".get_level_with_color($char[6])."</td>
+       <td><span onmouseover='toolTip(\"".get_pvp_rank_name($char[4], get_side_id($char[2]))."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".get_pvp_rank_id($char[4], get_side_id($char[2])).".gif'></span></td>
+       <td>$char[4]</td>
+       <td>$char[5]</td>
+       <td>$char[7]</td>
+       <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[8]\">".htmlentities($guild_name[0])."</a></td>
+       </tr>";
 }
 
 $output .= "</table><br /></fieldset>";
 
 $query = $sql->query("SELECT
- 				guid,name,race,class,
- 				CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS honor ,
-				CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS kills,
- 				CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
- 				CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_ARENA_POINTS+1)."), ' ', -1) AS UNSIGNED) AS arena,
-				CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
-				mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
-				FROM `characters`
-				where race not in (1,3,4,7,11)
-				ORDER BY $order_by DESC
-				LIMIT 25;");
+        guid,name,race,class,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_POINTS+1)."), ' ', -1) AS UNSIGNED) AS honor ,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS kills,
+        CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_ARENA_POINTS+1)."), ' ', -1) AS UNSIGNED) AS arena,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`characters`.`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as GNAME,
+        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+        FROM `characters`
+        where race not in (1,3,4,7,11)
+        ORDER BY $order_by DESC
+        LIMIT 25;");
 
 
  $this_page = $sql->num_rows($query);
 
 $output .= "<script type=\"text/javascript\">
-	answerbox.btn_ok='{$lang_global['yes_low']}';
-	answerbox.btn_cancel='{$lang_global['no']}';
+  answerbox.btn_ok='{$lang_global['yes_low']}';
+  answerbox.btn_cancel='{$lang_global['no']}';
  </script>
  <center>
  <fieldset style=\"width: 776px;\">
-	<legend><img src='img/horde.gif' /></legend>
+  <legend><img src='img/horde.gif' /></legend>
  <table class=\"lined\" style=\"width: 705px;\">
   <tr class=\"bold\">
     <td colspan=\"11\">{$lang_honor['horde']} {$lang_honor ['browse_honor']}</td>
@@ -116,33 +114,31 @@ $output .= "<script type=\"text/javascript\">
     <th width=\"7%\">{$lang_honor['race']}</th>
     <th width=\"7%\">{$lang_honor['class']}</th>
     <th width=\"7%\">{$lang_honor['level']}</th>
-	<th width=\"5%\"><a href=\"honor.php?order_by=honor\"".($order_by=='honor' ? " class=DESC" : "").">{$lang_honor['honor']}</a></th>
-	<th width=\"5%\"><a href=\"honor.php?order_by=honor\"".($order_by=='honor' ? " class=DESC" : "").">{$lang_honor['honor points']}</a></th>
-	<th width=\"5%\"><a href=\"honor.php?order_by=kills\"".($order_by=='kills' ? " class=DESC" : "").">Kills</a></th>
-	<th width=\"5%\"><a href=\"honor.php?order_by=arena\"".($order_by=='arena' ? " class=DESC" : "").">AP</a></th>
+  <th width=\"5%\"><a href=\"honor.php?order_by=honor\"".($order_by=='honor' ? " class=DESC" : "").">{$lang_honor['honor']}</a></th>
+  <th width=\"5%\"><a href=\"honor.php?order_by=honor\"".($order_by=='honor' ? " class=DESC" : "").">{$lang_honor['honor points']}</a></th>
+  <th width=\"5%\"><a href=\"honor.php?order_by=kills\"".($order_by=='kills' ? " class=DESC" : "").">Kills</a></th>
+  <th width=\"5%\"><a href=\"honor.php?order_by=arena\"".($order_by=='arena' ? " class=DESC" : "").">AP</a></th>
     <th width=\"30%\">{$lang_honor['guild']}</th>
   </tr>";
 
-while ($char = $sql->fetch_row($query))	{
+while ($char = $sql->fetch_row($query)) {
 
 $guild_name = $sql->fetch_row($sql->query("SELECT `name` FROM `guild` WHERE `guildid`=".$char[8].";"));
 
-  	$output .= " <tr>
-			 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
-		 	 <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_char_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
-		  	 <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_char_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
-			 <td>".get_level_with_color($char[6])."</td>
-		     <td><span onmouseover='toolTip(\"".$CHAR_RANK[$CHAR_RACE[$char[2]][1]][pvp_ranks($char[4])]."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".pvp_ranks($char[4],$CHAR_RACE[$char[2]][1]).".gif'></span></td>
-			 <td>$char[4]</td>
-			 <td>$char[5]</td>
-			 <td>$char[7]</td>
-			 <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[8]\">".htmlentities($guild_name[0])."</a></td>
-			 </tr>";
+    $output .= " <tr>
+       <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
+       <td><img src='img/c_icons/{$char[2]}-{$char[9]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
+         <td><img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()'></td>
+       <td>".get_level_with_color($char[6])."</td>
+         <td><span onmouseover='toolTip(\"".get_pvp_rank_name($char[4], get_side_id($char[2]))."\",\"item_tooltip\")' onmouseout='toolTip()' style='color: white;'><img src='img/ranks/rank".get_pvp_rank_id($char[4], get_side_id($char[2])).".gif'></span></td>
+       <td>$char[4]</td>
+       <td>$char[5]</td>
+       <td>$char[7]</td>
+       <td><a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[8]\">".htmlentities($guild_name[0])."</a></td>
+       </tr>";
 }
 
 $output .= "</table><br /></fieldset>";
-$sql->close();
-unset($sql);
 
 require_once("footer.php");
 ?>

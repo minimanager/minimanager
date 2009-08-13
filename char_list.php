@@ -335,8 +335,8 @@ function browse_chars()
                 <td>$char[0]</td>
                 <td><a href=\"char.php?id=$char[0]\">".htmlentities($char[1])."</a></td>
                 <td><a href=\"user.php?action=edit_user&amp;error=11&amp;id=$char[2]\">".htmlentities($owner_acc_name)."</a></td>
-                <td><img src='img/c_icons/{$char[3]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_char_race($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
-                <td><img src='img/c_icons/{$char[4]}.gif' onmousemove='toolTip(\"".get_char_class($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                <td><img src='img/c_icons/{$char[3]}-{$char[10]}.gif' onmousemove='toolTip(\"".get_race_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
+                <td><img src='img/c_icons/{$char[4]}.gif' onmousemove='toolTip(\"".get_class_name($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                 <td>".get_level_with_color($char[9])."</td>
                 <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$char[6]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($char[6])."</span></td>
                 <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$char[5]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($char[5])."</span></td>

@@ -19,7 +19,7 @@ valid_login($action_permission['read']);
 function edit_user()
 {
   global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
-    $lang_id_tab, $expansion_select, $server, $developer_test_mode, $multi_realm_mode;
+    $expansion_select, $server, $developer_test_mode, $multi_realm_mode;
 
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
@@ -143,8 +143,8 @@ function edit_user()
                   <tr>
                     <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'---></td>
                     <td>
-                      <a href=\"char.php?id=$char[0]&amp;realm=$realm[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_char_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
-                      <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_char_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".get_level_with_color($char[4])."</a>
+                      <a href=\"char.php?id=$char[0]&amp;realm=$realm[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
+                      <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".get_level_with_color($char[4])."</a>
                     </td>
                   </tr>";
         }
@@ -169,8 +169,8 @@ function edit_user()
                 <tr>
                   <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'---></td>
                   <td>
-                    <a href=\"char.php?id=$char[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_char_race($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
-                    <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_char_class($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".get_level_with_color($char[4])."</a>
+                    <a href=\"char.php?id=$char[0]\">$char[1]  - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />
+                    <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\"/> - lvl ".get_level_with_color($char[4])."</a>
                   </td>
                 </tr>";
       }

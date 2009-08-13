@@ -1844,12 +1844,12 @@ $lang_id_tab = array(
 
 $lang_arenateam = array(
   // ----- ARENATEAM.PHP -----
-  'by_name' => 'by Name',
-  'by_team_leader' => 'by Arena Team Leader',
-  'by_id' => 'by Arena Team Id',
+  'by_name' => 'by Team Name',
+  'by_team_leader' => 'by Team Leader',
+  'by_id' => 'by Team Id',
   'id' => 'Id',
-  'arenateam_id' => 'Arena Team Id',
-  'arenateam_name' => 'Arena Team Name',
+  'arenateam_id' => 'Team Id',
+  'arenateam_name' => 'Team Name',
   'captain' => 'Captain',
   'type' => 'Type',
   'arenateam_online' => 'Members online',
