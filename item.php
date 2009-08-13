@@ -7,32 +7,42 @@
  * Email: *****
  * License: GNU General Public License v2(GPL)
  */
+
+
 require_once("header.php");
- valid_login($action_permission['read']);
 require_once("scripts/id_tab.php");
 require_once("scripts/get_lib.php");
+valid_login($action_permission['read']);
 
-function makeinfocell($text,$tooltip){
+
+function makeinfocell($text,$tooltip)
+{
  return "<a href=\"#\" onmouseover=\"toolTip('".addslashes($tooltip)."','info_tooltip')\" onmouseout=\"toolTip()\">$text</a>";
 }
 
-function output_status_options($stat_type_offset){
- global $lang_item, $output;
 
- $stat_type = array( 0 => "", 1 => "", 3 => "", 4 => "", 5 => "", 6 => "", 7 => "",12 => "",
-        13 => "",14 => "",15 => "",16 => "",17 => "",18 => "",19 => "",20 => "",21 => "",22 => "",
-        23 => "",24 => "",25 => "",26 => "",27 => "",28 => "",29 => "",30 => "",31 => "",32 => "",
-        33 => "",34 => "",35 => "",36 => "");
- if (!$stat_type_offset) $stat_type_offset = 0;
- $stat_type[$stat_type_offset] = " selected=\"selected\" ";
+function output_status_options($stat_type_offset)
+{
+  global $lang_item, $output;
 
- $output .= "<option value=\"0\" {$stat_type[0]}>0: {$lang_item['mana']}</option>
-    <option value=\"1\" {$stat_type[1]}>1: {$lang_item['health']}</option>
-    <option value=\"3\" {$stat_type[3]}>3: {$lang_item['agility']}</option>
-    <option value=\"4\" {$stat_type[4]}>4: {$lang_item['strength']}</option>
-    <option value=\"5\" {$stat_type[5]}>5: {$lang_item['intellect']}</option>
-    <option value=\"6\" {$stat_type[6]}>6: {$lang_item['spirit']}</option>
-    <option value=\"7\" {$stat_type[7]}>7: {$lang_item['stamina']}</option>
+  $stat_type = array( 0 => "", 1 => "", 3 => "", 4 => "", 5 => "", 6 => "", 7 => "",12 => "",
+   13 => "",14 => "",15 => "",16 => "",17 => "",18 => "",19 => "",20 => "",21 => "",22 => "",
+   23 => "",24 => "",25 => "",26 => "",27 => "",28 => "",29 => "",30 => "",31 => "",32 => "",
+   33 => "",34 => "",35 => "",36 => "");
+
+  if (!$stat_type_offset)
+    $stat_type_offset = 0;
+
+  $stat_type[$stat_type_offset] = " selected=\"selected\" ";
+
+  $output .= "
+    <option value= \"0\" {$stat_type[0]} > 0: {$lang_item['mana']}</option>
+    <option value= \"1\" {$stat_type[1]} > 1: {$lang_item['health']}</option>
+    <option value= \"3\" {$stat_type[3]} > 3: {$lang_item['agility']}</option>
+    <option value= \"4\" {$stat_type[4]} > 4: {$lang_item['strength']}</option>
+    <option value= \"5\" {$stat_type[5]} > 5: {$lang_item['intellect']}</option>
+    <option value= \"6\" {$stat_type[6]} > 6: {$lang_item['spirit']}</option>
+    <option value= \"7\" {$stat_type[7]} > 7: {$lang_item['stamina']}</option>
     <option value=\"12\" {$stat_type[12]}>12: {$lang_item['DEFENCE_RATING']}</option>
     <option value=\"13\" {$stat_type[13]}>13: {$lang_item['DODGE_RATING']}</option>
     <option value=\"14\" {$stat_type[14]}>14: {$lang_item['PARRY_RATING']}</option>
@@ -62,14 +72,20 @@ function output_status_options($stat_type_offset){
  return;
 }
 
-function output_dmgtype_options($dmg_type_offset){
- global $lang_item, $output;
 
- $dmg_type  = array( 0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "", 6 => "");
- if (!$dmg_type_offset) $dmg_type_offset = 0;
- $dmg_type[$dmg_type_offset] = " selected=\"selected\" ";
+function output_dmgtype_options($dmg_type_offset)
+{
+  global $lang_item, $output;
 
- $output .= "<option value=\"0\" {$dmg_type[0]}>0: {$lang_item['physical_dmg']}</option>
+  $dmg_type  = array( 0 => "", 1 => "", 2 => "", 3 => "", 4 => "", 5 => "", 6 => "");
+
+  if (!$dmg_type_offset)
+    $dmg_type_offset = 0;
+
+  $dmg_type[$dmg_type_offset] = " selected=\"selected\" ";
+
+  $output .= "
+    <option value=\"0\" {$dmg_type[0]}>0: {$lang_item['physical_dmg']}</option>
     <option value=\"1\" {$dmg_type[1]}>1: {$lang_item['holy_dmg']}</option>
     <option value=\"2\" {$dmg_type[2]}>2: {$lang_item['fire_dmg']}</option>
     <option value=\"3\" {$dmg_type[3]}>3: {$lang_item['nature_dmg']}</option>
@@ -80,262 +96,283 @@ function output_dmgtype_options($dmg_type_offset){
  return;
 }
 
+
 //########################################################################################################################
 //  PRINT  ITEM SEARCH FORM
 //########################################################################################################################
-function search() {
- global $lang_global, $lang_item, $lang_item_edit, $output, $mmfpm_db, $world_db, $realm_id, $action_permission, $user_lvl;
-valid_login($action_permission['read']);
+function search()
+{
+  global $lang_global, $lang_item, $lang_item_edit, $output, $mmfpm_db, $world_db, $realm_id, $action_permission, $user_lvl;
+  valid_login($action_permission['read']);
 
- $sql = new SQL;
- $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
- $sqlm = new SQL;
- $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
- $result = $sql->query("SELECT count(*) FROM item_template");
- $tot_items = $sql->result($result, 0);
- $sql->close();
+  $result = $sqlw->query("SELECT count(*) FROM item_template");
+  $tot_items = $sqlw->result($result, 0);
 
- $output .= "<center>
- <fieldset class=\"full_frame\">
-  <legend>{$lang_item_edit['search_item']}</legend><br />
-  <form action=\"item.php?action=do_search&amp;error=2\" method=\"post\" name=\"form\">
-
-  <table class=\"hidden\">
-  <tr>
-    <td>{$lang_item_edit['entry']}:</td>
-    <td><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"entry\" /></td>
-    <td>{$lang_item_edit['item_name']}:</td>
-    <td colspan=\"3\"><input type=\"text\" size=\"35\" maxlength=\"35\" name=\"name\" /></td>
-    <td>{$lang_item_edit['model_id']}:</td>
-    <td><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"displayid\" /></td>
-  </tr>
-  </tr>
-  <tr>
-     <td width=\"15%\">{$lang_item_edit['class']}:</td>
-     <td width=\"15%\"><select name=\"class\">
-      <option value=\"-1\">{$lang_item_edit['all']}</option>
-    <option value=\"0\">{$lang_item['consumable']}</option>
-    <option value=\"1\">{$lang_item['bag']}</option>
-    <option value=\"2\">{$lang_item['weapon']}</option>
-    <option value=\"4\">{$lang_item['armor']}</option>
-    <option value=\"5\">{$lang_item['reagent']}</option>
-    <option value=\"6\">{$lang_item['projectile']}</option>
-    <option value=\"7\">{$lang_item['trade_goods']}</option>
-    <option value=\"9\">{$lang_item['recipe']}</option>
-    <option value=\"11\">{$lang_item['quiver']}</option>
-    <option value=\"12\">{$lang_item['quest']}</option>
-    <option value=\"13\">{$lang_item['key']}</option>
-    <option value=\"14\">{$lang_item['permanent']}</option>
-    <option value=\"15\">{$lang_item['misc_short']}</option>
-     </select></td>
-     <td width=\"15%\">{$lang_item_edit['quality']}:</td>
-     <td width=\"15%\"><select name=\"Quality\">
-    <option value=\"-1\">{$lang_item_edit['all']}</option>
-    <option value=\"0\">{$lang_item['poor']}</option>
-    <option value=\"1\">{$lang_item['common']}</option>
-    <option value=\"2\">{$lang_item['uncommon']}</option>
-    <option value=\"3\">{$lang_item['rare']}</option>
-    <option value=\"4\">{$lang_item['epic']}</option>
-    <option value=\"5\">{$lang_item['legendary']}</option>
-    <option value=\"6\">{$lang_item['artifact']}</option>
-     </select></td>
-    <td width=\"15%\">{$lang_item_edit['inv_type']}:</td>
-    <td width=\"15%\"><select name=\"InventoryType\">
-    <option value=\"-1\">{$lang_item_edit['all']}</option>
-    <option value=\"1\">{$lang_item['head']}</option>
-    <option value=\"2\">{$lang_item['neck']}</option>
-    <option value=\"3\">{$lang_item['shoulder']}</option>
-    <option value=\"4\">{$lang_item['shirt']}</option>
-    <option value=\"5\">{$lang_item['chest']}</option>
-    <option value=\"6\">{$lang_item['belt']}</option>
-    <option value=\"7\">{$lang_item['legs']}</option>
-    <option value=\"8\">{$lang_item['feet']}</option>
-    <option value=\"9\">{$lang_item['belt']}</option>
-    <option value=\"10\">{$lang_item['gloves']}</option>
-    <option value=\"11\">{$lang_item['finger']}</option>
-    <option value=\"12\">{$lang_item['trinket']}</option>
-    <option value=\"13\">{$lang_item['one_hand']}</option>
-    <option value=\"14\">{$lang_item['off_hand']}</option>
-    <option value=\"15\">{$lang_item['bow']}</option>
-    <option value=\"16\">{$lang_item['back']}</option>
-    <option value=\"17\">{$lang_item['two_hand']}</option>
-    <option value=\"18\">{$lang_item['bag']}</option>
-    <option value=\"19\">{$lang_item['tabard']}</option>
-    <option value=\"20\">{$lang_item['robe']}</option>
-    <option value=\"21\">{$lang_item['main_hand']}</option>
-    <option value=\"22\">{$lang_item['off_misc']}</option>
-    <option value=\"23\">{$lang_item['tome']}</option>
-    <option value=\"24\">{$lang_item['projectile']}</option>
-    <option value=\"25\">{$lang_item['thrown']}</option>
-    <option value=\"26\">{$lang_item['rifle']}</option>
-     </select></td>
-     <td width=\"15%\">{$lang_item_edit['req_level']}:</td>
-     <td width=\"15%\"><input type=\"text\" size=\"6\" maxlength=\"3\" name=\"RequiredLevel\" /></td>
-  </tr>
-  <tr>
-     <td>{$lang_item_edit['spell_id']} 1:</td>
-     <td><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"spellid_1\" /></td>
-     <td>{$lang_item_edit['spell_id']} 2:</td>
-     <td><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"spellid_2\" /></td>
-     <td>{$lang_item_edit['spell_id']} 3:</td>
-     <td><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"spellid_3\" /></td>
-     <td>{$lang_item_edit['spell_id']} 4:</td>
-     <td><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"spellid_4\" /></td>
-  </tr>
-  <tr>
-    <td>{$lang_item_edit['item_level']}:</td>
-    <td><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"ItemLevel\" /></td>
-
-    <td>{$lang_item_edit['item_set']}:</td>
-    <td colspan=\"3\"><select name=\"itemset\">
-    <option value=\"\">{$lang_item_edit['all']}</option>";
-
-
-    $itemset_id = $sqlm->query("SELECT `itemsetID`, `name_loc0` FROM `dbc_itemset`");
-    while($set = $sqlm->fetch_row($itemset_id))
-    $output .= "<option value=\"{$set[0]}\">($set[0]) {$set[1]}</option>";
-$output .= "</select></td>
-    <td>{$lang_item_edit['flags']}:</td>
-    <td><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"Flags\" /></td>
-  </tr>
-  <tr>
-    <td>{$lang_item_edit['bonding']}:</td>
-    <td colspan=\"2\"><select name=\"bonding\">
-    <option value=\"-1\">{$lang_item_edit['all']}</option>
-    <option value=\"1\">{$lang_item['bop']}</option>
-    <option value=\"2\">{$lang_item['boe']}</option>
-    <option value=\"3\">{$lang_item['bou']}</option>
-    <option value=\"4\">{$lang_item['quest_item']}</option>
-     </select></td>
-      <td>{$lang_item_edit['custom_search']}:</td>
-    <td colspan=\"2\"><input type=\"text\" size=\"20\" maxlength=\"512\" name=\"custom_search\" /></td>
-     <td colspan=\"2\">";
-     makebutton($lang_item_edit['search'], "javascript:do_submit()",160);
- $output .= "</td>
-  </tr>
-  <tr>
-    <td colspan=\"8\">-----------------------------------------------------------------------------------------------------------------------------------------------</td>
-  </tr>
-  <tr>
-    <td></td>
-    <td colspan=\"2\">";
-    if($user_lvl >= $action_permission['update'])
-      makebutton($lang_item_edit['add_new_item'], "item.php?action=add_new&error=3",200);
- $output .= "</td>
-    <td colspan=\"4\">{$lang_item_edit['tot_items_in_db']}: $tot_items</td>
-  </tr>
- </table>
-</form>
-</fieldset><br /><br /></center>";
+  $output .= "
+        <center>
+          <fieldset class=\"full_frame\">
+            <legend>{$lang_item_edit['search_item']}</legend><br />
+            <form action=\"item.php?action=do_search&amp;error=2\" method=\"post\" name=\"form\">
+              <table class=\"hidden\">
+                <tr>
+                  <td align=\"right\">{$lang_item_edit['entry']}:</td>
+                  <td align=\"right\"><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"entry\" /></td>
+                  <td align=\"right\">{$lang_item_edit['item_name']}:</td>
+                  <td align=\"right\" colspan=\"3\"><input type=\"text\" size=\"24\" maxlength=\"35\" name=\"name\" /></td>
+                  <td align=\"right\">{$lang_item_edit['model_id']}:</td>
+                  <td align=\"right\"><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"displayid\" /></td>
+                </tr>
+                <tr>
+                  <td align=\"right\" width=\"10%\">{$lang_item_edit['class']}:</td>
+                  <td align=\"right\" width=\"10%\">
+                    <select name=\"class\">
+                      <option value=\"-1\">{$lang_item_edit['all']}</option>
+                      <option value=\"0\">{$lang_item['consumable']}</option>
+                      <option value=\"1\">{$lang_item['bag']}</option>
+                      <option value=\"2\">{$lang_item['weapon']}</option>
+                      <option value=\"4\">{$lang_item['armor']}</option>
+                      <option value=\"5\">{$lang_item['reagent']}</option>
+                      <option value=\"6\">{$lang_item['projectile']}</option>
+                      <option value=\"7\">{$lang_item['trade_goods']}</option>
+                      <option value=\"9\">{$lang_item['recipe']}</option>
+                      <option value=\"11\">{$lang_item['quiver']}</option>
+                      <option value=\"12\">{$lang_item['quest']}</option>
+                      <option value=\"13\">{$lang_item['key']}</option>
+                      <option value=\"14\">{$lang_item['permanent']}</option>
+                      <option value=\"15\">{$lang_item['misc_short']}</option>
+                    </select>
+                  </td>
+                  <td align=\"right\" width=\"10%\">{$lang_item_edit['quality']}:</td>
+                  <td align=\"right\" width=\"10%\">
+                    <select name=\"Quality\">
+                      <option value=\"-1\">{$lang_item_edit['all']}</option>
+                      <option value=\"0\">{$lang_item['poor']}</option>
+                      <option value=\"1\">{$lang_item['common']}</option>
+                      <option value=\"2\">{$lang_item['uncommon']}</option>
+                      <option value=\"3\">{$lang_item['rare']}</option>
+                      <option value=\"4\">{$lang_item['epic']}</option>
+                      <option value=\"5\">{$lang_item['legendary']}</option>
+                      <option value=\"6\">{$lang_item['artifact']}</option>
+                    </select>
+                  </td>
+                  <td align=\"right\" width=\"10%\">{$lang_item_edit['inv_type']}:</td>
+                  <td align=\"right\" width=\"10%\">
+                    <select name=\"InventoryType\">
+                      <option value=\"-1\">{$lang_item_edit['all']}</option>
+                      <option value=\"1\">{$lang_item['head']}</option>
+                      <option value=\"2\">{$lang_item['neck']}</option>
+                      <option value=\"3\">{$lang_item['shoulder']}</option>
+                      <option value=\"4\">{$lang_item['shirt']}</option>
+                      <option value=\"5\">{$lang_item['chest']}</option>
+                      <option value=\"6\">{$lang_item['belt']}</option>
+                      <option value=\"7\">{$lang_item['legs']}</option>
+                      <option value=\"8\">{$lang_item['feet']}</option>
+                      <option value=\"9\">{$lang_item['belt']}</option>
+                      <option value=\"10\">{$lang_item['gloves']}</option>
+                      <option value=\"11\">{$lang_item['finger']}</option>
+                      <option value=\"12\">{$lang_item['trinket']}</option>
+                      <option value=\"13\">{$lang_item['one_hand']}</option>
+                      <option value=\"14\">{$lang_item['off_hand']}</option>
+                      <option value=\"15\">{$lang_item['bow']}</option>
+                      <option value=\"16\">{$lang_item['back']}</option>
+                      <option value=\"17\">{$lang_item['two_hand']}</option>
+                      <option value=\"18\">{$lang_item['bag']}</option>
+                      <option value=\"19\">{$lang_item['tabard']}</option>
+                      <option value=\"20\">{$lang_item['robe']}</option>
+                      <option value=\"21\">{$lang_item['main_hand']}</option>
+                      <option value=\"22\">{$lang_item['off_misc']}</option>
+                      <option value=\"23\">{$lang_item['tome']}</option>
+                      <option value=\"24\">{$lang_item['projectile']}</option>
+                      <option value=\"25\">{$lang_item['thrown']}</option>
+                      <option value=\"26\">{$lang_item['rifle']}</option>
+                    </select>
+                  </td>
+                  <td align=\"right\" width=\"10%\">{$lang_item_edit['req_level']}:</td>
+                  <td align=\"right\" width=\"10%\"><input type=\"text\" size=\"6\" maxlength=\"3\" name=\"RequiredLevel\" /></td>
+                </tr>
+                <tr>
+                  <td align=\"right\">{$lang_item_edit['spell_id']} 1:</td>
+                  <td align=\"right\"><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"spellid_1\" /></td>
+                  <td align=\"right\">{$lang_item_edit['spell_id']} 2:</td>
+                  <td align=\"right\"><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"spellid_2\" /></td>
+                  <td align=\"right\">{$lang_item_edit['spell_id']} 3:</td>
+                  <td align=\"right\"><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"spellid_3\" /></td>
+                  <td align=\"right\">{$lang_item_edit['spell_id']} 4:</td>
+                  <td align=\"right\"><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"spellid_4\" /></td>
+                </tr>
+                <tr>
+                  <td align=\"right\">{$lang_item_edit['item_level']}:</td>
+                  <td align=\"right\"><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"ItemLevel\" /></td>
+                  <td align=\"right\">{$lang_item_edit['item_set']}:</td>
+                  <td align=\"right\" colspan=\"3\">
+                    <select name=\"itemset\">
+                      <option value=\"\">{$lang_item_edit['all']}</option>";
+  $itemset_id = $sqlm->query("SELECT `itemsetID`, `name_loc0` FROM `dbc_itemset`");
+  while($set = $sqlm->fetch_row($itemset_id))
+    $output .= "
+                      <option value=\"{$set[0]}\">($set[0]) {$set[1]}</option>";
+  $output .= "
+                    </select>
+                  </td>
+                  <td align=\"right\">{$lang_item_edit['flags']}:</td>
+                  <td align=\"right\"><input type=\"text\" size=\"6\" maxlength=\"6\" name=\"Flags\" /></td>
+                </tr>
+                <tr>
+                  <td align=\"right\">{$lang_item_edit['bonding']}:</td>
+                  <td align=\"right\" colspan=\"2\">
+                    <select name=\"bonding\">
+                      <option value=\"-1\">{$lang_item_edit['all']}</option>
+                      <option value=\"1\">{$lang_item['bop']}</option>
+                      <option value=\"2\">{$lang_item['boe']}</option>
+                      <option value=\"3\">{$lang_item['bou']}</option>
+                      <option value=\"4\">{$lang_item['quest_item']}</option>
+                    </select>
+                  </td>
+                  <td align=\"right\">{$lang_item_edit['custom_search']}:</td>
+                  <td align=\"right\" colspan=\"2\"><input type=\"text\" size=\"24\" maxlength=\"512\" name=\"custom_search\" /></td>
+                  <td align=\"right\" colspan=\"2\">
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan=\"8\">-----------------------------------------------------------------------------------------------------------------------------------------------</td>
+                </tr>
+                <tr>
+                  <td align=\"right\"></td>
+                  <td align=\"right\" colspan=\"4\">";
+  if($user_lvl >= $action_permission['insert'])
+                    makebutton($lang_item_edit['add_new_item'], "item.php?action=add_new&error=3",130);
+                    makebutton($lang_item_edit['search'], "javascript:do_submit()",130);
+  $output .= "
+                  </td>
+                  <td align=\"right\" colspan=\"2\">{$lang_item_edit['tot_items_in_db']}: $tot_items</td>
+                  <td align=\"right\"></td>
+                </tr>
+              </table>
+            </form>
+          </fieldset>
+          <br /><br />
+        </center>
+";
 }
 
 
 //########################################################################################################################
 // SHOW SEARCH RESULTS
 //########################################################################################################################
-function do_search() {
- global $lang_global, $lang_item, $lang_item_edit, $output, $world_db, $realm_id, $item_datasite, $sql_search_limit, $action_permission, $user_lvl;
- valid_login($action_permission['read']);
+function do_search()
+{
+  global $lang_global, $lang_item, $lang_item_edit, $output, $world_db, $realm_id, $item_datasite, $sql_search_limit, $itemperpage,
+    $action_permission, $user_lvl;
+  valid_login($action_permission['read']);
   wowhead_tt();
 
- $deplang = get_lang_id();
- if(($_POST['class'] == "-1")&&($_POST['Quality'] == "-1")&&($_POST['InventoryType'] == "-1")&&($_POST['bonding'] == "-1")
-  &&(!isset($_POST['entry'])||$_POST['entry'] === '')&&(!isset($_POST['name'])||$_POST['name'] === '')&&(!isset($_POST['displayid'])||$_POST['displayid'] === '')&&(!isset($_POST['RequiredLevel'])||$_POST['RequiredLevel'] === '')
-  &&(!isset($_POST['spellid_1'])||$_POST['spellid_1'] === '')&&(!isset($_POST['spellid_2'])||$_POST['spellid_2'] === '')&&(!isset($_POST['spellid_3'])||$_POST['spellid_3'] === '')&&(!isset($_POST['spellid_4'])||$_POST['spellid_4'] === '')
-  &&(!isset($_POST['ItemLevel'])||$_POST['ItemLevel'] === '')&&(!isset($_POST['itemset'])||$_POST['itemset'] === '')&&(!isset($_POST['Flags'])||$_POST['Flags'] === '')
-  &&(!isset($_POST['custom_search'])||$_POST['custom_search'] === ''))
-  redirect("item.php?error=1");
+  $deplang = get_lang_id();
+  if(($_POST['class'] == "-1")&&($_POST['Quality'] == "-1")&&($_POST['InventoryType'] == "-1")&&($_POST['bonding'] == "-1")
+    &&(!isset($_POST['entry'])||$_POST['entry'] === '')&&(!isset($_POST['name'])||$_POST['name'] === '')&&(!isset($_POST['displayid'])||$_POST['displayid'] === '')&&(!isset($_POST['RequiredLevel'])||$_POST['RequiredLevel'] === '')
+    &&(!isset($_POST['spellid_1'])||$_POST['spellid_1'] === '')&&(!isset($_POST['spellid_2'])||$_POST['spellid_2'] === '')&&(!isset($_POST['spellid_3'])||$_POST['spellid_3'] === '')&&(!isset($_POST['spellid_4'])||$_POST['spellid_4'] === '')
+    &&(!isset($_POST['ItemLevel'])||$_POST['ItemLevel'] === '')&&(!isset($_POST['itemset'])||$_POST['itemset'] === '')&&(!isset($_POST['Flags'])||$_POST['Flags'] === '')
+    &&(!isset($_POST['custom_search'])||$_POST['custom_search'] === ''))
+      redirect("item.php?error=1");
 
-$sql = new SQL;
-$sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
-$class = $sql->quote_smart($_POST['class']);
-$Quality = $sql->quote_smart($_POST['Quality']);
-$InventoryType = $sql->quote_smart($_POST['InventoryType']);
-$bonding = $sql->quote_smart($_POST['bonding']);
+  $class = $sqlw->quote_smart($_POST['class']);
+  $Quality = $sqlw->quote_smart($_POST['Quality']);
+  $InventoryType = $sqlw->quote_smart($_POST['InventoryType']);
+  $bonding = $sqlw->quote_smart($_POST['bonding']);
 
-if ($_POST['entry'] != '') $entry = $sql->quote_smart($_POST['entry']);
-if ($_POST['name'] != '') $name = $sql->quote_smart($_POST['name']);
-if ($_POST['displayid'] != '') $displayid = $sql->quote_smart($_POST['displayid']);
-if ($_POST['RequiredLevel'] != '') $RequiredLevel = $sql->quote_smart($_POST['RequiredLevel']);
-if ($_POST['spellid_1'] != '') $spellid_1 = $sql->quote_smart($_POST['spellid_1']);
-if ($_POST['spellid_2'] != '') $spellid_2 = $sql->quote_smart($_POST['spellid_2']);
-if ($_POST['spellid_3'] != '') $spellid_3 = $sql->quote_smart($_POST['spellid_3']);
-if ($_POST['spellid_4'] != '') $spellid_4 = $sql->quote_smart($_POST['spellid_4']);
-if ($_POST['ItemLevel'] != '') $ItemLevel = $sql->quote_smart($_POST['ItemLevel']);
-if ($_POST['itemset'] != '') $itemset = $sql->quote_smart($_POST['itemset']);
-if ($_POST['Flags'] != '') $Flags = $sql->quote_smart($_POST['Flags']);
-if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['custom_search']);
+  if ($_POST['entry'] != '') $entry = $sqlw->quote_smart($_POST['entry']);
+  if ($_POST['name'] != '') $name = $sqlw->quote_smart($_POST['name']);
+  if ($_POST['displayid'] != '') $displayid = $sqlw->quote_smart($_POST['displayid']);
+  if ($_POST['RequiredLevel'] != '') $RequiredLevel = $sqlw->quote_smart($_POST['RequiredLevel']);
+  if ($_POST['spellid_1'] != '') $spellid_1 = $sqlw->quote_smart($_POST['spellid_1']);
+  if ($_POST['spellid_2'] != '') $spellid_2 = $sqlw->quote_smart($_POST['spellid_2']);
+  if ($_POST['spellid_3'] != '') $spellid_3 = $sqlw->quote_smart($_POST['spellid_3']);
+  if ($_POST['spellid_4'] != '') $spellid_4 = $sqlw->quote_smart($_POST['spellid_4']);
+  if ($_POST['ItemLevel'] != '') $ItemLevel = $sqlw->quote_smart($_POST['ItemLevel']);
+  if ($_POST['itemset'] != '') $itemset = $sqlw->quote_smart($_POST['itemset']);
+  if ($_POST['Flags'] != '') $Flags = $sqlw->quote_smart($_POST['Flags']);
+  if ($_POST['custom_search'] != '') $custom_search = $sqlw->quote_smart($_POST['custom_search']);
   else $custom_search = "";
 
- $where = "WHERE item_template.entry > 0 ";
- if($custom_search) $where .= "AND $custom_search ";
- if($class != "-1") $where .= "AND class = '$class' ";
- if($Quality != "-1") $where .= "AND Quality = '$Quality' ";
- if($InventoryType != "-1") $where .= "AND InventoryType = '$InventoryType' ";
- if($bonding != "-1") $where .= "AND bonding = '$bonding' ";
- if(isset($entry)) $where .= "AND item_template.entry = '$entry' ";
- if(isset($name)) $where .= "AND IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) LIKE '%$name%' ";
- if(isset($displayid)) $where .= "AND displayid = '$displayid' ";
- if(isset($RequiredLevel)) $where .= "AND RequiredLevel = '$RequiredLevel' ";
+  $where = "WHERE item_template.entry > 0 ";
+  if($custom_search)         $where .= "AND $custom_search ";
+  if($class != "-1")         $where .= "AND class = '$class' ";
+  if($Quality != "-1")       $where .= "AND Quality = '$Quality' ";
+  if($InventoryType != "-1") $where .= "AND InventoryType = '$InventoryType' ";
+  if($bonding != "-1")       $where .= "AND bonding = '$bonding' ";
 
- if(isset($spellid_1)) $where .= "AND (spellid_1 = '$spellid_1' OR spellid_2 = '$spellid_1' OR spellid_3 = '$spellid_1' OR spellid_4 = '$spellid_1' OR spellid_5 = '$spellid_1') ";
- if(isset($spellid_2)) $where .= "AND (spellid_1 = '$spellid_2' OR spellid_2 = '$spellid_2' OR spellid_3 = '$spellid_2' OR spellid_4 = '$spellid_2' OR spellid_5 = '$spellid_2') ";
- if(isset($spellid_3)) $where .= "AND (spellid_1 = '$spellid_3' OR spellid_2 = '$spellid_3' OR spellid_3 = '$spellid_3' OR spellid_4 = '$spellid_3' OR spellid_5 = '$spellid_3') ";
- if(isset($spellid_4)) $where .= "AND (spellid_1 = '$spellid_4' OR spellid_2 = '$spellid_4' OR spellid_3 = '$spellid_4' OR spellid_4 = '$spellid_4' OR spellid_5 = '$spellid_4') ";
+  if(isset($entry))         $where .= "AND item_template.entry = '$entry' ";
+  if(isset($name))          $where .= "AND IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) LIKE '%$name%' ";
+  if(isset($displayid))     $where .= "AND displayid = '$displayid' ";
+  if(isset($RequiredLevel)) $where .= "AND RequiredLevel = '$RequiredLevel' ";
 
- if(isset($ItemLevel)) $where .= "AND ItemLevel = '$ItemLevel' ";
- if(isset($itemset)) $where .= "AND itemset = '$itemset' ";
- if(isset($Flags)) $where .= "AND Flags = '$Flags' ";
+  if(isset($spellid_1)) $where .= "AND (spellid_1 = '$spellid_1' OR spellid_2 = '$spellid_1' OR spellid_3 = '$spellid_1' OR spellid_4 = '$spellid_1' OR spellid_5 = '$spellid_1') ";
+  if(isset($spellid_2)) $where .= "AND (spellid_1 = '$spellid_2' OR spellid_2 = '$spellid_2' OR spellid_3 = '$spellid_2' OR spellid_4 = '$spellid_2' OR spellid_5 = '$spellid_2') ";
+  if(isset($spellid_3)) $where .= "AND (spellid_1 = '$spellid_3' OR spellid_2 = '$spellid_3' OR spellid_3 = '$spellid_3' OR spellid_4 = '$spellid_3' OR spellid_5 = '$spellid_3') ";
+  if(isset($spellid_4)) $where .= "AND (spellid_1 = '$spellid_4' OR spellid_2 = '$spellid_4' OR spellid_3 = '$spellid_4' OR spellid_4 = '$spellid_4' OR spellid_5 = '$spellid_4') ";
 
- if($where == "WHERE item_template.entry > 0 ") redirect("item.php?error=1");
- $result = $sql->query("SELECT item_template.entry,displayid,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,RequiredLevel,ItemLevel FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry $where ORDER BY item_template.entry LIMIT $sql_search_limit");
- $total_items_found = $sql->num_rows($result);
+  if(isset($ItemLevel)) $where .= "AND ItemLevel = '$ItemLevel' ";
+  if(isset($itemset))   $where .= "AND itemset = '$itemset' ";
+  if(isset($Flags))     $where .= "AND Flags = '$Flags' ";
 
-  $output .= "<center>
-  <table class=\"top_hidden\"></td>
-       <tr><td>";
-    makebutton($lang_item_edit['new_search'], "item.php",160);
-  $output .= "</td>
-     <td align=\"right\">{$lang_item_edit['items_found']} : $total_items_found : {$lang_global['limit']} $sql_search_limit</td>
-   </tr></table>";
+  if($where == "WHERE item_template.entry > 0 ") redirect("item.php?error=1");
 
-  $output .= "<table class=\"lined\">
-   <tr>
-  <th width=\"15%\">{$lang_item_edit['entry']}</th>
-  <th width=\"10%\">{$lang_item_edit['display_id']}</th>
-  <th width=\"55%\">{$lang_item_edit['item_name']}</th>
-  <th width=\"10%\">{$lang_item_edit['req_level']}</th>
-  <th width=\"10%\">{$lang_item_edit['item_level']}</th>
-  </tr>";
+  $result = $sqlw->query("SELECT item_template.entry,displayid,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,RequiredLevel,ItemLevel FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry $where ORDER BY item_template.entry LIMIT $sql_search_limit");
+  $total_items_found = $sqlw->num_rows($result);
 
- for ($i=1; $i<=$total_items_found; $i++){
-  $item = $sql->fetch_row($result);
-
-  //$tooltip = get_item_tooltip($item[0]);
-
-  $output .= "<tr>
-        <td><a href=\"$item_datasite$item[0]\" target=\"_blank\">$item[0]</a></td>
-        <td>";
   $output .= "
-                    <a style=\"padding:2px;\" href=\"$item_datasite$item[0]\" target=\"_blank\">
-                      <img src=\"".get_item_icon($item[0])."\" class=\"".get_item_border($item[0])."\" alt=\"\">
-                  </a>";
-  $output .="</td>
-        <td>";
-        if($user_lvl >= $action_permission['update'])
-        $output .="<a href=\"item.php?action=edit&amp;entry=$item[0]&amp;error=4\">".htmlentities($item[2])."</a>";
-        else
-        $output .=htmlentities($item[2]);
-        $output .="</td>
-        <td>$item[3]</td>
-        <td>$item[4]</td>
-      </tr>";
-  }
-  $output .= "</table></center><br />";
+        <center>
+          <table class=\"top_hidden\">
+            <tr>
+              <td>";
+                makebutton($lang_item_edit['new_search'], "item.php",130);
+  $output .= "
+              </td>
+              <td align=\"right\">{$lang_item_edit['items_found']} : $total_items_found : {$lang_global['limit']} $sql_search_limit</td>
+            </tr>
+          </table>
+          <table class=\"lined\">
+          <tr>
+            <th width=\"10%\">{$lang_item_edit['entry']}</th>
+            <th width=\"10%\">{$lang_item_edit['display_id']}</th>
+            <th width=\"10%\">{$lang_item_edit['item_name']}</th>
+            <th width=\"10%\">{$lang_item_edit['req_level']}</th>
+            <th width=\"10%\">{$lang_item_edit['item_level']}</th>
+          </tr>";
+  for ($i=0; $i<$total_items_found; $i++)
+  {
+    $item = $sqlw->fetch_row($result);
 
- $sql->close();
+    //$tooltip = get_item_tooltip($item[0]);
+    $output .= "
+          <tr>
+            <td><a href=\"$item_datasite$item[0]\" target=\"_blank\">$item[0]</a></td>
+            <td>
+              <a style=\"padding:2px;\" href=\"$item_datasite$item[0]\" target=\"_blank\">
+                <img src=\"".get_item_icon($item[0])."\" class=\"".get_item_border($item[0])."\" alt=\"\" />
+              </a>
+            </td>
+            <td>
+              <a href=\"item.php?action=edit&amp;entry=$item[0]&amp;error=4\">".htmlentities($item[2])."</a>
+            </td>
+            <td>$item[3]</td>
+            <td>$item[4]</td>
+          </tr>";
+  }
+  $output .= "
+          </table>
+          <br />
+        </center>
+";
+
+
 }
 
 
@@ -344,7 +381,7 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
 //########################################################################################################################
 function add_new() {
  global $lang_global, $lang_item, $lang_id_tab, $lang_item_edit, $output, $item_datasite, $action_permission, $user_lvl;
-valid_login($action_permission['update']);
+valid_login($action_permission['insert']);
   wowhead_tt();
 
  $output .= "<script type=\"text/javascript\" src=\"js/tab.js\"></script>
@@ -1174,10 +1211,10 @@ $output .= "<div id=\"pane7\">
 //########################################################################################################################
 function edit() {
  global $lang_global, $lang_item_templ, $lang_item, $lang_item_edit, $output, $world_db, $realm_id,
-    $item_datasite, $lang_id_tab, $quest_datasite, $action_permission, $user_lvl;
+    $item_datasite, $lang_id_tab, $quest_datasite, $action_permission, $user_lvl, $creature_datasite;
   wowhead_tt();
 
-valid_login($action_permission['update']);
+valid_login($action_permission['read']);
 
  if (!isset($_GET['entry'])) redirect("item.php?error=1");
 
@@ -1223,7 +1260,7 @@ $output .= "<div id=\"pane1\">
 <tr>
  <td>".makeinfocell($lang_item_edit['entry'],$lang_item_edit['entry_desc'])."</td>
  <td>";
- $output .= maketooltip($entry, "$item_datasite$entry", $tooltip, "item_tooltip");
+ //$output .= maketooltip($entry, "$item_datasite$entry", $tooltip, "item_tooltip");
  $output .= "</td>
  <td>".makeinfocell($lang_item_edit['display_id'],$lang_item_edit['display_id_desc'])."</td>
  <td><input type=\"text\" name=\"displayid\" size=\"8\" maxlength=\"11\" value=\"{$item['displayid']}\" /></td>
@@ -2136,10 +2173,11 @@ $output .= "<td>".makeinfocell($lang_item_edit['socket_color']." 3",$lang_item_e
 
 $output .= "<div id=\"pane8\">
     <br /><br /><table class=\"lined\" style=\"width: 720px;\">
-  <tr class=\"large_bold\"><td colspan=\"4\" class=\"hidden\" align=\"left\">{$lang_item_edit['dropped_by']}: {$lang_item_edit['top_x']}</td></tr>
+  <tr class=\"large_bold\"><td colspan=\"5\" class=\"hidden\" align=\"left\">{$lang_item_edit['dropped_by']}: {$lang_item_edit['top_x']}</td></tr>
   <tr>
+    <th width=\"1%\">ID</th>
     <th width=\"35%\">{$lang_item_edit['mob_name']}</th>
-    <th width=\"15%\">{$lang_item_edit['mob_level']}</th>
+    <th width=\"10%\">{$lang_item_edit['mob_level']}</th>
     <th width=\"25%\">{$lang_item_edit['mob_drop_chance']}</th>
     <th width=\"25%\">{$lang_item_edit['mob_quest_drop_chance']}</th>
   </tr>";
@@ -2148,11 +2186,12 @@ $output .= "<div id=\"pane8\">
   $result3 = $sql->query("SELECT creature_template.entry,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,maxlevel FROM creature_template LEFT JOIN locales_creature ON creature_template.entry = locales_creature.entry WHERE lootid = {$info[0]} LIMIT 1");
   while ($mob = $sql->fetch_row($result3)){
     $output .= "<tr><td>";
-    if($user_lvl >= $action_permission['update'])
-    $output .="<a class=\"tooltip\" href=\"creature.php?action=edit&amp;entry=$mob[0]&amp;error=4\" target=\"_blank\">$mob[1]</a>";
+    if($user_lvl >= $action_permission['delete'])
+    $output .="<a class=\"tooltip\" href=\"creature.php?action=edit&amp;entry=$mob[0]&amp;error=4\" target=\"_blank\">$mob[0]</a>";
     else
-    $output .="$mob[1]";
+    $output .="$mob[0]";
     $output .="</td>
+          <td><a class=\"tooltip\" href=\"$creature_datasite$mob[0]\" target=\"_blank\">$mob[1]</a></td>
           <td>$mob[2]</td>
           <td>$info[1]%</td>
           <td>$info[2]%</td></tr>";
@@ -2161,15 +2200,19 @@ $output .= "<div id=\"pane8\">
 
 $result2 = $sql->query("SELECT creature_template.entry,IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name,maxlevel FROM creature_template LEFT JOIN locales_creature ON creature_template.entry = locales_creature.entry WHERE creature_template.entry IN (SELECT entry FROM npc_vendor WHERE item = {$item['entry']}) ORDER BY maxlevel DESC LIMIT 5");
  if ($sql->num_rows($result2)){
-  $output .= "<tr class=\"large_bold\"><td colspan=\"4\" class=\"hidden\" align=\"left\">{$lang_item_edit['soled_by']}: {$lang_item_edit['limit_x']}</td></tr>";
+  $output .= "<tr class=\"large_bold\"><td colspan=\"4\" class=\"hidden\" align=\"left\">{$lang_item_edit['sold_by']}: {$lang_item_edit['limit_x']}</td></tr>";
   while ($mob = $sql->fetch_row($result2)){
-    $output .= "<tr><td width=\"20%\">$mob[2]</td>
-        <td width=\"80%\" colspan=\"3\" align=\"left\">";
+    $output .= "<tr>
+        <td width=\"10%\">";
         if($user_lvl >= $action_permission['delete'])
-        $output .="<a class=\"tooltip\" href=\"creature.php?action=edit&amp;entry=$mob[0]&amp;error=4\" target=\"_blank\">$mob[1]</a>";
+          $output .="<a class=\"tooltip\" href=\"creature.php?action=edit&amp;entry=$mob[0]&amp;error=4\" target=\"_blank\">$mob[0]</a>";
         else
-        $output .="$mob[1]";
-        $output .="</td></tr>";
+          $output .="$mob[0]";
+        $output .="
+        <td width=\"10%\">$mob[2]</td>
+        <td width=\"80%\" colspan=\"2\" align=\"left\">
+          <a class=\"tooltip\" href=\"$creature_datasite$mob[0]\" target=\"_blank\">$mob[1]</a></td>
+        </td></tr>";
     }
 }
 
@@ -2258,25 +2301,45 @@ $output .= "</div>
 </form>
 
 <script type=\"text/javascript\">setupPanes(\"container\", \"tab1\")</script>";
- unset($socketColor_3);
+   unset($socketColor_3);
 
- $output .= "<table class=\"hidden\">
-          <tr><td>";
-       makebutton($lang_item_edit['update'], "javascript:do_submit('form1',0)",180);
-      if($user_lvl >= $action_permission['delete'])
-       makebutton($lang_item_edit['del_item'], "item.php?action=delete&amp;entry=$entry",180);
-       makebutton($lang_item_edit['export_sql'], "javascript:do_submit('form1',1)",180);
-       makebutton($lang_item_edit['search_items'], "item.php",180);
- $output .= "</td></tr>
-        </table></center>";
+   $output .= "
+          <table class=\"hidden\">
+            <tr>
+              <td>";
+    if($user_lvl >= $action_permission['delete'])
+      makebutton($lang_item_edit['del_item'], "item.php?action=delete&amp;entry=$entry\" type=\"wrn",180);
+    $output .= "
+              </td>
+              <td>";
+    if($user_lvl >= $action_permission['update'])
+      makebutton($lang_item_edit['update'], "javascript:do_submit('form1',0)\" type=\"wrn",180);
+    $output .= "
+              </td>
+              <td>";
+    if($user_lvl >= $action_permission['insert'])
+      makebutton($lang_item_edit['export_sql'], "javascript:do_submit('form1',1)",180);
+    $output .= "
+              </td>
+              <td>";
+    makebutton($lang_global['back'], "javascript:window.history.back()", 130);
+    $output .= "
+              </td>
+              <td>";
+    makebutton($lang_item_edit['new_search'], "item.php",130);
+    $output .= "
+              </td>
+            </tr>
+          </table>
+        </center>
+";
 
-
- $sql->close();
- } else {
-    $sql->close();
+  }
+  else
+  {
     error($lang_item_edit['item_not_found']);
     exit();
-    }
+  }
 }
 
 
@@ -2811,103 +2874,127 @@ valid_login($action_permission['update']);
 //#######################################################################################################
 //  DELETE ITEM
 //#######################################################################################################
-function delete() {
-global $lang_global, $lang_item_edit, $output, $action_permission, $user_lvl;
-valid_login($action_permission['delete']);
- if(isset($_GET['entry'])) $entry = $_GET['entry'];
+function delete()
+{
+  global $lang_global, $lang_item_edit, $output, $action_permission, $user_lvl;
+  valid_login($action_permission['delete']);
+
+  if(isset($_GET['entry'])) $entry = $_GET['entry'];
   else redirect("item.php?error=1");
 
- $output .= "<center><h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1><br />
-      <font class=\"bold\">{$lang_item_edit['item_id']}: <a href=\"item.php?action=edit&amp;entry=$entry\" target=\"_blank\">$entry</a>
-      {$lang_global['will_be_erased']}</font><br /><br />
-    <table class=\"hidden\">
-          <tr>
-            <td>";
-      makebutton($lang_global['yes'], "item.php?action=do_delete&amp;entry=$entry",120);
-      makebutton($lang_global['no'], "item.php",120);
- $output .= "</td>
-          </tr>
-        </table></center><br />";
+  $output .= "
+        <center>
+          <h1><font class=\"error\">{$lang_global['are_you_sure']}</font></h1>
+          <br />
+          <font class=\"bold\">
+            {$lang_item_edit['item_id']}: <a href=\"item.php?action=edit&amp;entry=$entry\" target=\"_blank\">$entry</a>
+            {$lang_global['will_be_erased']}
+          </font>
+          <br /><br />
+          <table class=\"hidden\">
+            <tr>
+              <td>";
+                makebutton($lang_global['yes'], "item.php?action=do_delete&amp;entry=$entry\" type=\"warn",130);
+                makebutton($lang_global['no'], "item.php",130);
+  $output .= "
+              </td>
+            </tr>
+          </table>
+          <br />
+        </center>";
 }
 
 
 //########################################################################################################################
 //  DO DELETE ITEM
 //########################################################################################################################
-function do_delete() {
- global $world_db, $realm_id, $action_permission, $user_lvl;
-valid_login($action_permission['delete']);
+function do_delete()
+{
+  global $world_db, $realm_id, $action_permission, $user_lvl;
+  valid_login($action_permission['delete']);
 
- if(isset($_GET['entry'])) $entry = $_GET['entry'];
+  if(isset($_GET['entry'])) $entry = $_GET['entry'];
   else redirect("item.php?error=1");
 
- $sql = new SQL;
- $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
- $result = $sql->query("DELETE FROM item_template WHERE entry = '$entry'");
+  $result = $sqlw->query("DELETE FROM item_template WHERE entry = '$entry'");
 
- $sql->close();
- redirect("item.php");
- }
+  redirect("item.php");
+}
 
 
-//########################################################################################################################
+//#############################################################################
 // MAIN
-//########################################################################################################################
+//#############################################################################
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
-$output .= "<div class=\"top\">";
-switch ($err) {
-case 1:
-   $output .= "<h1><font class=\"error\">{$lang_global['empty_fields']}</font></h1>";
-   break;
-case 2:
-   $output .= "<h1><font class=\"error\">{$lang_item_edit['search_results']}</font></h1>";
-   break;
-case 3:
-   $output .= "<h1><font class=\"error\">{$lang_item_edit['add_new_item']}</font></h1>";
-   break;
-case 4:
-   $output .= "<h1><font class=\"error\">{$lang_item_edit['edit_item']}</font></h1>";
-   break;
-case 5:
-   $output .= "<h1><font class=\"error\">{$lang_item_edit['err_adding_item']}</font></h1>";
-   break;
-case 6:
-   $output .= "<h1><font class=\"error\">{$lang_item_edit['err_no_field_updated']}</font></h1>";
-   break;
-default: //no error
-    $output .= "<h1>{$lang_item_edit['search_items']}</h1>";
+$output .= "
+        <div class=\"top\">";
+
+switch ($err)
+{
+  case 1:
+    $output .= "
+          <h1><font class=\"error\">{$lang_global['empty_fields']}</font></h1>";
+    break;
+  case 2:
+    $output .= "
+          <h1><font class=\"error\">{$lang_item_edit['search_results']}</font></h1>";
+    break;
+  case 3:
+    $output .= "
+          <h1><font class=\"error\">{$lang_item_edit['add_new_item']}</font></h1>";
+    break;
+  case 4:
+    $output .= "
+          <h1><font class=\"error\">{$lang_item_edit['edit_item']}</font></h1>";
+    break;
+  case 5:
+    $output .= "
+          <h1><font class=\"error\">{$lang_item_edit['err_adding_item']}</font></h1>";
+    break;
+  case 6:
+    $output .= "
+          <h1><font class=\"error\">{$lang_item_edit['err_no_field_updated']}</font></h1>";
+    break;
+  default: //no error
+    $output .= "
+          <h1>{$lang_item_edit['search_items']}</h1>";
 }
-$output .= "</div>";
+$output .= "
+        </div>";
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-switch ($action) {
-case "search":
-   search();
-   break;
-case "do_search":
-   do_search();
-   break;
-case "add_new":
-   add_new();
-   break;
-case "do_update":
-   do_update();
-   break;
-case "edit":
-   edit();
-   break;
-case "delete":
-   delete();
-   break;
-case "do_delete":
-   do_delete();
-   break;
-default:
+switch ($action)
+{
+  case "search":
+    search();
+    break;
+  case "do_search":
+    do_search();
+    break;
+  case "add_new":
+    add_new();
+    break;
+  case "do_update":
+    do_update();
+    break;
+  case "edit":
+    edit();
+    break;
+  case "delete":
+    delete();
+    break;
+  case "do_delete":
+    do_delete();
+    break;
+  default:
     search();
 }
 
 require_once("footer.php");
+
 ?>
