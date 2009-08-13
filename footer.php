@@ -1,99 +1,101 @@
 <?php
-  echo $output;
-  unset($output);
 
-  print "
+  if( 3 < $debug)
+  {
+    unset($sql);
+    unset($sqlc);
+    unset($sqlw);
+    unset($sqlr);
+    unset($sqlm);
+  }
+
+  $output .= '
       </div>
-      <div id=\"body_buttom\">
+      <div id="body_buttom">
         <center>
-";
-  if($developer_test_mode && $allow_anony && !isset($_SESSION['logged_in']))
+';
+  if($developer_test_mode && $allow_anony && empty($_SESSION['logged_in']))
   {
     $lang_login = lang_login();
-    $output ="
+    $output .= '
           <table>
             <tr>
               <td>
-                <a class=\"button\" style=\"width:130px;\" href=\"register.php\">Register</a>
-                <a class=\"button\" style=\"width:130px;\" href=\"login.php\">Login</a>
+                <a class="button" style="width:130px;" href="register.php">Register</a>
+                <a class="button" style="width:130px;" href="login.php">Login</a>
               </td>
             </tr>
-          </table>";
-    echo $output;
-    unset($output);
+          </table>';
   }
-  print "
-          <table class=\"table_buttom\">
+  $output .= '
+          <table class="table_buttom">
             <tr>
-              <td class=\"table_buttom_left\"></td>
-              <td class=\"table_buttom_middle\">";
+              <td class="table_buttom_left"></td>
+              <td class="table_buttom_middle">';
   $lang_footer = lang_footer();
-  print "
-                {$lang_footer['bugs_to_admin']} <a href=\"mailto:$admin_mail\">{$lang_footer['site_admin']}</a><br />";
+  $output .=
+                $lang_footer['bugs_to_admin'].'<a href="mailto:$admin_mail"> '.$lang_footer['site_admin'].'</a><br />';
   unset($lang_footer);
-  printf("
-                Execute time: %.5f", (microtime(true) - $time_start));
-  unset($time_start);
-  if($debug > 0)
+  $output .= sprintf('
+                Execute time: %.5f', (microtime(true) - $time_start));
+  if($debug)
   {
-    print "
-                Queries: $tot_queries on ".$_SERVER['SERVER_SOFTWARE'];
-    unset($tot_queries);
+    $output .= '
+                Queries: '.$tot_queries.' on '.$_SERVER['SERVER_SOFTWARE'];
     if (function_exists('memory_get_usage'))
-      printf("
-                <br />Mem. Usage: %.0f/%.0fK Peek: %.0f/%.0fK Global: %.0fK Limit: %s",memory_get_usage()/1024, memory_get_usage(true)/1024,memory_get_peak_usage()/1024,memory_get_peak_usage(true)/1024,sizeof($GLOBALS),ini_get('memory_limit'));
+      $output .= sprintf('
+                <br />Mem. Usage: %.0f/%.0fK Peek: %.0f/%.0fK Global: %.0fK Limit: %s',memory_get_usage()/1024, memory_get_usage(true)/1024,memory_get_peak_usage()/1024,memory_get_peak_usage(true)/1024,sizeof($GLOBALS),ini_get('memory_limit'));
   }
-  print "
-                <p>";
+  $output .= '
+                <p>';
   if ($server_type)
-    print "
-                  <a href=\"http://www.trinitycore.org/\" target=\"_blank\"><img src=\"img/logo-trinity.png\" class=\"logo_border\" alt=\"trinity\" /></a>";
+    $output .= '
+                  <a href="http://www.trinitycore.org/" target="_blank"><img src="img/logo-trinity.png" class="logo_border" alt="trinity" /></a>';
   else
-    print "
-                  <a href=\"http://getmangos.com/\" target=\"_blank\"><img src=\"img/logo-mangos.png\" class=\"logo_border\" alt=\"mangos\" /></a>";
-  unset($server_type);
-  print "
-                  <a href=\"http://www.php.net/\" target=\"_blank\"><img src=\"img/logo-php.png\" class=\"logo_border\" alt=\"php\" /></a>
-                  <a href=\"http://www.mysql.com/\" target=\"_blank\"><img src=\"img/logo-mysql.png\" class=\"logo_border\" alt=\"mysql\" /></a>
-                  <a href=\"http://validator.w3.org/check?uri=referer\" target=\"_blank\"><img src=\"img/logo-css.png\" class=\"logo_border\" alt=\"w3\" /></a>
-                  <a href=\"http://www.spreadfirefox.com/\" target=\"_blank\"><img src=\"img/logo-firefox.png\" class=\"logo_border\" alt=\"firefox\" /></a>
-                  <a href=\"http://www.opera.com/\" target=\"_blank\"><img src=\"img/logo-opera.png\" class=\"logo_border\" alt=\"opera\" /></a>
+    $output .= '
+                  <a href="http://getmangos.com/" target="_blank"><img src="img/logo-mangos.png" class="logo_border" alt="mangos" /></a>';
+  $output .= '
+                  <a href="http://www.php.net/" target="_blank"><img src="img/logo-php.png" class="logo_border" alt="php" /></a>
+                  <a href="http://www.mysql.com/" target="_blank"><img src="img/logo-mysql.png" class="logo_border" alt="mysql" /></a>
+                  <a href="http://validator.w3.org/check?uri=referer" target="_blank"><img src="img/logo-css.png" class="logo_border" alt="w3" /></a>
+                  <a href="http://www.spreadfirefox.com" target="_blank"><img src="img/logo-firefox.png" class="logo_border" alt="firefox" /></a>
+                  <a href="http://www.opera.com/" target="_blank"><img src="img/logo-opera.png" class="logo_border" alt="opera" /></a>
                 </p>
               </td>
-              <td class=\"table_buttom_right\"></td>
+              <td class="table_buttom_right"></td>
             </tr>
           </table>
         </center>
-        <br />
-";
-  if($debug > 2)
+        <br />';
+  echo $output;
+  unset($output);
+
+  if(2 < $debug)
   {
-    echo "
+    echo '
         <table>
           <tr>
-            <td align='left'>";
+            <td align="left">';
     $arrayObj = new ArrayObject(get_defined_vars());
     for($iterator = $arrayObj->getIterator(); $iterator->valid(); $iterator->next())
     {
-      echo "
-              <br />".$iterator->key() . ' => ' . $iterator->current();
+      echo '
+              <br />'.$iterator->key() . ' => ' . $iterator->current();
     }
-    unset($iterator);
-    unset($arrayObj);
-    if($debug > 3)
+    if(3 < $debug)
     {
-      echo "
-              <pre>";
-      print_r ($GLOBALS);
-      echo "
-              </pre>";
+      echo '
+              <pre>';
+                print_r ($GLOBALS);
+      echo '
+              </pre>';
     }
-    echo "
+    echo '
             </td>
           </tr>
-        <table>";
+        <table>';
   }
-  unset($debug);
+
 ?>
       </div>
     </div>

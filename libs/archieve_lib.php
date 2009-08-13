@@ -8,56 +8,41 @@
 //#############################################################################
 //get achievement name by its id
 
-function achieve_get_name($id)
+function achieve_get_name($id, &$sqlm)
 {
-  global $mmfpm_db;
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $achievement_name = $sqlm->fetch_row($sqlm->query("SELECT `name01` FROM `dbc_achievement` WHERE `id`={$id} LIMIT 1"));
-  return $achievement_name[0];
+  $achievement_name = $sqlm->fetch_assoc($sqlm->query('SELECT name01 FROM dbc_achievement WHERE id= '.$id.' LIMIT 1'));
+  return $achievement_name['name01'];
 }
 
 
 //#############################################################################
 //get achievement category name by its id
 
-function achieve_get_category($id)
+function achieve_get_category($id, &$sqlm)
 {
-  global $mmfpm_db;
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $category_id= $sqlm->fetch_row($sqlm->query("SELECT `categoryid` FROM `dbc_achievement` WHERE `id` = {$id} LIMIT 1"));
-  $category_name = $sqlm->fetch_row($sqlm->query("SELECT `name01` FROM `dbc_achievement_category` WHERE `id` = $category_id[0] LIMIT 1"));
-  return $category_name[0];
-
+  $category_id= $sqlm->fetch_assoc($sqlm->query('SELECT categoryid FROM dbc_achievement WHERE id = '.$id.' LIMIT 1'));
+  $category_name = $sqlm->fetch_assoc($sqlm->query('SELECT name01 FROM dbc_achievement_category WHERE id = '.$category_id['categoryid'].' LIMIT 1'));
+  return $category_name['name01'];
 }
 
 
 //#############################################################################
 //get achievement reward name by its id
 
-function achieve_get_reward($id)
+function achieve_get_reward($id, &$sqlm)
 {
-  global $mmfpm_db;
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $achievement_reward = $sqlm->fetch_row($sqlm->query("SELECT `rewarddesc01` FROM `dbc_achievement` WHERE `id`={$id} LIMIT 1"));
-  return $achievement_reward[0];
-
+  $achievement_reward = $sqlm->fetch_assoc($sqlm->query('SELECT rewarddesc01 FROM dbc_achievement WHERE id ='.$id.' LIMIT 1'));
+  return $achievement_reward['rewarddesc01'];
 }
 
 
 //#############################################################################
 //get achievement points name by its id
 
-function achieve_get_points($id)
+function achieve_get_points($id, &$sqlm)
 {
-  global $mmfpm_db;
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $achievement_points = $sqlm->fetch_row($sqlm->query("SELECT `rewpoints` FROM `dbc_achievement` WHERE `id`={$id} LIMIT 1"));
-  return $achievement_points[0];
-
+  $achievement_points = $sqlm->fetch_assoc($sqlm->query('SELECT rewpoints FROM dbc_achievement WHERE id = '.$id.' LIMIT 1'));
+  return $achievement_points['rewpoints'];
 }
 
 ?>

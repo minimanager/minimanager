@@ -10,63 +10,63 @@
 
 $time_start = microtime(true);
 
-if ( !ini_get('session.auto_start') ) session_start();
+if (!ini_get('session.auto_start')) session_start();
 
-if (file_exists("./scripts/config.php"))
-{ if (file_exists("./scripts/config.dist.php"))
-    require_once("./scripts/config.dist.php");
+if (file_exists('scripts/config.php'))
+{
+  if (file_exists('scripts/config.dist.php'))
+    require_once 'scripts/config.dist.php';
   else
-    exit("<center><br><code>'./scripts/config.dist.php'</code> not found,<br> please restore <code>'./scripts/config.dist.php'</code></center>");
-  require_once("./scripts/config.php");
+    exit("<center><br><code>'scripts/config.dist.php'</code> not found,<br> please restore <code>'scripts/config.dist.php'</code></center>");
+  require_once 'scripts/config.php';
 }
 else
-  exit("<center><br><code>'./scripts/config.php'</code> not found,<br> please copy <code>'./scripts/config.dist.php'</code> to <code>'./scripts/config.php'</code> and make appropriate changes.");
+  exit("<center><br><code>'scripts/config.php'</code> not found,<br> please copy <code>'scripts/config.dist.php'</code> to <code>'scripts/config.php'</code> and make appropriate changes.");
 
-//override PHP error reporting
-if ($debug > 1)
+if (1 < $debug)
   error_reporting (E_ALL);
 else
   error_reporting (E_COMPILE_ERROR);
 
-if (isset($_COOKIE["theme"]))
+if (isset($_COOKIE['theme']))
 {
-  if (is_dir("themes/".$_COOKIE["theme"]))
-    if (is_file("themes/".$_COOKIE["theme"]."/".$_COOKIE["theme"]."_1024.css"))
-      $theme = $_COOKIE["theme"];
+  if (is_dir('themes/'.$_COOKIE['theme']))
+    if (is_file('themes/'.$_COOKIE['theme'].'/'.$_COOKIE['theme'].'_1024.css'))
+      $theme = $_COOKIE['theme'];
 }
 
-if (isset($_COOKIE["lang"]))
+if (isset($_COOKIE['lang']))
 {
-  $lang = $_COOKIE["lang"];
-  if (!file_exists("lang/$lang.php"))
+  $lang = $_COOKIE['lang'];
+  if (!file_exists('lang/'.$lang.'.php'))
     $lang = $language;
 }
 else
   $lang = $language;
 
-require_once("./lang/$lang.php");
+require_once 'lang/'.$lang.'.php';
 
 if($debug) $tot_queries = 0;
-require_once("./libs/db_lib.php");
+require_once 'libs/db_lib.php';
 
-require_once("./scripts/global_lib.php");
-require_once("./scripts/id_tab.php");
+require_once 'scripts/global_lib.php';
+require_once 'scripts/id_tab.php';
 
-header("Content-Type: text/html; charset=".$site_encoding);
+header('Content-Type: text/html; charset='.$site_encoding);
 //application/xhtml+xml
-$output .= "
-<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">
-<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\" lang=\"en\">
+$output .= '
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-  <title>$title</title>
-  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=$site_encoding\" />
-  <meta http-equiv=\"Content-Type\" content=\"text/javascript; charset=$site_encoding\" />
-  <link rel=\"stylesheet\" type=\"text/css\" href=\"themes/".$theme."/".$theme."_1024.css\" title=\"1024\" />
-  <link rel=\"stylesheet\" type=\"text/css\" href=\"themes/".$theme."/".$theme."_1280.css\" title=\"1280\" />
-  <link rel=\"SHORTCUT ICON\" href=\"img/favicon.ico\" />
-  <script type=\"text/javascript\" charset=\"utf-8\"></script>
-  <script type=\"text/javascript\" src=\"libs/js/general.js\"></script>
-  <script type=\"text/javascript\" src=\"libs/js/layout.js\"></script>
+  <title>'.$title.'</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=$site_encoding" />
+  <meta http-equiv="Content-Type" content="text/javascript; charset=$site_encoding" />
+  <link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'_1024.css" title="1024" />
+  <link rel="stylesheet" type="text/css" href="themes/'.$theme.'/'.$theme.'_1280.css" title="1280" />
+  <link rel="SHORTCUT ICON" href="img/favicon.ico" />
+  <script type="text/javascript" charset="utf-8"></script>
+  <script type="text/javascript" src="libs/js/general.js"></script>
+  <script type="text/javascript" src="libs/js/layout.js"></script>
 
   <!--[if lte IE 7]>
     <style>
@@ -79,30 +79,30 @@ $output .= "
    <![endif]-->
 </head>
 
-<body onload=\"dynamicLayout();\">
+<body onload="dynamicLayout();">
   <center>
-    <table class=\"table_top\">
+    <table class="table_top">
       <tr>
-        <td class=\"table_top_left\">";
+        <td class="table_top_left">';
+unset($title);
 
-if($developer_test_mode && $allow_anony && (!isset($_SESSION['logged_in'])))
+if ($developer_test_mode && $allow_anony && empty($_SESSION['logged_in']))
 {
   $_SESSION['user_lvl'] = -1;
   $_SESSION['uname'] = $anony_uname;
   $_SESSION['user_id'] = -1;
   $_SESSION['realm_id'] = $anony_realm_id;
-  $_SESSION['client_ip'] = ( !empty($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
+  $_SESSION['client_ip'] = ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
 }
 
-if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_SESSION['realm_id']))&& (!isset($_GET['err'])) )
+if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION['realm_id']) && empty($_GET['err']))
 {
   if(ini_get('max_execution_time') < 1800)
   {
     if(!ini_set('max_execution_time',0))
-      error("Error - max_execution_time not set.<br /> Please set it manually to 0, in php.ini for full functionality.");
+      error('Error - max_execution_time not set.<br /> Please set it manually to 0, in php.ini for full functionality.');
   }
 
-  //temp workaround
   if (ini_get('memory_limit') < 16)
     @ini_set('memory_limit', '16M');
 
@@ -111,7 +111,7 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
   $user_lvl = $_SESSION['user_lvl'];
   $user_name = $_SESSION['uname'];
   $user_id = $_SESSION['user_id'];
-  $realm_id = (isset($_GET['r_id'])) ? (int)$_GET['r_id'] : $_SESSION['realm_id'];
+  $realm_id = ( isset($_GET['r_id']) ) ? (int)$_GET['r_id'] : $_SESSION['realm_id'];
 
   $user_lvl_name = id_get_gm_level($user_lvl);
 
@@ -120,150 +120,158 @@ if ( (isset($_SESSION['user_lvl'])) && (isset($_SESSION['uname'])) && (isset($_S
   $lookup_file = $array[sizeof($array)-1];
   unset($array);
 
-  $output .= "
-          <div id=\"menuwrapper\">
-            <ul id=\"menubar\">";
+  $output .= '
+          <div id="menuwrapper">
+            <ul id="menubar">';
 
   $lang_header = lang_header();
-  $lang_login = lang_login();
 
-  $action_permission=array();
+  $action_permission = array();
   foreach ($menu_array as $trunk)
   {
-    if ($trunk[1] != "invisible") // ignore "invisible array" this is for setting security read/write values for not accessible elements not in the navbar!
+    if ('invisible' === $trunk[1]) // ignore "invisible array" this is for setting security read/write values for not accessible elements not in the navbar!
     {
-      $output .= "
-              <li><a href=\"{$trunk[0]}\">{$lang_header[$trunk[1]]}</a>";
-      if(isset($trunk[2][0]))
-        $output .= "
-                <ul>";
       foreach ($trunk[2] as $branch)
       {
-        if($branch[0] == $lookup_file)
+        if($branch[0] === $lookup_file)
         {
           $action_permission['read']   = $branch[2];
           $action_permission['insert'] = $branch[3];
           $action_permission['update'] = $branch[4];
           $action_permission['delete'] = $branch[5];
         }
-        if ( $user_lvl >= $branch[2] )
-          $output .= "
-                  <li><a href=\"{$branch[0]}\">{$lang_header[$branch[1]]}</a></li>";
       }
-      if(isset($trunk[2][0]))
-        $output .= "
-                </ul>";
-      $output .= "
-              </li>";
     }
     else
     {
+      $output .= '
+              <li><a href="'.$trunk[0].'">'.$lang_header[$trunk[1]].'</a>';
+      if(isset($trunk[2][0]))
+        $output .= '
+                <ul>';
       foreach ($trunk[2] as $branch)
       {
-        if($branch[0] == $lookup_file)
+        if($branch[0] === $lookup_file)
         {
           $action_permission['read']   = $branch[2];
           $action_permission['insert'] = $branch[3];
           $action_permission['update'] = $branch[4];
           $action_permission['delete'] = $branch[5];
         }
+        if ($user_lvl >= $branch[2])
+          $output .= '
+                  <li><a href="'.$branch[0].'">'.$lang_header[$branch[1]].'</a></li>';
       }
+      if(isset($trunk[2][0]))
+        $output .= '
+                </ul>';
+      $output .= '
+              </li>';
     }
   }
   unset($branch);
   unset($trunk);
   unset($lookup_file);
+  unset($menu_array);
 
-  $output .= "
-              <li><a class=\"trigger\" href=\"edit.php\">{$lang_header['my_acc']}</a>
-                <ul>";
+  $output .= '
+              <li><a class="trigger" href="edit.php">'.$lang_header['my_acc'].'</a>
+                <ul>';
 
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  $result = $sqlr->query("SELECT id, name FROM `realmlist` LIMIT 10");
+  $result = $sqlr->query('SELECT id, name FROM `realmlist` LIMIT 10');
 
-  if ( $sqlr->num_rows($result) > 1 && (count($server) > 1) && (count($characters_db) > 1))
+  if ( ( 1 < $sqlr->num_rows($result)) && ( 1 < count($server)) && ( 1 < count($characters_db)) )
   {
-    $output .= "
-                  <li><a href=\"#\">{$lang_header['realms']}</a></li>";
-    while ($realm = $sqlr->fetch_row($result))
+    $output .= '
+                  <li><a href="#">'.$lang_header['realms'].'</a></li>';
+    while ($realm = $sqlr->fetch_assoc($result))
     {
-      if(isset($server[$realm[0]]))
+      if(isset($server[$realm['id']]))
       {
-        $set = ($realm[0] == $realm_id) ? ">" : "";
-        $output .= "
-                  <li><a href=\"realm.php?action=set_def_realm&amp;id=$realm[0]&amp;url={$_SERVER['PHP_SELF']}\">".htmlentities($set." ".$realm[1])."</a></li>";
+        $set = ($realm_id === $realm['id']) ? '>' : '';
+        $output .= '
+                  <li><a href="realm.php?action=set_def_realm&amp;id='.$realm['id'].'&amp;url='.$_SERVER['PHP_SELF'].'">'.htmlentities($set.' '.$realm['name']).'</a></li>';
       }
     }
+    unset($set);
     unset($realm);
-    if (isset($set)) unset($set);
   }
-  unset($result);
 
-  if($developer_test_mode && $allow_anony && !isset($_SESSION['logged_in']))
-    $output .= "
-                  <li><a href=\"register.php\">{$lang_login['not_registrated']}</a></li>
-                  <li><a href=\"login.php\">{$lang_login['login']}</a></li>";
+  $sqlc = new SQL;
+  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+
+
+  if($developer_test_mode && $allow_anony && empty($_SESSION['logged_in']))
+  {
+    $lang_login = lang_login();
+    $output .= '
+                  <li><a href="register.php">'.$lang_login['not_registrated'].'</a></li>
+                  <li><a href="login.php">'.$lang_login['login'].'</a></li>';
+    unset($lang_login);
+  }
   else
   {
-    $sqlc = new SQL;
-    $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
-    require_once("scripts/defines.php");
-    require_once("scripts/get_lib.php");
-    $result = $sqlc->query("SELECT guid, name, race, class,
-      SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1),
-      mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
-      FROM characters WHERE account = '$user_id'");
+    require_once 'scripts/defines.php';
+    require_once 'scripts/get_lib.php';
+
+    $result = $sqlc->query('SELECT guid, name, race, class,
+      SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) as level,
+      mid(lpad( hex( CAST(substring_index(substring_index(data," ",'.(CHAR_DATA_OFFSET_GENDER+1).')," ",-1) as unsigned) ),8,"0"),4,1) as gender
+      FROM characters WHERE account = '.$user_id.'');
+
     if($sqlc->num_rows($result))
     {
-      $output .= "
-                  <li><a href=\"#\">{$lang_header['my_characters']}</a></li>";
-
-      while ($char = $sqlc->fetch_array($result))
+      $output .= '
+                  <li><a href="#">'.$lang_header['my_characters'].'</a></li>';
+      while ($char = $sqlc->fetch_assoc($result))
       {
-        $output .= "
+        $output .= '
                     <li>
-                      <a href=\"char.php?id=$char[0]\">
-                        <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' alt=\"\" /><img src='img/c_icons/{$char[3]}.gif' alt=\"\"/>
-                        $char[1]
+                      <a href="char.php?id='.$char['guid'].'">
+                        <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" alt="" /><img src="img/c_icons/'.$char['class'].'.gif" alt="" />'.
+                        $char['name'].'
                       </a>
-                    </li>";
+                    </li>';
       }
+      unset($char);
     }
-    $output .= "
-                  <li><a href=\"#\">{$lang_header['account']}</a></li>
-                  <li><a href=\"edit.php\">{$lang_header['edit_my_acc']}</a></li>
-                  <li><a href=\"logout.php\">{$lang_header['logout']}</a></li>";
+    $output .= '
+                  <li><a href="#">'.$lang_header['account'].'</a></li>
+                  <li><a href="edit.php">'.$lang_header['edit_my_acc'].'</a></li>
+                  <li><a href="logout.php">'.$lang_header['logout'].'</a></li>';
   }
-  $output .= "
+  unset($result);
+  $output .= '
                 </ul>
               </li>
             </ul>
-            <br class=\"clearit\" />
+            <br class="clearit" />
           </div>
         </td>
-        <td class=\"table_top_middle\">
-          <div id=\"username\">$user_name .:{$user_lvl_name}'s {$lang_header['menu']}:.</div>
+        <td class="table_top_middle">
+          <div id="username">'.$user_name.' .:'.$user_lvl_name.'\'s '.$lang_header['menu'].':.</div>
         </td>
-        <td class=\"table_top_right\"></td>
+        <td class="table_top_right"></td>
       </tr>
-    </table>";
+    </table>';
 }
 else
 {
-  $output .= "
+  $output .= '
         </td>
-        <td class=\"table_top_middle\"></td>
-        <td class=\"table_top_right\"></td>
+        <td class="table_top_middle"></td>
+        <td class="table_top_right"></td>
       </tr>
-    </table>";
+    </table>';
 }
-unset($menu_array);
 unset($lang_header);
 
-$output .= "
-    <div id=\"version\">$version</div>
-    <div id=\"body_main\">
-      <div class=\"bubble\">";
+$output .= '
+    <div id="version">'.$version.'</div>
+    <div id="body_main">
+      <div class="bubble">';
+unset($version);
 
 ?>
