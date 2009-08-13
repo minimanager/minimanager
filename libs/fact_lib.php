@@ -43,16 +43,18 @@ function fact_get_fact_id()
      470 => array("Ratchet",   "Steamwheedle Cartel",5,9,1791,0,0,0,500,0,0,0),
      577 => array("Everlook",  "Steamwheedle Cartel",5,28,1791,0,0,0,500,0,0,0),
 
-     947 => array("Thrallmar",            "Outland",6,37,690,1101,0,0,0,-42000,0,0),
-     946 => array("Honor Hold",           "Outland",6,38,1101,690,0,0,0,-42000,0,0),
-     933 => array("The Consortium",       "Outland",6,60,2047,0,0,0,0,0,0,0),
-     941 => array("The Mag'har",          "Outland",6,61,690,1101,0,0,-500,-42000,0,0),
-     942 => array("Cenarion Expedition",  "Outland",6,64,2047,0,0,0,0,0,0,0),
-     970 => array("Sporeggar",            "Outland",6,65,2047,0,0,0,-2500,0,0,0),
-     978 => array("Kurenai",              "Outland",6,66,1101,690,0,0,-1200,-42000,0,0),
-    1012 => array("Ashtongue Deathsworn", "Outland",6,70,1791,0,0,0,0,0,0,0),
-    1015 => array("Netherwing",           "Outland",6,71,1791,0,0,0,-42000,0,0,0),
-    1038 => array("Ogri'la",              "Outland",6,73,1791,0,0,0,0,0,0,0),
+     947 => array("Thrallmar",             "The Burning Crusade",6,37,690,1101,0,0,0,-42000,0,0),
+     946 => array("Honor Hold",            "The Burning Crusade",6,38,1101,690,0,0,0,-42000,0,0),
+     933 => array("The Consortium",        "The Burning Crusade",6,60,2047,0,0,0,0,0,0,0),
+     941 => array("The Mag'har",           "The Burning Crusade",6,61,690,1101,0,0,-500,-42000,0,0),
+     942 => array("Cenarion Expedition",   "The Burning Crusade",6,64,2047,0,0,0,0,0,0,0),
+     970 => array("Sporeggar",             "The Burning Crusade",6,65,2047,0,0,0,-2500,0,0,0),
+     978 => array("Kurenai",               "The Burning Crusade",6,66,1101,690,0,0,-1200,-42000,0,0),
+     989 => array("Keepers of Time",       "The Burning Crusade",6,67,1791,0,0,0,0,0,0,0),
+     990 => array("The Scale of the Sands","The Burning Crusade",6,57,1791,0,0,0,0,0,0,0),
+    1012 => array("Ashtongue Deathsworn",  "The Burning Crusade",6,70,1791,0,0,0,0,0,0,0),
+    1015 => array("Netherwing",            "The Burning Crusade",6,71,1791,0,0,0,-42000,0,0,0),
+    1038 => array("Ogri'la",               "The Burning Crusade",6,73,1791,0,0,0,0,0,0,0),
 
      935 => array("The Sha'tar",             "Shattrath City",7,39,1791,0,0,0,0,0,0,0),
      932 => array("The Aldor",               "Shattrath City",7,58,255,1024,512,0,0,3500,-3500,0),
@@ -74,12 +76,12 @@ function fact_get_fact_id()
     1104 => array("Frenzyheart Tribe", "Sholazar Basin",10,92,1791,0,0,0,0,0,0,0),
     1105 => array("The Oracles",       "Sholazar Basin",10,93,1791,0,00,0,0,0,0,0),
 
-    1073 => array("The Kalu'ak",               "Northrend",11,79,1791,0,0,0,0,0,0,0),
-    1091 => array("The Wyrmrest Accord",       "Northrend",11,83,1791,0,0,0,0,0,0,0),
-    1090 => array("Kirin Tor",                 "Northrend",11,84,1229,690,1101,690,0,0,3000,3000),
-    1098 => array("Knights of the Ebon Blade", "Northrend",11,91,0,0,0,0,3200,0,0,0),
-    1106 => array("Argent Crusade",            "Northrend",11,94,32767,0,0,0,0,0,0,0),
-    1119 => array("The Sons of Hodir",         "Northrend",11,97,1791,0,0,0,-42000,0,0,0),
+    1073 => array("The Kalu'ak",               "Wrath of the Lich King",11,79,1791,0,0,0,0,0,0,0),
+    1091 => array("The Wyrmrest Accord",       "Wrath of the Lich King",11,83,1791,0,0,0,0,0,0,0),
+    1090 => array("Kirin Tor",                 "Wrath of the Lich King",11,84,1229,690,1101,690,0,0,3000,3000),
+    1098 => array("Knights of the Ebon Blade", "Wrath of the Lich King",11,91,0,0,0,0,3200,0,0,0),
+    1106 => array("Argent Crusade",            "Wrath of the Lich King",11,94,32767,0,0,0,0,0,0,0),
+    1119 => array("The Sons of Hodir",         "Wrath of the Lich King",11,97,1791,0,0,0,-42000,0,0,0),
 
       87 => array("Bloodsail Buccaneers",           "Other",12,0,1791,0,0,0,-6500,0,0,0),
       92 => array("Gelkis Clan Centaur",            "Other",12,2,1791,0,0,0,2000,0,0,0),
@@ -115,10 +117,8 @@ function fact_get_fact_id()
      270 => array("Zandalar Tribe",                 "Other",12,51,1791,0,0,0,0,0,0,0),
      910 => array("Brood of Nozdormu",              "Other",12,54,1791,0,0,0,-42000,0,0,0),
      922 => array("Tranquillien",                   "Other",12,56,690,1101,0,0,0,-42000,0,0),
-     990 => array("The Scale of the Sands",         "Other",12,57,1791,0,0,0,0,0,0,0),
      936 => array("Shattrath City",                 "Other",12,59,2047,0,0,0,0,0,0,0),
      967 => array("The Violet Eye",                 "Other",12,63,4095,0,0,0,0,0,0,0),
-     989 => array("Keepers of Time",                "Other",12,67,1791,0,0,0,0,0,0,0),
     1005 => array("Friendly, Hidden",               "Other",12,68,32767,0,0,0,3000,0,0,0),
     1037 => array("Alliance Vanguard",              "Other",12,88,1101,690,0,0,0,0,0,0),
     1052 => array("Horde Expedition",               "Other",12,75,690,1101,0,0,0,-42000,0,0),
@@ -193,19 +193,34 @@ function fact_get_faction_tree($id)
 //#############################################################################
 //get faction name by its id
 
-function fact_get_base_reputation($id)
+function fact_get_base_reputation($id, $race)
 {
   global $mmfpm_db;
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $faction_base_reputation = $sqlm->fetch_row($sqlm->query("SELECT `field_1`, `field_2`, `field_3`, `field_4`, `field_5`, `field_10`, `field_11`, `field_12`, `field_13` FROM `dbc_faction` WHERE `id` = $id LIMIT 1"));
-  if(!isset($faction_base_reputation[$id]))
+
+  if(!isset($faction_base_reputation))
     return 0;
-  for ($i = 0; $i <= 4; $i++)
+  for ($i = 0; $i < 4; $i++)
   {
-    if ($faction_base_reputation[$id][0 + $i] & (1 << ($race-1)))
-      return $faction_base_reputation[$id][5 + $i];
+    if ($faction_base_reputation[1 + $i] & (1 << ($race-1)))
+      return $faction_base_reputation[5 + $i];
   }
+
+  /*
+
+  $fact_id = fact_get_fact_id();
+
+  if(!isset($fact_id[$id]))
+    return 0;
+  for ($i = 0; $i < 4; $i++)
+  {
+    if ($fact_id[$id][4 + $i] & (1 << ($race-1)))
+      return $fact_id[$id][8 + $i];
+  }
+
+  */
   return 0;
 }
 
@@ -222,7 +237,7 @@ function fact_get_reputation($id, $standing, $race)
 //#############################################################################
 //get reputation rank by its id
 
-function fact_get_reputation_rank($id,  $standing, $race)
+function fact_get_reputation_rank($id, $standing, $race)
 {
   $reputation = fact_get_reputation($id, $standing, $race);
     return fact_reputation_to_rank($reputation);

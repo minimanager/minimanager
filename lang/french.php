@@ -405,6 +405,7 @@ function lang_char()
   'talent_id' => 'ID',
   'talent_name' => 'Nom du Talent',
   'talent_value' => 'Valeur',
+  'showhide' => 'Montrer/Cacher',
   // -----char_friends.php---
   'friends' => 'Ami(s)',
   'friendof' => 'Ami de',

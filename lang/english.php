@@ -405,6 +405,7 @@ function lang_char()
     'talent_id' => 'ID',
     'talent_name' => 'Talent Name',
     'talent_value' => 'Value',
+    'showhide' => 'show/hide',
     // --- skill_rank_array ---
     'apprentice' => 'Apprentice',
     'journeyman' => 'Journeyman',

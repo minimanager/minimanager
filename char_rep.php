@@ -97,132 +97,132 @@ function char_rep()
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i1')\">Alliance</a>
+                    <a href=\"#\" onclick=\"showHide('i1')\">Alliance ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i1\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i1\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
         2 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i2')\">Horde</a>
+                    <a href=\"#\" onclick=\"showHide('i2')\">Horde ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i2\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i2\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
         3 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i3')\">Alliance Forces</a>
+                    <a href=\"#\" onclick=\"showHide('i3')\">Alliance Forces ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i3\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i3\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
         4 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i4')\">Horde Forces</a>
+                    <a href=\"#\" onclick=\"showHide('i4')\">Horde Forces ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i4\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i4\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
         5 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i5')\">Steamwheedle Cartel</a>
+                    <a href=\"#\" onclick=\"showHide('i5')\">Steamwheedle Cartel ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i5\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i5\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
         6 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i6')\">Outland</a>
+                    <a href=\"#\" onclick=\"showHide('i6')\">The Burning Crusade ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i6\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i6\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
         7 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i7')\">Shattrath City</a>
+                    <a href=\"#\" onclick=\"showHide('i7')\">Shattrath City ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i7\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i7\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
         8 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i8')\">Alliance Vanguard</a>
+                    <a href=\"#\" onclick=\"showHide('i8')\">Alliance Vanguard ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i8\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i8\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
         9 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i9')\">Horde Expedition</a>
+                    <a href=\"#\" onclick=\"showHide('i9')\">Horde Expedition ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i9\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i9\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
        10 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i10')\">Sholazar Basin</a>
+                    <a href=\"#\" onclick=\"showHide('i10')\">Sholazar Basin ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i10\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i10\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
        11 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i11')\">Northrend</a>
+                    <a href=\"#\" onclick=\"showHide('i11')\">Wrath of the Lich King ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i11\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i11\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
        12 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i12')\">Other</a>
+                    <a href=\"#\" onclick=\"showHide('i12')\">Other ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i12\" class=\"lined\" style=\"width: 535px; display: none;\">",0),
+                    <table id=\"i12\" class=\"lined\" style=\"width: 535px; display: table;\">",0),
         0 => array("
               <table class=\"lined\" style=\"width: 550px;\">
                 <tr>
                   <th colspan=\"3\" align=\"left\">
-                    <a href=\"#\" onclick=\"showHide('i13')\">Unknown</a>
+                    <a href=\"#\" onclick=\"showHide('i13')\">Unknown ({$lang_char['showhide']})</a>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id=\"i13\" class=\"lined\" style=\"width: 535px; display: none;\">",0)
+                    <table id=\"i13\" class=\"lined\" style=\"width: 535px; display: table;\">",0)
       );
 
       if ($sqlc->num_rows($result))
