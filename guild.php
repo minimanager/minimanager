@@ -240,8 +240,8 @@ function count_days( $a, $b )
 //#############################################################################
 function view_guild()
 {
-  global $lang_guild, $lang_global, $output, $realm_db, $characters_db, $realm_id, $itemperpage,
-    $action_permission, $user_lvl, $user_id, $developer_test_mode, $guild_bank;
+  global $lang_guild, $lang_global, $output, $realm_db, $characters_db, $mmfpm_db, $realm_id, $itemperpage,
+    $action_permission, $user_lvl, $user_id, $developer_test_mode, $guild_bank, $showcountryflag;
   if(!isset($_GET['id'])) redirect("guild.php?error=1&amp;realm=$realmid");
 
   $sqlr = new SQL;
@@ -344,7 +344,20 @@ function view_guild()
                       <th width=\"15%\">{$lang_guild['pnote']}</th>
                       <th width=\"15%\">{$lang_guild['offnote']}</th>
                       <th width=\"15%\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=clogout&amp;start=$start&amp;dir=$dir\">".($order_by=='clogout' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['llogin']}</a></th>
-                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['online']}</a></th>
+                      <th width=\"1%\"><a href=\"guild.php?action=view_guild&amp;error=3&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=conline&amp;start=$start&amp;dir=$dir\">".($order_by=='conline' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_guild['online']}</a></th>";
+
+  if ($showcountryflag)
+  {
+    require_once 'libs/misc_lib.php';
+
+    $sqlm = new SQL;
+    $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
+    $output .="
+                      <th width=\"1%\">{$lang_global['country']}</th>";
+  }
+
+  $output .="
                     </tr>";
   $members = $sqlc->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(c.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS clevel,
@@ -379,7 +392,16 @@ function view_guild()
                       <td>".htmlentities($member[7])."</td>
                       <td>".htmlentities($member[8])."</td>
                       <td>".get_days_with_color($member[12])."</td>
-                      <td>".(($member[10]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
+                      <td>".(($member[10]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
+
+    if ($showcountryflag)
+    {
+        $country = misc_get_country_by_account($member[11], $sqlr, $sqlm);
+        $output .="
+                      <td>".(($country['code']) ? "<img src='img/flags/".$country['code'].".png' onmousemove='toolTip(\"".($country['country'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+    }
+
+              $output .="
                     </tr>";
   }
   unset($member);

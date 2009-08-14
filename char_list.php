@@ -286,9 +286,14 @@ function browse_chars()
                 <th width=\"10%\"><a href=\"char_list.php?order_by=gname&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='gname' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char_list['guild']}</a></th>
                 <th width=\"1%\"><a href=\"char_list.php?order_by=logout_time&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='logout_time' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char_list['lastseen']}</a></th>
                 <th width=\"1%\"><a href=\"char_list.php?order_by=online&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char_list['online']}</a></th>";
+
   if ($showcountryflag)
+  {
+    require_once 'libs/misc_lib.php';
     $output .="
                 <th width=\"1%\">{$lang_global['country']}</th>";
+  }
+
   $output .="
               </tr>";
 
@@ -302,16 +307,6 @@ function browse_chars()
     $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
     $owner_acc_name = $sqlr->result($result, 0, 'username');
     $lastseen = date("Y-m-d G:i:s", $char[11]);
-
-    if ($showcountryflag)
-    {
-        $loc = $sqlr->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[2]';");
-        $location = $sqlr->fetch_row($loc);
-        $ip = $location[0];
-
-        $nation = $sqlm->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
-        $country = $sqlm->fetch_row($nation);
-    }
 
     $guild_name = $sqlc->fetch_row($sqlc->query("SELECT `name` FROM `guild` WHERE `guildid`={$char[12]}"));
 
@@ -338,8 +333,11 @@ function browse_chars()
                 <td class=\"small\">$lastseen</td>
                 <td>".(($char[8]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
       if ($showcountryflag)
+      {
+        $country = misc_get_country_by_account($char[2], $sqlr, $sqlm);
         $output .="
-                <td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+                <td>".(($country['code']) ? "<img src='img/flags/".$country['code'].".png' onmousemove='toolTip(\"".($country['country'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+      }
       $output .="
               </tr>";
     }

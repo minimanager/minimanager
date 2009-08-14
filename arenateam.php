@@ -190,7 +190,7 @@ function count_days( $a, $b ) {
 //########################################################################################################################
 function view_team()
 {
-  global $lang_arenateam, $lang_global, $output, $characters_db, $realm_id, $action_permission, $user_lvl, $user_id;
+  global $lang_arenateam, $lang_global, $output, $characters_db, $realm_id, $realm_db, $mmfpm_db, $action_permission, $user_lvl, $user_id, $showcountryflag;
 
   if(!isset($_GET['id'])) redirect("arenateam.php?error=1");
 
@@ -216,7 +216,8 @@ function view_team()
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
     arena_team_member.played_week, arena_team_member.wons_week, arena_team_member.played_season, arena_team_member.wons_season,
     `characters`.race, `characters`.class, `characters`.online, `characters`.account, `characters`.logout_time,
-    mid(lpad( hex( CAST(substring_index(substring_index(`data`,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+    mid(lpad( hex( CAST(substring_index(substring_index(`data`,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender,
+    account
     FROM arena_team_member,`characters`
     LEFT JOIN arena_team_member k1 ON k1.`guid`=`characters`.`guid` AND k1.`arenateamid`='$arenateam_id'
     WHERE arena_team_member.arenateamid = '$arenateam_id' AND arena_team_member.guid=`characters`.guid
@@ -243,27 +244,27 @@ function view_team()
             <legend>{$lang_arenateam['arenateam']} ({$arenateam_data[2]}v{$arenateam_data[2]})</legend>
             <table class=\"lined\" style=\"width: 100%;\">
               <tr class=\"bold\">
-                <td colspan=\"13\">".htmlentities($arenateam_data[1])."</td>
+                <td colspan=\"".($showcountryflag ? 14 : 13 )."\">".htmlentities($arenateam_data[1])."</td>
               </tr>
               <tr>
-                <td colspan=\"13\">{$lang_arenateam['tot_members']}: $total_members</td>
+                <td colspan=\"".($showcountryflag ? 14 : 13 )."\">{$lang_arenateam['tot_members']}: $total_members</td>
               </tr>
               <tr>
                 <td colspan=\"4\">{$lang_arenateam['this_week']}</td>
                 <td colspan=\"2\">{$lang_arenateam['games_played']} : $arenateamstats_data[2]</td>
                 <td colspan=\"2\">{$lang_arenateam['games_won']} : $arenateamstats_data[3]</td>
                 <td colspan=\"2\">{$lang_arenateam['games_lost']} : $losses_week</td>
-                <td colspan=\"3\">{$lang_arenateam['ratio']} : $winperc_week %</td>
+                <td colspan=\"".($showcountryflag ? 4 : 3 )."\">{$lang_arenateam['ratio']} : $winperc_week %</td>
               </tr>
               <tr>
                 <td colspan=\"4\">{$lang_arenateam['this_season']}</td>
                 <td colspan=\"2\">{$lang_arenateam['games_played']} : $arenateamstats_data[4]</td>
                 <td colspan=\"2\">{$lang_arenateam['games_won']} : $arenateamstats_data[5]</td>
                 <td colspan=\"2\">{$lang_arenateam['games_lost']} : $losses_season</td>
-                <td colspan=\"3\">{$lang_arenateam['ratio']} : $winperc_season %</td>
+                <td colspan=\"".($showcountryflag ? 4 : 3 )."\">{$lang_arenateam['ratio']} : $winperc_season %</td>
               </tr>
               <tr>
-                <td colspan=\"13\">{$lang_arenateam['standings']} {$arenateamstats_data[6]} ({$arenateamstats_data[1]})</td>
+                <td colspan=\"".($showcountryflag ? 14 : 13 )."\">{$lang_arenateam['standings']} {$arenateamstats_data[6]} ({$arenateamstats_data[1]})</td>
               </tr>
               <tr>
                 <th width=\"1%\">{$lang_arenateam['remove']}</th>
@@ -278,7 +279,22 @@ function view_team()
                 <th width=\"1%\">Win %</th>
                 <th width=\"1%\">{$lang_arenateam['played_season']}</th>
                 <th width=\"1%\">{$lang_arenateam['wons_season']}</th>
-                <th width=\"1%\">Win %</th>
+                <th width=\"1%\">Win %</th>";
+
+    if ($showcountryflag)
+    {
+      require_once 'libs/misc_lib.php';
+
+      $sqlr = new SQL;
+      $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+      $sqlm = new SQL;
+      $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
+      $output .="
+                <th width=\"1%\">{$lang_global['country']}</th>";
+    }
+
+    $output .="
               </tr>";
 
     while ($member = $sqlc->fetch_row($members))
@@ -313,7 +329,16 @@ function view_team()
                 <td>$ww_pct %</td>
                 <td>$member[6]</td>
                 <td>$member[7]</td>
-                <td>$ws_pct %</td>
+                <td>$ws_pct %</td>";
+
+      if ($showcountryflag)
+      {
+        $country = misc_get_country_by_account($member[14], $sqlr, $sqlm);
+        $output .="
+                <td>".(($country['code']) ? "<img src='img/flags/".$country['code'].".png' onmousemove='toolTip(\"".($country['country'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+      }
+
+      $output .="
               </tr>";
     }
     $output .= "
