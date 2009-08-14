@@ -176,14 +176,7 @@ function char_get_pvp_rank_id($honor_points=0, $side_id=0)
 
 function char_get_avatar_img($level, $gender, $race, $class,$gm=0)
 {
-  if ($gm > 0)
-  {
-    if(file_exists("img/avatars/bliz/$gm.gif"))
-      $avatar = "img/avatars/bliz/$gm.gif";
-    else
-      $avatar = "img/avatars/bliz/bliz.gif";
-  }
-  elseif($level < 60)
+  if($level < 60)
   {
     $avatar = "img/avatars/np/$gender-$race-$class.gif";
   }
