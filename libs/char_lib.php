@@ -191,8 +191,12 @@ function char_get_avatar_img($level, $gender, $race, $class,$gm=0)
   {
     $avatar = "img/avatars/60/$gender-$race-$class.gif";
   }
-  else
+  elseif($level < 80)
+  {
     $avatar = "img/avatars/70/$gender-$race-$class.gif";
+  }
+  else
+    $avatar = "img/avatars/80/$gender-$race-$class.gif";
 
   return $avatar;
 }
