@@ -183,64 +183,65 @@ function char_inv(&$sqlr, &$sqlc)
         if($equiped_bag_id[$i])
         {
           $output .='
-                      <a style="padding:2px;" href="'.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
-                        <img class="bag_icon" src="'.get_item_icon($equiped_bag_id[$i][0], $sqlm, $sqlw).'" alt="" />
-                      </a>';
+                    <a style="padding:2px;" href="'.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
+                      <img class="bag_icon" src="'.get_item_icon($equiped_bag_id[$i][0], $sqlm, $sqlw).'" alt="" />
+                    </a>';
           $output .= '
-                      '.$lang_item['bag'].' '.$i.'<br />
-                      <font class="small">'.$equiped_bag_id[$i][1].' '.$lang_item['slots'].'</font>';
+                    '.$lang_item['bag'].' '.$i.'<br />
+                    <font class="small">'.$equiped_bag_id[$i][1].' '.$lang_item['slots'].'</font>';
         }
         $output .= '
                   </th>
                   <th>';
       }
       $output .= '
-              <tr>';
+                </tr>
+                <tr>';
 
       // adds equipped bag slots
       for($t = 1; $t < 5; ++$t)
       {
         $output .= '
-                <td class="bag" valign="bottom" align="center">
-                  <div style="width:'.(4*43).'px;height:'.(ceil($equiped_bag_id[$t][1]/4)*41).'px;">';
+                  <td class="bag" valign="bottom" align="center">
+                    <div style="width:'.(4*43).'px;height:'.(ceil($equiped_bag_id[$t][1]/4)*41).'px;">';
 
         $dsp = $equiped_bag_id[$t][1]%4;
         if ($dsp)
           $output .= '
-                    <div class="no_slot"></div>';
+                      <div class="no_slot"></div>';
         foreach ($bag[$t] as $pos => $item)
         {
           $output .= '
-                    <div style="left:'.(($pos+$dsp)%4*42).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">';
+                      <div style="left:'.(($pos+$dsp)%4*42).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">';
 
           $output .= '
-                  <a style="padding:2px;" href="'.$item_datasite.$item[0].'" target="_blank">
-                    <img src="'.get_item_icon($item[0], $sqlm, $sqlw).'" alt="" />'.($item[1] ? ($item[1]+1) : '').'
-                  </a>';
+                        <a style="padding:2px;" href="'.$item_datasite.$item[0].'" target="_blank">
+                          <img src="'.get_item_icon($item[0], $sqlm, $sqlw).'" alt="" />'.($item[1] ? ($item[1]+1) : '').'
+                        </a>';
           $item[2] = $item[2] == 1 ? '' : $item[2];
           $output .= '
-                      <div style="width:25px;margin:-20px 0px 0px 18px;color: black; font-size:14px">'.$item[2].'</div>
-                      <div style="width:25px;margin:-21px 0px 0px 17px;font-size:14px">'.$item[2].'</div>
-                    </div>';
+                        <div style="width:25px;margin:-20px 0px 0px 18px;color: black; font-size:14px">'.$item[2].'</div>
+                        <div style="width:25px;margin:-21px 0px 0px 17px;font-size:14px">'.$item[2].'</div>
+                      </div>';
         }
         $output .= '
-                  </div>
-                </td>';
+                    </div>
+                  </td>';
       }
       $output .= '
-              </tr>
-              <tr>
-                <th colspan="2" align="left">
-                  <img class="bag_icon" src="'.get_item_icon(3960, $sqlm, $sqlw).'" alt="" align="middle" style="margin-left:100px;" />
-                  <font style="margin-left:30px;">'.$lang_char['backpack'].'</font>
-                </th>
-                <th colspan="2">
-                  '.$lang_char['bank_items'].'
-                </th>
-              </tr>
-              <tr>
-                <td colspan="2" class="bag" align="center" height="220px">
-                  <div style="width:'.(4*43).'px;height:'.(ceil(16/4)*41).'px;">';
+                </tr>
+                <tr>
+                  <th colspan="2" align="left">
+                    <img class="bag_icon" src="'.get_item_icon(3960, $sqlm, $sqlw).'" alt="" align="middle" style="margin-left:100px;" />
+                    <font style="margin-left:30px;">'.$lang_char['backpack'].'</font>
+                  </th>
+                  <th colspan="2">
+                    '.$lang_char['bank_items'].'
+                  </th>
+                </tr>
+                <tr>
+                  <td colspan="2" class="bag" align="center" height="220px">
+                    <div style="width:'.(4*43).'px;height:'.(ceil(16/4)*41).'px;">';
 
 // developer note: Xiong Guoy 2009-08-15
 // note to self:

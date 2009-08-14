@@ -164,24 +164,12 @@ function get_side(){
 }
 
 function gen_avatar_panel($level,$sex,$race,$class,$info=1,$gm=0){
+  require_once("libs/char_lib.php");
   global $lang_index;
-  $return = "<div border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\" background: transparent url(img/avatars/";
-  if ($gm>0 && file_exists("img/avatars/bliz/$gm.gif"))
-    $return .= "bliz/$gm.gif";
-  else if ($gm>0 && file_exists("img/avatars/bliz/$gm.gif"))
-    $return .= "bliz/$gm.gif";
-  else if ($gm>0 && file_exists("img/avatars/bliz/$gm.jpg"))
-    $return .= "bliz/$gm.jpg";
-  else {
-    if($level >= 60){
-      if($level >= 70)
-        $return .= "70/$sex-$race-$class.gif";
-      else
-        $return .= "60/$sex-$race-$class.gif";
-    }
-    else
-      $return .= "np/$sex-$race-$class.gif";
-  }
+
+  $return = "<div border=\"0\" cellpadding=\"0\" cellspacing=\"0\" style=\" background: transparent url(";
+
+  $return .= char_get_avatar_img($level, $sex, $race, $class, $gm);
 
   $return .= ") repeat scroll 0%; width: 64px; height: 64px;\">";
 
@@ -196,7 +184,6 @@ function gen_avatar_panel($level,$sex,$race,$class,$info=1,$gm=0){
   }
 
   if($info == 1){
-    require_once("libs/char_lib.php");
     $return .= "<div style=\"margin-top:2px;\">
     <a href=\"#\" onmouseover=\"toolTip('{$lang_index["class"]} : ".char_get_class_name($class)."','item_tooltip')\" onmouseout=\"toolTip()\">
     <img src=\"img/c_icons/$class.gif\" border=\"0\" alt=\"\" /></a>
