@@ -9,7 +9,7 @@ valid_login($action_permission['read']);
 //#############################################################################
 // BROWSE AUCTIONS
 //#############################################################################
-function browse_auctions()
+function browse_auctions(&$sqlr, &$sqlc)
 {
   global $lang_auctionhouse, $lang_global, $lang_item, $output, $characters_db, $world_db, $realm_id,
     $itemperpage, $item_datasite, $server, $user_lvl, $user_id;
@@ -20,8 +20,8 @@ function browse_auctions()
   $sidecolor = array(1 => $blue,2 => $red,3 => $blue,4 => $blue,5 => $red,6 => $red,7 => $blue,8 => $red,10 => $red);
   $hiddencols = array(1,8,9,10);
 
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  //$sqlc = new SQL;
+  //$sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
@@ -250,6 +250,12 @@ function browse_auctions()
               <th width=\"15%\"><a href=\"ahstats.php?order_by=startbid&amp;start=$start".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=$dir\">".($order_by=='startbid' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_auctionhouse['firstbid']}</a></th>
             </tr>";
 
+  global $mmfpm_db, $world_db;
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+
   while ($rows = $sqlc->fetch_row($result))
   {
     $output .= "
@@ -275,7 +281,7 @@ function browse_auctions()
           $value = $g."<img src=\"./img/gold.gif\" alt=\"\" /> ".$s."<img src=\"./img/silver.gif\" alt=\"\" /> ".$c."<img src=\"./img/copper.gif\" alt=\"\" /> ";
           break;
         case 2:
-          $value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip,'item_tooltip')\"><img src=\"".get_item_icon($rows[1])."\" class=\"".get_item_border($rows[1])."\" alt=\"$value\" /><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</a>";
+          $value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip,'item_tooltip')\"><img src=\"".get_item_icon($rows[1], $sqlm, $sqlw)."\" class=\"".get_item_border($rows[1])."\" alt=\"$value\" /><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</a>";
           break;
         case 0:
           $value = "<b>".((!empty($rows[9])) ? "<font color=".$sidecolor[$rows[9]].">".htmlentities($value)."</font>" : "N/A")."</b>";
@@ -345,7 +351,7 @@ switch ($action)
   case "unknown":
     break;
   default:
-    browse_auctions();
+    browse_auctions($sqlr, $sqlc);
 }
 
 unset($action);

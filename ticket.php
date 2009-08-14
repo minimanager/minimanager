@@ -47,13 +47,11 @@ function browse_tickets()
   if($server_type)
     $query = $sqlc->query("SELECT gm_tickets.guid, gm_tickets.playerGuid, SUBSTRING_INDEX(gm_tickets.message,' ',6),`characters`.name
       FROM gm_tickets,`characters`
-        LEFT JOIN gm_tickets k1 ON k1.`playerGuid`=`characters`.`guid`
           WHERE gm_tickets.playerGuid = `characters`.`guid`
             ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
  else
    $query = $sqlc->query("SELECT character_ticket.ticket_id, character_ticket.guid, SUBSTRING_INDEX(character_ticket.ticket_text,' ',6), `characters`.name
      FROM character_ticket,`characters`
-       LEFT JOIN character_ticket k1 ON k1.`guid`=`characters`.`guid`
          WHERE character_ticket.guid = `characters`.`guid`
            ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
 

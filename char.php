@@ -12,7 +12,7 @@ valid_login($action_permission['read']);
 //########################################################################################################################
 // SHOW GENERAL CHARACTERS INFO
 //########################################################################################################################
-function char_main()
+function char_main(&$sqlr, &$sqlc)
 {
   global $lang_global, $lang_char, $lang_item, $output, $realm_id, $realm_db, $characters_db, $server, $mmfpm_db,
     $action_permission, $user_lvl, $user_name, $user_id, $item_datasite, $spell_datasite , $showcountryflag;
@@ -20,9 +20,6 @@ function char_main()
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
-
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
   if (empty($_GET['realm']))
     $realmid = $realm_id;
@@ -32,9 +29,6 @@ function char_main()
     if (!is_numeric($realmid)) $realmid = $realm_id;
   }
 
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'],
-    $characters_db[$realmid]['name']);
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $id = $sqlc->quote_smart($_GET['id']);
@@ -694,7 +688,7 @@ switch ($action)
   case "unknown":
     break;
   default:
-    char_main();
+    char_main($sqlr, $sqlc);
 }
 
 unset($action);

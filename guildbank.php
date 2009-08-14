@@ -22,16 +22,13 @@ valid_login($action_permission['read']);
 //########################################################################################################################
 // GUILD BANK
 //########################################################################################################################
-function guild_bank()
+function guild_bank(&$sqlr, &$sqlc)
 {
   global $lang_global, $lang_guildbank, $output, $characters_db, $realm_id, $item_datasite, $item_icons,
     $developer_test_mode, $guild_bank;
   wowhead_tt();
 
   if (empty($_GET['id'])) error($lang_global['empty_fields']);
-
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   //==========================$_GET and SECURE=================================
   $guild_id = $sqlc->quote_smart($_GET['id']);
@@ -107,6 +104,12 @@ function guild_bank()
     $output .= "
             <table style=\"width: 550px;\">";
 
+    global $mmfpm_db, $world_db;
+    $sqlm = new SQL;
+    $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+    $sqlw = new SQL;
+    $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+
     $item_position = 0;
     for ($i=0;$i<7;$i++)
     {
@@ -121,7 +124,7 @@ function guild_bank()
           $output .= "
                 <td>
                   <a href=\"".$item_datasite.$gb_item_id."\">
-                    <img src=\"".get_item_icon($gb_item_id)."\" align=\"middle\" width=\"36\" height=\"36\" border=\"0\" alt=\"\" />
+                    <img src=\"".get_item_icon($gb_item_id, $sqlm, $sqlw)."\" align=\"middle\" width=\"36\" height=\"36\" border=\"0\" alt=\"\" />
                   </a>
                 </td>";
         }
@@ -173,7 +176,7 @@ switch ($action)
   case "unknown":
     break;
   default:
-    guild_bank();
+    guild_bank($sqlr, $sqlc);
 }
 
 unset($action);

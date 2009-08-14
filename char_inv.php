@@ -106,177 +106,147 @@ function char_inv(&$sqlr, &$sqlc)
       // this is where we will put items that are in bank bangs, 7 arrays, 1 for each
       $equip_bnk_bag_id = array(0,0,0,0,0,0,0,0);
 
-// developer note: Xiong Guoy 2009-08-14
-// note to self:
-//  i left off here, just finish passing sql link by reference to get_item_icon
-// todo: code optimization, documentation
-
       $sqlw = new SQL;
       $sqlw->connect($world_db[$realmid]['addr'], $world_db[$realmid]['user'], $world_db[$realmid]['pass'], $world_db[$realmid]['name']);
 
-      while ($slot = $sqlc->fetch_row($result))
+      // we load the things in each bag slot
+      while ($slot = $sqlc->fetch_assoc($result))
       {
-        if ($slot[0] == 0 && $slot[1] > 18)
+        if ($slot['bag'] == 0 && $slot['slot'] > 18)
         {
-          if($slot[1] < 23) // SLOT 19 TO 22 (Bags)
+          if($slot['slot'] < 23) // SLOT 19 TO 22 (Bags)
           {
-            $bag_id[$slot[2]] = ($slot[1]-18);
-            $equiped_bag_id[$slot[1]-18] = array($slot[3], $sqlw->result($sqlw->query("SELECT ContainerSlots FROM `".$world_db[$realmid]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
+            $bag_id[$slot['item']] = ($slot['slot']-18);
+            $equiped_bag_id[$slot['slot']-18] = array($slot['item_template'], $sqlw->result($sqlw->query('SELECT ContainerSlots FROM item_template WHERE entry = '.$slot['item_template'].''), 0, 'ContainerSlots'), $slot['stack_count']);
           }
-          elseif($slot[1] < 39) // SLOT 23 TO 38 (BackPack)
+          elseif($slot['slot'] < 39) // SLOT 23 TO 38 (BackPack)
           {
-            if(isset($bag[0][$slot[1]-23]))
-              $bag[0][$slot[1]-23][0]++;
-            else $bag[0][$slot[1]-23] = array($slot[3],0,$slot[4]);
+            if(isset($bag[0][$slot['slot']-23]))
+              $bag[0][$slot['slot']-23][0]++;
+            else $bag[0][$slot['slot']-23] = array($slot['item_template'],0,$slot['stack_count']);
           }
-          elseif($slot[1] < 67) // SLOT 39 TO 66 (Bank)
+          elseif($slot['slot'] < 67) // SLOT 39 TO 66 (Bank)
           {
-            $bank[0][$slot[1]-39] = array($slot[3],0,$slot[4]);
+            $bank[0][$slot['slot']-39] = array($slot['item_template'],0,$slot['stack_count']);
           }
-          elseif($slot[1] < 74) // SLOT 67 TO 73 (Bank Bags)
+          elseif($slot['slot'] < 74) // SLOT 67 TO 73 (Bank Bags)
           {
-            $bank_bag_id[$slot[2]] = ($slot[1]-66);
-            $equip_bnk_bag_id[$slot[1]-66] = array($slot[3], $sqlw->result($sqlw->query("SELECT ContainerSlots FROM `".$world_db[$realmid]['name']."`.`item_template` WHERE entry ='{$slot[3]}'"), 0, 'ContainerSlots'), $slot[4]);
+            $bank_bag_id[$slot['item']] = ($slot['slot']-66);
+            $equip_bnk_bag_id[$slot['slot']-66] = array($slot['item_template'], $sqlw->result($sqlw->query('SELECT ContainerSlots FROM item_template WHERE entry = '.$slot['item_template'].''), 0, 'ContainerSlots'), $slot['stack_count']);
           }
         }
         else
         {
           // Bags
-          if (isset($bag_id[$slot[0]]))
+          if (isset($bag_id[$slot['bag']]))
           {
-            if(isset($bag[$bag_id[$slot[0]]][$slot[1]]))
-            $bag[$bag_id[$slot[0]]][$slot[1]][1]++;
+            if(isset($bag[$bag_id[$slot['bag']]][$slot['slot']]))
+            $bag[$bag_id[$slot['bag']]][$slot['slot']][1]++;
             else
-              $bag[$bag_id[$slot[0]]][$slot[1]] = array($slot[3],0,$slot[4]);
+              $bag[$bag_id[$slot['bag']]][$slot['slot']] = array($slot['item_template'],0,$slot['stack_count']);
           }
           // Bank Bags
-          elseif (isset($bank_bag_id[$slot[0]]))
+          elseif (isset($bank_bag_id[$slot['bag']]))
           {
-            $bank[$bank_bag_id[$slot[0]]][$slot[1]] = array($slot[3],0,$slot[4]);
+            $bank[$bank_bag_id[$slot['bag']]][$slot['slot']] = array($slot['item_template'],0,$slot['stack_count']);
           }
         }
       }
-
+      unset($result);
+      //------------------------Character Tabs---------------------------------
       $output .= "
-        <center>
-          <div id=\"tab\">
-            <ul>
-            <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
-            <li id=\"selected\"><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
-            <li><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
-            <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
-            <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
-            <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
-            </ul>
-          </div>
-          <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char['name'])." - <img src='img/c_icons/{$char['race']}-{$char['gender']}.gif' onmousemove='toolTip(\"".char_get_race_name($char['race'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char['class']}.gif' onmousemove='toolTip(\"".char_get_class_name($char['class'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char['level'])."</font>
-            <br />
-            <br />
-            <table class=\"lined\" style=\"width: 700px;\">
-              <tr>
-                <th>";
-
+          <center>
+            <div id=\"tab\">
+              <ul>
+              <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
+              <li id=\"selected\"><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
+              <li><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
+              <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
+              <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
+              <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
+              </ul>
+            </div>
+            <div id=\"tab_content\">
+              <font class=\"bold\">".htmlentities($char['name'])." - <img src='img/c_icons/{$char['race']}-{$char['gender']}.gif' onmousemove='toolTip(\"".char_get_race_name($char['race'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char['class']}.gif' onmousemove='toolTip(\"".char_get_class_name($char['class'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char['level'])."</font>
+              <br />
+              <br />
+              <table class=\"lined\" style=\"width: 700px;\">
+                <tr>
+                  <th>";
+      //---------------Page Specific Data Starts Here--------------------------
       $sqlm = new SQL;
       $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
-      if($equiped_bag_id[1])
+      // adds equipped bag
+      for($i=1; $i < 5; ++$i)
       {
-        $output .="
-                  <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[1][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[1][0], $sqlm, $sqlw)."\" alt=\"\" />
-                  </a>";
-        $output .= "
-                  {$lang_item['bag']} I<br />
-                  <font class=\"small\">({$equiped_bag_id[1][1]} {$lang_item['slots']})</font>";
+        if($equiped_bag_id[$i])
+        {
+          $output .='
+                      <a style="padding:2px;" href="'.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
+                        <img class="bag_icon" src="'.get_item_icon($equiped_bag_id[$i][0], $sqlm, $sqlw).'" alt="" />
+                      </a>';
+          $output .= '
+                      '.$lang_item['bag'].' '.$i.'<br />
+                      <font class="small">'.$equiped_bag_id[$i][1].' '.$lang_item['slots'].'</font>';
+        }
+        $output .= '
+                  </th>
+                  <th>';
       }
-      $output .= "
-                </th>
-                <th>";
-      if($equiped_bag_id[2])
-      {
-        $output .="
-                  <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[2][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[2][0], $sqlm, $sqlw)."\" alt=\"\" />
-                  </a>";
-        $output .= "
-                  {$lang_item['bag']} II<br />
-                  <font class=\"small\">({$equiped_bag_id[2][1]} {$lang_item['slots']})</font>";
-      }
-      $output .= "
-                </th>
-                <th>";
-      if($equiped_bag_id[3])
-      {
-        $output .="
-                  <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[3][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[3][0], $sqlm, $sqlw)."\" alt=\"\" />
-                  </a>";
-        $output .= "
-                  {$lang_item['bag']} III<br />
-                  <font class=\"small\">({$equiped_bag_id[3][1]} {$lang_item['slots']})</font>";
-      }
-      $output .= "
-                </th>
-                <th>";
-      if($equiped_bag_id[4])
-      {
-        $output .="
-                  <a style=\"padding:2px;\" href=\"$item_datasite{$equiped_bag_id[4][0]}\" target=\"_blank\">
-                    <img class=\"bag_icon\" src=\"".get_item_icon($equiped_bag_id[4][0], $sqlm, $sqlw)."\" alt=\"\" />
-                  </a>";
-        $output .= "
-                  {$lang_item['bag']} IV<br />
-                  <font class=\"small\">({$equiped_bag_id[4][1]} {$lang_item['slots']})</font>";
-      }
-      $output .= "
-                </th>
-              </tr>
-              <tr>";
+      $output .= '
+              <tr>';
+
       // adds equipped bag slots
-      for($t = 1; $t < count($bag); $t++)
+      for($t = 1; $t < 5; ++$t)
       {
-        $output .= "
-                <td class=\"bag\" valign=\"bottom\" align=\"center\">
-                  <div style=\"width:".(4*43)."px;height:".(ceil($equiped_bag_id[$t][1]/4)*41)."px;\">";
+        $output .= '
+                <td class="bag" valign="bottom" align="center">
+                  <div style="width:'.(4*43).'px;height:'.(ceil($equiped_bag_id[$t][1]/4)*41).'px;">';
 
         $dsp = $equiped_bag_id[$t][1]%4;
         if ($dsp)
-          $output .= "
-                    <div class=\"no_slot\" /></div>";
+          $output .= '
+                    <div class="no_slot"></div>';
         foreach ($bag[$t] as $pos => $item)
         {
-          $output .= "
-                    <div style=\"left:".(($pos+$dsp)%4*42)."px;top:".(floor(($pos+$dsp)/4)*41)."px;\">";
+          $output .= '
+                    <div style="left:'.(($pos+$dsp)%4*42).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">';
 
-          $output .= "
-                  <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
-                    <img src=\"".get_item_icon($item[0], $sqlm, $sqlw)."\" alt=\"\" />".($item[1] ? ($item[1]+1) : "")."
-                  </a>";
+          $output .= '
+                  <a style="padding:2px;" href="'.$item_datasite.$item[0].'" target="_blank">
+                    <img src="'.get_item_icon($item[0], $sqlm, $sqlw).'" alt="" />'.($item[1] ? ($item[1]+1) : '').'
+                  </a>';
           $item[2] = $item[2] == 1 ? '' : $item[2];
-          $output .= "
-                      <div style=\"width:25px;margin:-20px 0px 0px 18px;color: black; font-size:14px\">$item[2]</div>
-                      <div style=\"width:25px;margin:-21px 0px 0px 17px;font-size:14px\">$item[2]</div>
-                    </div>";
+          $output .= '
+                      <div style="width:25px;margin:-20px 0px 0px 18px;color: black; font-size:14px">'.$item[2].'</div>
+                      <div style="width:25px;margin:-21px 0px 0px 17px;font-size:14px">'.$item[2].'</div>
+                    </div>';
         }
-        $output .= "
+        $output .= '
                   </div>
-                </td>";
+                </td>';
       }
-      $output .= "
+      $output .= '
               </tr>
               <tr>
-                <th colspan=\"2\" align=\"left\">
-                  <img class=\"bag_icon\" src=\"".get_item_icon(3960, $sqlm, $sqlw)."\" alt=\"\" align=\"middle\" style=\"margin-left:100px;\" />
-                  <font style=\"margin-left:30px;\">{$lang_char['backpack']}</font>
+                <th colspan="2" align="left">
+                  <img class="bag_icon" src="'.get_item_icon(3960, $sqlm, $sqlw).'" alt="" align="middle" style="margin-left:100px;" />
+                  <font style="margin-left:30px;">'.$lang_char['backpack'].'</font>
                 </th>
-                <th colspan=\"2\">
-                  {$lang_char['bank_items']}
+                <th colspan="2">
+                  '.$lang_char['bank_items'].'
                 </th>
               </tr>
               <tr>
-                <td colspan=\"2\" class=\"bag\" align=\"center\" height=\"220px\">
-                  <div style=\"width:".(4*43)."px;height:".(ceil(16/4)*41)."px;\">";
+                <td colspan="2" class="bag" align="center" height="220px">
+                  <div style="width:'.(4*43).'px;height:'.(ceil(16/4)*41).'px;">';
+
+// developer note: Xiong Guoy 2009-08-15
+// note to self:
+//  i left off here
+// todo: code optimization, documentation
+
       // inventory items
       foreach ($bag[0] as $pos => $item)
       {
@@ -382,7 +352,7 @@ function char_inv(&$sqlr, &$sqlc)
                 </th>
               </tr>
               <tr>";
-      for($t=1; $t < count($bank); $t++)
+      for($t=1; $t < 8; ++$t)
       {
         if($t==5)
         {
