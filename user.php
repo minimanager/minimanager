@@ -129,8 +129,8 @@ function browse_users(&$sqlr, &$sqlc)
 
   // multi page links
   $output .=
-                $lang_user['tot_acc'].' : '.$all_record.'<br /><br />'.
-                generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
+                  $lang_user['tot_acc'].' : '.$all_record.'<br /><br />'.
+                  generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
   // this part for search
   $output .= '
                 </td>

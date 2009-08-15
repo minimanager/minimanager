@@ -1925,6 +1925,7 @@ function lang_instances()
 {
   $lang_instances = array
   (
+    'instances' => 'Instances',
     'total' => 'Total',
     'map' => 'Map',
     'level_min' => 'Niveau minimum',

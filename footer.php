@@ -12,6 +12,10 @@
     unset($sqlm);
   }
 
+  // we start with a lead of 10 spaces,
+  //  because last line of header is an opening tag with 8 spaces
+  //  so if the file before this follows the indent, we will be at the same place it starts
+  //  keep html indent in sync, so debuging from browser source would be easy to read
   $output .= '
           <!-- start of footer.php -->
         </div>

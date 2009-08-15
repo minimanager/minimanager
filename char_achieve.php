@@ -132,7 +132,7 @@ function char_achievements(&$sqlr, &$sqlc)
                   <th width="30%">'.$lang_char['achievement_category'].'</th>
                   <th width="50%">'.$lang_char['achievement_title'].'</th>
                   <th width="1%">'.$lang_char['achievement_points'].'</th>
-                  <th width="1%"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=date&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='date' ? ' class="'.$order_dir.'"' : "").'>'.$lang_char['achievement_date'].'</a></th>
+                  <th width="1%"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=date&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='date' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['achievement_date'].'</a></th>
                 </tr>';
 
       // we match character data with info from MiniManager database using achievement library

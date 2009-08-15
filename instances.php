@@ -1,103 +1,113 @@
 <?php
 
 
-require_once("header.php");
+// page header, and any additional required libraries
+require_once 'header.php';
+require_once 'libs/map_zone_lib.php';
+// minimum permission to view page
 valid_login($action_permission['read']);
 
 //#############################################################################
-// SEARCH
+// INSTANCES
 //#############################################################################
-function do_search()
+function instances()
 {
-  global $lang_instances, $output, $world_db, $realm_id, $server_type, $itemperpage;
+  global $output, $lang_instances,
+    $realm_id, $world_db,
+    $server_type, $itemperpage;
 
   $sqlw = new SQL;
   $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
-  //==========================$_GET and SECURE=================================
+  //-------------------SQL Injection Prevention--------------------------------
   $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (preg_match('/^[[:digit:]]{1,5}$/', $start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : "level_min";
-  if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="level_min";
+  $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : 'level_min';
+  if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by='level_min';
 
   $dir = (isset($_GET['dir'])) ? $sqlw->quote_smart($_GET['dir']) : 1;
-  if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
+  if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
 
-  $order_dir = ($dir) ? "ASC" : "DESC";
+  $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
-  //==========================$_GET and SECURE end=============================
 
-  $query_1 = $sqlw->query("SELECT count(*) FROM instance_template");
+  // for multipage support
+  $result = $sqlw->query("SELECT count(*) FROM instance_template");
+  $all_record = $sqlw->result($result,0);
 
+  // main data that we need for this page, instances
   if ($server_type)
-    $result = $sqlw->query("SELECT `map`, `level_min`, `level_max`, `maxPlayers` as maxplayers, `reset_delay`
-    FROM `instance_template` JOIN access_requirement ON access_requirement.id = instance_template.access_id
-    ORDER BY $order_by $order_dir LIMIT $start, $itemperpage;");
+    $result = $sqlw->query('SELECT map, level_min, level_max, maxPlayers as maxplayers, reset_delay
+    FROM instance_template JOIN access_requirement ON access_requirement.id = instance_template.access_id
+    ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.';');
   else
-    $result = $sqlw->query("SELECT `map`, `levelMin` as level_min, `levelMax` as level_max, `maxPlayers` as maxplayers, `reset_delay`
-    FROM `instance_template` ORDER BY $order_by $order_dir LIMIT $start, $itemperpage;");
+    $result = $sqlw->query('SELECT map, levelMin as level_min, levelMax as level_max, maxPlayers as maxplayers, reset_delay
+    FROM instance_template ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.';');
 
-  $all_record = $sqlw->result($query_1,0);
-  unset($query_1);
+  //---------------Page Specific Data Starts Here--------------------------
+  // we start with a lead of 10 spaces,
+  //  because last line of header is an opening tag with 8 spaces
+  //  keep html indent in sync, so debuging from browser source would be easy to read
+  $output .= '
+          <!-- start of instances.php -->
+          <center>
+            <table class="top_hidden">
+              <tr>
+                <td width="25%" align="right">';
 
-  $output .= "
-        <center>
-          <table class=\"top_hidden\">
-            <tr>
-              <td width=\"25%\" align=\"right\">";
-  $output .= generate_pagination("instances.php?order_by=$order_by&amp;dir=".(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
-  $output .= "
-              </td>
-            </tr>
-          </table>
-          <table class=\"lined\">
-            <tr>
-              <th width=\"40%\"><a href=\"instances.php?order_by=map&amp;start=$start&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_instances['map']}</a></th>
-              <th width=\"15%\"><a href=\"instances.php?order_by=level_min&amp;start=$start&amp;dir=$dir\">".($order_by=='level_min' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_instances['level_min']}</a></th>
-              <th width=\"15%\"><a href=\"instances.php?order_by=level_max&amp;start=$start&amp;dir=$dir\">".($order_by=='level_max' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_instances['level_max']}</a></th>
-              <th width=\"15%\"><a href=\"instances.php?order_by=maxplayers&amp;start=$start&amp;dir=$dir\">".($order_by=='maxplayers' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_instances['max_players']}</a></th>
-              <th width=\"15%\"><a href=\"instances.php?order_by=reset_delay&amp;start=$start&amp;dir=$dir\">".($order_by=='reset_delay' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" /> " : "")."{$lang_instances['reset_delay']}</a></th>
-            </tr>";
+  // multi page links
+  $output .=
+                  $lang_instances['total'].' : '.$all_record.'<br /><br />'.
+                  generate_pagination('instances.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
 
-  while ($instances = $sqlw->fetch_array($result))
+// column headers, with links for sorting
+  $output .= '
+                </td>
+              </tr>
+            </table>
+            <table class="lined">
+              <tr>
+                <th width="40%"><a href="instances.php?order_by=map&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['map'].'</a></th>
+                <th width="15%"><a href="instances.php?order_by=level_min&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level_min' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['level_min'].'</a></th>
+                <th width="15%"><a href="instances.php?order_by=level_max&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level_max' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['level_max'].'</a></th>
+                <th width="15%"><a href="instances.php?order_by=maxplayers&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='maxplayers' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['max_players'].'</a></th>
+                <th width="15%"><a href="instances.php?order_by=reset_delay&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='reset_delay' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['reset_delay'].'</a></th>
+              </tr>';
+
+  while ($instances = $sqlw->fetch_assoc($result))
   {
-    $days = floor(round($instances[4] / 3600)/24);
-    $hours = round($instances[4] / 3600) - ($days * 24);
+    $days  = floor(round($instances['reset_delay'] / 3600) / 24);
+    $hours = round($instances['reset_delay'] / 3600) - ($days * 24);
     $reset = "";
-    if ($days > 0)
-    {
-      $reset .= $days;
-      $reset .= " days ";
-    }
-    if ($hours > 0)
-    {
-      $reset .= $hours;
-      $reset .= " hours";
-    }
+    if ($days)
+      $reset .= $days.' days';
+    if ($hours)
+      $reset .= $hours.' hours';
 
-    $output .= "
-            <tr valign=top>
-              <td>".get_map_name($instances[0])." ($instances[0])</td>
-              <td>$instances[1]</td>
-              <td>$instances[2]</td>
-              <td>$instances[3]</td>
-              <td>$reset</td>
-            </tr>";
+    $output .= '
+              <tr valign=top>
+                <td>'.get_map_name($instances['map']).' ('.$instances['map'].')</td>
+                <td>'.$instances['level_min'].'</td>
+                <td>'.$instances['level_max'].'</td>
+                <td>'.$instances['maxplayers'].'</td>
+                <td>'.$reset.'</td>
+              </tr>';
   }
-  $output .= "
-            <tr>
-              <td colspan=\"5\" class=\"hidden\" align=\"right\" width=\"25%\">";
-  $output .= generate_pagination("instances.php?order_by=$order_by&amp;dir=".(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
-  $output .= "
-              </td>
-            </tr>
-            <tr>
-              <td colspan=\"5\" class=\"hidden\" align=\"right\">{$lang_instances['total']} : $all_record</td>
-            </tr>
-          </table>
-        </center>
-";
+  $output .= '
+              <tr>
+                <td colspan="5" class="hidden" align="right" width="25%">';
+  // multi page links
+  $output .= generate_pagination('instances.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
+  $output .= '
+                </td>
+              </tr>
+              <tr>
+                <td colspan="5" class="hidden" align="right">'.$lang_instances['total'].' : '.$all_record.'</td>
+              </tr>
+            </table>
+          </center>
+          <!-- end of instances.php -->';
 
 }
 
@@ -105,32 +115,28 @@ function do_search()
 //#############################################################################
 // MAIN
 //#############################################################################
-$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
-unset($err);
+// error variable reserved for future use
+//$err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
+
+//unset($err);
 
 $lang_instances = lang_instances();
 
-$output .= "
-        <div class=\"top\">
-          <h1>Instances</h1>
-        </div>";
+$output .= '
+          <div class="top">
+            <h1>'.$lang_instances['instances'].'</h1>
+          </div>';
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+// action variable reserved for future use
+//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-switch ($action)
-{
-  case "do_search":
-    do_search();
-    break;
-  default:
-    do_search();
-}
+instances();
 
-unset($action);
+//unset($action);
 unset($action_permission);
 unset($lang_instances);
 
-require_once("footer.php");
+require_once 'footer.php';
 
 ?>

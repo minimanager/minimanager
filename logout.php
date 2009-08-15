@@ -1,8 +1,8 @@
 <?php
 
 
-if ( !ini_get('session.auto_start') )
-  session_start();
+if (ini_get('session.auto_start'));
+else session_start();
 
 session_destroy();
 
@@ -13,13 +13,13 @@ unset($_SESSION['realm_id']);
 unset($_SESSION['client_ip']);
 unset($_SESSION['logged_in']);
 
-setcookie ("uname", "", time() - 3600);
-setcookie ("realm_id", "", time() - 3600);
-setcookie ("p_hash", "", time() - 3600);
+setcookie ('uname',    '', time() - 3600);
+setcookie ('realm_id', '', time() - 3600);
+setcookie ('p_hash',   '', time() - 3600);
 
-if ( strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false )
+if (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false)
 {
-  header("Location: login.php");
+  header('Location: login.php');
   exit();
 }
 else
