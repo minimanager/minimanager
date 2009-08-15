@@ -268,6 +268,31 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
         </tr>
       </table>';
   unset($lang_header);
+
+  //---------------------Version Information-------------------------------------
+  if ( $show_version['show'] && $user_lvl >= $show_version['version_lvl'] )
+  {
+    if ( ( 1 < $show_version['show']) && $user_lvl >= $show_version['svnrev_lvl'] )
+    {
+      $show_version['svnrev'] = '';
+      // if file exists and readable
+      if (is_readable('.svn/entries') )
+      {
+        $file_obj = new SplFileObject('.svn/entries');
+        // line 4 is where svn revision is stored
+        $file_obj->seek(3);
+        $show_version['svnrev'] = $file_obj->current();
+        unset($file_obj);
+      }
+      $output .= '
+        <div id="version">'.$show_version['version'].' r'.$show_version['svnrev'].'</div>';
+    }
+    else
+    {
+      $output .= '
+        <div id="version">'.$show_version['version'].'</div>';
+    }
+  }
 }
 else
 {
@@ -278,32 +303,6 @@ else
         </tr>
       </table>';
 }
-
-//---------------------Version Information-------------------------------------
-if ( $show_version['show'] && $user_lvl >= $show_version['version_lvl'] )
-{
-  if ( ( 1 < $show_version['show']) && $user_lvl >= $show_version['svnrev_lvl'] )
-  {
-    $show_version['svnrev'] = '';
-    // if file exists and readable
-    if (is_readable('.svn/entries') )
-    {
-      $file_obj = new SplFileObject('.svn/entries');
-      // line 4 is where svn revision is stored
-      $file_obj->seek(3);
-      $show_version['svnrev'] = $file_obj->current();
-      unset($file_obj);
-    }
-    $output .= '
-      <div id="version">'.$show_version['version'].' r'.$show_version['svnrev'].'</div>';
-  }
-  else
-  {
-    $output .= '
-      <div id="version">'.$show_version['version'].'</div>';
-  }
-}
-
 
 //---------------------Start of Body-------------------------------------------
 $output .= '

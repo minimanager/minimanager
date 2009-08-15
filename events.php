@@ -124,7 +124,7 @@ $lang_events = lang_events();
 
 $output .= '
           <div class="top">
-            <h1>'.$lang_events[events].'</h1>
+            <h1>'.$lang_events['events'].'</h1>
           </div>';
 
 // action variable reserved for future use

@@ -1,11 +1,11 @@
 <?php
 
 
-require_once("header.php");
+require_once 'header.php';
 valid_login($action_permission['read']);
 
-if(!$server_type)
-  redirect("error.php?err={$lang_global['for_trinity']}");
+if($server_type);
+else redirect('error.php?err='.$lang_global['for_trinity'].'');
 
 //#############################################################################
 // BROWSE SPELLS
