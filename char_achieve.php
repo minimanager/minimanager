@@ -46,13 +46,13 @@ function char_achievements(&$sqlr, &$sqlc)
 
   // this page has multipage support and field ordering, so we need these
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
-  if (preg_match("/^[[:digit:]]{1,5}$/", $start)); else $start = 0;
+  if (preg_match('/^[[:digit:]]{1,5}$/', $start)); else $start = 0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'date';
-  if (preg_match("/^[_[:lower:]]{1,8}$/", $order_by)); else $order_by = 'date';
+  if (preg_match('/^[_[:lower:]]{1,4}$/', $order_by)); else $order_by = 'date';
 
-  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 0;
-  if (preg_match("/^[01]{1}$/", $dir)); else $dir = 1;
+  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
+  if (preg_match('/^[01]{1}$/', $dir)); else $dir = 1;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
@@ -116,8 +116,7 @@ function char_achievements(&$sqlr, &$sqlc)
                   <td width="100%" align="right" colspan="4">';
 
       // multi page links
-      $output .= generate_pagination('char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
-      unset($all_record);
+      $output .= generate_pagination('char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
       $output .= '
                   </td>
                 </tr>
@@ -130,10 +129,10 @@ function char_achievements(&$sqlr, &$sqlc)
 
       // column headers, with links for sorting
       $output .= '
-                  <th width="25%">'.$lang_char['achievement_category'].'</th>
-                  <th width="60%">'.$lang_char['achievement_title'].'</th>
-                  <th width="5%">'.$lang_char['achievement_points'].'</th>
-                  <th width="10%"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=date&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='date' ? ' class="$order_dir"' : "").'>'.$lang_char['achievement_date'].'</a></th>
+                  <th width="30%">'.$lang_char['achievement_category'].'</th>
+                  <th width="50%">'.$lang_char['achievement_title'].'</th>
+                  <th width="1%">'.$lang_char['achievement_points'].'</th>
+                  <th width="1%"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=date&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='date' ? ' class="'.$order_dir.'"' : "").'>'.$lang_char['achievement_date'].'</a></th>
                 </tr>';
 
       // we match character data with info from MiniManager database using achievement library
@@ -150,6 +149,15 @@ function char_achievements(&$sqlr, &$sqlc)
                   <td>'.date('o-m-d', $data['date']).'</td>
                 </tr>';
       }
+      $output .= '
+                <tr>
+                  <td class="hidden" width="100%" align="right" colspan="4">';
+      // multi page links
+      $output .= generate_pagination('char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
+      unset($all_record);
+      $output .= '
+                  </td>
+                </tr>';
       unset($data);
       unset($result);
       //---------------Page Specific Data Ends here----------------------------

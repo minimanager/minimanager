@@ -1,282 +1,329 @@
 <?php
 
 
-require_once("header.php");
-require_once("scripts/defines.php");
-require_once("libs/char_lib.php");
+// page header, and any additional required libraries
+require_once 'header.php';
+require_once 'libs/char_lib.php';
+// minimum permission to view page
 valid_login($action_permission['read']);
 
 //########################################################################################################################
 // BROWSE USERS
 //########################################################################################################################
-function browse_users()
+function browse_users(&$sqlr, &$sqlc)
 {
-  global $lang_global, $lang_user, $output, $realm_db, $mmfpm_db, $itemperpage, $user_lvl, $user_name,
-   $gm_level_arr, $action_permission, $showcountryflag, $expansion_select;
+  global $output, $lang_global, $lang_user,
+    $mmfpm_db,
+    $action_permission, $user_lvl, $user_name,
+    $itemperpage, $showcountryflag, $expansion_select,
+    $gm_level_arr;
 
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
-  //==========================$_GET and SECURE=================================
+  //-------------------SQL Injection Prevention--------------------------------
   $start = (isset($_GET['start'])) ? $sqlr->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (preg_match('/^[[:digit:]]{1,5}$/', $start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlr->quote_smart($_GET['order_by']) : "id";
-  if (!preg_match("/^[_[:lower:]]{1,15}$/", $order_by)) $order_by="id";
+  $order_by = (isset($_GET['order_by'])) ? $sqlr->quote_smart($_GET['order_by']) : 'id';
+  if (preg_match('/^[_[:lower:]]{1,15}$/', $order_by)); else $order_by='id';
 
   $dir = (isset($_GET['dir'])) ? $sqlr->quote_smart($_GET['dir']) : 1;
-  if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
+  if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
 
-  $order_dir = ($dir) ? "ASC" : "DESC";
+  $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
-  //==========================$_GET and SECURE end=============================
 
+  //-------------------Search--------------------------------------------------
   $search_by = '';
   $search_value = '';
+  // if we have a search request, if not we just return everything
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
+    // injection prevention
     $search_value = $sqlr->quote_smart($_GET['search_value']);
     $search_by = $sqlr->quote_smart($_GET['search_by']);
     $search_menu = array('username', 'id', 'gmlevel', 'greater_gmlevel', 'email', 'joindate', 'last_ip', 'failed_logins', 'last_login', 'online', 'banned', 'locked', 'expansion');
-    if (!in_array($search_by, $search_menu)) $search_by = 'username';
+    if (in_array($search_by, $search_menu));
+    else $search_by = 'username';
     unset($search_menu);
 
-    switch ($search_by)
+    // special search cases
+    // developer note: 'if else' is always faster then 'switch case'
+    if ($search_by === 'greater_gmlevel')
     {
-      case "greater_gmlevel":
-        $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
-          FROM account WHERE gmlevel > $search_value ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
-        $query_1 = $sqlr->query("SELECT count(*) FROM account WHERE gmlevel > '%$search_value%'");
-        break;
-      case "banned":
-        $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
-          FROM account WHERE id = 0 ";
-        $count_query = "SELECT count(*) FROM account WHERE id = 0 ";
-        $que = $sqlr->query("SELECT id FROM account_banned");
-        while ($banned = $sqlr->fetch_row($que))
-        {
-          $sql_query .= "OR id =$banned[0] ";
-          $count_query .= "OR id =$banned[0] ";
-        }
-        $sql_query .= " ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
-        $query_1 = $sqlr->query($count_query);
-        unset($count_query);
-        break;
-      case "failed_logins":
-        $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
-          FROM account WHERE failed_logins > $search_value ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
-        $query_1 = $sqlr->query("SELECT count(*) FROM account WHERE failed_logins > '%$search_value%'");
-        break;
-      default:
-        $sql_query = "SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
-          FROM account WHERE $search_by LIKE '%$search_value%' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
-        $query_1 = $sqlr->query("SELECT count(*) FROM account WHERE $search_by LIKE '%$search_value%'");
-     }
-     $query = $sqlr->query($sql_query);
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
+        FROM account WHERE gmlevel > "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+      $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE gmlevel > "%'.$search_value.'%"');
+    }
+    elseif ($search_by === 'banned')
+    {
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
+        FROM account WHERE id = 0 ';
+      $count_query = 'SELECT count(*) FROM account WHERE id = 0 ';
+      $que = $sqlr->query('SELECT id FROM account_banned');
+      while ($banned = $sqlr->fetch_assoc($que))
+      {
+        $sql_query .= 'OR id = '.$banned['id'].'';
+        $count_query .= 'OR id = '.$banned['id'].'';
+      }
+      $sql_query .= ' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+      $query_1 = $sqlr->query($count_query);
+      unset($count_query);
+    }
+    elseif ($search_by === 'failed_logins')
+    {
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
+        FROM account WHERE failed_logins > '.$search_value.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+      $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE failed_logins > '.$search_value.'');
+    }
+    else
+    {
+      // default search case
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
+        FROM account WHERE '.$search_by.' LIKE "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+      $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE '.$search_by.' LIKE "%'.$search_value.'%"');
+    }
+    $query = $sqlr->query($sql_query);
   }
   else
   {
-    //get total number of items
-    $query_1 = $sqlr->query("SELECT count(*) FROM account");
-    $query = $sqlr->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
-      FROM account ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+    // get total number of items
+    $query_1 = $sqlr->query('SELECT count(*) FROM account');
+    $query = $sqlr->query('SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
+      FROM account ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
   }
+  // this is for multipage support
   $all_record = $sqlr->result($query_1,0);
   unset($query_1);
 
   //==========================top tage navigaion starts here========================
-  $output .="
-        <script type=\"text/javascript\" src=\"js/check.js\"></script>
-        <center>
-          <table class=\"top_hidden\">
-            <tr>
-              <td>";
-  if($user_lvl >= $action_permission['insert'])
+  // we start with a lead of 10 spaces,
+  //  because last line of header is an opening tag with 8 spaces
+  //  keep html indent in sync, so debuging from browser source would be easy to read
+  $output .='
+          <!-- start of user.php -->
+          <script type="text/javascript" src="js/check.js"></script>
+          <center>
+            <table class="top_hidden">
+              <tr>
+                <td>';
+  if ($user_lvl >= $action_permission['insert'])
   {
-                makebutton($lang_user['add_acc'], "user.php?action=add_new", 130);
+                  makebutton($lang_user['add_acc'], 'user.php?action=add_new', 130);
   // backup is broken
-  //              makebutton($lang_user['backup'], "backup.php", 130);
+  //              makebutton($lang_user['backup'], 'backup.php', 130);
   }
 
   // cleanup unknown working condition
   //if($user_lvl >= $action_permission['delete'])
-  //              makebutton($lang_user['cleanup'], "cleanup.php", 130);
-                makebutton($lang_global['back'], "javascript:window.history.back()", 130);
+  //              makebutton($lang_user['cleanup'], 'cleanup.php', 130);
+                  makebutton($lang_global['back'], 'javascript:window.history.back()', 130);
   if ($search_by && $search_value)
   {
-                makebutton($lang_user['user_list'], "user.php", 130);
+                  makebutton($lang_user['user_list'], 'user.php', 130);
   }
-  $output .= "
-              </td>
-              <td align=\"right\" width=\"25%\" rowspan=\"2\">";
-  $output .= generate_pagination("user.php?order_by=$order_by&amp;dir=".!$dir.( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
-  $output .= "
-              </td>
-            </tr>
-            <tr align=\"left\">
-              <td>
-                <table class=\"hidden\">
-                  <tr>
-                    <td>
-                      <form action=\"user.php\" method=\"get\" name=\"form\">
-                        <input type=\"hidden\" name=\"error\" value=\"3\" />
-                        <input type=\"text\" size=\"24\" maxlength=\"50\" name=\"search_value\" value=\"$search_value\" />
-                        <select name=\"search_by\">
-                          <option value=\"username\"".($search_by == 'username' ? " selected=\"selected\"" : "").">{$lang_user['by_name']}</option>
-                          <option value=\"id\"".($search_by == 'id' ? " selected=\"selected\"" : "").">{$lang_user['by_id']}</option>
-                          <option value=\"gmlevel\"".($search_by == 'gmlevel' ? " selected=\"selected\"" : "").">{$lang_user['by_gm_level']}</option>
-                          <option value=\"greater_gmlevel\"".($search_by == 'greater_gmlevel' ? " selected=\"selected\"" : "").">{$lang_user['greater_gm_level']}</option>
-                          <option value=\"expansion\"".($search_by == 'expansion' ? " selected=\"selected\"" : "").">{$lang_user['by_expansion']}</option>
-                          <option value=\"email\"".($search_by == 'email' ? " selected=\"selected\"" : "").">{$lang_user['by_email']}</option>
-                          <option value=\"joindate\"".($search_by == 'joindate' ? " selected=\"selected\"" : "").">{$lang_user['by_join_date']}</option>
-                          <option value=\"last_ip\"".($search_by == 'last_ip' ? " selected=\"selected\"" : "").">{$lang_user['by_ip']}</option>
-                          <option value=\"failed_logins\"".($search_by == 'failed_logins' ? " selected=\"selected\"" : "").">{$lang_user['by_failed_loggins']}</option>
-                          <option value=\"last_login\"".($search_by == 'last_login' ? " selected=\"selected\"" : "").">{$lang_user['by_last_login']}</option>
-                          <option value=\"online\"".($search_by == 'online' ? " selected=\"selected\"" : "").">{$lang_user['by_online']}</option>
-                          <option value=\"locked\"".($search_by == 'locked' ? " selected=\"selected\"" : "").">{$lang_user['by_locked']}</option>
-                          <option value=\"banned\"".($search_by == 'banned' ? " selected=\"selected\"" : "").">{$lang_user['by_banned']}</option>
-                        </select>
-                      </form>
-                    </td>
-                    <td>";
-                      makebutton($lang_global['search'], "javascript:do_submit()",80);
-  $output .= "
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>";
-  //==========================top tage navigaion ENDS here ========================
-
-  $output .= "
-          <form method=\"get\" action=\"user.php\" name=\"form1\">
-            <input type=\"hidden\" name=\"action\" value=\"del_user\" />
-            <input type=\"hidden\" name=\"start\" value=\"$start\" />
-            <input type=\"hidden\" name=\"backup_op\" value=\"0\"/>
-            <table class=\"lined\">
-              <tr>";
-  if($user_lvl >= $action_permission['insert'])
-    $output.= "
-                <th width=\"1%\">
-                  <input name=\"allbox\" type=\"checkbox\" value=\"Check All\" onclick=\"CheckAll(document.form1);\" />
-                </th>";
-  else
-    $output .= "
-                <th width=\"1%\"></th>";
-  $output .="
-                <th width=\"5%\"><a href=\"user.php?order_by=id&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='id' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['id']}</a></th>
-                <th width=\"21%\"><a href=\"user.php?order_by=username&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='username' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['username']}</a></th>
-                <th width=\"5%\"><a href=\"user.php?order_by=gmlevel&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='gmlevel' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['gm_level']}</a></th>";
-  if ($expansion_select)
-    $output .="
-                <th width=\"5%\"><a href=\"user.php?order_by=expansion&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='expansion' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."EXP</a></th>";
-  $output .="
-                <th width=\"16%\"><a href=\"user.php?order_by=email&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='email' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['email']}</a></th>
-                <th width=\"14%\"><a href=\"user.php?order_by=joindate&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='joindate' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['join_date']}</a></th>
-                <th width=\"10%\"><a href=\"user.php?order_by=last_ip&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='last_ip' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['ip']}</a></th>
-                <th width=\"5%\"><a href=\"user.php?order_by=failed_logins&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='failed_logins' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['failed_logins']}</a></th>
-                <th width=\"3%\"><a href=\"user.php?order_by=locked&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='locked' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['locked']}</a></th>
-                <th width=\"14%\"><a href=\"user.php?order_by=last_login&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='last_login' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['last_login']}</a></th>
-                <th width=\"3%\"><a href=\"user.php?order_by=online&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_user['online']}</a></th>";
-  if ($showcountryflag)
-    $output .="
-                <th width=\"3%\">{$lang_global['country']}</th>";
-  $output .="
-              </tr>";
-  while ($data = $sqlr->fetch_row($query))
-  {
-    $ip = $data[5];
-    if ($showcountryflag)
-    {
-      $nation = $sqlm->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
-      $country = $sqlm->fetch_row($nation);
-    }
-    if (($user_lvl >= $data[2])||($user_name == $data[1]))
-    {
-      $output .= "
-              <tr>";
-      if ($user_lvl >= $action_permission['insert'])
-        $output .= "
-                <td><input type=\"checkbox\" name=\"check[]\" value=\"$data[0]\" onclick=\"CheckCheckAll(document.form1);\" /></td>";
-      else
-        $output .= "
-                <td></td>";
-      $output .= "
-                <td>$data[0]</td>
-                <td>
-                  <a href=\"user.php?action=edit_user&amp;error=11&amp;id=$data[0]\">$data[1]</a>
+  $output .= '
                 </td>
-                <td>".$gm_level_arr[$data[2]][2]."</td>";
+                <td align="right" width="25%" rowspan="2">';
+
+  // multi page links
+  $output .=
+                $lang_user['tot_acc'].' : '.$all_record.'<br /><br />'.
+                generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
+  // this part for search
+  $output .= '
+                </td>
+              </tr>
+              <tr align="left">
+                <td>
+                  <table class="hidden">
+                    <tr>
+                      <td>
+                        <form action="user.php" method="get" name="form">
+                          <input type="hidden" name="error" value="3" />
+                          <input type="text" size="24" maxlength="50" name="search_value" value="'.$search_value.'" />
+                          <select name="search_by">
+                            <option value="username"'.($search_by === 'username' ? ' selected="selected"' : '').'>'.$lang_user['by_name'].'</option>
+                            <option value="id"'.($search_by === 'id' ? ' selected="selected"' : '').'>'.$lang_user['by_id'].'</option>
+                            <option value="gmlevel"'.($search_by === 'gmlevel' ? ' selected="selected"' : '').'>'.$lang_user['by_gm_level'].'</option>
+                            <option value="greater_gmlevel"'.($search_by === 'greater_gmlevel' ? ' selected="selected"' : '').'>'.$lang_user['greater_gm_level'].'</option>
+                            <option value="expansion"'.($search_by === 'expansion' ? ' selected="selected"' : '').'>'.$lang_user['by_expansion'].'</option>
+                            <option value="email"'.($search_by === 'email' ? ' selected="selected"' : '').'>'.$lang_user['by_email'].'</option>
+                            <option value="joindate"'.($search_by === 'joindate' ? ' selected="selected"' : '').'>'.$lang_user['by_join_date'].'</option>
+                            <option value="last_ip"'.($search_by === 'last_ip' ? ' selected="selected"' : '').'>'.$lang_user['by_ip'].'</option>
+                            <option value="failed_logins"'.($search_by === 'failed_logins' ? ' selected="selected"' : '').'>'.$lang_user['by_failed_loggins'].'</option>
+                            <option value="last_login"'.($search_by === 'last_login' ? ' selected="selected"' : '').'>'.$lang_user['by_last_login'].'</option>
+                            <option value="online"'.($search_by === 'online' ? ' selected="selected"' : '').'>'.$lang_user['by_online'].'</option>
+                            <option value="locked"'.($search_by === 'locked' ? ' selected="selected"' : '').'>'.$lang_user['by_locked'].'</option>
+                            <option value="banned"'.($search_by === 'banned' ? ' selected="selected"' : '').'>'.$lang_user['by_banned'].'</option>
+                          </select>
+                        </form>
+                      </td>
+                      <td>';
+                       makebutton($lang_global['search'], 'javascript:do_submit()',80);
+  $output .= '
+                      </td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+            </table>';
+  //==========================top tage navigaion ENDS here ========================
+  $output .= '
+            <form method="get" action="user.php" name="form1">
+              <input type="hidden" name="action" value="del_user" />
+              <input type="hidden" name="start" value="'.$start.'" />
+              <input type="hidden" name="backup_op" value="0"/>
+              <table class="lined">
+                <tr>';
+  // column headers, with links for sorting
+  // first column is the  selection check box
+  if($user_lvl >= $action_permission['insert'])
+    $output.= '
+                  <th width="1%">
+                    <input name="allbox" type="checkbox" value="Check All" onclick="CheckAll(document.form1);" />
+                  </th>';
+  else
+    $output .= '
+                  <th width="1%"></th>';
+  $output .='
+                  <th width="1%"><a href="user.php?order_by=id&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='id' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['id'].'</a></th>
+                  <th width="1%"><a href="user.php?order_by=username&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='username' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['username'].'</a></th>
+                  <th width="1%"><a href="user.php?order_by=gmlevel&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='gmlevel' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['gm_level'].'</a></th>';
+  if ($expansion_select)
+    $output .='
+                  <th width="1%"><a href="user.php?order_by=expansion&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='expansion' ? ' class="'.$order_dir.'"' : '').'>EXP</a></th>';
+  $output .='
+                  <th width="1%"><a href="user.php?order_by=email&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='email' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['email'].'</a></th>
+                  <th width="1%"><a href="user.php?order_by=joindate&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='joindate' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['join_date'].'</a></th>
+                  <th width="1%"><a href="user.php?order_by=last_ip&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='last_ip' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['ip'].'</a></th>
+                  <th width="1%"><a href="user.php?order_by=failed_logins&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='failed_logins' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['failed_logins'].'</a></th>
+                  <th width="1%"><a href="user.php?order_by=locked&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='locked' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['locked'].'</a></th>
+                  <th width="1%"><a href="user.php?order_by=last_login&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='last_login' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['last_login'].'</a></th>
+                  <th width="1%"><a href="user.php?order_by=online&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='online' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['online'].'</a></th>';
+  if ($showcountryflag)
+  {
+    require_once 'libs/misc_lib.php';
+    $output .= '
+                  <th width="1%">'.$lang_global['country'].'</th>';
+  }
+  $output .= '
+                </tr>';
+
+  //---------------Page Specific Data Starts Here--------------------------
+  while ($data = $sqlr->fetch_assoc($query))
+  {
+    if (($user_lvl >= $data['gmlevel'])||($user_name === $data['username']))
+    {
+      $output .= '
+                <tr>';
+      if ($user_lvl >= $action_permission['insert'])
+        $output .= '
+                  <td><input type="checkbox" name="check[]" value="'.$data['id'].'" onclick="CheckCheckAll(document.form1);" /></td>';
+      else
+        $output .= '
+                  <td></td>';
+      $output .= '
+                  <td>'.$data['id'].'</td>
+                  <td>
+                    <a href="user.php?action=edit_user&amp;error=11&amp;id='.$data['id'].'">'.$data['username'].'</a>
+                  </td>
+                  <td>'.$gm_level_arr[$data['gmlevel']][2].'</td>';
       if ($expansion_select)
       {
         $exp_lvl_arr = id_get_exp_lvl();
-        $output .="
-                <td>".$exp_lvl_arr[$data[10]][2]."</td>";
+        $output .= '
+                  <td>'.$exp_lvl_arr[$data['expansion']][2].'</td>';
         unset($exp_lvl_arr);
       }
-      if ($user_lvl >= $action_permission['update']||($user_name == $data[1]))
-        $output .= "
-                <td><a href=\"mailto:$data[3]\">".substr($data[3],0,15)."</a></td>";
+      if ($user_lvl >= $action_permission['update']||($user_name === $data['username']))
+        $output .= '
+                  <td><a href="mailto:'.$data['email'].'">'.substr($data['email'],0,15).'</a></td>';
       else
-        $output .= "<td>***@***.***</td>";
-      $output .="
-                <td class=\"small\">$data[4]</td>";
-      if (($user_lvl >= $action_permission['update'])||($user_name == $data[1]))
-        $output .= "
-                <td>$data[5]</td>";
+        $output .= '
+                  <td>***@***.***</td>';
+      $output .= '
+                  <td class="small">'.$data['joindate'].'</td>';
+      if (($user_lvl >= $action_permission['update'])||($user_name === $data['username']))
+        $output .= '
+                  <td>'.$data['last_ip'].'</td>';
       else
-        $output .= "
-                <td>*******</td>";
-      $output .= "
-                <td>".(($data[6]) ? $data[6] : "-")."</td>
-                <td>".(($data[7]) ? $lang_global['yes_low'] : "-")."</td>
-                <td class=\"small\">$data[8]</td>
-                <td>".(($data[9]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>";
+        $output .= '
+                  <td>*******</td>';
+      $output .= '
+                  <td>'.(($data['failed_logins']) ? $data['failed_logins'] : '-').'</td>
+                  <td>'.(($data['locked']) ? $lang_global['yes_low'] : '-').'</td>
+                  <td class="small">'.$data['last_login'].'</td>
+                  <td>'.(($data['online']) ? '<img src="img/up.gif" alt="" />' : '-').'</td>';
       if ($showcountryflag)
-        $output .= "
-                <td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
-      $output .= "
-              </tr>";
+      {
+        $country = misc_get_country_by_ip($data['last_ip'], $sqlm);
+        $output .= '
+                  <td>'.(($country['code']) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="toolTip(\''.($country['country']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />' : '-').'</td>';
+      }
+      $output .= '
+                </tr>';
     }
     else
     {
-      $output .= "
-             <tr>
-               <td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
-               <td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>***</td>";
+      $output .= '
+                <tr>
+                  <td>*</td><td>***</td><td>You</td><td>Have</td><td>No</td>
+                  <td class=\"small\">Permission</td><td>to</td><td>View</td><td>this</td><td>Data</td><td>***</td>';
     if ($expansion_select)
-      $output .= "<td>*</td>";
+      $output .= '
+                  <td>*</td>';
     if ($showcountryflag)
-      $output .= "<td>*</td>";
-    $output .= "
-               </tr>";
+      $output .= '
+                  <td>*</td>';
+    $output .= '
+                </tr>';
     }
   }
-  $output .= "
-               <tr>
-                 <td  colspan=\"12\" class=\"hidden\" align=\"right\" width=\"25%\">";
-  $output .= generate_pagination("user.php?order_by=$order_by&amp;dir=".!$dir.( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" ), $all_record, $itemperpage, $start);
-  $output .= "
-                 </td>
-               </tr>
-               <tr>
-                 <td colspan=\"8\" align=\"left\" class=\"hidden\">";
+  $output .= '
+                <tr>
+                  <td  colspan="';
+  if ($expansion_select || $showcountryflag)
+  {
+    if ($expansion_select && $showcountryflag)
+      $output .= '13';
+    else
+      $output .= '12';
+  }
+  else
+    $output .= '11';
+  $output .= '" class="hidden" align="right" width="25%">';
+  $output .= generate_pagination('user.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'', $all_record, $itemperpage, $start);
+  $output .= '
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="8" align="left" class="hidden">';
   if($user_lvl >= $action_permission['delete'])
-                   makebutton($lang_user['del_selected_users'], "javascript:do_submit('form1',0)\" type=\"wrn",230);
-  if($user_lvl >= $action_permission['insert'])
-                   makebutton($lang_user['backup_selected_users'], "javascript:do_submit('form1',1)",230);
-  $output .= "
-                 </td>
-                <td colspan=\"4\" align=\"right\" class=\"hidden\">{$lang_user['tot_acc']} : $all_record</td>
-              </tr>
-            </table>
-          </form>
-          <br />
-        </center>
-";
+                    makebutton($lang_user['del_selected_users'], 'javascript:do_submit("form1",0)" type="wrn',230);
+// backup is broken
+//if($user_lvl >= $action_permission['insert'])
+//                  makebutton($lang_user['backup_selected_users'], 'javascript:do_submit("form1",1)',230);
+  $output .= '
+                  </td>
+                  <td colspan="';
+  if ($expansion_select || $showcountryflag)
+  {
+    if ($expansion_select && $showcountryflag)
+      $output .= '5';
+    else
+      $output .= '4';
+  }
+  else
+    $output .= '3';
+  $output .= '" align="right" class="hidden">'.$lang_user['tot_acc'].' : '.$all_record.'</td>
+                </tr>
+              </table>
+            </form>
+            <br />
+          </center>
+          <!-- end of user.php -->';
 
 }
 
@@ -698,59 +745,59 @@ function edit_user()
   $id = $sqlr->quote_smart($_GET['id']);
 
   $result = $sqlr->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion FROM account WHERE id = '$id'");
-  $data = $sqlr->fetch_row($result);
+  $data = $sqlr->fetch_assoc($result);
 
-  $refguid = $sqlm->fetch_row($sqlm->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '$data[0]'"));
-  $refguid = $refguid[0];
-  $referred_by = $sqlc->fetch_row($sqlc->query("SELECT name FROM characters WHERE guid = '$refguid'"));
+  $refguid = $sqlm->fetch_assoc($sqlm->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '.$data['id'].''));
+  $refguid = $refguid['InveitedBy'];
+  $referred_by = $sqlc->fetch_assoc($sqlc->query("SELECT name FROM characters WHERE guid = '$refguid'"));
   unset($refguid);
-  $referred_by = $referred_by[0];
+  $referred_by = $referred_by['name'];
 
   if ($sqlr->num_rows($result))
   {
-    $output .= "
+    $output .= '
         <center>
-          <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
-          <script type=\"text/javascript\">
+          <script type="text/javascript" src="js/sha1.js"></script>
+          <script type="text/javascript">
           <!--
             function do_submit_data ()
             {
-              if ((document.form.username.value != '$data[1]') && (document.form.new_pass.value == '******'))
+              if ((document.form.username.value != "'.$data['username'].'") && (document.form.new_pass.value == "******"))
               {
-                alert('If you are changing Username, The password must be changed too.');
+                alert("If you are changing Username, The password must be changed too.");
                 return;
               }
               else
               {
-                document.form.pass.value = hex_sha1(document.form.username.value.toUpperCase()+':'+document.form.new_pass.value.toUpperCase());
-                document.form.new_pass.value = '0';
+                document.form.pass.value = hex_sha1(document.form.username.value.toUpperCase()+":"+document.form.new_pass.value.toUpperCase());
+                document.form.new_pass.value = "0";
                 do_submit();
               }
             }
           !-->
           </script>
-          <fieldset style=\"width: 550px;\">
-            <legend>{$lang_user['edit_acc']}</legend>
-            <form method=\"post\" action=\"user.php?action=doedit_user\" name=\"form\">
-            <input type=\"hidden\" name=\"pass\" value=\"\" maxlength=\"256\" />
-            <input type=\"hidden\" name=\"id\" value=\"$id\" />
-            <table class=\"flat\">
+          <fieldset style="width: 550px;">
+            <legend>'.$lang_user['edit_acc'].'</legend>
+            <form method="post" action="user.php?action=doedit_user" name="form">
+            <input type="hidden" name="pass" value="" maxlength="256" />
+            <input type="hidden" name="id" value="'.$id.'" />
+            <table class="flat">
               <tr>
-                <td>{$lang_user['id']}</td>
-                <td>$data[0]</td>
+                <td>'.$lang_user['id'].'</td>
+                <td>'.$data['id'].'</td>
               </tr>
               <tr>
-                <td>{$lang_user['username']}</td>";
+                <td>'.$lang_user['username'].'</td>';
   if($user_lvl >= $action_permission['update'])
-    $output .="
-                <td><input type=\"text\" name=\"username\" size=\"42\" maxlength=\"15\" value=\"$data[1]\" /></td>";
+    $output .='
+                <td><input type="text" name="username" size="42" maxlength="15" value="'.$data['username'].'" /></td>';
   else
-    $output.="
-                <td>$data[1]</td>";
-  $output .= "
+    $output.='
+                <td>'.$data['username'].'</td>';
+  $output .= '
               </tr>
               <tr>
-                <td>{$lang_user['password']}</td>";
+                <td>'.$lang_user['password'].'</td>';
   if($user_lvl >= $action_permission['update'])
     $output .="
                 <td><input type=\"text\" name=\"new_pass\" size=\"42\" maxlength=\"40\" value=\"******\" /></td>";
@@ -762,8 +809,8 @@ function edit_user()
               <tr>
                 <td>{$lang_user['email']}</td>";
   if($user_lvl >= $action_permission['update'])
-    $output .="
-                <td><input type=\"text\" name=\"mail\" size=\"42\" maxlength=\"225\" value=\"$data[3]\" /></td>";
+    $output .= '
+                <td><input type="text" name="mail" size="42" maxlength="225" value="'.$data['email'].'" /></td>';
   else
     $output.="
                 <td>***@***.***</td>";
@@ -794,7 +841,7 @@ function edit_user()
       {
         $output .= "
                     <option value=\"{$level[0]}\" ";
-        if ($data[2] == $level[0])
+        if ($data['gmlevel'] == $level[0])
           $output .= "selected=\"selected\" ";
         $output .= ">{$level[1]}</option>";
       }
@@ -804,19 +851,19 @@ function edit_user()
                 </td>";
   }
   else
-    $output .= "
-                <td>".id_get_gm_level($data[2])." ( $data[2] )</td>";
-  $output .="
+    $output .= '
+                <td>'.id_get_gm_level($data['gmlevel']).' ( '.$data['gmlevel'].' )</td>';
+  $output .= '
               </tr>
               <tr>
-                <td>{$lang_user['join_date']}</td>
-                <td>$data[4]</td>
+                <td>'.$lang_user['join_date'].'</td>
+                <td>'.$data['joindate'].'</td>
               </tr>
               <tr>
-                <td>{$lang_user['last_ip']}</td>";
+                <td>'.$lang_user['last_ip'].'</td>';
   if($user_lvl >= $action_permission['update'])
-    $output .="
-                <td>$data[5]<a href=\"banned.php?action=do_add_entry&amp;entry=$data[5]&amp;bantime=3600&amp;ban_type=ip_banned\"> &lt;- {$lang_user['ban_this_ip']}</a></td>";
+    $output .= '
+                <td>'.$data['last_ip'].'<a href="banned.php?action=do_add_entry&amp;entry='.$data['last_ip'].'&amp;bantime=3600&amp;ban_type=ip_banned"> &lt;- '.$lang_user['ban_this_ip'].'</a></td>';
   else
     $output .= "
                 <td>***.***.***.***</td>";
@@ -868,11 +915,11 @@ function edit_user()
       $output .= "
                     <option value=\"0\">{$lang_user['classic']}</option>
                     <option value=\"1\" ";
-      if ($data[10] == 1)
+      if ($data['expansion'] == 1)
         $output .= "selected=\"selected\" ";
       $output .= ">{$lang_user['tbc']}</option>
                    <option value=\"2\" ";
-      if ($data[10] ==2)
+      if ($data['expansion'] ==2)
         $output .= "selected=\"selected\" ";
       $output .= ">{$lang_user['wotlk']}</option>
                   </select>
@@ -887,32 +934,32 @@ function edit_user()
               <tr>
                 <td>{$lang_user['failed_logins_long']}</td>";
   if($user_lvl >= $action_permission['update'])
-    $output .="
-                <td><input type=\"text\" name=\"failed\" size=\"42\" maxlength=\"3\" value=\"$data[6]\" /></td>";
+    $output .='
+                <td><input type="text" name="failed" size="42" maxlength="3" value="'.$data['failed_logins'].'" /></td>';
   else
-    $output .= "
-                <td>$data[6]</td>";
+    $output .= '
+                <td>'.$data['failed_logins'].'</td>';
   $output .="
               </tr>
               <tr>
                 <td>{$lang_user['locked']}</td>";
-  $lock_checked = ($data[7]) ? " checked=\"checked\"" : "";
+  $lock_checked = ($data['locked']) ? " checked=\"checked\"" : "";
   if($user_lvl >= $action_permission['update'])
     $output .= "
                 <td><input type=\"checkbox\" name=\"locked\" value=\"1\" $lock_checked/></td>";
   else
     $output .="
                 <td></td>";
-  $output.="
+  $output.= '
               </tr>
               <tr>
-                <td>{$lang_user['last_login']}</td>
-                <td>$data[8]</td>
+                <td>'.$lang_user['last_login'].'</td>
+                <td>'.$data['last_login'].'</td>
               </tr>
               <tr>
-                <td>{$lang_user['online']}</td>";
+                <td>'.$lang_user['online'].'</td>';
   $output .= "
-                <td>".(( $data[9] ) ? $lang_global['yes'] : $lang_global['no'])."</td>
+                <td>".(( $data['online'] ) ? $lang_global['yes'] : $lang_global['no'])."</td>
               </tr>";
   $query = $sqlr->query("SELECT SUM(numchars) FROM realmcharacters WHERE acctid = '$id'");
   $tot_chars = $sqlr->result($query, 0);
@@ -1109,8 +1156,10 @@ $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 $output .= "
         <div class=\"top\">";
 
+// load language
 $lang_user = lang_user();
 
+// defines the title header in error cases
 switch ($err)
 {
   case 1:
@@ -1212,7 +1261,7 @@ switch ($action)
     backup_user();
     break;
   default:
-    browse_users();
+    browse_users($sqlr, $sqlc);
 }
 
 unset($action);

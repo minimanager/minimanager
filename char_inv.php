@@ -63,7 +63,7 @@ function char_inv(&$sqlr, &$sqlc)
     $owner_name = $sqlr->result($result, 0, 'username');
 
     // check user permission
-    if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
+    if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name))
     {
       // main data that we need for this page, character inventory
       $result = $sqlc->query('SELECT ci.bag, ci.slot, ci.item, ci.item_template,
@@ -336,7 +336,7 @@ function char_inv(&$sqlr, &$sqlc)
       {
 
         // equipped bank bags, last 3
-        if($t==5)
+        if($t===5)
         {
           $output .= '
                 </tr>
