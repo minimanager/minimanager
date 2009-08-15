@@ -123,7 +123,7 @@ function events()
 $lang_events = lang_events();
 
 $output .= '
-          <div class=\"top\">
+          <div class="top">
             <h1>'.$lang_events[events].'</h1>
           </div>';
 
