@@ -13,7 +13,7 @@ valid_login($action_permission['read']);
 function instances()
 {
   global $output, $lang_instances,
-    $realm_id, $world_db,
+    $realm_id, $world_db, $mmfpm_db,
     $server_type, $itemperpage;
 
   $sqlw = new SQL;
@@ -75,6 +75,9 @@ function instances()
                 <th width="15%"><a href="instances.php?order_by=reset_delay&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='reset_delay' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['reset_delay'].'</a></th>
               </tr>';
 
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
   while ($instances = $sqlw->fetch_assoc($result))
   {
     $days  = floor(round($instances['reset_delay'] / 3600) / 24);
@@ -87,7 +90,7 @@ function instances()
 
     $output .= '
               <tr valign=top>
-                <td>'.get_map_name($instances['map']).' ('.$instances['map'].')</td>
+                <td>'.get_map_name($instances['map'], $sqlm).' ('.$instances['map'].')</td>
                 <td>'.$instances['level_min'].'</td>
                 <td>'.$instances['level_max'].'</td>
                 <td>'.$instances['maxplayers'].'</td>

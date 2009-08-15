@@ -1,7 +1,9 @@
 <?php
 
 
-include("header.php");
+// page header, and any additional required libraries
+include 'header.php';
+// minimum permission to view page
 valid_login($action_permission['read']);
 
 //#############################################################################
@@ -9,84 +11,86 @@ valid_login($action_permission['read']);
 //#############################################################################
 function print_commands_form()
 {
-  global $lang_command, $output, $world_db, $action_permission, $user_lvl, $realm_id, $gm_level_arr;
-  valid_login($action_permission['read']);
+  global $output, $lang_command, $output,
+    $realm_id, $world_db,
+    $action_permission, $user_lvl,
+    $gm_level_arr;
 
   $levels = $gm_level_arr;
 
   $sqlw = new SQL;
   $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
-  $query = $sqlw->query("SELECT name,help,`security` FROM command WHERE `security` <= $user_lvl");
+  $query = $sqlw->query('SELECT name, help, security FROM command WHERE security <= '.$user_lvl.'');
 
-  while ($data = $sqlw->fetch_row($query))
+  while ($data = $sqlw->fetch_assoc($query))
   {
-    $tmp_output = "
-              <tr>";
+    $tmp_output = '
+              <tr>';
     $tmp_output .=
-          ($user_lvl >= $action_permission['update']) ? "<td><input type=\"checkbox\" name=\"check[$data[0]]\" value=\"$data[2]\" /></td>" : "<td></td>";
-    $tmp_output .= "
-                <td align=\"left\">.$data[0]</td>";
-    $comm = explode("\r\n",$data[1],2);
-    $syntax = ereg_replace("[a-zA-Z ]+:* *\.".$data[0]." *", "", str_replace("/", "<br />",$comm[0]));
+          ($user_lvl >= $action_permission['update']) ? '<td><input type="checkbox" name="check['.$data['name'].']" value="'.$data['security'].'" /></td>' : '<td></td>';
+    $tmp_output .= '
+                <td align="left">'.$data['name'].'</td>';
+    $comm = explode('\r\n',$data['help'],2);
+    $syntax = ereg_replace('[a-zA-Z ]+:* *\.'.$data['name'].' *', '', str_replace('/', '<br />',$comm[0]));
     if (isset($comm[1]))
-      $description = str_replace("\r\n\r\n", "<br />", $comm[1]);
+      $description = str_replace('\r\n\r\n', '<br />', $comm[1]);
     else
     {
-      $comm = explode("<!>",ereg_replace(" ([a-zA-Z]+ .*)", "<!>\\0", $syntax),2);
+      $comm = explode('<!>',ereg_replace(' ([a-zA-Z]+ .*)', '<!>\\0', $syntax),2);
       $syntax = $comm[0];
-      $description = isset($comm[1]) ? $comm[1] : " ";
+      $description = isset($comm[1]) ? $comm[1] : ' ';
     }
-    $tmp_output .="
-                <td>".htmlentities($syntax)."</td>
-                <td>".htmlentities($description)."</td>
-              </tr>";
-    $levels[$data[2]][3] .= $tmp_output;
+    $tmp_output .= '
+                <td>'.htmlentities($syntax).'</td>
+                <td>'.htmlentities($description).'</td>
+              </tr>';
+    $levels[$data['security']][3] .= $tmp_output;
   }
   unset($data);
   unset($query);
 
-  $output .= "
+  $output .= '
         <center>
-          <form method=\"get\" action=\"command.php\" name=\"form\">
-            <input type=\"hidden\" name=\"action\" value=\"update\" />";
-  for ($i=0; $i<=$user_lvl; $i++)
+          <form method="get" action="command.php" name="form">
+            <input type="hidden" name="action" value="update" />';
+  for ($i=0; $i<=$user_lvl; ++$i)
   {
-    $output .= "
-            <table style=\"width: 720px; text-align: left;\" class=\"lined\">
+    $output .= '
+            <table style="width: 720px; text-align: left;" class="lined">
               <tr>
                 <th>
-                  <a href=\"#\" onclick=\"showHide('{$levels[$i][1]}')\">{$levels[$i][1]} {$lang_command['showhide']}</a>
+                  <a href="#" onclick="showHide(\''.$levels[$i][1].'\')">'.$levels[$i][1].' '.$lang_command['showhide'].'</a>
                 </th>
               </tr>
             </table>
-            <table id=\"{$levels[$i][1]}\" class=\"lined\" style=\"width: 720px; text-align: left; display: none\">
-              <tr style=\"text-align: center;\">
-                <th width=\"2%\"></th>
-                <th width=\"13%\">{$lang_command['command']}</th>
-                <th width=\"20%\">{$lang_command['syntax']}</th>
-                <th width=\"65%\">{$lang_command['description']}</th>
-              </tr>" . $levels[$i][3];
+            <table id="'.$levels[$i][1].'" class="lined" style="width: 720px; text-align: left; display: none">
+              <tr style="text-align: center;">
+                <th width="2%"></th>
+                <th width="13%">'.$lang_command['command'].'</th>
+                <th width="20%">'.$lang_command['syntax'].'</th>
+                <th width="65%">'.$lang_command['description'].'</th>
+              </tr>'.$levels[$i][3];
     if($user_lvl >= $action_permission['update'])
     {
-      $output .= "
+      $output .= '
             </table>
             <br />
-            <table class=\"hidden\" style=\"width: 720px;\">
+            <table class="hidden" style="width: 720px;">
               <tr>
-                <td>";
-                    makebutton($lang_command['change_level'], "javascript:do_submit()",280);
-      $output .="
+                <td>';
+                    makebutton($lang_command['change_level'], 'javascript:do_submit()',280);
+      $output .= '
                 </td>
-              </tr>";
+              </tr>';
     }
-    $output .= "
+    $output .= '
             </table>
-            <br />";
+            <br />';
   }
-  $output .= "
+  $output .= '
           </form>
-        </center>";
+        </center>';
 
 }
 

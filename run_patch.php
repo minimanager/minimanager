@@ -1,7 +1,9 @@
 <?php
 
 
-require_once("header.php");
+// page header, and any additional required libraries
+require_once 'header.php';
+// minimum permission to view page
 valid_login($action_permission['delete']);
 
 //#####################################################################################################
@@ -9,26 +11,27 @@ valid_login($action_permission['delete']);
 //#####################################################################################################
 function print_upload()
 {
-  global $lang_run_patch, $output, $realm_db, $world_db, $characters_db, $mmfpm_db;
+  global $output, $lang_run_patch,
+  $realm_db, $world_db, $characters_db, $mmfpm_db;
 
-  if (isset($_FILES["uploaded_file"]["name"]))
+  if (isset($_FILES['uploaded_file']['name']))
   {
-    if ($_FILES["uploaded_file"]["type"] != "application/octet-stream" && $_FILES["uploaded_file"]["type"] != "text/plain")
-      error("{$lang_run_patch['run_sql_file_only']}<br />". $_FILES["uploaded_file"]["type"]);
-    if (file_exists($_FILES["uploaded_file"]["tmp_name"]))
+    if ($_FILES['uploaded_file']['type'] == 'application/octet-stream' || $_FILES['uploaded_file']['type'] == 'text/plain')
+      error($lang_run_patch['run_sql_file_only'].'<br />'. $_FILES['uploaded_file']['type']);
+    if (file_exists($_FILES['uploaded_file']['tmp_name']))
     {
-      $buffer = implode('', file($_FILES["uploaded_file"]["tmp_name"]));
+      $buffer = implode('', file($_FILES['uploaded_file']['tmp_name']));
     }
     else
       error($lang_run_patch['file_not_found']);
   }
   else
-    $buffer = "";
+    $buffer = '';
 
-  $upload_max_filesize=ini_get("upload_max_filesize");
-  if (eregi("([0-9]+)K",$upload_max_filesize,$tempregs))
+  $upload_max_filesize=ini_get('upload_max_filesize');
+  if (eregi('([0-9]+)K', $upload_max_filesize, $tempregs))
     $upload_max_filesize=$tempregs[1]*1024;
-  if (eregi("([0-9]+)M",$upload_max_filesize,$tempregs))
+  if (eregi('([0-9]+)M', $upload_max_filesize, $tempregs))
     $upload_max_filesize=$tempregs[1]*1024*1024;
 
   $output .= "
@@ -157,54 +160,56 @@ else
 //########################################################################################################################
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
-$output .= "
-        <div class=\"top\">";
+$output .= '
+          <div class="top">';
 
+// load language
 $lang_run_patch = lang_run_patch();
 
-switch ($err)
+// defines the title header in error cases
+// if else is always faster then switch case
+if (1 == $err)
 {
-  case 1:
-    $output .= "
-          <h1><font class=\"error\">{$lang_global['empty_fields']}</font></h1>";
-    break;
-  case 2:
-    if(isset($_GET['tot']))
-      $tot = $_GET['tot'];
-    else
-      $tot = NULL;
-    $output .= "
-          <h1><font class=\"error\">$tot {$lang_run_patch['query_executed']}</font></h1>";
-    break;
-  case 3:
-    $output .= "
-          <h1><font class=\"error\">{$lang_run_patch['no_query_found']}</font></h1>";
-    break;
-  default:
-    $output .= "
-          <h1>{$lang_run_patch['run_patch']}</h1>";
+  $output .= '
+            <h1><font class="error">'.$lang_global['empty_fields'].'</font></h1>';
+}
+elseif (2 == $err)
+{
+  if(isset($_GET['tot']))
+    $tot = $_GET['tot'];
+  else
+    $tot = NULL;
+  $output .= '
+            <h1><font class="error">'.$tot.' '.$lang_run_patch['query_executed'].'</font></h1>';
+}
+elseif (3 == $err)
+{
+  $output .= '
+            <h1><font class="error">'.$lang_run_patch['no_query_found'].'</font></h1>';
+}
+else
+{
+  $output .= '
+            <h1>'.$lang_run_patch['run_patch'].'</h1>';
 }
 
 unset($err);
 
-$output .= "
-        </div>";
+$output .= '
+        </div>';
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-switch ($action)
-{
-  case "do_run_patch":
-    do_run_patch();
-    break;
-  default:
-    print_upload();
-}
+// if else is always faster then switch case
+if ('do_run_patch' == $action)
+  do_run_patch();
+else
+  print_upload();
 
 unset($action);
 unset($action_permission);
 unset($lang_run_patch);
 
-require_once("footer.php");
+require_once 'footer.php';
 
 ?>

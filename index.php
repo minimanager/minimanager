@@ -1,27 +1,24 @@
 <?php
 
 
-require_once("header.php");
-require_once("scripts/get_lib.php");
-require_once("libs/bbcode_lib.php");
-require_once("libs/char_lib.php");
-require_once("libs/map_zone_lib.php");
+require_once 'header.php';
+require_once 'libs/bbcode_lib.php';
+require_once 'libs/char_lib.php';
+require_once 'libs/map_zone_lib.php';
 valid_login($action_permission['read']);
 
 //#############################################################################
 // MINIMANAGER FRONT PAGE
 //#############################################################################
-function front()
+function front(&$sqlr, &$sqlc)
 {
-  global $lang_global, $lang_index, $output, $realm_id, $realm_db, $world_db, $characters_db, $mmfpm_db, $server, $server_type,
-    $showcountryflag, $motd_display_poster, $gm_online_count, $gm_online, $action_permission, $user_lvl, $user_id;
+  global $output, $lang_global, $lang_index,
+    $realm_id, $realm_db, $world_db, $characters_db, $mmfpm_db, $server,
+    $action_permission, $user_lvl, $user_id,
+    $server_type, $showcountryflag, $motd_display_poster, $gm_online_count, $gm_online ;
 
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
   $sqlw = new SQL;
   $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
@@ -31,8 +28,8 @@ function front()
   if (test_port($server[$realm_id]['addr'],$server[$realm_id]['game_port']))
   {
     $query = $sqlr->query("SELECT `starttime` FROM `uptime` WHERE `realmid` = $realm_id ORDER BY `starttime` DESC LIMIT 1");
-    $getuptime = mysql_fetch_row($query);
-    $uptimetime = time() - $getuptime[0];
+    $getuptime = mysql_fetch_assoc($query);
+    $uptimetime = time() - $getuptime['starttime'];
 
     function format_uptime($seconds)
     {
@@ -224,8 +221,11 @@ function front()
       $output .="
                 <th width=\"25%\"><a href=\"index.php?order_by=latency&amp;dir=$dir\"".($order_by=='latency' ? " class=\"$order_dir\"" : "").">{$lang_index['latency']}</th>";
     if ($showcountryflag)
-      $output .="
-                <th width=\"5%\">{$lang_global['country']}</th>";
+    {
+      require_once 'libs/misc_lib.php';
+      $output .= '
+                <th width="1%">'.$lang_global['country'].'</th>';
+    }
     $output .= "
               </tr>";
 
@@ -258,15 +258,6 @@ function front()
         $fixavglat = round($avglat, 2);
       }
 
-      if ($showcountryflag)
-      {
-        $loc = $sqlr->query("SELECT `last_ip` FROM `account` WHERE `id`='$accid';");
-        $location = $sqlr->fetch_row($loc);
-        $ip = $location[0];
-
-        $nation = $sqlm->query("SELECT c.code, c.country FROM ip2nationCountries c, ip2nation i WHERE i.ip < INET_ATON('".$ip."') AND c.code = i.country ORDER BY i.ip DESC LIMIT 0,1;");
-        $country = $sqlm->fetch_row($nation);
-      }
       $output .= "
               <tr>
                 <td>";
@@ -293,16 +284,17 @@ function front()
                 <td>
                   <a href=\"guild.php?action=view_guild&amp;error=3&amp;id=$char[9]\">$guild_name[0]</a>
                 </td>
-                <td>".get_map_name($char[5])."</td>
-                <td>".get_zone_name($char[4])."</td>";
-      unset($CHAR_RACE);
-      unset($CHAR_RANK);
+                <td>".get_map_name($char[5], $sqlm)."</td>
+                <td>".get_zone_name($char[4], $sqlm)."</td>";
       if ($server_type)
         $output .="
                 <td>$cc</td>";
       if ($showcountryflag)
+      {
+        $country = misc_get_country_by_account($char[8], $sqlr, $sqlm);
         $output .="
-                <td>".(($country[0]) ? "<img src='img/flags/".$country[0].".png' onmousemove='toolTip(\"".($country[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+                <td>".(($country['code']) ? "<img src='img/flags/".$country['code'].".png' onmousemove='toolTip(\"".($country['country'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" />" : "-")."</td>";
+      }
       $output .="
               </tr>";
     }
@@ -323,19 +315,13 @@ function front()
 // MAIN
 //#############################################################################
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 $lang_index = lang_index();
 
-switch ($action)
-{
-  case "unknown":
-    break;
-  default:
-    front();
-}
+front($sqlr, $sqlc);
 
-unset($action);
+//unset($action);
 unset($action_permission);
 unset($lang_index);
 

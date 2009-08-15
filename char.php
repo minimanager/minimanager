@@ -29,8 +29,6 @@ function char_main(&$sqlr, &$sqlc)
     if (!is_numeric($realmid)) $realmid = $realm_id;
   }
 
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
     $id = 0;
@@ -227,6 +225,9 @@ function char_main(&$sqlr, &$sqlc)
         }
       }
 
+      $sqlm = new SQL;
+      $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
       if ($showcountryflag)
       {
         $loc = $sqlr->query("SELECT `last_ip` FROM `account` WHERE `id`='$char[9]';");
@@ -264,7 +265,7 @@ function char_main(&$sqlr, &$sqlc)
       $output .= "
                 </td>
                 <td class=\"half_line\" colspan=\"4\">
-                ".get_map_name($char[5])." - ".get_zone_name($char[4])."
+                ".get_map_name($char[5], $sqlm)." - ".get_zone_name($char[4], $sqlm)."
                 </td>
                 <td width=\"6%\">";
       if (!empty($equiped_items[10][1]))

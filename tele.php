@@ -10,7 +10,7 @@ valid_login($action_permission['read']);
 //#############################################################################
 function browse_tele()
 {
-  global $lang_tele, $lang_global, $output, $world_db, $realm_id, $itemperpage,
+  global $lang_tele, $lang_global, $output, $world_db, $realm_id, $mmfpm_db, $itemperpage,
     $action_permission, $user_lvl;
 
   $sqlw = new SQL;
@@ -123,6 +123,9 @@ function browse_tele()
               <th width=\"10%\"><a href=\"tele.php?order_by=orientation&amp;start=$start".( $search_value && $search_by ? "&amp;search_by=$search_by&amp;search_value=$search_value" : "" )."&amp;dir=$dir\"".($order_by=='orientation' ? " class=\"$order_dir\"" : "").">{$lang_tele['orientation']}</a></th>
             </tr>";
 
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
   while ($data = $sqlw->fetch_row($query))
   {
     $output .= "
@@ -140,7 +143,7 @@ function browse_tele()
       $output .="$data[1]";
     $output .="
               </td>
-              <td>".get_map_name($data[2])." ($data[2])</td>
+              <td>".get_map_name($data[2], $sqlm)." ($data[2])</td>
               <td>$data[3]</td>
               <td>$data[4]</td>
               <td>$data[5]</td>

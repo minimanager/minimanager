@@ -12,7 +12,7 @@ valid_login($action_permission['read']);
 //########################################################################################################################
 function char_friends()
 {
-  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $mmfpm_db, $characters_db,
     $action_permission, $user_lvl, $user_name;
 
   if (empty($_GET['id']))
@@ -31,6 +31,9 @@ function char_friends()
 
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+
+  $sqlm = new SQL;
+  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
@@ -127,8 +130,8 @@ function char_friends()
                       <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".char_get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".char_get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td>".char_get_level_color($data[5])."</td>
-                      <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3])."</span></td>
-                      <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4])."</span></td>
+                      <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3], $sqlm)."</span></td>
+                      <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4], $sqlm)."</span></td>
                       <td>".(($data[7]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
                     </tr>";
         }
@@ -173,8 +176,8 @@ function char_friends()
                       <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".char_get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".char_get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td>".char_get_level_color($data[5])."</td>
-                      <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3])."</span></td>
-                      <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4])."</span></td>
+                      <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3], $sqlm)."</span></td>
+                      <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4], $sqlm)."</span></td>
                       <td>".(($data[7]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
                     </tr>";
         }
@@ -224,8 +227,8 @@ function char_friends()
                       <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".char_get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".char_get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td>".char_get_level_color($data[5])."</td>
-                      <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3])."</span></td>
-                      <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4])."</span></td>
+                      <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3], $sqlm)."</span></td>
+                      <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4], $sqlm)."</span></td>
                       <td>".(($data[7]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
                     </tr>";
         }
@@ -269,8 +272,8 @@ function char_friends()
                       <td><img src='img/c_icons/{$data[1]}-{$data[6]}.gif' onmousemove='toolTip(\"".char_get_race_name($data[1])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td><img src='img/c_icons/{$data[2]}.gif' onmousemove='toolTip(\"".char_get_class_name($data[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /></td>
                       <td>".char_get_level_color($data[5])."</td>
-                      <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3])."</span></td>
-                      <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4])."</span></td>
+                      <td class=\"small\"><span onmousemove='toolTip(\"MapID:".$data[3]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_map_name($data[3], $sqlm)."</span></td>
+                      <td class=\"small\"><span onmousemove='toolTip(\"ZoneID:".$data[4]."\",\"item_tooltip\")' onmouseout='toolTip()'>".get_zone_name($data[4], $sqlm)."</span></td>
                       <td>".(($data[7]) ? "<img src=\"img/up.gif\" alt=\"\" />" : "-")."</td>
                     </tr>";
         }

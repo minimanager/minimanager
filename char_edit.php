@@ -11,7 +11,7 @@ valid_login($action_permission['delete']);
 //  PRINT  EDIT FORM
 //########################################################################################################################
 function edit_char() {
- global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $action_permission, $user_lvl,
+ global $lang_global, $lang_char, $lang_item, $output, $realm_db, $characters_db, $realm_id, $mmfpm_db, $action_permission, $user_lvl,
     $item_datasite;
   wowhead_tt();
 
@@ -20,6 +20,9 @@ if (empty($_GET['id'])) error($lang_global['empty_fields']);
 
 $sql = new SQL;
 $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+
+$sqlm = new SQL;
+$sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
 $id = $sql->quote_smart($_GET['id']);
 
@@ -77,7 +80,7 @@ $output .= "<center>
     <td colspan=\"8\"><font class=\"bold\"><input type=\"text\" name=\"name\" size=\"14\" maxlength=\"12\" value=\"$char[3]\" /> - <img src='img/c_icons/{$char[4]}-{$char[14]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[4])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[5]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[5])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char[13])."</font><br />$online</td>
 </tr>
 <tr>
- <td colspan=\"8\">".get_map_name($char[9])." - ".get_zone_name($char[12])."</td>
+ <td colspan=\"8\">".get_map_name($char[9], $sqlm)." - ".get_zone_name($char[12], $sqlm)."</td>
 </tr>
 <tr>
  <td colspan=\"8\">{$lang_char['username']}: <input type=\"text\" name=\"owner_name\" size=\"20\" maxlength=\"25\" value=\"$owner_name\" /> | {$lang_char['acc_id']}: $owner_acc_id</td>
@@ -222,8 +225,7 @@ $output .= "<table class=\"lined\">
     }
 
 } else error($lang_char['no_char_found']);
-$sql->close();
-unset($sql);
+
 }
 
 
