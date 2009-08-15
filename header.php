@@ -45,14 +45,15 @@ if (isset($_COOKIE['lang']))
 else
   $lang = $language;
 
-require_once 'lang/'.$lang.'.php';
-
-//---------------------Loading Libraries that Header Needs---------------------
+//---------------------Loading Libraries---------------------------------------
 // database library
 require_once 'libs/db_lib.php';
+require_once 'lang/'.$lang.'.php';
 
+require_once 'scripts/defines.php';
 require_once 'scripts/global_lib.php';
 require_once 'scripts/get_lib.php';
+
 //---------------------Headers' header-----------------------------------------
 // sets encoding defined in config for language support
 header('Content-Type: text/html; charset='.$site_encoding);
@@ -107,7 +108,7 @@ if ($developer_test_mode && $allow_anony && empty($_SESSION['logged_in']))
   $_SESSION['client_ip'] = ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
 }
 
-//---------------------Check if a user has login, if Guest mode is enabled, code above will login as Guest
+//----Check if a user has login, if Guest mode is enabled, code above will login as Guest
 if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION['realm_id']) && empty($_GET['err']))
 {
   // check for host php script max memory allowed,
@@ -225,14 +226,6 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
   }
   else
   {
-
-    require_once 'scripts/defines.php';
-    // * developer note: header no longer needs get_lib anymore,
-    //     but most pages assume header will load it for them
-    //   todo: add back this include to pages that require them,
-    //     so can be removed from header, not every page needs it
-    require_once 'scripts/get_lib.php';
-
     $result = $sqlc->query('SELECT guid, name, race, class,
       SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) as level,
       mid(lpad( hex( CAST(substring_index(substring_index(data," ",'.(CHAR_DATA_OFFSET_GENDER+1).')," ",-1) as unsigned) ),8,"0"),4,1) as gender
@@ -274,6 +267,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
           <td class="table_top_right"></td>
         </tr>
       </table>';
+  unset($lang_header);
 }
 else
 {
@@ -284,12 +278,37 @@ else
         </tr>
       </table>';
 }
-unset($lang_header);
 
+//---------------------Version Information-------------------------------------
+if ( $show_version['show'] && $user_lvl >= $show_version['version_lvl'] )
+{
+  if ( ( 1 < $show_version['show']) && $user_lvl >= $show_version['svnrev_lvl'] )
+  {
+    $show_version['svnrev'] = '';
+    // if file exists and readable
+    if (is_readable('.svn/entries') )
+    {
+      $file_obj = new SplFileObject('.svn/entries');
+      // line 4 is where svn revision is stored
+      $file_obj->seek(3);
+      $show_version['svnrev'] = $file_obj->current();
+      unset($file_obj);
+    }
+    $output .= '
+      <div id="version">'.$show_version['version'].' r'.$show_version['svnrev'].'</div>';
+  }
+  else
+  {
+    $output .= '
+      <div id="version">'.$show_version['version'].'</div>';
+  }
+}
+
+
+//---------------------Start of Body-------------------------------------------
 $output .= '
-      <div id="version">'.$version.'</div>
       <div id="body_main">
-        <div class="bubble">';
-unset($version);
+        <div class="bubble">
+          <!-- end of header.php -->';
 
 ?>

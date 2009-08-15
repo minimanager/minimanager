@@ -8,13 +8,16 @@ require_once 'libs/archieve_lib.php';
 // minimum permission to view page
 valid_login($action_permission['read']);
 
-//########################################################################################################################
+//#############################################################################
 // SHOW CHARACTERS ACHIEVEMENTS
-//########################################################################################################################
+//#############################################################################
 function char_achievements(&$sqlr, &$sqlc)
 {
-  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $mmfpm_db, $characters_db, $itemperpage,
-    $action_permission, $user_lvl, $user_name, $achievement_datasite;
+  global $output, $lang_global, $lang_char,
+    $realm_id, $characters_db, $mmfpm_db,
+    $action_permission, $user_lvl, $user_name,
+    $achievement_datasite, $itemperpage;
+
   // this page uses wowhead tooltops
   wowhead_tt();
 
@@ -74,20 +77,20 @@ function char_achievements(&$sqlr, &$sqlc)
     // check user permission
     if ( ($user_lvl > $owner_gmlvl) || ($owner_name === $user_name) )
     {
+      // for multipage support
+      $result = $sqlc->query('SELECT count(*) FROM character_achievement WHERE guid = '.$id.'');
+      $all_record = $sqlc->result($result,0);
+
       // main data that we need for this page, character achievements
       $result = $sqlc->query('SELECT achievement, date FROM character_achievement
         WHERE guid = '.$id.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
-
-      // for multipage support
-      $query_1 = $sqlc->query('SELECT count(*) FROM character_achievement WHERE guid = '.$id.'');
-      $all_record = $sqlc->result($query_1,0);
-      unset($query_1);
 
       //------------------------Character Tabs---------------------------------
       // we start with a lead of 10 spaces,
       //  because last line of header is an opening tag with 8 spaces
       //  keep html indent in sync, so debuging from browser source would be easy to read
       $output .= '
+          <!-- start of char_achieve.php -->
           <center>
             <div id="tab">
               <ul>
@@ -100,7 +103,13 @@ function char_achievements(&$sqlr, &$sqlc)
               </ul>
             </div>
             <div id="tab_content">
-              <font class="bold">'.htmlentities($char['name']).' - <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="toolTip("'.char_get_race_name($char['race']).'", "item_tooltip")" onmouseout="toolTip()" alt="" /> <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="toolTip("'.char_get_class_name($char['class']).'", "item_tooltip")" onmouseout="toolTip()" alt="" /> - lvl '.char_get_level_color($char['level']).'</font>
+              <font class="bold">
+                '.htmlentities($char['name']).' -
+                <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif"
+                  onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
+                <img src="img/c_icons/'.$char['class'].'.gif"
+                  onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - lvl '.char_get_level_color($char['level']).'
+              </font>
               <br /><br />
               <table class="lined" style="width: 550px;">
                 <tr>
@@ -124,7 +133,7 @@ function char_achievements(&$sqlr, &$sqlc)
                   <th width="25%">'.$lang_char['achievement_category'].'</th>
                   <th width="60%">'.$lang_char['achievement_title'].'</th>
                   <th width="5%">'.$lang_char['achievement_points'].'</th>
-                  <th width="10%"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=date&amp;start='.$start.'&amp;dir='.$dir.($order_by=='date' ? ' class="$order_dir"' : "").'>'.$lang_char['achievement_date'].'</a></th>
+                  <th width="10%"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=date&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='date' ? ' class="$order_dir"' : "").'>'.$lang_char['achievement_date'].'</a></th>
                 </tr>';
 
       // we match character data with info from MiniManager database using achievement library
@@ -152,8 +161,7 @@ function char_achievements(&$sqlr, &$sqlc)
             <table class="hidden">
               <tr>
                 <td>';
-
-              // button to user account page, user account page has own security
+                  // button to user account page, user account page has own security
                   makebutton($lang_char['chars_acc'], 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
       $output .= '
                 </td>
@@ -171,7 +179,7 @@ function char_achievements(&$sqlr, &$sqlc)
       // only higher level GM with delete access, or character owner can delete character
       if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
       {
-                  makebutton($lang_char['del_char'], 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn"', 130);
+                  makebutton($lang_char['del_char'], 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
         $output .= '
                 </td>
                 <td>';
@@ -184,14 +192,14 @@ function char_achievements(&$sqlr, &$sqlc)
                 </td>
                 <td>';
       }
-                  makebutton($lang_global['back'], 'javascript:window.history.back()" type="def"', 130);
+                  makebutton($lang_global['back'], 'javascript:window.history.back()" type="def', 130);
       $output .= '
                 </td>
               </tr>
             </table>
             <br />
           </center>
-';
+          <!-- end of char_achieve.php -->';
     }
     else
       error($lang_char['no_permission']);
@@ -202,9 +210,9 @@ function char_achievements(&$sqlr, &$sqlc)
 }
 
 
-//########################################################################################################################
+//#############################################################################
 // MAIN
-//########################################################################################################################
+//#############################################################################
 
 // action variable reserved for future use
 //$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;

@@ -13,6 +13,7 @@
   }
 
   $output .= '
+          <!-- start of footer.php -->
         </div>
         <div id="body_buttom">
           <center>';
@@ -107,6 +108,7 @@
   }
 
 ?>
+
         </div>
       </div>
     </center>

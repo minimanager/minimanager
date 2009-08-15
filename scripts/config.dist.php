@@ -16,7 +16,18 @@
 //  copy this file as config.php,
 //  make changes there.
 
-$version = "0.14";
+
+//#############################################################################
+//---- Version Information ----
+
+$show_version = array
+(
+  'show'        =>  '1',    // 0 - Don't Show, 1 - Show Version, 2 - Show Version and SVN Revision
+  'version'     =>  '0.14',
+  'version_lvl' => '-1',    // Minimum account level to show Version to, -1 is guest account
+  'svnrev'      =>  '0',    // SVN Revision will be read from .svn folder, values here hold no meaning or effect
+  'svnrev_lvl'  =>  '5',    // Minimum account level to show SVN Revision to.
+);
 
 
 //#############################################################################
