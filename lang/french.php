@@ -184,7 +184,8 @@ function lang_index()
     'a_latency' => 'Latence moyenne',
     'guild' => 'Guilde',
     'trinity_rev' => 'Trinity Rev',
-    'using_db' => 'using db',
+    'using_db' => 'using db:',
+    'maxplayers' => 'Max players this uptime session',
   );
   return $lang_index;
 }

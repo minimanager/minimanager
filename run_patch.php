@@ -36,53 +36,53 @@ function print_upload()
     $upload_max_filesize=$tempregs[1]*1024*1024;
 
   $output .= '
-        <center>
-          '.$lang_run_patch['select_sql_file'].' :<br />
-          '.$lang_run_patch['max_filesize'].' '.$upload_max_filesize.' bytes('.round ($upload_max_filesize/1024/1024).' Mbytes)<br />
-          <table class="hidden">
-            <tr>
-              <td>';
-  $output .= '
-                <form enctype="multipart/form-data" action="run_patch.php?action=print_upload" method="post" name="form">
-                  <input type="hidden" name="MAX_FILE_SIZE" value="'.$upload_max_filesize.'" />
-                  <input type="file" name="uploaded_file" />
-                </form>
-              </td>
-              <td>';
-                makebutton($lang_run_patch['open'], 'javascript:do_submit()', 130);
-  $output .= '
-              </td>
-            </tr>
-          </table>
-          <hr />
-          <form action="run_patch.php?action=do_run_patch" method="post" name="form1">
+          <center>
+            '.$lang_run_patch['select_sql_file'].' :<br />
+            '.$lang_run_patch['max_filesize'].' '.$upload_max_filesize.' bytes('.round ($upload_max_filesize/1024/1024).' Mbytes)<br />
             <table class="hidden">
               <tr>
-                <td align="left">'.$lang_run_patch['run_rules'].'</td>
-                <td align="right">'.$lang_run_patch['select_db'].':
-                  <select name="use_db">';
-  foreach ($world_db as $db)
-    $output .= '
-                    <option value=\"'.$db['name'].'">'.$db['name'].'</option>';
-  foreach ($characters_db as $db)
-    $output .= '
-                    <option value="'.$db['name'].'">'.$db['name'].'</option>';
+                <td>';
   $output .= '
-                    <option value="'.$realm_db['name'].'">'.$realm_db['name'].'</option>
-                    <option value="'.$mmfpm_db['name'].'">'.$mmfpm_db['name'].'</option>
-                  </select>
+                  <form enctype="multipart/form-data" action="run_patch.php?action=print_upload" method="post" name="form">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="'.$upload_max_filesize.'" />
+                    <input type="file" name="uploaded_file" />
+                  </form>
                 </td>
-              </tr>
-              <tr><td colspan="2"><textarea name="query" rows="26" cols="97">'.$buffer.'</textarea></td></tr>
-              <tr>
-                <td colspan="2">';
-                  makebutton($lang_run_patch['run_sql'], 'javascript:do_submit(\'form1\',0)" type="wrn', 130);
+                <td>';
+                  makebutton($lang_run_patch['open'], 'javascript:do_submit()', 130);
   $output .= '
                 </td>
               </tr>
             </table>
-          </form>
-        </center>';
+            <hr />
+            <form action="run_patch.php?action=do_run_patch" method="post" name="form1">
+              <table class="hidden">
+                <tr>
+                  <td align="left">'.$lang_run_patch['run_rules'].'</td>
+                  <td align="right">'.$lang_run_patch['select_db'].':
+                    <select name="use_db">';
+  foreach ($world_db as $db)
+    $output .= '
+                      <option value=\"'.$db['name'].'">'.$db['name'].'</option>';
+  foreach ($characters_db as $db)
+    $output .= '
+                      <option value="'.$db['name'].'">'.$db['name'].'</option>';
+  $output .= '
+                      <option value="'.$realm_db['name'].'">'.$realm_db['name'].'</option>
+                      <option value="'.$mmfpm_db['name'].'">'.$mmfpm_db['name'].'</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr><td colspan="2"><textarea name="query" rows="26" cols="97">'.$buffer.'</textarea></td></tr>
+                <tr>
+                  <td colspan="2">';
+                    makebutton($lang_run_patch['run_sql'], 'javascript:do_submit(\'form1\',0)" type="wrn', 130);
+  $output .= '
+                  </td>
+                </tr>
+              </table>
+            </form>
+          </center>';
 
 }
 
@@ -124,7 +124,7 @@ function do_run_patch()
   $line = 0;
 
   $queries = explode("\n",$query);
-  for($i=0; $i<count($queries); $i++)
+  for($i=0; $i<count($queries); ++$i)
   {
     $queries[$i] = trim($queries[$i]);
     if(strpos ($queries[$i], '#') === 0 || strpos ($queries[$i], '--') === 0)
@@ -191,7 +191,7 @@ else
 unset($err);
 
 $output .= '
-        </div>';
+          </div>';
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 

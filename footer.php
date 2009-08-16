@@ -1,8 +1,8 @@
 <?php
 
 
-// level 4 debug prints all global arrays, but can't print content of classes
-//  so we would have to close these, or we can't have debug output
+  // level 4 debug prints all global arrays, but can't print content of classes
+  //  so we would have to close these, or we can't have debug output
   if( 3 < $debug)
   {
     unset($sql);
@@ -42,7 +42,7 @@
                 <td class="table_buttom_middle">';
   $lang_footer = lang_footer();
   $output .=
-                  $lang_footer['bugs_to_admin'].'<a href="mailto:$admin_mail"> '.$lang_footer['site_admin'].'</a><br />';
+                  $lang_footer['bugs_to_admin'].'<a href="mailto:'.$admin_mail.'"> '.$lang_footer['site_admin'].'</a><br />';
   unset($lang_footer);
   $output .= sprintf('
                   Execute time: %.5f', (microtime(true) - $time_start));
@@ -76,7 +76,7 @@
                 </td>
                 <td class="table_buttom_right"></td>
               </tr>
-            </table
+            </table>
             <br />';
   echo $output;
   unset($output);
@@ -111,6 +111,7 @@
   }
 
 ?>
+
           </center>
         </div>
       </div>

@@ -60,7 +60,7 @@ function instances()
                   $lang_instances['total'].' : '.$all_record.'<br /><br />'.
                   generate_pagination('instances.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
 
-// column headers, with links for sorting
+  // column headers, with links for sorting
   $output .= '
                 </td>
               </tr>
@@ -88,7 +88,7 @@ function instances()
       $reset .= $hours.' hours';
 
     $output .= '
-              <tr valign=top>
+              <tr valign="top">
                 <td>'.get_map_name($instances['map'], $sqlm).' ('.$instances['map'].')</td>
                 <td>'.$instances['level_min'].'</td>
                 <td>'.$instances['level_max'].'</td>

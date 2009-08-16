@@ -108,50 +108,50 @@ function update_commands()
     else redirect('command.php?error=1');
 
   $output .= '
-        <center>
-          <form method="get" action="command.php" name="form">
-            <input type="hidden" name="action" value="doupdate" />
-              <table class="lined" style="width: 700px;">
-                <tr>
-                  <th width="1%"></th>';
+          <center>
+            <form method="get" action="command.php" name="form">
+              <input type="hidden" name="action" value="doupdate" />
+                <table class="lined" style="width: 700px;">
+                  <tr>
+                    <th width="1%"></th>';
   for ($i=0; $i<=$user_lvl; ++$i)
   {
     $output .= '
-                  <th width="1%">'.$gm_level_arr[$i][1].'</th>';
+                    <th width="1%">'.$gm_level_arr[$i][1].'</th>';
   }
 
   $output .= '
-                </tr>';
+                  </tr>';
 
   $commands = array_keys($check);
   $n_commands = count($check);
   for ($i=0; $i<$n_commands; ++$i)
   {
     $output .= '
-                <tr>
-                  <td>'.$commands[$i].'</td>';
+                  <tr>
+                    <td>'.$commands[$i].'</td>';
     for ($j=0; $j<=$user_lvl; ++$j)
     {
       $output .= '
-                  <td><input type="radio" name="change['.$commands[$i].']" value="'.$j.'"';
+                    <td><input type="radio" name="change['.$commands[$i].']" value="'.$j.'"';
       if ($j==$check[$commands[$i]])
         $output .= ' checked="checked"';
       $output .= ' /></td>';
     }
     $output .= '
-                </tr>';
+                  </tr>';
   }
   unset($n_commands);
   unset($commands);
   unset($change);
   $output .= '
-              </table>
-            </form>
-            <table width="300" class="hidden">
-              <tr>
-                <td>';
-                  makebutton($lang_command['save'], 'javascript:do_submit()" type="wrn', 130);
-                  makebutton($lang_global['back'], 'command.php" type="def', 130);
+                </table>
+              </form>
+              <table width="300" class="hidden">
+                <tr>
+                  <td>';
+                    makebutton($lang_command['save'], 'javascript:do_submit()" type="wrn', 130);
+                    makebutton($lang_global['back'], 'command.php" type="def', 130);
   $output .= '
                 </td>
               </tr>
