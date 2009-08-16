@@ -71,7 +71,7 @@ function redirect($url)
 function error($err)
 {
   //$err = addslashes($err);
-  redirect("error.php?err=$err");
+  redirect('error.php?err=$err');
 }
 
 
@@ -217,5 +217,6 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $add
   return $page_string;
 
 }
+
 
 ?>

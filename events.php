@@ -23,7 +23,7 @@ function events()
   if (preg_match('/^[[:digit:]]{1,5}$/', $start)); else $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : 'description';
-  if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by='description';
+  if (preg_match('/^[_[:lower:]]{1,11}$/', $order_by)); else $order_by='description';
 
   $dir = (isset($_GET['dir'])) ? $sqlw->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
@@ -32,8 +32,7 @@ function events()
   $dir = ($dir) ? 0 : 1;
 
   // for multipage support
-  $result = $sqlw->query("SELECT count(*) FROM game_event WHERE start_time <> end_time");
-  $all_record = $sqlw->result($result,0);
+  $all_record = $sqlw->result($sqlw->query('SELECT count(*) FROM game_event WHERE start_time <> end_time'),0);
 
   // main data that we need for this page, game events
   $result = $sqlw->query('SELECT description, start_time, occurence, length
@@ -52,8 +51,8 @@ function events()
 
   // multi page links
   $output .=
-                 $lang_events['total'].' : '.$all_record.'<br /><br />'.
-                 generate_pagination('events.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
+                  $lang_events['total'].' : '.$all_record.'<br /><br />'.
+                  generate_pagination('events.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
 
   // column headers, with links for sorting
   $output .= '
@@ -93,11 +92,19 @@ function events()
                 <td>'.$event_duration.'</td>
               </tr>';
   }
+  unset($event_duration);
+  unset($event_occurance);
+  unset($hours);
+  unset($days);
+  unset($events);
+  unset($result);
+
   $output .= '
               <tr>
                 <td colspan="4" class="hidden" align="right" width="25%">';
   // multi page links
   $output .= generate_pagination('events.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
+  unset($start);
   $output .= '
                 </td>
               </tr>
@@ -137,5 +144,6 @@ unset($action_permission);
 unset($lang_events);
 
 require_once 'footer.php';
+
 
 ?>

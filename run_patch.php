@@ -212,4 +212,5 @@ unset($lang_run_patch);
 
 require_once 'footer.php';
 
+
 ?>

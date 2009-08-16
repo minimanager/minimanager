@@ -1,7 +1,9 @@
 <?php
 
 
+// page header, and any additional required libraries
 require_once 'header.php';
+// minimum permission to view page
 valid_login($action_permission['read']);
 
 $output .= '
@@ -38,8 +40,9 @@ $output .= '
             <br />
             <br />
           </center>
-          <!-- irc.php -->';
+          <!-- end of irc.php -->';
 
 require_once 'footer.php';
+
 
 ?>

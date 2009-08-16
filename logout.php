@@ -25,4 +25,5 @@ if (strpos($_SERVER['SERVER_SOFTWARE'], 'Microsoft-IIS') === false)
 else
   die('<meta http-equiv="refresh" content="0;URL=login.php" />');
 
+
 ?>

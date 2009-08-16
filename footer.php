@@ -6,10 +6,10 @@
   if( 3 < $debug)
   {
     unset($sql);
-    unset($sqlc);
-    unset($sqlw);
     unset($sqlr);
+    unset($sqlc);
     unset($sqlm);
+    unset($sqlw);
   }
 
   // we start with a lead of 10 spaces,
@@ -76,9 +76,8 @@
                 </td>
                 <td class="table_buttom_right"></td>
               </tr>
-            </table>
-          </center>
-          <br />';
+            </table
+            <br />';
   echo $output;
   unset($output);
   // we need to close $output before we start debug mode 3 or higher
@@ -86,33 +85,33 @@
   if(2 < $debug)
   {
     echo '
-          <table>
-            <tr>
-              <td align="left">';
+            <table>
+              <tr>
+                <td align="left">';
     $arrayObj = new ArrayObject(get_defined_vars());
     for($iterator = $arrayObj->getIterator(); $iterator->valid(); $iterator->next())
     {
       echo '
-                <br />'.$iterator->key() . ' => ' . $iterator->current();
+                  <br />'.$iterator->key() . ' => ' . $iterator->current();
     }
     // debug mode 3 lists all global vars and their values, but not for arrays
     // debug mode 4 branches all arrays and their content,
     if(3 < $debug)
     {
       echo '
-                <pre>';
-                  print_r ($GLOBALS);
+                  <pre>';
+                    print_r ($GLOBALS);
       echo '
-                </pre>';
+                  </pre>';
     }
     echo '
-              </td>
-            </tr>
-          <table>';
+                </td>
+              </tr>
+            <table>';
   }
 
 ?>
-
+          </center>
         </div>
       </div>
     </center>

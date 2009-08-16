@@ -40,8 +40,8 @@ class SQL //MySQL
       ++$this->num_queries;
       return $this->query_result;
     } else {
-      return mysql_error();
-      //return false;
+      die(error(mysql_error()));
+      return false;
     }
   }
 

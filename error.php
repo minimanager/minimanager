@@ -1,5 +1,6 @@
 <?php
 
+
 // page header, and any additional required libraries
 require_once 'header.php';
 // we get the error message which was passed to us
@@ -43,5 +44,6 @@ $output .= '
           <!-- end of error.php -->';
 
 require_once 'footer.php';
+
 
 ?>

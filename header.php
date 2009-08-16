@@ -12,14 +12,14 @@ if (file_exists('scripts/config.php'))
   if (file_exists('scripts/config.dist.php'))
     require_once 'scripts/config.dist.php';
   else
-    exit("<center><br><code>'scripts/config.dist.php'</code> not found,<br>
-          please restore <code>'scripts/config.dist.php'</code></center>");
+    exit('<center><br><code>\'scripts/config.dist.php\'</code> not found,<br>
+          please restore <code>\'scripts/config.dist.php\'</code></center>');
   require_once 'scripts/config.php';
 }
 else
-  exit("<center><br><code>'scripts/config.php'</code> not found,<br>
-        please copy <code>'scripts/config.dist.php'</code> to
-        <code>'scripts/config.php'</code> and make appropriate changes.");
+  exit('<center><br><code>\'scripts/config.php\'</code> not found,<br>
+        please copy <code>\'scripts/config.dist.php\'</code> to
+        <code>\'scripts/config.php\'</code> and make appropriate changes.');
 
 //---------------------Error reports for Debugging-----------------------------
 if ($debug) $tot_queries = 0;
@@ -185,13 +185,14 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
   unset($lookup_file);
   unset($menu_array);
 
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-  $result = $sqlr->query('SELECT id, name FROM `realmlist` LIMIT 10');
-
   $output .= '
                 <li><a class="trigger" href="edit.php">'.$lang_header['my_acc'].'</a>
                   <ul>';
+
+  $sqlr = new SQL;
+  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
+  $result = $sqlr->query('SELECT id, name FROM `realmlist` LIMIT 10');
 
   // we check how many realms are configured, this does not check if config is valid
   if ( ( 1 < $sqlr->num_rows($result)) && ( 1 < count($server)) && ( 1 < count($characters_db)) )
