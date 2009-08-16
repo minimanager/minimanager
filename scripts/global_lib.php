@@ -71,7 +71,7 @@ function redirect($url)
 function error($err)
 {
   //$err = addslashes($err);
-  redirect('error.php?err=$err');
+  redirect('error.php?err='.$err.'');
 }
 
 

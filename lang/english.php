@@ -1009,17 +1009,17 @@ function lang_user()
 // ----- STAT.PHP -----
 function lang_stat()
 {
-$lang_stat = array
+  $lang_stat = array
   (
     'srv_statistics' => 'Server Statistics',
     'general_info' => 'General Information',
     'tot_accounts' => 'Total Accounts',
     'total_of' => 'There is total of',
-    'gms_one_for' => 'GMs, One for every',
+    'gms_one_for' => 'GMs, one for every',
     'players' => 'Players',
     'tot_chars_on_realm' => 'Total Characters on Realm',
     'average_of' => 'An average of',
-    'chars_per_acc' => 'Characters per Account',
+    'chars_per_acc' => 'characters per account',
     'horde' => 'Horde',
     'alliance' => 'Alliance',
     'chars_by_race' => 'Character Share by Race',
@@ -1030,7 +1030,10 @@ $lang_stat = array
     'max_uptime' => 'Maximum Server Uptime',
     'uptime_prec' => ' Uptime percentage since first run',
     'unique_ip' => 'Unique IPs last 24 Hour',
-    'on_statistics' => 'Online Statistics'
+    'on_statistics' => 'Online Statistics',
+    'max_players' => 'Max players online since',
+    'max_ever' => 'first run',
+    'max_restart' => 'last restart',
   );
   return $lang_stat;
 }

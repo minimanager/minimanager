@@ -1019,7 +1019,7 @@ function lang_stat()
     'players' => 'Joueurs',
     'tot_chars_on_realm' => 'Total de personnages sur le royaume',
     'average_of' => 'Une moyenne de ',
-    'chars_per_acc' => 'Personnages par compte',
+    'chars_per_acc' => 'personnages par compte',
     'horde' => 'Horde',
     'alliance' => 'Alliance',
     'chars_by_race' => 'Répartition de personnage par Race',
@@ -1030,7 +1030,10 @@ function lang_stat()
     'max_uptime' => 'Uptime Maximum du Serveur',
     'uptime_prec' => ' Pourcentage d\'Uptime depuis le premier lancement',
     'unique_ip' => 'IPs Unique pour les dernières 24H',
-    'on_statistics' => 'Statistiques en ligne'
+    'on_statistics' => 'Statistiques en ligne',
+    'max_players' => 'Max players online since',
+    'max_ever' => 'first run',
+    'max_restart' => 'last restart',
   );
   return $lang_stat;
 }
