@@ -53,7 +53,7 @@ a:hover, a:focus{ color: #A47236; text-decoration: none }
 #menubar {
 	position:relative;
 	left:25px;
-	top:37px;
+	top:81px;
 	z-index:100;
 	width: 36em; /*total len*/
 	text-align: left;

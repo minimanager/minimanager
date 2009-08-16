@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos/Trinity
  * License: GNU General Public License v2(GPL)
  * Language: French
- * Supported Minimanager Revision: r313
+ * Supported Minimanager Revision: r352
  * Translator: fra298
  */
 
@@ -185,7 +185,7 @@ function lang_index()
     'guild' => 'Guilde',
     'trinity_rev' => 'Trinity Rev',
     'using_db' => 'using db:',
-    'maxplayers' => 'Max players this uptime session',
+    'maxplayers' => 'Joueurs max pour cette session',
   );
   return $lang_index;
 }
@@ -236,7 +236,7 @@ function lang_header()
   'add_motd' => 'Ajouter un message du jour',
   'realm' => 'Royaume',
   'irc' => 'Applet IRC',
-  'spelld' => 'Spell(s) Disabled',
+  'spelld' => 'Sort(s) Désactivé(s)',
 
   'items' => 'Items',
   'creatures' => 'Creatures',
@@ -1031,9 +1031,9 @@ function lang_stat()
     'uptime_prec' => ' Pourcentage d\'Uptime depuis le premier lancement',
     'unique_ip' => 'IPs Unique pour les dernières 24H',
     'on_statistics' => 'Statistiques en ligne',
-    'max_players' => 'Max players online since',
-    'max_ever' => 'first run',
-    'max_restart' => 'last restart',
+    'max_players' => 'Mombre max de joueurs depuis',
+    'max_ever' => 'le premier démmarrage',
+    'max_restart' => 'le dernier redémmarrage',
   );
   return $lang_stat;
 }
@@ -1981,33 +1981,33 @@ function lang_spelld()
 {
   $lang_spelld = array
   (
-    'add_spell' => 'Add spell',
-    'spell_list' => 'Spell(s) List',
-    'by_id' => 'by spell ID',
-    'by_disable' => 'by mask',
-    'by_comment' => 'by spell name',
-    'entry' => 'Spell ID',
-    'disable_mask' => 'Disable mask',
-    'comment' => 'Spell name',
-    'del_selected_spells' => 'Delete checked spell(s)',
-    'tot_spell' => 'Total Spells',
-    'add_new_spell' => 'Add new spell',
-    'entry2' => 'Spell ID (numbers only)',
-    'disable_mask2' => 'Spell Disable Mask (Check table)',
-    'comment2' => 'Spell name (max 64 chars)',
-    'dm_exp' => 'Spell Disable Mask - Specifies who the spell is disabled for.',
-    'value' => ' Value ',
+    'add_spell' => 'Ajouter un sort',
+    'spell_list' => 'Liste de sort(s)',
+    'by_id' => 'par ID de sort',
+    'by_disable' => 'par masque',
+    'by_comment' => 'par nom de sort',
+    'entry' => 'ID du sort',
+    'disable_mask' => 'Masque de désactivation,',
+    'comment' => 'Nom',
+    'del_selected_spells' => 'Effacer le(s) sort(s) selectionné(s)',
+    'tot_spell' => 'Total de sorts',
+    'add_new_spell' => 'Ajouter un nouveau sort',
+    'entry2' => 'ID du sort (Seulement des nombres)',
+    'disable_mask2' => 'Masque de désactivation de sort (Vérification de la table))',
+    'comment2' => 'Nom du sort (max 64 caractères)',
+    'dm_exp' => 'Masque de désactivation de sort - Determine pour qui le sort est désactivé.',
+    'value' => ' Valeur ',
     'type' => ' Type ',
-    'disabled_p' => ' Spell disabled for players',
-    'disabled_crea_npc_pets' => ' Spell disabled for creatures/npc/pets ',
-    'disabled_p_crea_npc_pets' => ' Spell disabled for players and creatures/npc/pets ',
-    'wrong_fields' => 'Some Fields Wrong',
-    'err_add_entry' => 'Adding New Spell Fail',
-    'spell_added' => 'New Spell Added',
-    'spells' => 'Spell(s) Disabled',
-    'search_results' => 'Search result',
-    'spell_deleted' => 'Spell deleted!',
-    'spell_not_deleted' => 'No spell deleted!',
+    'disabled_p' => ' Sorts désactivés pour les joueurs',
+    'disabled_crea_npc_pets' => ' Sorts désactivés pour les créatures/pnj/familiers ',
+    'disabled_p_crea_npc_pets' => ' Sorts désactivés pour les joueurs et les créatures/pnj/familiers ',
+    'wrong_fields' => 'Certains champs sont faux',
+    'err_add_entry' => 'Echec de l\'ajout de nouveau sort',
+    'spell_added' => 'Nouveau sort ajouté',
+    'spells' => 'Sort(s) Désactivé',
+    'search_results' => 'Résultat de recherche',
+    'spell_deleted' => 'Sort éffacé!',
+    'spell_not_deleted' => 'aucun sort éffacé!',
   );
   return $lang_spelld;
 }

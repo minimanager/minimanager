@@ -70,23 +70,13 @@ $output .= '
     <script type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="libs/js/general.js"></script>
     <script type="text/javascript" src="libs/js/layout.js"></script>
-
-    <!--[if lte IE 7]>
-      <style>
-        #menuwrapper, #menubar ul a {height: 1%;}
-        a:active {width: auto;}
-        legend{margin:5px 0px 20px 0px;}
-        span.button{margin:15px 0px 0px 0px;}
-        #tab a { display: inline-block;}
-      </style>
-     <![endif]-->
   </head>
 
   <body onload="dynamicLayout();">
     <center>
       <table class="table_top">
         <tr>
-          <td class="table_top_left">';
+          <td class="table_top_left" valign="top">';
 unset($title);
 
 // check for host php script execution time limit,
@@ -186,7 +176,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
   unset($menu_array);
 
   $output .= '
-                <li><a class="trigger" href="edit.php">'.$lang_header['my_acc'].'</a>
+                <li><a href="edit.php">'.$lang_header['my_acc'].'</a>
                   <ul>';
 
   $sqlr = new SQL;

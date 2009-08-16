@@ -19,13 +19,13 @@
   $output .= '
           <!-- start of footer.php -->
         </div>
-        <div id="body_buttom">
-          <center>';
+        <div id="body_buttom">';
   // show login and register button at bottom of every page if guest mode is activated
   if($developer_test_mode && $allow_anony && empty($_SESSION['logged_in']))
   {
     $lang_login = lang_login();
     $output .= '
+          <center>
             <table>
               <tr>
                 <td>
@@ -33,7 +33,8 @@
                   <a class="button" style="width:130px;" href="login.php">Login</a>
                 </td>
               </tr>
-            </table>';
+            </table>
+          </center>';
   }
   $output .= '
             <table class="table_buttom">
@@ -112,7 +113,6 @@
 
 ?>
 
-          </center>
         </div>
       </div>
     </center>
