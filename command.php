@@ -105,7 +105,7 @@ function update_commands()
   valid_login($action_permission['update']);
 
   if(isset($_GET['check'])) $check = $_GET['check'];
-    else redirect("command.php?error=1");
+    else redirect('command.php?error=1');
 
   $output .= '
         <center>
@@ -130,7 +130,7 @@ function update_commands()
     $output .= '
                 <tr>
                   <td>'.$commands[$i].'</td>';
-    for ($j=0; $j<=$user_lvl; $j++)
+    for ($j=0; $j<=$user_lvl; ++$j)
     {
       $output .= '
                   <td><input type="radio" name="change['.$commands[$i].']" value="'.$j.'"';
@@ -142,6 +142,8 @@ function update_commands()
                 </tr>';
   }
   unset($n_commands);
+  unset($commands);
+  unset($change);
   $output .= '
               </table>
             </form>
@@ -180,11 +182,14 @@ function doupdate_commands()
   $n_commands = count($change);
   for ($i=0; $i<$n_commands; ++$i)
   {
-    $query = $sqlw->query('UPDATE command SET security = '.$change[$commands[$i]].' WHERE name= '.$commands[$i].'');
+    $query = $sqlw->query('UPDATE command SET security = '.$change[$commands[$i]].' WHERE name= \''.$commands[$i].'\'');
   }
-  unset(n_commands);
+  unset($n_commands);
+  unset($commands);
+  unset($change);
   redirect('command.php');
 }
+
 
 //#############################################################################
 // MAIN
@@ -192,25 +197,21 @@ function doupdate_commands()
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
 $output .= '
-        <div class="top">';
+          <div class="top">';
 
 $lang_command = lang_command();
 
-switch ($err)
-{
-  case 1:
-    $output .= '
-          <h1><font class="error">'.$lang_global['empty_fields'].'</font></h1>';
-    break;
-  default: //no error
-    $output .= '
-          <h1>'.$lang_command['command_list'].'</h1>';
-}
+if(1 == $err)
+  $output .= '
+            <h1><font class="error">'.$lang_global['empty_fields'].'</font></h1>';
+else
+  $output .= '
+            <h1>'.$lang_command['command_list'].'</h1>';
 
 unset($err);
 
 $output .= '
-        </div>';
+          </div>';
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
