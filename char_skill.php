@@ -1,38 +1,35 @@
 <?php
 
 
-require_once("header.php");
-require_once("scripts/defines.php");
-require_once("libs/char_lib.php");
-require_once("libs/skill_lib.php");
+require_once 'header.php';
+require_once 'libs/char_lib.php';
+require_once 'libs/skill_lib.php';
 valid_login($action_permission['read']);
 
 //########################################################################################################################
 // SHOW CHARACTERS SKILLS
 //########################################################################################################################
-function char_skill()
+function char_skill(&$sqlr, &$sqlc)
 {
-  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db, $mmfpm_db,
     $action_permission, $user_lvl, $user_name, $skill_datasite;
   wowhead_tt();
 
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-
+  // this is multi realm support, as of writing still under development
+  //  this page is already implementing it
   if (empty($_GET['realm']))
     $realmid = $realm_id;
   else
   {
     $realmid = $sqlr->quote_smart($_GET['realm']);
-    if (!is_numeric($realmid)) $realmid = $realm_id;
+    if (is_numeric($realmid))
+      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+    else
+      $realmid = $realm_id;
   }
-
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'],
-    $characters_db[$realmid]['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
@@ -114,40 +111,43 @@ function char_skill()
         385 => $lang_char['wise']
       );
 
+      $sqlm = new SQL;
+      $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
       for ($i = CHAR_DATA_OFFSET_SKILL_DATA; $i <= CHAR_DATA_OFFSET_SKILL_DATA+384 ; $i+=3)
       {
-        if (($char_data[$i])&&(skill_get_name($char_data[$i] & 0x0000FFFF )))
+        if (($char_data[$i])&&(skill_get_name($char_data[$i] & 0x0000FFFF, $sqlm)))
         {
           $temp = unpack("S", pack("L", $char_data[$i+1]));
           $skill = ($char_data[$i] & 0x0000FFFF);
 
-          if (skill_get_type($skill) == 6)
+          if (skill_get_type($skill, $sqlm) == 6)
           {
-            array_push($weapon_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
+            array_push($weapon_array , array(($user_lvl ? $skill : ''), skill_get_name($skill, $sqlm), $temp[1]));
           }
-          elseif (skill_get_type($skill) == 7)
+          elseif (skill_get_type($skill, $sqlm) == 7)
           {
-            array_push($class_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
+            array_push($class_array , array(($user_lvl ? $skill : ''), skill_get_name($skill, $sqlm), $temp[1]));
           }
-          elseif (skill_get_type($skill) == 8)
+          elseif (skill_get_type($skill, $sqlm) == 8)
           {
-            array_push($armor_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
+            array_push($armor_array , array(($user_lvl ? $skill : ''), skill_get_name($skill, $sqlm), $temp[1]));
           }
-          elseif (skill_get_type($skill) == 9)
+          elseif (skill_get_type($skill, $sqlm) == 9)
           {
-            array_push($prof_2_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
+            array_push($prof_2_array , array(($user_lvl ? $skill : ''), skill_get_name($skill, $sqlm), $temp[1]));
           }
-          elseif (skill_get_type($skill) == 10)
+          elseif (skill_get_type($skill, $sqlm) == 10)
           {
-            array_push($language_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
+            array_push($language_array , array(($user_lvl ? $skill : ''), skill_get_name($skill, $sqlm), $temp[1]));
           }
-          elseif (skill_get_type($skill) == 11)
+          elseif (skill_get_type($skill, $sqlm) == 11)
           {
-            array_push($prof_1_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
+            array_push($prof_1_array , array(($user_lvl ? $skill : ''), skill_get_name($skill, $sqlm), $temp[1]));
           }
           else
           {
-            array_push($skill_array , array(($user_lvl ? $skill : ''), skill_get_name($skill), $temp[1]));
+            array_push($skill_array , array(($user_lvl ? $skill : ''), skill_get_name($skill, $sqlm), $temp[1]));
           }
         }
       }
@@ -323,22 +323,16 @@ function char_skill()
 // MAIN
 //########################################################################################################################
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 $lang_char = lang_char();
 
-switch ($action)
-{
-  case "unknown":
-    break;
-  default:
-    char_skill();
-}
+char_skill($sqlr, $sqlc);
 
-unset($action);
+//unset($action);
 unset($action_permission);
 unset($lang_char);
 
-require_once("footer.php");
+require_once 'footer.php';
 
 ?>

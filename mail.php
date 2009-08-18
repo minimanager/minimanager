@@ -328,85 +328,75 @@ function send_mail()
 // 2009-08-08
 function send_ingame_mail($realm_id, $massmails)
 {
-  require_once("./libs/telnet_lib.php");
+  require_once 'libs/telnet_lib.php';
   global $server;
   $telnet = new telnet_lib();
-  $telnet->show_connect_error=0;
 
   //$massmails array format
   //($to, $subject, $body, $gold = 0, $item = 0, $stack = 1)
 
-  $result = $telnet->Connect($server[$realm_id]['addr'],$server[$realm_id]['telnet_user'],$server[$realm_id]['telnet_pass']);
+  $result = $telnet->Connect($server[$realm_id]['addr'], $server[$realm_id]['telnet_port'], $server[$realm_id]['telnet_user'], $server[$realm_id]['telnet_pass']);
 
-  switch ($result)
+  if (0 == $result)
   {
-    case 0:
-      $mess_str = '';
-      $result = '';
-      foreach($massmails as $mails)
+    $mess_str = '';
+    $result = '';
+    foreach($massmails as $mails)
+    {
+      if ($mails[3] && $mails[4])
       {
-        if ($mails[3] && $mails[4])
-        {
-          $mess_str1 = "send money ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[3]."";
-          $telnet->DoCommand($mess_str1, $result1);
+        $mess_str1 = "send money ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[3]."";
+        $telnet->DoCommand($mess_str1, $result1);
 
-          $mess_str .= $mess_str1."<br >";
-          $result .= $result1."";
+        $mess_str .= $mess_str1."<br >";
+        $result .= $result1."";
 
-          $mess_str1 = "send item ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[4].(($mails[5] > 1) ? "[:count".$mails[5]."]" : " ");
-          $telnet->DoCommand($mess_str1, $result1);
+        $mess_str1 = "send item ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[4].(($mails[5] > 1) ? "[:count".$mails[5]."]" : " ");
+        $telnet->DoCommand($mess_str1, $result1);
 
-          $mess_str .= $mess_str1."<br >";
-          $result .= $result1."";
-        }
-        elseif ($mails[3])
-        {
-          $mess_str1 = "send money ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[3]."";
-          $telnet->DoCommand($mess_str1, $result1);
-
-          $mess_str .= $mess_str1."<br >";
-          $result .= $result1."";
-        }
-        elseif ($mails[4])
-        {
-          $mess_str1 = "send item ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[4].(($mails[5] > 1) ? "[:count".$mails[5]."]" : " ");
-          $telnet->DoCommand($mess_str1, $result1);
-
-          $mess_str .= $mess_str1."<br >";
-          $result .= $result1."";
-        }
-        else
-        {
-          $mess_str1 = "send mail ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\"";
-          $telnet->DoCommand($mess_str1, $result1);
-
-          $mess_str .= $mess_str1."<br >";
-          $result .= $result1."";
-        }
+        $mess_str .= $mess_str1."<br >";
+        $result .= $result1."";
       }
-      $result = str_replace("mangos>","",$result);
-      $result = str_replace(array("\r\n", "\n", "\r"), '<br />', $result);
-      $mess_str .= "<br /><br />".$result;
-      $telnet->Disconnect();
-      redirect("mail.php?action=result&error=6&mess=$mess_str");
-      break;
-    case 1:
-      $mess_str = "Connect failed: Unable to open network connection";
-      redirect("mail.php?action=result&error=6&mess=$mess_str");
-      break;
-    case 2:
-      $mess_str = "Connect failed: Unknown host";
-      redirect("mail.php?action=result&error=6&mess=$mess_str");
-      break;
-    case 3:
-      $mess_str = "Connect failed: Login failed";
-      redirect("mail.php?action=result&error=6&mess=$mess_str");
-      break;
-    case 4:
-      $mess_str = "Connect failed: Your PHP version does not support PHP Telnet";
-      redirect("mail.php?action=result&error=6&mess=$mess_str");
-      break;
+      elseif ($mails[3])
+      {
+        $mess_str1 = "send money ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[3]."";
+        $telnet->DoCommand($mess_str1, $result1);
+
+        $mess_str .= $mess_str1."<br >";
+        $result .= $result1."";
+      }
+      elseif ($mails[4])
+      {
+        $mess_str1 = "send item ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\" ".$mails[4].(($mails[5] > 1) ? "[:count".$mails[5]."]" : " ");
+        $telnet->DoCommand($mess_str1, $result1);
+
+        $mess_str .= $mess_str1."<br >";
+        $result .= $result1."";
+      }
+      else
+      {
+        $mess_str1 = "send mail ".$mails[0]." \"".$mails[1]."\" \"".$mails[2]."\"";
+        $telnet->DoCommand($mess_str1, $result1);
+
+        $mess_str .= $mess_str1."<br >";
+        $result .= $result1."";
+      }
+    }
+    $result = str_replace("mangos>","",$result);
+    $result = str_replace(array("\r\n", "\n", "\r"), '<br />', $result);
+    $mess_str .= "<br /><br />".$result;
+    $telnet->Disconnect();
   }
+  elseif (1 == $result)
+    $mess_str = "Connect failed: Unable to open network connection";
+  elseif (2 == $result)
+    $mess_str = "Connect failed: Unknown host";
+  elseif (3 == $result)
+    $mess_str = "Connect failed: Login failed";
+  elseif (4 == $result)
+    $mess_str = "Connect failed: Your PHP version does not support PHP Telnet";
+
+  redirect("mail.php?action=result&error=6&mess=$mess_str");
 
 }
 
@@ -422,30 +412,29 @@ function result()
 {
   global $lang_global, $output;
   $mess = (isset($_GET['mess'])) ? $_GET['mess'] : NULL;
-  $output .= "
+  $output .= '
         <center>
           <br />
-          <table width=\"400\" class=\"flat\">
+          <table width="400" class="flat">
             <tr>
-              <td align=\"left\">
-                <br />$mess<br />";
+              <td align="left">
+                <br />'.$mess.'<br />';
   unset($mess);
-  $output .="
+  $output .= '
               </td>
             </tr>
           </table>
           <br />
-          <table width=\"400\" class=\"hidden\">
+          <table width="400" class="hidden">
             <tr>
-              <td align=\"center\">";
-                makebutton($lang_global['back'], "javascript:window.history.back()", 130);
-  $output .= "
+              <td align="center">';
+                makebutton($lang_global['back'], 'javascript:window.history.back()', 130);
+  $output .= '
               </td>
             </tr>
           </table>
           <br />
-        </center>
-";
+        </center>';
 
 }
 

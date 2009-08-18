@@ -301,10 +301,10 @@ function browse_users(&$sqlr, &$sqlc)
                 <tr>
                   <td colspan="8" align="left" class="hidden">';
   if($user_lvl >= $action_permission['delete'])
-                    makebutton($lang_user['del_selected_users'], 'javascript:do_submit("form1",0)" type="wrn',230);
+                    makebutton($lang_user['del_selected_users'], 'javascript:do_submit(\'form1\',0)" type="wrn',230);
 // backup is broken
 //if($user_lvl >= $action_permission['insert'])
-//                  makebutton($lang_user['backup_selected_users'], 'javascript:do_submit("form1",1)',230);
+//                  makebutton($lang_user['backup_selected_users'], 'javascript:do_submit(\'form1\',1)',230);
   $output .= '
                   </td>
                   <td colspan="';

@@ -9,9 +9,9 @@ valid_login($action_permission['read']);
 //########################################################################################################################
 // SHOW CHAR REPUTATION
 //########################################################################################################################
-function char_rep()
+function char_rep(&$sqlr, &$sqlc)
 {
-  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db, $mmfpm_db,
     $action_permission, $user_lvl, $user_name;
 
   require_once("libs/fact_lib.php");
@@ -21,20 +21,18 @@ function char_rep()
   if (empty($_GET['id']))
     error($lang_global['empty_fields']);
 
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-
+  // this is multi realm support, as of writing still under development
+  //  this page is already implementing it
   if (empty($_GET['realm']))
     $realmid = $realm_id;
   else
   {
     $realmid = $sqlr->quote_smart($_GET['realm']);
-    if (!is_numeric($realmid)) $realmid = $realm_id;
+    if (is_numeric($realmid))
+      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+    else
+      $realmid = $realm_id;
   }
-
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'],
-    $characters_db[$realmid]['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
   if (!is_numeric($id))
@@ -217,6 +215,9 @@ function char_rep()
                     <table id=\"i13\" class=\"lined\" style=\"width: 535px; display: table;\">",0)
       );
 
+      $sqlm = new SQL;
+      $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
       if ($sqlc->num_rows($result))
       {
         while ($fact = $sqlc->fetch_row($result))
@@ -224,11 +225,11 @@ function char_rep()
           $faction  = $fact[0];
           $standing = $fact[1];
 
-          $rep_rank      = fact_get_reputation_rank($faction, $standing, $char[2]);
+          $rep_rank      = fact_get_reputation_rank($faction, $standing, $char[2], $sqlm);
           $rep_rank_name = $reputation_rank[$rep_rank];
           $rep_cap       = $reputation_rank_length[$rep_rank];
-          $rep           = fact_get_reputation_at_rank($faction, $standing, $char[2]);
-          $faction_name  = fact_get_faction_name($faction);
+          $rep           = fact_get_reputation_at_rank($faction, $standing, $char[2], $sqlm);
+          $faction_name  = fact_get_faction_name($faction, $sqlm);
           $ft            = fact_get_faction_tree($faction);
 
           // not show alliance rep for horde and vice versa:
@@ -320,19 +321,13 @@ function char_rep()
 // MAIN
 //########################################################################################################################
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 $lang_char = lang_char();
 
-switch ($action)
-{
-  case "unknown":
-    break;
-  default:
-    char_rep();
-}
+char_rep($sqlr, $sqlc);
 
-unset($action);
+//unset($action);
 unset($action_permission);
 unset($lang_char);
 

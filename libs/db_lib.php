@@ -1,5 +1,6 @@
 <?php
 
+
 if ($db_type === 'MySQL')
   require_once 'db_lib/mysql.php';
 elseif ($db_type === 'PgSQL')

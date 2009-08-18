@@ -178,25 +178,25 @@ function char_get_avatar_img($level, $gender, $race, $class,$gm=0)
 {
   if ($gm > 0)
   {
-    if(file_exists("img/avatars/bliz/$gm.gif"))
-      $avatar = "img/avatars/bliz/$gm.gif";
+    if(file_exists('img/avatars/bliz/'.$gm.'.gif'))
+      $avatar = 'img/avatars/bliz/'.$gm.'.gif';
     else
-      $avatar = "img/avatars/bliz/bliz.gif";
+      $avatar = 'img/avatars/bliz/bliz.gif';
   }
   elseif($level < 60)
   {
-    $avatar = "img/avatars/np/$gender-$race-$class.gif";
+    $avatar = 'img/avatars/np/'.$gender.'-'.$race.'-'.$class.'.gif';
   }
   elseif($level < 70)
   {
-    $avatar = "img/avatars/60/$gender-$race-$class.gif";
+    $avatar = 'img/avatars/60/'.$gender.'-'.$race.'-'.$class.'.gif';
   }
   elseif($level < 80)
   {
-    $avatar = "img/avatars/70/$gender-$race-$class.gif";
+    $avatar = 'img/avatars/70/'.$gender.'-'.$race.'-'.$class.'.gif';
   }
   else
-    $avatar = "img/avatars/80/$gender-$race-$class.gif";
+    $avatar = 'img/avatars/80/'.$gender.'-'.$race.'-'.$class.'.gif';
 
   return $avatar;
 }

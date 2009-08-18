@@ -41,4 +41,5 @@ function achieve_get_points($id, &$sqlm)
   return $achievement_points['rewpoints'];
 }
 
+
 ?>
