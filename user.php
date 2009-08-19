@@ -759,7 +759,6 @@ function edit_user()
         <center>
           <script type="text/javascript" src="js/sha1.js"></script>
           <script type="text/javascript">
-          <!--
             function do_submit_data ()
             {
               if ((document.form.username.value != "'.$data['username'].'") && (document.form.new_pass.value == "******"))
@@ -774,7 +773,6 @@ function edit_user()
                 do_submit();
               }
             }
-          !-->
           </script>
           <fieldset style="width: 550px;">
             <legend>'.$lang_user['edit_acc'].'</legend>
@@ -1088,6 +1086,7 @@ function doedit_user()
   //make sure username/pass at least 4 chars long and less than max
   if ((strlen($username) < 4) || (strlen($username) > 15))
     redirect("user.php?action=edit_user&id=$id&error=8");
+
   if ($gmlevel >= $user_lvl)
     redirect("user.php?action=edit_user&&id={$_POST['id']}&error=16");
   require_once("libs/valid_lib.php");
