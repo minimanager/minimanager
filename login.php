@@ -150,9 +150,9 @@ function login()
                 </tr>
               </table>
               <script type=\"text/javascript\">
-                <!--
+                // <![CDATA[
                   document.form.user.focus();
-                //-->
+                // ]]>
               </script>
             </form>
             <br />

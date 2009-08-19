@@ -65,14 +65,14 @@ function char_friends()
     {
       $output .= "
         <center>
-          <script type=\"text/javascript\" language=\"JavaScript\">
-            <!--
+          <script type=\"text/javascript\">
+            // <![CDATA[
             function wrap()
             {
               if (getBrowserWidth() > 1024)
               document.write(\"</table></td><td><table class='lined' style='width: 1%;'>\");
             }
-            //-->
+            // ]]>
           </script>
           <div id=\"tab\">
             <ul>
@@ -184,7 +184,7 @@ function char_friends()
       }
 
       $output .= "
-                    <script type=\"text/javascript\" language=\"JavaScript\">
+                    <script type=\"text/javascript\">
                       // <![CDATA[
                         wrap();
                       // ]]>

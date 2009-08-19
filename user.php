@@ -610,21 +610,23 @@ function add_new()
         <center>
           <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
           <script type=\"text/javascript\">
-            function do_submit_data ()
-            {
-              if (document.form.new_pass1.value != document.form.new_pass2.value)
+            // <![CDATA[
+              function do_submit_data ()
               {
-                alert('{$lang_user['nonidentical_passes']}');
-                return;
+                if (document.form.new_pass1.value != document.form.new_pass2.value)
+                {
+                  alert('{$lang_user['nonidentical_passes']}');
+                  return;
+                }
+                else
+                {
+                  document.form.pass.value = hex_sha1(document.form.new_user.value.toUpperCase()+':'+document.form.new_pass1.value.toUpperCase());
+                  document.form.new_pass1.value = '0';
+                  document.form.new_pass2.value = '0';
+                  do_submit();
+                }
               }
-              else
-              {
-                document.form.pass.value = hex_sha1(document.form.new_user.value.toUpperCase()+':'+document.form.new_pass1.value.toUpperCase());
-                document.form.new_pass1.value = '0';
-                document.form.new_pass2.value = '0';
-                do_submit();
-              }
-            }
+            // ]]>
           </script>
           <fieldset style=\"width: 550px;\">
             <legend>{$lang_user['create_new_acc']}</legend>
