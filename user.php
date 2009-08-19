@@ -761,20 +761,22 @@ function edit_user()
         <center>
           <script type="text/javascript" src="js/sha1.js"></script>
           <script type="text/javascript">
-            function do_submit_data ()
-            {
-              if ((document.form.username.value != "'.$data['username'].'") && (document.form.new_pass.value == "******"))
+            // <![CDATA[
+              function do_submit_data ()
               {
-                alert("If you are changing Username, The password must be changed too.");
-                return;
+                if ((document.form.username.value != "'.$data['username'].'") && (document.form.new_pass.value == "******"))
+                {
+                  alert("If you are changing Username, The password must be changed too.");
+                  return;
+                }
+                else
+                {
+                  document.form.pass.value = hex_sha1(document.form.username.value.toUpperCase()+":"+document.form.new_pass.value.toUpperCase());
+                  document.form.new_pass.value = "0";
+                  do_submit();
+                }
               }
-              else
-              {
-                document.form.pass.value = hex_sha1(document.form.username.value.toUpperCase()+":"+document.form.new_pass.value.toUpperCase());
-                document.form.new_pass.value = "0";
-                do_submit();
-              }
-            }
+            // ]]>
           </script>
           <fieldset style="width: 550px;">
             <legend>'.$lang_user['edit_acc'].'</legend>
