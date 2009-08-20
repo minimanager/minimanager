@@ -224,4 +224,5 @@ $tab_del_user_characters_trinity = Array
 
 $tab_backup_user_characters_trinity = $tab_del_user_characters_trinity;
 
+
 ?>

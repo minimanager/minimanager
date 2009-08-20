@@ -39,7 +39,7 @@ function del_char($guid,$realm)
         (SELECT id FROM character_pet WHERE owner IN
         (SELECT guid FROM characters WHERE guid = '$guid'))");
       $query = $sqlc->query("
-        DELETE FROM pet_spell_cookdown WHERE guid IN
+        DELETE FROM pet_spell_cooldown WHERE guid IN
         (SELECT id FROM character_pet WHERE owner IN
         (SELECT guid FROM characters WHERE guid = '$guid'))");
       $query = $sqlc->query("
@@ -100,7 +100,7 @@ function del_acc($acc_id)
             (SELECT id FROM character_pet WHERE owner IN
             (SELECT guid FROM characters WHERE guid = '$row[0]'))");
           $query = $sqlc->query("
-            DELETE FROM pet_spell_cookdown WHERE guid IN
+            DELETE FROM pet_spell_cooldown WHERE guid IN
             (SELECT id FROM character_pet WHERE owner IN
             (SELECT guid FROM characters WHERE guid = '$row[0]'))");
           $query = $sqlc->query("

@@ -182,16 +182,16 @@ $output .= '
           <div class="top">';
 
 if (1 == $err)
-    $output .= '
+  $output .= '
             <h1><font class="error">'.$lang_global['empty_fields'].'</font></h1>';
 elseif (2 == $err)
-    $output .= '
+  $output .= '
             <h1><font class="error">'.$lang_motd['err_max_len'].'</font></h1>';
 elseif (3 == $err)
-    $output .= '
+  $output .= '
             <h1>'.$lang_motd['edit_motd'].'</h1>';
 else
-    $output .= '
+  $output .= '
             <h1>'.$lang_motd['add_motd'].'</h1>';
 
 unset($err);

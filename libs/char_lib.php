@@ -231,7 +231,7 @@ function char_get_level_color($lvl)
       if($lvl < 50)
         $level_color = '<font color="#C552FF">'.$lvl.'</font>';
       else
-        $level_color = '<font color="#FFF280">'.$lvl.'</font>';
+        $level_color = '<font color="#FF8000">'.$lvl.'</font>';
     }
     else
     {

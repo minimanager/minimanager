@@ -38,7 +38,7 @@ function fact_get_fact_id()
      947 => array('Thrallmar',             'The Burning Crusade',6,37,690,1101,0,0,0,-42000,0,0),
      946 => array('Honor Hold',            'The Burning Crusade',6,38,1101,690,0,0,0,-42000,0,0),
      933 => array('The Consortium',        'The Burning Crusade',6,60,2047,0,0,0,0,0,0,0),
-     941 => array('The Mag\'har',           'The Burning Crusade',6,61,690,1101,0,0,-500,-42000,0,0),
+     941 => array('The Mag\'har',          'The Burning Crusade',6,61,690,1101,0,0,-500,-42000,0,0),
      942 => array('Cenarion Expedition',   'The Burning Crusade',6,64,2047,0,0,0,0,0,0,0),
      970 => array('Sporeggar',             'The Burning Crusade',6,65,2047,0,0,0,-2500,0,0,0),
      978 => array('Kurenai',               'The Burning Crusade',6,66,1101,690,0,0,-1200,-42000,0,0),
@@ -46,17 +46,17 @@ function fact_get_fact_id()
      990 => array('The Scale of the Sands','The Burning Crusade',6,57,1791,0,0,0,0,0,0,0),
     1012 => array('Ashtongue Deathsworn',  'The Burning Crusade',6,70,1791,0,0,0,0,0,0,0),
     1015 => array('Netherwing',            'The Burning Crusade',6,71,1791,0,0,0,-42000,0,0,0),
-    1038 => array('Ogri\'la',               'The Burning Crusade',6,73,1791,0,0,0,0,0,0,0),
+    1038 => array('Ogri\'la',              'The Burning Crusade',6,73,1791,0,0,0,0,0,0,0),
 
-     935 => array('The Sha\'tar',             'Shattrath City',7,39,1791,0,0,0,0,0,0,0),
+     935 => array('The Sha\'tar',            'Shattrath City',7,39,1791,0,0,0,0,0,0,0),
      932 => array('The Aldor',               'Shattrath City',7,58,255,1024,512,0,0,3500,-3500,0),
      934 => array('The Scryers',             'Shattrath City',7,62,255,1024,512,0,0,-3500,3500,0),
     1011 => array('Lower City',              'Shattrath City',7,69,32767,0,0,0,0,0,0,0),
-    1031 => array('Sha\'tari Skyguard',       'Shattrath City',7,72,1791,0,0,0,0,0,0,0),
+    1031 => array('Sha\'tari Skyguard',      'Shattrath City',7,72,1791,0,0,0,0,0,0,0),
     1077 => array('Shattered Sun Offensive', 'Shattrath City',7,73,1791,0,0,0,0,0,0,0),
 
     1050 => array('Valiance Expedition', 'Alliance Vanguard',8,74,1101,690,0,0,0,-42000,0,0),
-    1068 => array('Explorers\' League',   'Alliance Vanguard',8,78,1101,690,0,0,0,-42000,0,0),
+    1068 => array('Explorers\' League',  'Alliance Vanguard',8,78,1101,690,0,0,0,-42000,0,0),
     1094 => array('The Silver Covenant', 'Alliance Vanguard',8,90,1101,690,0,0,0,-42000,0,0),
     1126 => array('The Frostborn',       'Alliance Vanguard',8,99,1101,690,0,0,0,-42000,0,0),
 
@@ -68,7 +68,7 @@ function fact_get_fact_id()
     1104 => array('Frenzyheart Tribe', 'Sholazar Basin',10,92,1791,0,0,0,0,0,0,0),
     1105 => array('The Oracles',       'Sholazar Basin',10,93,1791,0,00,0,0,0,0,0),
 
-    1073 => array('The Kalu\'ak',               'Wrath of the Lich King',11,79,1791,0,0,0,0,0,0,0),
+    1073 => array('The Kalu\'ak',              'Wrath of the Lich King',11,79,1791,0,0,0,0,0,0,0),
     1091 => array('The Wyrmrest Accord',       'Wrath of the Lich King',11,83,1791,0,0,0,0,0,0,0),
     1090 => array('Kirin Tor',                 'Wrath of the Lich King',11,84,1229,690,1101,690,0,0,3000,3000),
     1098 => array('Knights of the Ebon Blade', 'Wrath of the Lich King',11,91,0,0,0,0,3200,0,0,0),
@@ -102,7 +102,7 @@ function fact_get_fact_id()
      609 => array('Cenarion Circle',                'Other',12,36,1791,40,0,0,0,2000,0,0),
      749 => array('Hydraxian Waterlords',           'Other',12,42,1791,0,0,0,0,0,0,0),
      980 => array('Outland',                        'Other',12,43,0,0,0,0,0,0,0,0),
-     809 => array('Shen\'dralar',                    'Other',12,44,1791,0,0,0,0,0,0,0),
+     809 => array('Shen\'dralar',                   'Other',12,44,1791,0,0,0,0,0,0,0),
      891 => array('Alliance Forces',                'Other',12,47,1101,178,0,0,0,-42000,0,0),
      892 => array('Horde Forces',                   'Other',12,48,690,77,0,0,0,-42000,0,0),
      909 => array('Darkmoon Faire',                 'Other',12,50,1791,0,0,0,0,0,0,0),
@@ -197,9 +197,10 @@ function fact_get_base_reputation($id, $race, &$sqlm)
   /*
   $fact_id = fact_get_fact_id();
 
-  if(!isset($fact_id[$id]))
+  if(isset($fact_id[$id]));
+  else
     return 0;
-  for ($i = 0; $i < 4; $i++)
+  for ($i = 0; $i < 4; ++$i)
   {
     if ($fact_id[$id][4 + $i] & (1 << ($race-1)))
       return $fact_id[$id][8 + $i];
