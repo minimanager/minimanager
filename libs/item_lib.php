@@ -4,11 +4,15 @@
 //#############################################################################
 //get item set name by its id
 
- function get_itemset_name($id)
+ function get_itemset_name($id, &$sqlm=0)
 {
   global $mmfpm_db;
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
+  if (empty($sqlm))
+  {
+    $sqlm = new SQL;
+    $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  }
   $itemset = $sqlm->fetch_row($sqlm->query("SELECT `name_loc0` FROM `dbc_itemset` WHERE `itemsetID`={$id} LIMIT 1"));
   return $itemset[0];
 }
@@ -17,40 +21,38 @@
 //#############################################################################
 //generate item border from item_template.entry
 
-function get_item_border($item_id)
+function get_item_border($item_id, &$sqlw)
 {
-  global $world_db, $realm_id;
-
   if($item_id)
   {
-    $sqlw = new SQL;
-    $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+    $result = $sqlw->query('SELECT Quality FROM item_template WHERE entry = '.$item_id.'');
+    $iborder = (1 == $sqlw->num_rows($result)) ? $sqlw->result($result, 0, 'Quality'): 'Quality: '.$iborder.' Not Found' ;
 
-    $result_2 = $sqlw->query("SELECT Quality FROM item_template WHERE entry = '$item_id'");
-    $iborder = ($sqlw->num_rows($result_2) == 1) ? $sqlw->result($result_2, 0,"Quality"): "Quality: $iborder Not Found" ;
-
-    return "icon_border_$iborder";
+    return 'icon_border_'.$iborder.'';
   }
   else
-    return "icon_border_0";
+    return 'icon_border_0';
 }
 
 
 //#############################################################################
 //get item name from item_template.entry
 
-function get_item_name($item_id)
+function get_item_name($item_id, &$sqlw=0)
 {
   global $world_db, $realm_id;
 
   if($item_id)
   {
-    $sqlw = new SQL;
-    $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+    if (empty($sqlw))
+    {
+      $sqlw = new SQL;
+      $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+    }
 
     $deplang = get_lang_id();
-    $result = $sqlw->query("SELECT IFNULL(".($deplang<>0?"name_loc$deplang":"NULL").",`name`) as name FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry WHERE item_template.entry = '$item_id'");
-    $item_name = ($sqlw->num_rows($result) == 1) ? $sqlw->result($result, 0,"name") : "ItemID: $item_id Not Found" ;
+    $result = $sqlw->query('SELECT IFNULL('.($deplang<>0 ? 'name_loc'.$deplang.'' : 'NULL').', name) as name FROM item_template LEFT JOIN locales_item ON item_template.entry = locales_item.entry WHERE item_template.entry = '.$item_id.'');
+    $item_name = (1 == $sqlw->num_rows($result)) ? $sqlw->result($result, 0, 'name') : 'ItemID: '.$item_id.' Not Found' ;
 
     return $item_name;
   }
@@ -68,10 +70,13 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
 
   // not all functions that call this function will pass reference to existing SQL links
   // so we need to check and overload when needed
-  if(empty($sqlm) && empty($splw))
+  if (empty($sqlm))
   {
     $sqlm = new SQL;
     $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+  }
+  if (empty($sqlw))
+  {
     $sqlw = new SQL;
     $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
   }
@@ -79,7 +84,7 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
   $result = $sqlw->query("SELECT `displayid` FROM `item_template` WHERE `entry` = $itemid LIMIT 1");
 
   if ($result)
-    $displayid = $sqlm->result($result, 0);
+    $displayid = $sqlw->result($result, 0);
   else
     $displayid = 0;
 

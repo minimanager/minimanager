@@ -347,7 +347,7 @@ function do_search()
             <td><a href=\"$item_datasite$item[0]\" target=\"_blank\">$item[0]</a></td>
             <td>
               <a style=\"padding:2px;\" href=\"$item_datasite$item[0]\" target=\"_blank\">
-                <img src=\"".get_item_icon($item[0])."\" class=\"".get_item_border($item[0])."\" alt=\"\" />
+                <img src=\"".get_item_icon($item[0])."\" class=\"".get_item_border($item[0], $sqlw)."\" alt=\"\" />
               </a>
             </td>
             <td>
