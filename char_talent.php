@@ -3,11 +3,9 @@
 
 // page header, and any additional required libraries
 require_once 'header.php';
-require_once 'scripts/defines.php';
-require_once 'scripts/get_lib.php';
 require_once 'libs/char_lib.php';
-// minimum permission to view page
 require_once("libs/spell_lib.php");
+// minimum permission to view page
 valid_login($action_permission['read']);
 
 //########################################################################################################################
@@ -60,39 +58,40 @@ function char_talent(&$sqlr, &$sqlc)
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 0;
   $dir = ($dir) ? 0 : 1;
 
-  $result = $sqlc->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
+  $result = $sqlc->query("SELECT account, name, race, class,
+    CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
     mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
     FROM `characters` WHERE guid = $id LIMIT 1");
 
   if ($sqlc->num_rows($result))
   {
-    $char = $sqlc->fetch_row($result);
+    $char = $sqlc->fetch_assoc($result);
 
     $owner_acc_id = $sqlc->result($result, 0, 'account');
-    $result = $sqlr->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+    $result = $sqlr->query('SELECT gmlevel,username FROM account WHERE id = '.$char['account'].'');
     $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
     $owner_name = $sqlr->result($result, 0, 'username');
 
-    if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
+    if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name))
     {
-      $result = $sqlc->query("SELECT spell FROM `character_spell` WHERE guid = $id AND active = 1 ORDER BY spell ASC");
+      $result = $sqlc->query('SELECT spell FROM character_spell WHERE guid = '.$id.' ORDER BY spell ASC');
 
       $output .= "
-        <center>
-            <div id=\"tab\">
-            <ul>
-              <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
-              <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
-              <li id=\"selected\"><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
-              <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
-              <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
-              <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
-            </ul>
-          </div>
-          <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char[4])."</font>
-            <br /><br />
-            <table class=\"lined\" style=\"width: 550px;\">";
+          <center>
+              <div id=\"tab\">
+              <ul>
+                <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
+                <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
+                <li id=\"selected\"><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
+                <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
+                <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
+                <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
+              </ul>
+            </div>
+            <div id=\"tab_content\">
+              <font class=\"bold\">".htmlentities($char['name'])." - <img src='img/c_icons/{$char['race']}-{$char['gender']}.gif' onmousemove='toolTip(\"".char_get_race_name($char['race'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char['class']}.gif' onmousemove='toolTip(\"".char_get_class_name($char['class'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char['level'])."</font>
+              <br /><br />
+              <table class=\"lined\" style=\"width: 550px;\">";
       if($developer_test_mode && $new_talent_tab)
       {
         $tabs = array();
@@ -101,106 +100,126 @@ function char_talent(&$sqlr, &$sqlc)
           $i = 0;
           while (($talent = $sqlc->fetch_assoc($result)) && ($i < 120))
           {
-
-            if($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col from dbc_talent where rank5 = '.$talent['spell'].' LIMIT 1')))
+            if ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank5 = '.$talent['spell'].' LIMIT 1')))
             {
               $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'5');
               ++$i;
+              if ($tab['dependsOn'])
+                talent_dependencies($tabs, $tab, $i, $sqlm);
             }
-            elseif($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col from dbc_talent where rank4 = '.$talent['spell'].' LIMIT 1')))
+            elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank4 = '.$talent['spell'].' LIMIT 1')))
             {
               $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'4');
               ++$i;
+              if ($tab['dependsOn'])
+                talent_dependencies($tabs, $tab, $i, $sqlm);
             }
-            elseif($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col from dbc_talent where rank3 = '.$talent['spell'].' LIMIT 1')))
+            elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank3 = '.$talent['spell'].' LIMIT 1')))
             {
               $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'3');
               ++$i;
+              if ($tab['dependsOn'])
+                talent_dependencies($tabs, $tab, $i, $sqlm);
             }
-            elseif($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col from dbc_talent where rank2 = '.$talent['spell'].' LIMIT 1')))
+            elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank2 = '.$talent['spell'].' LIMIT 1')))
             {
               $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'2');
               ++$i;
+              if ($tab['dependsOn'])
+                talent_dependencies($tabs, $tab, $i, $sqlm);
             }
-            elseif($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col from dbc_talent where rank1 = '.$talent['spell'].' LIMIT 1')))
+            elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank1 = '.$talent['spell'].' LIMIT 1')))
             {
               $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'1');
               ++$i;
+              if ($tab['dependsOn'])
+                talent_dependencies($tabs, $tab, $i, $sqlm);
             }
-
           }
-          $output .="
-                <tr valign=\"top\">";
-          foreach ($tabs as $data)
+          $output .= '
+                <tr valign="top" align="center">';
+          foreach ($tabs as $k=>$data)
           {
-            $output .="
+            $points = 0;
+            $output .= '
                   <td>
-                    <table style=\"width: 0px;\">";
+                    <table style="width: 0px;">';
             for($i=0;$i<11;++$i)
             {
-              $output .="
-                      <tr>";
+              $output .= '
+                      <tr>';
               for($j=0;$j<4;++$j)
               {
                 if(isset($data[$i][$j]))
-                  $output .="
-                        <td>
-                          <a href=\"$spell_datasite".$data[$i][$j][0]."\" target=\"_blank\">
-                            <img src=\"".get_spell_icon($data[$i][$j][0], $sqlm)."\" width=\"36\" height=\"36\" alt=\"\" />
+                {
+                  $output .= '
+                        <td valign="bottom" align="center">
+                          <a href="'.$spell_datasite.$data[$i][$j][0].'" target="_blank">
+                            <img src="'.get_spell_icon($data[$i][$j][0], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                           </a>
-                        </td>";
+                          <div style="width:0px;margin:-14px 0px 0px 30px;font-size:14px;color:black">'.$data[$i][$j][1].'</div>
+                          <div style="width:0px;margin:-14px 0px 0px 29px;font-size:14px;color:white">'.$data[$i][$j][1].'</div>
+                        </td>';
+                  $points += $data[$i][$j][1];
+                }
                 else
-                  $output .="
+                  $output .= '
                         <td>
                           <a href=#>
-                            <img src=\"img/blank.gif\" width=\"36\" height=\"36\" alt=\"\" />
+                            <img src="img/blank.gif" width="44" height="44" alt="" />
                           </a>
-                        </td>";
+                        </td>';
               }
-              $output .="
-                      </tr>";
+              $output .= '
+                      </tr>';
+
             }
-            $output .="
+            $output .= '
+                      <tr>
+                        <td colspan="4" valign="bottom" align="left">
+                         '.$sqlm->result($sqlm->query('SELECT name_loc0 FROM dbc_talenttab WHERE id = '.$k.''), 0, 'name_loc0').': '.$points.'
+                        </td>
+                      </tr>
                     </table>
-                  </td>";
+                  </td>';
           }
         }
-        $output .= "
-                </tr>";
+        $output .= '
+                </tr>';
       }
       else
       {
-        $output .="
+        $output .= '
                 <tr>
-                  <th><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['talent_id']}</a></th>
-                  <th align=\"left\"><a href=\"char_talent.php?id=$id&amp;realm=$realmid&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['talent_name']}</a></th>
-                </tr>";
+                  <th><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=0&amp;dir='.$dir.'">'.($order_by==0 ? '<img src="img/arr_'.($dir ? 'up' : 'dw').'.gif" alt="" />' : '').$lang_char['talent_id'].'</a></th>
+                  <th align="left"><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=1&amp;dir='.$dir.'">'.($order_by==1 ? '<img src="img/arr_'.($dir ? 'up' : 'dw').'.gif" alt="" />' : '').$lang_char['talent_name'].'</a></th>
+                </tr>';
         $talents_1 = array();
         if ($sqlc->num_rows($result))
         {
-          while ($talent = $sqlc->fetch_row($result))
+          while ($talent = $sqlc->fetch_assoc($result))
           {
-            if(talent_get_value($talent[0]))
-              array_push($talents_1, array($talent[0], get_spell_name($talent[0], $sqlm)));
+            if(talent_get_value($talent['spell']))
+              array_push($talents_1, array($talent['spell'], get_spell_name($talent['spell'], $sqlm)));
           }
           aasort($talents_1, $order_by, $dir);
           //if ($GMP)
           //  $talent_sum = gmp_init(0);
           foreach ($talents_1 as $data)
           {
-            $output .= "
+            $output .= '
                 <tr>
-                  <td>$data[0]</td>
-                  <td align=\"left\">
-                    <a style=\"padding:2px;\" href=\"$spell_datasite$data[0]\" target=\"_blank\">
-                      <img src=\"".get_spell_icon($data[0], $sqlm)."\" alt=\"\" />
+                  <td>'.$data[0].'</td>
+                  <td align="left">
+                    <a style="padding:2px;" href="'.$spell_datasite.$data[0].'" target="_blank">
+                      <img src="'.get_spell_icon($data[0], $sqlm).'" alt="" />
                     </a>
-                    <a href=\"$spell_datasite$data[0]\" target=\"_blank\">$data[1]</a>
-                  </td>";
+                    <a href="'.$spell_datasite.$data[0].'" target="_blank">'.$data[1].'</a>
+                  </td>';
             //if ($GMP)
             //  $talent_sum = gmp_add($talent_sum,sprintf('%s',talent_get_value($data[0])));
-            $output .= "
-                </tr>";
+            $output .= '
+                </tr>';
           }
         }
         /*
@@ -237,46 +256,54 @@ function char_talent(&$sqlr, &$sqlc)
                 </tr>";
         */
       }
-      $output .= "
-            </table>
-          </div>
-          <br />
-          <table class=\"hidden\">
-            <tr>
-              <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
-      $output .= "
-              </td>
-              <td>";
-      if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
+      //---------------Page Specific Data Ends here----------------------------
+      //---------------Character Tabs Footer-----------------------------------
+      $output .= '
+              </table>
+            </div>
+            <br />
+            <table class="hidden">
+              <tr>
+                <td>';
+                  // button to user account page, user account page has own security
+                  makebutton($lang_char['chars_acc'], 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      $output .= '
+                </td>
+                <td>';
+
+      // only higher level GM with delete access can edit character
+      //  character edit allows removal of character items, so delete permission is needed
+      if ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) )
       {
-                makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
-        $output .= "
-              </td>
-              <td>";
+                  makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
+        $output .= '
+                </td>
+                <td>';
       }
-      if ((($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))||($owner_name == $user_name))
+      // only higher level GM with delete access, or character owner can delete character
+      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
       {
-                makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
-        $output .= "
-              </td>
-              <td>";
+                  makebutton($lang_char['del_char'], 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        $output .= '
+                </td>
+                <td>';
       }
+      // only GM with update permission can send mail, mail can send items, so update permission is needed
       if ($user_lvl >= $action_permission['update'])
       {
-                makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
-        $output .= "
-              </td>
-              <td>";
+                  makebutton($lang_char['send_mail'], 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
+        $output .= '
+                </td>
+                <td>';
       }
-                makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
-      $output .= "
-              </td>
-            </tr>
-          </table>
-          <br />
-        </center>
-";
+                  makebutton($lang_global['back'], 'javascript:window.history.back()" type="def', 130);
+      $output .= '
+                </td>
+              </tr>
+            </table>
+            <br />
+          </center>
+          <!-- end of char_talent.php -->';
     }
     else
       error($lang_char['no_permission']);
@@ -284,6 +311,46 @@ function char_talent(&$sqlr, &$sqlc)
   else
     error($lang_char['no_char_found']);
 
+}
+
+
+function talent_dependencies(&$tabs, &$tab, &$i, &$sqlm)
+{
+  if ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank5, dependsOn from dbc_talent where id = '.$tab['dependsOn'].' and rank5 != 0 LIMIT 1')))
+  {
+    $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank5'],'5');
+    ++$i;
+    if ($dep['dependsOn'])
+      talent_dependencies($tabs, $dep, $i, $sqlm);
+  }
+  elseif ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank4, dependsOn from dbc_talent where id = '.$tab['dependsOn'].' and rank4 != 0 LIMIT 1')))
+  {
+    $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank4'],'4');
+    ++$i;
+    if ($dep['dependsOn'])
+      talent_dependencies($tabs, $dep, $i, $sqlm);
+  }
+  elseif ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank3, dependsOn from dbc_talent where id = '.$tab['dependsOn'].' and rank3 != 0 LIMIT 1')))
+  {
+    $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank3'],'3');
+    ++$i;
+    if ($dep['dependsOn'])
+      talent_dependencies($tabs, $dep, $i, $sqlm);
+  }
+  elseif ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank2, dependsOn from dbc_talent where id = '.$tab['dependsOn'].' and rank2 != 0 LIMIT 1')))
+  {
+    $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank2'],'2');
+    ++$i;
+    if ($dep['dependsOn'])
+      talent_dependencies($tabs, $dep, $i, $sqlm);
+  }
+  elseif ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank1, dependsOn from dbc_talent where id = '.$tab['dependsOn'].' and rank1 != 0 LIMIT 1')))
+  {
+    $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank1'],'1');
+    ++$i;
+    if ($dep['dependsOn'])
+      talent_dependencies($tabs, $dep, $i, $sqlm);
+  }
 }
 
 

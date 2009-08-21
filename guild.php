@@ -427,7 +427,7 @@ function view_guild()
   }
   if ($developer_test_mode && $guild_bank)
   {
-                  makebutton("Guild Bank", "guildbank.php?id=$guild_id", 130);
+                  makebutton("Guild Bank", "guildbank.php?id=$guild_id&amp;realm=$realmid", 130);
   $output .= "
                 </td>
                 <td>";
