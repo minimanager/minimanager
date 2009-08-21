@@ -110,8 +110,23 @@ function lang_guild()
     'del_guild' => 'Delete Guild',
     'guild_id' => 'Guild id',
     'guild_search_result' => 'Guilds Search Results',
+    'guildbank' => 'Guild Bank',
   );
   return $lang_guild;
+}
+
+
+// ----- GUILDBANK.PHP -----
+function lang_guildbank()
+{
+  $lang_guildbank = array
+  (
+    'guild' => 'Guild',
+    'guildbank' => 'Guild Bank',
+    'tab' => 'Tab',
+    'notfound' => 'Wrong ID, no Guild Bank Found.',
+  );
+  return $lang_guildbank;
 }
 
 

@@ -241,7 +241,7 @@ function count_days( $a, $b )
 function view_guild()
 {
   global $lang_guild, $lang_global, $output, $realm_db, $characters_db, $mmfpm_db, $realm_id, $itemperpage,
-    $action_permission, $user_lvl, $user_id, $developer_test_mode, $guild_bank, $showcountryflag;
+    $action_permission, $user_lvl, $user_id, $showcountryflag;
   if(!isset($_GET['id'])) redirect("guild.php?error=1&amp;realm=$realmid");
 
   $sqlr = new SQL;
@@ -425,13 +425,10 @@ function view_guild()
                 </td>
                 <td>";
   }
-  if ($developer_test_mode && $guild_bank)
-  {
-                  makebutton("Guild Bank", "guildbank.php?id=$guild_id&amp;realm=$realmid", 130);
+                  makebutton($lang_guild['guildbank'], "guildbank.php?id=$guild_id&amp;realm=$realmid", 130);
   $output .= "
                 </td>
                 <td>";
-  }
                   makebutton($lang_guild['show_guilds'], "guild.php?realm=$realmid\" type=\"def", 130);
   $output .= "
                 </td>

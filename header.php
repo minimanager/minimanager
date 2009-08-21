@@ -89,7 +89,7 @@ if (ini_get('max_execution_time') < 1800)
 }
 
 //---------------------Guest login Predefines----------------------------------
-if ($developer_test_mode && $allow_anony && empty($_SESSION['logged_in']))
+if ($allow_anony && empty($_SESSION['logged_in']))
 {
   $_SESSION['user_lvl'] = -1;
   $_SESSION['uname'] = $anony_uname;
@@ -206,7 +206,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
   $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   // we have a different menu for guest account
-  if($developer_test_mode && $allow_anony && empty($_SESSION['logged_in']))
+  if($allow_anony && empty($_SESSION['logged_in']))
   {
     $lang_login = lang_login();
     $output .= '

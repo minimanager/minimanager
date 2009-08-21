@@ -195,6 +195,14 @@ $valid_ip_mask = array
 
 $remember_me_checked  = false;     // "Remember Me" cookie check box default, false = unchecked
 
+$allow_anony         =  true;      // allow anonymouse login, aka guest account
+$anony_uname         = 'Guest';    // guest account name, this is purely cosmetic
+$anony_realm_id      =  1;         // guest account default realm
+
+// permission level for guest access is -1
+// set it like how you set any page permission level in menu config below, using the value -1
+// the "Guest" account exists only in MiniManager, not in your realms or server or database
+
 //#############################################################################
 //---- Layout configuration ----
 
@@ -253,7 +261,7 @@ $backup_dir = 'backup';    // make sure webserver have the permission to write/r
 
 $gm_level_arr = array
 (
- -1 => array(-1,      'Guest',      '',''), // DO NOT change this, unless you know what you are doing, or being told to do so
+ -1 => array(-1,      'Guest',      '',''),
   0 => array( 0,     'Player',      '',''),
   1 => array( 1,  'Moderator',   'Mod',''),
   2 => array( 2, 'Gamemaster',    'GM',''), // change the name and alias as required
@@ -383,12 +391,6 @@ $developer_test_mode =  false;
 $multi_realm_mode    =  true;
 
 $new_talent_tab      =  true;
-
-$guild_bank          =  true;
-
-$allow_anony         =  false;
-$anony_uname         = 'Guest';
-$anony_realm_id      =  1;
 
 
 ?>

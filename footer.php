@@ -21,7 +21,7 @@
         </div>
         <div id="body_buttom">';
   // show login and register button at bottom of every page if guest mode is activated
-  if($developer_test_mode && $allow_anony && empty($_SESSION['logged_in']))
+  if($allow_anony && empty($_SESSION['logged_in']))
   {
     $lang_login = lang_login();
     $output .= '

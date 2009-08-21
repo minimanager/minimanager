@@ -1,20 +1,6 @@
 <?php
 
 
-function lang_guildbank()
-{
-  $lang_guildbank = array
-  (
-    'guild' => 'Guild',
-    'guildbank' => 'Guild Bank',
-    'tab' => 'Tab',
-    'notfound' => 'Wrong ID, no Guild Bank Found.',
-
-  );
-  return $lang_guildbank;
-}
-
-
 require_once 'header.php';
 require_once 'libs/item_lib.php';
 valid_login($action_permission['read']);
@@ -26,8 +12,7 @@ function guild_bank(&$sqlr, &$sqlc)
 {
   global  $output, $lang_global, $lang_guildbank,
     $realm_id, $characters_db, $mmfpm_db, $world_db,
-    $item_datasite, $item_icons,
-    $developer_test_mode, $guild_bank;
+    $item_datasite, $item_icons;
   wowhead_tt();
 
   if (empty($_GET['id'])) error($lang_global['empty_fields']);
@@ -53,7 +38,7 @@ function guild_bank(&$sqlr, &$sqlc)
 
   $result = $sqlc->query('SELECT name, BankMoney FROM guild WHERE guildid = '.$guild_id.' LIMIT 1');
 
-  if($sqlc->num_rows($result) && $developer_test_mode && $guild_bank)
+  if($sqlc->num_rows($result))
   {
     $guild_name  = $sqlc->result($result, 0, 'name');
     $bank_gold   = $sqlc->result($result, 0, 'BankMoney');
@@ -137,7 +122,7 @@ function guild_bank(&$sqlr, &$sqlc)
           $stack = $gb_slots[$item_position]['stack_count'] == 1 ? '' : $gb_slots[$item_position]['stack_count'];
           $output .= '
                       <div style="left:'.($j*43).'px;top:'.($i*41).'px;">
-                        <a style=\"padding:2px;\" href="'.$item_datasite.$gb_item_id.'">
+                        <a style="padding:2px;" href="'.$item_datasite.$gb_item_id.'">
                           <img src="'.get_item_icon($gb_item_id, $sqlm, $sqlw).'" alt="" />
                         </a>
                         <div style="width:25px;margin:-15px 0px 0px 16px;color:black;font-size:12px">'.$stack.'</div>
@@ -159,7 +144,7 @@ function guild_bank(&$sqlr, &$sqlc)
                 </tr>
               </table>
             </div>
-            <br>
+            <br />
             <table class="hidden">
               <tr>
                 <td>';

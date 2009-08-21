@@ -109,9 +109,24 @@ function lang_guild()
     'guild_id' => 'Id de guilde',
     'guild_search_result' => 'Résultats de recherche de guildes',
     'show_guilds' => 'Afficher toutes les guildes',
-    'browse_guilds' => 'Parcourir les guildes'
+    'browse_guilds' => 'Parcourir les guildes',
+    'guildbank' => 'Guild Bank',
   );
   return $lang_guild;
+}
+
+
+// ----- GUILDBANK.PHP -----
+function lang_guildbank()
+{
+  $lang_guildbank = array
+  (
+    'guild' => 'Guild',
+    'guildbank' => 'Guild Bank',
+    'tab' => 'Tab',
+    'notfound' => 'Wrong ID, no Guild Bank Found.',
+  );
+  return $lang_guildbank;
 }
 
 
