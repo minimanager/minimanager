@@ -390,7 +390,5 @@ $developer_test_mode =  false;
 
 $multi_realm_mode    =  true;
 
-$new_talent_tab      =  true;
-
 
 ?>

@@ -11,7 +11,7 @@ valid_login($action_permission['read']);
 //########################################################################################################################^M
 function char_pets()
 {
-  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db,
+  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db, $mmfpm_db,
     $action_permission, $user_lvl, $user_name, $spell_datasite, $pet_ability;
   wowhead_tt();
 
@@ -74,6 +74,9 @@ function char_pets()
 
       if ($sqlc->num_rows($result))
       {
+        $sqlm = new SQL;
+        $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
         while($pet = $sqlc->fetch_row($result))
         {
           $happiness = floor($pet[4]/333000);
@@ -92,7 +95,7 @@ function char_pets()
               $hap_text = "Unhappy";
               $hap_val = 0;
           }
-          $pet_next_lvl_xp = floor(get_xp_to_level($pet[1])/4);
+          $pet_next_lvl_xp = floor(char_get_xp_to_level($pet[1])/4);
           $output .= "
               <font class=\"bold\">$pet[3] - lvl ".char_get_level_color($pet[1])."
                 <a style=\"padding:2px;\" onmouseover=\"toolTip('&lt;font color=\'white\'&gt;$hap_text&lt;/font&gt;','item_tooltip')\" onmouseout=\"toolTip()\"><img src=\"img/pet/happiness_$hap_val.jpg\" alt=\"\" /></a>
@@ -116,7 +119,7 @@ function char_pets()
             {
               $output .= "
                     <a style=\"padding:2px;\" href=\"$spell_datasite$ability[0]\" target=\"_blank\">
-                      <img src=\"".get_spell_icon($ability[0])."\" alt=\"".$ability[0]."\" />
+                      <img src=\"".spell_get_icon($ability[0], $sqlm)."\" alt=\"".$ability[0]."\" />
                     </a>";
             }
           }

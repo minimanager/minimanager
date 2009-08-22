@@ -219,7 +219,6 @@ function char_inv(&$sqlr, &$sqlc)
         $output .= '
                   <td class="bag" valign="bottom" align="center">
                     <div style="width:'.(4*43).'px;height:'.(ceil($equiped_bag_id[$t][1]/4)*41).'px;">';
-
         $dsp = $equiped_bag_id[$t][1]%4;
         if ($dsp)
           $output .= '
@@ -377,11 +376,11 @@ function char_inv(&$sqlr, &$sqlc)
                   </td>';
       }
       $output .= '
-                  <td class="bank"></td>
-                </tr>';
+                  <td class="bank"></td>';
       //---------------Page Specific Data Ends here----------------------------
       //---------------Character Tabs Footer-----------------------------------
       $output .= '
+                </tr>
               </table>
             </div>
             <br />
@@ -433,6 +432,7 @@ function char_inv(&$sqlr, &$sqlc)
   }
   else
     error($lang_char['no_char_found']);
+
 }
 
 

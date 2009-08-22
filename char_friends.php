@@ -2,7 +2,6 @@
 
 
 require_once("header.php");
-require_once("scripts/defines.php");
 require_once("libs/char_lib.php");
 require_once("libs/map_zone_lib.php");
 valid_login($action_permission['read']);
@@ -64,54 +63,56 @@ function char_friends()
     if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
       $output .= "
-        <center>
-          <script type=\"text/javascript\">
-            // <![CDATA[
-            function wrap()
-            {
-              if (getBrowserWidth() > 1024)
-              document.write(\"</table></td><td><table class='lined' style='width: 1%;'>\");
-            }
-            // ]]>
-          </script>
-          <div id=\"tab\">
-            <ul>
-              <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
-              <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
-              <li><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
-              <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
-              <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
-              <li id=\"selected\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
-            </ul>
-          </div>
-          <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char[4])."</font>
-            <br /><br />
-            <table class=\"hidden\"  style=\"width: 1%;\">
-              <tr valign=\"top\">
-                <td>
-                  <table class=\"lined\" style=\"width: 1%;\">";
+          <center>
+            <script type=\"text/javascript\">
+              // <![CDATA[
+              function wrap()
+              {
+                if (getBrowserWidth() > 1024)
+                document.write(\"</table></td><td><table class='lined' style='width: 1%;'>\");
+              }
+              // ]]>
+            </script>
+            <div id=\"tab\">
+              <ul>
+                <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
+                <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
+                <li><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
+                <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
+                <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
+                <li id=\"selected\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
+              </ul>
+            </div>
+            <div id=\"tab_content\">
+              <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char[4])."</font>
+              <br /><br />
+              <table class=\"hidden\"  style=\"width: 1%;\">
+                <tr valign=\"top\">";
 
       $result = $sqlc->query("SELECT name, race, class, map, zone,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
         mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, online, account, guid
         FROM `characters` WHERE guid in (SELECT friend FROM character_social WHERE guid =$id and flags <= 1) ORDER BY $order_by $order_dir");
 
+      $output .="
+                  <td>
+                    <table class=\"lined\" style=\"width: 1%;\">";
+
       if($sqlc->num_rows($result))
       {
         $output .="
-                    <tr>
-                      <th colspan=\"7\" align=\"left\">{$lang_char['friends']}</th>
-                    </tr>
-                    <tr>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['race']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['class']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['level']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['map']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=zone&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['zone']}</a></th>
-                      <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['online']}</a></th>
-                    </tr>";
+                      <tr>
+                        <th colspan=\"7\" align=\"left\">{$lang_char['friends']}</th>
+                      </tr>
+                      <tr>
+                        <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=name&amp;dir=$dir\">".($order_by=='name' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['name']}</a></th>
+                        <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=race&amp;dir=$dir\">".($order_by=='race' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['race']}</a></th>
+                        <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=class&amp;dir=$dir\">".($order_by=='class' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['class']}</a></th>
+                        <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=level&amp;dir=$dir\">".($order_by=='level' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['level']}</a></th>
+                        <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=map&amp;dir=$dir\">".($order_by=='map' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['map']}</a></th>
+                        <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=zone&amp;dir=$dir\">".($order_by=='zone' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['zone']}</a></th>
+                        <th width=\"1%\"><a href=\"char_friends.php?id=$id&amp;realm=$realmid&amp;order_by=online&amp;dir=$dir\">".($order_by=='online' ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['online']}</a></th>
+                      </tr>";
 
         while ($data = $sqlc->fetch_row($result))
         {
@@ -280,47 +281,56 @@ function char_friends()
       }
       $output .= "
                   </table>
+                </td>";
+      //---------------Page Specific Data Ends here----------------------------
+      //---------------Character Tabs Footer-----------------------------------
+      $output .= '
+                </tr>
+              </table>
+            </div>
+            <br />
+            <table class="hidden">
+              <tr>
+                <td>';
+                  // button to user account page, user account page has own security
+                  makebutton($lang_char['chars_acc'], 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      $output .= '
+                </td>
+                <td>';
+
+      // only higher level GM with delete access can edit character
+      //  character edit allows removal of character items, so delete permission is needed
+      if ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) )
+      {
+                  makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
+        $output .= '
+                </td>
+                <td>';
+      }
+      // only higher level GM with delete access, or character owner can delete character
+      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
+      {
+                  makebutton($lang_char['del_char'], 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        $output .= '
+                </td>
+                <td>';
+      }
+      // only GM with update permission can send mail, mail can send items, so update permission is needed
+      if ($user_lvl >= $action_permission['update'])
+      {
+                  makebutton($lang_char['send_mail'], 'mail.php?type=ingame_mail&amp;to='.$char[0].'', 130);
+        $output .= '
+                </td>
+                <td>';
+      }
+                  makebutton($lang_global['back'], 'javascript:window.history.back()" type="def', 130);
+      $output .= '
                 </td>
               </tr>
             </table>
-          </div>
-          <br />
-          <table class=\"hidden\">
-            <tr>
-              <td>";
-                  makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
-      $output .= "
-              </td>
-              <td>";
-      if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
-      {
-                makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
-        $output .= "
-              </td>
-              <td>";
-      }
-      if ((($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))||($owner_name == $user_name))
-      {
-                makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
-        $output .= "
-              </td>
-              <td>";
-      }
-      if ($user_lvl >= $action_permission['update'])
-      {
-                makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
-        $output .= "
-              </td>
-              <td>";
-      }
-                makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
-      $output .= "
-              </td>
-            </tr>
-          </table>
-          <br />
-        </center>
-";
+            <br />
+          </center>
+          <!-- end of char_friends.php -->';
     }
     else
       error($lang_char['no_permission']);
@@ -335,22 +345,17 @@ function char_friends()
 // MAIN
 //########################################################################################################################
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 $lang_char = lang_char();
 
-switch ($action)
-{
-  case "unknown":
-    break;
-  default:
-    char_friends();
-}
+char_friends();
 
-unset($action);
+//unset($action);
 unset($action_permission);
 unset($lang_char);
 
-require_once("footer.php");
+require_once 'footer.php';
+
 
 ?>

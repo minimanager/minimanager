@@ -4,7 +4,7 @@
 //#############################################################################
 //get spell name by its id
 
-function get_spell_name($id, &$sqlm)
+function spell_get_name($id, &$sqlm)
 {
   $spell_name = $sqlm->fetch_assoc($sqlm->query('SELECT spellname_loc0 FROM dbc_spell WHERE spellID='.$id.' LIMIT 1'));
   return $spell_name['spellname_loc0'];
@@ -12,29 +12,11 @@ function get_spell_name($id, &$sqlm)
 
 
 //#############################################################################
-//get spell rank by its id
-
-function get_spell_rank($id, &$sqlm)
-{
-  $spell_rank = $sqlm->fetch_assoc($sqlm->query('SELECT rank_loc0 FROM dbc_spell WHERE spellID='.$id.' LIMIT 1'));
-  return $spell_rank['rank_loc0'];
-}
-
-
-//#############################################################################
 //get spell icon - if icon not exists in item_icons folder D/L it from web.
 
-function get_spell_icon($auraid, &$sqlm=0)
+function spell_get_icon($auraid, &$sqlm)
 {
-  global $proxy_cfg, $get_icons_from_web, $mmfpm_db, $item_icons;
-
-  // not all functions that call this function will pass reference to existing SQL links
-  // so we need to check and overload when needed
-  if(empty($sqlm))
-  {
-    $sqlm = new SQL;
-    $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  }
+  global $proxy_cfg, $get_icons_from_web, $item_icons;
 
   $result = $sqlm->query('SELECT spellicon FROM dbc_spell WHERE spellID = '.$auraid.' LIMIT 1');
 

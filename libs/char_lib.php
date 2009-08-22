@@ -335,7 +335,7 @@ function mxp($lvl)
   }
 }
 
-function get_xp_to_level($lvl)
+function char_get_xp_to_level($lvl)
 {
   $RATE_XP_PAST_70 = 1;
   $xp = 0;

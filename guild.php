@@ -288,8 +288,6 @@ function view_guild()
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
 
-  require_once("scripts/defines.php");
-
   $query = $sqlc->query("SELECT guildid, name, info, MOTD, createdate,
     (select count(*) from guild_member where guildid = '$guild_id') as mtotal,
     (select count(*) from guild_member where guildid = '$guild_id' and guid in
@@ -507,8 +505,6 @@ function del_guild()
 function rem_char_from_guild()
 {
   global $characters_db, $realm_id, $user_lvl, $user_id;
-
-  require_once("scripts/defines.php");
 
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);

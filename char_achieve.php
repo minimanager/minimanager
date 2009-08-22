@@ -149,6 +149,8 @@ function char_achievements(&$sqlr, &$sqlc)
                   <td>'.date('o-m-d', $data['date']).'</td>
                 </tr>';
       }
+      unset($data);
+      unset($result);
       $output .= '
                 <tr>
                   <td class="hidden" width="100%" align="right" colspan="4">';
@@ -156,13 +158,11 @@ function char_achievements(&$sqlr, &$sqlc)
       $output .= generate_pagination('char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
       unset($all_record);
       $output .= '
-                  </td>
-                </tr>';
-      unset($data);
-      unset($result);
+                  </td>';
       //---------------Page Specific Data Ends here----------------------------
       //---------------Character Tabs Footer-----------------------------------
       $output .= '
+                </tr>
               </table>
             </div>
             <br />

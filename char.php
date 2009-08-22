@@ -261,7 +261,7 @@ function char_main(&$sqlr, &$sqlc)
         {
                  $output .= '
                         <a style="padding:2px;" href="'.$spell_datasite.$aura['spell'].'" target="_blank">
-                          <img src="'.get_spell_icon($aura['spell'], $sqlm).'" alt="'.$aura['spell'].'" width="24" height="24" />
+                          <img src="'.spell_get_icon($aura['spell'], $sqlm).'" alt="'.$aura['spell'].'" width="24" height="24" />
                         </a>';
         }
       }

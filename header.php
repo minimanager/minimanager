@@ -50,8 +50,8 @@ else
 require_once 'libs/db_lib.php';
 require_once 'lang/'.$lang.'.php';
 
-require_once 'scripts/defines.php';
-require_once 'scripts/global_lib.php';
+require_once 'libs/data_lib.php';
+require_once 'libs/global_lib.php';
 require_once 'scripts/get_lib.php';
 
 //---------------------Headers' header-----------------------------------------

@@ -134,7 +134,7 @@ function del_guild($guid,$realm)
 {
   global $characters_db, $realm_db;
 
-  require_once("scripts/defines.php");
+  require_once 'libs/data_lib.php';
 
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realm]['addr'], $characters_db[$realm]['user'], $characters_db[$realm]['pass'], $characters_db[$realm]['name']);
@@ -178,7 +178,7 @@ function del_arenateam($guid,$realm)
 {
   global $characters_db, $realm_db;
 
-  require_once("scripts/defines.php");
+  require_once 'libs/data_lib.php';
 
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realm]['addr'], $characters_db[$realm]['user'], $characters_db[$realm]['pass'], $characters_db[$realm]['name']);

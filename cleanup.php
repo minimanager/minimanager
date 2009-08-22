@@ -2,7 +2,6 @@
 
 
 require_once("header.php");
-require_once("scripts/defines.php");
 
 // override default security : guild.php (guild leader deletes guild)
 if(!isset($_POST['override']) || $_POST['override'] != '1')

@@ -2,7 +2,6 @@
 
 
 require_once("header.php");
-require_once("scripts/defines.php");
 require_once("libs/char_lib.php");
 valid_login($action_permission['read']);
 
@@ -160,46 +159,54 @@ function char_quest()
               <tr>
                 <td colspan=\"".($user_lvl ? "4" : "3")."\"><p>{$lang_char['no_act_quests']}</p></td>
               </tr>";
-      $output .= "
-            </table>
-          </div>
-          <br />
-          <table class=\"hidden\">
-            <tr>
-              <td>";
-                makebutton($lang_char['chars_acc'], "user.php?action=edit_user&amp;id=$owner_acc_id",130);
-      $output .= "
-              </td>
-              <td>";
-      if (($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))
+      //---------------Page Specific Data Ends here----------------------------
+      //---------------Character Tabs Footer-----------------------------------
+      $output .= '
+              </table>
+            </div>
+            <br />
+            <table class="hidden">
+              <tr>
+                <td>';
+                  // button to user account page, user account page has own security
+                  makebutton($lang_char['chars_acc'], 'user.php?action=edit_user&amp;id='.$owner_acc_id.'', 130);
+      $output .= '
+                </td>
+                <td>';
+
+      // only higher level GM with delete access can edit character
+      //  character edit allows removal of character items, so delete permission is needed
+      if ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) )
       {
-                makebutton($lang_char['edit_button'], "char_edit.php?id=$id&amp;realm=$realmid",130);
-        $output .= "
-              </td>
-              <td>";
+                  makebutton($lang_char['edit_button'], 'char_edit.php?id='.$id.'&amp;realm='.$realmid.'', 130);
+        $output .= '
+                </td>
+                <td>';
       }
-      if ((($user_lvl > $owner_gmlvl)&&($user_lvl >= $action_permission['delete']))||($owner_name == $user_name))
+      // only higher level GM with delete access, or character owner can delete character
+      if ( ( ($user_lvl > $owner_gmlvl) && ($user_lvl >= $action_permission['delete']) ) || ($owner_name === $user_name) )
       {
-                makebutton($lang_char['del_char'], "char_list.php?action=del_char_form&amp;check%5B%5D=$id\" type=\"wrn",130);
-        $output .= "
-              </td>
-              <td>";
+                  makebutton($lang_char['del_char'], 'char_list.php?action=del_char_form&amp;check%5B%5D='.$id.'" type="wrn', 130);
+        $output .= '
+                </td>
+                <td>';
       }
+      // only GM with update permission can send mail, mail can send items, so update permission is needed
       if ($user_lvl >= $action_permission['update'])
       {
-                makebutton($lang_char['send_mail'], "mail.php?type=ingame_mail&amp;to=$char[1]",130);
-        $output .= "
-              </td>
-              <td>";
+                  makebutton($lang_char['send_mail'], 'mail.php?type=ingame_mail&amp;to='.$char[0].'', 130);
+        $output .= '
+                </td>
+                <td>';
       }
-                makebutton($lang_global['back'], "javascript:window.history.back()\" type=\"def",130);
-      $output .= "
-              </td>
-            </tr>
-          </table>
-          <br />
-        </center>
-";
+                  makebutton($lang_global['back'], 'javascript:window.history.back()" type="def', 130);
+      $output .= '
+                </td>
+              </tr>
+            </table>
+            <br />
+          </center>
+          <!-- end of char_quest.php -->';
     }
     else
       error($lang_char['no_permission']);

@@ -4,7 +4,6 @@
 require_once("header.php");
 require_once("scripts/forum.conf.php");
 require_once("scripts/forum_lib.php");
-require_once("scripts/defines.php");
 valid_login($action_permission['read']);
 
 if (isset($_COOKIE["lang"])){

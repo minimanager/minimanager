@@ -4,7 +4,7 @@
 // page header, and any additional required libraries
 require_once 'header.php';
 require_once 'libs/char_lib.php';
-require_once("libs/spell_lib.php");
+require_once 'libs/spell_lib.php';
 // minimum permission to view page
 valid_login($action_permission['read']);
 
@@ -13,10 +13,9 @@ valid_login($action_permission['read']);
 //########################################################################################################################
 function char_talent(&$sqlr, &$sqlc)
 {
-  // we shall load this one locally, no need to load in global, it contains a huge array
-  require_once 'libs/talent_lib.php';
-  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $characters_db, $mmfpm_db,
-    $action_permission, $user_lvl, $user_name, $spell_datasite, $talent_calculator_datasite, $developer_test_mode, $new_talent_tab;
+  global $output, $lang_global, $lang_char,
+    $realm_id, $realm_db, $characters_db, $mmfpm_db,
+    $action_permission, $user_lvl, $user_name, $spell_datasite;
   // this page uses wowhead tooltops
   wowhead_tt();
 
@@ -37,26 +36,11 @@ function char_talent(&$sqlr, &$sqlc)
       $realmid = $realm_id;
   }
 
-  $sqlm = new SQL;
-  $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-
-  // gmp reserved for talent tree calculation for use with 3rd party talent calculators
-  //check for php gmp extension
-  //if (extension_loaded('gmp'))
-  //  $GMP=1;
-  //else
-  //  $GMP=0;
-  //end of gmp check
-
   //-------------------SQL Injection Prevention--------------------------------
   // no point going further if we don have a valid ID
   $id = $sqlc->quote_smart($_GET['id']);
   if (is_numeric($id));
   else error($lang_global['empty_fields']);
-
-  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 1;
-  $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 0;
-  $dir = ($dir) ? 0 : 1;
 
   $result = $sqlc->query('SELECT account, name, race, class,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) AS UNSIGNED) AS level,
@@ -74,8 +58,7 @@ function char_talent(&$sqlr, &$sqlc)
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name))
     {
-      $result = $sqlc->query('SELECT spell FROM character_spell WHERE guid = '.$id.' ORDER BY spell ASC');
-
+      $result = $sqlc->query('SELECT spell FROM character_spell WHERE guid = '.$id.'');
       $output .= '
           <center>
               <div id="tab">
@@ -92,93 +75,93 @@ function char_talent(&$sqlr, &$sqlc)
               <font class="bold">'.htmlentities($char['name']).' -
               <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
               <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - lvl '.char_get_level_color($char['level']).'</font>
-              <br /><br />';
-      if($developer_test_mode && $new_talent_tab)
-      {
-        $tabs = array();
-        if ($sqlc->num_rows($result))
-        {
-          $i = 0;
-          while (($talent = $sqlc->fetch_assoc($result)) && ($i < 120))
-          {
-            if ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank5 = '.$talent['spell'].' LIMIT 1')))
-            {
-              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'5');
-              ++$i;
-              if ($tab['dependsOn'])
-                talent_dependencies($tabs, $tab, $i, $sqlm);
-            }
-            elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank4 = '.$talent['spell'].' LIMIT 1')))
-            {
-              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'4');
-              ++$i;
-              if ($tab['dependsOn'])
-                talent_dependencies($tabs, $tab, $i, $sqlm);
-            }
-            elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank3 = '.$talent['spell'].' LIMIT 1')))
-            {
-              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'3');
-              ++$i;
-              if ($tab['dependsOn'])
-                talent_dependencies($tabs, $tab, $i, $sqlm);
-            }
-            elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank2 = '.$talent['spell'].' LIMIT 1')))
-            {
-              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'2');
-              ++$i;
-              if ($tab['dependsOn'])
-                talent_dependencies($tabs, $tab, $i, $sqlm);
-            }
-            elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank1 = '.$talent['spell'].' LIMIT 1')))
-            {
-              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'1');
-              ++$i;
-              if ($tab['dependsOn'])
-                talent_dependencies($tabs, $tab, $i, $sqlm);
-            }
-          }
-          $output .= '
+              <br /><br />
               <table class="lined" style="width: 550px;">
                 <tr valign="top" align="center">';
-          foreach ($tabs as $k=>$data)
+      if ($sqlc->num_rows($result))
+      {
+        $sqlm = new SQL;
+        $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
+        $tabs = array();
+        $i = 0;
+
+        while (($talent = $sqlc->fetch_assoc($result)) && ($i < 120))
+        {
+          if ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank5 = '.$talent['spell'].' LIMIT 1')))
           {
-            $points = 0;
-            $output .= '
+            $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'5');
+            ++$i;
+            if ($tab['dependsOn'])
+              talent_dependencies($tabs, $tab, $i, $sqlm);
+          }
+          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank4 = '.$talent['spell'].' LIMIT 1')))
+          {
+            $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'4');
+            ++$i;
+            if ($tab['dependsOn'])
+              talent_dependencies($tabs, $tab, $i, $sqlm);
+          }
+          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank3 = '.$talent['spell'].' LIMIT 1')))
+          {
+            $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'3');
+            ++$i;
+            if ($tab['dependsOn'])
+              talent_dependencies($tabs, $tab, $i, $sqlm);
+          }
+          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank2 = '.$talent['spell'].' LIMIT 1')))
+          {
+            $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'2');
+            ++$i;
+            if ($tab['dependsOn'])
+              talent_dependencies($tabs, $tab, $i, $sqlm);
+          }
+          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank1 = '.$talent['spell'].' LIMIT 1')))
+          {
+            $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'1');
+            ++$i;
+            if ($tab['dependsOn'])
+              talent_dependencies($tabs, $tab, $i, $sqlm);
+          }
+        }
+        foreach ($tabs as $k=>$data)
+        {
+          $points = 0;
+          $output .= '
                   <td>
                     <table class="hidden" style="width: 0px;">
                      <tr>
                        <td colspan="6" style="border-bottom-width: 0px;">
                        </td>
-                     </tr>';
-            for($i=0;$i<11;++$i)
+                     </tr>
+                     <tr>';
+          for($i=0;$i<11;++$i)
+          {
+            for($j=0;$j<4;++$j)
             {
-              $output .= '
-                      <tr>';
-              for($j=0;$j<4;++$j)
+              if(isset($data[$i][$j]))
               {
-                if(isset($data[$i][$j]))
-                {
-                  $output .= '
+                $output .= '
                         <td valign="bottom" align="center" style="border-top-width: 0px;border-bottom-width: 0px;">
                           <a href="'.$spell_datasite.$data[$i][$j][0].'" target="_blank">
-                            <img src="'.get_spell_icon($data[$i][$j][0], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
+                            <img src="'.spell_get_icon($data[$i][$j][0], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                           </a>
                           <div style="width:0px;margin:-14px 0px 0px 30px;font-size:14px;color:black">'.$data[$i][$j][1].'</div>
                           <div style="width:0px;margin:-14px 0px 0px 29px;font-size:14px;color:white">'.$data[$i][$j][1].'</div>
                         </td>';
-                  $points += $data[$i][$j][1];
-                }
-                else
-                  $output .= '
+                $points += $data[$i][$j][1];
+              }
+              else
+                $output .= '
                         <td valign="bottom" align="center" style="border-top-width: 0px;border-bottom-width: 0px;">
                           <img src="img/blank.gif" width="44" height="44" alt="" />
                         </td>';
-              }
-              $output .= '
-                      </tr>';
             }
             $output .= '
-                     <tr>
+                      </tr>
+                      <tr>';
+          }
+          $output .= '
                        <td colspan="6" style="border-top-width: 0px;border-bottom-width: 0px;">
                        </td>
                      </tr>
@@ -189,84 +172,12 @@ function char_talent(&$sqlr, &$sqlc)
                       </tr>
                     </table>
                   </td>';
-          }
-          $output .= '
-                </tr>';
         }
-      }
-      else
-      {
-        $output .= '
-              <table class="lined" style="width: 550px;">
-                <tr>
-                  <th><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=0&amp;dir='.$dir.'">'.($order_by==0 ? '<img src="img/arr_'.($dir ? 'up' : 'dw').'.gif" alt="" />' : '').$lang_char['talent_id'].'</a></th>
-                  <th align="left"><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=1&amp;dir='.$dir.'">'.($order_by==1 ? '<img src="img/arr_'.($dir ? 'up' : 'dw').'.gif" alt="" />' : '').$lang_char['talent_name'].'</a></th>
-                </tr>';
-        $talents_1 = array();
-        if ($sqlc->num_rows($result))
-        {
-          while ($talent = $sqlc->fetch_assoc($result))
-          {
-            if(talent_get_value($talent['spell']))
-              array_push($talents_1, array($talent['spell'], get_spell_name($talent['spell'], $sqlm)));
-          }
-          aasort($talents_1, $order_by, $dir);
-          //if ($GMP)
-          //  $talent_sum = gmp_init(0);
-          foreach ($talents_1 as $data)
-          {
-            $output .= '
-                <tr>
-                  <td>'.$data[0].'</td>
-                  <td align="left">
-                    <a style="padding:2px;" href="'.$spell_datasite.$data[0].'" target="_blank">
-                      <img src="'.get_spell_icon($data[0], $sqlm).'" alt="" />
-                    </a>
-                    <a href="'.$spell_datasite.$data[0].'" target="_blank">'.$data[1].'</a>
-                  </td>';
-            //if ($GMP)
-            //  $talent_sum = gmp_add($talent_sum,sprintf('%s',talent_get_value($data[0])));
-            $output .= '
-                </tr>';
-          }
-        }
-        /*
-        // reserved till we get to calculate talent points using the new data we have in db
-        $playerclass = strtolower(char_get_class_name($char[3]));
-        switch ($playerclass)
-        {
-          case "shaman":
-            $padlength = 61;
-            break;
-          case "druid":
-            $padlength = 62;
-            break;
-          case "warlock":
-          case "paladin":
-          case "hunter":
-          case "priest":
-            $padlength = 64;
-            break;
-          case "warrior":
-            $padlength = 66;
-            break;
-          case "rogue":
-          case "mage":
-            $padlength = 67;
-            break;
-        }
-        if ($GMP)
-          $output .= "
-                <tr>
-                  <td>
-                    <a href=\"".$talent_calculator_datasite.$char[3]."&tal=".str_pad(sprintf('%s',gmp_strval($talent_sum)), "0", "0", STR_PAD_LEFT)."\" target=\"_blank\">Talent Calculator</a>
-                  </td>
-                </tr>";
-        */
       }
       //---------------Page Specific Data Ends here----------------------------
       //---------------Character Tabs Footer-----------------------------------
       $output .= '
+                </tr>
               </table>
             </div>
             <br />
