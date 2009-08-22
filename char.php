@@ -40,7 +40,7 @@ function char_main(&$sqlr, &$sqlc)
 
   $id = $sqlc->quote_smart($_GET['id']);
   if (is_numeric($id));
-  else $id = 0;
+  else error($lang_global['empty_fields']);
 
   $result = $sqlc->query('SELECT account, race FROM characters WHERE guid = '.$id.' LIMIT 1');
 
@@ -48,7 +48,7 @@ function char_main(&$sqlr, &$sqlc)
   {
     //resrict by owner's gmlvl
     $owner_acc_id = $sqlc->result($result, 0, 'account');
-    $query = $sqlr->query("SELECT gmlevel,username FROM account WHERE id = $owner_acc_id");
+    $query = $sqlr->query('SELECT gmlevel, username FROM account WHERE id = '.$owner_acc_id.'');
     $owner_gmlvl = $sqlr->result($query, 0, 'gmlevel');
     $owner_name = $sqlr->result($query, 0, 'username');
 
@@ -68,7 +68,7 @@ function char_main(&$sqlr, &$sqlc)
       unset($result_1);
     }
 
-    if ($user_lvl >= $owner_gmlvl && (($side_v == $side_p) || !$side_v))
+    if ($user_lvl >= $owner_gmlvl && (($side_v === $side_p) || !$side_v))
     {
       $result = $sqlc->query('SELECT data, name, race, class, zone, map, online, totaltime,
         mid(lpad( hex( CAST(substring_index(substring_index(data, " ", '.(CHAR_DATA_OFFSET_GENDER+1).'), " ", -1) as unsigned) ), 8, 0), 4, 1) as gender,
@@ -215,7 +215,7 @@ function char_main(&$sqlr, &$sqlc)
               <ul>
                 <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['char_sheet'].'</a></li>';
 
-      if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
+      if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name))
       {
         $output .= '
                 <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['inventory'].'</a></li>
@@ -229,7 +229,7 @@ function char_main(&$sqlr, &$sqlc)
               <div id="tab">
                 <ul>
                   <li id="selected"><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['char_sheet'].'</a></li>';
-        if (char_get_class_name($char['class']) == 'Hunter' )
+        if (char_get_class_name($char['class']) === 'Hunter' )
           $output .= '
                   <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['pets'].'</a></li>';
         $output .= '
@@ -660,7 +660,7 @@ function char_main(&$sqlr, &$sqlc)
                     <td width="15%"></td>
                     <td></td>
                   </tr>';
-      if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
+      if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name))
       {
         //total time played
         $tot_time = $char['totaltime'];

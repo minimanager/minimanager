@@ -20,6 +20,7 @@ function instances()
   $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
   //-------------------SQL Injection Prevention--------------------------------
+  // this page has multipage support and field ordering, so we need these
   $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
   if (preg_match('/^[[:digit:]]{1,5}$/', $start)); else $start=0;
 

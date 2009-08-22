@@ -6,16 +6,19 @@ require_once 'header.php';
 // minimum permission to view page
 valid_login($action_permission['read']);
 
+// we start with a lead of 10 spaces,
+//  because last line of header is an opening tag with 8 spaces
+//  keep html indent in sync, so debuging from browser source would be easy to read
 $output .= '
-        <!-- start of irc.php -->
-        <center>
-          <br />
+          <!-- start of irc.php -->
+          <center>
+            <br />
             <applet code="IRCApplet.class" archive="libs/js/irc/irc.jar, libs/js/irc/pixx.jar" width="780" height="400">
               <param name="nick" value="'.$user_name.'" />
               <param name="alternatenick" value="'.$user_name.'_tmp" />
-              <param name="name" value='.$user_name.' />
-              <param name="host" value='.$irc_cfg['server'].' />
-              <param name="port" value='.$irc_cfg['port'].' />
+              <param name="name" value="'.$user_name.'" />
+              <param name="host" value="'.$irc_cfg['server'].'" />
+              <param name="port" value="'.$irc_cfg['port'].'" />
               <param name="gui"  value="pixx" />
               <param name="asl"  value="false" />
               <param name="language"      value="libs/js/irc/english" />

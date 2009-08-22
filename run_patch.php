@@ -63,7 +63,7 @@ function print_upload()
                     <select name="use_db">';
   foreach ($world_db as $db)
     $output .= '
-                      <option value=\"'.$db['name'].'">'.$db['name'].'</option>';
+                      <option value="'.$db['name'].'">'.$db['name'].'</option>';
   foreach ($characters_db as $db)
     $output .= '
                       <option value="'.$db['name'].'">'.$db['name'].'</option>';

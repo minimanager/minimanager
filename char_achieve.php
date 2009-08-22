@@ -238,4 +238,5 @@ unset($lang_char);
 
 require_once 'footer.php';
 
+
 ?>

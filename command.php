@@ -11,10 +11,9 @@ valid_login($action_permission['read']);
 //#############################################################################
 function print_commands_form()
 {
-  global $output, $lang_command, $output,
+  global $output, $lang_command,
     $realm_id, $world_db,
-    $action_permission, $user_lvl,
-    $gm_level_arr;
+    $action_permission, $user_lvl, $gm_level_arr;
 
   $levels = $gm_level_arr;
 
@@ -47,6 +46,10 @@ function print_commands_form()
                 </tr>';
     $levels[$data['security']][3] .= $tmp_output;
   }
+  unset($description);
+  unset($syntax);
+  unset($comm);
+  unset($tmp_output);
   unset($data);
   unset($query);
 
@@ -143,7 +146,7 @@ function update_commands()
   }
   unset($n_commands);
   unset($commands);
-  unset($change);
+  unset($check);
   $output .= '
                 </table>
               </form>
@@ -165,8 +168,8 @@ function update_commands()
 //#############################################################################
 function doupdate_commands()
 {
-  global $output, $lang_global,
-    $world_db, $realm_id,
+  global $output,
+    $realm_id, $world_db,
     $action_permission;
   valid_login($action_permission['update']);
 
@@ -215,9 +218,9 @@ $output .= '
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-if ($action == 'update')
+if ('update' == $action)
   update_commands();
-elseif ($action == 'doupdate')
+elseif ('doupdate' == $action)
   doupdate_commands();
 else
   print_commands_form();

@@ -58,10 +58,10 @@ function char_talent(&$sqlr, &$sqlc)
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 0;
   $dir = ($dir) ? 0 : 1;
 
-  $result = $sqlc->query("SELECT account, name, race, class,
-    CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-    mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
-    FROM `characters` WHERE guid = $id LIMIT 1");
+  $result = $sqlc->query('SELECT account, name, race, class,
+    CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) AS UNSIGNED) AS level,
+    mid(lpad( hex( CAST(substring_index(substring_index(data, " ", '.(CHAR_DATA_OFFSET_GENDER+1).'), " ", -1) as unsigned) ), 8, 0), 4, 1) as gender
+    FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   if ($sqlc->num_rows($result))
   {
@@ -76,22 +76,23 @@ function char_talent(&$sqlr, &$sqlc)
     {
       $result = $sqlc->query('SELECT spell FROM character_spell WHERE guid = '.$id.' ORDER BY spell ASC');
 
-      $output .= "
+      $output .= '
           <center>
-              <div id=\"tab\">
+              <div id="tab">
               <ul>
-                <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
-                <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
-                <li id=\"selected\"><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
-                <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
-                <li><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
-                <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
+                <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['char_sheet'].'</a></li>
+                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['inventory'].'</a></li>
+                <li id="selected"><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['talents'].'</a></li>
+                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['achievements'].'</a></li>
+                <li><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['quests'].'</a></li>
+                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['friends'].'</a></li>
               </ul>
             </div>
-            <div id=\"tab_content\">
-              <font class=\"bold\">".htmlentities($char['name'])." - <img src='img/c_icons/{$char['race']}-{$char['gender']}.gif' onmousemove='toolTip(\"".char_get_race_name($char['race'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char['class']}.gif' onmousemove='toolTip(\"".char_get_class_name($char['class'])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char['level'])."</font>
-              <br /><br />
-              <table class=\"lined\" style=\"width: 550px;\">";
+            <div id="tab_content">
+              <font class="bold">'.htmlentities($char['name']).' -
+              <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
+              <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - lvl '.char_get_level_color($char['level']).'</font>
+              <br /><br />';
       if($developer_test_mode && $new_talent_tab)
       {
         $tabs = array();
@@ -137,13 +138,18 @@ function char_talent(&$sqlr, &$sqlc)
             }
           }
           $output .= '
+              <table class="lined" style="width: 550px;">
                 <tr valign="top" align="center">';
           foreach ($tabs as $k=>$data)
           {
             $points = 0;
             $output .= '
                   <td>
-                    <table style="width: 0px;">';
+                    <table class="hidden" style="width: 0px;">
+                     <tr>
+                       <td colspan="6" style="border-bottom-width: 0px;">
+                       </td>
+                     </tr>';
             for($i=0;$i<11;++$i)
             {
               $output .= '
@@ -153,7 +159,7 @@ function char_talent(&$sqlr, &$sqlc)
                 if(isset($data[$i][$j]))
                 {
                   $output .= '
-                        <td valign="bottom" align="center">
+                        <td valign="bottom" align="center" style="border-top-width: 0px;border-bottom-width: 0px;">
                           <a href="'.$spell_datasite.$data[$i][$j][0].'" target="_blank">
                             <img src="'.get_spell_icon($data[$i][$j][0], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                           </a>
@@ -164,32 +170,34 @@ function char_talent(&$sqlr, &$sqlc)
                 }
                 else
                   $output .= '
-                        <td>
-                          <a href=#>
-                            <img src="img/blank.gif" width="44" height="44" alt="" />
-                          </a>
+                        <td valign="bottom" align="center" style="border-top-width: 0px;border-bottom-width: 0px;">
+                          <img src="img/blank.gif" width="44" height="44" alt="" />
                         </td>';
               }
               $output .= '
                       </tr>';
-
             }
             $output .= '
+                     <tr>
+                       <td colspan="6" style="border-top-width: 0px;border-bottom-width: 0px;">
+                       </td>
+                     </tr>
                       <tr>
-                        <td colspan="4" valign="bottom" align="left">
+                        <td colspan="6" valign="bottom" align="left">
                          '.$sqlm->result($sqlm->query('SELECT name_loc0 FROM dbc_talenttab WHERE id = '.$k.''), 0, 'name_loc0').': '.$points.'
                         </td>
                       </tr>
                     </table>
                   </td>';
           }
-        }
-        $output .= '
+          $output .= '
                 </tr>';
+        }
       }
       else
       {
         $output .= '
+              <table class="lined" style="width: 550px;">
                 <tr>
                   <th><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=0&amp;dir='.$dir.'">'.($order_by==0 ? '<img src="img/arr_'.($dir ? 'up' : 'dw').'.gif" alt="" />' : '').$lang_char['talent_id'].'</a></th>
                   <th align="left"><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=1&amp;dir='.$dir.'">'.($order_by==1 ? '<img src="img/arr_'.($dir ? 'up' : 'dw').'.gif" alt="" />' : '').$lang_char['talent_name'].'</a></th>

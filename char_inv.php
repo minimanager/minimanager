@@ -202,8 +202,7 @@ function char_inv(&$sqlr, &$sqlc)
           $output .='
                     <a style="padding:2px;" href="'.$item_datasite.$equiped_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equiped_bag_id[$i][0], $sqlm, $sqlw).'" alt="" />
-                    </a>';
-          $output .= '
+                    </a>
                     '.$lang_item['bag'].' '.$i.'<br />
                     <font class="small">'.$equiped_bag_id[$i][1].' '.$lang_item['slots'].'</font>';
         }
@@ -227,15 +226,12 @@ function char_inv(&$sqlr, &$sqlc)
                       <div class="no_slot"></div>';
         foreach ($bag[$t] as $pos => $item)
         {
-          $output .= '
-                      <div style="left:'.(($pos+$dsp)%4*42).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">';
-
-          $output .= '
-                        <a style="padding:2px;" href="'.$item_datasite.$item[0].'" target="_blank">
-                          <img src="'.get_item_icon($item[0], $sqlm, $sqlw).'" alt="" />'.($item[1] ? ($item[1]+1) : '').'
-                        </a>';
           $item[2] = $item[2] == 1 ? '' : $item[2];
           $output .= '
+                      <div style="left:'.(($pos+$dsp)%4*42).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
+                        <a style="padding:2px;" href="'.$item_datasite.$item[0].'" target="_blank">
+                          <img src="'.get_item_icon($item[0], $sqlm, $sqlw).'" alt="" />
+                        </a>
                         <div style="width:25px;margin:-20px 0px 0px 18px;color: black; font-size:14px">'.$item[2].'</div>
                         <div style="width:25px;margin:-21px 0px 0px 17px;font-size:14px">'.$item[2].'</div>
                       </div>';
@@ -262,14 +258,12 @@ function char_inv(&$sqlr, &$sqlc)
       // inventory items
       foreach ($bag[0] as $pos => $item)
       {
-        $output .= '
-                      <div style="left:'.($pos%4*42).'px;top:'.(floor($pos/4)*41).'px;">';
-        $output .= '
-                        <a style="padding:2px;" href="'.$item_datasite.$item[0].'" target="_blank">
-                          <img src="'.get_item_icon($item[0], $sqlm, $sqlw).'" alt="" />'.($item[1] ? ($item[1]+1) : '').'
-                        </a>';
         $item[2] = $item[2] == 1 ? '' : $item[2];
         $output .= '
+                      <div style="left:'.($pos%4*42).'px;top:'.(floor($pos/4)*41).'px;">
+                        <a style="padding:2px;" href="'.$item_datasite.$item[0].'" target="_blank">
+                          <img src="'.get_item_icon($item[0], $sqlm, $sqlw).'" alt="" />
+                        </a>
                         <div style="width:25px;margin:-20px 0px 0px 18px;color: black; font-size:14px\">'.$item[2].'</div>
                         <div style="width:25px;margin:-21px 0px 0px 17px;font-size:14px">'.$item[2].'</div>
                       </div>';
@@ -281,8 +275,7 @@ function char_inv(&$sqlr, &$sqlc)
                         '.substr($char['gold'],  0, -4).'<img src="img/gold.gif" alt="" align="middle" />
                         '.substr($char['gold'], -4,  2).'<img src="img/silver.gif" alt="" align="middle" />
                         '.substr($char['gold'], -2).'<img src="img/copper.gif" alt="" align="middle" />
-                      </b>';
-      $output .= '
+                      </b>
                     </div>
                   </td>
                   <td colspan="2" class="bank" align="center">
@@ -291,14 +284,12 @@ function char_inv(&$sqlr, &$sqlc)
       // bank items
       foreach ($bank[0] as $pos => $item)
       {
-        $output .= '
-                      <div style="left:'.($pos%7*43).'px;top:'.(floor($pos/7)*41).'px;">';
-        $output .= '
-                        <a style="padding:2px;" href="'.$item_datasite.$item[0].'" target="_blank">
-                          <img src="'.get_item_icon($item[0], $sqlm, $sqlw).'" class="inv_icon" alt="" />
-                        </a>';
         $item[2] = $item[2] == 1 ? '' : $item[2];
         $output .= '
+                      <div style="left:'.($pos%7*43).'px;top:'.(floor($pos/7)*41).'px;">
+                        <a style="padding:2px;" href="'.$item_datasite.$item[0].'" target="_blank">
+                          <img src="'.get_item_icon($item[0], $sqlm, $sqlw).'" class="inv_icon" alt="" />
+                        </a>
                         <div style="width:25px;margin:-20px 0px 0px 18px;color: black; font-size:14px">'.$item[2].'</div>
                         <div style="width:25px;margin:-21px 0px 0px 17px;font-size:14px">'.$item[2].'</div>
                       </div>';
@@ -319,8 +310,7 @@ function char_inv(&$sqlr, &$sqlc)
           $output .= '
                     <a style="padding:2px;" href="'.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equip_bnk_bag_id[$i][0], $sqlm, $sqlw).'" alt="" />
-                    </a>';
-          $output .= '
+                    </a>
                     '.$lang_item['bag'].' '.$i.'<br />
                     <font class="small">'.$equip_bnk_bag_id[$i][1].' '.$lang_item['slots'].'</font>';
         }
@@ -350,8 +340,7 @@ function char_inv(&$sqlr, &$sqlc)
               $output .= '
                     <a style="padding:2px;" href="'.$item_datasite.$equip_bnk_bag_id[$i][0].'" target="_blank">
                       <img class="bag_icon" src="'.get_item_icon($equip_bnk_bag_id[$i][0], $sqlm, $sqlw).'" alt="" />
-                    </a>';
-              $output .= '
+                    </a>
                     '.$lang_item['bag'].' '.$i.'<br />
                     <font class="small">'.$equip_bnk_bag_id[$i][1].' '.$lang_item['slots'].'</font>';
             }
@@ -373,17 +362,15 @@ function char_inv(&$sqlr, &$sqlc)
                       <div class="no_slot"></div>';
         foreach ($bank[$t] as $pos => $item)
         {
-          $output .= "
-                      <div style=\"left:".(($pos+$dsp)%4*43)."px;top:".(floor(($pos+$dsp)/4)*41)."px;\">";
-          $output .= "
-                        <a style=\"padding:2px;\" href=\"$item_datasite{$item[0]}\" target=\"_blank\">
-                          <img src=\"".get_item_icon($item[0], $sqlm, $sqlw)."\" alt=\"\" />
-                        </a>";
           $item[2] = $item[2] == 1 ? '' : $item[2];
-          $output .= "
-                        <div style=\"width:25px;margin:-20px 0px 0px 18px;color: black; font-size:14px\">$item[2]</div>
-                        <div style=\"width:25px;margin:-21px 0px 0px 17px;font-size:14px\">$item[2]</div>
-                      </div>";
+          $output .= '
+                      <div style="left:'.(($pos+$dsp)%4*43).'px;top:'.(floor(($pos+$dsp)/4)*41).'px;">
+                        <a style="padding:2px;" href="'.$item_datasite.$item[0].'" target="_blank">
+                          <img src="'.get_item_icon($item[0], $sqlm, $sqlw).'" alt="" />
+                        </a>
+                        <div style="width:25px;margin:-20px 0px 0px 18px;color: black; font-size:14px">'.$item[2].'</div>
+                        <div style="width:25px;margin:-21px 0px 0px 17px;font-size:14px">'.$item[2].'</div>
+                      </div>';
         }
         $output .= '
                     </div>
@@ -468,5 +455,6 @@ unset($action_permission);
 unset($lang_char);
 
 require_once("footer.php");
+
 
 ?>

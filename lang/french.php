@@ -211,56 +211,51 @@ function lang_header()
 {
   $lang_header = array
   (
-  'menu' => 'Menu',
+    'menu' => 'Menu',
 
-  'my_acc' => 'Mon compte',
+    'main' => 'Portail',
+    'tools' => 'Outils',
+    'db' => 'Base de données',
+    'forums' => 'Forums',
+    'my_acc' => 'Mon compte',
 
-  // please check the length at 'My Account' Menu
-  'realms' => '-----Royaumes----',
-  'my_characters' => '---Personnages---',
-  'account' => '------Compte-----',
+    'auctionhouse' => 'Hôtel des ventes',
+    'arena_teams' => 'Equipes d\'arène',
+    'guilds' => 'Guildes',
+    'honor' => 'Rangs d\'Honneur',
+    'statistics' => 'Statistiques',
+    'events' => 'Evènements',
+    'instances' => 'Instances',
+    'top100' => 'TOP 100',
+    'player_map' => 'Carte des joueurs',
 
-  'edit_my_acc' => 'Editer mon compte',
-  'logout' => 'Se deconnecter',
+    'accounts' => 'Comptes',
+    'characters' => 'Personnages',
+    'command' => 'Commandes',
+    'banned_list' => 'Liste des bannis',
+    'mail' => 'E-Mail',
+    'tickets' => 'Tickets',
+    'teleports' => 'Teleports',
+    'cleanup' => 'Purger',
+    'ssh_line' => 'Commandes SSH',
+    'run_sql_patch' => 'Exécuter un patch SQL ',
+    'add_motd' => 'Ajouter un message du jour',
+    'realm' => 'Royaume',
+    'irc' => 'Applet IRC',
+    'spelld' => 'Sort(s) Désactivé(s)',
 
-  'main' => 'Portail',
-  'tools' => 'Outils',
-  'db' => 'Base de données',
-  'forums' => 'Forums',
+    'items' => 'Items',
+    'creatures' => 'Creatures',
+    'game_object' => 'Objects',
+    'backup' => 'Sauvegarde',
+    'repair' => 'Réparer/Optimiser',
 
-  'auctionhouse' => 'Hôtel des ventes',
-  'arena_teams' => 'Equipes d\'arène',
-  'guilds' => 'Guildes',
-  'honor' => 'Rangs d\'Honneur',
-  'statistics' => 'Statistiques',
-  'events' => 'Evènements',
-  'instances' => 'Instances',
-  'top100' => 'TOP 100',
-  'player_map' => 'Carte des joueurs',
-
-  'accounts' => 'Comptes',
-  'characters' => 'Personnages',
-  'command' => 'Commandes',
-  'banned_list' => 'Liste des bannis',
-  'mail' => 'E-Mail',
-  'tickets' => 'Tickets',
-  'teleports' => 'Teleports',
-  'cleanup' => 'Purger',
-  'ssh_line' => 'Commandes SSH',
-  'run_sql_patch' => 'Exécuter un patch SQL ',
-  'add_motd' => 'Ajouter un message du jour',
-  'realm' => 'Royaume',
-  'irc' => 'Applet IRC',
-  'spelld' => 'Sort(s) Désactivé(s)',
-
-  'items' => 'Items',
-  'creatures' => 'Creatures',
-  'game_object' => 'Objects',
-  'backup' => 'Sauvegarde',
-  'repair' => 'Réparer/Optimiser',
-
-  'users' => 'Utilisateurs',
-  'statistics_on' => 'Statistiques en ligne',
+    // please check the length at 'My Account' Menu
+    'realms' => '-----Royaumes----',
+    'my_characters' => '---Personnages---',
+    'account' => '------Compte-----',
+    'edit_my_acc' => 'Editer mon compte',
+    'logout' => 'Se deconnecter',
   );
   return $lang_header;
 }
@@ -271,8 +266,8 @@ function lang_footer()
 {
   $lang_footer = array
   (
-  'bugs_to_admin' => 'Problèmes et bugs :',
-  'site_admin' => 'Administrateur du site'
+    'bugs_to_admin' => 'Problèmes et bugs :',
+    'site_admin' => 'Administrateur du site',
   );
   return $lang_footer;
 }
@@ -862,7 +857,7 @@ function lang_ssh()
   $lang_ssh = array
   (
     'server_offline' => 'Le serveur SSH/Telnet semble hors ligne!',
-    'config_server_properly' => 'Vérifiez que vous avez configuré le serveur SSH/Telnet correctement, et qu\'il est actuellement actif'
+    'config_server_properly' => 'Vérifiez que vous avez configuré le serveur SSH/Telnet correctement, et qu\'il est actuellement actif',
   );
   return $lang_ssh;
 }
@@ -1939,8 +1934,8 @@ function lang_events()
     'total' => 'Total',
     'descr' => 'Nom de l\'évènement',
     'start' => 'Première date de démarrage',
-    'occur' => 'Occurance<br /><small>jour(s)/heure(s)',
-    'length' => 'Durée<br /><small>jour(s)/heure(s)',
+    'occur' => 'Occurance<br /><small>jour(s)/heure(s)</small>',
+    'length' => 'Durée<br /><small>jour(s)/heure(s)</small>',
     'events' => 'Evènements',
   );
   return $lang_events;
