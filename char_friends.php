@@ -35,8 +35,7 @@ function char_friends()
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
-  if (!is_numeric($id))
-    $id = 0;
+  if (is_numeric($id)); else $id = 0;
 
   //==========================$_GET and SECURE========================
   $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "name";

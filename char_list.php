@@ -23,7 +23,7 @@ function browse_chars()
 
   //==========================$_GET and SECURE========================
   $start = (isset($_GET['start'])) ? $sqlr->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (is_numeric($start)); else $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlr->quote_smart($_GET['order_by']) : "guid";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="guid";
@@ -70,7 +70,7 @@ function browse_chars()
       break;
 
       case "level":
-        if (!is_numeric($search_value)) $search_value = 1;
+        if (is_numeric($search_value)); else $search_value = 1;
         $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) = $search_value";
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
@@ -82,7 +82,7 @@ function browse_chars()
       break;
 
       case "greater_level":
-        if (!is_numeric($search_value)) $search_value = 1;
+        if (is_numeric($search_value)); else $search_value = 1;
         $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) > $search_value";
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
@@ -94,7 +94,7 @@ function browse_chars()
       break;
 
       case "gold":
-        if (!is_numeric($search_value)) $search_value = 1;
+        if (is_numeric($search_value)); else $search_value = 1;
         $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1) > $search_value";
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
@@ -136,7 +136,7 @@ function browse_chars()
       break;
 
       case "item":
-        if (!is_numeric($search_value)) $search_value = 0;
+        if (is_numeric($search_value)); else $search_value = 0;
         $result = $sqlc->query("SELECT guid FROM character_inventory WHERE item_template = '$search_value'");
 
         $where_out = "guid IN (0 ";
@@ -157,7 +157,7 @@ function browse_chars()
       break;
 
       case "greater_rank":
-        if (!is_numeric($search_value)) $search_value = 0;
+        if (is_numeric($search_value)); else $search_value = 0;
         $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) > $search_value";
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
@@ -169,7 +169,7 @@ function browse_chars()
       break;
 
       case "highest_rank":
-        if (!is_numeric($search_value)) $search_value = 0;
+        if (is_numeric($search_value)); else $search_value = 0;
         $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) = $search_value";
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,

@@ -16,7 +16,7 @@ function browse_tickets()
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (is_numeric($start)); else $start=0;
 
   if ($server_type)
   {
@@ -180,7 +180,7 @@ function edit_ticket()
   $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
-  if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("ticket.php?error=1");
+  if(is_numeric($id)); else redirect("ticket.php?error=1");
 
   if ($server_type)
     $query = $sqlc->query("SELECT gm_tickets.playerGuid, gm_tickets.message text, `characters`.name
@@ -263,7 +263,7 @@ function do_edit_ticket()
 
   $new_text = $sqlc->quote_smart($_POST['new_text']);
   $id = $sqlc->quote_smart($_POST['id']);
-  if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("ticket.php?error=1");
+  if(is_numeric($id)); else redirect("ticket.php?error=1");
 
   if ($server_type)
     $query = $sqlc->query("UPDATE gm_tickets SET message='$new_text' WHERE guid = '$id'");

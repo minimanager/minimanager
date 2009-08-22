@@ -46,7 +46,7 @@ function char_achievements(&$sqlr, &$sqlc)
 
   // this page has multipage support and field ordering, so we need these
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
-  if (preg_match('/^[[:digit:]]{1,5}$/', $start)); else $start = 0;
+  if (is_numeric($start)); else $start = 0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'date';
   if (preg_match('/^[_[:lower:]]{1,4}$/', $order_by)); else $order_by = 'date';

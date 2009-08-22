@@ -133,7 +133,7 @@ function edit_realm()
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
   $id = $sqlr->quote_smart($_GET['id']);
-  if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
+  if(is_numeric($id)); else redirect("tele.php?error=1");
 
   $result = $sqlr->query("SELECT realmlist.id AS rid,name,address,port,icon,color,timezone,
             (SELECT SUM(numchars) FROM realmcharacters WHERE realmid = rid)
@@ -261,7 +261,7 @@ function doedit_realm()
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
   $id = $sqlr->quote_smart($_GET['id']);
-  if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("realm.php?error=1");
+  if(is_numeric($id)); else redirect("realm.php?error=1");
   $new_name = $sqlr->quote_smart($_GET['new_name']);
   $new_address = $sqlr->quote_smart($_GET['new_address']);
   $new_port = $sqlr->quote_smart($_GET['new_port']);
@@ -327,7 +327,7 @@ function dodel_realm()
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
   $id = $sqlr->quote_smart($_GET['id']);
-  if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("realm.php?error=1");
+  if(is_numeric($id)); else redirect("realm.php?error=1");
 
   $sqlr->query("DELETE FROM realmlist WHERE id = '$id'");
 

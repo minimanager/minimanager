@@ -32,8 +32,7 @@ function char_skill(&$sqlr, &$sqlc)
   }
 
   $id = $sqlc->quote_smart($_GET['id']);
-  if (!is_numeric($id))
-    $id = 0;
+  if (is_numeric($id)); else $id = 0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 1;
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;

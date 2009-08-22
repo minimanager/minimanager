@@ -92,7 +92,7 @@ function front(&$sqlr, &$sqlc)
 
   //MOTD part
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
-  if (!preg_match('/^[[:digit:]]{1,5}$/', $start)) $start=0;
+  if (is_numeric($start)); else $start=0;
 
   $all_record = $sqlc->result($sqlc->query('SELECT count(*) FROM bugreport'), 0);
 

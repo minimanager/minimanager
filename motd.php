@@ -60,7 +60,7 @@ function edit_motd(&$sqlc)
   if(empty($_GET['id'])) redirect('motd.php?error=1');
 
   $id = $sqlc->quote_smart($_GET['id']);
-  if(preg_match('/^[[:digit:]]{1,10}$/', $id));
+  if(is_numeric($id));
   else redirect('motd.php?error=1');
 
   $msg = $sqlc->result($sqlc->query('SELECT content FROM bugreport WHERE id = '.$id.''), 0);
@@ -134,7 +134,7 @@ function do_edit_motd(&$sqlc)
     redirect('motd.php?error=1');
 
   $id = $sqlc->quote_smart($_POST['id']);
-  if(preg_match('/^[[:digit:]]{1,10}$/', $id));
+  if(is_numeric($id));
   else redirect('motd.php?error=1');
 
   $msg = $sqlc->quote_smart($_POST['msg']);
@@ -162,7 +162,7 @@ function delete_motd(&$sqlc)
   if (empty($_GET['id'])) redirect('index.php');
 
   $id = $sqlc->quote_smart($_GET['id']);
-  if(preg_match('/^[[:digit:]]{1,10}$/', $id));
+  if(is_numeric($id));
   else redirect('motd.php?error=1');
 
   $query = $sqlc->query('DELETE FROM bugreport WHERE id ='.$id.'');

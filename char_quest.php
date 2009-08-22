@@ -31,14 +31,14 @@ function char_quest()
   $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
-  if (!is_numeric($id)) $id = 0;
+  if (is_numeric($id)); else $id = 0;
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (is_numeric($start)); else $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 1;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $order_by)) $order_by=1;
+  if (is_numeric($order_by)); else $order_by=1;
 
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 0;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=0;

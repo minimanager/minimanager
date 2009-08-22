@@ -20,7 +20,7 @@ function show_list()
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (is_numeric($start)); else $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : "$key_field";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="$key_field";

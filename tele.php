@@ -18,7 +18,7 @@ function browse_tele()
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (is_numeric($start)); else $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : "id";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="id";
@@ -184,11 +184,11 @@ function del_tele()
   $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
   $id = $sqlw->quote_smart($_GET['id']);
-  if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
+  if(is_numeric($id)); else redirect("tele.php?error=1");
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (is_numeric($start)); else $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : "id";
   if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="id";
@@ -228,7 +228,7 @@ function edit_tele()
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
   $id = $sqlw->quote_smart($_GET['id']);
-  if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
+  if(is_numeric($id)); else redirect("tele.php?error=1");
 
   $query = $sqlw->query("SELECT id, name, map, position_x, position_y, position_z, orientation FROM game_tele WHERE id = '$id'");
 
@@ -331,7 +331,7 @@ function do_edit_tele()
   $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
   $id = $sqlw->quote_smart($_GET['id']);
-  if(!preg_match("/^[[:digit:]]{1,10}$/", $id)) redirect("tele.php?error=1");
+  if(is_numeric($id)); else redirect("tele.php?error=1");
 
   $new_name = $sqlw->quote_smart($_GET['new_name']);
   $new_map = $sqlw->quote_smart($_GET['new_map']);

@@ -32,8 +32,7 @@ function char_pets()
   $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
-  if (!is_numeric($id))
-    $id = 0;
+  if (is_numeric($id)); else $id = 0;
 
   $result = $sqlc->query("SELECT account FROM `characters` WHERE guid = $id LIMIT 1");
 

@@ -223,31 +223,31 @@ $where = '';
 // language // if $_POST['language'] > 0 also search locales_XXX
 // prepare sql_query
 if ($_POST['language'] != '0') {
-  $loc_language  = (preg_match("/^[[:digit:]]{1,2}$/", $_POST['language']))  ? $sql->quote_smart($_POST['language'])  : redirect("creature.php?error=8");
+  $loc_language  = (is_numeric($_POST['language']))  ? $sql->quote_smart($_POST['language'])  : redirect("creature.php?error=8");
 }
 else $loc_language = '0';
 
 // check input and prepare sql query
 
 if ($_POST['npcflag'] != '') {
-  $npcflag = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['npcflag'])) ? $sql->quote_smart($_POST['npcflag']) : redirect("creature.php?error=8");
+  $npcflag = (is_numeric($_POST['npcflag'])) ? $sql->quote_smart($_POST['npcflag']) : redirect("creature.php?error=8");
   $where .= "ct.npcflag = '$npcflag' ";
 }
 else if ($_POST['type'] != '') {
-  $type    = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['type']))    ? $sql->quote_smart($_POST['type'])    : redirect("creature.php?error=8");
+  $type    = (is_numeric($_POST['type']))    ? $sql->quote_smart($_POST['type'])    : redirect("creature.php?error=8");
   $where .= "ct.type = '$type' ";
 
 }
 else if ($_POST['rank'] != '') {
-  $rank    = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['rank']))    ? $sql->quote_smart($_POST['rank'])    : redirect("creature.php?error=8");
+  $rank    = (is_numeric($_POST['rank']))    ? $sql->quote_smart($_POST['rank'])    : redirect("creature.php?error=8");
   $where .= "ct.rank = '$rank' ";
 }
 else if  ($_POST['family'] != '') {
-  $family  = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['family']))  ? $sql->quote_smart($_POST['family'])  : redirect("creature.php?error=8");
+  $family  = (is_numeric($_POST['family']))  ? $sql->quote_smart($_POST['family'])  : redirect("creature.php?error=8");
   $where .= "ct.family = '$family' ";
 }
 else if ($_POST['entry'] != '') {
-  $entry   = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['entry']))   ? $sql->quote_smart($_POST['entry'])   : redirect("creature.php?error=8");
+  $entry   = (is_numeric($_POST['entry']))   ? $sql->quote_smart($_POST['entry'])   : redirect("creature.php?error=8");
   $where .= "ct.entry = '$entry' ";
 }
 else if ($_POST['name'] != '') {
@@ -260,27 +260,27 @@ else if ($_POST['name'] != '') {
 
 }
 else if ($_POST['level'] != '') {
-  $level   = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['level']))   ? $sql->quote_smart($_POST['level'])   : redirect("creature.php?error=8");
+  $level   = (is_numeric($_POST['level']))   ? $sql->quote_smart($_POST['level'])   : redirect("creature.php?error=8");
   $where .= "ct.minlevel <= $level AND ct.maxlevel >= $level ";
 }
 else if ($_POST['health'] != '') {
-  $health  = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['health']))  ? $sql->quote_smart($_POST['health'])  : redirect("creature.php?error=8");
+  $health  = (is_numeric($_POST['health']))  ? $sql->quote_smart($_POST['health'])  : redirect("creature.php?error=8");
   $where .= "ct.minhealth <= $health AND ct.maxhealth >= $health ";
 }
 else if ($_POST['faction_A'] != '') {
-  $faction_A = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['faction_A'])) ? $sql->quote_smart($_POST['faction_A']) : redirect("creature.php?error=8");
+  $faction_A = (is_numeric($_POST['faction_A'])) ? $sql->quote_smart($_POST['faction_A']) : redirect("creature.php?error=8");
   $where .= "ct.faction_A = '$faction_A' ";
 }
 else if ($_POST['faction_H'] != '') {
-  $faction_H = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['faction_H'])) ? $sql->quote_smart($_POST['faction_H']) : redirect("creature.php?error=8");
+  $faction_H = (is_numeric($_POST['faction_H'])) ? $sql->quote_smart($_POST['faction_H']) : redirect("creature.php?error=8");
   $where .= "ct.faction_H = '$faction_H' ";
 }
 else if ($_POST['spell'] != '') {
-  $spell   = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['spell']))   ? $sql->quote_smart($_POST['spell'])   : redirect("creature.php?error=8");
+  $spell   = (is_numeric($_POST['spell']))   ? $sql->quote_smart($_POST['spell'])   : redirect("creature.php?error=8");
   $where .= "(ct.spell1 = '$spell' OR ct.spell2 = '$spell' OR ct.spell3 = '$spell' OR ct.spell4 = '$spell') ";
 }
 else if ($_POST['lootid'] != '') {
-  $lootid  = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['lootid']))  ? $sql->quote_smart($_POST['lootid'])  : redirect("creature.php?error=8");
+  $lootid  = (is_numeric($_POST['lootid']))  ? $sql->quote_smart($_POST['lootid'])  : redirect("creature.php?error=8");
   $where .= "ct.lootid = '$lootid' ";
 }
 else if ($_POST['ScriptName'] != '') {
@@ -288,7 +288,7 @@ else if ($_POST['ScriptName'] != '') {
   $where .= "ct.ScriptName LIKE '%$ScriptName%' ";
 }
 else if ($_POST['heroic'] != '') {
-  $heroic  = (preg_match("/^[[:digit:]]{1,15}$/", $_POST['heroic']))  ? $sql->quote_smart($_POST['heroic'])  : redirect("creature.php?error=8");
+  $heroic  = (is_numeric($_POST['heroic']))  ? $sql->quote_smart($_POST['heroic'])  : redirect("creature.php?error=8");
   $where .= "ct.heroic_entry = '$heroic'";
 }
 
@@ -375,7 +375,7 @@ function do_insert_update($do_insert) {
  if (!$do_insert) {
    if (!isset($_GET['entry']) ) redirect("creature.php?error=1");
 
-   $entry   = (preg_match("/^[[:digit:]]{1,15}$/", $_GET['entry']))   ? $sql->quote_smart($_GET['entry'])   : redirect("creature.php?error=8");
+   $entry   = (is_numeric($_GET['entry']))   ? $sql->quote_smart($_GET['entry'])   : redirect("creature.php?error=8");
    $result = $sql->query("SELECT `entry`, `heroic_entry`, `KillCredit1`, `KillCredit2`, `modelid_A`, `modelid_A2`, `modelid_H`, `modelid_H2`, `name`,`subname`, `IconName`, `minlevel`, `maxlevel`, `minhealth`, `maxhealth`, `minmana`, `maxmana`, `armor`,`faction_A`, `faction_H`, `npcflag`, `speed`,`scale`,`rank`,`mindmg`, `maxdmg`, `dmgschool`, `attackpower`, `baseattacktime`, `rangeattacktime`, `unit_flags`,`dynamicflags`, `family`, `trainer_type`, `trainer_spell`, `trainer_class`,`trainer_race`,`minrangedmg`, `maxrangedmg`, `rangedattackpower`, `type`,`type_flags`,`lootid`, `pickpocketloot`, `skinloot`, `resistance1`, `resistance2`, `resistance3`, `resistance4`, `resistance5`, `resistance6`, `spell1`, `spell2`, `spell3`, `spell4`, `PetSpellDataId`, `mingold`, `maxgold`, `AIName`, `MovementType`, `InhabitType`, `RacialLeader`, `RegenHealth`, `equipment_id`, `mechanic_immune_mask`, `flags_extra`, `ScriptName` FROM creature_template WHERE entry = '$entry'");
  }
  else {

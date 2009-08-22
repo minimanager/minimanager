@@ -29,7 +29,7 @@ function browse_guilds()
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (is_numeric($start)); else $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "gid";
   if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="gid";
@@ -124,7 +124,7 @@ function browse_guilds()
         $query_count = $sqlc->query("SELECT 1 from guild where leaderguid in (select guid from characters where name like '%$search_value%')");
         break;
       case "guildid" :
-        if (!preg_match('/^[[:digit:]]{1,12}$/', $search_value)) redirect("guild.php?error=5&amp;realm=$realmid");
+        if (is_numeric($search_value)); else redirect("guild.php?error=5&amp;realm=$realmid");
         $query = $sqlc->query("SELECT g.guildid as gid, g.name,g.leaderguid as lguid,
           (SELECT name from characters where guid = lguid) as lname, c.race in (2,5,6,8,10) as lfaction,
           (select count(*) from guild_member where guildid = gid) as tot_chars, createdate, c.account as laccount
@@ -259,7 +259,7 @@ function view_guild()
   $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
 
   $guild_id = $sqlc->quote_smart($_GET['id']);
-  if(!preg_match("/^[[:digit:]]{1,10}$/", $guild_id)) redirect("guild.php?error=6&amp;realm=$realmid");
+  if(is_numeric($guild_id)); else redirect("guild.php?error=6&amp;realm=$realmid");
 
   //==========================SQL INGUILD and GUILDLEADER======================
   $q_inguild = $sqlc->query("select 1 from guild_member where guildid = '$guild_id' and guid in (select guid from characters where account = '$user_id')");
@@ -276,7 +276,7 @@ function view_guild()
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (is_numeric($start)); else $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "mrank";
   if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="mrank";
@@ -461,7 +461,8 @@ function del_guild()
     $id = $_GET['id'];
   else
     redirect("guild.php?error=1&amp;realm=$realmid");
-  if (!preg_match('/^[[:digit:]]{1,12}$/', $id))
+  if (is_numeric($id));
+  else
     redirect("guild.php?error=5&amp;realm=$realmid");
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
@@ -521,13 +522,15 @@ function rem_char_from_guild()
     $guid = $_GET['id'];
   else
     redirect("guild.php?error=1&amp;realm=$realmid");
-  if (!preg_match('/^[[:digit:]]{1,12}$/', $guid))
+  if (is_numeric($guid));
+  else
     redirect("guild.php?error=5&amp;realm=$realmid");
   if(isset($_GET['guld_id']))
     $guld_id = $_GET['guld_id'];
   else
     redirect("guild.php?error=1&amp;realm=$realmid");
-  if (!preg_match('/^[[:digit:]]{1,12}$/', $guld_id))
+  if (is_numeric($guld_id));
+  else
     redirect("guild.php?error=5&amp;realm=$realmid");
   $sqlc = new SQL;
   $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);

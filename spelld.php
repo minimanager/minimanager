@@ -20,7 +20,7 @@ function browse_spells()
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
-  if (!preg_match("/^[[:digit:]]{1,5}$/", $start)) $start=0;
+  if (is_numeric($start)); else $start=0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : "entry";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="entry";
@@ -249,10 +249,12 @@ function doadd_new()
   $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
   $entry = $sqlw->quote_smart($_GET['entry']);
-  if (!preg_match("/^[[:digit:]]{1,8}$/", $entry))
+  if (is_numeric($entry));
+  else
     redirect("spelld.php?error=6");
   $disable_mask = $sqlw->quote_smart($_GET['disable_mask']);
-  if (!preg_match("/^[[:digit:]]{1,11}$/", $disable_mask))
+  if (is_numeric($disable_mask));
+  else
     redirect("spelld.php?error=6");
   $comment = $sqlw->quote_smart($_GET['comment']);
 
