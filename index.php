@@ -20,15 +20,9 @@ function front(&$sqlr, &$sqlc)
   $output .= '
           <div class="top">';
 
-  $sqlw = new SQL;
-  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
-
   if (test_port($server[$realm_id]['addr'],$server[$realm_id]['game_port']))
   {
-    if($server_type)
-      $stats = $sqlw->fetch_assoc($sqlw->query('SELECT starttime, maxplayers FROM uptime ORDER BY starttime DESC LIMIT 1'), 0);
-    else
-      $stats = $sqlr->fetch_assoc($sqlr->query('SELECT starttime, maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
+    $stats = $sqlr->fetch_assoc($sqlr->query('SELECT starttime, maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
     $uptimetime = time() - $stats['starttime'];
 
     function format_uptime($seconds)
@@ -79,6 +73,9 @@ function front(&$sqlr, &$sqlc)
             <h1><font class="error">'.$lang_index['realm'].' <em>'.htmlentities(get_realm_name($realm_id)).'</em> '.$lang_index['offline_or_let_high'].'</font></h1>';
     $online = false;
   }
+
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
   //  This retrieves the actual database version from the database itself, instead of hardcoding it into a string
   if ($server_type)

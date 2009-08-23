@@ -7,8 +7,8 @@ valid_login($action_permission['read']);
 function stats($action, &$sqlr, &$sqlc)
 {
   global $output, $lang_global, $lang_stat, $lang_index,
-    $realm_id, $realm_db, $characters_db, $world_db,
-    $theme, $server_type;
+    $realm_id, $realm_db, $characters_db,
+    $theme;
 
   $race = Array
   (
@@ -63,25 +63,13 @@ function stats($action, &$sqlr, &$sqlc)
     $data_1 = mktime(date('H'), date('i'), date('s'), date('m'), date('d')-1, date('Y'));
     $data_1 = date('Y-m-d H:i:s', $data_1);
 
-    if ($server_type)
-    {
-      $sqlw = new SQL;
-      $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
-
-      $max_ever = $sqlw->result($sqlw->query('SELECT maxplayers FROM uptime ORDER BY maxplayers DESC LIMIT 1'), 0);
-      $max_restart = $sqlw->result($sqlw->query('SELECT maxplayers FROM uptime ORDER BY starttime DESC LIMIT 1'), 0);
-      $query = $sqlw->query('SELECT AVG(uptime)/60,MAX(uptime)/60,(100*SUM(uptime)/(UNIX_TIMESTAMP()-MIN(starttime))) FROM uptime');
-      $uptime = $sqlw->fetch_row($query);
-    }
-    else
-    {
-      $max_ever = $sqlr->result($sqlr->query('SELECT maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY maxplayers DESC LIMIT 1'), 0);
-      $max_restart = $sqlr->result($sqlr->query('SELECT maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
-      $query = $sqlr->query('SELECT AVG(uptime)/60,MAX(uptime)/60,(100*SUM(uptime)/(UNIX_TIMESTAMP()-MIN(starttime))) FROM uptime WHERE realmid = '.$realm_id.'');
-      $uptime = $sqlr->fetch_row($query);
-    }
+    $max_ever = $sqlr->result($sqlr->query('SELECT maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY maxplayers DESC LIMIT 1'), 0);
+    $max_restart = $sqlr->result($sqlr->query('SELECT maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
 
     $uniqueIPs = $sqlr->result($sqlr->query('select distinct count(last_ip) from account where last_login > \''.$data_1.'\' and last_login < \''.$data.'\''),0);
+
+    $query = $sqlr->query('SELECT AVG(uptime)/60,MAX(uptime)/60,(100*SUM(uptime)/(UNIX_TIMESTAMP()-MIN(starttime))) FROM uptime WHERE realmid = '.$realm_id.'');
+    $uptime = $sqlr->fetch_row($query);
 
     $query = $sqlc->query('SELECT count(*) FROM characters');
   }
