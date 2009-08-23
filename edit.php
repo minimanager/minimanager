@@ -1,31 +1,26 @@
 <?php
 
 
-require_once("header.php");
-require_once("libs/char_lib.php");
+require_once 'header.php';
+require_once 'libs/char_lib.php';
 valid_login($action_permission['read']);
 
 //##############################################################################################################
 // EDIT USER
 //##############################################################################################################
-function edit_user()
+function edit_user(&$sqlr, &$sqlc)
 {
-  global $lang_edit, $lang_global, $output, $realm_db, $mmfpm_db, $characters_db, $realm_id, $user_name, $user_id,
-    $expansion_select, $server, $developer_test_mode, $multi_realm_mode;
+  global $output, $lang_edit, $lang_global,
+    $realm_db, $mmfpm_db, $characters_db, $realm_id,
+    $user_name, $user_id, $expansion_select, $server, $developer_test_mode, $multi_realm_mode;
 
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   $result = $sqlr->query("SELECT email, gmlevel, joindate, expansion, last_ip FROM account WHERE username = '$user_name'");
-  $refguid = $sqlm->fetch_row($sqlm->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '$user_id'"));
-  $refguid = $refguid[0];
-  $referred_by = $sqlc->fetch_row($sqlc->query("SELECT name FROM characters WHERE guid = '$refguid'"));
+  $refguid = $sqlm->result($sqlm->query("SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '$user_id'"), 0, 'InvitedBy');
+  $referred_by = $sqlc->result($sqlc->query("SELECT name FROM characters WHERE guid = '$refguid'"), 0, 'name');
   unset($refguid);
-  $referred_by = $referred_by[0];
 
   if ($acc = $sqlc->fetch_row($result))
   {
@@ -33,12 +28,14 @@ function edit_user()
         <center>
           <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
           <script type=\"text/javascript\">
-           function do_submit_data ()
-           {
-             document.form.pass.value = hex_sha1('".strtoupper($user_name).":'+document.form.user_pass.value.toUpperCase());
-             document.form.user_pass.value = '0';
-             do_submit();
-           }
+            // <![CDATA[
+              function do_submit_data ()
+              {
+                document.form.pass.value = hex_sha1('".strtoupper($user_name).":'+document.form.user_pass.value.toUpperCase());
+                document.form.user_pass.value = '0';
+                do_submit();
+              }
+            // ]]>
           </script>
           <fieldset style=\"width: 550px;\">
             <legend>{$lang_edit['edit_acc']}</legend>
@@ -351,17 +348,17 @@ function doupdate_referral($referredby)
 function lang_set()
 {
   if (empty($_GET['lang']))
-    redirect("edit.php?error=1");
+    redirect('edit.php?error=1');
   else
     $lang = addslashes($_GET['lang']);
 
   if ($lang)
   {
-    setcookie("lang", $lang, time()+60*60*24*30*6); //six month
-    redirect("edit.php");
+    setcookie('lang', $lang, time()+60*60*24*30*6); //six month
+    redirect('edit.php');
   }
   else
-    redirect("edit.php?error=1");
+    redirect('edit.php?error=1');
 }
 
 
@@ -371,17 +368,17 @@ function lang_set()
 function theme_set()
 {
   if (empty($_GET['theme']))
-    redirect("edit.php?error=1");
+    redirect('edit.php?error=1');
   else
     $tmpl = addslashes($_GET['theme']);
 
   if ($tmpl)
   {
-    setcookie("theme", $tmpl, time()+3600*24*30*6); //six month
-    redirect("edit.php");
+    setcookie('theme', $tmpl, time()+3600*24*30*6); //six month
+    redirect('edit.php');
   }
   else
-    redirect("edit.php?error=1");
+    redirect('edit.php?error=1');
 }
 
 
@@ -441,7 +438,7 @@ switch ($action)
     theme_set();
     break;
   default:
-    edit_user();
+    edit_user($sqlr, $sqlc);
 }
 
 unset($action);
@@ -449,5 +446,6 @@ unset($action_permission);
 unset($lang_edit);
 
 require_once("footer.php");
+
 
 ?>

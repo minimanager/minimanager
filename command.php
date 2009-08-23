@@ -24,32 +24,16 @@ function print_commands_form()
 
   while ($data = $sqlw->fetch_assoc($query))
   {
-    $tmp_output = '
-                <tr>';
-    $tmp_output .=
-          ($user_lvl >= $action_permission['update']) ? '<td><input type="checkbox" name="check['.$data['name'].']" value="'.$data['security'].'" /></td>' : '<td></td>';
-    $tmp_output .= '
-                  <td align="left">'.$data['name'].'</td>';
-    $comm = explode('\r\n',$data['help'],2);
-    $syntax = ereg_replace('[a-zA-Z ]+:* *\.'.$data['name'].' *', '', str_replace('/', '<br />',$comm[0]));
-    if (isset($comm[1]))
-      $description = str_replace('\r\n\r\n', '<br />', $comm[1]);
-    else
-    {
-      $comm = explode('<!>',ereg_replace(' ([a-zA-Z]+ .*)', '<!>\\0', $syntax),2);
-      $syntax = $comm[0];
-      $description = isset($comm[1]) ? $comm[1] : ' ';
-    }
-    $tmp_output .= '
-                  <td>'.htmlentities($syntax).'</td>
-                  <td>'.htmlentities($description).'</td>
+    $comm = explode("\r\n", $data['help'], 2);
+    $levels[$data['security']][3] .= '
+                <tr>
+                  '.(($user_lvl >= $action_permission['update']) ? '<td><input type="checkbox" name="check['.$data['name'].']" value="'.$data['security'].'" /></td>' : '<td></td>').'
+                  <td align="left">'.$data['name'].'</td>
+                  <td>'.htmlentities(ereg_replace("[a-zA-Z ]+:* *\.", ".", $comm[0])).'</td>
+                  <td>'.(isset($comm[1]) ? str_replace("\r\n", "<br />", str_replace("\r\n\r\n", "<br />", htmlentities($comm[1]))): '').'</td>
                 </tr>';
-    $levels[$data['security']][3] .= $tmp_output;
   }
-  unset($description);
-  unset($syntax);
   unset($comm);
-  unset($tmp_output);
   unset($data);
   unset($query);
 
