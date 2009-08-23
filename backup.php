@@ -621,7 +621,7 @@ function dobackup()
 // MAIN
 //########################################################################################################################
 if ($server_type)
-  $tables_backup_characters = $$tables_backup_characters_trinity;
+  $tables_backup_characters = $tables_backup_characters_trinity;
 
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 

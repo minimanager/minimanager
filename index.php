@@ -20,9 +20,15 @@ function front(&$sqlr, &$sqlc)
   $output .= '
           <div class="top">';
 
+  $sqlw = new SQL;
+  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
+
   if (test_port($server[$realm_id]['addr'],$server[$realm_id]['game_port']))
   {
-    $stats = $sqlr->fetch_assoc($sqlr->query('SELECT starttime, maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
+    if($server_type)
+      $stats = $sqlw->fetch_assoc($sqlw->query('SELECT starttime, maxplayers FROM uptime ORDER BY starttime DESC LIMIT 1'), 0);
+    else
+      $stats = $sqlr->fetch_assoc($sqlr->query('SELECT starttime, maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
     $uptimetime = time() - $stats['starttime'];
 
     function format_uptime($seconds)
@@ -73,9 +79,6 @@ function front(&$sqlr, &$sqlc)
             <h1><font class="error">'.$lang_index['realm'].' <em>'.htmlentities(get_realm_name($realm_id)).'</em> '.$lang_index['offline_or_let_high'].'</font></h1>';
     $online = false;
   }
-
-  $sqlw = new SQL;
-  $sqlw->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
 
   //  This retrieves the actual database version from the database itself, instead of hardcoding it into a string
   if ($server_type)
@@ -213,6 +216,12 @@ function front(&$sqlr, &$sqlc)
               </tr>';
     unset($total_online);
 
+    if ($server_type)
+    {
+      $tlatency = 0;
+      $latencycount = 0;
+    }
+
     $sqlm = new SQL;
     $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
@@ -240,7 +249,6 @@ function front(&$sqlr, &$sqlc)
         $tlatency = ($tlatency+$lat);
         $latencycount = ($latencycount+1);
       }
-
       $output .= '
               <tr>
                 <td>';
@@ -284,7 +292,7 @@ function front(&$sqlr, &$sqlc)
     if ($server_type)
       $output .= '
               <tr>
-                <td colspan="'.(($showcountryflag) ? '10' : '9').'" class="hidden" align="right">'.$lang_index['a_latency'].' : '.round(($tlatency/$latencycount), 2).' ms</td>
+                <td colspan="'.(($showcountryflag) ? '10' : '9').'" class="hidden" align="right">'.$lang_index['a_latency'].' : '.round(( ($latencycount) ? $tlatency/$latencycount : 0 ), 2).' ms</td>
               <tr>';
     $output .= '
             </table>
