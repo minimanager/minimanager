@@ -420,11 +420,13 @@ function lang_char()
     'skill_name' => 'Fertigkeit',
     'skill_value' => 'Wert',
     'talents' => 'Talente',
-    'talent' => 'Talent',
-    'talent_id' => 'ID',
-    'talent_name' => 'Talent Name',
-    'talent_value' => 'Wert',
     'showhide' => 'show/hide',
+    // ----char_talents.php----
+    'talent_rate' => 'Talent Rate',
+    'talent_points' => 'Talent Points',
+    'talent_points_used' => 'Talent Points Used',
+    'talent_points_shown' => 'Talent Points Shown',
+    'talent_points_left' => 'Talent Points',
     // --- skill_rank_array ---
     'apprentice' => 'Lehrling',
     'journeyman' => 'Geselle',

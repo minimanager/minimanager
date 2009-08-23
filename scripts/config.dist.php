@@ -106,7 +106,8 @@ $server = array
     'telnet_user'   => 'USER',      // Telnet username, must be all CAPS
     'telnet_pass'   => 'pass',      // Telnet password
     'rev'           => 'rev. ',     // MaNGOS rev. used (Trinity does not need this)
-    'both_factions' =>  true        // Allow to see opponent faction characters. Affects only players.
+    'both_factions' =>  true,       // Allow to see opponent faction characters. Affects only players.
+    'talent_rate'   =>  1,          // Talent rate set for this server, needed for talent point calculation
   ),
 );
 
