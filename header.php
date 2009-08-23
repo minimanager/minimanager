@@ -98,6 +98,9 @@ if ($allow_anony && empty($_SESSION['logged_in']))
   $_SESSION['client_ip'] = ( isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
 }
 
+$sqlr = new SQL;
+$sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
+
 //----Check if a user has login, if Guest mode is enabled, code above will login as Guest
 if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION['realm_id']) && empty($_GET['err']))
 {
@@ -120,7 +123,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
   $lookup_file = $array[sizeof($array)-1];
   unset($array);
 
-//---------------------Top Menu------------------------------------------------
+  //---------------------Top Menu----------------------------------------------
   $output .= '
             <div id="menuwrapper">
               <ul id="menubar">';
@@ -178,9 +181,6 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
   $output .= '
                 <li><a href="edit.php">'.$lang_header['my_acc'].'</a>
                   <ul>';
-
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
   $result = $sqlr->query('SELECT id, name FROM `realmlist` LIMIT 10');
 
