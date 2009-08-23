@@ -426,7 +426,7 @@ function lang_char()
     'talent_points' => 'Talent Points',
     'talent_points_used' => 'Talent Points Used',
     'talent_points_shown' => 'Talent Points Shown',
-    'talent_points_left' => 'Talent Points',
+    'talent_points_left' => 'Talent Points Left',
     // --- skill_rank_array ---
     'apprentice' => 'Apprenti',
     'journeyman' => 'Compagnon',
