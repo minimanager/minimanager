@@ -42,9 +42,7 @@ function char_talent(&$sqlr, &$sqlc)
   if (is_numeric($id));
   else error($lang_global['empty_fields']);
 
-  $result = $sqlc->query('SELECT account, name, race, class,
-    CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) AS UNSIGNED) AS level,
-    mid(lpad( hex( CAST(substring_index(substring_index(data, " ", '.(CHAR_DATA_OFFSET_GENDER+1).'), " ", -1) as unsigned) ), 8, 0), 4, 1) as gender,
+  $result = $sqlc->query('SELECT account, name, race, class, level, gender,
     CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_POINTS1+1).'), " ", -1) AS UNSIGNED) AS talent_points
     FROM characters WHERE guid = '.$id.' LIMIT 1');
 

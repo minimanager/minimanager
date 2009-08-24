@@ -45,10 +45,7 @@ function char_inv(&$sqlr, &$sqlc)
   else error($lang_global['empty_fields']);
 
   // getting character data from database
-  $result = $sqlc->query('SELECT account, name, race, class,
-    CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) AS UNSIGNED) AS level,
-    mid(lpad( hex( CAST(substring_index(substring_index(data, " ", '.(CHAR_DATA_OFFSET_GENDER+1).'), " ",-1) as unsigned) ), 8, 0), 4, 1) as gender,
-    CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GOLD+1).'), " ", -1) AS UNSIGNED) AS gold
+  $result = $sqlc->query('SELECT account, name, race, class, level, gender, money
     FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   // no point going further if character does not exist
@@ -271,9 +268,9 @@ function char_inv(&$sqlr, &$sqlc)
                     </div>
                     <div style="text-align:right;width:168px;background-image:none;background-color:#393936;padding:2px;">
                       <b>
-                        '.substr($char['gold'],  0, -4).'<img src="img/gold.gif" alt="" align="middle" />
-                        '.substr($char['gold'], -4,  2).'<img src="img/silver.gif" alt="" align="middle" />
-                        '.substr($char['gold'], -2).'<img src="img/copper.gif" alt="" align="middle" />
+                        '.substr($char['money'],  0, -4).'<img src="img/gold.gif" alt="" align="middle" />
+                        '.substr($char['money'], -4,  2).'<img src="img/silver.gif" alt="" align="middle" />
+                        '.substr($char['money'], -2).'<img src="img/copper.gif" alt="" align="middle" />
                       </b>
                     </div>
                   </td>

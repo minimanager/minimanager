@@ -33,15 +33,11 @@ function top100($realmid, &$sqlr, &$sqlc)
   $all_record = $sqlc->result($result, 0);
   $all_record = (($all_record < 100) ? $all_record : 100);
 
-  $result = $sqlc->query('SELECT guid, name, race, class, totaltime, online,
+  $result = $sqlc->query('SELECT guid, name, race, class, totaltime, online, gender, level, money,
     CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_HONOR_POINTS+1).'), " ", -1) AS UNSIGNED) AS honor,
     CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_HONOR_KILL+1).'),   " ", -1) AS UNSIGNED) AS kills,
-    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'),        " ", -1) AS UNSIGNED) AS level,
     CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_ARENA_POINTS+1).'), " ", -1) AS UNSIGNED) AS arena,
-    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GUILD_ID+1).'),     " ", -1) AS UNSIGNED) as gname,
-    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GOLD+1).'),         " ", -1) AS UNSIGNED) as money,
-    mid(lpad(hex(
-    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GENDER+1).'),       " ", -1) AS UNSIGNED)), 8, 0 ), 4, 1) as gender
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GUILD_ID+1).'),     " ", -1) AS UNSIGNED) as gname
     FROM characters ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
 
   //==========================top tage navigaion starts here========================

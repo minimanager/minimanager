@@ -178,11 +178,9 @@ function front(&$sqlr, &$sqlc)
         $order_side = (in_array($sqlc->result($result, 0),array(2,5,6,8,10))) ? ' AND race IN (2,5,6,8,10) ' : ' AND race IN (1,3,4,7,11) ';
     }
     $query = '
-      SELECT guid, name, race, class, zone, map,
+      SELECT guid, name, race, class, zone, map, level, account, gender,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_HONOR_POINTS+1).'), " ", -1) AS UNSIGNED) AS highest_rank,
-        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) AS UNSIGNED) AS level, account,
-        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GUILD_ID+1).'), " ", -1) AS UNSIGNED) as gname,
-        mid(lpad( hex( CAST(substring_index(substring_index(data, " ", '.(CHAR_DATA_OFFSET_GENDER+1).'), " ", -1) as unsigned) ), 8, 0), 4, 1) as gender
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GUILD_ID+1).'), " ", -1) AS UNSIGNED) as gname
         '.($server_type ? ', latency ' : ' ').'
         FROM characters WHERE online= 1 '.($gm_online == '0' ? 'AND extra_flags &1 = 0 ' : '').$order_side.' ORDER BY '.$order_by.' '.$order_dir.'';
     $result = $sqlc->query($query);

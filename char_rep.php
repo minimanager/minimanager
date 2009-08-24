@@ -36,7 +36,7 @@ function char_rep(&$sqlr, &$sqlc)
   $id = $sqlc->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
 
-  $result = $sqlc->query("SELECT account, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id LIMIT 1");
+  $result = $sqlc->query("SELECT account, name, race, class, level, gender FROM `characters` WHERE guid = $id LIMIT 1");
 
   if ($sqlc->num_rows($result))
   {

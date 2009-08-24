@@ -16,7 +16,8 @@ function char_achievements(&$sqlr, &$sqlc)
   global $output, $lang_global, $lang_char,
     $realm_id, $characters_db, $mmfpm_db,
     $action_permission, $user_lvl, $user_name,
-    $achievement_datasite, $itemperpage;
+    $achievement_datasite, $itemperpage,
+    $developer_test_mode, $new_achieve_page;
 
   // this page uses wowhead tooltops
   wowhead_tt();
@@ -58,9 +59,7 @@ function char_achievements(&$sqlr, &$sqlc)
   $dir = ($dir) ? 0 : 1;
 
   // getting character data from database
-  $result = $sqlc->query('SELECT account, name, race, class,
-    CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) AS UNSIGNED) AS level,
-    mid(lpad( hex( CAST(substring_index(substring_index(data, " ", '.(CHAR_DATA_OFFSET_GENDER+1).'), " ", -1) as unsigned) ), 8, 0), 4, 1) as gender
+  $result = $sqlc->query('SELECT account, name, race, class, level, gender
     FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   // no point going further if character does not exist
@@ -77,20 +76,29 @@ function char_achievements(&$sqlr, &$sqlc)
     // check user permission
     if ( ($user_lvl > $owner_gmlvl) || ($owner_name === $user_name) )
     {
-      // for multipage support
-      $result = $sqlc->query('SELECT count(*) FROM character_achievement WHERE guid = '.$id.'');
-      $all_record = $sqlc->result($result,0);
-
-      // main data that we need for this page, character achievements
-      $result = $sqlc->query('SELECT achievement, date FROM character_achievement
-        WHERE guid = '.$id.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
-
       //------------------------Character Tabs---------------------------------
       // we start with a lead of 10 spaces,
       //  because last line of header is an opening tag with 8 spaces
       //  keep html indent in sync, so debuging from browser source would be easy to read
       $output .= '
           <!-- start of char_achieve.php -->
+          <script LANGUAGE="JavaScript1.2">
+            function expand(thistag, tag, name)
+            {
+              styleObj = document.getElementById(thistag).style;
+
+              if (styleObj.display=="table")
+              {
+                styleObj.display="none";
+                tag.innerHTML = \'[+] \' + name;
+              }
+              else
+              {
+                styleObj.display="table";
+                tag.innerHTML = \'[-] \' + name;
+              }
+            }
+          </SCRIPT>
           <center>
             <div id="tab">
               <ul>
@@ -110,55 +118,191 @@ function char_achievements(&$sqlr, &$sqlc)
                 <img src="img/c_icons/'.$char['class'].'.gif"
                   onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - lvl '.char_get_level_color($char['level']).'
               </font>
-              <br /><br />
+              <br /><br />';
+      //---------------Page Specific Data Starts Here--------------------------
+
+      $sqlm = new SQL;
+      $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
+
+      if ($developer_test_mode && $new_achieve_page)
+      {
+        $output .= '
+              <table class="hidden" style="width: 550px;">
+                <tr>';
+
+        global $char_achieve;
+        $result = $sqlc->query('SELECT achievement, date FROM character_achievement WHERE guid = '.$id.'');
+        $char_achieve = array();
+
+        while ($temp = $sqlc->fetch_assoc($result))
+        {
+          $char_achieve[$temp['achievement']] = $temp['date'];
+        }
+
+        $main_cat = achieve_get_main_category($sqlm);
+        $sub_cat = achieve_get_sub_category($sqlm);
+
+        foreach($main_cat as $cat_id => $cat)
+        {
+          if (isset($cat['name01']))
+          // level 1
+          $output .='
+                  <th align="left">
+                    <div id="div'.$cat_id.'" onclick="expand(\''.$cat_id.'\', this, \''.$cat['name01'].'\');">[+] '.$cat['name01'].'</div>
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    <table id="'.$cat_id.'" class="lined" style="width: 550px; display: none;">';
+          if (isset($sub_cat[$cat['id']]))
+          {
+            $this_sub_cat = $sub_cat[$cat['id']];
+            foreach($this_sub_cat as $sub_cat_id => $sub)
+            {
+              if (isset($sub))
+              // level 2
+              $output .= '
+                      <tr>
+                        <th colspan="3" align="left">
+                          <div id="div'.$sub_cat_id.'" onclick="expand(\''.$sub_cat_id.'\', this, \''.$sub.'\');">[-] '.$sub.'</div>
+                        </th>
+                      </tr>
+                      <tr>
+                        <td colspan="3">
+                          <table id="'.$sub_cat_id.'" style="width: 550px; display: table;">';
+              if (isset($sub_cat[$sub_cat_id]))
+              {
+                $this_sub_sub_cat = $sub_cat[$sub_cat_id];
+                foreach($this_sub_sub_cat as $sub_sub_cat_id => $sub_sub)
+                {
+                  if (isset($sub_sub))
+                  // level 3
+                  $output .= '
+                            <tr>
+                              <td colspan="4" align="left">'.$sub_sub.'</td>
+                            </tr>';
+                  // level 3
+                  $achieve_cat = achieve_get_id_category($sub_sub_cat_id, $sqlm);
+                  foreach($achieve_cat as $achieve_id => $id)
+                  {
+                    if (isset($char_achieve[$id['id']]))
+                    $output .= '
+                            <tr>
+                              <td></td>
+                              <td width="50%" align="left">
+                                <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
+                                '.$id['description01'].'<br />
+                                '.$id['rewarddesc01'].'
+                              </td>
+                              <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
+                              <td width="5%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
+                            </tr>';
+                  }
+                }
+              }
+              // level 2
+              $achieve_cat = achieve_get_id_category($sub_cat_id, $sqlm);
+              foreach($achieve_cat as $achieve_id => $id)
+              {
+                if (isset($char_achieve[$id['id']]))
+                $output .= '
+                            <tr>
+                              <td width="50%" colspan="2" align="left">
+                                <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
+                                '.$id['description01'].'<br />
+                                '.$id['rewarddesc01'].'
+                              </td>
+                              <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
+                              <td width="5%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
+                            </tr>';
+              }
+              $output .= '
+                          </table>
+                        </td>
+                      </tr>';
+            }
+          }
+          // level 1
+          $achieve_sub_cat = achieve_get_id_category($cat['id'], $sqlm);
+          foreach($achieve_sub_cat as $achieve_id => $id)
+          {
+            if (isset($char_achieve[$id['id']]))
+            $output .= '
+                      <tr>
+                        <td width="50%" align="left">
+                          <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
+                          '.$id['description01'].'<br />
+                          '.$id['rewarddesc01'].'
+                        </td>
+                        <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
+                        <td width="5%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
+                      </tr>';
+          }
+          $output .= '
+                    </table>
+                  </td>
+                </tr>
+                <tr>';
+        }
+      }
+      else
+      {
+        $output .= '
               <table class="lined" style="width: 550px;">
                 <tr>
                   <td width="100%" align="right" colspan="4">';
 
-      // multi page links
-      $output .= generate_pagination('char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
-      $output .= '
-                  </td>
-                </tr>
-                <tr>';
+        // for multipage support
+        $result = $sqlc->query('SELECT count(*) FROM character_achievement WHERE guid = '.$id.'');
+        $all_record = $sqlc->result($result,0);
 
-      //---------------Page Specific Data Starts Here--------------------------
-      // developer note: for now we are only able to list achievements,
-      //   their categories, rewards and date, only date is sortable
-      // todo: group by categories, and if possible sort by other fields.
+        // main data that we need for this page, character achievements
+        $result = $sqlc->query('SELECT achievement, date FROM character_achievement
+          WHERE guid = '.$id.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
 
-      // column headers, with links for sorting
-      $output .= '
-                  <th width="30%">'.$lang_char['achievement_category'].'</th>
-                  <th width="50%">'.$lang_char['achievement_title'].'</th>
-                  <th width="1%">'.$lang_char['achievement_points'].'</th>
-                  <th width="1%"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=date&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='date' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['achievement_date'].'</a></th>
-                </tr>';
-
-      // we match character data with info from MiniManager database using achievement library
-      $sqlm = new SQL;
-      $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-
-      while ($data = $sqlc->fetch_assoc($result))
-      {
+        // multi page links
+        $output .= generate_pagination('char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
         $output .= '
-                <tr>
-                  <td>'.achieve_get_category($data['achievement'], $sqlm).'</td>
-                  <td align="left"><a href="'.$achievement_datasite.$data['achievement'].'" target="_blank">'.achieve_get_name($data['achievement'], $sqlm).'</a><br />'.achieve_get_reward($data['achievement'], $sqlm).'</td>
-                  <td>'.achieve_get_points($data['achievement'], $sqlm).' <img src="img/money_achievement.gif" alt="" /></td>
-                  <td>'.date('o-m-d', $data['date']).'</td>
-                </tr>';
+                    </td>
+                  </tr>
+                  <tr>';
+
+        //---------------Page Specific Data Starts Here--------------------------
+        // developer note: for now we are only able to list achievements,
+        //   their categories, rewards and date, only date is sortable
+        // todo: group by categories, and if possible sort by other fields.
+
+        // column headers, with links for sorting
+        $output .= '
+                    <th width="30%">'.$lang_char['achievement_category'].'</th>
+                    <th width="50%">'.$lang_char['achievement_title'].'</th>
+                    <th width="1%">'.$lang_char['achievement_points'].'</th>
+                    <th width="1%"><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=date&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='date' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['achievement_date'].'</a></th>
+                  </tr>';
+
+        // we match character data with info from MiniManager database using achievement library
+
+        while ($data = $sqlc->fetch_assoc($result))
+        {
+          $output .= '
+                  <tr>
+                    <td>'.achieve_get_category($data['achievement'], $sqlm).'</td>
+                    <td align="left"><a href="'.$achievement_datasite.$data['achievement'].'" target="_blank">'.achieve_get_name($data['achievement'], $sqlm).'</a><br />'.achieve_get_reward($data['achievement'], $sqlm).'</td>
+                    <td>'.achieve_get_points($data['achievement'], $sqlm).' <img src="img/money_achievement.gif" alt="" /></td>
+                    <td>'.date('o-m-d', $data['date']).'</td>
+                  </tr>';
+        }
+        unset($data);
+        unset($result);
+        $output .= '
+                  <tr>
+                    <td class="hidden" width="100%" align="right" colspan="4">';
+        // multi page links
+        $output .= generate_pagination('char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
+        unset($all_record);
+        $output .= '
+                    </td>';
       }
-      unset($data);
-      unset($result);
-      $output .= '
-                <tr>
-                  <td class="hidden" width="100%" align="right" colspan="4">';
-      // multi page links
-      $output .= generate_pagination('char_achieve.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
-      unset($all_record);
-      $output .= '
-                  </td>';
       //---------------Page Specific Data Ends here----------------------------
       //---------------Character Tabs Footer-----------------------------------
       $output .= '

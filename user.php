@@ -988,8 +988,7 @@ function edit_user()
               </tr>";
       if ($chars_on_realm)
       {
-        $char_array = $sqlc->query("SELECT guid,name,race,class,SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1),
-          mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender
+        $char_array = $sqlc->query("SELECT guid, name, race, class, level, gender
           FROM `characters` WHERE account = $id");
         while ($char = $sqlc->fetch_array($char_array))
         {

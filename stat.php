@@ -282,8 +282,8 @@ function stats($action, &$sqlr, &$sqlc)
     foreach ($level as $id)
     {
       $level[$id[0]][3] = $sqlc->result($sqlc->query('SELECT count(guid) FROM characters
-        WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) >= '.$id[1].'
-          AND SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) <= '.$id[2].'
+        WHERE level >= '.$id[1].'
+          AND level <= '.$id[2].'
             '.$order_race.' '.$order_class.' '.$order_side.(($action) ? ' AND online= 1' : '').''),0);
       $level[$id[0]][4] = round((($level[$id[0]][3])*100)/$total_chars,1);
     }

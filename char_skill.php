@@ -51,7 +51,7 @@ function char_skill(&$sqlr, &$sqlc)
 
     if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
     {
-      $result = $sqlc->query("SELECT data, name, race, class, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender FROM `characters` WHERE guid = $id");
+      $result = $sqlc->query("SELECT data, name, race, class, level, gender FROM `characters` WHERE guid = $id");
       $char = $sqlc->fetch_row($result);
       $char_data = explode(' ',$char[0]);
 
@@ -72,9 +72,9 @@ function char_skill(&$sqlr, &$sqlc)
               <ul>";
       if( char_get_class_name($char[3]) == 'Hunter' )
         $output .= "
-                <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>";
+                <li><a href=\"char_pets.php?id=$id&amp;realm=$realmid\">{$lang_char['pets']}</a></li>";
       $output .= "
-                <li><a href=\"char_pets.php?id=$id&amp;realm=$realmid\">{$lang_char['pets']}</a></li>
+                <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
                 <li><a href=\"char_rep.php?id=$id&amp;realm=$realmid\">{$lang_char['reputation']}</a></li>
                 <li id=\"selected\"><a href=\"char_skill.php?id=$id&amp;realm=$realmid\">{$lang_char['skills']}</a></li>
               </ul>

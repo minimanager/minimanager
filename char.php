@@ -70,8 +70,7 @@ function char_main(&$sqlr, &$sqlc)
 
     if ($user_lvl >= $owner_gmlvl && (($side_v === $side_p) || !$side_v))
     {
-      $result = $sqlc->query('SELECT data, name, race, class, zone, map, online, totaltime,
-        mid(lpad( hex( CAST(substring_index(substring_index(data, " ", '.(CHAR_DATA_OFFSET_GENDER+1).'), " ", -1) as unsigned) ), 8, 0), 4, 1) as gender,
+      $result = $sqlc->query('SELECT data, name, race, class, zone, map, online, totaltime, gender,
         account FROM characters WHERE guid = '.$id.'');
       $char = $sqlc->fetch_assoc($result);
       $char_data = explode(' ',$char['data']);
