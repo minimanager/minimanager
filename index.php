@@ -268,7 +268,7 @@ function front(&$sqlr, &$sqlc)
                   <span onmouseover="toolTip(\''.char_get_pvp_rank_name($char['highest_rank'], char_get_side_id($char['race'])).'\', \'item_tooltip\')" onmouseout="toolTip()" style="color: white;"><img src="img/ranks/rank'.char_get_pvp_rank_id($char['highest_rank'], char_get_side_id($char['race'])).'.gif" alt="" /></span>
                 </td>
                 <td>
-                  <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$char['gname'].'">'.$guild_name.'</a>
+                  <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$char['gname'].'">'.htmlentities($guild_name).'</a>
                 </td>
                 <td>'.get_map_name($char['map'], $sqlm).'</td>
                 <td>'.get_zone_name($char['zone'], $sqlm).'</td>';
