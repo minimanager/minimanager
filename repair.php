@@ -16,11 +16,11 @@ function repair_form()
   $output .= '
           <center>
             <fieldset class="tquarter_frame">
-              <legend>'.$lang_repair['repair_optimize'].'</legend>';
+              <legend>'.$lang_repair['repair_optimize'].'</legend>
+              <form action="repair.php?action=do_repair" method="post" name="form">';
   if($user_lvl >= $action_permission['update'])
   {
     $output .= '
-              <form action="repair.php?action=do_repair" method="post" name="form">
                 <table class="hidden">
                   <tr>
                     <td>

@@ -1,43 +1,44 @@
 <?php
 
 
-require_once("header.php");
-require_once("libs/char_lib.php");
+require_once 'header.php';
+require_once 'libs/char_lib.php';
 valid_login($action_permission['read']);
 
 //#############################################################################
 // BROWSE GUILDS
 //#############################################################################
-function browse_guilds()
+function browse_guilds(&$sqlr, &$sqlc)
 {
-  global $lang_guild, $lang_global, $output, $realm_db, $characters_db, $realm_id, $itemperpage,
-    $action_permission, $user_lvl, $user_id;
+  global $output, $lang_guild, $lang_global,
+    $realm_db, $characters_db, $realm_id,
+    $action_permission, $user_lvl, $user_id,
+    $itemperpage;
 
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-
+  // this is multi realm support, as of writing still under development
+  //  this page is already implementing it
   if (empty($_GET['realm']))
     $realmid = $realm_id;
   else
   {
     $realmid = $sqlr->quote_smart($_GET['realm']);
-    if (!is_numeric($realmid)) $realmid = $realm_id;
+    if (is_numeric($realmid))
+      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+    else
+      $realmid = $realm_id;
   }
-
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "gid";
-  if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="gid";
+  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'gid';
+  if (preg_match('/^[_[:lower:]]{1,10}$/', $order_by)); else $order_by='gid';
 
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
-  if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
+  if (preg_match('/^[01]{1}$/', $dir)) $dir=1;
 
-  $order_dir = ($dir) ? "ASC" : "DESC";
+  $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
   //==========================MyGuild==========================================
@@ -52,20 +53,20 @@ function browse_guilds()
 
   if ($query_myGuild)
   {
-    $output .= "
+    $output .= '
         <center>
           <fieldset>
-            <legend>{$lang_guild['my_guilds']}</legend>
-            <table class=\"lined\" align=\"center\">
+            <legend>'.$lang_guild['my_guilds'].'</legend>
+            <table class="lined" align="center">
               <tr>
-                <th width=\"1%\">{$lang_guild['id']}</th>
-                <th width=\"20%\">{$lang_guild['guild_name']}</th>
-                <th width=\"10%\">{$lang_guild['guild_leader']}</th>
-                <th width=\"1%\">{$lang_guild['guild_faction']}</th>
-                <th width=\"10%\">{$lang_guild['tot_m_online']}</th>
-                <th width=\"20%\">{$lang_guild['guild_motd']}</th>
-                <th width=\"20%\">{$lang_guild['create_date']}</th>
-              </tr>";
+                <th width="1%">'.$lang_guild['id'].'</th>
+                <th width="20%">'.$lang_guild['guild_name'].'</th>
+                <th width="10%">'.$lang_guild['guild_leader'].'</th>
+                <th width="1%">'.$lang_guild['guild_faction'].'</th>
+                <th width="10%">'.$lang_guild['tot_m_online'].'</th>
+                <th width="20%">'.$lang_guild['guild_motd'].'</th>
+                <th width="20%">'.$lang_guild['create_date'].'</th>
+              </tr>';
     while ($data = $sqlr->fetch_row($query_myGuild))
     {
       $result = $sqlr->query("SELECT gmlevel FROM account WHERE id ='$data[9]'");
@@ -84,12 +85,11 @@ function browse_guilds()
     }
     unset($data);
     unset($result);
-    $output .= "
+    $output .= '
             </table>
           </fieldset>
           <br />
-        </center>
-";
+        </center>';
   }
   //==========================MyGuild end======================================
   //==========================Browse/Search Guilds CHECK=======================
@@ -100,8 +100,8 @@ function browse_guilds()
     $search_by = $sqlc->quote_smart($_GET['search_by']);
     $search_value = $sqlc->quote_smart($_GET['search_value']);
 
-    $search_menu = array("name", "leadername", "guildid");
-    if (!in_array($search_by, $search_menu)) $search_by = 'name';
+    $search_menu = array('name', 'leadername', 'guildid');
+    if (in_array($search_by, $search_menu)); else $search_by = 'name';
 
     switch($search_by)
     {
@@ -488,14 +488,13 @@ function del_guild()
                 </td>
                 <td>";
                   makebutton($lang_global['no'], "guild.php?action=view_guild&amp;realm=$realmid&amp;id=$id\" type=\"def",130);
-  $output .= "
+  $output .= '
                 </td>
               </tr>
             </table>
           </form>
         </center>
-        <br />
-";
+        <br />';
 
 }
 
@@ -503,19 +502,21 @@ function del_guild()
 //#############################################################################
 //REMOVE CHAR FROM GUILD
 //#############################################################################
-function rem_char_from_guild()
+function rem_char_from_guild(&$sqlr, &$sqlc)
 {
   global $characters_db, $realm_id, $user_lvl, $user_id;
 
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-
+  // this is multi realm support, as of writing still under development
+  //  this page is already implementing it
   if (empty($_GET['realm']))
     $realmid = $realm_id;
   else
   {
     $realmid = $sqlr->quote_smart($_GET['realm']);
-    if (!is_numeric($realmid)) $realmid = $realm_id;
+    if (is_numeric($realmid))
+      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+    else
+      $realmid = $realm_id;
   }
 
   if(isset($_GET['id']))
@@ -523,17 +524,14 @@ function rem_char_from_guild()
   else
     redirect("guild.php?error=1&amp;realm=$realmid");
   if (is_numeric($guid));
-  else
-    redirect("guild.php?error=5&amp;realm=$realmid");
+  else redirect("guild.php?error=5&amp;realm=$realmid");
   if(isset($_GET['guld_id']))
     $guld_id = $_GET['guld_id'];
   else
     redirect("guild.php?error=1&amp;realm=$realmid");
   if (is_numeric($guld_id));
-  else
-    redirect("guild.php?error=5&amp;realm=$realmid");
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+  else redirect("guild.php?error=5&amp;realm=$realmid");
+
   $q_amIguildleaderOrSelfRemoval = $sqlc->query("select 1 from guild as g left outer join guild_member as gm on gm.guildid = g.guildid
                                    where g.guildid = '$guld_id' and
                                    (g.leaderguid in (select guid from characters where account = '$user_id')
@@ -558,8 +556,8 @@ function rem_char_from_guild()
 //#############################################################################
 $err = (isset($_GET['error'])) ? $_GET['error'] : NULL;
 
-$output .= "
-        <div class=\"top\">";
+$output .= '
+          <div class="top">';
 
 $lang_guild = lang_guild();
 
@@ -594,30 +592,25 @@ switch ($err)
 
 unset($err);
 
-$output .= "
-        </div>";
+$output .= '
+          </div>';
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-switch ($action)
-{
-  case "view_guild":
-    view_guild();
-    break;
-  case "del_guild":
-    del_guild();
-    break;
-  case "rem_char_from_guild":
-    rem_char_from_guild();
-    break;
-  default:
-    browse_guilds();
-}
+if ('view_guild' == $action)
+  view_guild();
+elseif ('del_guild' == $action)
+  del_guild();
+elseif ('rem_char_from_guild' == $action)
+  rem_char_from_guild($sqlr, $sqlc);
+else
+  browse_guilds($sqlr, $sqlc);
 
 unset($action);
 unset($action_permission);
 unset($lang_guild);
 
-require_once("footer.php");
+require_once 'footer.php';
+
 
 ?>

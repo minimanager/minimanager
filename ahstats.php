@@ -234,7 +234,7 @@ function browse_auctions(&$sqlr, &$sqlc)
                 </form>
               </td>
               <td width=\"25%\" align=\"right\">";
-  $output .= generate_pagination("ahstats.php?order_by=$order_by".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=".!$dir, $all_record, $itemperpage, $start);
+  $output .= generate_pagination("ahstats.php?order_by=$order_by".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=".(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
   $output .= "
               </td>
             </tr>
@@ -301,7 +301,7 @@ function browse_auctions(&$sqlr, &$sqlc)
   $output .= "
             <tr>
               <td  colspan=\"7\" class=\"hidden\" align=\"right\" width=\"25%\">";
-  $output .= generate_pagination("ahstats.php?order_by=$order_by".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=".!$dir, $all_record, $itemperpage, $start);
+  $output .= generate_pagination("ahstats.php?order_by=$order_by".( (($search_by && $search_value) || ($search_class != -1) || ($search_quality != -1)) ? "&amp;search_by=$search_by&amp;search_value=$search_value&amp;search_quality=$search_quality&amp;search_class=$search_class&amp;error=2" : "" )."&amp;dir=".(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
   $output .= "
               </td>
             </tr>

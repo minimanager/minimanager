@@ -64,9 +64,10 @@ function show_realm(&$sqlr)
 
    while ($realm = $sqlr->fetch_assoc($result))
    {
+     $output .= '
+              <tr>';
      if($user_lvl >= $action_permission['delete'])
        $output .= '
-              <tr>
                 <td><a href="realm.php?action=del_realm&amp;id='.$realm['rid'].'"><img src="img/aff_cross.png" alt="" /></a></td>';
      if (isset($server[$realm['rid']]['game_port']))
      {
