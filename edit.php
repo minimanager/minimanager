@@ -140,9 +140,7 @@ function edit_user(&$sqlr, &$sqlc)
     }
     else
     {
-      $result = $sqlc->query('SELECT guid, name, race, class,
-        SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) as level,
-        mid(lpad( hex( CAST(substring_index(substring_index(data," ", '.(CHAR_DATA_OFFSET_GENDER+1).'), " ", -1) as unsigned) ), 8, 0), 4, 1) as gender
+      $result = $sqlc->query('SELECT guid, name, race, class, level, gender
         FROM characters WHERE account = '.$user_id.'');
 
       $output .= '

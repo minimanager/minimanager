@@ -74,7 +74,7 @@ switch ($cleanup_by) {
  case "char_lvl":
  $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
- $result = $sql->query("SELECT guid FROM `characters` WHERE SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) $cleanup_sign $cleanup_value");
+ $result = $sql->query("SELECT guid FROM `characters` WHERE level $cleanup_sign $cleanup_value");
  $total_chars = $sql->num_rows($result);
 
  $output .= "<center>";

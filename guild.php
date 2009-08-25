@@ -358,10 +358,9 @@ function view_guild()
   $output .="
                     </tr>";
   $members = $sqlc->query("SELECT gm.guid as cguid, c.name as cname, c.`race` as crace ,c.`class` as cclass,
-    CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(c.`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS clevel,
+    c.`level` AS clevel,
     gm.rank AS mrank, (SELECT rname FROM guild_rank WHERE guildid ='$guild_id' AND rid = mrank) AS rname,
-    gm.Pnote, gm.OFFnote,
-    mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender,
+    gm.Pnote, gm.OFFnote, gender,
     c.`online` as conline, c.`account`, c.`logout_time` as clogout
     FROM guild_member as gm left outer join characters as c on c.guid = gm.guid
     WHERE gm.guildid = '$guild_id' ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");

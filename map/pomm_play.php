@@ -66,7 +66,7 @@ for($i = 0; $i < $maps_count; $i++) {
     }
 $arr = array();
 $i=$maps_count;
-$query = $characters_db->query("SELECT `account`,`data`,`name`,`class`,`race`,`position_x`,`position_y`,`map`,`zone`,`extra_flags` FROM `characters` WHERE `online`='1' ORDER BY `name`");
+$query = $characters_db->query("SELECT `account`,`data`,`name`,`class`,`race`, `level`, `gender`, `position_x`,`position_y`,`map`,`zone`,`extra_flags` FROM `characters` WHERE `online`='1' ORDER BY `name`");
 while($result = $characters_db->fetch_assoc($query))
 {
     if($result['map'] == 530 && $result['position_y'] > -1000 || in_array($result['map'], $outland_inst))
@@ -110,8 +110,6 @@ while($result = $characters_db->fetch_assoc($query))
     $char_data = explode(' ',$result['data']);
     $char_flags = $char_data[$PLAYER_FLAGS];
     $char_dead = ($char_flags & 0x11)?1:0;
-    $char_gender = dechex($char_data[$UNIT_FIELD_BYTES_0]);
-    $char_gender = str_pad($char_gender,8, 0, STR_PAD_LEFT);
     $arr[$i]['x'] = $result['position_x'];
     $arr[$i]['y'] = $result['position_y'];
     $arr[$i]['dead'] = $char_dead;
@@ -120,8 +118,8 @@ while($result = $characters_db->fetch_assoc($query))
     $arr[$i]['zone']=get_zone_name($result['zone']);
     $arr[$i]['cl'] = $result['class'];
     $arr[$i]['race'] = $result['race'];
-    $arr[$i]['level']=$char_data[$UNIT_FIELD_LEVEL];
-    $arr[$i]['gender'] = $char_gender{3};
+    $arr[$i]['level']=$result['level'];
+    $arr[$i]['gender'] = $result['gender'];
     $arr[$i]['Extention'] = $Extention;
     $arr[$i]['leaderGuid'] = isset($groups[$char_data[0]]) ? $groups[$char_data[0]] : 0;
     $i++;

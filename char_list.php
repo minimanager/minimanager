@@ -70,7 +70,7 @@ function browse_chars()
 
       case "level":
         if (is_numeric($search_value)); else $search_value = 1;
-        $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) = $search_value";
+        $where_out ="level = $search_value";
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
@@ -81,7 +81,7 @@ function browse_chars()
 
       case "greater_level":
         if (is_numeric($search_value)); else $search_value = 1;
-        $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) > $search_value";
+        $where_out ="level > $search_value";
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
@@ -92,7 +92,7 @@ function browse_chars()
 
       case "gold":
         if (is_numeric($search_value)); else $search_value = 1;
-        $where_out ="SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GOLD+1)."), ' ', -1) > $search_value";
+        $where_out ="money > $search_value";
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
@@ -124,9 +124,8 @@ function browse_chars()
         unset($result);
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
-        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,online,
-        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-        mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
+        CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
+        online, level, gender, logout_time,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as gname FROM `characters`
         WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
       break;
@@ -179,7 +178,7 @@ function browse_chars()
 
         $sql_query = "SELECT guid,name,account,race,class,zone,map,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
-        online, level, as gender, logout_time,
+        online, level, gender, logout_time,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as gname FROM `characters`
         WHERE $where_out ORDER BY $order_by $order_dir LIMIT $start, $itemperpage";
     }
@@ -192,8 +191,7 @@ function browse_chars()
     $query_1 = $sqlc->query("SELECT count(*) FROM `characters`");
     $query = $sqlc->query("SELECT guid,name,account,race,class,zone,map,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_HONOR_KILL+1)."), ' ', -1) AS UNSIGNED) AS highest_rank,
-      online,CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level,
-      mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender, logout_time,
+      online,level, gender, logout_time,
       CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_GUILD_ID+1)."), ' ', -1) AS UNSIGNED) as gname
       FROM `characters` ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   }

@@ -76,8 +76,6 @@ $maps_for_points = "0,1,530,571,609";
 $img_base = "../img/map/";
 $img_base2 = "../img/c_icons/";
 
-$UNIT_FIELD_BYTES_0 = CHAR_DATA_OFFSET_GENDER;
-$UNIT_FIELD_LEVEL   = CHAR_DATA_OFFSET_LEVEL;
 $PLAYER_FLAGS       = CHAR_DATA_OFFSET_FLAGS;
 
 ?>

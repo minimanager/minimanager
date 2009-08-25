@@ -214,8 +214,8 @@ function forum_view_topic(){
 
     $link = $mysql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-$query = "SELECT account,name,SUBSTRING_INDEX(SUBSTRING_INDEX(data,' ', ".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) AS gen,race,class,
-SUBSTRING_INDEX(SUBSTRING_INDEX(data,' ',".(CHAR_DATA_OFFSET_LEVEL+1)."),' ',-1) AS level,(SELECT gmlevel FROM `{$realm_db['name']}`.account WHERE `{$realm_db['name']}`.account.id = `{$characters_db[$realm_id]['name']}`.characters.account) as gmlevel
+$query = "SELECT account,name,gender,race,class,
+ level,(SELECT gmlevel FROM `{$realm_db['name']}`.account WHERE `{$realm_db['name']}`.account.id = `{$characters_db[$realm_id]['name']}`.characters.account) as gmlevel
 FROM `{$characters_db[$realm_id]['name']}`.characters WHERE totaltime IN ( SELECT MAX(totaltime) FROM `{$characters_db[$realm_id]['name']}`.characters WHERE account IN (";
 while($post = $mysql->fetch_row($posts)){
   $query .= "$post[1],";

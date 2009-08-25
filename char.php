@@ -70,7 +70,7 @@ function char_main(&$sqlr, &$sqlc)
 
     if ($user_lvl >= $owner_gmlvl && (($side_v === $side_p) || !$side_v))
     {
-      $result = $sqlc->query('SELECT data, name, race, class, zone, map, online, totaltime, gender,
+      $result = $sqlc->query('SELECT data, name, race, class, level, zone, map, online, totaltime, gender,
         account FROM characters WHERE guid = '.$id.'');
       $char = $sqlc->fetch_assoc($result);
       $char_data = explode(' ',$char['data']);
@@ -250,7 +250,7 @@ function char_main(&$sqlr, &$sqlc)
                   <tr>
                     <td colspan="2">
                       <div>
-                        <img src="'.char_get_avatar_img($char_data[CHAR_DATA_OFFSET_LEVEL], $char['gender'], $char['race'], $char['class'], 0).'" alt="avatar" />
+                        <img src="'.char_get_avatar_img($char['level'], $char['gender'], $char['race'], $char['class'], 0).'" alt="avatar" />
                       </div>
                       <div>';
       $a_results = $sqlc->query('SELECT DISTINCT spell FROM character_aura WHERE guid = '.$id.'');
@@ -272,7 +272,7 @@ function char_main(&$sqlr, &$sqlc)
                         '.htmlentities($char['name']).' -
                         <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
                         <img src="img/c_icons/'.$char['class'].'.gif" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
-                        - lvl '.char_get_level_color($char_data[CHAR_DATA_OFFSET_LEVEL]).'
+                        - lvl '.char_get_level_color($char['level']).'
                       </font>
                       <br />'.get_map_name($char['map'], $sqlm).' - '.get_zone_name($char['zone'], $sqlm).'
                       <br />'.$lang_char['honor_points'].': '.$char_data[CHAR_DATA_OFFSET_HONOR_POINTS].' / '.$char_data[CHAR_DATA_OFFSET_ARENA_POINTS].' - '.$lang_char['honor_kills'].': '.$char_data[CHAR_DATA_OFFSET_HONOR_KILL].'

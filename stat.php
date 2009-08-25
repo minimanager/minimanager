@@ -85,7 +85,7 @@ function stats($action, &$sqlr, &$sqlc)
     {
       $lvl_min = $sqlc->quote_smart($_GET['level']);
       $lvl_max = $lvl_min + 4;
-      $order_level = 'AND SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) >= '.$lvl_min.' AND SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_LEVEL+1).'), " ", -1) <= '.$lvl_max.'';
+      $order_level = 'AND level >= '.$lvl_min.' AND level <= '.$lvl_max.'';
     }
     else
       $order_level = '';

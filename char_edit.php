@@ -40,7 +40,7 @@ if ($sql->num_rows($result)){
  if ($user_lvl >= $owner_gmlvl){
   $sql->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-  $result = $sql->query("SELECT guid,account,data,name,race,class,position_x,position_y,map,online,totaltime,position_z,zone, CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(`data`, ' ', ".(CHAR_DATA_OFFSET_LEVEL+1)."), ' ', -1) AS UNSIGNED) AS level, mid(lpad( hex( CAST(substring_index(substring_index(data,' ',".(CHAR_DATA_OFFSET_GENDER+1)."),' ',-1) as unsigned) ),8,'0'),4,1) as gender  FROM `characters` WHERE guid = '$id'");
+  $result = $sql->query("SELECT guid,account,data,name,race,class,position_x,position_y,map,online,totaltime,position_z,zone, level, gender  FROM `characters` WHERE guid = '$id'");
   $char = $sql->fetch_row($result);
   $char_data = explode(' ',$char[2]);
 
