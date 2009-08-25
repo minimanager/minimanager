@@ -127,10 +127,7 @@ function char_achievements(&$sqlr, &$sqlc)
       if ($developer_test_mode && $new_achieve_page)
       {
         $output .= '
-              <table class="hidden" style="width: 550px;">
-                <tr>';
-
-        global $char_achieve;
+              <table class="lined" style="width: 500px;">';
         $result = $sqlc->query('SELECT achievement, date FROM character_achievement WHERE guid = '.$id.'');
         $char_achieve = array();
 
@@ -139,111 +136,204 @@ function char_achievements(&$sqlr, &$sqlc)
           $char_achieve[$temp['achievement']] = $temp['date'];
         }
 
-        $main_cat = achieve_get_main_category($sqlm);
-        $sub_cat = achieve_get_sub_category($sqlm);
-
-        foreach($main_cat as $cat_id => $cat)
+        $total = 0;
+        $points = 0;
+        $main_cats = achieve_get_main_category($sqlm);
+        $sub_cats = achieve_get_sub_category($sqlm);
+        foreach($main_cats as $cat_id => $cat)
         {
+          $total_cat= 0;
           if (isset($cat['name01']))
-          // level 1
-          $output .='
-                  <th align="left">
-                    <div id="div'.$cat_id.'" onclick="expand(\''.$cat_id.'\', this, \''.$cat['name01'].'\');">[+] '.$cat['name01'].'</div>
-                  </th>
-                </tr>
-                <tr>
-                  <td>
-                    <table id="'.$cat_id.'" class="lined" style="width: 550px; display: none;">';
-          if (isset($sub_cat[$cat['id']]))
           {
-            $this_sub_cat = $sub_cat[$cat['id']];
-            foreach($this_sub_cat as $sub_cat_id => $sub)
+            $i=0;
+            $j=0;
+            //$k=0;
+            $temp_output = '';
+            $achieve_sub_cat = achieve_get_id_category($cat['id'], $sqlm);
+            foreach($achieve_sub_cat as $achieve_id => $id)
             {
-              if (isset($sub))
-              // level 2
-              $output .= '
-                      <tr>
-                        <th colspan="3" align="left">
-                          <div id="div'.$sub_cat_id.'" onclick="expand(\''.$sub_cat_id.'\', this, \''.$sub.'\');">[-] '.$sub.'</div>
-                        </th>
-                      </tr>
-                      <tr>
-                        <td colspan="3">
-                          <table id="'.$sub_cat_id.'" style="width: 550px; display: table;">';
-              if (isset($sub_cat[$sub_cat_id]))
+              if (isset($char_achieve[$id['id']]))
               {
-                $this_sub_sub_cat = $sub_cat[$sub_cat_id];
-                foreach($this_sub_sub_cat as $sub_sub_cat_id => $sub_sub)
-                {
-                  if (isset($sub_sub))
-                  // level 3
-                  $output .= '
-                            <tr>
-                              <td colspan="4" align="left">'.$sub_sub.'</td>
-                            </tr>';
-                  // level 3
-                  $achieve_cat = achieve_get_id_category($sub_sub_cat_id, $sqlm);
-                  foreach($achieve_cat as $achieve_id => $id)
-                  {
-                    if (isset($char_achieve[$id['id']]))
-                    $output .= '
-                            <tr>
-                              <td></td>
-                              <td width="50%" align="left">
-                                <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
-                                '.$id['description01'].'<br />
-                                '.$id['rewarddesc01'].'
-                              </td>
-                              <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
-                              <td width="5%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
-                            </tr>';
-                  }
-                }
-              }
-              // level 2
-              $achieve_cat = achieve_get_id_category($sub_cat_id, $sqlm);
-              foreach($achieve_cat as $achieve_id => $id)
-              {
-                if (isset($char_achieve[$id['id']]))
-                $output .= '
-                            <tr>
-                              <td width="50%" colspan="2" align="left">
-                                <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
-                                '.$id['description01'].'<br />
-                                '.$id['rewarddesc01'].'
-                              </td>
-                              <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
-                              <td width="5%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
-                            </tr>';
-              }
-              $output .= '
-                          </table>
+                $temp_output .= '
+                      <tr>
+                        <td>
+                          <a href="'.$achievement_datasite.$id['id'].'" target="_blank">
+                            <img src="'.achieve_get_icon($id['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
+                          </a>
                         </td>
-                      </tr>';
-            }
-          }
-          // level 1
-          $achieve_sub_cat = achieve_get_id_category($cat['id'], $sqlm);
-          foreach($achieve_sub_cat as $achieve_id => $id)
-          {
-            if (isset($char_achieve[$id['id']]))
-            $output .= '
-                      <tr>
-                        <td width="50%" align="left">
+                        <td colspan="2" align="left">
                           <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
                           '.$id['description01'].'<br />
                           '.$id['rewarddesc01'].'
                         </td>
                         <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
-                        <td width="5%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
+                        <td width="10%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
                       </tr>';
-          }
-          $output .= '
+                $points += $id['rewpoints'];
+                ++$i;
+              }
+            }
+            $total = $total + $i;
+            $total_cat = $total_cat + $i;
+            $temp_cat_output = '';
+            if (isset($sub_cats[$cat['id']]))
+            {
+              $main_sub_cats = $sub_cats[$cat['id']];
+              foreach($main_sub_cats as $sub_cat_id => $sub_cat)
+              {
+                $total_sub_cat = 0;
+                if (isset($sub_cat))
+                {
+                  $j=0;
+                  $temp_sub_output = '';
+                  $achieve_cat = achieve_get_id_category($sub_cat_id, $sqlm);
+                  foreach($achieve_cat as $achieve_id => $id)
+                  {
+                    if (isset($char_achieve[$id['id']]))
+                    {
+                      $temp_sub_output .= '
+                            <tr>
+                              <td>
+                                <a href="'.$achievement_datasite.$id['id'].'" target="_blank">
+                                  <img src="'.achieve_get_icon($id['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
+                                </a>
+                              </td>
+                              <td colspan="2" align="left">
+                                <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
+                                '.$id['description01'].'<br />
+                                '.$id['rewarddesc01'].'
+                              </td>
+                              <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
+                              <td width="10%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
+                            </tr>';
+                       $points += $id['rewpoints'];
+                       ++$j;
+                    }
+                  }
+                  $total = $total + $j;
+                  $total_cat = $total_cat + $j;
+                  $total_sub_cat = $total_sub_cat + $j;
+                  $temp_sub_cat_output = '';
+
+                  // this is working code for 3rd level sub category, reserved for future
+                  /*
+                  if (isset($sub_cats[$sub_cat_id]))
+                  {
+                    $main_sub_sub_cats = $sub_cats[$sub_cat_id];
+                    foreach($main_sub_sub_cats as $sub_sub_cat_id => $sub_sub_cat)
+                    {
+                      if (isset($sub_sub_cat))
+                      {
+                        $k=0;
+                        $temp_sub_sub_ = '';
+                        $achieve_cat = achieve_get_id_category($sub_sub_cat_id, $sqlm);
+                        foreach($achieve_cat as $achieve_id => $id)
+                        {
+                          if (isset($char_achieve[$id['id']]))
+                          {
+                            $temp_sub_sub_output .= '
+                                  <tr>
+                                    <td>
+                                      <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
+                                        <img src="'.achieve_get_icon($id['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
+                                      </a>
+                                    </td>
+                                    <td colspan="2" align="left">
+                                      <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
+                                      '.$id['description01'].'<br />
+                                      '.$id['rewarddesc01'].'
+                                    </td>
+                                    <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
+                                    <td width="10%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
+                                  </tr>';
+                            ++$k;
+                            $points += $id['rewpoints'];
+                          }
+                        }
+                        $total = $total + $k;
+                        $total_cat = $total_cat + $k;
+                        if ($k)
+                        {
+                          $temp_sub_cat_output .= '
+                            <tr>
+                              <td colspan="5" align="left">'.$sub_sub_cat.'</td>
+                            </tr>
+                            <tr>
+                              <td colspan="5">
+                                <table id="'.$sub_cat_id_cat.'" style="width: 500px; display: table;">';
+                          $temp_sub_cat_output .= '
+                                  <tr>
+                                    <th colspan="3" align="left">'.$lang_char['achievement_title'].'</th>
+                                    <th width="5%">'.$lang_char['achievement_points'].'</th>
+                                    <th width="10%">'.$lang_char['achievement_date'].'</th>
+                                  </tr>'.$temp_sub_sub_output;
+                          $temp_sub_cat_output .= '
+                                </table>
+                              </td>
+                            </tr>';
+                        }
+                      }
+                    }
+                  }
+                  */
+                  // end of working 3rd level category code
+
+                  if ($total_sub_cat)
+                  {
+                    $temp_cat_output .= '
+                      <tr>
+                        <th colspan="5" align="left">
+                          <div id="div'.$sub_cat_id.'" onclick="expand(\''.$sub_cat_id.'\', this, \''.$sub_cat.' ('.$total_sub_cat.')\');">[+] '.$sub_cat.' ('.$total_sub_cat.')</div>
+                        </th>
+                      </tr>
+                      <tr>
+                        <td colspan="5">
+                          <table id="'.$sub_cat_id.'" style="width: 500px; display: none;">'.$temp_sub_cat_output;
+                    if ($j)
+                      $temp_cat_output .= '
+                            <tr>
+                              <th colspan="3" align="left">'.$lang_char['achievement_title'].'</th>
+                              <th width="5%">'.$lang_char['achievement_points'].'</th>
+                              <th width="10%">'.$lang_char['achievement_date'].'</th>
+                            </tr>'.$temp_sub_output;
+                    $temp_cat_output .= '
+                          </table>
+                        </td>
+                      </tr>';
+                  }
+                }
+              }
+            }
+            if ($total_cat)
+            {
+              $output .='
+                <tr>
+                  <th align="left">
+                    <div id="div'.$cat_id.'" onclick="expand(\''.$cat_id.'\', this, \''.$cat['name01'].' ('.$total_cat.')\');">[+] '.$cat['name01'].' ('.$total_cat.')</div>
+                  </th>
+                </tr>
+                <tr>
+                  <td>
+                    <table id="'.$cat_id.'" class="lined" style="width: 500px; display: none;">'.$temp_cat_output;
+              if ($i)
+                $output .='
+                      <tr>
+                        <th colspan="3" align="left">'.$lang_char['achievement_title'].'</th>
+                        <th width="5%">'.$lang_char['achievement_points'].'</th>
+                        <th width="10%">'.$lang_char['achievement_date'].'</th>
+                      </tr>'.$temp_output;
+              $output .='
                     </table>
                   </td>
-                </tr>
-                <tr>';
+                </tr>';
+            }
+          }
         }
+        $output .='
+                <tr>
+                  <td>
+                    Achievement Points: '.$points.'
+                  </td>';
       }
       else
       {
