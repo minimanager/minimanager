@@ -283,6 +283,7 @@ function char_main(&$sqlr, &$sqlc)
         require_once 'libs/misc_lib.php';
         $country = misc_get_country_by_account($char['account'], $sqlr, $sqlm);
         $output .= ' - '.(($country['code']) ? '<img src="img/flags/'.$country['code'].'.png" onmousemove="toolTip(\''.($country['country']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />' : '-');
+        unset($country);
       }
       $output .= '
                     </td>
@@ -302,7 +303,7 @@ function char_main(&$sqlr, &$sqlc)
                     <td class="half_line" colspan="2" align="center" width="50%">
                       <div class="gradient_p">'.$lang_item['health'].':</div>
                       <div class="gradient_pp">'.$char_data[CHAR_DATA_OFFSET_HEALTH].'</div>';
-      if ($char['class'] == 11 || $char['class'] == 4) //druid
+      if ($char['class'] == 11) //druid
         $output .= '
                       </br>
                       <div class="gradient_p">'.$lang_item['energy'].':</div>

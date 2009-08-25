@@ -1111,7 +1111,6 @@ function lang_command()
     'description' => 'Description',
     'change_level' => 'Change Checked Command(s) Level',
     'save' => 'Save',
-    'showhide' => 'show/hide',
   );
   return $lang_command;
 }

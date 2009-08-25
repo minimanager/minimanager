@@ -8,8 +8,7 @@ function char_char_get_race_names_n_sides_tab()
 {
   global $lang_id_tab;
 
-  $race_names_n_sides_tab =
-    array
+  return array
     (
        1 => array($lang_id_tab['human'],    0),
        2 => array($lang_id_tab['orc'],      1),
@@ -22,8 +21,6 @@ function char_char_get_race_names_n_sides_tab()
       10 => array($lang_id_tab['bloodelf'], 1),
       11 => array($lang_id_tab['draenei'],  0),
     );
-
-   return $race_names_n_sides_tab;
 }
 
 
@@ -89,7 +86,7 @@ function char_get_class_name($class_id)
        11 => $lang_id_tab['druid'],
     );
 
-    return $class_names[$class_id];
+  return $class_names[$class_id];
 }
 
 
@@ -174,7 +171,7 @@ function char_get_pvp_rank_id($honor_points=0, $side_id=0)
 //#############################################################################
 //get avatar image by char level, gender, race, class and gm level
 
-function char_get_avatar_img($level, $gender, $race, $class,$gm=0)
+function char_get_avatar_img($level, $gender, $race, $class, $gm=0)
 {
   if ($gm > 0)
   {

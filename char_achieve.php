@@ -111,14 +111,14 @@ function char_achievements(&$sqlr, &$sqlc)
       {
         $output .= '
               <table class="lined" style="width: 500px;">';
+
         $result = $sqlc->query('SELECT achievement, date FROM character_achievement WHERE guid = '.$id.'');
         $char_achieve = array();
 
         while ($temp = $sqlc->fetch_assoc($result))
-        {
           $char_achieve[$temp['achievement']] = $temp['date'];
-        }
 
+        unset($result);
         $total = 0;
         $points = 0;
         $main_cats = achieve_get_main_category($sqlm);

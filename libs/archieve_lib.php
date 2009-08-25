@@ -82,7 +82,6 @@ function achieve_get_points($id, &$sqlm)
 }
 
 
-
 //#############################################################################
 //get achievement icon - if icon not exists in item_icons folder D/L it from web.
 

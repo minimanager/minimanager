@@ -13,9 +13,9 @@ valid_login($action_permission['read']);
 function front(&$sqlr, &$sqlc)
 {
   global $output, $lang_global, $lang_index,
-    $realm_id, $realm_db, $world_db, $characters_db, $mmfpm_db, $server,
+    $realm_id, $world_db, $mmfpm_db, $server,
     $action_permission, $user_lvl, $user_id,
-    $server_type, $showcountryflag, $motd_display_poster, $gm_online_count, $gm_online ;
+    $server_type, $showcountryflag, $motd_display_poster, $gm_online_count, $gm_online;
 
   $output .= '
           <div class="top">';
@@ -92,7 +92,7 @@ function front(&$sqlr, &$sqlc)
 
   //MOTD part
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
-  if (is_numeric($start)); else $start=0;
+  if (is_numeric($start)); else $start = 0;
 
   $all_record = $sqlc->result($sqlc->query('SELECT count(*) FROM bugreport'), 0);
 
@@ -160,10 +160,10 @@ function front(&$sqlr, &$sqlc)
   {
     //==========================$_GET and SECURE=================================
     $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'name';
-    if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by='name';
+    if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by = 'name';
 
     $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
-    if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
+    if (preg_match('/^[01]{1}$/', $dir)); else $dir = 1;
 
     $order_dir = ($dir) ? 'ASC' : 'DESC';
     $dir = ($dir) ? 0 : 1;
@@ -173,7 +173,8 @@ function front(&$sqlr, &$sqlc)
     if( $user_lvl || $server[$realm_id]['both_factions']);
     else
     {
-      $result = $sqlc->query('SELECT race FROM characters WHERE account = '.$user_id.' AND totaltime = (SELECT MAX(totaltime) FROM characters WHERE account = '.$user_id.') LIMIT 1');
+      $result = $sqlc->query('SELECT race FROM characters WHERE account = '.$user_id.'
+        AND totaltime = (SELECT MAX(totaltime) FROM characters WHERE account = '.$user_id.') LIMIT 1');
       if ($sqlc->num_rows($result))
         $order_side = (in_array($sqlc->result($result, 0),array(2,5,6,8,10))) ? ' AND race IN (2,5,6,8,10) ' : ' AND race IN (1,3,4,7,11) ';
     }

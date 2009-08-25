@@ -154,6 +154,9 @@ function char_inv(&$sqlr, &$sqlc)
           }
         }
       }
+      unset($slot);
+      unset($bag_id);
+      unset($bank_bag_id);
       unset($result);
 
       //------------------------Character Tabs---------------------------------
@@ -236,6 +239,7 @@ function char_inv(&$sqlr, &$sqlc)
                     </div>
                   </td>';
       }
+      unset($equiped_bag_id);
       $output .= '
                 </tr>
                 <tr>
@@ -264,6 +268,7 @@ function char_inv(&$sqlr, &$sqlc)
                         <div style="width:25px;margin:-21px 0px 0px 17px;font-size:14px">'.$item[2].'</div>
                       </div>';
       }
+      unset($bag);
       $output .= '
                     </div>
                     <div style="text-align:right;width:168px;background-image:none;background-color:#393936;padding:2px;">
@@ -320,7 +325,6 @@ function char_inv(&$sqlr, &$sqlc)
       // equipped bank bag slots
       for($t=1; $t < 8; ++$t)
       {
-
         // equipped bank bags, last 3
         if($t===5)
         {
@@ -368,10 +372,13 @@ function char_inv(&$sqlr, &$sqlc)
                         <div style="width:25px;margin:-21px 0px 0px 17px;font-size:14px">'.$item[2].'</div>
                       </div>';
         }
+
         $output .= '
                     </div>
                   </td>';
       }
+      unset($equip_bnk_bag_id);
+      unset($bank);
       $output .= '
                   <td class="bank"></td>';
       //---------------Page Specific Data Ends here----------------------------
@@ -451,7 +458,7 @@ char_inv($sqlr, $sqlc);
 unset($action_permission);
 unset($lang_char);
 
-require_once("footer.php");
+require_once 'footer.php';
 
 
 ?>

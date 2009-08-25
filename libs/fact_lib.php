@@ -6,7 +6,7 @@
 
 function fact_get_fact_id()
 {
-  $fact_id = Array
+  return Array
   ( //              0    1  2       3               4            5            6            7            8             9             10            11
     //id => array(name,team,n,reputationListID,BaseRepMask1,BaseRepMask2,BaseRepMask3,BaseRepMask4,BaseRepValue1,BaseRepValue2,BaseRepValue3,BaseRepValue4)
 
@@ -117,7 +117,6 @@ function fact_get_fact_id()
     1097 => array('Northrend',                      'Other',12,89,0,0,0,0,0,0,0,0),
     1117 => array('Sholazar Basin',                 'Other',12,95,1791,0,0,0,0,0,0,0)
   );
-  return $fact_id;
 }
 
 
@@ -126,10 +125,8 @@ function fact_get_fact_id()
 
 function fact_get_reputation_rank_length()
 {
-  $reputation_rank_length = array
+  return array
     (36000, 3000, 3000, 3000, 6000, 12000, 21000, 999);
-
-  return $reputation_rank_length;
 }
 
 
@@ -138,8 +135,7 @@ function fact_get_reputation_rank_length()
 
 function fact_get_reputation_rank_arr()
 {
-  $reputation_rank =
-    array
+  return array
     (
       0 => 'Hated',
       1 => 'Hostile',
@@ -150,7 +146,6 @@ function fact_get_reputation_rank_arr()
       6 => 'Revered',
       7 => 'Exalted'
     );
-  return $reputation_rank;
 }
 
 

@@ -47,7 +47,7 @@ function print_commands_form()
               <table style="width: 720px; text-align: left;" class="lined">
                 <tr>
                   <th>
-                    <a href="#" onclick="showHide(\''.$levels[$i][1].'\')">'.$levels[$i][1].' '.$lang_command['showhide'].'</a>
+                    <div id="div'.$levels[$i][1].'" onclick="expand(\''.$levels[$i][1].'\', this, \''.$levels[$i][1].'\');">[+] '.$levels[$i][1].' :</div>
                   </th>
                 </tr>
               </table>

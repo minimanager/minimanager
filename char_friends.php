@@ -36,10 +36,10 @@ function char_friends(&$sqlr, &$sqlc)
   if (is_numeric($id)); else $id = 0;
 
   $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'name';
-  if (preg_match('/^[[:lower:]]{1,6}$/', $order_by)); else $order_by='name';
+  if (preg_match('/^[[:lower:]]{1,6}$/', $order_by)); else $order_by = 'name';
 
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
-  if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
+  if (preg_match('/^[01]{1}$/', $dir)); else $dir = 1;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;

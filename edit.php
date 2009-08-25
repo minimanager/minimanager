@@ -17,12 +17,11 @@ function edit_user(&$sqlr, &$sqlc)
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
-  $result = $sqlr->query('SELECT email, gmlevel, joindate, expansion, last_ip FROM account WHERE username = \''.$user_name.'\'');
   $refguid = $sqlm->result($sqlm->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = \''.$user_id.'\''), 0, 'InvitedBy');
   $referred_by = $sqlc->result($sqlc->query('SELECT name FROM characters WHERE guid = \''.$refguid.'\''), 0, 'name');
   unset($refguid);
 
-  if ($acc = $sqlc->fetch_assoc($result))
+  if ($acc = $sqlc->fetch_assoc($sqlr->query('SELECT email, gmlevel, joindate, expansion, last_ip FROM account WHERE username = \''.$user_name.'\'')))
   {
     $output .= '
           <center>
@@ -102,14 +101,13 @@ function edit_user(&$sqlr, &$sqlc)
                     </td>
                   </tr>';
     }
-    $result = $sqlr->query('SELECT SUM(numchars) FROM realmcharacters WHERE acctid = '.$user_id.'');
     $output .= '
                   <tr>
                     <td>'.$lang_edit['tot_chars'].'</td>
-                    <td>'.$sqlr->result($result, 0).'</td>
+                    <td>'.$sqlr->result($sqlr->query('SELECT SUM(numchars) FROM realmcharacters WHERE acctid = '.$user_id.''), 0).'</td>
                   </tr>';
     $realms = $sqlr->query('SELECT id, name FROM realmlist');
-    if ($developer_test_mode && $multi_realm_mode && ($sqlr->num_rows($realms) > 1 && (count($server) > 1) && (count($characters_db) > 1)))
+    if ( $developer_test_mode && $multi_realm_mode && ( 1 < $sqlr->num_rows($realms) && (1 < count($server)) && (1 < count($characters_db)) ) )
     {
       while ($realm = $sqlr->fetch_assoc($realms))
       {
@@ -290,13 +288,10 @@ function doedit_user(&$sqlr, &$sqlc)
 
   $sqlr->query('UPDATE account SET email = \''.$new_mail.'\', '.$new_pass.' expansion = \''.$new_expansion.'\' WHERE username = \''.$user_name.'\'');
   if (doupdate_referral($referredby, $sqlr, $sqlc) || $sqlr->affected_rows())
-  {
     redirect('edit.php?error=3');
-  }
   else
-  {
     redirect('edit.php?error=4');
-  }
+
 }
 
 function doupdate_referral($referredby, &$sqlr, &$sqlc)
@@ -306,19 +301,16 @@ function doupdate_referral($referredby, &$sqlr, &$sqlc)
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
 
-  $result = $sqlm->result($sqlm->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = \''.$user_id.'\''), 0, 'InvitedBy');
-
-  if ($result == NULL)
+  if (NULL == $sqlm->result($sqlm->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = \''.$user_id.'\''), 0))
   {
-    $referred_by = $sqlc->result($sqlc->query('SELECT guid FROM characters WHERE name = \''.$referredby.'\''), 0, 'guid');
+    $referred_by = $sqlc->result($sqlc->query('SELECT guid FROM characters WHERE name = \''.$referredby.'\''), 0);
 
     if ($referred_by == NULL);
     else
     {
       $char = $sqlc->result($sqlc->query('SELECT account FROM characters WHERE guid = \''.$referred_by.'\''), 0, 'account');
       $result = $sqlr->result($sqlr->query('SELECT id FROM account WHERE id = \''.$char.'\''), 0, 'id');
-      if ($result == $user_id)
-        return false;
+      if ($result == $user_id);
       else
       {
         $sqlm->query('INSERT INTO point_system_invites (PlayersAccount, InvitedBy, InviterAccount) VALUES (\''.$user_id.'\', \''.$referred_by.'\', \''.$result.'\')');
@@ -326,6 +318,7 @@ function doupdate_referral($referredby, &$sqlr, &$sqlc)
       }
     }
   }
+  return false;
 }
 
 

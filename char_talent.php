@@ -57,7 +57,7 @@ function char_talent(&$sqlr, &$sqlc)
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name))
     {
-      $result = $sqlc->query('SELECT spell FROM character_spell WHERE guid = '.$id.'');
+      $result = $sqlc->query('SELECT spell FROM character_spell WHERE guid = '.$id.' ORDER BY spell DESC');
       $output .= '
           <center>
               <div id="tab">
@@ -90,7 +90,7 @@ function char_talent(&$sqlr, &$sqlc)
         $tabs = array();
         $l = 0;
 
-        while (($talent = $sqlc->fetch_assoc($result)) && ($l <= $talent_points_used))
+        while (($talent = $sqlc->fetch_assoc($result)) && ($l < $talent_points_used))
         {
           if ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank5 = '.$talent['spell'].' LIMIT 1')))
           {
@@ -143,6 +143,8 @@ function char_talent(&$sqlr, &$sqlc)
             }
           }
         }
+        unset($tab);
+        unset($talent);
         foreach ($tabs as $k=>$data)
         {
           $points = 0;
@@ -192,6 +194,9 @@ function char_talent(&$sqlr, &$sqlc)
                     </table>
                   </td>';
         }
+        unset($data);
+        unset($k);
+        unset($tabs);
         $output .='
                 </tr>
               </table>
@@ -215,18 +220,24 @@ function char_talent(&$sqlr, &$sqlc)
                   <td width="64">
                   </td>
                   <td align="right">';
-        $glyphs = explode(' ', $sqlc->result($sqlc->query('SELECT data FROM characters WHERE guid = '.$id.''), 0, 'data'));
+        unset($l);
+        unset($talent_rate);
+        unset($talent_points);
+        unset($talent_points_used);
+        unset($talent_points_left);
+        $glyphs = explode(' ', $sqlc->result($sqlc->query('SELECT data FROM characters WHERE guid = '.$id.''), 0));
         for($i=0;$i<6;++$i)
         {
           if ($glyphs[(CHAR_DATA_OFFSET_GLYPHS+($i))])
           {
-            $glyph = $sqlm->result($sqlm->query('select spellid from dbc_glyphproperties where id = '.$glyphs[(CHAR_DATA_OFFSET_GLYPHS+($i))].''), 0, 'spellid');
+            $glyph = $sqlm->result($sqlm->query('select spellid from dbc_glyphproperties where id = '.$glyphs[(CHAR_DATA_OFFSET_GLYPHS+($i))].''), 0);
             $output .='
                     <a href="'.$spell_datasite.$glyph.'" target="_blank">
                       <img src="'.spell_get_icon($glyph, $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                     </a>';
           }
         }
+        unset($glyphs);
         $output .='
                   </td>';
       }
@@ -361,7 +372,7 @@ char_talent($sqlr, $sqlc);
 unset($action_permission);
 unset($lang_char);
 
-require_once("footer.php");
+require_once 'footer.php';
 
 
 ?>

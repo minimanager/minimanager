@@ -22,10 +22,7 @@ $output .= '
                       <br />ERR!
                     </font>
                   </h1>
-                  <br />'.$err.'<br />';
-unset($err);
-$output .= '
-                  <br />
+                  <br />'.$err.'<br />
                 </td>
               </tr>
             </table>
@@ -35,6 +32,7 @@ $output .= '
                 <td align="center">';
                   makebutton($lang_global['home'], 'index.php', 130);
                   makebutton($lang_global['back'], 'javascript:window.history.back()', 130);
+unset($err);
 $output .= '
                 </td>
               </tr>
