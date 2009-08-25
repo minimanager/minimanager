@@ -7,7 +7,7 @@ valid_login($action_permission['read']);
 function stats($action, &$sqlr, &$sqlc)
 {
   global $output, $lang_global, $lang_stat, $lang_index,
-    $realm_id, $realm_db, $characters_db,
+    $realm_id,
     $theme;
 
   $race = Array
@@ -51,54 +51,10 @@ function stats($action, &$sqlr, &$sqlc)
     9 => array(9,80,80,'','')
   );
 
-  if($action)
-    $query = $sqlc->query('SELECT count(*) FROM characters WHERE online= 1');
-  else
-  {
-    $query = $sqlr->query('SELECT count(*) FROM account UNION SELECT count(*) FROM account WHERE gmlevel > 0');
-    $total_acc = $sqlr->result($query,0);
-    $total_gms = $sqlr->result($query,1);
-
-    $data = date('Y-m-d H:i:s');
-    $data_1 = mktime(date('H'), date('i'), date('s'), date('m'), date('d')-1, date('Y'));
-    $data_1 = date('Y-m-d H:i:s', $data_1);
-
-    $max_ever = $sqlr->result($sqlr->query('SELECT maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY maxplayers DESC LIMIT 1'), 0);
-    $max_restart = $sqlr->result($sqlr->query('SELECT maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
-
-    $uniqueIPs = $sqlr->result($sqlr->query('select distinct count(last_ip) from account where last_login > \''.$data_1.'\' and last_login < \''.$data.'\''),0);
-
-    $query = $sqlr->query('SELECT AVG(uptime)/60,MAX(uptime)/60,(100*SUM(uptime)/(UNIX_TIMESTAMP()-MIN(starttime))) FROM uptime WHERE realmid = '.$realm_id.'');
-    $uptime = $sqlr->fetch_row($query);
-
-    $query = $sqlc->query('SELECT count(*) FROM characters');
-  }
-
-  $total_chars = $sqlc->result($query,0);
+  $total_chars = $sqlc->result($sqlc->query('SELECT count(*) FROM characters'.( ($action) ? ' WHERE online= 1' : '' ).''), 0);
 
   if ($total_chars)
   {
-    $order_race = (isset($_GET['race'])) ? 'AND race ='.$sqlc->quote_smart($_GET['race']) : '';
-    $order_class = (isset($_GET['class'])) ? 'AND class ='.$sqlc->quote_smart($_GET['class']) : '';
-
-    if(isset($_GET['level']))
-    {
-      $lvl_min = $sqlc->quote_smart($_GET['level']);
-      $lvl_max = $lvl_min + 4;
-      $order_level = 'AND level >= '.$lvl_min.' AND level <= '.$lvl_max.'';
-    }
-    else
-      $order_level = '';
-
-    if(isset($_GET['side']))
-    {
-      if ($sqlc->quote_smart($_GET['side']) == 'h')
-        $order_side = 'AND race IN(2,5,6,8,10)';
-      elseif ($sqlc->quote_smart($_GET['side']) == 'a')
-        $order_side = 'AND race IN (1,3,4,7,11)';
-    }
-    else
-      $order_side = '';
     $output .= '
           <center>
             <div id="tab">
@@ -115,18 +71,8 @@ function stats($action, &$sqlr, &$sqlc)
                 </li>
               </ul>
             </div>
-            <div id="tab_content">';
-    $output .= '
-              <div class="top"><h1>'.(($action) ? $lang_stat['on_statistics'] : $lang_stat['srv_statistics']).'</h1></div>';
-
-    //there is always less hordies
-    $query = $sqlc->query('SELECT count(guid) FROM characters WHERE race IN(2,5,6,8,10)'.(($action) ? ' AND online= 1' : ''));
-    $horde_chars = $sqlc->result($query,0);
-    $horde_pros = round(($horde_chars*100)/$total_chars ,1);
-    $allies_chars = $total_chars - $horde_chars;
-    $allies_pros = 100 - $horde_pros;
-
-    $output .= '
+            <div id="tab_content">
+              <div class="top"><h1>'.(($action) ? $lang_stat['on_statistics'] : $lang_stat['srv_statistics']).'</h1></div>
               <center>
                 <table class="hidden">
                   <tr>
@@ -141,7 +87,25 @@ function stats($action, &$sqlr, &$sqlc)
                       <font class="bold">'.$lang_index['tot_users_online'].' : '.$total_chars.'</font><br /><br />';
     else
     {
-       $output .= '
+      $query = $sqlr->query('SELECT count(*) FROM account UNION SELECT count(*) FROM account WHERE gmlevel > 0');
+      $total_acc = $sqlr->result($query, 0);
+      $total_gms = $sqlr->result($query, 1);
+      unset($query);
+
+      $data = date('Y-m-d H:i:s');
+      $data_1 = mktime(date('H'), date('i'), date('s'), date('m'), date('d')-1, date('Y'));
+      $data_1 = date('Y-m-d H:i:s', $data_1);
+
+      $uniqueIPs = $sqlr->result($sqlr->query('select distinct count(last_ip) from account where last_login > \''.$data_1.'\' and last_login < \''.$data.'\''), 0);
+      unset($data_1);
+      unset($data);
+
+      $max_ever = $sqlr->result($sqlr->query('SELECT maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY maxplayers DESC LIMIT 1'), 0);
+      $max_restart = $sqlr->result($sqlr->query('SELECT maxplayers FROM uptime WHERE realmid = '.$realm_id.' ORDER BY starttime DESC LIMIT 1'), 0);
+
+      $uptime = $sqlr->fetch_row($sqlr->query('SELECT AVG(uptime)/60, MAX(uptime)/60, ( 100*SUM(uptime)/( UNIX_TIMESTAMP()-MIN(starttime) ) ) FROM uptime WHERE realmid = '.$realm_id.''));
+
+      $output .= '
                       <table>
                         <tr valign="top">
                           <td align="left">
@@ -187,7 +151,20 @@ function stats($action, &$sqlr, &$sqlc)
                         </tr>
                       </table>
                       <br />';
+      unset($uptime);
+      unset($uniqueIPs);
+      unset($max_restart);
+      unset($max_ever);
+      unset($total_gms);
+      unset($total_acc);
     }
+
+    //there is always less hordies
+    $horde_chars  = $sqlc->result($sqlc->query('SELECT count(guid) FROM characters WHERE race IN(2,5,6,8,10)'.(($action) ? ' AND online= 1' : '')), 0);
+    $horde_pros   = round(($horde_chars*100)/$total_chars ,1);
+    $allies_chars = $total_chars - $horde_chars;
+    $allies_pros  = 100 - $horde_pros;
+
     $output .= '
                       <table class="tot_bar">
                         <tr>
@@ -198,11 +175,38 @@ function stats($action, &$sqlr, &$sqlc)
                       <hr/>
                     </td>
                   </tr>';
+    unset($horde_chars);
+    unset($horde_pros);
+    unset($allies_chars);
+    unset($allies_pros);
+
+    $order_race = (isset($_GET['race'])) ? 'AND race ='.$sqlc->quote_smart($_GET['race']) : '';
+    $order_class = (isset($_GET['class'])) ? 'AND class ='.$sqlc->quote_smart($_GET['class']) : '';
+
+    if(isset($_GET['level']))
+    {
+      $lvl_min = $sqlc->quote_smart($_GET['level']);
+      $lvl_max = $lvl_min + 4;
+      $order_level = 'AND level >= '.$lvl_min.' AND level <= '.$lvl_max.'';
+    }
+    else
+      $order_level = '';
+
+    if(isset($_GET['side']))
+    {
+      if ('h' == $sqlc->quote_smart($_GET['side']))
+        $order_side = 'AND race IN(2,5,6,8,10)';
+      elseif ('a' == $sqlc->quote_smart($_GET['side']))
+        $order_side = 'AND race IN (1,3,4,7,11)';
+    }
+    else
+      $order_side = '';
+
     // RACE
     foreach ($race as $id)
     {
       $race[$id[0]][2] = $sqlc->result($sqlc->query('SELECT count(guid) FROM characters
-        WHERE race = '.$id[0].' '.$order_class.' '.$order_level.' '.$order_side.(($action) ? ' AND online= 1' : '')),0);
+        WHERE race = '.$id[0].' '.$order_class.' '.$order_level.' '.$order_side.(($action) ? ' AND online= 1' : '')), 0);
       $race[$id[0]][3] = round((($race[$id[0]][2])*100)/$total_chars,1);
     }
     $output .= '
@@ -231,6 +235,7 @@ function stats($action, &$sqlr, &$sqlc)
       $output .= '
                           <th>'.$race[$id[0]][1].'<br />'.$race[$id[0]][2].'</th>';
     }
+    unset($race);
     $output .= '
                         </tr>
                       </table>
@@ -245,6 +250,7 @@ function stats($action, &$sqlr, &$sqlc)
         WHERE class = '.$id[0].' '.$order_race.' '.$order_level.' '.$order_side.(($action) ? ' AND online= 1' : '')), 0);
       $class[$id[0]][3] = round((($class[$id[0]][2])*100)/$total_chars,1);
     }
+    unset($order_level);
     $output .= '
                   <tr align="left">
                     <td>
@@ -271,6 +277,7 @@ function stats($action, &$sqlr, &$sqlc)
       $output .= '
                           <th>'.$class[$id[0]][1].'<br />'.$class[$id[0]][2].'</th>';
     }
+    unset($class);
     $output .= '
                         </tr>
                       </table>
@@ -284,10 +291,14 @@ function stats($action, &$sqlr, &$sqlc)
       $level[$id[0]][3] = $sqlc->result($sqlc->query('SELECT count(guid) FROM characters
         WHERE level >= '.$id[1].'
           AND level <= '.$id[2].'
-            '.$order_race.' '.$order_class.' '.$order_side.(($action) ? ' AND online= 1' : '').''),0);
+            '.$order_race.' '.$order_class.' '.$order_side.(($action) ? ' AND online= 1' : '').''), 0);
       $level[$id[0]][4] = round((($level[$id[0]][3])*100)/$total_chars,1);
     }
-
+    unset($order_level);
+    unset($order_class);
+    unset($order_race);
+    unset($total_chars);
+    unset($order_side);
     $output .= '
                   <tr align="left">
                     <td>
@@ -304,12 +315,15 @@ function stats($action, &$sqlr, &$sqlc)
       $output .= '
                           <td><a href="stat.php?action='.$action.'&amp;level='.$id[1].'" class="graph_link">'.$level[$id[0]][4].'%<img src="themes/'.$theme.'/column.gif" width="77" height="'.$height.'" alt="'.$level[$id[0]][3].'" /></a></td>';
     }
+    unset($height);
     $output .= '
                         </tr>
                         <tr>';
     foreach ($level as $id)
       $output .= '
                           <th>'.$level[$id[0]][1].'-'.$level[$id[0]][2].'<br />'.$level[$id[0]][3].'</th>';
+    unset($id);
+    unset($level);
     $output .= '
                         </tr>
                       </table>

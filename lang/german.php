@@ -290,7 +290,6 @@ function lang_repair()
     'tables' => 'Tabellen',
     'select_tables' => 'W&auml;hlen Sie die Tabellen aus, die bearbeitet werden sollen.',
     'repair_error' => 'Fehler',
-    'showhide' => 'Show/Hide',
   );
   return $lang_repair;
 }
@@ -870,49 +869,50 @@ function lang_realm()
 {
   $lang_realm = array
   (
-  'add_realm' => 'Realm hinzuf&uuml;gen',
-  'tot_realms' => 'Realms gesamt',
-  'name' => 'Name',
-  'address' => 'Addresse',
-  'port' => 'Port',
-  'icon' => 'Typ',
-  'color' => 'Farbe',
-  'timezone' => 'Zeitzone',
-  'edit_realm' => 'Bearbeite Realmdaten',
-  'id' => 'ID',
-  'update' => 'Daten aktualisieren',
-  'realm_id' => 'Realm ID',
-  'err_deleting' => 'Fehler beim L&ouml;schen des Realms',
-  'update_executed' => 'Aktualisierung erfolgreich!',
-  'update_err' => 'Fehler bei Aktualisierung!<br />KEINES der beiden Felder ver&auml;ndert?',
-  'realm_data' => 'Realmdaten',
-  'online' => 'Status',
-  'tot_char' => 'Charaktere gesamt',
-  'delete' => 'Entferne Realm',
-  'normal' => 'Normal',
-  'pvp' => 'PVP',
-  'rp' => 'RP',
-  'rppvp' => 'RP-PVP',
-  'ffapvp' => 'FFA-PVP',
-  'development' => 'Entwicklung',
-  'united_states' => 'USA', // TODO: check
-  'oceanic' => 'Australien', // TODO: check
-  'latin_america' => 'Latein Amerika', // TODO: check
-  'tournament' => 'Tunier', // TODO: check
-  'korea' => 'Korea', // TODO: check
-  'english' => 'Englisch',
-  'german' => 'Deutsch',
-  'french' => 'Franz&ouml;sisch',
-  'spanish' => 'Spanisch',
-  'russian' => 'Russisch',
-  'taiwan' => 'Taiwan', // TODO: check
-  'china' => 'China', // TODO: check
-  'test_server' => 'Testserver', // TODO: check
-  'qa_server' => 'QA Server', // TODO: check
-  'others' => 'Andere',
-  'conf_from_file' => '** Dieser Realm scheint keine ordentlichen Einstellungen in der config.php zu haben.<br />&Uuml;berprüfen Sie die Einstellungen, bevor Sie CMS benutzen.',
-  'offline' => 'Offline',
-  'status' => 'Status'
+    'add_realm' => 'Realm hinzuf&uuml;gen',
+    'tot_realms' => 'Realms gesamt',
+    'name' => 'Name',
+    'address' => 'Addresse',
+    'port' => 'Port',
+    'icon' => 'Typ',
+    'color' => 'Farbe',
+    'timezone' => 'Zeitzone',
+    'edit_realm' => 'Bearbeite Realmdaten',
+    'id' => 'ID',
+    'update' => 'Daten aktualisieren',
+    'realm_id' => 'Realm ID',
+    'err_deleting' => 'Fehler beim L&ouml;schen des Realms',
+    'update_executed' => 'Aktualisierung erfolgreich!',
+    'update_err' => 'Fehler bei Aktualisierung!<br />KEINES der beiden Felder ver&auml;ndert?',
+    'realm_data' => 'Realmdaten',
+    'online' => 'Status',
+    'tot_char' => 'Charaktere gesamt',
+    'delete' => 'Entferne Realm',
+    'normal' => 'Normal',
+    'pvp' => 'PVP',
+    'rp' => 'RP',
+    'rppvp' => 'RP-PVP',
+    'ffapvp' => 'FFA-PVP',
+    'development' => 'Entwicklung',
+    'united_states' => 'USA', // TODO: check
+    'oceanic' => 'Australien', // TODO: check
+    'latin_america' => 'Latein Amerika', // TODO: check
+    'tournament' => 'Tunier', // TODO: check
+    'korea' => 'Korea', // TODO: check
+    'english' => 'Englisch',
+    'german' => 'Deutsch',
+    'french' => 'Franz&ouml;sisch',
+    'spanish' => 'Spanisch',
+    'russian' => 'Russisch',
+    'taiwan' => 'Taiwan', // TODO: check
+    'china' => 'China', // TODO: check
+    'test_server' => 'Testserver', // TODO: check
+    'qa_server' => 'QA Server', // TODO: check
+    'others' => 'Andere',
+    'conf_from_file' => '** Dieser Realm scheint keine ordentlichen Einstellungen in der config.php zu haben.<br />&Uuml;berprüfen Sie die Einstellungen, bevor Sie CMS benutzen.',
+    'offline' => 'Offline',
+    'status' => 'Status',
+    'notconfigured' => 'Not Configured yet',
   );
   return $lang_realm;
 }

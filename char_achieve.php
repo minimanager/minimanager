@@ -82,25 +82,6 @@ function char_achievements(&$sqlr, &$sqlc)
       //  keep html indent in sync, so debuging from browser source would be easy to read
       $output .= '
           <!-- start of char_achieve.php -->
-          <script type="text/javascript">
-            // <![CDATA[
-              function expand(thistag, tag, name)
-              {
-                styleObj = document.getElementById(thistag).style;
-
-                if (styleObj.display=="table")
-                {
-                  styleObj.display="none";
-                  tag.innerHTML = \'[+] \' + name;
-                }
-                else
-                {
-                  styleObj.display="table";
-                  tag.innerHTML = \'[-] \' + name;
-                }
-              }
-            // ]]>
-          </script>
           <center>
             <div id="tab">
               <ul>

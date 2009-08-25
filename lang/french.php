@@ -290,7 +290,6 @@ function lang_repair()
     'tables' => 'Tables',
     'select_tables' => 'Choisir les tables sur lesquelles les opérations doivent se porter.',
     'repair_error' => 'Erreur',
-    'showhide' => 'Montrer/Cacher',
   );
   return $lang_repair;
 }
@@ -912,7 +911,8 @@ function lang_realm()
     'others' => 'Others',
     'conf_from_file' => '** Ce monde ne semble pas avoir une configuration correcte dans le fichier config.php.<br />Soyez certain de le configurer correctement avant d\'utiliser.',
     'offline' => 'Hors Ligne',
-    'status' => 'Status'
+    'status' => 'Status',
+    'notconfigured' => 'Not Configured yet',
   );
   return $lang_realm;
 }

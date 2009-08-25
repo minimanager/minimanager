@@ -58,10 +58,8 @@ function edit_motd(&$sqlc)
   valid_login($action_permission['update']);
 
   if(empty($_GET['id'])) redirect('motd.php?error=1');
-
   $id = $sqlc->quote_smart($_GET['id']);
-  if(is_numeric($id));
-  else redirect('motd.php?error=1');
+  if(is_numeric($id)); else redirect('motd.php?error=1');
 
   $msg = $sqlc->result($sqlc->query('SELECT content FROM bugreport WHERE id = '.$id.''), 0);
 
@@ -72,6 +70,7 @@ function edit_motd(&$sqlc)
               <table class="top_hidden">
                 <tr>
                   <td colspan="3">';
+  unset($id);
                     bbcode_add_editor();
   $output .= '
                   </td>
@@ -84,6 +83,7 @@ function edit_motd(&$sqlc)
                 <tr>
                   <td>'.$lang_motd['post_rules'].'</td>
                   <td>';
+  unset($msg);
                     makebutton($lang_motd['post_motd'], 'javascript:do_submit()" type="wrn', 230);
   $output .= '
                   </td>
@@ -117,6 +117,8 @@ function do_add_motd(&$sqlc)
   $by = date('m/d/y H:i:s').' Posted by: '.$user_name;
 
   $sqlc->query('INSERT INTO bugreport (type, content) VALUES (\''.$by.'\', \''.$msg.'\')');
+  unset($by);
+  unset($msg);
   redirect('index.php');
 
 }
@@ -134,18 +136,20 @@ function do_edit_motd(&$sqlc)
     redirect('motd.php?error=1');
 
   $id = $sqlc->quote_smart($_POST['id']);
-  if(is_numeric($id));
-  else redirect('motd.php?error=1');
+  if(is_numeric($id)); else redirect('motd.php?error=1');
 
   $msg = $sqlc->quote_smart($_POST['msg']);
   if (4096 < strlen($msg))
     redirect('motd.php?error=2');
 
-  $by = $sqlc->result($sqlc->query('SELECT type FROM bugreport WHERE id = '.$id.''), 0, 'type');
+  $by = $sqlc->result($sqlc->query('SELECT type FROM bugreport WHERE id = '.$id.''), 0);
   $by = split('<br />', $by, 2);
   $by = $by[0].'<br />'.date('m/d/y H:i:s').' Edited by: '.$user_name;
 
   $sqlc->query('UPDATE bugreport SET type = \''.$by.'\', content = \''.$msg.'\' WHERE id = '.$id.'');
+  unset($by);
+  unset($msg);
+  unset($id);
   redirect('index.php');
 
 }
@@ -160,12 +164,11 @@ function delete_motd(&$sqlc)
   valid_login($action_permission['delete']);
 
   if (empty($_GET['id'])) redirect('index.php');
-
   $id = $sqlc->quote_smart($_GET['id']);
-  if(is_numeric($id));
-  else redirect('motd.php?error=1');
+  if(is_numeric($id)); else redirect('motd.php?error=1');
 
-  $query = $sqlc->query('DELETE FROM bugreport WHERE id ='.$id.'');
+  $sqlc->query('DELETE FROM bugreport WHERE id ='.$id.'');
+  unset($id);
   redirect('index.php');
 
 }

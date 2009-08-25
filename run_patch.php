@@ -12,17 +12,15 @@ valid_login($action_permission['delete']);
 function print_upload()
 {
   global $output, $lang_run_patch,
-  $realm_db, $world_db, $characters_db, $mmfpm_db;
+    $realm_db, $world_db, $characters_db, $mmfpm_db;
 
   if (isset($_FILES['uploaded_file']['name']))
   {
-    if ($_FILES['uploaded_file']['type'] == 'application/octet-stream' || $_FILES['uploaded_file']['type'] == 'text/plain');
+    if ( 'application/octet-stream' == $_FILES['uploaded_file']['type'] || 'text/plain' == $_FILES['uploaded_file']['type'] );
     else
       error($lang_run_patch['run_sql_file_only'].'<br />'. $_FILES['uploaded_file']['type']);
     if (file_exists($_FILES['uploaded_file']['tmp_name']))
-    {
       $buffer = implode('', file($_FILES['uploaded_file']['tmp_name']));
-    }
     else
       error($lang_run_patch['file_not_found']);
   }
@@ -41,8 +39,7 @@ function print_upload()
             '.$lang_run_patch['max_filesize'].' '.$upload_max_filesize.' bytes('.round ($upload_max_filesize/1024/1024).' Mbytes)<br />
             <table class="hidden">
               <tr>
-                <td>';
-  $output .= '
+                <td>
                   <form enctype="multipart/form-data" action="run_patch.php?action=print_upload" method="post" name="form">
                     <input type="hidden" name="MAX_FILE_SIZE" value="'.$upload_max_filesize.'" />
                     <input type="file" name="uploaded_file" />
@@ -50,6 +47,7 @@ function print_upload()
                 </td>
                 <td>';
                   makebutton($lang_run_patch['open'], 'javascript:do_submit()', 130);
+  unset($upload_max_filesize);
   $output .= '
                 </td>
               </tr>
@@ -67,6 +65,7 @@ function print_upload()
   foreach ($characters_db as $db)
     $output .= '
                       <option value="'.$db['name'].'">'.$db['name'].'</option>';
+  unset($db);
   $output .= '
                       <option value="'.$realm_db['name'].'">'.$realm_db['name'].'</option>
                       <option value="'.$mmfpm_db['name'].'">'.$mmfpm_db['name'].'</option>
@@ -77,6 +76,7 @@ function print_upload()
                 <tr>
                   <td colspan="2">';
                     makebutton($lang_run_patch['run_sql'], 'javascript:do_submit(\'form1\',0)" type="wrn', 130);
+  unset($buffer);
   $output .= '
                   </td>
                 </tr>
@@ -117,42 +117,50 @@ function do_run_patch()
       if ($use_db == $db['name'])
         $sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
   }
+  unset($use_db);
 
   $new_queries = array();
-  $good = 0;
-  $bad = 0;
   $line = 0;
 
   $queries = explode("\n",$query);
-  for($i=0; $i<count($queries); ++$i)
+  unset($query);
+  $n_queries = count($queries);
+  for($i=0; $i<$n_queries; ++$i)
   {
     $queries[$i] = trim($queries[$i]);
-    if(strpos ($queries[$i], '#') === 0 || strpos ($queries[$i], '--') === 0)
-      $line++;
+    if ( 0 === strpos ($queries[$i], '#') || 0 === strpos ($queries[$i], '--') )
+      ++$line;
     else
       array_push($new_queries, $queries[$i]);
   }
+  unset($n_queries);
   $qr=split(";\n",implode("\n",$new_queries));
+  unset($new_queries);
 
+  $good = 0;
+  $bad = 0;
   foreach($qr as $qry)
   {
-    $line++;
-    if(trim($qry))
-      ($sql->query(trim($qry))?$good++:$bad++);
+    ++$line;
+    if (trim($qry))
+      ( $sql->query(trim($qry) ) ? ++$good : ++$bad);
     if ($bad)
     {
-      $err = ereg_replace ('\n','',$sql->error());
+      $err = ereg_replace ('\n',   '',$sql->error());
       $err = ereg_replace ('\r\n$','',$err);
-      $err = ereg_replace ('\r$','',$err);
+      $err = ereg_replace ('\r$',  '',$err);
       error($lang_run_patch['err_in_line'].': '.$line.' <br />'.$err);
       exit();
     }
   }
-
-if ($queries)
-  redirect('run_patch.php?error=2&tot='.$good.'');
-else
-  redirect('run_patch.php?error=3');
+  unset($qry);
+  unset($qr);
+  unset($line);
+  unset($bad);
+  if ($queries)
+    redirect('run_patch.php?error=2&tot='.$good.'');
+  else
+    redirect('run_patch.php?error=3');
 }
 
 
@@ -180,6 +188,7 @@ elseif (2 == $err)
     $tot = NULL;
   $output .= '
             <h1><font class="error">'.$tot.' '.$lang_run_patch['query_executed'].'</font></h1>';
+  unset($tot);
 }
 elseif (3 == $err)
   $output .= '

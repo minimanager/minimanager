@@ -34,16 +34,16 @@ function instances()
   $dir = ($dir) ? 0 : 1;
 
   // for multipage support
-  $all_record = $sqlw->result($sqlw->query('SELECT count(*) FROM instance_template'),0);
+  $all_record = $sqlw->result($sqlw->query('SELECT count(*) FROM instance_template'), 0);
 
   // main data that we need for this page, instances
   if ($server_type)
     $result = $sqlw->query('SELECT map, level_min, level_max, maxPlayers as maxplayers, reset_delay
-    FROM instance_template JOIN access_requirement ON access_requirement.id = instance_template.access_id
-    ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.';');
+      FROM instance_template JOIN access_requirement ON access_requirement.id = instance_template.access_id
+      ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.';');
   else
     $result = $sqlw->query('SELECT map, levelMin as level_min, levelMax as level_max, maxPlayers as maxplayers, reset_delay
-    FROM instance_template ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.';');
+      FROM instance_template ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.';');
 
   //---------------Page Specific Data Starts Here--------------------------
   // we start with a lead of 10 spaces,

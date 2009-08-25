@@ -290,7 +290,6 @@ function lang_repair()
     'tables' => 'Tables',
     'select_tables' => 'Select Tables the operation to be performed on.',
     'repair_error' => 'Error',
-    'showhide' => 'Show/Hide',
   );
   return $lang_repair;
 }
@@ -912,7 +911,8 @@ function lang_realm()
     'others' => 'Others',
     'conf_from_file' => '** This realm appear not to have proper configuration in config.php file.<br />Make sure to properly configure it before using.',
     'offline' => 'Offline',
-    'status' => 'Status'
+    'status' => 'Status',
+    'notconfigured' => 'Not Configured yet',
   );
   return $lang_realm;
 }

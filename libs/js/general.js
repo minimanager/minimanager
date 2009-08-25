@@ -8,6 +8,27 @@ function do_submit (form_name,backup){
 			else document.form.submit();
 }
 
+
+function expand(thistag, tag, name)
+{
+  styleObj = document.getElementById(thistag).style;
+
+  if(name == undefined)
+    name = '';
+
+  if (styleObj.display=="table")
+  {
+    styleObj.display="none";
+    tag.innerHTML = '[+] ' + name;
+  }
+  else
+  {
+    styleObj.display="table";
+    tag.innerHTML = '[-] ' + name;
+  }
+}
+
+
 function showHide(id,force){
 	var o, st;
 	if( document.getElementById ) // Standart way

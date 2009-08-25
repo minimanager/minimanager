@@ -62,8 +62,7 @@ function repair_form()
                 <table style="width: 550px;" class="lined">
                   <tr class="large_bold">
                     <td colspan="3" class="hidden" align="left">
-                      <a href="#" onclick="showHide(\''.$db['name'].'\')">Show/Hide </a>
-                      '.$db['name'].' '.$lang_repair['tables'].' :
+                      <div id="div'.$db['name'].'" onclick="expand(\''.$db['name'].'\', this, \''.$db['name'].' '.$lang_repair['tables'].' :\');">[+] '.$db['name'].' '.$lang_repair['tables'].' :</div>
                     </td>
                   </tr>
                 </table>
@@ -100,8 +99,7 @@ function repair_form()
                 <table style="width: 550px;" class="lined">
                   <tr class="large_bold">
                     <td colspan="3" class="hidden" align="left">
-                      <a href="#" onclick="showHide(\''.$db['name'].$db['id'].'\')">'.$lang_repair['showhide'].'</a>
-                      '.$db['name'].' Realm '.$db['id'].' Tables :
+                      <div id="div'.$db['name'].$db['id'].'" onclick="expand(\''.$db['name'].$db['id'].'\', this, \''.$db['name'].' Realm '.$db['id'].' Tables :\');">[+] '.$db['name'].' Realm '.$db['id'].' Tables :</div>
                     </td>
                   </tr>
                 </table>
@@ -130,6 +128,13 @@ function repair_form()
                 </table>';
     }
   }
+  unset($dbs);
+  unset($db);
+  unset($result);
+  unset($result2);
+  unset($result1);
+  unset($table);
+  unset($mm_dbs);
   $output .= '
               </form>
             </fieldset>
@@ -149,10 +154,8 @@ function do_repair()
     $action_permission;
   valid_login($action_permission['update']);
 
-  if ((empty($_POST['repair_action']) && $_POST['repair_action'] === '') || (empty($_POST['check'])) )
-  {
+  if ((empty($_POST['repair_action']) && '' === $_POST['repair_action']) || (empty($_POST['check'])) )
     redirect('repair.php?error=1');
-  }
   else
   {
     $table_list = $_POST['check'];
@@ -166,28 +169,24 @@ function do_repair()
   {
     $table_data = explode('~', $table);
     if ($table_data[2] == $realm_db['name'])
-    {
       $sql->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
-    }
     elseif ($table_data[2] == $mmfpm_db['name'])
-    {
       $sql->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
-    }
     elseif ($table_data[2] == $world_db[$table_data[1]]['name'])
-    {
       $sql->connect($world_db[$table_data[1]]['addr'], $world_db[$table_data[1]]['user'], $world_db[$table_data[1]]['pass']);
-    }
-    elseif  ($table_data[2] == $characters_db[$table_data[1]]['name'])
-    {
+    elseif ($table_data[2] == $characters_db[$table_data[1]]['name'])
       $sql->connect($characters_db[$table_data[1]]['addr'], $characters_db[$table_data[1]]['user'], $characters_db[$table_data[1]]['pass']);
-    }
 
-     $result = $sql->query(''.$table_action.' TABLE '.$table_data[2].'.'.$table_data[3].'');
-     $action_result = $sql->fetch_row($result);
+    $action_result = $sql->fetch_row($sql->query(''.$table_action.' TABLE '.$table_data[2].'.'.$table_data[3].''));
 
-     if ($action_result[3] === 'OK') $counter++;
-      else $err = $action_result[3];
+    if ($action_result[3] === 'OK') ++$counter;
+    else $err = $action_result[3];
   }
+  unset($action_result);
+  unset($table_data);
+  unset($table);
+  unset($table_action);
+  unset($table_list);
 
   if ($counter)
     redirect('repair.php?error=2&num='.$counter.'');

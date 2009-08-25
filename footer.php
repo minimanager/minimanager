@@ -36,6 +36,8 @@
             </table>
             <br />
           </center>';
+    unset($lang_login);
+    unset($allow_anony);
   }
   $output .= '
           <table class="table_buttom">
@@ -46,14 +48,17 @@
   $output .=
                 $lang_footer['bugs_to_admin'].'<a href="mailto:'.$admin_mail.'"> '.$lang_footer['site_admin'].'</a><br />';
   unset($lang_footer);
+  unset($admin_mail);
   $output .= sprintf('
                 Execute time: %.5f', (microtime(true) - $time_start));
+  unset($time_start);
 
   // if any debug mode is activated, show memory usage
   if($debug)
   {
     $output .= '
                 Queries: '.$tot_queries.' on '.$_SERVER['SERVER_SOFTWARE'];
+    unset($tot_queries);
     if (function_exists('memory_get_usage'))
       $output .= sprintf('
                 <br />Mem. Usage: %.0f/%.0fK Peek: %.0f/%.0fK Global: %.0fK Limit: %s',memory_get_usage()/1024, memory_get_usage(true)/1024,memory_get_peak_usage()/1024,memory_get_peak_usage(true)/1024,sizeof($GLOBALS),ini_get('memory_limit'));
@@ -68,6 +73,7 @@
   else
     $output .= '
                   <a href="http://getmangos.com/" target="_blank"><img src="img/logo-mangos.png" class="logo_border" alt="mangos" /></a>';
+  unset($server_type);
   $output .= '
                   <a href="http://www.php.net/" target="_blank"><img src="img/logo-php.png" class="logo_border" alt="php" /></a>
                   <a href="http://www.mysql.com/" target="_blank"><img src="img/logo-mysql.png" class="logo_border" alt="mysql" /></a>
@@ -96,6 +102,8 @@
       echo '
                 <br />'.$iterator->key() . ' => ' . $iterator->current();
     }
+    unset($iterator);
+    unset($arrayObj);
     // debug mode 3 lists all global vars and their values, but not for arrays
     // debug mode 4 branches all arrays and their content,
     if(3 < $debug)

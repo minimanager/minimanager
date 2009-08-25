@@ -10,16 +10,13 @@ valid_login($action_permission['read']);
 function show_realm(&$sqlr)
 {
   global $output, $lang_global, $lang_realm,
-  $server,
-  $action_permission, $user_lvl;
+    $server,
+    $action_permission, $user_lvl;
   valid_login($action_permission['read']);
 
-  $icon_type = get_icon_type();
-  $timezone_type = get_timezone_type();
-
   //==========================$_GET and SECURE=================================
-  $order_by = (isset($_GET['order_by'])) ? $sqlr->quote_smart($_GET['order_by']) : 'name';
-  if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by='name';
+  $order_by = (isset($_GET['order_by'])) ? $sqlr->quote_smart($_GET['order_by']) : 'rid';
+  if (preg_match('/^[_[:lower:]]{1,8}$/', $order_by)); else $order_by='rid';
 
   $dir = (isset($_GET['dir'])) ? $sqlr->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
@@ -50,55 +47,63 @@ function show_realm(&$sqlr)
               <tr>';
   if($user_lvl >= $action_permission['delete'])
     $output .= '
-                <th width="5%">'.$lang_global['delete_short'].'</th>';
+                <th width="1%">'.$lang_global['delete_short'].'</th>';
   $output .= '
+                <th width="1%"><a href="realm.php?order_by=rid&amp;dir='.$dir.'"'.($order_by=='rid' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['id'].'</a></th>
                 <th width="40%"><a href="realm.php?order_by=name&amp;dir='.$dir.'"'.($order_by=='name' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['name'].'</a></th>
-                <th width="5%">'.$lang_realm['online'].'</th>
-                <th width="10%">'.$lang_realm['tot_char'].'</th>
+                <th width="1%">'.$lang_realm['online'].'</th>
+                <th width="10%"><a href="realm.php?order_by=sum&amp;dir='.$dir.'"'.($order_by=='sum' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['tot_char'].'</a></th>
                 <th width="10%"><a href="realm.php?order_by=address&amp;dir='.$dir.'"'.($order_by=='address' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['address'].'</a></th>
-                <th width="5%"><a href="realm.php?order_by=port&amp;dir='.$dir.'"'.($order_by=='port' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['port'].'</a></th>
-                <th width="8%"><a href="realm.php?order_by=icon&amp;dir='.$dir.'"'.($order_by=='icon' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['icon'].'</a></th>
-                <th width="5%"><a href="realm.php?order_by=color&amp;dir='.$dir.'"'.($order_by=='color' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['color'].'</a></th>
+                <th width="1%"><a href="realm.php?order_by=port&amp;dir='.$dir.'"'.($order_by=='port' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['port'].'</a></th>
+                <th width="1%"><a href="realm.php?order_by=icon&amp;dir='.$dir.'"'.($order_by=='icon' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['icon'].'</a></th>
+                <th width="1%"><a href="realm.php?order_by=color&amp;dir='.$dir.'"'.($order_by=='color' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['color'].'</a></th>
                 <th width="7%"><a href="realm.php?order_by=timezone&amp;dir='.$dir.'"'.($order_by=='timezone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['timezone'].'</a></th>
               </tr>';
+  unset($dir);
+  unset($order_dir);
+  unset($order_by);
+  $icon_type = get_icon_type();
+  $timezone_type = get_timezone_type();
 
-   while ($realm = $sqlr->fetch_assoc($result))
-   {
-     $output .= '
+  while ($realm = $sqlr->fetch_assoc($result))
+  {
+    $output .= '
               <tr>';
-     if($user_lvl >= $action_permission['delete'])
-       $output .= '
+    if($user_lvl >= $action_permission['delete'])
+      $output .= '
                 <td><a href="realm.php?action=del_realm&amp;id='.$realm['rid'].'"><img src="img/aff_cross.png" alt="" /></a></td>';
-     if (isset($server[$realm['rid']]['game_port']))
-     {
-       if($user_lvl >= $action_permission['update'])
-         $output .= '
+    $output .= '
+                <td>'.$realm['rid'].'</td>';
+    if (isset($server[$realm['rid']]['game_port']))
+    {
+      if($user_lvl >= $action_permission['update'])
+        $output .= '
                 <td><a href="realm.php?action=edit_realm&amp;id='.$realm['rid'].'">'.$realm['name'].'</a></td>';
-       else
-         $output .= '
+      else
+        $output .= '
                 <td>'.$realm['name'].'</td>';
-       if (test_port($server[$realm['rid']]['addr'],$server[$realm['rid']]['game_port']))
-         $output .= '
+      if (test_port($server[$realm['rid']]['addr'],$server[$realm['rid']]['game_port']))
+        $output .= '
                 <td><img src="img/up.gif" alt="" /></td>';
-       else
-         $output .= '
+      else
+        $output .= '
                 <td><img src="img/down.gif" alt="" /></td>';
-     }
-     else
-     {
-       $output .= '
+    }
+    else
+    {
+      $output .= '
                 <td>';
-       if($user_lvl >= $action_permission['update'])
-         $output .= '
-                  <a href="realm.php?action=edit_realm&amp;id='.$realm['rid'].'">'.$realm['name'].' (Not Configured yet)</a>';
-       else
-         $output .= ''.
-                  $realm['name'].' (Not Configured yet)';
-       $output .= '
+      if($user_lvl >= $action_permission['update'])
+        $output .= '
+                  <a href="realm.php?action=edit_realm&amp;id='.$realm['rid'].'">'.$realm['name'].' ('.$lang_realm['notconfigured'].')</a>';
+      else
+        $output .= ''.
+                  $realm['name'].' ('.$lang_realm['notconfigured'].')';
+      $output .= '
                 </td>
                 <td>***</td>';
-      }
-      $output .= '
+    }
+    $output .= '
                 <td>'.$realm['sum'].'</td>
                 <td>'.$realm['address'].'</td>
                 <td>'.$realm['port'].'</td>
@@ -106,8 +111,12 @@ function show_realm(&$sqlr)
                 <td>'.$realm['color'].'</td>
                 <td>'.$timezone_type[$realm['timezone']][1].'</td>
               </tr>';
-    }
-    $output .= '
+  }
+  unset($realm);
+  unset($icon_type);
+  unset($timezone_type);
+  unset($result);
+  $output .= '
             </table>
             <br />
           </center>';
@@ -121,23 +130,19 @@ function show_realm(&$sqlr)
 function edit_realm(&$sqlr)
 {
   global $output, $lang_global, $lang_realm,
-  $server,
-  $action_permission, $user_lvl;
+    $server,
+    $action_permission, $user_lvl;
   valid_login($action_permission['update']);
 
-  $icon_type = get_icon_type();
-  $timezone_type = get_timezone_type();
-
   if(empty($_GET['id'])) redirect('realm.php?error=1');
-
   $id = $sqlr->quote_smart($_GET['id']);
-  if(is_numeric($id)); else redirect('tele.php?error=1');
+  if(is_numeric($id)); else redirect('realm.php?error=1');
 
-  $result = $sqlr->query('SELECT realmlist.id AS rid, name, address, port, icon, color, timezone,
-            (SELECT SUM(numchars) FROM realmcharacters WHERE realmid = rid) as sum
-            FROM realmlist WHERE id ='.$id.'');
-
-  if ($realm = $sqlr->fetch_row($result))
+  if ($realm =
+       $sqlr->fetch_assoc($sqlr->query('SELECT realmlist.id AS rid, name, address, port, icon, color, timezone,
+         (SELECT SUM(numchars) FROM realmcharacters WHERE realmid = rid) as sum
+         FROM realmlist WHERE id ='.$id.''))
+     )
   {
     $output .= '
           <center>
@@ -149,66 +154,69 @@ function edit_realm(&$sqlr)
                 <table class="flat">
                   <tr>
                     <td>'.$lang_realm['id'].'</td>
-                    <td>'.$realm[0].'</td>
+                    <td>'.$realm['rid'].'</td>
                   </tr>
                   <tr>
                     <td>'.$lang_realm['name'].'</td>
-                    <td><input type="text" name="new_name" size="40" maxlength="32" value="'.$realm[1].'" /></td>
+                    <td><input type="text" name="new_name" size="40" maxlength="32" value="'.$realm['name'].'" /></td>
                   </tr>
                   <tr>
                     <td>'.$lang_realm['address'].'</td>
-                    <td><input type="text" name="new_address" size="40" maxlength="32" value="'.$realm[2].'" /></td>
+                    <td><input type="text" name="new_address" size="40" maxlength="32" value="'.$realm['address'].'" /></td>
                   </tr>
                   <tr>
                     <td>'.$lang_realm['port'].'</td>
-                    <td><input type="text" name="new_port" size="40" maxlength="5" value="'.$realm[3].'" /></td>
+                    <td><input type="text" name="new_port" size="40" maxlength="5" value="'.$realm['port'].'" /></td>
                   </tr>
                   <tr>
                     <td>'.$lang_realm['icon'].'</td>
                     <td>
                       <select name="new_icon">';
-    foreach ($icon_type as $icon)
+    unset($id);
+    foreach (get_icon_type() as $icon)
     {
       $output .= '
                         <option value="'.$icon[0].'" ';
-      if ($realm[4]==$icon[0])
+      if ($realm['icon']==$icon[0])
         $output .= 'selected="selected" ';
       $output .= '>'.$icon[1].'</option>';
     }
+    unset($icon);
     $output .= '
                       </select>
                     </td>
                   </tr>
                   <tr>
                     <td>'.$lang_realm['color'].'</td>
-                    <td><input type="text" name="new_color" size="40" maxlength="3" value="'.$realm[5].'" /></td>
+                    <td><input type="text" name="new_color" size="40" maxlength="3" value="'.$realm['color'].'" /></td>
                   </tr>
                   <tr>
                     <td>'.$lang_realm['timezone'].'</td>
                     <td>
                       <select name="new_timezone">';
-    foreach ($timezone_type as $zone)
+    foreach (get_timezone_type() as $zone)
     {
       $output .= '
                         <option value="'.$zone[0].'" ';
-      if ($realm[6]==$zone[0])
+      if ($realm['timezone']==$zone[0])
         $output .= 'selected="selected" ';
       $output .= '>'.$zone[1].'</option>';
     }
+    unset($zone);
     $output .= '
                       </select>
                     </td>
                   </tr>';
-    if (isset($server[$realm[0]]['game_port']))
+    if (isset($server[$realm['rid']]['game_port']))
     {
       $output .= '
                   <tr>
                     <td>'.$lang_realm['status'].'</td>
-                    <td>'.(test_port($server[$realm[0]]['addr'],$server[$realm[0]]['game_port'])) ? $lang_realm['online'] : $lang_realm['offline'].'</td>
+                    <td>'.(test_port($server[$realm['rid']]['addr'],$server[$realm['rid']]['game_port'])) ? $lang_realm['online'] : $lang_realm['offline'].'</td>
                   </tr>
                   <tr>
                     <td>'.$lang_realm['tot_char'].'</td>
-                    <td>'.$realm[7].'</td>
+                    <td>'.$realm['sum'].'</td>
                   </tr>';
     }
     else
@@ -220,7 +228,8 @@ function edit_realm(&$sqlr)
                   <tr>
                     <td>';
     if($user_lvl >= $action_permission['delete'])
-                      makebutton($lang_realm['delete'], 'realm.php?action=del_realm&amp;id='.$realm[0].'" type="wrn', 130);
+                      makebutton($lang_realm['delete'], 'realm.php?action=del_realm&amp;id='.$realm['rid'].'" type="wrn', 130);
+    unset($realm);
     $output .= '
                     </td>
                     <td>';
@@ -249,42 +258,52 @@ function doedit_realm(&$sqlr)
   global $action_permission;
   valid_login($action_permission['update']);
 
-  if (empty($_GET['new_name']) || empty($_GET['new_address']) || empty($_GET['new_port']) || empty($_GET['id']))
-   redirect("realm.php?error=1");
+  if (empty($_GET['id']) ||
+      empty($_GET['new_name']) ||
+      empty($_GET['new_address']) ||
+      empty($_GET['new_port']) ||
+      empty($_GET['new_icon']) ||
+      empty($_GET['new_timezone'])
+     )
+    redirect('realm.php?error=1');
 
   $id = $sqlr->quote_smart($_GET['id']);
-  if(is_numeric($id)); else redirect("realm.php?error=1");
-  $new_name = $sqlr->quote_smart($_GET['new_name']);
-  $new_address = $sqlr->quote_smart($_GET['new_address']);
-  $new_port = $sqlr->quote_smart($_GET['new_port']);
-  $new_icon = $sqlr->quote_smart($_GET['new_icon']);
-  $new_color = $sqlr->quote_smart($_GET['new_color']);
+  if(is_numeric($id)); else redirect('realm.php?error=1');
+  $new_name     = $sqlr->quote_smart($_GET['new_name']);
+  $new_address  = $sqlr->quote_smart($_GET['new_address']);
+  $new_port     = $sqlr->quote_smart($_GET['new_port']);
+  $new_icon     = $sqlr->quote_smart($_GET['new_icon']);
+  $new_color    = $sqlr->quote_smart($_GET['new_color']);
   $new_timezone = $sqlr->quote_smart($_GET['new_timezone']);
 
   $query = $sqlr->query('UPDATE realmlist SET name=\''.$new_name.'\', address =\''.$new_address.'\' , port =\''.$new_port.'\', icon =\''.$new_icon.'\', color =\''.$new_color.'\', timezone =\''.$new_timezone.'\' WHERE id = '.$id.'');
 
+  unset($new_name);
+  unset($new_address);
+  unset($new_port);
+  unset($new_icon);
+  unset($new_color);
+  unset($new_timezone);
+
   if ($sqlr->affected_rows())
-  {
     redirect('realm.php?error=3');
-  }
   else
-  {
     redirect('realm.php?action=edit_realm&id='.$id.'&error=4');
-  }
 }
 
 
 //####################################################################################################
 // DELETE REALM
 //####################################################################################################
-function del_realm()
+function del_realm(&$sqlr)
 {
   global $output, $lang_realm, $lang_global,
-  $action_permission;
+    $action_permission;
   valid_login($action_permission['delete']);
 
-  if(isset($_GET['id'])) $id = addslashes($_GET['id']);
-  else redirect('realm.php?error=1');
+  if(empty($_GET['id'])) redirect('realm.php?error=1');
+  $id = $sqlr->quote_smart($_GET['id']);
+  if(is_numeric($id)); else redirect('realm.php?error=1');
 
   $output .= '
           <center>
@@ -297,6 +316,7 @@ function del_realm()
                 <td>';
                   makebutton($lang_global['yes'], 'realm.php?action=dodel_realm&amp;id='.$id.'" type ="wrn', 130);
                   makebutton($lang_global['no'], 'realm.php" type="def', 130);
+  unset($id);
   $output .= '
                 </td>
               </tr>
@@ -314,20 +334,16 @@ function dodel_realm(&$sqlr)
   valid_login($action_permission['delete']);
 
   if(empty($_GET['id'])) redirect('realm.php?error=1');
-
   $id = $sqlr->quote_smart($_GET['id']);
   if(is_numeric($id)); else redirect('realm.php?error=1');
 
   $sqlr->query('DELETE FROM realmlist WHERE id = '.$id.'');
+  unset($id);
 
   if ($sqlr->affected_rows())
-  {
     redirect('realm.php');
-  }
   else
-  {
     redirect('realm.php?error=2');
-  }
 }
 
 
@@ -339,11 +355,11 @@ function add_realm(&$sqlr)
   global $action_permission;
   valid_login($action_permission['insert']);
 
-  $result = $sqlr->query('INSERT INTO realmlist (id, name, address, port, icon, color, timezone)
-    VALUES (NULL,"'.(($server_type) ? TRINITY : MANGOS).'", "127.0.0.1", 8085 ,0 ,0 ,1)');
-
-  if ($result) redirect('realm.php');
-  else redirect('realm.php?error=4');
+  if ($sqlr->query('INSERT INTO realmlist (id, name, address, port, icon, color, timezone)
+    VALUES (NULL,"'.(($server_type) ? TRINITY : MANGOS).'", "127.0.0.1", 8085 ,0 ,0 ,1)'))
+    redirect('realm.php');
+  else
+    redirect('realm.php?error=4');
 }
 
 
@@ -356,9 +372,11 @@ function set_def_realm(&$sqlr)
   valid_login($action_permission['read']);
 
   $id = (isset($_GET['id'])) ? $sqlr->quote_smart($_GET['id']) : 1;
+  if(is_numeric($id)); else $id = 1;
 
-  $result = $sqlr->query('SELECT id FROM realmlist WHERE id = '.$id.'');
-  if ($sqlr->num_rows($result)) $_SESSION['realm_id'] = $id;
+  if ($sqlr->num_rows($sqlr->query('SELECT id FROM realmlist WHERE id = '.$id.'')))
+    $_SESSION['realm_id'] = $id;
+  unset($id);
 
   $url = (isset($_GET['url'])) ? $_GET['url'] : 'index.php';
   redirect($url);
@@ -368,7 +386,7 @@ function set_def_realm(&$sqlr)
 function get_icon_type()
 {
   global $lang_realm;
-  $icon_type = Array
+  return Array
   (
     0 => array( 0,$lang_realm['normal']),
     1 => array( 1,$lang_realm['pvp']),
@@ -377,13 +395,13 @@ function get_icon_type()
     8 => array( 8,$lang_realm['rppvp']),
    16 => array(16,$lang_realm['ffapvp']),
   );
-  return $icon_type;
 }
 
 
 function get_timezone_type()
-{ global $lang_realm;
-  $timezone_type = Array
+{
+  global $lang_realm;
+  return Array
   (
     1 => array( 1,$lang_realm['development']),
     2 => array( 2,$lang_realm['united_states']),
@@ -401,7 +419,6 @@ function get_timezone_type()
    26 => array(26,$lang_realm['test_server']),
    28 => array(28,$lang_realm['qa_server']),
   );
-  return $timezone_type;
 }
 
 
@@ -443,7 +460,7 @@ if ('edit_realm' == $action)
 elseif ('doedit_realm' == $action)
   doedit_realm($sqlr);
 elseif ('del_realm' == $action)
-  del_realm();
+  del_realm($sqlr);
 elseif ('dodel_realm' == $action)
   dodel_realm($sqlr);
 elseif ('add_realm' == $action)

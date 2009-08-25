@@ -14,16 +14,17 @@ function dologin(&$sqlr)
   $user_name  = $sqlr->quote_smart($_POST['user']);
   $user_pass  = $sqlr->quote_smart($_POST['pass']);
 
-  if (strlen($user_name) > 255 || strlen($user_pass) > 255)
+  if (255 < strlen($user_name) || 255 < strlen($user_pass))
     redirect('login.php?error=1');
 
   $result = $sqlr->query('SELECT id, gmlevel, username FROM account WHERE username = \''.$user_name.'\' AND sha_pass_hash = \''.$user_pass.'\'');
 
-  if ($sqlr->num_rows($result) == 1)
+  unset($user_name);
+
+  if (1 == $sqlr->num_rows($result))
   {
     $id = $sqlr->result($result, 0, 'id');
-    $result1 = $sqlr->query('SELECT count(*) FROM account_banned WHERE id = '.$id.' AND active = \'1\'');
-    if ($sqlr->result($result1, 0))
+    if ($sqlr->result($sqlr->query('SELECT count(*) FROM account_banned WHERE id = '.$id.' AND active = \'1\''), 0))
     {
       redirect('login.php?error=3');
     }
@@ -128,8 +129,8 @@ function login(&$sqlr)
                   <tr align="right">
                     <td width="290">
                       <input type="submit" value="" style="display:none" />';
-                      makebutton($lang_login['not_registrated'], 'register.php" type="wrn', 130);
-                      makebutton($lang_login['login'], 'javascript:dologin()" type="def', 130);
+                        makebutton($lang_login['not_registrated'], 'register.php" type="wrn', 130);
+                        makebutton($lang_login['login'], 'javascript:dologin()" type="def', 130);
   $output .= '
                     </td>
                   </tr>
@@ -165,12 +166,16 @@ function do_cookie_login(&$sqlr)
 
   $user_name = $sqlr->quote_smart($_COOKIE['uname']);
   $user_pass = $sqlr->quote_smart($_COOKIE['p_hash']);
+
   $result = $sqlr->query('SELECT username, gmlevel, id FROM account WHERE username = \''.$user_name.'\' AND sha_pass_hash = \''.$user_pass.'\'');
+
+  unset($user_name);
+  unset($user_pass);
+
   if ($sqlr->num_rows($result))
   {
     $id = $sqlr->result($result, 0, 'id');
-    $result1 = $sqlr->query('SELECT count(*) FROM account_banned WHERE id ='.$id.'');
-    if ($sqlr->result($result1, 0))
+    if ($sqlr->result($sqlr->query('SELECT count(*) FROM account_banned WHERE id ='.$id.' AND active = \'1\''), 0))
     {
       redirect('login.php?error=3');
     }
@@ -181,6 +186,7 @@ function do_cookie_login(&$sqlr)
       $_SESSION['user_lvl']  = $sqlr->result($result, 0, 'gmlevel');
       $_SESSION['realm_id']  = $sqlr->quote_smart($_COOKIE['realm_id']);
       $_SESSION['client_ip'] = (isset($_SERVER['REMOTE_ADDR']) ) ? $_SERVER['REMOTE_ADDR'] : getenv('REMOTE_ADDR');
+      $_SESSION['logged_in'] = true;
       redirect('index.php');
     }
   }
