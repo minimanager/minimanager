@@ -19,13 +19,13 @@ function show_list()
   $key_field = ($ban_type == "account_banned") ? "id" :"ip";
 
   //==========================$_GET and SECURE=================================
-  $start = (isset($_GET['start'])) ? $sqlw->quote_smart($_GET['start']) : 0;
+  $start = (isset($_GET['start'])) ? $sqlr->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlw->quote_smart($_GET['order_by']) : "$key_field";
+  $order_by = (isset($_GET['order_by'])) ? $sqlr->quote_smart($_GET['order_by']) : "$key_field";
   if (!preg_match("/^[_[:lower:]]{1,12}$/", $order_by)) $order_by="$key_field";
 
-  $dir = (isset($_GET['dir'])) ? $sqlw->quote_smart($_GET['dir']) : 1;
+  $dir = (isset($_GET['dir'])) ? $sqlr->quote_smart($_GET['dir']) : 1;
   if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
 
   $order_dir = ($dir) ? "ASC" : "DESC";

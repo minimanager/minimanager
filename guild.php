@@ -36,7 +36,7 @@ function browse_guilds(&$sqlr, &$sqlc)
   if (preg_match('/^[_[:lower:]]{1,10}$/', $order_by)); else $order_by='gid';
 
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
-  if (preg_match('/^[01]{1}$/', $dir)) $dir=1;
+  if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
 
   $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
@@ -182,7 +182,7 @@ function browse_guilds(&$sqlr, &$sqlc)
               <table class=\"lined\" align=\"center\">
                 <tr class=\"hidden\">
                   <td colspan=\"6\" class=\"hidden\" align=\"right\" width=\"25%\">";
-      $output .= generate_pagination("guild.php?action=brows_guilds&amp;realm=$realmid&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start);
+      $output .= generate_pagination("guild.php?action=brows_guilds&amp;realm=$realmid&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".(($dir) ? 0 : 1)."", $all_record, $itemperpage, $start);
       $output .= "
                   </td>
                 </tr>
@@ -211,7 +211,7 @@ function browse_guilds(&$sqlr, &$sqlc)
   }
   $output .= "
                 <tr>
-                  <td colspan=\"6\" class=\"hidden\" align=\"right\" width=\"25%\">".generate_pagination("guild.php?action=brows_guilds&amp;realm=$realmid&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".!$dir, $all_record, $itemperpage, $start)."</td>
+                  <td colspan=\"6\" class=\"hidden\" align=\"right\" width=\"25%\">".generate_pagination("guild.php?action=brows_guilds&amp;realm=$realmid&amp;order_by=$order_by&amp;".($search_value && $search_by ? "search_by=$search_by&amp;search_value=$search_value&amp" : "")."dir=".(($dir) ? 0 : 1)."", $all_record, $itemperpage, $start)."</td>
                 </tr>
                 <tr>
                   <td colspan=\"6\" class=\"hidden\" align=\"right\">{$lang_guild['tot_guilds']} : $all_record</td>
@@ -327,7 +327,7 @@ function view_guild()
                 </td>
               </tr>
               <tr>
-                <td align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".!$dir, $guildmemberCount, $itemperpage, $start)."</td>
+                <td align=\"right\">".generate_pagination("guild.php?action=view_guild&amp;realm=$realmid&amp;id=$guild_id&amp;order_by=$order_by&amp;dir=".(($dir) ? 0 : 1)."", $guildmemberCount, $itemperpage, $start)."</td>
               </tr>
               <tr>
                 <td>

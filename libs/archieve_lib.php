@@ -23,7 +23,7 @@ function achieve_get_category($id, &$sqlm)
 
 
 //#############################################################################
-//get achievement id by category id
+//get achievements by category id
 
 function achieve_get_id_category($id, &$sqlm)
 {

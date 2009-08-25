@@ -82,23 +82,25 @@ function char_achievements(&$sqlr, &$sqlc)
       //  keep html indent in sync, so debuging from browser source would be easy to read
       $output .= '
           <!-- start of char_achieve.php -->
-          <script LANGUAGE="JavaScript1.2">
-            function expand(thistag, tag, name)
-            {
-              styleObj = document.getElementById(thistag).style;
+          <script type="text/javascript">
+            // <![CDATA[
+              function expand(thistag, tag, name)
+              {
+                styleObj = document.getElementById(thistag).style;
 
-              if (styleObj.display=="table")
-              {
-                styleObj.display="none";
-                tag.innerHTML = \'[+] \' + name;
+                if (styleObj.display=="table")
+                {
+                  styleObj.display="none";
+                  tag.innerHTML = \'[+] \' + name;
+                }
+                else
+                {
+                  styleObj.display="table";
+                  tag.innerHTML = \'[-] \' + name;
+                }
               }
-              else
-              {
-                styleObj.display="table";
-                tag.innerHTML = \'[-] \' + name;
-              }
-            }
-          </SCRIPT>
+            // ]]>
+          </script>
           <center>
             <div id="tab">
               <ul>
@@ -146,8 +148,6 @@ function char_achievements(&$sqlr, &$sqlc)
           if (isset($cat['name01']))
           {
             $i=0;
-            $j=0;
-            //$k=0;
             $temp_output = '';
             $achieve_sub_cat = achieve_get_id_category($cat['id'], $sqlm);
             foreach($achieve_sub_cat as $achieve_id => $id)
@@ -280,15 +280,17 @@ function char_achievements(&$sqlr, &$sqlc)
 
                   if ($total_sub_cat)
                   {
+                    $sub_cat = str_replace('&', '&amp;', $sub_cat);
+                    $sub_cat = $sqlm->quote_smart($sub_cat);
                     $temp_cat_output .= '
                       <tr>
                         <th colspan="5" align="left">
-                          <div id="div'.$sub_cat_id.'" onclick="expand(\''.$sub_cat_id.'\', this, \''.$sub_cat.' ('.$total_sub_cat.')\');">[+] '.$sub_cat.' ('.$total_sub_cat.')</div>
+                          <div id="div'.$sub_cat_id.'" onclick="expand(\'t'.$sub_cat_id.'\', this, \''.$sub_cat.' ('.$total_sub_cat.')\');">[+] '.$sub_cat.' ('.$total_sub_cat.')</div>
                         </th>
                       </tr>
                       <tr>
                         <td colspan="5">
-                          <table id="'.$sub_cat_id.'" style="width: 500px; display: none;">'.$temp_sub_cat_output;
+                          <table id="t'.$sub_cat_id.'" style="width: 500px; display: none;">'.$temp_sub_cat_output;
                     if ($j)
                       $temp_cat_output .= '
                             <tr>
@@ -306,15 +308,17 @@ function char_achievements(&$sqlr, &$sqlc)
             }
             if ($total_cat)
             {
+              $cat = str_replace('&', '&amp;', $cat);
+              $cat = $sqlm->quote_smart($cat);
               $output .='
                 <tr>
                   <th align="left">
-                    <div id="div'.$cat_id.'" onclick="expand(\''.$cat_id.'\', this, \''.$cat['name01'].' ('.$total_cat.')\');">[+] '.$cat['name01'].' ('.$total_cat.')</div>
+                    <div id="div'.$cat_id.'" onclick="expand(\'t'.$cat_id.'\', this, \''.$cat['name01'].' ('.$total_cat.')\');">[+] '.$cat['name01'].' ('.$total_cat.')</div>
                   </th>
                 </tr>
                 <tr>
                   <td>
-                    <table id="'.$cat_id.'" class="lined" style="width: 500px; display: none;">'.$temp_cat_output;
+                    <table id="t'.$cat_id.'" class="lined" style="width: 500px; display: none;">'.$temp_cat_output;
               if ($i)
                 $output .='
                       <tr>
