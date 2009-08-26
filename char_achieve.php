@@ -110,7 +110,7 @@ function char_achievements(&$sqlr, &$sqlc)
       if ($developer_test_mode && $new_achieve_page)
       {
         $output .= '
-              <table class="lined" style="width: 500px;">';
+              <table class="lined" style="width: 80%;">';
 
         $result = $sqlc->query('SELECT achievement, date FROM character_achievement WHERE guid = '.$id.'');
         $char_achieve = array();
@@ -137,7 +137,7 @@ function char_achievements(&$sqlr, &$sqlc)
               {
                 $temp_output .= '
                       <tr>
-                        <td>
+                        <td width="1%" align="left">
                           <a href="'.$achievement_datasite.$id['id'].'" target="_blank">
                             <img src="'.achieve_get_icon($id['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                           </a>
@@ -174,7 +174,7 @@ function char_achievements(&$sqlr, &$sqlc)
                     {
                       $temp_sub_output .= '
                             <tr>
-                              <td>
+                              <td width="1%" align="left">
                                 <a href="'.$achievement_datasite.$id['id'].'" target="_blank">
                                   <img src="'.achieve_get_icon($id['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                                 </a>
@@ -214,7 +214,7 @@ function char_achievements(&$sqlr, &$sqlc)
                           {
                             $temp_sub_sub_output .= '
                                   <tr>
-                                    <td>
+                                    <td width="1%" align="left">
                                       <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
                                         <img src="'.achieve_get_icon($id['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                                       </a>
@@ -271,7 +271,7 @@ function char_achievements(&$sqlr, &$sqlc)
                       </tr>
                       <tr>
                         <td colspan="5">
-                          <table id="t'.$sub_cat_id.'" style="width: 500px; display: none;">'.$temp_sub_cat_output;
+                          <table id="t'.$sub_cat_id.'" style="width: 100%; display: none;">'.$temp_sub_cat_output;
                     if ($j)
                       $temp_cat_output .= '
                             <tr>
@@ -299,7 +299,7 @@ function char_achievements(&$sqlr, &$sqlc)
                 </tr>
                 <tr>
                   <td>
-                    <table id="t'.$cat_id.'" class="lined" style="width: 500px; display: none;">'.$temp_cat_output;
+                    <table id="t'.$cat_id.'" class="lined" style="width: 100%; display: none;">'.$temp_cat_output;
               if ($i)
                 $output .='
                       <tr>
