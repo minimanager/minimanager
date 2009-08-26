@@ -58,7 +58,7 @@ function browse_spells()
 
   //==========================top tage navigaion starts here========================
   $output .="
-        <script type=\"text/javascript\" src=\"js/check.js\"></script>
+        <script type=\"text/javascript\" src=\"libs/js/check.js\"></script>
         <center>
           <table class=\"top_hidden\">
             <tr>
