@@ -365,6 +365,7 @@ $menu_array = array
       array(        'edit.php',   'MyAccount', 0,5,5,5), // new security system implemented
       array(       'index.php',   'Startpage',-1,5,5,5), // new security system implemented
       array(   'guildbank.php',   'guildbank', 0,5,5,5), // under development
+      array(   'bugreport.php',   'bugreport', 5,5,5,5),
       array(       'realm.php',       'realm', 0,5,5,5), // this last one is special, if this is not here, users are unable to switch realms
     ),                                                   // if READ is set to level 3, only level 3 and above can switch realms.
   ),                                                     // INSERT, UPDATE and DELETE should have no effect, but best to keep it at 5.
