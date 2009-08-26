@@ -42,7 +42,7 @@ function repair_form()
                 <p>'.$lang_repair['select_tables'].'</p>';
   }
   $output .= '
-                <script type="text/javascript" src="js/check.js"></script>
+                <script type="text/javascript" src="libs/js/check.js"></script>
                 <table style="width: 550px;" class="lined">
                   <tr>';
   if($user_lvl >= $action_permission['update'])

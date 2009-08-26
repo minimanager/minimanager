@@ -391,7 +391,7 @@ function do_insert_update($do_insert) {
 
  if ($mob = $sql->fetch_assoc($result)){
 
-  $output .= "<script type=\"text/javascript\" src=\"js/tab.js\"></script>
+  $output .= "<script type=\"text/javascript\" src=\"libs/js/tab.js\"></script>
    <center>
     <br /><br /><br />
     <form method=\"post\" action=\"creature.php?action=do_update\" name=\"form1\">

@@ -56,7 +56,7 @@ function browse_tickets()
            ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
 
   $output .="
-        <script type=\"text/javascript\" src=\"js/check.js\"></script>
+        <script type=\"text/javascript\" src=\"libs/js/check.js\"></script>
         <center>
           <table class=\"top_hidden\">
             <tr>

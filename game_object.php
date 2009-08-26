@@ -197,7 +197,7 @@ if ($_POST['custom_search'] != '') $custom_search = $sql->quote_smart($_POST['cu
 function add_new() {
  global $lang_global, $lang_game_object, $output, $go_type;
 
- $output .= "<script type=\"text/javascript\" src=\"js/tab.js\"></script>
+ $output .= "<script type=\"text/javascript\" src=\"libs/js/tab.js\"></script>
    <center>
     <br /><br /><br />
     <form method=\"post\" action=\"game_object.php?action=do_update\" name=\"form1\">
@@ -371,7 +371,7 @@ function edit() {
 
  if ($go = $sql->fetch_assoc($result)){
 
-  $output .= "<script type=\"text/javascript\" src=\"js/tab.js\"></script>
+  $output .= "<script type=\"text/javascript\" src=\"libs/js/tab.js\"></script>
    <center>
     <br /><br /><br />
     <form method=\"post\" action=\"game_object.php?action=do_update\" name=\"form1\">

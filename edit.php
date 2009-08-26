@@ -25,7 +25,7 @@ function edit_user(&$sqlr, &$sqlc)
   {
     $output .= '
           <center>
-            <script type="text/javascript" src="js/sha1.js"></script>
+            <script type="text/javascript" src="libs/js/sha1.js"></script>
             <script type="text/javascript">
               // <![CDATA[
                 function do_submit_data ()

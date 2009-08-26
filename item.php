@@ -375,7 +375,7 @@ function add_new() {
 valid_login($action_permission['insert']);
   wowhead_tt();
 
- $output .= "<script type=\"text/javascript\" src=\"js/tab.js\"></script>
+ $output .= "<script type=\"text/javascript\" src=\"libs/js/tab.js\"></script>
    <center>
     <br /><br /><br />
     <form method=\"post\" action=\"item.php?action=do_update\" name=\"form1\">
@@ -1221,7 +1221,7 @@ valid_login($action_permission['read']);
   require_once("scripts/get_lib.php");
   //$tooltip = get_item_tooltip($entry);
 
-  $output .= "<script type=\"text/javascript\" src=\"js/tab.js\"></script>
+  $output .= "<script type=\"text/javascript\" src=\"libs/js/tab.js\"></script>
    <center>
     <br /><br /><br />
     <form method=\"post\" action=\"item.php?action=do_update\" name=\"form1\">

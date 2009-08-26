@@ -42,7 +42,6 @@ function top100($realmid, &$sqlr, &$sqlc)
 
   //==========================top tage navigaion starts here========================
   $output .= '
-          <script type="text/javascript" src="js/check.js"></script>
           <center>
             <table class="top_hidden">';
   if($developer_test_mode && $multi_realm_mode)

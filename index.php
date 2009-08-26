@@ -15,7 +15,7 @@ function front(&$sqlr, &$sqlc)
   global $output, $lang_global, $lang_index,
     $realm_id, $world_db, $mmfpm_db, $server,
     $action_permission, $user_lvl, $user_id,
-    $server_type, $showcountryflag, $motd_display_poster, $gm_online_count, $gm_online;
+    $server_type, $showcountryflag, $motd_display_poster, $gm_online_count, $gm_online, $itemperpage;
 
   $output .= '
           <div class="top">';
@@ -81,84 +81,88 @@ function front(&$sqlr, &$sqlc)
   if ($server_type)
   {
     $version = $sqlw->fetch_assoc($sqlw->query('SELECT core_revision, db_version FROM version'), 0);
-    $output .= $lang_index['trinity_rev'].' '.$version['core_revision'].' '.$lang_index['using_db'].' '.$version['db_version'].'</div>';
+    $output .= '
+            '.$lang_index['trinity_rev'].' '.$version['core_revision'].' '.$lang_index['using_db'].' '.$version['db_version'].'
+          </div>';
   }
   else
   {
     $version = $sqlw->fetch_assoc($sqlw->query('SELECT version FROM db_version'));
-    $output .= 'Mangos: '.$server[$realm_id]['rev'].' '.$lang_index['using_db'].' '.$version['version'].'</div>';
+    $output .= '
+            Mangos: '.$server[$realm_id]['rev'].' '.$lang_index['using_db'].' '.$version['version'].'
+          </div>';
   }
   unset($version);
 
   //MOTD part
-  $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
-  if (is_numeric($start)); else $start = 0;
+  $start_m = (isset($_GET['start_m'])) ? $sqlc->quote_smart($_GET['start_m']) : 0;
+  if (is_numeric($start_m)); else $start_m = 0;
 
-  $all_record = $sqlc->result($sqlc->query('SELECT count(*) FROM bugreport'), 0);
+  $all_record_m = $sqlc->result($sqlc->query('SELECT count(*) FROM bugreport'), 0);
 
   if ($user_lvl >= $action_permission['delete'])
     $output .= '
-            <script type="text/javascript">
+          <script type="text/javascript">
+            // <![CDATA[
               answerbox.btn_ok="'.$lang_global['yes_low'].'";
               answerbox.btn_cancel="'.$lang_global['no'].'";
               var del_motd = "motd.php?action=delete_motd&amp;id=";
-            </script>';
+            // ]]>
+          </script>';
   $output .= '
-            <center>
-              <table class="lined">
-                <tr>
-                  <th align="right">';
+          <center>
+            <table class="lined">
+              <tr>
+                <th align="right">';
   if ($user_lvl >= $action_permission['insert'])
     $output .= '
-                    <a href="motd.php?action=add_motd">'.$lang_index['add_motd'].'</a>';
+                  <a href="motd.php?action=add_motd">'.$lang_index['add_motd'].'</a>';
   $output .= '
-                  </th>
-                </tr>';
+                </th>
+              </tr>';
 
-  if($all_record)
+  if($all_record_m)
   {
-    $result = $sqlc->query('SELECT id, type, content FROM bugreport ORDER BY id DESC LIMIT '.$start.', 3');
+    $result = $sqlc->query('SELECT id, type, content FROM bugreport ORDER BY id DESC LIMIT '.$start_m.', 3');
     while($post = $sqlc->fetch_assoc($result))
     {
       $output .= '
-                <tr>
-                  <td align="left" class="large">
-                    <blockquote>'.bbcode_bbc2html($post['content']).'</blockquote>
-                   </td>
-                </tr>
-                <tr>
-                  <td align="right">';
+              <tr>
+                <td align="left" class="large">
+                  <blockquote>'.bbcode_bbc2html($post['content']).'</blockquote>
+                 </td>
+              </tr>
+              <tr>
+                <td align="right">';
       ($motd_display_poster) ? $output .= $post['type'] : '';
 
       if ($user_lvl >= $action_permission['delete'])
         $output .= '
-                    <img src="img/cross.png" width="12" height="12" onclick="answerBox(\''.$lang_global['delete'].': &lt;font color=white&gt;'.$post['id'].'&lt;/font&gt;&lt;br /&gt;'.$lang_global['are_you_sure'].'\', del_motd + '.$post['id'].');" style="cursor:pointer;" alt="" />';
+                  <img src="img/cross.png" width="12" height="12" onclick="answerBox(\''.$lang_global['delete'].': &lt;font color=white&gt;'.$post['id'].'&lt;/font&gt;&lt;br /&gt;'.$lang_global['are_you_sure'].'\', del_motd + '.$post['id'].');" style="cursor:pointer;" alt="" />';
       if ($user_lvl >= $action_permission['update'])
         $output .= '
-                    <a href="motd.php?action=edit_motd&amp;error=3&amp;id='.$post['id'].'">
-                      <img src="img/edit.png" width="14" height="14" alt="" />
-                    </a>';
+                  <a href="motd.php?action=edit_motd&amp;error=3&amp;id='.$post['id'].'">
+                    <img src="img/edit.png" width="14" height="14" alt="" />
+                  </a>';
       $output .= '
-                  </td>
-                </tr>
-                <tr>
-                  <td class="hidden"></td>
-                </tr>';
+                </td>
+              </tr>
+              <tr>
+                <td class="hidden"></td>
+              </tr>';
     }
-    $output .= '
-                <tr>
-                  <td align="right" class="hidden">'.generate_pagination('index.php?', $all_record, 3, $start).'</td>
-                </tr>';
+    $output .= '%%REPLACE_TAG%%';
   }
-  unset($all_record);
   $output .= '
-              </table>
-              <br />';
+            </table>';
 
   //print online chars
   if ($online)
   {
     //==========================$_GET and SECURE=================================
+    $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
+    if (is_numeric($start)); else $start = 0;
+
     $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'name';
     if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by = 'name';
 
@@ -178,30 +182,44 @@ function front(&$sqlr, &$sqlc)
       if ($sqlc->num_rows($result))
         $order_side = (in_array($sqlc->result($result, 0),array(2,5,6,8,10))) ? ' AND race IN (2,5,6,8,10) ' : ' AND race IN (1,3,4,7,11) ';
     }
-    $query = '
+    if($order_by == 'ip')
+      $result = $sqlr->query('select id, last_ip from account where online = 1 order by last_ip '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
+    else
+      $result = $sqlc->query('
       SELECT guid, name, race, class, zone, map, level, account, gender,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_HONOR_POINTS+1).'), " ", -1) AS UNSIGNED) AS highest_rank,
         CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GUILD_ID+1).'), " ", -1) AS UNSIGNED) as gname
         '.($server_type ? ', latency ' : ' ').'
-        FROM characters WHERE online= 1 '.($gm_online == '0' ? 'AND extra_flags &1 = 0 ' : '').$order_side.' ORDER BY '.$order_by.' '.$order_dir.'';
-    $result = $sqlc->query($query);
+        FROM characters WHERE online= 1 '.($gm_online == '0' ? 'AND extra_flags &1 = 0 ' : '').$order_side.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
     $total_online = $sqlc->result($sqlc->query('SELECT count(*) FROM characters WHERE online= 1'.(($gm_online_count == '0') ? ' AND extra_flags &1 = 0' : '')), 0);
+    $replace = '
+              <tr>
+                <td align="right" class="hidden">'.generate_pagination('index.php?start='.$start.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record_m, 3, $start_m, 'start_m').'</td>
+              </tr>';
+    unset($all_record_m);
+    $output = str_replace('%%REPLACE_TAG%%', $replace, $output);
+    unset($replace);
     $output .= '
             <font class="bold">'.$lang_index['tot_users_online'].': '.$total_online.'</font>
-            <br /><br />
             <table class="lined">
               <tr>
-                <th width="15%"><a href="index.php?order_by=name&amp;dir='.$dir.'"'.($order_by=='name' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['name'].'</a></th>
-                <th width="1%"><a href="index.php?order_by=race&amp;dir='.$dir.'"'.($order_by=='race' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['race'].'</a></th>
-                <th width="1%"><a href="index.php?order_by=class&amp;dir='.$dir.'"'.($order_by=='class' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['class'].'</a></th>
-                <th width="5%"><a href="index.php?order_by=level&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['level'].'</a></th>
-                <th width="1%"><a href="index.php?order_by=highest_rank&amp;dir='.$dir.'"'.($order_by=='highest_rank' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['rank'].'</a></th>
-                <th width="15%"><a href="index.php?order_by=gname&amp;dir='.$dir.'"'.($order_by=='gname' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['guild'].'</a></th>
-                <th width="20%"><a href="index.php?order_by=map&amp;dir='.$dir.'"'.($order_by=='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['map'].'</a></th>
-                <th width="25%"><a href="index.php?order_by=zone&amp;dir='.$dir.'"'.($order_by=='zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['zone'].'</a></th>';
+                <td colspan="'.(10-$showcountryflag-$server_type).'" align="right" class="hidden" width="25%">';
+    $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $total_online, $itemperpage, $start);
+    $output .= '
+                </td>
+              </tr>
+              <tr>
+                <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=name&amp;dir='.$dir.'"'.($order_by=='name' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['name'].'</a></th>
+                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=race&amp;dir='.$dir.'"'.($order_by=='race' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['race'].'</a></th>
+                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=class&amp;dir='.$dir.'"'.($order_by=='class' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['class'].'</a></th>
+                <th width="5%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=level&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['level'].'</a></th>
+                <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=highest_rank&amp;dir='.$dir.'"'.($order_by=='highest_rank' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['rank'].'</a></th>
+                <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=gname&amp;dir='.$dir.'"'.($order_by=='gname' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['guild'].'</a></th>
+                <th width="20%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by=='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['map'].'</a></th>
+                <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by=='zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['zone'].'</a></th>';
     if ($server_type)
       $output .='
-                <th width="25%"><a href="index.php?order_by=latency&amp;dir='.$dir.'"'.($order_by=='latency' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['latency'].'</th>';
+                <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=latency&amp;dir='.$dir.'"'.($order_by=='latency' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['latency'].'</a></th>';
     if ($showcountryflag)
     {
       require_once 'libs/misc_lib.php';
@@ -210,7 +228,6 @@ function front(&$sqlr, &$sqlc)
     }
     $output .= '
               </tr>';
-    unset($total_online);
 
     if ($server_type)
     {
@@ -223,6 +240,17 @@ function front(&$sqlr, &$sqlc)
 
     while ($char = $sqlc->fetch_assoc($result))
     {
+      if($order_by == 'ip')
+      {
+        $temp = $sqlc->fetch_assoc($sqlc->query('
+        SELECT guid, name, race, class, zone, map, level, account, gender,
+          CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_HONOR_POINTS+1).'), " ", -1) AS UNSIGNED) AS highest_rank,
+          CAST( SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GUILD_ID+1).'), " ", -1) AS UNSIGNED) as gname
+          '.($server_type ? ', latency ' : ' ').'
+          FROM characters WHERE online= 1 '.($gm_online == '0' ? 'AND extra_flags &1 = 0 ' : '').$order_side.' and account = '.$char['id'].''));
+        $char = $temp;
+      }
+
       $gm = $sqlr->result($sqlr->query('SELECT gmlevel FROM account WHERE id='.$char['account'].''), 0);
       $guild_name = $sqlc->result($sqlc->query('SELECT name FROM guild WHERE guildid='.$char['gname'].''));
 
@@ -271,8 +299,8 @@ function front(&$sqlr, &$sqlc)
                 <td>
                   <a href="guild.php?action=view_guild&amp;error=3&amp;id='.$char['gname'].'">'.htmlentities($guild_name).'</a>
                 </td>
-                <td>'.get_map_name($char['map'], $sqlm).'</td>
-                <td>'.get_zone_name($char['zone'], $sqlm).'</td>';
+                <td><span onmousemove="toolTip(\'MapID:'.$char['map'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_map_name($char['map'], $sqlm).'</span></td>
+                <td><span onmousemove="toolTip(\'ZoneID:'.$char['zone'].'\', \'item_tooltip\')" onmouseout="toolTip()">'.get_zone_name($char['zone'], $sqlm).'</span></td>';
       if ($server_type)
         $output .='
                 <td>'.$cc.'</td>';
@@ -285,12 +313,18 @@ function front(&$sqlr, &$sqlc)
       $output .='
               </tr>';
     }
+    $output .= '
+              <tr>';
     if ($server_type)
       $output .= '
-              <tr>
-                <td colspan="'.(($showcountryflag) ? '10' : '9').'" class="hidden" align="right">'.$lang_index['a_latency'].' : '.round(( ($latencycount) ? $tlatency/$latencycount : 0 ), 2).' ms</td>
-              <tr>';
+                <td class="hidden" align="right">'.$lang_index['a_latency'].' : '.round(( ($latencycount) ? $tlatency/$latencycount : 0 ), 2).' ms</td>';
     $output .= '
+                <td colspan="'.(10-$showcountryflag-$server_type).'" align="right" class="hidden" width="25%">';
+    $output .= generate_pagination('index.php?start_m='.$start_m.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $total_online, $itemperpage, $start);
+    unset($total_online);
+    $output .= '
+                </td>
+              </tr>
             </table>
             <br />
           </center>';

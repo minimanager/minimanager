@@ -157,7 +157,7 @@ function register(){
  global $lang_register, $lang_global, $output, $expansion_select, $lang_captcha ,$lang_command, $enable_captcha;
 
  $output .= "<center>
-  <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
+  <script type=\"text/javascript\" src=\"libs/js/sha1.js\"></script>
   <script type=\"text/javascript\">
     function do_submit_data () {
       if (document.form.pass1.value != document.form.pass2.value){

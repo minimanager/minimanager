@@ -103,7 +103,7 @@ function browse_users(&$sqlr, &$sqlc)
   //  keep html indent in sync, so debuging from browser source would be easy to read
   $output .='
           <!-- start of user.php -->
-          <script type="text/javascript" src="js/check.js"></script>
+          <script type="text/javascript" src="libs/js/check.js"></script>
           <center>
             <table class="top_hidden">
               <tr>
@@ -608,7 +608,7 @@ function add_new()
   valid_login($action_permission['insert']);
   $output .= "
         <center>
-          <script type=\"text/javascript\" src=\"js/sha1.js\"></script>
+          <script type=\"text/javascript\" src=\"libs/js/sha1.js\"></script>
           <script type=\"text/javascript\">
             // <![CDATA[
               function do_submit_data ()
@@ -759,7 +759,7 @@ function edit_user()
   {
     $output .= '
         <center>
-          <script type="text/javascript" src="js/sha1.js"></script>
+          <script type="text/javascript" src="libs/js/sha1.js"></script>
           <script type="text/javascript">
             // <![CDATA[
               function do_submit_data ()

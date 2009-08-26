@@ -132,7 +132,7 @@ function maketooltip($text, $link, $tip, $class, $target = 'target="_self"')
 //#############################################################################
 // Generate paging navigation.
 // Original from PHPBB with some modifications to make them more simple
-function generate_pagination($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = TRUE)
+function generate_pagination($base_url, $num_items, $per_page, $start_item, $start_tag = 'start', $add_prevnext_text = TRUE)
 {
   if ($num_items);
   else return '';
@@ -149,7 +149,7 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $add
     $count = $init_page_max+1;
     for($i=1; $i<$count; ++$i)
     {
-      $page_string .= ($i == $on_page) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;start='.(($i-1)*$per_page).'">'.$i.'</a>';
+      $page_string .= ($i == $on_page) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>';
       if ($i < $init_page_max)
       {
         $page_string .= ', ';
@@ -166,7 +166,7 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $add
         $count = $init_page_max+2;
         for($i=$init_page_min-1; $i<$count; ++$i)
         {
-          $page_string .= ($i === $on_page) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;start='.(($i-1)*$per_page).'">'.$i.'</a>';
+          $page_string .= ($i === $on_page) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>';
           if ($i <  $init_page_max+1)
           {
             $page_string .= ', ';
@@ -181,7 +181,7 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $add
       $count = $total_pages+1;
       for($i=$total_pages-2; $i<$count; ++$i)
       {
-        $page_string .= ($i == $on_page) ? '<b>'.$i.'</b>'  : '<a href="'.$base_url.'&amp;start='.(($i-1)*$per_page).'">'.$i.'</a>';
+        $page_string .= ($i == $on_page) ? '<b>'.$i.'</b>'  : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>';
         if($i < $total_pages)
         {
           $page_string .= ', ';
@@ -194,7 +194,7 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $add
     $count = $total_pages+1;
     for($i=1; $i<$count; ++$i)
     {
-      $page_string .= ($i == $on_page) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;start='.(($i-1)*$per_page).'">'.$i.'</a>';
+      $page_string .= ($i == $on_page) ? '<b>'.$i.'</b>' : '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($i-1)*$per_page).'">'.$i.'</a>';
       if ($i <  $total_pages)
       {
         $page_string .= ', ';
@@ -205,11 +205,11 @@ function generate_pagination($base_url, $num_items, $per_page, $start_item, $add
   {
     if (1 < $on_page)
     {
-      $page_string = '<a href="'.$base_url.'&amp;start='.(($on_page-2)*$per_page).'">Prev</a>&nbsp;&nbsp;'.$page_string;
+      $page_string = '<a href="'.$base_url.'&amp;'.$start_tag.'='.(($on_page-2)*$per_page).'">Prev</a>&nbsp;&nbsp;'.$page_string;
     }
     if ($on_page < $total_pages)
     {
-      $page_string .= '&nbsp;&nbsp;<a href="'.$base_url.'&amp;start='.($on_page*$per_page).'">Next</a>';
+      $page_string .= '&nbsp;&nbsp;<a href="'.$base_url.'&amp;'.$start_tag.'='.($on_page*$per_page).'">Next</a>';
     }
   }
   $page_string = 'Page: '.$page_string;
