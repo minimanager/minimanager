@@ -96,9 +96,8 @@ function top100($realmid, &$sqlr, &$sqlc)
                 <th width="10%"><a href="top100.php?order_by=totaltime&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='totaltime' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['time_played'].'</a></th>
                 <th width="1%">'.$lang_top['online'].'</th>
               </tr>';
-  for ($i=0; $i<$itemperpage; ++$i)
+  while($char = $sqlc->fetch_assoc($result))
   {
-    $char = $sqlc->fetch_assoc($result);
     $guild_name = $sqlc->result($sqlc->query('SELECT name FROM guild WHERE guildid = '.$char['gname'].''), 0);
 
     $days  = floor(round($char['totaltime'] / 3600)/24);

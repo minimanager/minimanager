@@ -58,7 +58,7 @@ function bbcode_emoticons()
     2 => Array (";)",    "wink",    "15","15"),
     3 => Array ("8)",    "cool",    "15","15"),
     4 => Array (":(",    "sad",     "15","15"),
-    5 => Array (">:(",   "angry",   "15","15"),
+    5 => Array (":mad:", "angry",   "15","15"),
     6 => Array (":|",    "neutral", "15","15"),
     7 => Array ("=)",    "happy",   "15","15"),
     8 => Array (":´(",   "cry",     "15","15"),

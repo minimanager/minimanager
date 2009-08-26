@@ -279,12 +279,16 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
         unset($file_obj);
       }
       $output .= '
-      <div id="version">'.$show_version['version'].' r'.$show_version['svnrev'].'</div>';
+      <div id="version">
+        '.$show_version['version'].' r'.$show_version['svnrev'].'
+      </div>';
     }
     else
     {
       $output .= '
-      <div id="version">'.$show_version['version'].'</div>';
+      <div id="version">
+        '.$show_version['version'].'
+      </div>';
     }
   }
 }
