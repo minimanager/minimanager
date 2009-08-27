@@ -27,11 +27,22 @@ function print_upload()
   else
     $buffer = '';
 
-  $upload_max_filesize=ini_get('upload_max_filesize');
-  if (eregi('([0-9]+)K', $upload_max_filesize, $tempregs))
-    $upload_max_filesize=$tempregs[1]*1024;
-  if (eregi('([0-9]+)M', $upload_max_filesize, $tempregs))
-    $upload_max_filesize=$tempregs[1]*1024*1024;
+  $upload_max = ini_get('upload_max_filesize');
+  if (eregi('([0-9]+)K', $upload_max, $tempregs))
+    $upload_max=$tempregs[1]*1024;
+  if (eregi('([0-9]+)M', $upload_max, $tempregs))
+    $upload_max=$tempregs[1]*1024*1024;
+
+  $post_max = ini_get('post_max_size');
+  if (eregi('([0-9]+)K', $post_max, $tempregs))
+    $post_max=$tempregs[1]*1024;
+  if (eregi('([0-9]+)M', $post_max, $tempregs))
+    $post_max=$tempregs[1]*1024*1024;
+  // sanity check- a single upload should not be more than 50% the size limit of the total post
+  $post_max = $post_max /2;
+  $upload_max_filesize = ($upload_max < $post_max) ? $upload_max : $post_max;
+  unset($upload_max);
+  unset($post_max);
 
   $output .= '
           <center>

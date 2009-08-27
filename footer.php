@@ -1,15 +1,32 @@
 <?php
 
 
-  // level 4 debug prints all global arrays, but can't print content of classes
+  // level 1 debug prints total queries,
   //  so we would have to close these, or we can't have debug output
-  if( 3 < $debug)
+  if($debug)
   {
-    unset($sql);
-    unset($sqlr);
-    unset($sqlc);
-    unset($sqlm);
-    unset($sqlw);
+    if (isset($sql))
+      $sql->close();
+    if (isset($sqlr))
+      $sqlr->close();
+    if (isset($sqlc))
+      $sqlc->close();
+    if (isset($sqlm))
+      $sqlm->close();
+    if (isset($sqlw))
+      $sqlw->close();
+
+    // level 3 debug lists all global vars, but can't read classes
+    // level 4 debug prints all global arrays, but can't print content of classes
+    //  so we would have to close these, or we can't have debug output
+    if(2 < $debug)
+    {
+      unset($sql);
+      unset($sqlr);
+      unset($sqlc);
+      unset($sqlm);
+      unset($sqlw);
+    }
   }
 
   // we start with a lead of 10 spaces,

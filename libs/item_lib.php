@@ -86,7 +86,13 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
   if ($result)
     $displayid = $sqlw->result($result, 0);
   else
-    $displayid = 0;
+  {
+    $result = $sqlm->query("SELECT `displayid` FROM `dbc_item` WHERE `entry` = $itemid LIMIT 1");
+    if ($result)
+      $displayid = $sqlm->result($result, 0);
+    else
+      $displayid = 0;
+  }
 
   if ($displayid)
   {
