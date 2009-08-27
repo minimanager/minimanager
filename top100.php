@@ -16,11 +16,14 @@ function top100($realmid, &$sqlr, &$sqlc)
   $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
   //==========================$_GET and SECURE========================
+  $type = (isset($_GET['type'])) ? $sqlc->quote_smart($_GET['type']) : 'level';
+  if (preg_match('/^[_[:lower:]]{1,10}$/', $type)); else $type = 'level';
+
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start=0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'honor';
-  if (preg_match('/^[_[:lower:]]{1,10}$/', $order_by)); else $order_by = 'honor';
+  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'level';
+  if (preg_match('/^[_[:lower:]]{1,10}$/', $order_by)); else $order_by = 'level';
 
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
@@ -29,21 +32,100 @@ function top100($realmid, &$sqlr, &$sqlc)
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end========================
 
+  $type_list = array('level', 'stat', 'defense', 'attack', 'resist', 'crit_hit', 'pvp');
+  if (in_array($type, $type_list));
+    else $type = 'level';
+
   $result = $sqlc->query('SELECT count(*) FROM characters');
   $all_record = $sqlc->result($result, 0);
   $all_record = (($all_record < 100) ? $all_record : 100);
 
-  $result = $sqlc->query('SELECT guid, name, race, class, totaltime, online, gender, level, money,
+  $result = $sqlc->query('SELECT guid, name, race, class, gender, level, totaltime, online, money,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GUILD_ID+1).'),     " ", -1) AS UNSIGNED) as gname,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_MAX_HEALTH+1).'), " ", -1) AS UNSIGNED) AS health,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_MAX_MANA+1).'),   " ", -1) AS UNSIGNED) AS mana,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_STR+1).'), " ", -1) AS UNSIGNED) AS str,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_AGI+1).'), " ", -1) AS UNSIGNED) AS agi,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_STA+1).'),   " ", -1) AS UNSIGNED) AS sta,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_INT+1).'),   " ", -1) AS UNSIGNED) AS intel,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_SPI+1).'),   " ", -1) AS UNSIGNED) AS spi,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_ARMOR+1).'), " ", -1) AS UNSIGNED) AS armor,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_BLOCK+1).'), " ", -1) AS UNSIGNED) AS block,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_DODGE+1).'), " ", -1) AS UNSIGNED) AS dodge,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_PARRY+1).'), " ", -1) AS UNSIGNED) AS parry,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RESILIENCE+1).'), " ", -1) AS UNSIGNED) AS resilience,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_AP+1).'), " ", -1) AS UNSIGNED) AS ap,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_AP_MOD+1).'),   " ", -1) AS UNSIGNED) AS ap_mod,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RANGED_AP+1).'), " ", -1) AS UNSIGNED) AS ranged_ap,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RANGED_AP_MOD+1).'), " ", -1) AS UNSIGNED) AS ranged_ap_mod,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_MINDAMAGE+1).'), " ", -1) AS UNSIGNED) AS min_dmg,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_MAXDAMAGE+1).'), " ", -1) AS UNSIGNED) AS max_dmg,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_MINRANGEDDAMAGE+1).'),   " ", -1) AS UNSIGNED) AS min_ranged_dmg,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_MAXRANGEDDAMAGE+1).'),   " ", -1) AS UNSIGNED) AS max_ranged_dmg,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_EXPERTISE+1).'),   " ", -1) AS UNSIGNED) AS expertise,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_OFFHAND_EXPERTISE+1).'), " ", -1) AS UNSIGNED) AS off_expertise,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RES_HOLY+1).'), " ", -1) AS UNSIGNED) AS holy,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RES_FIRE+1).'),   " ", -1) AS UNSIGNED) AS fire,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RES_NATURE+1).'), " ", -1) AS UNSIGNED) AS nature,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RES_FROST+1).'), " ", -1) AS UNSIGNED) AS frost,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RES_SHADOW+1).'),   " ", -1) AS UNSIGNED) AS shadow,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RES_ARCANE+1).'),   " ", -1) AS UNSIGNED) AS arcane,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_MELEE_CRIT+1).'), " ", -1) AS UNSIGNED) AS melee_crit,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RANGE_CRIT+1).'),   " ", -1) AS UNSIGNED) AS range_crit,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_SPELL_CRIT+1).'), " ", -1) AS UNSIGNED) AS spell_crit,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_MELEE_HIT+1).'), " ", -1) AS UNSIGNED) AS melee_hit,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_RANGE_HIT+1).'),   " ", -1) AS UNSIGNED) AS range_hit,
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_SPELL_HIT+1).'),   " ", -1) AS UNSIGNED) AS spell_hit,
     CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_HONOR_POINTS+1).'), " ", -1) AS UNSIGNED) AS honor,
     CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_HONOR_KILL+1).'),   " ", -1) AS UNSIGNED) AS kills,
-    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_ARENA_POINTS+1).'), " ", -1) AS UNSIGNED) AS arena,
-    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_GUILD_ID+1).'),     " ", -1) AS UNSIGNED) as gname
+    CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(data, " ", '.(CHAR_DATA_OFFSET_ARENA_POINTS+1).'), " ", -1) AS UNSIGNED) AS arena
     FROM characters ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
+
 
   //==========================top tage navigaion starts here========================
   $output .= '
           <center>
-            <table class="top_hidden">';
+            <div id="tab">
+              <ul>
+                <li'.(($type == 'level') ? ' id="selected"' : '' ).'>
+                  <a href="top100.php">
+                    '.$lang_top['general'].'
+                  </a>
+                </li>
+                <li'.(($type == 'stat') ? ' id="selected"' : '' ).'>
+                  <a href="top100.php?type=stat">
+                    '.$lang_top['stats'].'
+                  </a>
+                </li>
+                <li'.(($type == 'defense') ? ' id="selected"' : '' ).'>
+                  <a href="top100.php?type=defense">
+                    '.$lang_top['defense'].'
+                  </a>
+                </li>
+                <li'.(($type == 'attack') ? ' id="selected"' : '' ).'>
+                  <a href="top100.php?type=attack">
+                    '.$lang_top['attack'].'
+                  </a>
+                </li>
+                <li'.(($type == 'resist') ? ' id="selected"' : '' ).'>
+                  <a href="top100.php?type=resist">
+                    '.$lang_top['resist'].'
+                  </a>
+                </li>
+                <li'.(($type == 'crit_hit') ? ' id="selected"' : '' ).'>
+                  <a href="top100.php?type=crit_hit">
+                    '.$lang_top['crit_hit'].'
+                  </a>
+                </li>
+                <li'.(($type == 'pvp') ? ' id="selected"' : '' ).'>
+                  <a href="top100.php?type=pvp">
+                    '.$lang_top['pvp'].'
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div id="tab_content">
+            <table class="top_hidden" style="width: 700px">';
   if($developer_test_mode && $multi_realm_mode)
   {
     $realms = $sqlr->query('SELECT count(*) FROM realmlist');
@@ -55,7 +137,7 @@ function top100($realmid, &$sqlr, &$sqlc)
                 <td colspan="2" align="left">';
                   makebutton('View', 'javascript:do_submit(\'form'.$realm_id.'\',0)', 130);
       $output .= '
-                  <form action="top100.php" method="get" name="form'.$realm_id.'">
+                  <form action="top100.php?type='.$type.'" method="post" name="form'.$realm_id.'">
                     Number of Realms :
                     <input type="hidden" name="action" value="realms" />
                     <select name="n_realms">';
@@ -73,7 +155,7 @@ function top100($realmid, &$sqlr, &$sqlc)
               <tr>
                 <td align="right">Total: '.$all_record.'</td>
                 <td align="right" width="25%">';
-  $output .= generate_pagination('top100.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
+  $output .= generate_pagination('top100.php?type='.$type.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
   $output .= '
                 </td>
               </tr>
@@ -81,20 +163,83 @@ function top100($realmid, &$sqlr, &$sqlc)
   //==========================top tage navigaion ENDS here ========================
 
   $output .= '
-            <table class="lined">
+            <table class="lined" style="width: 700px">
               <tr>
-                <th width="1%">'.$lang_top['name'].'</th>
-                <th width="1%">'.$lang_top['race'].'</th>
-                <th width="1%">'.$lang_top['class'].'</th>
-                <th width="1%"><a href="top100.php?order_by=level&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['level'].'</a></th>
-                <th width="10%">'.$lang_top['guild'].'</th>
-                <th width="10%"><a href="top100.php?order_by=money&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='money' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['money'].'</a></th>
-                <th width="1%"><a href="top100.php?order_by=honor&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='honor' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['rank'].'</a></th>
-                <th width="1%">'.$lang_top['honor_points'].'</th>
-                <th width="1%"><a href="top100.php?order_by=kills&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='kills' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['kills'].'</a></th>
-                <th width="1%"><a href="top100.php?order_by=arena&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='arena' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['arena_points'].'</a></th>
-                <th width="10%"><a href="top100.php?order_by=totaltime&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='totaltime' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['time_played'].'</a></th>
-                <th width="1%">'.$lang_top['online'].'</th>
+                <th width="15%">'.$lang_top['name'].'</th>
+                <th width="5%">'.$lang_top['race'].'</th>
+                <th width="5%">'.$lang_top['class'].'</th>
+                <th width="5%"><a href="top100.php?type='.$type.'&amp;order_by=level&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['level'].'</a></th>';
+  if ($type == 'level')
+  {
+    $output .= '
+                <th width="20%">'.$lang_top['guild'].'</th>
+                <th width="25%"><a href="top100.php?type='.$type.'&amp;order_by=money&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='money' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['money'].'</a></th>
+                <th width="20%"><a href="top100.php?type='.$type.'&amp;order_by=totaltime&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='totaltime' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['time_played'].'</a></th>
+                <th width="5%">'.$lang_top['online'].'</th>';
+  }
+  elseif ($type == 'stat')
+  {
+    $output .= '
+                <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=health&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='health' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['health'].'</a></th>
+                <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=mana&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='mana' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['mana'].'</a></th>
+                <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=str&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='str' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['str'].'</a></th>
+                <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=agi&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='agi' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['agi'].'</a></th>
+                <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=sta&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='sta' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['sta'].'</a></th>
+                <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=intel&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='intel' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['intel'].'</a></th>
+                <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=spi&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='spi' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['spi'].'</a></th>';
+  }
+  elseif ($type == 'defense')
+  {
+    $output .= '
+                <th width="14%"><a href="top100.php?type='.$type.'&amp;order_by=armor&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='armor' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['armor'].'</a></th>
+                <th width="14%"><a href="top100.php?type='.$type.'&amp;order_by=block&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='block' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['block'].'</a></th>
+                <th width="14%"><a href="top100.php?type='.$type.'&amp;order_by=dodge&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='dodge' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['dodge'].'</a></th>
+                <th width="14%"><a href="top100.php?type='.$type.'&amp;order_by=parry&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='parry' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['parry'].'</a></th>
+                <th width="14%"><a href="top100.php?type='.$type.'&amp;order_by=resilience&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='resilience' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['resilience'].'</a></th>';
+  }
+  elseif ($type == 'attack')
+  {
+    $output .= '
+				<th width="7%"><a href="top100.php?type='.$type.'&amp;order_by=ap&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='ap' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['ap'].'</a></th>
+				<th width="7%"><a href="top100.php?type='.$type.'&amp;order_by=ap_mod&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='ap_mod' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['ap_mod'].'</a></th>
+				<th width="7%"><a href="top100.php?type='.$type.'&amp;order_by=ranged_ap&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='ranged_ap' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['ranged_ap'].'</a></th>
+				<th width="7%"><a href="top100.php?type='.$type.'&amp;order_by=ranged_ap_mod&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='ranged_ap_mod' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['ranged_ap_mod'].'</a></th>
+				<th width="7%"><a href="top100.php?type='.$type.'&amp;order_by=min_dmg&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='min_dmg' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['min_dmg'].'</a></th>
+				<th width="7%"><a href="top100.php?type='.$type.'&amp;order_by=max_dmg&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='max_dmg' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['max_dmg'].'</a></th>
+				<th width="7%"><a href="top100.php?type='.$type.'&amp;order_by=min_ranged_dmg&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='min_ranged_dmg' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['min_ranged_dmg'].'</a></th>
+				<th width="7%"><a href="top100.php?type='.$type.'&amp;order_by=max_ranged_dmg&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='max_ranged_dmg' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['max_ranged_dmg'].'</a></th>
+				<th width="7%"><a href="top100.php?type='.$type.'&amp;order_by=expertise&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='expertise' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['expertise'].'</a></th>
+				<th width="7%"><a href="top100.php?type='.$type.'&amp;order_by=off_expertise&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='off_expertise' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['off_expertise'].'</a></th>';
+  }
+  elseif ($type == 'resist')
+  {
+    $output .= '
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=holy&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='holy' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['holy'].'</a></th>
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=fire&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='fire' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['fire'].'</a></th>
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=nature&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='nature' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['nature'].'</a></th>
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=frost&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='frost' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['frost'].'</a></th>
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=shadow&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='shadow' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['shadow'].'</a></th>
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=arcane&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='arcane' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['arcane'].'</a></th>';
+  }
+  elseif ($type == 'crit_hit')
+  {
+    $output .= '
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=melee_crit&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='melee_crit' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['melee_crit'].'</a></th>
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=range_crit&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='range_crit' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['range_crit'].'</a></th>
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=spell_crit&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='spell_crit' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['spell_crit'].'</a></th>
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=melee_hit&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='melee_hit' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['melee_hit'].'</a></th>
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=range_hit&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='range_hit' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['range_hit'].'</a></th>
+				<th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=spell_hit&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='spell_hit' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['spell_hit'].'</a></th>';
+  }
+  elseif ($type == 'pvp')
+  {
+    $output .= '
+                <th width="15%"><a href="top100.php?type='.$type.'&amp;order_by=honor&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='honor' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['rank'].'</a></th>
+                <th width="15%">'.$lang_top['honor_points'].'</th>
+                <th width="15%"><a href="top100.php?type='.$type.'&amp;order_by=kills&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='kills' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['kills'].'</a></th>
+                <th width="15%"><a href="top100.php?type='.$type.'&amp;order_by=arena&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='arena' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['arena_points'].'</a></th>';
+  }
+  $output .= '
               </tr>';
   while($char = $sqlc->fetch_assoc($result))
   {
@@ -112,30 +257,132 @@ function top100($realmid, &$sqlr, &$sqlc)
                 <td><a href="char.php?id='.$char['guid'].'&amp;realm='.$realm_id.'">'.htmlentities($char['name']).'</a></td>
                 <td><img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif" alt="'.char_get_race_name($char['race']).'" onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" /></td>
                 <td><img src="img/c_icons/'.$char['class'].'.gif" alt="'.char_get_class_name($char['class']).'" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" /></td>
-                <td>'.char_get_level_color($char['level']).'</td>
+                <td>'.char_get_level_color($char['level']).'</td>';
+    if ($type == 'level')
+    {
+      $output .= '
                 <td><a href="guild.php?action=view_guild&amp;realm='.$realm_id.'&amp;error=3&amp;id='.$char['gname'].'">'.htmlentities($guild_name).'</a></td>
-                <td>
+                <td align="right">
                   '.substr($char['money'],  0, -4).'<img src="img/gold.gif" alt="" align="middle" />
                   '.substr($char['money'], -4,  2).'<img src="img/silver.gif" alt="" align="middle" />
                   '.substr($char['money'], -2).'<img src="img/copper.gif" alt="" align="middle" />
                 </td>
+                <td align="right">'.$time.'</td>
+                <td>'.($char['online'] ? '<img src="img/up.gif" alt="" />' : '-').'</td>';
+    }
+    elseif ($type == 'stat')
+    {
+      $output .= '
+                <td>'.$char['health'].'</td>
+                <td>'.$char['mana'].'</td>
+                <td>'.$char['str'].'</td>
+                <td>'.$char['agi'].'</td>
+                <td>'.$char['sta'].'</td>
+                <td>'.$char['intel'].'</td>
+                <td>'.$char['spi'].'</td>';
+    }
+    elseif ($type == 'defense')
+    {
+      $block = unpack('f', pack('L', $char['block']));
+      $block = round($block[1],2);
+      $dodge = unpack('f', pack('L', $char['dodge']));
+      $dodge = round($dodge[1],2);
+      $parry = unpack('f', pack('L', $char['parry']));
+      $parry = round($parry[1],2);
+
+      $output .= '
+                <td>'.$char['armor'].'</td>
+                <td>'.$block.'%</td>
+                <td>'.$dodge.'%</td>
+                <td>'.$parry.'%</td>
+                <td>'.$char['resilience'].'</td>';
+    }
+    elseif ($type == 'attack')
+    {
+     $mindamage = unpack('f', pack('L', $char['min_dmg']));
+     $mindamage = round($mindamage[1],0);
+     $maxdamage = unpack('f', pack('L', $char['max_dmg']));
+     $maxdamage = round($maxdamage[1],0);
+     $minrangeddamage = unpack('f', pack('L', $char['min_ranged_dmg']));
+     $minrangeddamage = round($minrangeddamage[1],0);
+     $maxrangeddamage = unpack('f', pack('L', $char['max_ranged_dmg']));
+     $maxrangeddamage = round($maxrangeddamage[1],0);
+
+      $output .= '
+				<td>'.$char['ap'].'</td>
+                <td>'.$char['ap_mod'].'</td>
+                <td>'.$char['ranged_ap'].'</td>
+				<td>'.$char['ranged_ap_mod'].'</td>
+				<td>'.$mindamage.'</td>
+				<td>'.$maxdamage.'</td>
+				<td>'.$minrangeddamage.'</td>
+				<td>'.$maxrangeddamage.'</td>
+				<td>'.$char['expertise'].'</td>
+				<td>'.$char['off_expertise'].'</td>';
+    }
+    elseif ($type == 'resist')
+    {
+      $output .= '
+				<td>'.$char['holy'].'</td>
+                <td>'.$char['fire'].'</td>
+                <td>'.$char['nature'].'</td>
+				<td>'.$char['frost'].'</td>
+				<td>'.$char['shadow'].'</td>
+				<td>'.$char['arcane'].'</td>';
+    }
+    elseif ($type == 'crit_hit')
+    {
+     $melee = unpack('f', pack('L', $char['melee_crit']));
+     $melee = round($melee[1],2);
+     $range = unpack('f', pack('L', $char['range_crit']));
+     $range = round($range[1],2);
+     $spell = unpack('f', pack('L', $char['spell_crit']));
+     $spell = round($spell[1],2);
+      $output .= '
+				<td>'.$melee.'%</td>
+                <td>'.$range.'%</td>
+                <td>'.$spell.'%</td>
+				<td>'.$char['melee_hit'].'</td>
+				<td>'.$char['range_hit'].'</td>
+				<td>'.$char['spell_hit'].'</td>';
+    }
+    elseif ($type == 'pvp')
+    {
+      $output .= '
                 <td><span onmouseover="toolTip(\''.char_get_pvp_rank_name($char['honor'], char_get_side_id($char['race'])).'\', \'item_tooltip\')" onmouseout="toolTip()" style="color: white;"><img src="img/ranks/rank'.char_get_pvp_rank_id($char['honor'], char_get_side_id($char['race'])).'.gif" alt=""></img></span></td>
                 <td>'.$char['honor'].'</td>
                 <td>'.$char['kills'].'</td>
-                <td>'.$char['arena'].'</td>
-                <td>'.$time.'</td>
-                <td>'.($char['online'] ? '<img src="img/up.gif" alt="" />' : '-').'</td>
+                <td>'.$char['arena'].'</td>';
+    }
+    $output .= '
               </tr>';
   }
   $output .= '
               <tr>
-                <td colspan="12" class="hidden" align="right" width="25%">';
-  $output .= generate_pagination('top100.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
+                <td colspan="';
+  if ($type == 'level')
+    $output .= '8';
+  elseif ($type == 'stat')
+    $output .= '11';
+  elseif ($type == 'defense')
+    $output .= '9';
+  elseif ($type == 'attack')
+    $output .= '15';
+  elseif ($type == 'resist')
+    $output .= '10';
+  elseif ($type == 'crit_hit')
+    $output .= '10';
+  elseif ($type == 'pvp')
+    $output .= '8';
+
+  $output .= '" class="hidden" align="right" width="25%">';
+  $output .= generate_pagination('top100.php?type='.$type.'&amp;order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1).'', $all_record, $itemperpage, $start);
   unset($all_record);
   $output .= '
                 </td>
               </tr>
             </table>
+            </div>
             <br />
           </center>';
 
@@ -163,13 +410,13 @@ $lang_top = lang_top();
 //$output .= '
 //          </div>';
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+$action = (isset($_POST['action'])) ? $_POST['action'] : NULL;
 
 if ('realms' == $action)
 {
-  if (isset($_GET['n_realms']))
+  if (isset($_POST['n_realms']))
   {
-    $n_realms = $_GET['n_realms'];
+    $n_realms = $_POST['n_realms'];
 
     $realms = $sqlr->query('SELECT id, name FROM realmlist LIMIT 10');
 
