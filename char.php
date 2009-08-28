@@ -129,8 +129,6 @@ function char_main(&$sqlr, &$sqlc)
       $maxrage    = round($char_data[CHAR_DATA_OFFSET_MAX_RAGE] / 10);
       $expertise  = ''.$char_data[CHAR_DATA_OFFSET_EXPERTISE].' / '.$char_data[CHAR_DATA_OFFSET_OFFHAND_EXPERTISE].'';
 
-      $speed      = round($char_data[CHAR_DATA_OFFSET_BASEATTACKTIME] / 1000000, 2);
-
       $EQU_HEAD      = $char_data[CHAR_DATA_OFFSET_EQU_HEAD];
       $EQU_NECK      = $char_data[CHAR_DATA_OFFSET_EQU_NECK];
       $EQU_SHOULDER  = $char_data[CHAR_DATA_OFFSET_EQU_SHOULDER];
@@ -486,20 +484,6 @@ function char_main(&$sqlr, &$sqlc)
                     </td>
                     <td class="half_line" colspan="2" rowspan="2" align="center" width="50%">
                       <div class="gradient_p">
-                        '.$lang_char['ranged_d'].':<br />
-                        '.$lang_char['ranged_ap'].':<br />
-                        '.$lang_char['ranged_hit'].':<br />
-                        '.$lang_char['ranged_crit'].':<br />
-                      </div>
-                      <div class="gradient_pp">
-                        '.$minrangeddamage.'-'.$maxrangeddamage.'<br />
-                        '.($char_data[CHAR_DATA_OFFSET_RANGED_AP]+$char_data[CHAR_DATA_OFFSET_RANGED_AP_MOD]).'<br />
-                        '.$char_data[CHAR_DATA_OFFSET_RANGE_HIT].'<br />
-                        '.$ranged_crit.'%<br />
-                      </div>
-                    </td>
-                    <td class="half_line" colspan="2" rowspan="2" align="center" width="50%">
-                      <div class="gradient_p">
                         '.$lang_char['melee_d'].':<br />
                         '.$lang_char['melee_ap'].':<br />
                         '.$lang_char['melee_hit'].':<br />
@@ -512,6 +496,22 @@ function char_main(&$sqlr, &$sqlc)
                         '.$char_data[CHAR_DATA_OFFSET_MELEE_HIT].'<br />
                         '.$crit.'%<br />
                         '.$expertise.'<br />
+                      </div>
+                    </td>
+                    <td class="half_line" colspan="2" rowspan="2" align="center" width="50%">
+                      <div class="gradient_p">
+                        '.$lang_char['spell_d'].':<br />
+                        '.$lang_char['spell_heal'].':<br />
+                        '.$lang_char['spell_hit'].':<br />
+                        '.$lang_char['spell_crit'].':<br />
+                        '.$lang_char['spell_haste'].'
+                      </div>
+                      <div class="gradient_pp">
+                        '.$spell_damage.'<br />
+                        '.$char_data[CHAR_DATA_OFFSET_SPELL_HEAL].'<br />
+                        '.$char_data[CHAR_DATA_OFFSET_SPELL_HIT].'<br />
+                        '.$spell_crit.'%<br />
+                        '.$char_data[CHAR_DATA_OFFSET_SPELL_HASTE_RATING].'
                       </div>
                     </td>
                     <td width="1%">';
@@ -564,26 +564,26 @@ function char_main(&$sqlr, &$sqlc)
                       <div class="gradient_p">
                         '.$lang_char['dodge'].':<br />
                         '.$lang_char['parry'].':<br />
-                        '.$lang_char['block'].':<br />
+                        '.$lang_char['block'].':
                       </div>
                       <div class="gradient_pp">
                         '.$dodge.'%<br />
                         '.$parry.'%<br />
-                        '.$block.'%<br />
+                        '.$block.'%
                       </div>
                     </td>
                     <td class="half_line" colspan="2" rowspan="2" align="center" width="50%">
                       <div class="gradient_p">
-                        '.$lang_char['spell_d'].':<br />
-                        '.$lang_char['spell_heal'].':<br />
-                        '.$lang_char['spell_hit'].':<br />
-                        '.$lang_char['spell_crit'].':<br />
+                        '.$lang_char['ranged_d'].':<br />
+                        '.$lang_char['ranged_ap'].':<br />
+                        '.$lang_char['ranged_hit'].':<br />
+                        '.$lang_char['ranged_crit'].':<br />
                       </div>
                       <div class="gradient_pp">
-                        '.$spell_damage.'<br />
-                        '.$char_data[CHAR_DATA_OFFSET_SPELL_HEAL].'<br />
-                        '.$char_data[CHAR_DATA_OFFSET_SPELL_HIT].'<br />
-                        '.$spell_crit.'%<br />
+                        '.$minrangeddamage.'-'.$maxrangeddamage.'<br />
+                        '.($char_data[CHAR_DATA_OFFSET_RANGED_AP]+$char_data[CHAR_DATA_OFFSET_RANGED_AP_MOD]).'<br />
+                        '.$char_data[CHAR_DATA_OFFSET_RANGE_HIT].'<br />
+                        '.$ranged_crit.'%<br />
                       </div>
                     </td>
                     <td width="1%">';

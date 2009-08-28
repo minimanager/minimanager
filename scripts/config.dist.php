@@ -165,7 +165,7 @@ $go_datasite                = 'http://'.$tt_lang.'.wowhead.com/?object=';
 $achievement_datasite       = 'http://'.$tt_lang.'.wowhead.com/?achievement=';
 $talent_calculator_datasite = 'http://www.wowarmory.com/talent-calc.xml?cid=';
 $get_icons_from_web         =  false;           // wherever to get icons from the web.
-$item_icons                 = 'img/item_icons'; // and this is where it will save to and get from.
+$item_icons                 = 'img/icons';      // and this is where it will save to and get from.
 
 
 //#############################################################################

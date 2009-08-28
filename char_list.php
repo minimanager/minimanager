@@ -356,7 +356,7 @@ function browse_chars(&$sqlr, &$sqlc)
                   makebutton($lang_char_list['del_selected_chars'], 'javascript:do_submit(\'form1\',0)" type="wrn', 220);
   $output .= '
                 </td>
-                <td colspan="7" align="right" class="hidden">'.$lang_char_list['tot_chars'].' : $all_record</td>
+                <td colspan="7" align="right" class="hidden">'.$lang_char_list['tot_chars'].' : '.$all_record.'</td>
               </tr>
             </table>
           </form>
