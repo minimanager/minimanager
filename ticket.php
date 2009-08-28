@@ -1,18 +1,18 @@
 <?php
 
 
-require_once("header.php");
+require_once 'header.php';
 valid_login($action_permission['read']);
 
 //#############################################################################
 //  BROWSE  TICKETS
 //#############################################################################
-function browse_tickets()
+function browse_tickets(&$sqlc)
 {
-  global  $lang_global, $lang_ticket, $output, $characters_db, $realm_id, $itemperpage, $server_type, $action_permission, $user_lvl;
-
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
+  global $output, $lang_global, $lang_ticket,
+    $characters_db, $realm_id,
+    $action_permission, $user_lvl,
+    $itemperpage, $server_type;
 
   //==========================$_GET and SECURE=================================
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
@@ -20,27 +20,27 @@ function browse_tickets()
 
   if ($server_type)
   {
-    $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "guid";
-    if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="guid";
+    $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'guid';
+    if (preg_match('/^[_[:lower:]]{1,10}$/', $order_by)); else $order_by = 'guid';
   }
   else
   {
-    $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : "ticket_id";
-    if (!preg_match("/^[_[:lower:]]{1,10}$/", $order_by)) $order_by="ticket_id";
+    $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'ticket_id';
+    if (preg_match('/^[_[:lower:]]{1,10}$/', $order_by)); else $order_by = 'ticket_id';
   }
 
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
-  if (!preg_match("/^[01]{1}$/", $dir)) $dir=1;
+  if (preg_match('/^[01]{1}$/', $dir)); else $dir=1;
 
-  $order_dir = ($dir) ? "ASC" : "DESC";
+  $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
 
   //get total number of items
   if($server_type)
-    $query_1 = $sqlc->query("SELECT count(*) FROM gm_tickets");
+    $query_1 = $sqlc->query('SELECT count(*) FROM gm_tickets');
   else
-    $query_1 = $sqlc->query("SELECT count(*) FROM character_ticket");
+    $query_1 = $sqlc->query('SELECT count(*) FROM character_ticket');
   $all_record = $sqlc->result($query_1,0);
   unset($query_1);
 
@@ -159,15 +159,15 @@ function delete_tickets()
     }
   }
 
-  if ($deleted_tickets == 0)
-    redirect("ticket.php?error=3");
+  if (0 == $deleted_tickets)
+    redirect('ticket.php?error=3');
   else
-    redirect("ticket.php?error=2");
+    redirect('ticket.php?error=2');
 }
 
 
 //########################################################################################################################
-//  EDIT   TICKET
+//  EDIT TICKET
 //########################################################################################################################
 function edit_ticket()
 {
@@ -332,7 +332,7 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 switch ($action)
 {
   case "browse_tickets":
-    browse_tickets();
+    browse_tickets($sqlc);
     break;
   case "delete_tickets":
     delete_tickets();
@@ -344,13 +344,13 @@ switch ($action)
     do_edit_ticket();
     break;
   default:
-    browse_tickets();
+    browse_tickets($sqlc);
 }
 
 unset($action);
 unset($action_permission);
 unset($lang_tikcet);
 
-require_once("footer.php");
+require_once 'footer.php';
 
 ?>

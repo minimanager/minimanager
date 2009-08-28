@@ -466,12 +466,19 @@ function lang_char()
     'max_acc' => 'The account you are trying to move this character to has the max ammount of players in it.',
     'no_tp_location' => 'Keinen Teleport-Ort mit diesem Namen gefunden.',
     // ---- char_achieve.php ----
+    'show' => 'Show',
+    'all' => 'All',
+    'earned' => 'Earned',
+    'incomplete' => 'Incomplete',
+    'summary' => 'Summary',
+    'recent' => 'Recent',
     'achievements' => 'Achievements',  // <---- TODO
+    'achievement_title' => 'Achievement Title',    // <---- TODO
+    'achievement_points' => 'Punkte',
+    'achievement_date' => 'Date',    // <---- TODO
+
     'achievement_id' => 'ID', // <---- TODO
     'achievement_category' => 'Kategorie',
-    'achievement_title' => 'Achievement Title',    // <---- TODO
-    'achievement_date' => 'Date',    // <---- TODO
-    'achievement_points' => 'Punkte',
     'no_com_achievements' => 'No Achievements Completed',    // <---- TODO
   );
   return $lang_char;

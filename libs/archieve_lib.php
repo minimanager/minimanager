@@ -12,6 +12,26 @@ function achieve_get_name($id, &$sqlm)
 
 
 //#############################################################################
+//get achievement reward name by its id
+
+function achieve_get_reward($id, &$sqlm)
+{
+  $achievement_reward = $sqlm->fetch_assoc($sqlm->query('SELECT rewarddesc01 FROM dbc_achievement WHERE id ='.$id.' LIMIT 1'));
+  return $achievement_reward['rewarddesc01'];
+}
+
+
+//#############################################################################
+//get achievement points name by its id
+
+function achieve_get_points($id, &$sqlm)
+{
+  $achievement_points = $sqlm->fetch_assoc($sqlm->query('SELECT rewpoints FROM dbc_achievement WHERE id = '.$id.' LIMIT 1'));
+  return $achievement_points['rewpoints'];
+}
+
+
+//#############################################################################
 //get achievement category name by its id
 
 function achieve_get_category($id, &$sqlm)
@@ -40,7 +60,7 @@ function achieve_get_id_category($id, &$sqlm)
 function achieve_get_main_category(&$sqlm)
 {
   $main_cat = array();
-  $result = $sqlm->query('SELECT id, name01 FROM dbc_achievement_category WHERE parentid = -1 ORDER BY `order` ASC');
+  $result = $sqlm->query('SELECT id, name01 FROM dbc_achievement_category WHERE parentid = -1 and id != 1 ORDER BY `order` ASC');
   while ($main_cat[] = $sqlm->fetch_assoc($result));
   return $main_cat;
 }
@@ -63,22 +83,13 @@ function achieve_get_sub_category(&$sqlm)
 
 
 //#############################################################################
-//get achievement reward name by its id
+//get achievement details by its id
 
-function achieve_get_reward($id, &$sqlm)
+function achieve_get_details($id, &$sqlm)
 {
-  $achievement_reward = $sqlm->fetch_assoc($sqlm->query('SELECT rewarddesc01 FROM dbc_achievement WHERE id ='.$id.' LIMIT 1'));
-  return $achievement_reward['rewarddesc01'];
-}
-
-
-//#############################################################################
-//get achievement points name by its id
-
-function achieve_get_points($id, &$sqlm)
-{
-  $achievement_points = $sqlm->fetch_assoc($sqlm->query('SELECT rewpoints FROM dbc_achievement WHERE id = '.$id.' LIMIT 1'));
-  return $achievement_points['rewpoints'];
+  $result = ($sqlm->query('SELECT id, name01, description01, rewarddesc01, rewpoints FROM dbc_achievement WHERE id = \''.$id.'\' LIMIT 1'));
+  $details = $sqlm->fetch_assoc($result);
+  return $details;
 }
 
 
@@ -89,7 +100,7 @@ function achieve_get_icon($achieveid, &$sqlm)
 {
   global $proxy_cfg, $get_icons_from_web, $item_icons;
 
-  $result = $sqlm->query('SELECT field_42 FROM dbc_achievement WHERE id = '.$achieveid.' LIMIT 1');
+  $result = $sqlm->query('SELECT field_42 FROM dbc_achievement WHERE id = \''.$achieveid.'\' LIMIT 1');
 
   if ($result)
     $displayid = $sqlm->result($result, 0);
@@ -119,6 +130,8 @@ function achieve_get_icon($achieveid, &$sqlm)
     else
       $achieve = '';
   }
+  else
+    $achieve = '';
 
   if($get_icons_from_web)
   {

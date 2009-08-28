@@ -466,12 +466,19 @@ function lang_char()
     'max_acc' => 'Le compte vers lequel vous essayez de déplacer ce personnage a atteint le nombre de personnages maximum autorisé.',
     'no_tp_location' => 'Aucun emplacement de téléport trouvé avec ce nom.',
     // ---- char_achieve.php ----
+    'show' => 'Show',
+    'all' => 'All',
+    'earned' => 'Earned',
+    'incomplete' => 'Incomplete',
+    'summary' => 'Summary',
+    'recent' => 'Recent',
     'achievements' => 'Hauts Faits',
+    'achievement_title' => 'Haut Fait',
+    'achievement_points' => 'Points',
+    'achievement_date' => 'Date',
+
     'achievement_id' => 'ID',
     'achievement_category' => 'catégorie',
-    'achievement_title' => 'Haut Fait',
-    'achievement_date' => 'Date',
-    'achievement_points' => 'Points',
     'no_com_achievements' => 'Aucun Haut Fait accompli'
   );
   return $lang_char;
