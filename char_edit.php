@@ -66,7 +66,7 @@ if ($sql->num_rows($result)){
   $dodge = round($dodge[1],4);
   $parry = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_PARRY]));
   $parry = round($parry[1],4);
-  $crit = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_CRIT]));
+  $crit = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_MELEE_CRIT]));
   $crit = round($crit[1],4);
   $range_crit = unpack("f", pack("L", $char_data[CHAR_DATA_OFFSET_RANGE_CRIT]));
   $range_crit = round($range_crit[1],4);
@@ -150,8 +150,8 @@ $output .= "<center>
 <td colspan=\"8\">{$lang_char['block']} : <input type=\"text\" name=\"block\" size=\"5\" maxlength=\"3\" value=\"$block\" />%
 | {$lang_char['dodge']}: <input type=\"text\" name=\"dodge\" size=\"5\" maxlength=\"3\" value=\"$dodge\" />%
 | {$lang_char['parry']}: <input type=\"text\" name=\"parry\" size=\"5\" maxlength=\"3\" value=\"$parry\" />%
-| {$lang_char['crit']}: <input type=\"text\" name=\"crit\" size=\"5\" maxlength=\"3\" value=\"$crit\" />%
-| {$lang_char['range_crit']}: <input type=\"text\" name=\"range_crit\" size=\"3\" maxlength=\"14\" value=\"$range_crit\" />%</td>
+| {$lang_char['melee_crit']}: <input type=\"text\" name=\"crit\" size=\"5\" maxlength=\"3\" value=\"$crit\" />%
+| {$lang_char['ranged_crit']}: <input type=\"text\" name=\"range_crit\" size=\"3\" maxlength=\"14\" value=\"$range_crit\" />%</td>
  </tr>
  <tr>
 <td colspan=\"4\">{$lang_char['gold']}: <input type=\"text\" name=\"money\" size=\"10\" maxlength=\"8\" value=\"{$char_data[CHAR_DATA_OFFSET_GOLD]}\" /></td>
