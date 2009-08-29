@@ -300,7 +300,7 @@ function char_main(&$sqlr, &$sqlc)
                     </td>
                     <td class="half_line" colspan="2" align="center" width="50%">
                       <div class="gradient_p">'.$lang_item['health'].':</div>
-                      <div class="gradient_pp">'.$char_data[CHAR_DATA_OFFSET_HEALTH].'</div>';
+                      <div class="gradient_pp">'.$char_data[CHAR_DATA_OFFSET_MAX_HEALTH].'</div>';
       if ($char['class'] == 11) //druid
         $output .= '
                       </br>

@@ -137,7 +137,7 @@ $tab_del_user_characters = Array
 (
   Array('arena_team_member','guid'),
   Array('auctionhouse','itemowner'),
-  Array('character_account_data','guid');
+  Array('character_account_data','guid'),
   Array('character_achievement','guid'),
   Array('character_achievement_progress','guid'),
   Array('character_action','guid'),
