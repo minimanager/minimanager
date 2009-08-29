@@ -45,7 +45,6 @@ function char_achievements(&$sqlr, &$sqlc)
   if (is_numeric($id));
   else error($lang_global['empty_fields']);
 
-
   $show_type = (isset($_POST['show_type'])) ? $sqlc->quote_smart($_POST['show_type']) : 0;
   if (is_numeric($show_type)); else $show_type = 0;
 
@@ -87,7 +86,7 @@ function char_achievements(&$sqlr, &$sqlc)
       $output .= '
           <!-- start of char_achieve.php -->
           <center>
-          <script>
+          <script type="text/javascript">
               function expand(thistag)
               {
                 var i = 0;
@@ -236,7 +235,7 @@ function char_achievements(&$sqlr, &$sqlc)
         $output .= '
               <table class="top_hidden" style="width: 90%;">
                 <tr>
-                  <td witdh="80%">
+                  <td width="30%">
                   </td>
                   %%REPLACE_POINTS%%
                   <td align="right">
@@ -311,58 +310,63 @@ function char_achievements(&$sqlr, &$sqlc)
             $output_achieve_main_cat[$cat_id] = '';
             $output_u_achieve_main_cat[$cat_id] = '';
             $achieve_main_cat = achieve_get_id_category($cat['id'], $sqlm);
-            foreach($achieve_main_cat as $achieve_id => $id)
+            foreach($achieve_main_cat as $achieve_id => $cid)
             {
-              if (isset($achieve_id) && isset($id['id']))
+              if (isset($achieve_id) && isset($cid['id']))
               {
-                if (isset($char_achieve[$id['id']]))
+                if (isset($char_achieve[$cid['id']]))
                 {
                   if (2 > $show_type)
                   {
-                    $id['rewarddesc01'] = str_replace('&', '&amp;', $id['rewarddesc01']);
+                    $cid['name01'] = str_replace('&', '&amp;', $cid['name01']);
+                    $cid['description01'] = str_replace('&', '&amp;', $cid['description01']);
+                    $cid['rewarddesc01'] = str_replace('&', '&amp;', $cid['rewarddesc01']);
                     $output_achieve_main_cat[$cat_id] .= '
                       <tr>
                         <td width="1%" align="left">
-                          <a href="'.$achievement_datasite.$id['id'].'" target="_blank">
-                            <img src="'.achieve_get_icon($id['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
+                          <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">
+                            <img src="'.achieve_get_icon($cid['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                           </a>
                         </td>
                         <td colspan="2" align="left">
-                          <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
-                          '.$id['description01'].'<br />
-                          '.$id['rewarddesc01'].'
+                          <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">'.$cid['name01'].'</a><br />
+                          '.$cid['description01'].'<br />
+                          '.$cid['rewarddesc01'].'
                         </td>
-                        <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
-                        <td width="15%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
+                        <td width="5%" align="right">'.$cid['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
+                        <td width="15%" align="right">'.date('o-m-d', $char_achieve[$cid['id']]).'</td>
                       </tr>';
                     ++$i;
                   }
-                  $points += $id['rewpoints'];
+                  $points += $cid['rewpoints'];
                 }
                 elseif ($show_type && isset($achieve_id))
                 {
-                  $id['rewarddesc01'] = str_replace('&', '&amp;', $id['rewarddesc01']);
+                  $cid['name01'] = str_replace('&', '&amp;', $cid['name01']);
+                  $cid['description01'] = str_replace('&', '&amp;', $cid['description01']);
+                  $cid['rewarddesc01'] = str_replace('&', '&amp;', $cid['rewarddesc01']);
                   $output_u_achieve_main_cat[$cat_id] .= '
                       <tr>
                         <td width="1%" align="left">
-                          <a href="'.$achievement_datasite.$id['id'].'" target="_blank">
+                          <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">
                             <span style="opacity:0.2;">
-                              <img src="'.achieve_get_icon($id['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
+                              <img src="'.achieve_get_icon($cid['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                             </span>
                           </a>
                         </td>
                         <td colspan="2" align="left">
-                          <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
-                          '.$id['description01'].'<br />
-                          '.$id['rewarddesc01'].'
+                          <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">'.$cid['name01'].'</a><br />
+                          '.$cid['description01'].'<br />
+                          '.$cid['rewarddesc01'].'
                         </td>
-                        <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
+                        <td width="5%" align="right">'.$cid['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
                         <td width="15%" align="right">'.$lang_char['incomplete'].'</td>
                       </tr>';
                   ++$i;
                 }
               }
             }
+            unset($achieve_main_cat);
             $output_achieve_main_cat[$cat_id] = '
                     <table class="hidden" id="ta'.$cat_id.'" style="width: 100%; display: none;">
                       <tr>
@@ -371,6 +375,7 @@ function char_achievements(&$sqlr, &$sqlc)
                         <th width="15%">'.$lang_char['achievement_date'].'</th>
                       </tr>'.$output_achieve_main_cat[$cat_id].$output_u_achieve_main_cat[$cat_id].'
                     </table>';
+            unset($output_u_achieve_main_cat);
             $js_main_cats .='
                   main_cats_achieve['.$cat_id.'] = "ta'.$cat_id.'";';
 
@@ -387,61 +392,67 @@ function char_achievements(&$sqlr, &$sqlc)
                   $output_achieve_sub_cat[$sub_cat_id] = '';
                   $output_u_achieve_sub_cat[$sub_cat_id] = '';
                   $achieve_sub_cat = achieve_get_id_category($sub_cat_id, $sqlm);
-                  foreach($achieve_sub_cat as $achieve_id => $id)
+                  foreach($achieve_sub_cat as $achieve_id => $cid)
                   {
-                    if (isset($achieve_id) && isset($id['id']))
+                    if (isset($achieve_id) && isset($cid['id']))
                     {
-                      if (isset($char_achieve[$id['id']]))
+                      if (isset($char_achieve[$cid['id']]))
                       {
                         if (2 > $show_type)
                         {
-                          $id['rewarddesc01'] = str_replace('&', '&amp;', $id['rewarddesc01']);
+                          $cid['name01'] = str_replace('&', '&amp;', $cid['name01']);
+                          $cid['description01'] = str_replace('&', '&amp;', $cid['description01']);
+                          $cid['rewarddesc01'] = str_replace('&', '&amp;', $cid['rewarddesc01']);
                           $output_achieve_sub_cat[$sub_cat_id] .= '
                             <tr>
                               <td width="1%" align="left">
-                                <a href="'.$achievement_datasite.$id['id'].'" target="_blank">
-                                  <img src="'.achieve_get_icon($id['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
+                                <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">
+                                  <img src="'.achieve_get_icon($cid['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                                 </a>
                               </td>
                               <td colspan="2" align="left">
-                                <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
-                                '.$id['description01'].'<br />
-                                '.$id['rewarddesc01'].'
+                                <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">'.$cid['name01'].'</a><br />
+                                '.$cid['description01'].'<br />
+                                '.$cid['rewarddesc01'].'
                               </td>
-                              <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
-                              <td width="15%" align="right">'.date('o-m-d', $char_achieve[$id['id']]).'</td>
+                              <td width="5%" align="right">'.$cid['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
+                              <td width="15%" align="right">'.date('o-m-d', $char_achieve[$cid['id']]).'</td>
                             </tr>';
                           ++$j;
                         }
-                        $points += $id['rewpoints'];
+                        $points += $cid['rewpoints'];
                       }
                       elseif ($show_type && isset($achieve_id))
                       {
-                        $id['rewarddesc01'] = str_replace('&', '&amp;', $id['rewarddesc01']);
+                        $cid['name01'] = str_replace('&', '&amp;', $cid['name01']);
+                        $cid['description01'] = str_replace('&', '&amp;', $cid['description01']);
+                        $cid['rewarddesc01'] = str_replace('&', '&amp;', $cid['rewarddesc01']);
                         $output_u_achieve_sub_cat[$sub_cat_id] .= '
                             <tr>
                               <td width="1%" align="left">
-                                <a href="'.$achievement_datasite.$id['id'].'" target="_blank">
+                                <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">
                                   <span style="opacity:0.2;">
-                                    <img src="'.achieve_get_icon($id['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
+                                    <img src="'.achieve_get_icon($cid['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                                   </span>
                                 </a>
                               </td>
                               <td colspan="2" align="left">
-                                <a href="'.$achievement_datasite.$id['id'].'" target="_blank">'.$id['name01'].'</a><br />
-                                '.$id['description01'].'<br />
-                                '.$id['rewarddesc01'].'
+                                <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">'.$cid['name01'].'</a><br />
+                                '.$cid['description01'].'<br />
+                                '.$cid['rewarddesc01'].'
                               </td>
-                              <td width="5%" align="right">'.$id['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
-                              <td width="15%" align="right">'.$lang_char['incomplete'].'/td>
+                              <td width="5%" align="right">'.$cid['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
+                              <td width="15%" align="right">'.$lang_char['incomplete'].'</td>
                             </tr>';
                         ++$j;
                       }
                     }
                   }
+                  unset($achieve_sub_cat);
                   $total_sub_cat = $total_sub_cat + $j;
                   if($j)
                   {
+                    $sub_cat['name01'] = str_replace('&', '&amp;', $sub_cat['name01']);
                     $output_sub_cat .='
                               <tr>
                                 <th align="left">
@@ -460,14 +471,18 @@ function char_achievements(&$sqlr, &$sqlc)
                           <th width="15%">'.$lang_char['achievement_date'].'</th>
                         </tr>'.$output_achieve_sub_cat[$sub_cat_id].$output_u_achieve_sub_cat[$sub_cat_id].'
                       </table>';
+                    unset($output_u_achieve_sub_cat);
                     $js_main_cats .='
                       main_sub_cats_achieve['.$sub_cat_id.'] = "tsa'.$sub_cat_id.'";';
                   }
                 }
               }
+              unset($main_sub_cats);
             }
+            unset($main_sub_cats);
             if($total_sub_cat || $i)
             {
+              $cat['name01'] = str_replace('&', '&amp;', $cat['name01']);
               $output .='
                         <tr>
                           <th align="left">
@@ -480,14 +495,17 @@ function char_achievements(&$sqlr, &$sqlc)
                             </table>
                           </td>
                         </tr>';
-              unset($output_sub_cat);
               $js_main_cats .='
                     main_cats['.$cat_id.']      = "t'.$cat_id.'";
                     main_cats_div['.$cat_id.']  = "div'.$cat_id.'";
                     main_cats_name['.$cat_id.'] = "'.$cat['name01'].' ('.($i+$total_sub_cat).')";';
             }
+            unset($output_sub_cat);
           }
         }
+        unset($sub_cats);
+        unset($main_cats);
+        unset($char_achieve);
 
         $output = str_replace('%%REPLACE%%', $js_main_cats, $output);
         unset($js_main_cats);
@@ -495,7 +513,7 @@ function char_achievements(&$sqlr, &$sqlc)
                   <td align="right">
                     '.$lang_char['achievements'].' '.$lang_char['achievement_points'].': '.$points.'
                   </td>', $output);
-
+        unset($point);
         $output .= '
                     </table>
                   </td>
@@ -503,12 +521,10 @@ function char_achievements(&$sqlr, &$sqlc)
 
         foreach($output_achieve_main_cat as $temp)
           $output .= $temp;
-        unset($temp);
-        unset($output_achieve_main_cat);
-
         foreach($output_achieve_sub_cat as $temp)
           $output .= $temp;
         unset($temp);
+        unset($output_achieve_main_cat);
         unset($output_achieve_sub_cat);
 
         $output .= '
@@ -525,29 +541,32 @@ function char_achievements(&$sqlr, &$sqlc)
                       </tr>';
         while ($temp = $sqlc->fetch_assoc($result))
         {
-          $char_achieve = achieve_get_details($temp['achievement'], $sqlm);
+          $cid = achieve_get_details($temp['achievement'], $sqlm);
+          $cid['name01'] = str_replace('&', '&amp;', $cid['name01']);
+          $cid['description01'] = str_replace('&', '&amp;', $cid['description01']);
+          $cid['rewarddesc01'] = str_replace('&', '&amp;', $cid['rewarddesc01']);
           $output .= '
                       <tr>
                         <td width="1%" align="left">
-                          <a href="'.$achievement_datasite.$char_achieve['id'].'" target="_blank">
-                            <img src="'.achieve_get_icon($char_achieve['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
+                          <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">
+                            <img src="'.achieve_get_icon($cid['id'], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
                           </a>
                         </td>
                         <td colspan="2" align="left">
-                          <a href="'.$achievement_datasite.$char_achieve['id'].'" target="_blank">'.$char_achieve['name01'].'</a><br />
-                          '.$char_achieve['description01'].'<br />
-                          '.$char_achieve['rewarddesc01'].'
+                          <a href="'.$achievement_datasite.$cid['id'].'" target="_blank">'.$cid['name01'].'</a><br />
+                          '.$cid['description01'].'<br />
+                          '.$cid['rewarddesc01'].'
                         </td>
-                        <td width="5%" align="right">'.$char_achieve['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
+                        <td width="5%" align="right">'.$cid['rewpoints'].' <img src="img/money_achievement.gif" alt="" /></td>
                         <td width="15%" align="right">'.date('o-m-d', $temp['date']).'</td>
                       </tr>';
         }
-        $output .= '
-                    </table>';
+        unset($cid);
+        unset($temp);
         unset($result);
         $output .= '
-                  </td>
-                </tr>';
+                    </table>
+                  </td>';
       }
       else
       {

@@ -20,14 +20,11 @@
 //#############################################################################
 //---- Version Information ----
 
-$show_version = array
-(
-  'show'        =>  '1',    // 0 - Don't Show, 1 - Show Version, 2 - Show Version and SVN Revision
-  'version'     =>  '0.14',
-  'version_lvl' => '-1',    // Minimum account level to show Version to, -1 is guest account
-  'svnrev'      =>  '0',    // SVN Revision will be read from .svn folder, values here hold no meaning or effect
-  'svnrev_lvl'  =>  '5',    // Minimum account level to show SVN Revision to.
-);
+$show_version['show']        =  '1';    // 0 - Don't Show, 1 - Show Version, 2 - Show Version and SVN Revision
+$show_version['version']     =  '0.14';
+$show_version['version_lvl'] = '-1';    // Minimum account level to show Version to, -1 is guest account
+$show_version['svnrev']      =  '0';    // SVN Revision will be read from .svn folder, values here hold no meaning or effect
+$show_version['svnrev_lvl']  =  '5';    // Minimum account level to show SVN Revision to.
 
 
 //#############################################################################
@@ -41,51 +38,50 @@ $show_version = array
 
 $db_type          = 'MySQL';
 
-$sql_search_limit =  100;           // limit number of maximum search results
+// only Creature, Item and Game Object uses this setting, the rest uses $itemperpage.
+// $itemperpage setting is lower down at Layout configuration.
+$sql_search_limit =  100;                         // limit number of maximum search results
 
-$mmfpm_db = array
-(
-  'addr'       => '127.0.0.1:3306', // SQL server IP:port this DB located on
-  'user'       => 'root',           // SQL server login this DB located on
-  'pass'       => '1',              // SQL server pass this DB located on
-  'name'       => 'mmfpm',          // MiniManager DB name
-  'encoding'   => 'utf8'            // SQL connection encoding
-);
+$mmfpm_db['addr']     = '127.0.0.1:3306';         // SQL server IP:port this DB located on
+$mmfpm_db['user']     = 'root';                   // SQL server login this DB located on
+$mmfpm_db['pass']     = '1';                      // SQL server pass this DB located on
+$mmfpm_db['name']     = 'mmfpm';                  // MiniManager DB name
+$mmfpm_db['encoding'] = 'utf8';                   // SQL connection encoding
 
-$realm_db = array
-(
-  'addr'       => '127.0.0.1:3306', // SQL server IP:port this realmd located on
-  'user'       => 'root',           // SQL server login this realmd located on
-  'pass'       => '1',              // SQL server pass this realmd located on
-  'name'       => 'realmd',         // realmd DB name
-  'encoding'   => 'utf8'            // SQL connection encoding
-);
+$realm_db['addr']     = '127.0.0.1:3306';         // SQL server IP:port this realmd located on
+$realm_db['user']     = 'root';                   // SQL server login this realmd located on
+$realm_db['pass']     = '1';                      // SQL server pass this realmd located on
+$realm_db['name']     = 'realmd';                 // realmd DB name
+$realm_db['encoding'] = 'utf8';                   // SQL connection encoding
 
-$world_db = array
-(
-  1 => array
-  (                                 // position in array must represent realmd ID
-    'id'       =>  1,               // Realm ID
-    'addr'     => '127.0.0.1:3306', // SQL server IP:port this DB located on
-    'user'     => 'root',           // SQL server login this DB located on
-    'pass'     => '1',              // SQL server pass this DB located on
-    'name'     => 'mangos',         // World Database name, by default "mangos" for MaNGOS, "world" for Trinity
-    'encoding' => 'utf8'            // SQL connection encoding
-  ),
-);
+          // position in array must represent realmd ID
+$world_db[1]['addr']          = '127.0.0.1:3306'; // SQL server IP:port this DB located on
+$world_db[1]['user']          = 'root';           // SQL server login this DB located on
+$world_db[1]['pass']          = '1';              // SQL server pass this DB located on
+$world_db[1]['name']          = 'mangos';         // World Database name, by default "mangos" for MaNGOS, "world" for Trinity
+$world_db[1]['encoding']      = 'utf8';           // SQL connection encoding
 
-$characters_db = Array
-(
-  1 => array
-  (                                 // position in array must represent realmd ID
-    'id'       =>  1,               // Realm ID
-    'addr'     => '127.0.0.1:3306', // SQL server IP:port this DB located on
-    'user'     => 'root',           // SQL server login this DB located on
-    'pass'     => '1',              // SQL server pass this DB located on
-    'name'     => 'characters',     // Character Database name
-    'encoding' => 'utf8',           // SQL connection encoding
-  ),                                // NOTE: THIS USER MUST HAVE AT LEAST READ ACCESS ON THE WORLD DATABASE
-);
+               // position in array must represent realmd ID
+$characters_db[1]['addr']     = '127.0.0.1:3306'; // SQL server IP:port this DB located on
+$characters_db[1]['user']     = 'root';           // SQL server login this DB located on
+$characters_db[1]['pass']     = '1';              // SQL server pass this DB located on
+$characters_db[1]['name']     = 'characters';     // Character Database name
+$characters_db[1]['encoding'] = 'utf8';           // SQL connection encoding
+
+/* Sample Second Realm config
+          // position in array must represent realmd ID
+$world_db[2]['addr']          = '127.0.0.1:3306'; // SQL server IP:port this DB located on
+$world_db[2]['user']          = 'root';           // SQL server login this DB located on
+$world_db[2]['pass']          = '1';              // SQL server pass this DB located on
+$world_db[2]['name']          = 'mangos';         // World Database name, by default "mangos" for MaNGOS, "world" for Trinity
+$world_db[2]['encoding']      = 'utf8';           // SQL connection encoding
+               // position in array must represent realmd ID
+$characters_db[2]['addr']     = '127.0.0.1:3306'; // SQL server IP:port this DB located on
+$characters_db[2]['user']     = 'root';           // SQL server login this DB located on
+$characters_db[2]['pass']     = '1';              // SQL server pass this DB located on
+$characters_db[2]['name']     = 'characters';     // Character Database name
+$characters_db[2]['encoding'] = 'utf8';           // SQL connection encoding
+*/
 
 
 //#############################################################################
@@ -93,69 +89,71 @@ $characters_db = Array
 
 $server_type        =  0;           // 0=MaNGOS, 1=Trinity
 
-$server = array
-(                                   // if more than one realm used, even if they are on same system new subarray MUST be added.
-  1 => array
-  (                                 // position in array must represent realmd ID, same as in $world_db
-    'addr'          => '127.0.0.1', // Game Server IP, as seen by MiniManager, from your webhost
-    'addr_wan'      => '127.0.0.1', // Game Server IP, as seen by clients - Must be external address
-    'game_port'     =>  8085,       // Game Server port
-    'term_type'     => 'SSH',       // Terminal type - ("SSH"/"Telnet")
-    'term_port'     =>  22,         // Terminal port
-    'telnet_port'   =>  3443,       // Telnet port - Telnet settins are needed for sending InGame Mail.
-    'telnet_user'   => 'USER',      // Telnet username, must be all CAPS
-    'telnet_pass'   => 'pass',      // Telnet password
-    'rev'           => 'rev. ',     // MaNGOS rev. used (Trinity does not need this)
-    'both_factions' =>  true,       // Allow to see opponent faction characters. Affects only players.
-    'talent_rate'   =>  1,          // Talent rate set for this server, needed for talent point calculation
-  ),
-);
+        // position in array must represent realmd ID, same as in $world_db
+$server[1]['addr']          = '127.0.0.1'; // Game Server IP, as seen by MiniManager, from your webhost
+$server[1]['addr_wan']      = '127.0.0.1'; // Game Server IP, as seen by clients - Must be external address
+$server[1]['game_port']     =  8085;       // Game Server port
+$server[1]['term_type']     = 'SSH';       // Terminal type - ("SSH"/"Telnet")
+$server[1]['term_port']     =  22;         // Terminal port
+$server[1]['telnet_port']   =  3443;       // Telnet port - Telnet settins are needed for sending InGame Mail.
+$server[1]['telnet_user']   = 'USER';      // Telnet username, must be all CAPS
+$server[1]['telnet_pass']   = 'pass';      // Telnet password
+$server[1]['rev']           = 'rev. ';     // MaNGOS rev. used (Trinity does not need this)
+$server[1]['both_factions'] =  true;       // Allow to see opponent faction characters. Affects only players.
+$server[1]['talent_rate']   =  1;          // Talent rate set for this server, needed for talent point calculation
+
+/* Sample Second Realm config
+        // position in array must represent realmd ID, same as in $world_db
+$server[2]['addr']          = '127.0.0.1'; // Game Server IP, as seen by MiniManager, from your webhost
+$server[2]['addr_wan']      = '127.0.0.1'; // Game Server IP, as seen by clients - Must be external address
+$server[2]['game_port']     =  8085;       // Game Server port
+$server[2]['term_type']     = 'SSH';       // Terminal type - ("SSH"/"Telnet")
+$server[2]['term_port']     =  22;         // Terminal port
+$server[2]['telnet_port']   =  3443;       // Telnet port - Telnet settins are needed for sending InGame Mail.
+$server[2]['telnet_user']   = 'USER';      // Telnet username, must be all CAPS
+$server[2]['telnet_pass']   = 'pass';      // Telnet password
+$server[2]['rev']           = 'rev. ';     // MaNGOS rev. used (Trinity does not need this)
+$server[2]['both_factions'] =  true;       // Allow to see opponent faction characters. Affects only players.
+$server[2]['talent_rate']   =  1;          // Talent rate set for this server, needed for talent point calculation
+*/
 
 
 //#############################################################################
 //---- Mail configuration ----
 
-$admin_mail  = 'mail@mail.com';     // mail used for bug reports and other user contact
-$mailer_type = 'smtp';              // type of mailer to be used("mail", "sendmail", "smtp")
-$from_mail   = 'mail@mail.com';     // all emails will be sent from this email
+$admin_mail  = 'mail@mail.com';      // mail used for bug reports and other user contact
+$mailer_type = 'smtp';               // type of mailer to be used("mail", "sendmail", "smtp")
+$from_mail   = 'mail@mail.com';      // all emails will be sent from this email
 
 //smtp server config
-$smtp_cfg = array
-(
-  'host'     => 'smtp.mail.com',    // smtp server
-  'port'     =>  25,                // port
-  'user'     => '',                 // username - use only if auth. required
-  'pass'     => ''                  // pass
-);
+$smtp_cfg['host'] = 'smtp.mail.com'; // smtp server
+$smtp_cfg['port'] =  25;             // port
+$smtp_cfg['user'] = '';              // username - use only if auth. required
+$smtp_cfg['pass'] = '';              // pass
 
 
 //#############################################################################
 //---- IRC Options ------
 
-$irc_cfg = array
-(
-  'server'  => 'mangos.cjb.net',    // irc server
-  'port'    =>  6667,               // port
-  'channel' => 'minimanager'        // channel
-);
+$irc_cfg['server']  = 'mangos.cjb.net'; // irc server
+$irc_cfg['port']    =  6667;            // port
+$irc_cfg['channel'] = 'minimanager';    // channel
 
 
 //#############################################################################
 //---- HTTP Proxy Configuration ----
+// configure only if requierd
 
-$proxy_cfg = array
-(
-  'addr' => '',              // configure only if requierd
-  'port' => 80,
-  'user' => '',
-  'pass' => ''
-);
+$proxy_cfg['addr'] = '';
+$proxy_cfg['port'] = 80;
+$proxy_cfg['user'] = '';
+$proxy_cfg['pass'] = '';
 
 
 //#############################################################################
 //---- External Links ----
 
-$tt_lang                    = 'www'; // wowhead tooltip language. choices are 'fr', 'de', 'es', 'ru' (for 'en' use www)
+$tt_lang                    = 'www';// wowhead tooltip language. choices are 'fr', 'de', 'es', 'ru' (for 'en' use www)
 $item_datasite              = 'http://'.$tt_lang.'.wowhead.com/?item=';
 $quest_datasite             = 'http://'.$tt_lang.'.wowhead.com/?quest=';
 $creature_datasite          = 'http://'.$tt_lang.'.wowhead.com/?npc=';
@@ -164,8 +162,9 @@ $skill_datasite             = 'http://'.$tt_lang.'.wowhead.com/?spells=';
 $go_datasite                = 'http://'.$tt_lang.'.wowhead.com/?object=';
 $achievement_datasite       = 'http://'.$tt_lang.'.wowhead.com/?achievement=';
 $talent_calculator_datasite = 'http://www.wowarmory.com/talent-calc.xml?cid=';
-$get_icons_from_web         =  false;           // wherever to get icons from the web.
-$item_icons                 = 'img/icons';      // and this is where it will save to and get from.
+
+$get_icons_from_web         =  false;      // wherever to get icons from the web.
+$item_icons                 = 'img/icons'; // and this is where it will save to and get from.
 
 
 //#############################################################################
@@ -186,23 +185,27 @@ $simple_register       = false;     // Sets the registration to a simple form. N
 // allow all => empty array
 // e.g: "120-122.55.255-0.255-0"
 
-$valid_ip_mask = array
-(
-  // "255-0.255-0.255-0.255-0",
-);
+$valid_ip_mask = array();
+/* Sample config, you may have more then 1
+$valid_ip_mask[0] = '255-0.255-0.255-0.255-0';
+$valid_ip_mask[1] = '120-122.55.255-0.255-0';
+$valid_ip_mask[2] = '190.50.33-16.255-0';
+*/
+
 
 //#############################################################################
 //---- Login Options ----
 
-$remember_me_checked  = false;     // "Remember Me" cookie check box default, false = unchecked
+$remember_me_checked  = false;      // "Remember Me" cookie check box default, false = unchecked
 
-$allow_anony         =  true;      // allow anonymouse login, aka guest account
-$anony_uname         = 'Guest';    // guest account name, this is purely cosmetic
-$anony_realm_id      =  1;         // guest account default realm
+$allow_anony         =  true;       // allow anonymouse login, aka guest account
+$anony_uname         = 'Guest';     // guest account name, this is purely cosmetic
+$anony_realm_id      =  1;          // guest account default realm
 
 // permission level for guest access is -1
 // set it like how you set any page permission level in menu config below, using the value -1
 // the "Guest" account exists only in MiniManager, not in your realms or server or database
+
 
 //#############################################################################
 //---- Layout configuration ----
@@ -213,7 +216,7 @@ $showcountryflag     =  true;
 
 $theme               = 'Sulfur';    // file/folder name of theme to use from themes directory by default
 $language            = 'english';   // default site language
-$timezone            = 'UTC';       // default timezone (use your local timezone code)
+$timezone            = 'UTC';       // default timezone (use your local timezone code) http://www.php.net/manual/en/timezones.php
 $gm_online           = '1';         // display GM Characters in the Online Character List and Player Map (1 = enable, 0 = disable)
 $gm_online_count     = '1';         // include GM Characters in the Online User Count and Player Map (1 = enable, 0 = disable)
 $motd_display_poster = '1';         // display the poserter info in the MOTD (1 = enable, 0 = disable)
@@ -294,81 +297,80 @@ $gm_level_arr = array
 // --    level 2 can delete items, but cannot add or edit
 // --    level 3 can add and edit, but cannot delete
 
-
 $menu_array = array
 (
   array
-  (               'index.php',         'main', array
+  (              'index.php',        'main', array
     (
-      array(    'ahstats.php', 'auctionhouse', 0,5,5,5), // new security system implemented
-      array(  'arenateam.php',  'arena_teams', 0,5,5,5), // has own level security, but has yet to honor the new security system.
-      array(      'guild.php',       'guilds', 0,5,5,5), // new security system implemented
-      array(      'honor.php',        'honor', 0,5,5,5), // new security system implemented
-      array(       'stat.php',   'statistics', 0,5,5,5), // new security system implemented
-      array(     'events.php',       'events', 0,5,5,5), // new security system implemented
-      array(  'instances.php',    'instances', 0,5,5,5), // new security system implemented
-      array(     'top100.php',       'top100', 0,5,5,5), // new security system implemented
+      array(   'ahstats.php','auctionhouse', 0,5,5,5), // new security system implemented
+      array( 'arenateam.php', 'arena_teams', 0,5,5,5), // has own level security, but has yet to honor the new security system.
+      array(     'guild.php',      'guilds', 0,5,5,5), // new security system implemented
+      array(     'honor.php',       'honor', 0,5,5,5), // new security system implemented
+      array(      'stat.php',  'statistics', 0,5,5,5), // new security system implemented
+      array(    'events.php',      'events', 0,5,5,5), // new security system implemented
+      array( 'instances.php',   'instances', 0,5,5,5), // new security system implemented
+      array(    'top100.php',      'top100', 0,5,5,5), // new security system implemented
       array('javascript:void(0);" onclick="window.open
-        (\'map/\', \'map\', \'toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=no, resizable=no, copyhistory=1, width=966, height=732\')',
-                                 'player_map', 0,5,5,5), // this page has yet to honor the new security system, but it is a read only page
+              (\'map/\', \'map\', \'toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=no, resizable=no, copyhistory=1, width=966, height=732\')',
+                               'player_map', 0,5,5,5), // this page has yet to honor the new security system, but it is a read only page
     ),
   ),
   array
-  (                      '#',         'tools', array
+  (                     '#',        'tools', array
     (
-      array(      'user.php',      'accounts', 0,5,5,5), // new security system implemented
-      array( 'char_list.php',    'characters', 0,5,5,5), // new security system implemented
-      array(   'command.php',       'command', 0,5,5,5), // new security system implemented
-      array(    'banned.php',   'banned_list', 0,5,5,5), // new security system implemented
-      array(      'mail.php',          'mail', 0,5,5,5), // new security system implemented
-      array(    'ticket.php',       'tickets', 0,5,5,5), // new security system implemented
-      array(      'tele.php',     'teleports', 0,5,5,5), // new security system implemented
-      array(   'cleanup.php',       'cleanup', 5,5,5,5), // new security system implemented
-      array(       'ssh.php',      'ssh_line', 0,5,5,5), // new security system implemented
-      array( 'run_patch.php', 'run_sql_patch', 0,5,5,5), // new security system implemented
-      array(     'realm.php',         'realm', 0,5,5,5), // new security system implemented
-      array(      'motd.php',      'add_motd', 0,5,5,5), // new security system implemented
-      array(       'irc.php',           'irc', 0,5,5,5), // new security system implemented
-      array(    'spelld.php',        'spelld', 0,5,5,5), // new security system implemented
+      array(     'user.php',     'accounts', 0,5,5,5), // new security system implemented
+      array('char_list.php',   'characters', 0,5,5,5), // new security system implemented
+      array(  'command.php',      'command', 0,5,5,5), // new security system implemented
+      array(   'banned.php',  'banned_list', 0,5,5,5), // new security system implemented
+      array(     'mail.php',         'mail', 0,5,5,5), // new security system implemented
+      array(   'ticket.php',      'tickets', 0,5,5,5), // new security system implemented
+      array(     'tele.php',    'teleports', 0,5,5,5), // new security system implemented
+      array(  'cleanup.php',      'cleanup', 5,5,5,5), // new security system implemented
+      array(      'ssh.php',     'ssh_line', 0,5,5,5), // new security system implemented
+      array('run_patch.php','run_sql_patch', 0,5,5,5), // new security system implemented
+      array(    'realm.php',        'realm', 0,5,5,5), // new security system implemented
+      array(     'motd.php',     'add_motd', 0,5,5,5), // new security system implemented
+      array(      'irc.php',          'irc', 0,5,5,5), // new security system implemented
+      array(   'spelld.php',       'spelld', 0,5,5,5), // new security system implemented
     ),
   ),
   array
-  (                        '#',          'db', array
+  (                       '#',         'db', array
     (
-      array(        'item.php',       'items', 0,5,5,5), // new security system implemented
-      array(    'creature.php',   'creatures', 5,5,5,5), // this page has yet to honor the new security system, please use with caution.
-      array( 'game_object.php', 'game_object', 5,5,5,5), // this page has yet to honor the new security system, please use with caution.
-      array(      'backup.php',      'backup', 5,5,5,5), // this page has yet to honor the new security system, please use with caution.
-      array(      'repair.php',      'repair', 0,5,5,5), // new security system implemented
+      array(       'item.php',      'items', 0,5,5,5), // new security system implemented
+      array(   'creature.php',  'creatures', 5,5,5,5), // this page has yet to honor the new security system, please use with caution.
+      array('game_object.php','game_object', 5,5,5,5), // this page has yet to honor the new security system, please use with caution.
+      array(     'backup.php',     'backup', 5,5,5,5), // this page has yet to honor the new security system, please use with caution.
+      array(     'repair.php',     'repair', 0,5,5,5), // new security system implemented
     ),
   ),
   array
-  (                'forum.php',      'forums', array
+  (                'forum.php',     'forums', array
     (
     ),
   ),
   array
-  (                        '#',   'invisible', array
+  (                        '#',  'invisible', array
     (
       array('javascript:void(0);" onclick="window.open(\'./forum.html\', \'forum\')', 'forums',0,0,0,0),
-      array(       'forum.php',      'forums', 0,5,5,5), // has own level security, but has yet to honor the new security system.
-      array(        'char.php',   'character', 0,5,5,5), // new security system implemented
-      array(    'char_inv.php',   'character', 0,5,5,5), // new security system implemented
-      array(  'char_quest.php',   'character', 0,5,5,5), // new security system implemented
-      array('char_achieve.php',   'character', 0,5,5,5), // new security system implemented
-      array(  'char_skill.php',   'character', 0,5,5,5), // new security system implemented
-      array( 'char_talent.php',   'character', 0,5,5,5), // new security system implemented
-      array(    'char_rep.php',   'character', 0,5,5,5), // new security system implemented
-      array(   'char_pets.php',   'character', 0,5,5,5), // new security system implemented
-      array('char_friends.php',   'character', 0,5,5,5), // new security system implemented
-      array(   'char_edit.php',   'char_edit', 0,5,5,5), // new security system implemented
-      array(        'edit.php',   'MyAccount', 0,5,5,5), // new security system implemented
-      array(       'index.php',   'Startpage',-1,5,5,5), // new security system implemented
-      array(   'guildbank.php',   'guildbank', 0,5,5,5), // under development
-      array(   'bugreport.php',   'bugreport', 5,5,5,5),
-      array(       'realm.php',       'realm', 0,5,5,5), // this last one is special, if this is not here, users are unable to switch realms
-    ),                                                   // if READ is set to level 3, only level 3 and above can switch realms.
-  ),                                                     // INSERT, UPDATE and DELETE should have no effect, but best to keep it at 5.
+      array(       'forum.php',    'forums', 0,5,5,5), // has own level security, but has yet to honor the new security system.
+      array(        'char.php', 'character', 0,5,5,5), // new security system implemented
+      array(    'char_inv.php', 'character', 0,5,5,5), // new security system implemented
+      array(  'char_quest.php', 'character', 0,5,5,5), // new security system implemented
+      array('char_achieve.php', 'character', 0,5,5,5), // new security system implemented
+      array(  'char_skill.php', 'character', 0,5,5,5), // new security system implemented
+      array( 'char_talent.php', 'character', 0,5,5,5), // new security system implemented
+      array(    'char_rep.php', 'character', 0,5,5,5), // new security system implemented
+      array(   'char_pets.php', 'character', 0,5,5,5), // new security system implemented
+      array('char_friends.php', 'character', 0,5,5,5), // new security system implemented
+      array(   'char_edit.php', 'char_edit', 0,5,5,5), // new security system implemented
+      array(        'edit.php', 'MyAccount', 0,5,5,5), // new security system implemented
+      array(       'index.php', 'Startpage',-1,5,5,5), // new security system implemented
+      array(   'guildbank.php', 'guildbank', 0,5,5,5), // under development
+      array(   'bugreport.php', 'bugreport', 5,5,5,5),
+      array(       'realm.php',     'realm', 0,5,5,5), // this last one is special, if this is not here, users are unable to switch realms
+    ),                                                 // if READ is set to level 3, only level 3 and above can switch realms.
+  ),                                                   // INSERT, UPDATE and DELETE should have no effect, but best to keep it at 5.
 );
 
 
