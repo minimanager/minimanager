@@ -75,7 +75,8 @@
 0506 [SERVER_LOGIN] Logging in...
 0507 [SERVER_DISCONNECTED] Disconnected from %1
 0508 [SERVER_ERROR] Error : %1
-     
+0509 [SERVER_AUTOREJOIN_ATTEMPT] Attempting to rejoin channel %1...
+050a [SERVER_AUTOREJOIN_FAILED] Unable to rejoin channel %1
       
 071a [GUI_CHANGE_NICK] Change nick to
 071b [GUI_COPY_WINDOW] Copy text
