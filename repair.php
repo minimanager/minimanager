@@ -93,17 +93,17 @@ function repair_form()
   $mm_dbs=array($world_db, $characters_db);
   foreach ($mm_dbs as $dbs)
   {
-    foreach ($dbs as $db)
+    foreach ($dbs as $dbr => $db)
     {
       $output .= '
                 <table style="width: 550px;" class="lined">
                   <tr class="large_bold">
                     <td colspan="3" class="hidden" align="left">
-                      <div id="div'.$db['name'].$db['id'].'" onclick="expand(\''.$db['name'].$db['id'].'\', this, \''.$db['name'].' Realm '.$db['id'].' Tables :\');">[+] '.$db['name'].' Realm '.$db['id'].' Tables :</div>
+                      <div id="div'.$db['name'].$dbr.'" onclick="expand(\''.$db['name'].$dbr.'\', this, \''.$db['name'].' Realm '.$dbr.' Tables :\');">[+] '.$db['name'].' Realm '.$dbr.' Tables :</div>
                     </td>
                   </tr>
                 </table>
-                <table id="'.$db['name'].$db['id'].'" style="width: 550px; display: none;" class="lined">';
+                <table id="'.$db['name'].$dbr.'" style="width: 550px; display: none;" class="lined">';
       $sql->connect($db['addr'], $db['user'], $db['pass'], $db['name']);
       $result = $sql->query('SHOW TABLES FROM '.$db['name'].'');
 
@@ -116,7 +116,7 @@ function repair_form()
         if($user_lvl >= $action_permission['update'])
           $output .= '
                     <td>
-                      <input type="checkbox" name="check[]" value="db~'.$db['id'].'~'.$db['name'].'~'.$table[0].'" onclick="CheckCheckAll(document.form);" />
+                      <input type="checkbox" name="check[]" value="db~'.$dbr.'~'.$db['name'].'~'.$table[0].'" onclick="CheckCheckAll(document.form);" />
                     </td>';
         $output .= '
                     <td>'.$table[0].'</td>
