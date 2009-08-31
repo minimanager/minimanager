@@ -377,7 +377,7 @@ if ($sql->num_rows($result)){
   $new_parry = unpack("L",pack("f", $new_parry));
   $char_data[CHAR_DATA_OFFSET_PARRY] = $new_parry[1];
   $new_crit = unpack("L",pack("f", $new_crit));
-  $char_data[CHAR_DATA_OFFSET_CRIT] = $new_crit[1];
+  $char_data[CHAR_DATA_OFFSET_MELEE_CRIT] = $new_crit[1];
   $new_range_crit = unpack("L",pack("f", $new_range_crit));
   $char_data[CHAR_DATA_OFFSET_RANGE_CRIT] = $new_range_crit[1];
 

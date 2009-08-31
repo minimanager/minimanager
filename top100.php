@@ -159,17 +159,16 @@ function top100($realmid, &$sqlr, &$sqlc)
               </tr>
             </table>';
   //==========================top tage navigaion ENDS here ========================
-
   $output .= '
             <table class="lined" style="width: 720px">
-              <tr>';
-  if ($type == 'level')
-  {
-    $output .= '
+              <tr>
                 <th width="5%">#</th>
                 <th width="14%">'.$lang_top['name'].'</th>
                 <th width="11%">'.$lang_top['race'].' '.$lang_top['class'].'</th>
-                <th width="8%"><a href="top100.php?type='.$type.'&amp;order_by=level&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['level'].'</a></th>
+                <th width="8%"><a href="top100.php?type='.$type.'&amp;order_by=level&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['level'].'</a></th>';
+  if ($type == 'level')
+  {
+    $output .= '
                 <th width="22%">'.$lang_top['guild'].'</th>
                 <th width="20%"><a href="top100.php?type='.$type.'&amp;order_by=money&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='money' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['money'].'</a></th>
                 <th width="20%"><a href="top100.php?type='.$type.'&amp;order_by=totaltime&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='totaltime' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['time_played'].'</a></th>';
@@ -177,10 +176,6 @@ function top100($realmid, &$sqlr, &$sqlc)
   elseif ($type == 'stat')
   {
     $output .= '
-                <th width="5%">#</th>
-                <th width="14%">'.$lang_top['name'].'</th>
-                <th width="11%">'.$lang_top['race'].' '.$lang_top['class'].'</th>
-                <th width="8%"><a href="top100.php?type='.$type.'&amp;order_by=level&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['level'].'</a></th>
                 <th width="11%"><a href="top100.php?type='.$type.'&amp;order_by=health&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='health' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['health'].'</a></th>
                 <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=mana&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='mana' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['mana'].'</a></th>
                 <th width="9%"><a href="top100.php?type='.$type.'&amp;order_by=str&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='str' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['str'].'</a></th>
@@ -192,10 +187,6 @@ function top100($realmid, &$sqlr, &$sqlc)
   elseif ($type == 'defense')
   {
     $output .= '
-                <th width="5%">#</th>
-                <th width="14%">'.$lang_top['name'].'</th>
-                <th width="11%">'.$lang_top['race'].' '.$lang_top['class'].'</th>
-                <th width="8%"><a href="top100.php?type='.$type.'&amp;order_by=level&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['level'].'</a></th>
                 <th width="16%"><a href="top100.php?type='.$type.'&amp;order_by=armor&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='armor' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['armor'].'</a></th>
                 <th width="16%"><a href="top100.php?type='.$type.'&amp;order_by=block&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='block' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['block'].'</a></th>
                 <th width="15%"><a href="top100.php?type='.$type.'&amp;order_by=dodge&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='dodge' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['dodge'].'</a></th>
@@ -204,10 +195,6 @@ function top100($realmid, &$sqlr, &$sqlc)
   elseif ($type == 'resist')
   {
     $output .= '
-                <th width="5%">#</th>
-                <th width="14%">'.$lang_top['name'].'</th>
-                <th width="11%">'.$lang_top['race'].' '.$lang_top['class'].'</th>
-                <th width="8%"><a href="top100.php?type='.$type.'&amp;order_by=level&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['level'].'</a></th>
                 <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=holy&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='holy' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['holy'].'</a></th>
                 <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=fire&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='fire' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['fire'].'</a></th>
                 <th width="10%"><a href="top100.php?type='.$type.'&amp;order_by=nature&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='nature' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['nature'].'</a></th>
@@ -218,10 +205,6 @@ function top100($realmid, &$sqlr, &$sqlc)
   elseif ($type == 'attack')
   {
     $output .= '
-                <th width="5%">#</th>
-                <th width="14%">'.$lang_top['name'].'</th>
-                <th width="12%">'.$lang_top['race'].' '.$lang_top['class'].'</th>
-                <th width="8%"><a href="top100.php?type='.$type.'&amp;order_by=level&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['level'].'</a></th>
                 <th width="20%"><a href="top100.php?type='.$type.'&amp;order_by=ap&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='ap' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['ap'].'</a></th>
                 <th width="6%"><a href="top100.php?type='.$type.'&amp;order_by=min_dmg&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='min_dmg' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['min_dmg'].'</a></th>
                 <th width="6%"><a href="top100.php?type='.$type.'&amp;order_by=max_dmg&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='max_dmg' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['max_dmg'].'</a></th>
@@ -234,10 +217,6 @@ function top100($realmid, &$sqlr, &$sqlc)
   elseif ($type == 'crit_hit')
   {
     $output .= '
-                <th width="5%">#</th>
-                <th width="14%">'.$lang_top['name'].'</th>
-                <th width="11%">'.$lang_top['race'].' '.$lang_top['class'].'</th>
-                <th width="8%"><a href="top100.php?type='.$type.'&amp;order_by=level&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['level'].'</a></th>
                 <th width="18%"><a href="top100.php?type='.$type.'&amp;order_by=ranged_ap&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='ranged_ap' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['ap'].'</a></th>
                 <th width="12%"><a href="top100.php?type='.$type.'&amp;order_by=min_ranged_dmg&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='min_ranged_dmg' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['min_dmg'].'</a></th>
                 <th width="12%"><a href="top100.php?type='.$type.'&amp;order_by=max_ranged_dmg&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='max_ranged_dmg' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['max_dmg'].'</a></th>
@@ -247,10 +226,6 @@ function top100($realmid, &$sqlr, &$sqlc)
   elseif ($type == 'pvp')
   {
     $output .= '
-                <th width="5%">#</th>
-                <th width="14%">'.$lang_top['name'].'</th>
-                <th width="11%">'.$lang_top['race'].' '.$lang_top['class'].'</th>
-                <th width="8%"><a href="top100.php?type='.$type.'&amp;order_by=level&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['level'].'</a></th>
                 <th width="20%"><a href="top100.php?type='.$type.'&amp;order_by=honor&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='honor' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['rank'].'</a></th>
                 <th width="14%">'.$lang_top['honor_points'].'</th>
                 <th width="14%"><a href="top100.php?type='.$type.'&amp;order_by=kills&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='kills' ? ' class="'.$order_dir.'"' : '').'>'.$lang_top['kills'].'</a></th>
@@ -270,7 +245,7 @@ function top100($realmid, &$sqlr, &$sqlc)
                   <img src="img/c_icons/'.$char['class'].'.gif" alt="'.char_get_class_name($char['class']).'" onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" />
                 </td>
                 <td>'.char_get_level_color($char['level']).'</td>';
- if ($type == 'level')
+    if ($type == 'level')
     {
       $guild_name = $sqlc->result($sqlc->query('SELECT name FROM guild WHERE guildid = '.$char['gname'].''), 0);
       $days  = floor(round($char['totaltime'] / 3600)/24);
@@ -328,7 +303,6 @@ function top100($realmid, &$sqlr, &$sqlc)
     }
     elseif ($type == 'attack')
     {
-
       $melee = unpack('f', pack('L', $char['melee_crit']));
       $melee = round($melee[1],2);
       $mindamage = unpack('f', pack('L', $char['min_dmg']));
@@ -353,7 +327,6 @@ function top100($realmid, &$sqlr, &$sqlc)
       $minrangeddamage = round($minrangeddamage[1],0);
       $maxrangeddamage = unpack('f', pack('L', $char['max_ranged_dmg']));
       $maxrangeddamage = round($maxrangeddamage[1],0);
-
 
       $output .= '
                 <td>'.$char['ranged_ap'].'</td>
@@ -389,8 +362,8 @@ function top100($realmid, &$sqlr, &$sqlc)
             <br />
           </center>';
 
-
 }
+
 
 //#############################################################################
 // MAIN
@@ -456,7 +429,6 @@ else
           <div class="top"><h1>'.$lang_top['top100'].'</h1></div>';
   top100($realm_id, $sqlr, $sqlc);
 }
-
 
 unset($action);
 unset($action_permission);
