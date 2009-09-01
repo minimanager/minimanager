@@ -179,6 +179,11 @@ function front(&$sqlr, &$sqlc)
     $dir = ($dir) ? 0 : 1;
     //==========================$_GET and SECURE end=============================
 
+    if ($order_by == 'map')
+      $order_by = 'map '.$order_dir.', zone';
+    elseif ($order_by == 'zone')
+      $order_by = 'zone '.$order_dir.', map';
+
     $order_side = '';
     if( $user_lvl || $server[$realm_id]['both_factions']);
     else
@@ -221,8 +226,8 @@ function front(&$sqlr, &$sqlc)
                 <th width="5%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=level&amp;dir='.$dir.'"'.($order_by=='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['level'].'</a></th>
                 <th width="1%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=highest_rank&amp;dir='.$dir.'"'.($order_by=='highest_rank' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['rank'].'</a></th>
                 <th width="15%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=gname&amp;dir='.$dir.'"'.($order_by=='gname' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['guild'].'</a></th>
-                <th width="20%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by=='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['map'].'</a></th>
-                <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by=='zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['zone'].'</a></th>';
+                <th width="20%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by=='map '.$order_dir.', zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['map'].'</a></th>
+                <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by=='zone '.$order_dir.', map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['zone'].'</a></th>';
     if ($server_type)
       $output .='
                 <th width="25%"><a href="index.php?start='.$start.'&amp;start_m='.$start_m.'&amp;order_by=latency&amp;dir='.$dir.'"'.($order_by=='latency' ? ' class="'.$order_dir.'"' : '').'>'.$lang_index['latency'].'</a></th>';
