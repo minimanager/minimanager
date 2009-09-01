@@ -216,39 +216,45 @@ function lang_header()
     'main' => 'Main',
     'tools' => 'Tools',
     'db' => 'DataBase',
-    'forums' => 'Forums',
+    'system' => 'System',
+    'support' => 'Support',
     'my_acc' => 'My Account',
 
     'auctionhouse' => 'Auction House',
     'arena_teams' => 'Arena Teams',
     'guilds' => 'Guilds',
     'honor' => 'Honor Rankings',
-    'statistics' => 'Statistics',
-    'events' => 'Events',
-    'instances' => 'Instances',
     'top100' => 'TOP 100',
+    'statistics' => 'Statistics',
     'player_map' => 'Player Map',
 
     'accounts' => 'Accounts',
     'characters' => 'Characters',
     'command' => 'Commands',
-    'banned_list' => 'Banned List',
     'mail' => 'Mail',
     'tickets' => 'Tickets',
-    'teleports' => 'Teleports',
+    'banned_list' => 'Banned List',
     'cleanup' => 'Cleanup',
-    'ssh_line' => 'SSH line',
-    'run_sql_patch' => 'Run SQL Patch',
-    'add_motd' => 'Add MOTD',
-    'realm' => 'Realm',
-    'irc' => 'IRC Applet',
-    'spelld' => 'Spell(s) Disabled',
 
+    'events' => 'Events',
+    'instances' => 'Instances',
     'items' => 'Items',
     'creatures' => 'Creatures',
     'game_object' => 'Game Objects',
+    'teleports' => 'Teleports',
     'backup' => 'Backup',
+    'run_patch' => 'Run SQL Patch',
     'repair' => 'Repair/Optimize',
+
+    'realm' => 'Realm',
+    'add_motd' => 'Add MOTD',
+    'spelld' => 'Spell(s) Disabled',
+    'message' => 'Send Message',
+    'ssh_line' => 'SSH line',
+
+    'forums' => 'Forums',
+    'irc' => 'IRC Applet',
+    'bugreport' => 'Bug Report',
 
     // please check the length at 'My Account' Menu
     'realms' => '------Realms------',
@@ -1665,7 +1671,8 @@ $lang_creature = array(
   'equip_info3_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes',
   'heroic' => 'Heroic Spawn ID',
   'heroic_desc' => 'A heroic id is used when a creature has a different template for instances in normal and heroic mode. The one with the heroic_entry is the one used in the normal mode. A zero values means, this template is used for normal and heroic mode, or only heroic mode, if another creature point with its heroic_entry to this creature.',
-  'locales' => 'Localisation'
+  'locales' => 'Localisation',
+  'unit_flags' => 'Unit flags',
   );
 
 $lang_game_object = array(
@@ -2071,6 +2078,41 @@ function lang_spelld()
     'spell_not_deleted' => 'No spell deleted!',
   );
   return $lang_spelld;
+}
+
+
+// ----- GLOBAL TELNET -----
+function lang_telnet()
+{
+  $lang_telnet = array
+  (
+    'unable' => 'Connect failed: Unable to open network connection, please check your config',
+    'unknown_host' => 'Connect failed: Unknown host, please check your config',
+    'login_failed' => 'Connect failed: Login failed, please check your config',
+    'not_supported' => 'Connect failed: Your PHP version does not support PHP Telnet, please check your config',
+  );
+  return $lang_telnet;
+}
+
+
+// ---- message.php ----
+function lang_message()
+{
+  $lang_message  = array
+  (
+    'main' => 'Send System Message/Global Notification',
+    'announcement' => 'Announcement',
+    'notification' => 'Notification',
+    'both' => 'Both',
+    'send' => 'Send',
+    'empty_fields' => 'Empty Fields',
+    'message_too_long' => 'Message too long',
+    'system_message' => 'System Message',
+    'global_notify' => 'Global Notify',
+    'sent' => 'sent',
+    'message_result' => 'Message Result',
+  );
+  return $lang_message;
 }
 
 

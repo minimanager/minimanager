@@ -216,17 +216,16 @@ $lang_header = array
     'main' => '&Uuml;bersicht',
     'tools' => 'Werkzeuge',
     'db' => 'Datenbank',
-    'forums' => 'Forum',
+    'system' => 'System',
+    'support' => 'Support',
     'my_acc' => 'Profil',
 
     'auctionhouse' => 'Auktionshaus',
     'arena_teams' => 'Arena Teams',
     'guilds' => 'Gilden',
     'honor' => 'Ehre-Rangliste',
-    'statistics' => 'Statistik',
-    'events' => 'Ereignisse',
-    'instances' => 'Instanz-Informationen',
     'top100' => 'TOP 100',
+    'statistics' => 'Statistik',
     'player_map' => 'Spielerkarte',
 
     'accounts' => 'Benutzerkonten',
@@ -235,20 +234,27 @@ $lang_header = array
     'banned_list' => 'Bannliste',
     'mail' => 'Nachrichten',
     'tickets' => 'Tickets',
-    'teleports' => 'Teleport-Punkte',
     'cleanup' => 'Aufr&auml;umen',
-    'ssh_line' => 'SSH Zeile',
-    'run_sql_patch' => 'SQL Patch einspielen',
-    'add_motd' => 'MOTD hinzuf&uuml;gen',
-    'realm' => 'Realm',
-    'irc' => 'IRC Applet',
-    'spelld' => 'Spell(s) Disabled',
 
+    'events' => 'Ereignisse',
+    'instances' => 'Instanz-Informationen',
     'items' => 'Gegenst&auml;nde',
     'creatures' => 'Kreaturen',
     'game_object' => 'Spielobjekte',
+    'teleports' => 'Teleport-Punkte',
     'backup' => 'Backup',
+    'run_patch' => 'SQL Patch einspielen',
     'repair' => 'Reparieren/Optimieren',
+
+    'realm' => 'Realm',
+    'add_motd' => 'MOTD hinzuf&uuml;gen',
+    'spelld' => 'Spell(s) Disabled',
+    'message' => 'Send Message',
+    'ssh_line' => 'SSH Zeile',
+
+    'forums' => 'Forum',
+    'irc' => 'IRC Applet',
+    'bugreport' => 'Bug Report',
 
     // please check the length at 'My Account' Menu
     'realms' => '------Realms------',
@@ -1665,7 +1671,8 @@ $lang_creature = array( //TODO
   'equip_info3_desc' => 'This field controls both the animation, the way the equiped item hits and the sound it makes',
   'heroic' => 'Heroische Spawn ID',
   'heroic_desc' => 'Heroische IDs werden vergeben, wenn eine Kreature fu&uml;r Instanzen im normalen und im hoerischen Modus unterschiedliche Vorlagen benutzt. Wird heroic_entry gesetzt, so wird diese Kreatur nur im normalen Modus benutzt. Ein Wert von 0 bedeutet, die Kreatur wird in beiden Fa&uml;llen benutzt, es sei denn eine andere Vorlage zeigt mit seinem heroic_entry Eintrag auf diese Kreatur.',
-  'locales' => 'Lokalisierung'
+  'locales' => 'Lokalisierung',
+  'unit_flags' => 'Unit flags',
   );
 
 $lang_game_object = array( //TODO
@@ -2071,6 +2078,41 @@ function lang_spelld()
     'spell_not_deleted' => 'No spell deleted!',
   );
   return $lang_spelld;
+}
+
+
+// ----- GLOBAL TELNET -----
+function lang_telnet()
+{
+  $lang_telnet = array
+  (
+    'unable' => 'Connect failed: Unable to open network connection, please check your config',
+    'unknown_host' => 'Connect failed: Unknown host, please check your config',
+    'login_failed' => 'Connect failed: Login failed, please check your config',
+    'not_supported' => 'Connect failed: Your PHP version does not support PHP Telnet, please check your config',
+  );
+  return $lang_telnet;
+}
+
+
+// ---- message.php ----
+function lang_message()
+{
+  $lang_message  = array
+  (
+    'main' => 'Send System Message/Global Notification',
+    'announcement' => 'Announcement',
+    'notification' => 'Notification',
+    'both' => 'Both',
+    'send' => 'Send',
+    'empty_fields' => 'Empty Fields',
+    'message_too_long' => 'Message too long',
+    'system_message' => 'System Message',
+    'global_notify' => 'Global Notify',
+    'sent' => 'sent',
+    'message_result' => 'Message Result',
+  );
+  return $lang_message;
 }
 
 

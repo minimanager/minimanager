@@ -302,72 +302,73 @@ $menu_array = array
   array
   (              'index.php',        'main', array
     (
-      array(   'ahstats.php','auctionhouse', 0,5,5,5), // new security system implemented
+      array(   'ahstats.php','auctionhouse', 0,5,5,5),
       array( 'arenateam.php', 'arena_teams', 0,5,5,5), // has own level security, but has yet to honor the new security system.
-      array(     'guild.php',      'guilds', 0,5,5,5), // new security system implemented
-      array(     'honor.php',       'honor', 0,5,5,5), // new security system implemented
-      array(      'stat.php',  'statistics', 0,5,5,5), // new security system implemented
-      array(    'events.php',      'events', 0,5,5,5), // new security system implemented
-      array( 'instances.php',   'instances', 0,5,5,5), // new security system implemented
-      array(    'top100.php',      'top100', 0,5,5,5), // new security system implemented
+      array(     'guild.php',      'guilds', 0,5,5,5),
+      array(     'honor.php',       'honor', 0,5,5,5),
+      array(    'top100.php',      'top100', 0,5,5,5),
+      array(     'forum.php',      'forums', 0,5,5,5), // has own level security, but has yet to honor the new security system.
+      array(      'stat.php',  'statistics', 0,5,5,5),
       array('javascript:void(0);" onclick="window.open
               (\'map/\', \'map\', \'toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=no, resizable=no, copyhistory=1, width=966, height=732\')',
                                'player_map', 0,5,5,5), // this page has yet to honor the new security system, but it is a read only page
     ),
   ),
   array
-  (                     '#',        'tools', array
+  (                       '#',      'tools', array
     (
-      array(     'user.php',     'accounts', 0,5,5,5), // new security system implemented
-      array('char_list.php',   'characters', 0,5,5,5), // new security system implemented
-      array(  'command.php',      'command', 0,5,5,5), // new security system implemented
-      array(   'banned.php',  'banned_list', 0,5,5,5), // new security system implemented
-      array(     'mail.php',         'mail', 0,5,5,5), // new security system implemented
-      array(   'ticket.php',      'tickets', 0,5,5,5), // new security system implemented
-      array(     'tele.php',    'teleports', 0,5,5,5), // new security system implemented
-      array(  'cleanup.php',      'cleanup', 5,5,5,5), // new security system implemented
-      array(      'ssh.php',     'ssh_line', 0,5,5,5), // new security system implemented
-      array('run_patch.php','run_sql_patch', 0,5,5,5), // new security system implemented
-      array(    'realm.php',        'realm', 0,5,5,5), // new security system implemented
-      array(     'motd.php',     'add_motd', 0,5,5,5), // new security system implemented
-      array(      'irc.php',          'irc', 0,5,5,5), // new security system implemented
-      array(   'spelld.php',       'spelld', 0,5,5,5), // new security system implemented
+      array(       'user.php',   'accounts', 0,5,5,5),
+      array(  'char_list.php', 'characters', 0,5,5,5),
+      array(    'command.php',    'command', 0,5,5,5),
+      array(       'mail.php',       'mail', 0,5,5,5),
+      array(     'ticket.php',    'tickets', 0,5,5,5),
+      array(     'banned.php','banned_list', 0,5,5,5),
+      array(    'cleanup.php',    'cleanup', 5,5,5,5),
+      array(        'irc.php',        'irc', 0,5,5,5),
+      array(  'bugreport.php',  'bugreport', 5,5,5,5),
     ),
   ),
   array
   (                       '#',         'db', array
     (
-      array(       'item.php',      'items', 0,5,5,5), // new security system implemented
+      array(     'events.php',     'events', 0,5,5,5),
+      array(  'instances.php',  'instances', 0,5,5,5),
+      array(       'item.php',      'items', 0,5,5,5),
       array(   'creature.php',  'creatures', 5,5,5,5), // this page has yet to honor the new security system, please use with caution.
       array('game_object.php','game_object', 5,5,5,5), // this page has yet to honor the new security system, please use with caution.
+      array(       'tele.php',  'teleports', 0,5,5,5),
       array(     'backup.php',     'backup', 5,5,5,5), // this page has yet to honor the new security system, please use with caution.
-      array(     'repair.php',     'repair', 0,5,5,5), // new security system implemented
+      array(  'run_patch.php',  'run_patch', 0,5,5,5),
+      array(     'repair.php',     'repair', 0,5,5,5),
     ),
   ),
   array
-  (                'forum.php',     'forums', array
+  (                       '#',     'system', array
     (
+      array(      'realm.php',      'realm', 0,5,5,5),
+      array(       'motd.php',   'add_motd', 0,5,5,5),
+      array(     'spelld.php',     'spelld', 0,5,5,5),
+      array(    'message.php',    'message', 0,5,5,5),
+      array(        'ssh.php',   'ssh_line', 0,5,5,5),
     ),
   ),
   array
   (                        '#',  'invisible', array
     (
       array('javascript:void(0);" onclick="window.open(\'./forum.html\', \'forum\')', 'forums',0,0,0,0),
-      array(       'forum.php',    'forums', 0,5,5,5), // has own level security, but has yet to honor the new security system.
-      array(        'char.php', 'character', 0,5,5,5), // new security system implemented
-      array(    'char_inv.php', 'character', 0,5,5,5), // new security system implemented
-      array(  'char_quest.php', 'character', 0,5,5,5), // new security system implemented
-      array('char_achieve.php', 'character', 0,5,5,5), // new security system implemented
-      array(  'char_skill.php', 'character', 0,5,5,5), // new security system implemented
-      array( 'char_talent.php', 'character', 0,5,5,5), // new security system implemented
-      array(    'char_rep.php', 'character', 0,5,5,5), // new security system implemented
-      array(   'char_pets.php', 'character', 0,5,5,5), // new security system implemented
-      array('char_friends.php', 'character', 0,5,5,5), // new security system implemented
-      array(   'char_edit.php', 'char_edit', 0,5,5,5), // new security system implemented
-      array(        'edit.php', 'MyAccount', 0,5,5,5), // new security system implemented
-      array(       'index.php', 'Startpage',-1,5,5,5), // new security system implemented
+      array(        'char.php', 'character', 0,5,5,5),
+      array(    'char_inv.php', 'character', 0,5,5,5),
+      array(  'char_quest.php', 'character', 0,5,5,5),
+      array('char_achieve.php', 'character', 0,5,5,5),
+      array(  'char_skill.php', 'character', 0,5,5,5),
+      array( 'char_talent.php', 'character', 0,5,5,5),
+      array(    'char_rep.php', 'character', 0,5,5,5),
+      array(   'char_pets.php', 'character', 0,5,5,5),
+      array('char_friends.php', 'character', 0,5,5,5),
+      array(   'char_edit.php', 'char_edit', 0,5,5,5),
+      array(        'edit.php', 'myaccount', 0,5,5,5),
+      array(       'index.php', 'startpage',-1,5,5,5),
       array(   'guildbank.php', 'guildbank', 0,5,5,5), // under development
-      array(   'bugreport.php', 'bugreport', 5,5,5,5),
       array(       'realm.php',     'realm', 0,5,5,5), // this last one is special, if this is not here, users are unable to switch realms
     ),                                                 // if READ is set to level 3, only level 3 and above can switch realms.
   ),                                                   // INSERT, UPDATE and DELETE should have no effect, but best to keep it at 5.

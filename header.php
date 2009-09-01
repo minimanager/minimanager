@@ -155,7 +155,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
     else
     {
       $output .= '
-                <li><a href="'.$trunk[0].'">'.$lang_header[$trunk[1]].'</a>';
+                <li><a href="'.$trunk[0].'">'.(isset($lang_header[$trunk[1]]) ? $lang_header[$trunk[1]] : $trunk[1]).'</a>';
       if(isset($trunk[2][0]))
         $output .= '
                   <ul>';
@@ -170,7 +170,7 @@ if (isset($_SESSION['user_lvl']) && isset($_SESSION['uname']) && isset($_SESSION
         }
         if ($user_lvl >= $branch[2])
           $output .= '
-                    <li><a href="'.$branch[0].'">'.$lang_header[$branch[1]].'</a></li>';
+                    <li><a href="'.$branch[0].'">'.(isset($lang_header[$branch[1]]) ? $lang_header[$branch[1]] : $branch[1]).'</a></li>';
       }
       if(isset($trunk[2][0]))
         $output .= '

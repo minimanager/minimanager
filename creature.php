@@ -365,6 +365,7 @@ function do_insert_update($do_insert) {
   wowhead_tt();
 
  require_once("./scripts/get_lib.php");
+ require_once 'libs/item_lib.php';
 
 
  $sql = new SQL;
@@ -546,15 +547,24 @@ $output .= "<td colspan=\"2\">".makeinfocell($lang_creature['type'],$lang_creatu
 <tr>";
  unset($type);
 
-$npcflag = array(0 => "", 1 => "", 2 => "", 16 => "", 128 => "", 4096 => "", 8192 => "", 16384 => "", 65536 => "",
+$npcflag = array(0 => "", 1 => "", 2 => "", 4 => "", 8 => "", 16 => "", 32 => "", 64 => "", 128 => "",
+ 256 => "", 512 => "", 1024 => "", 2048 => "", 4096 => "", 8192 => "", 16384 => "", 65536 => "",
  131072 => "", 262144 => "", 524288 => "", 1048576 => "", 2097152 => "", 4194304 => "", 268435456 => "");
 
  if($mob['npcflag'] == 0) $npcflag[0] = " selected=\"selected\" ";
 else {
   if ($mob['npcflag'] & 1) $npcflag[1] = " selected=\"selected\" ";
   if ($mob['npcflag'] & 2) $npcflag[2] = " selected=\"selected\" ";
+  if ($mob['npcflag'] & 4) $npcflag[4] = " selected=\"selected\" ";
+  if ($mob['npcflag'] & 8) $npcflag[8] = " selected=\"selected\" ";
   if ($mob['npcflag'] & 16) $npcflag[16] = " selected=\"selected\" ";
+  if ($mob['npcflag'] & 32) $npcflag[32] = " selected=\"selected\" ";
+  if ($mob['npcflag'] & 64) $npcflag[64] = " selected=\"selected\" ";
   if ($mob['npcflag'] & 128) $npcflag[128] = " selected=\"selected\" ";
+  if ($mob['npcflag'] & 256) $npcflag[256] = " selected=\"selected\" ";
+  if ($mob['npcflag'] & 512) $npcflag[512] = " selected=\"selected\" ";
+  if ($mob['npcflag'] & 1024) $npcflag[1024] = " selected=\"selected\" ";
+  if ($mob['npcflag'] & 2048) $npcflag[2048] = " selected=\"selected\" ";
   if ($mob['npcflag'] & 4096) $npcflag[4096] = " selected=\"selected\" ";
   if ($mob['npcflag'] & 8192) $npcflag[8192] = " selected=\"selected\" ";
   if ($mob['npcflag'] & 16384) $npcflag[16384] = " selected=\"selected\" ";
@@ -801,7 +811,7 @@ $output .= "<br /><br /><table class=\"lined\" style=\"width: 720px;\">
 <tr class=\"large_bold\"><td colspan=\"6\" class=\"hidden\" align=\"left\">{$lang_creature['equipment']}:</td></tr>
 <tr>
   <td>".makeinfocell($lang_creature['equip_slot']." 1",$lang_creature['equip_slot1_desc'])."</td>
-  <td><input type=\"text\" name=\"equipslot1\" size=\"8\" maxlength=\"10\" value=\"{$mobequip['equipslot1']}\" /></td>
+  <td><input type=\"text\" name=\"equipslot1\" size=\"8\" maxlength=\"10\" value=\"{$mobequip['equipentry1']}\" /></td>
 
   <td>".makeinfocell($lang_creature['equip_model']." 1",$lang_creature['equip_model1_desc'])."</td>
   <td><input type=\"text\" name=\"equipmodel1\" size=\"8\" maxlength=\"10\" value=\"{$mobequip['equipmodel1']}\" /></td>
@@ -811,7 +821,7 @@ $output .= "<br /><br /><table class=\"lined\" style=\"width: 720px;\">
 </tr>
 <tr>
   <td>".makeinfocell($lang_creature['equip_slot']." 2",$lang_creature['equip_slot2_desc'])."</td>
-  <td><input type=\"text\" name=\"equipslot2\" size=\"8\" maxlength=\"10\" value=\"{$mobequip['equipslot2']}\" /></td>
+  <td><input type=\"text\" name=\"equipslot2\" size=\"8\" maxlength=\"10\" value=\"{$mobequip['equipentry2']}\" /></td>
 
   <td>".makeinfocell($lang_creature['equip_model']." 2",$lang_creature['equip_model2_desc'])."</td>
   <td><input type=\"text\" name=\"equipmodel2\" size=\"8\" maxlength=\"10\" value=\"{$mobequip['equipmodel2']}\" /></td>
@@ -821,7 +831,7 @@ $output .= "<br /><br /><table class=\"lined\" style=\"width: 720px;\">
 </tr>
 <tr>
   <td>".makeinfocell($lang_creature['equip_slot']." 3",$lang_creature['equip_slot3_desc'])."</td>
-  <td><input type=\"text\" name=\"equipslot3\" size=\"8\" maxlength=\"10\" value=\"{$mobequip['equipslot3']}\" /></td>
+  <td><input type=\"text\" name=\"equipslot3\" size=\"8\" maxlength=\"10\" value=\"{$mobequip['equipentry3']}\" /></td>
 
   <td>".makeinfocell($lang_creature['equip_model']." 3",$lang_creature['equip_model3_desc'])."</td>
   <td><input type=\"text\" name=\"equipmodel3\" size=\"8\" maxlength=\"10\" value=\"{$mobequip['equipmodel3']}\" /></td>
@@ -854,7 +864,7 @@ $output .= "<div id=\"pane2\">
 <tr class=\"large_bold\"><td colspan=\"6\" class=\"hidden\" align=\"left\">{$lang_creature['other']}:</td></tr>";
 
  $trainer_class = array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "",5 => "",7 => "",8 => "",9 => "",11 => "");
- $trainer_class[$mob['class']] = " selected=\"selected\" ";
+ $trainer_class[$mob['trainer_class']] = " selected=\"selected\" ";
 
 $output .= "<td>".makeinfocell($lang_creature['class'],$lang_creature['class_desc'])."</td>
      <td><select name=\"class\">
@@ -872,7 +882,7 @@ $output .= "<td>".makeinfocell($lang_creature['class'],$lang_creature['class_des
   unset($trainer_class);
 
  $trainer_race = array(0 => "", 1 => "", 2 => "", 3 => "", 4 => "",5 => "",6 => "", 7 => "",8 => "",10 => "",11 => "");
- $trainer_race[$mob['race']] = " selected=\"selected\" ";
+ $trainer_race[$mob['trainer_race']] = " selected=\"selected\" ";
 
  $output .= "<td>".makeinfocell($lang_creature['race'],$lang_creature['race_desc'])."</td>
      <td><select name=\"race\">

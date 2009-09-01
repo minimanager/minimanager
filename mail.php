@@ -329,7 +329,7 @@ function send_mail()
 function send_ingame_mail($realm_id, $massmails)
 {
   require_once 'libs/telnet_lib.php';
-  global $server;
+  global $server, $lang_telnet;
   $telnet = new telnet_lib();
 
   //$massmails array format
@@ -388,13 +388,13 @@ function send_ingame_mail($realm_id, $massmails)
     $telnet->Disconnect();
   }
   elseif (1 == $result)
-    $mess_str = "Connect failed: Unable to open network connection";
+    $mess_str = $lang_telnet['unable'];
   elseif (2 == $result)
-    $mess_str = "Connect failed: Unknown host";
+    $mess_str = $lang_telnet['unknown_host'];
   elseif (3 == $result)
-    $mess_str = "Connect failed: Login failed";
+    $mess_str = $lang_telnet['login_failed'];
   elseif (4 == $result)
-    $mess_str = "Connect failed: Your PHP version does not support PHP Telnet";
+    $mess_str = $lang_telnet['not_supported'];
 
   redirect("mail.php?action=result&error=6&mess=$mess_str");
 
@@ -448,6 +448,7 @@ $output .= "
         <div class=\"top\">";
 
 $lang_mail = lang_mail();
+$lang_telnet = lang_telnet();
 
 switch ($err)
 {
@@ -503,6 +504,7 @@ switch ($action)
 
 unset($action);
 unset($action_permission);
+unset($lang_telnet);
 unset($lang_mail);
 
 require_once("footer.php");

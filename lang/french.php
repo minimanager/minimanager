@@ -216,39 +216,45 @@ function lang_header()
     'main' => 'Portail',
     'tools' => 'Outils',
     'db' => 'Base de données',
-    'forums' => 'Forums',
+    'system' => 'System',
+    'support' => 'Support',
     'my_acc' => 'Mon compte',
 
     'auctionhouse' => 'Hôtel des ventes',
     'arena_teams' => 'Equipes d\'arène',
     'guilds' => 'Guildes',
     'honor' => 'Rangs d\'Honneur',
-    'statistics' => 'Statistiques',
-    'events' => 'Evènements',
-    'instances' => 'Instances',
     'top100' => 'TOP 100',
+    'statistics' => 'Statistiques',
     'player_map' => 'Carte des joueurs',
 
     'accounts' => 'Comptes',
     'characters' => 'Personnages',
     'command' => 'Commandes',
-    'banned_list' => 'Liste des bannis',
-    'mail' => 'E-Mail',
+    'mail' => 'Mail',
     'tickets' => 'Tickets',
-    'teleports' => 'Teleports',
+    'banned_list' => 'Liste des bannis',
     'cleanup' => 'Purger',
-    'ssh_line' => 'Commandes SSH',
-    'run_sql_patch' => 'Exécuter un patch SQL ',
-    'add_motd' => 'Ajouter un message du jour',
-    'realm' => 'Royaume',
-    'irc' => 'Applet IRC',
-    'spelld' => 'Sort(s) Désactivé(s)',
 
+    'events' => 'Evènements',
+    'instances' => 'Instances',
     'items' => 'Items',
     'creatures' => 'Creatures',
     'game_object' => 'Objects',
+    'teleports' => 'Teleports',
     'backup' => 'Sauvegarde',
+    'run_patch' => 'Exécuter un patch SQL',
     'repair' => 'Réparer/Optimiser',
+
+    'add_motd' => 'Ajouter un message du jour',
+    'realm' => 'Royaume',
+    'spelld' => 'Sort(s) Désactivé(s)',
+    'message' => 'Send Message',
+    'ssh_line' => 'Commandes SSH',
+
+    'forums' => 'Forums',
+    'irc' => 'Applet IRC',
+    'bugreport' => 'Bug Report',
 
     // please check the length at 'My Account' Menu
     'realms' => '-----Royaumes----',
@@ -1665,7 +1671,8 @@ $lang_creature = array(
   'equip_info3_desc' => 'Ce champ contrôle aussi bien l\'animation, la manière de toucher que le bruit que l\'item fait.',
   'heroic' => 'Heroic Spawn ID',
   'heroic_desc' => 'A heroic id is used when a creature has a different template for instances in normal and heroic mode. The one with the heroic_entry is the one used in the normal mode. A zero values means, this template is used for normal and heroic mode, or only heroic mode, if another creature point with its heroic_entry to this creature.',
-  'locales' => 'Localisation'
+  'locales' => 'Localisation',
+  'unit_flags' => 'Unit flags',
   );
 
 $lang_game_object = array(
@@ -2071,6 +2078,41 @@ function lang_spelld()
     'spell_not_deleted' => 'aucun sort éffacé!',
   );
   return $lang_spelld;
+}
+
+
+// ----- GLOBAL TELNET -----
+function lang_telnet()
+{
+  $lang_telnet = array
+  (
+    'unable' => 'Connect failed: Unable to open network connection, please check your config',
+    'unknown_host' => 'Connect failed: Unknown host, please check your config',
+    'login_failed' => 'Connect failed: Login failed, please check your config',
+    'not_supported' => 'Connect failed: Your PHP version does not support PHP Telnet, please check your config',
+  );
+  return $lang_telnet;
+}
+
+
+// ---- message.php ----
+function lang_message()
+{
+  $lang_message  = array
+  (
+    'main' => 'Send System Message/Global Notification',
+    'announcement' => 'Announcement',
+    'notification' => 'Notification',
+    'both' => 'Both',
+    'send' => 'Send',
+    'empty_fields' => 'Empty Fields',
+    'message_too_long' => 'Message too long',
+    'system_message' => 'System Message',
+    'global_notify' => 'Global Notify',
+    'sent' => 'sent',
+    'message_result' => 'Message Result',
+  );
+  return $lang_message;
 }
 
 
