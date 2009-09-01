@@ -74,7 +74,7 @@ class telnet_lib
         fputs($this->fp,$this->conn2);
         $this->Sleep();
         $this->GetResponse($r);
-        $r = explode('\n',$r);
+        $r = explode("\n",$r);
         $this->loginprompt = $r[count($r)-1];
 
         fputs($this->fp, "USER $user\r");
@@ -86,7 +86,7 @@ class telnet_lib
         else
           sleep(1);
         $this->GetResponse($r);
-        $r = explode('\n', $r);
+        $r = explode("\n", $r);
         if ( ($r[count($r)-1] == '')||($this->loginprompt == $r[count($r)-1]) )
         {
           $rv = 3;
