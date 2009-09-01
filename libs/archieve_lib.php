@@ -1,6 +1,7 @@
 <?php
 
 
+/*
 //#############################################################################
 //get achievement name by its id
 
@@ -40,6 +41,7 @@ function achieve_get_category($id, &$sqlm)
   $category_name = $sqlm->fetch_assoc($sqlm->query('SELECT name01 FROM dbc_achievement_category WHERE id = '.$category_id['categoryid'].' LIMIT 1'));
   return $category_name['name01'];
 }
+*/
 
 
 //#############################################################################

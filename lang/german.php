@@ -483,10 +483,6 @@ function lang_char()
     'achievement_title' => 'Achievement Title',    // <---- TODO
     'achievement_points' => 'Punkte',
     'achievement_date' => 'Date',    // <---- TODO
-
-    'achievement_id' => 'ID', // <---- TODO
-    'achievement_category' => 'Kategorie',
-    'no_com_achievements' => 'No Achievements Completed',    // <---- TODO
   );
   return $lang_char;
 }

@@ -483,10 +483,6 @@ function lang_char()
     'achievement_title' => 'Haut Fait',
     'achievement_points' => 'Points',
     'achievement_date' => 'Date',
-
-    'achievement_id' => 'ID',
-    'achievement_category' => 'catégorie',
-    'no_com_achievements' => 'Aucun Haut Fait accompli'
   );
   return $lang_char;
 }

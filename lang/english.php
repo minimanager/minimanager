@@ -483,10 +483,6 @@ function lang_char()
     'achievement_title' => 'Achievement Title',
     'achievement_points' => 'Points',
     'achievement_date' => 'Date',
-
-    'achievement_id' => 'ID',
-    'achievement_category' => 'Category',
-    'no_com_achievements' => 'No Achievements Completed'
   );
   return $lang_char;
 }

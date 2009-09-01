@@ -395,7 +395,5 @@ $developer_test_mode =  false;
 
 $multi_realm_mode    =  true;
 
-$new_achieve_page    =  true;
-
 
 ?>
