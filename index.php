@@ -151,7 +151,13 @@ function front(&$sqlr, &$sqlc)
                 <td class="hidden"></td>
               </tr>';
     }
-    $output .= '%%REPLACE_TAG%%';
+    if ($online)
+      $output .= '%%REPLACE_TAG%%';
+    else
+      $output .= '
+              <tr>
+                <td align="right" class="hidden">'.generate_pagination('index.php?start=0', $all_record_m, 3, $start_m, 'start_m').'</td>
+              </tr>';
   }
   $output .= '
             </table>';
@@ -348,5 +354,6 @@ unset($action_permission);
 unset($lang_index);
 
 require_once 'footer.php';
+
 
 ?>
