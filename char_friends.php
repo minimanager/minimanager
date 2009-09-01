@@ -304,7 +304,7 @@ function char_friends(&$sqlr, &$sqlc)
       // only GM with update permission can send mail, mail can send items, so update permission is needed
       if ($user_lvl >= $action_permission['update'])
       {
-                  makebutton($lang_char['send_mail'], 'mail.php?type=ingame_mail&amp;to='.$char['account'].'', 130);
+                  makebutton($lang_char['send_mail'], 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
         $output .= '
                 </td>
                 <td>';

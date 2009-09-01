@@ -1,34 +1,33 @@
 <?php
 
 
-require_once("header.php");
-require_once("libs/char_lib.php");
+require_once 'header.php';
+require_once 'libs/char_lib.php';
 valid_login($action_permission['read']);
 
 //########################################################################################################################
 // SHOW CHARACTERS QUESTS
 //########################################################################################################################
-function char_quest()
+function char_quest(&$sqlr, &$sqlc)
 {
-  global $lang_global, $lang_char, $output, $realm_id, $realm_db, $world_db, $characters_db, $itemperpage,
-    $action_permission, $user_lvl, $user_name, $quest_datasite;
+  global $output, $lang_global, $lang_char,
+    $realm_id, $world_db, $characters_db,
+    $action_permission, $user_lvl, $user_name,
+    $quest_datasite, $itemperpage;
   wowhead_tt();
 
   if (empty($_GET['id'])) error($lang_global['empty_fields']);
-
-  $sqlr = new SQL;
-  $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
   if (empty($_GET['realm']))
     $realmid = $realm_id;
   else
   {
     $realmid = $sqlr->quote_smart($_GET['realm']);
-    if (!is_numeric($realmid)) $realmid = $realm_id;
+    if (is_numeric($realmid))
+      $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
+    else
+      $realmid = $realm_id;
   }
-
-  $sqlc = new SQL;
-  $sqlc->connect($characters_db[$realmid]['addr'], $characters_db[$realmid]['user'], $characters_db[$realmid]['pass'], $characters_db[$realmid]['name']);
 
   $id = $sqlc->quote_smart($_GET['id']);
   if (is_numeric($id)); else $id = 0;
@@ -41,123 +40,143 @@ function char_quest()
   if (is_numeric($order_by)); else $order_by=1;
 
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 0;
-  if (!preg_match("/^[01]{1}$/", $dir)) $dir=0;
+  if (preg_match('/^[01]{1}$/', $dir)); else $dir=0;
 
-  //$order_dir = ($dir) ? "ASC" : "DESC";
+  $order_dir = ($dir) ? 'ASC' : 'DESC';
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end=============================
 
-  $result = $sqlc->query("SELECT account, name, race, class, level, gender
-    FROM `characters` WHERE guid = $id LIMIT 1");
+  $result = $sqlc->query('SELECT account, name, race, class, level, gender
+    FROM characters WHERE guid = '.$id.' LIMIT 1');
 
   if ($sqlc->num_rows($result))
   {
-    $char = $sqlc->fetch_row($result);
+    $char = $sqlc->fetch_assoc($result);
 
-    $owner_acc_id = $sqlr->result($result, 0, 'account');
-    $result = $sqlr->query("SELECT gmlevel,username FROM account WHERE id ='$char[0]'");
+    $owner_acc_id = $sqlc->result($result, 0, 'account');
+    $result = $sqlr->query('SELECT gmlevel, username FROM account WHERE id = '.$char['account'].'');
     $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
     $owner_name = $sqlr->result($result, 0, 'username');
 
-    if (($user_lvl > $owner_gmlvl)||($owner_name == $user_name))
+    if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name))
     {
-      $result = $sqlc->query("SELECT quest,status FROM character_queststatus WHERE guid =$id AND ( status = 3 OR status = 1 ) ORDER BY status DESC");
-      $output .= "
-        <center>
-          <div id=\"tab\">
-            <ul>
-            <li><a href=\"char.php?id=$id&amp;realm=$realmid\">{$lang_char['char_sheet']}</a></li>
-            <li><a href=\"char_inv.php?id=$id&amp;realm=$realmid\">{$lang_char['inventory']}</a></li>
-            <li><a href=\"char_talent.php?id=$id&amp;realm=$realmid\">{$lang_char['talents']}</a></li>
-            <li><a href=\"char_achieve.php?id=$id&amp;realm=$realmid\">{$lang_char['achievements']}</a></li>
-            <li id=\"selected\"><a href=\"char_quest.php?id=$id&amp;realm=$realmid\">{$lang_char['quests']}</a></li>
-            <li><a href=\"char_friends.php?id=$id&amp;realm=$realmid\">{$lang_char['friends']}</a></li>
-            </ul>
-          </div>
-          <div id=\"tab_content\">
-            <font class=\"bold\">".htmlentities($char[1])." - <img src='img/c_icons/{$char[2]}-{$char[5]}.gif' onmousemove='toolTip(\"".char_get_race_name($char[2])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> <img src='img/c_icons/{$char[3]}.gif' onmousemove='toolTip(\"".char_get_class_name($char[3])."\",\"item_tooltip\")' onmouseout='toolTip()' alt=\"\" /> - lvl ".char_get_level_color($char[4])."</font>
-            <br /><br />
-            <table class=\"lined\" style=\"width: 550px;\">
-              <tr>";
-      if ($user_lvl)
-        $output .= "
-                <th width=\"10%\"><a href=\"char_quest.php?id=$id&amp;realm=$realmid&amp;start=$start&amp;order_by=0&amp;dir=$dir\">".($order_by==0 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['quest_id']}</a></th>";
-      $output .= "
-                <th width=\"7%\"><a href=\"char_quest.php?id=$id&amp;realm=$realmid&amp;start=$start&amp;order_by=1&amp;dir=$dir\">".($order_by==1 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['quest_level']}</a></th>
-                <th width=\"78%\"><a href=\"char_quest.php?id=$id&amp;realm=$realmid&amp;start=$start&amp;order_by=2&amp;dir=$dir\">".($order_by==2 ? "<img src=\"img/arr_".($dir ? "up" : "dw").".gif\" alt=\"\" /> " : "")."{$lang_char['quest_title']}</a></th>
-                <th width=\"5%\"><img src=\"img/aff_qst.png\" width=\"14\" height=\"14\" border=\"0\" alt=\"\" /></th>
-              </tr>";
+      $output .= '
+          <center>
+            <div id="tab">
+              <ul>
+                <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['char_sheet'].'</a></li>
+                <li><a href="char_inv.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['inventory'].'</a></li>
+                <li><a href="char_talent.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['talents'].'</a></li>
+                <li><a href="char_achieve.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['achievements'].'</a></li>
+                <li id="selected"><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['quests'].'</a></li>
+                <li><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['friends'].'</a></li>
+              </ul>
+            </div>
+            <div id="tab_content">
+              <font class="bold">
+                '.htmlentities($char['name']).' -
+                <img src="img/c_icons/'.$char['race'].'-'.$char['gender'].'.gif"
+                  onmousemove="toolTip(\''.char_get_race_name($char['race']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" />
+                <img src="img/c_icons/'.$char['class'].'.gif"
+                  onmousemove="toolTip(\''.char_get_class_name($char['class']).'\', \'item_tooltip\')" onmouseout="toolTip()" alt="" /> - lvl '.char_get_level_color($char['level']).'
+              </font>
+              <br /><br />
+              <table class="lined" style="width: 550px;">
+                <tr>
+                  <th width="10%"><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'&amp;start='.$start.'&amp;order_by=0&amp;dir='.$dir.'"'.($order_by == 0 ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['quest_id'].'</a></th>
+                  <th width="7%"><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'&amp;start='.$start.'&amp;order_by=1&amp;dir='.$dir.'"'.($order_by == 1 ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['quest_level'].'</a></th>
+                  <th width="78%"><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'&amp;start='.$start.'&amp;order_by=2&amp;dir='.$dir.'"'.($order_by == 2 ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['quest_title'].'</a></th>
+                  <th width="5%"><img src="img/aff_qst.png" width="14" height="14" border="0" alt="" /></th>
+                </tr>';
+      $result = $sqlc->query('SELECT quest, status, rewarded FROM character_queststatus WHERE guid = '.$id.' AND ( status = 3 OR status = 1 ) ORDER BY status DESC');
+
       $quests_1 = array();
       $quests_3 = array();
 
       if ($sqlc->num_rows($result))
       {
-        while ($quest = $sqlc->fetch_row($result))
+        while ($quest = $sqlc->fetch_assoc($result))
         {
           $deplang = get_lang_id();
-          $query1 = $sqlc->query("SELECT QuestLevel,IFNULL(".($deplang<>0?"title_loc$deplang":"NULL").",`title`) as Title FROM `".$world_db[$realmid]['name']."`.`quest_template` LEFT JOIN `".$world_db[$realmid]['name']."`.`locales_quest` ON `quest_template`.`entry` = `locales_quest`.`entry` WHERE `quest_template`.`entry` ='$quest[0]'");
-          $quest_info = $sqlc->fetch_row($query1);
-          if($quest[1]==1)
-            array_push($quests_1, array($quest[0], $quest_info[0], $quest_info[1]));
+          $query1 = $sqlc->query('SELECT QuestLevel, IFNULL('.($deplang<>0 ? '`title_loc'.$deplang.'`' : 'NULL').', title) as Title FROM `'.$world_db[$realmid]['name'].'`.`quest_template` LEFT JOIN `'.$world_db[$realmid]['name'].'`.`locales_quest` ON `quest_template`.`entry` = `locales_quest`.`entry` WHERE `quest_template`.`entry` = \''.$quest['quest'].'\'');
+          $quest_info = $sqlc->fetch_assoc($query1);
+          if(1 == $quest['status'])
+            array_push($quests_1, array($quest['quest'], $quest_info['QuestLevel'], $quest_info['Title'], $quest['rewarded']));
           else
-            array_push($quests_3, array($quest[0], $quest_info[0], $quest_info[1]));
+            array_push($quests_3, array($quest['quest'], $quest_info['QuestLevel'], $quest_info['Title']));
         }
+        unset($quest);
+        unset($quest_info);
         aasort($quests_1, $order_by, $dir);
-        aasort($quests_3, $order_by, $dir);
+        $orderby = $order_by;
+        if (2 < $orderby)
+          $orderby = 1;
+        aasort($quests_3, $orderby, $dir);
         $all_record = count($quests_1);
 
         foreach ($quests_3 as $data)
         {
-          $output .= "
-              <tr>";
-          if($user_lvl)
-            $output .= "
-                <td>$data[0]</td>";
-          $output .= "
-                <td>($data[1])</td>
-                <td align=\"left\"><a href=\"$quest_datasite$data[0]\" target=\"_blank\">".htmlentities($data[2])."</a></td>
-                <td><img src=\"img/aff_qst.png\" width=\"14\" height=\"14\" alt=\"\" /></td>
-              </tr>";
+          $output .= '
+                <tr>
+                  <td>'.$data[0].'</td>
+                  <td>('.$data[1].')</td>
+                  <td align="left"><a href="'.$quest_datasite.$data[0].'" target="_blank">'.htmlentities($data[2]).'</a></td>
+                  <td><img src="img/aff_qst.png" width="14" height="14" alt="" /></td>
+                </tr>';
         }
+        unset($quest_3);
         if(count($quests_1))
-          $output .= "
-            </table>
-            <table class=\"hidden\" style=\"width: 510px;\">
-              <tr align=\"right\">
-                <td colspan=\"".($user_lvl ? "4" : "3")."\">";
-                  $output .= generate_pagination("char_quest.php?id=$id&amp;realm=$realmid&amp;start=$start&amp;order_by=$order_by&amp;dir=".!$dir."", $all_record, $itemperpage, $start);
-          $output .= "
-                </td>
-              </tr>
-            </table>
-            <table class=\"lined\" style=\"width: 550px;\">";
-        $i=0;
-        foreach ($quests_1 as $data)
         {
-          if($i<$start)
+          $output .= '
+              </table>
+              <table class="hidden" style="width: 550px;">
+                <tr align="right">
+                  <td>';
+          $output .= generate_pagination('char_quest.php?id='.$id.'&amp;realm='.$realmid.'&amp;start='.$start.'&amp;order_by='.$order_by.'&amp;dir='.($dir ? 0 : 1), $all_record, $itemperpage, $start);
+          $output .= '
+                  </td>
+                </tr>
+              </table>
+              <table class="lined" style="width: 550px;">
+                <tr>
+                  <th width="10%"><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'&amp;start='.$start.'&amp;order_by=0&amp;dir='.$dir.'"'.($order_by == 0 ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['quest_id'].'</a></th>
+                  <th width="7%"><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'&amp;start='.$start.'&amp;order_by=1&amp;dir='.$dir.'"'.($order_by == 1 ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['quest_level'].'</a></th>
+                  <th width="68%"><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'&amp;start='.$start.'&amp;order_by=2&amp;dir='.$dir.'"'.($order_by == 2 ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['quest_title'].'</a></th>
+                  <th width="10%"><a href="char_quest.php?id='.$id.'&amp;realm='.$realmid.'&amp;start='.$start.'&amp;order_by=3&amp;dir='.$dir.'"'.($order_by == 3 ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['rewarded'].'</a></th>
+                  <th width="5%"><img src="img/aff_tick.png" width="14" height="14" border="0" alt="" /></th>
+                </tr>';
+          $i = 0;
+          foreach ($quests_1 as $data)
           {
+            if($i < ($start+$itemperpage) && $i >= $start)
+            {
+              $output .= '
+                <tr>
+                  <td>'.$data[0].'</td>
+                  <td>('.$data[1].')</td>
+                  <td align="left"><a href="'.$quest_datasite.$data[0].'" target="_blank">'.htmlentities($data[2]).'</a></td>
+                  <td><img src="img/aff_'.($data[3] ? 'tick' : 'qst' ).'.png" width="14" height="14" alt="" /></td>
+                  <td><img src="img/aff_tick.png" width="14" height="14" alt="" /></td>
+                </tr>';
+            }
+            $i++;
           }
-          elseif($i<$start+$itemperpage)
-          {
-            $output .= "
-              <tr>";
-            if($user_lvl)
-              $output .= "
-                <td>$data[0]</td>";
-            $output .= "
-                <td>($data[1])</td>
-                <td align=\"left\"><a href=\"$quest_datasite$data[0]\" target=\"_blank\">".htmlentities($data[2])."</a></td>
-                <td><img src=\"img/aff_tick.png\" width=\"14\" height=\"14\" alt=\"\" /></td>
-              </tr>";
-          }
-          $i++;
+          unset($data);
+          unset($quest_1);
+          $output .= '
+                <tr align="right">
+                  <td colspan="5">';
+          $output .= generate_pagination('char_quest.php?id='.$id.'&amp;realm='.$realmid.'&amp;start='.$start.'&amp;order_by='.$order_by.'&amp;dir='.($dir ? 0 : 1), $all_record, $itemperpage, $start);
+          $output .= '
+                  </td>
+                </tr>';
         }
       }
       else
-        $output .= "
-              <tr>
-                <td colspan=\"".($user_lvl ? "4" : "3")."\"><p>{$lang_char['no_act_quests']}</p></td>
-              </tr>";
+        $output .= '
+                <tr>
+                  <td colspan="4"><p>'.$lang_char['no_act_quests'].'</p></td>
+                </tr>';
       //---------------Page Specific Data Ends here----------------------------
       //---------------Character Tabs Footer-----------------------------------
       $output .= '
@@ -193,7 +212,7 @@ function char_quest()
       // only GM with update permission can send mail, mail can send items, so update permission is needed
       if ($user_lvl >= $action_permission['update'])
       {
-                  makebutton($lang_char['send_mail'], 'mail.php?type=ingame_mail&amp;to='.$char[0].'', 130);
+                  makebutton($lang_char['send_mail'], 'mail.php?type=ingame_mail&amp;to='.$char['name'].'', 130);
         $output .= '
                 </td>
                 <td>';
@@ -220,22 +239,17 @@ function char_quest()
 // MAIN
 //########################################################################################################################
 
-$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
+//$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
 $lang_char = lang_char();
 
-switch ($action)
-{
-  case "unknown":
-    break;
-  default:
-    char_quest();
-}
+char_quest($sqlr, $sqlc);
 
-unset($action);
+//unset($action);
 unset($action_permission);
 unset($lang_char);
 
-require_once("footer.php");
+require_once 'footer.php';
+
 
 ?>

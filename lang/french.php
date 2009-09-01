@@ -409,6 +409,7 @@ function lang_char()
     'quest_id' => 'Quest ID',
     'quest_level' => 'lvl',
     'quest_title' => 'Titre de Quête',
+    'rewarded' => 'Rewarded',
     'classskills' => 'Compétences de classe',
     'professions' => 'Professions',
     'secondaryskills' => 'Compétences secondaires',

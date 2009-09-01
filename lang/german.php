@@ -409,6 +409,7 @@ function lang_char()
     'quest_id' => 'ID',
     'quest_level' => 'Stufe',
     'quest_title' => 'Quest Titel',
+    'rewarded' => 'Rewarded',
     'classskills' => 'Class Skills',
     'professions' => 'Berufe',
     'secondaryskills' => 'Secondary Skills',
