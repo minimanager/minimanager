@@ -67,11 +67,11 @@ $tables_backup_characters = Array
 
 $tables_backup_characters_trinity = Array
 (
-  'account_data',
   'arena_team',
   'arena_team_member',
   'arena_team_stats',
   'auctionhouse',
+  'character_account_data',
   'character_achievement',
   'character_achievement_progress',
   'character_action',
@@ -190,6 +190,7 @@ $tab_del_user_characters_trinity = Array
 (
   Array('arena_team_member','guid'),
   Array('auctionhouse','itemowner'),
+  Array('character_account_data','guid'),
   Array('character_achievement','guid'),
   Array('character_achievement_progress','guid'),
   Array('character_action','guid'),
