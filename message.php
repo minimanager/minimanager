@@ -31,7 +31,7 @@ function main()
                 </tr>
                 <tr>
                   <td align="center">
-                    <table align="center" class="hidden"
+                    <table align="center" class="hidden">
                       <tr>
                         <td>';
                           makebutton($lang_message['send'], 'javascript:do_submit()" type="wrn', 130);
@@ -170,11 +170,11 @@ $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 $lang_message = lang_message();
 $lang_telnet = lang_telnet();
 
-if ('send' == $action)
+if ('send' === $action)
   send($sqlc);
-elseif ('result' == $action)
+elseif ('result' === $action)
   result();
-elseif ('main' == $action)
+elseif ('main' === $action)
   main();
 else
   check();

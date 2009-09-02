@@ -388,7 +388,7 @@ $lang_top = lang_top();
 
 $action = (isset($_POST['action'])) ? $_POST['action'] : NULL;
 
-if ('realms' == $action)
+if ('realms' === $action)
 {
   if (isset($_POST['n_realms']))
   {

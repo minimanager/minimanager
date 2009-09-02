@@ -239,7 +239,7 @@ $output .= '
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-if ('dologin' == $action)
+if ('dologin' === $action)
   dologin($sqlr);
 else
   login($sqlr);

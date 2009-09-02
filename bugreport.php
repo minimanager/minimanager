@@ -14,6 +14,7 @@
     $result = str_replace("\r\n", "\r\n  ", $result);
     $telnet->Disconnect();
   }
+  unset($telnet);
 
   $doutput = '
 ';
@@ -71,6 +72,7 @@
             <br /><br />';
     }
   }
+  unset($l_rev);
   $output .= '
             Copy the selected text below and paste it in your bug report.
             <br /><br />
@@ -79,7 +81,7 @@
             <a href="http://mangos.osh.nu/forums/index.php?showforum=38" target="_blank">miniManager Bug Report Forum: http://mangos.osh.nu/forums/index.php?showforum=38<br />
             (link opens in new tab/window)</a>
             <br /><br />
-            <script>
+            <script type="text/javascript">
               document.getElementById(\'codearea\').focus();
               document.getElementById(\'codearea\').select();
             </script>

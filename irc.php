@@ -33,9 +33,9 @@ $output .= '
               <param name="style:highlightlinks" value="true" />
               <param name="pixx:highlight"     value="true" />
               <param name="pixx:highlightnick" value="true" />
-              <param name="pixx:nickfield" value="true">
+              <param name="pixx:nickfield" value="true" />
               <param name="pixx:showabout" value="false" />
-              <param name="pixx:helppage" value="http://mangos.osh.nu/forums/index.php?showforum=19">
+              <param name="pixx:helppage" value="http://mangos.osh.nu/forums/index.php?showforum=19" />
               <param name="pixx:timestamp" value="true" />
               <param name="pixx:color5"  value="2a2a2a" />
               <param name="pixx:color6"  value="383838" />

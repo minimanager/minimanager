@@ -212,7 +212,7 @@ function edit_realm(&$sqlr)
       $output .= '
                   <tr>
                     <td>'.$lang_realm['status'].'</td>
-                    <td>'.(test_port($server[$realm['rid']]['addr'],$server[$realm['rid']]['game_port'])) ? $lang_realm['online'] : $lang_realm['offline'].'</td>
+                    <td>'.(test_port($server[$realm['rid']]['addr'],$server[$realm['rid']]['game_port']) ? $lang_realm['online'] : $lang_realm['offline']).'</td>
                   </tr>
                   <tr>
                     <td>'.$lang_realm['tot_char'].'</td>
