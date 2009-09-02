@@ -68,11 +68,11 @@ function instances()
             </table>
             <table class="lined">
               <tr>
-                <th width="40%"><a href="instances.php?order_by=map&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['map'].'</a></th>
-                <th width="15%"><a href="instances.php?order_by=level_min&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level_min' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['level_min'].'</a></th>
-                <th width="15%"><a href="instances.php?order_by=level_max&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='level_max' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['level_max'].'</a></th>
-                <th width="15%"><a href="instances.php?order_by=maxplayers&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='maxplayers' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['max_players'].'</a></th>
-                <th width="15%"><a href="instances.php?order_by=reset_delay&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by=='reset_delay' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['reset_delay'].'</a></th>
+                <th width="40%"><a href="instances.php?order_by=map&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['map'].'</a></th>
+                <th width="15%"><a href="instances.php?order_by=level_min&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='level_min' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['level_min'].'</a></th>
+                <th width="15%"><a href="instances.php?order_by=level_max&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='level_max' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['level_max'].'</a></th>
+                <th width="15%"><a href="instances.php?order_by=maxplayers&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='maxplayers' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['max_players'].'</a></th>
+                <th width="15%"><a href="instances.php?order_by=reset_delay&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='reset_delay' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['reset_delay'].'</a></th>
               </tr>';
 
   $sqlm = new SQL;

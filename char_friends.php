@@ -45,6 +45,11 @@ function char_friends(&$sqlr, &$sqlc)
   $dir = ($dir) ? 0 : 1;
   //==========================$_GET and SECURE end========================
 
+  if ($order_by === 'map')
+    $order_by = 'map '.$order_dir.', zone';
+  elseif ($order_by === 'zone')
+    $order_by = 'zone '.$order_dir.', map';
+
   // getting character data from database
   $result = $sqlc->query('SELECT account, name, race, class, level, gender
     FROM characters WHERE guid = '.$id.' LIMIT 1');
@@ -117,8 +122,8 @@ function char_friends(&$sqlr, &$sqlc)
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=race&amp;dir='.$dir.'"'.($order_by==='race' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['race'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=class&amp;dir='.$dir.'"'.($order_by==='class' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['class'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=level&amp;dir='.$dir.'"'.($order_by==='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['level'].'</a></th>
-                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by==='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['map'].'</a></th>
-                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by==='zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['zone'].'</a></th>
+                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by==='map '.$order_dir.', zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['map'].'</a></th>
+                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by==='zone '.$order_dir.', map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['zone'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=online&amp;dir='.$dir.'"'.($order_by==='online' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['online'].'</a></th>
                       </tr>';
         while ($data = $sqlc->fetch_assoc($result))
@@ -156,8 +161,8 @@ function char_friends(&$sqlr, &$sqlc)
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=race&amp;dir='.$dir.'"'.($order_by==='race' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['race'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=class&amp;dir='.$dir.'"'.($order_by==='class' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['class'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=level&amp;dir='.$dir.'"'.($order_by==='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['level'].'</a></th>
-                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by==='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['map'].'</a></th>
-                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by==='zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['zone'].'</a></th>
+                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by==='map '.$order_dir.', zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['map'].'</a></th>
+                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by==='zone '.$order_dir.', map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['zone'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=online&amp;dir='.$dir.'"'.($order_by==='online' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['online'].'</a></th>
                       </tr>';
         while ($data = $sqlc->fetch_assoc($result))
@@ -202,8 +207,8 @@ function char_friends(&$sqlr, &$sqlc)
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=race&amp;dir='.$dir.'"'.($order_by==='race' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['race'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=class&amp;dir='.$dir.'"'.($order_by==='class' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['class'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=level&amp;dir='.$dir.'"'.($order_by==='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['level'].'</a></th>
-                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by==='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['map'].'</a></th>
-                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by==='zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['zone'].'</a></th>
+                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by==='map '.$order_dir.', zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['map'].'</a></th>
+                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by==='zone '.$order_dir.', map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['zone'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=online&amp;dir='.$dir.'"'.($order_by==='online' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['online'].'</a></th>
                       </tr>';
         while ($data = $sqlc->fetch_assoc($result))
@@ -241,8 +246,8 @@ function char_friends(&$sqlr, &$sqlc)
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=race&amp;dir='.$dir.'"'.($order_by==='race' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['race'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=class&amp;dir='.$dir.'"'.($order_by==='class' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['class'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=level&amp;dir='.$dir.'"'.($order_by==='level' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['level'].'</a></th>
-                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by==='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['map'].'</a></th>
-                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by==='zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['zone'].'</a></th>
+                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=map&amp;dir='.$dir.'"'.($order_by==='map '.$order_dir.', zone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['map'].'</a></th>
+                        <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=zone&amp;dir='.$dir.'"'.($order_by==='zone '.$order_dir.', map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['zone'].'</a></th>
                         <th width="1%"><a href="char_friends.php?id='.$id.'&amp;realm='.$realmid.'&amp;order_by=online&amp;dir='.$dir.'"'.($order_by==='online' ? ' class="'.$order_dir.'"' : '').'>'.$lang_char['online'].'</a></th>
                       </tr>';
         while ($data = $sqlc->fetch_assoc($result))

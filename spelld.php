@@ -116,9 +116,9 @@ function browse_spells()
     $output .= '
                   <th width="1%"></th>';
   $output .= '
-                  <th width="10%"><a href="spelld.php?order_by=entry&amp;start='.$start.( $search_value && $search_by ? '&amp;error=3&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='entry' ? ' class="'.$order_dir.'"' : '').'>'.$lang_spelld['entry'].'</a></th>
-                  <th width="10%"><a href="spelld.php?order_by=disable_mask&amp;start='.$start.( $search_value && $search_by ? '&amp;error=3&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='disable_mask' ? ' class="'.$order_dir.'"' : '').'>'.$lang_spelld['disable_mask'].'</a></th>
-                  <th width="70%"><a href="spelld.php?order_by=comment&amp;start='.$start.( $search_value && $search_by ? '&amp;error=3&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by=='comment' ? ' class="'.$order_dir.'"' : '').'>'.$lang_spelld['comment'].'</a></th>
+                  <th width="10%"><a href="spelld.php?order_by=entry&amp;start='.$start.( $search_value && $search_by ? '&amp;error=3&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='entry' ? ' class="'.$order_dir.'"' : '').'>'.$lang_spelld['entry'].'</a></th>
+                  <th width="10%"><a href="spelld.php?order_by=disable_mask&amp;start='.$start.( $search_value && $search_by ? '&amp;error=3&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='disable_mask' ? ' class="'.$order_dir.'"' : '').'>'.$lang_spelld['disable_mask'].'</a></th>
+                  <th width="70%"><a href="spelld.php?order_by=comment&amp;start='.$start.( $search_value && $search_by ? '&amp;error=3&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='comment' ? ' class="'.$order_dir.'"' : '').'>'.$lang_spelld['comment'].'</a></th>
                 </tr>
                 <tr>';
 
@@ -342,11 +342,11 @@ $output .= '
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-if ('add_new' == $action)
+if ('add_new' === $action)
   add_new();
-elseif ('doadd_new' == $action)
+elseif ('doadd_new' === $action)
   doadd_new();
-elseif ('del_spell' == $action)
+elseif ('del_spell' === $action)
   del_spell();
 else
   browse_spells();

@@ -49,15 +49,15 @@ function show_realm(&$sqlr)
     $output .= '
                 <th width="1%">'.$lang_global['delete_short'].'</th>';
   $output .= '
-                <th width="1%"><a href="realm.php?order_by=rid&amp;dir='.$dir.'"'.($order_by=='rid' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['id'].'</a></th>
-                <th width="40%"><a href="realm.php?order_by=name&amp;dir='.$dir.'"'.($order_by=='name' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['name'].'</a></th>
+                <th width="1%"><a href="realm.php?order_by=rid&amp;dir='.$dir.'"'.($order_by==='rid' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['id'].'</a></th>
+                <th width="40%"><a href="realm.php?order_by=name&amp;dir='.$dir.'"'.($order_by==='name' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['name'].'</a></th>
                 <th width="1%">'.$lang_realm['online'].'</th>
-                <th width="10%"><a href="realm.php?order_by=sum&amp;dir='.$dir.'"'.($order_by=='sum' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['tot_char'].'</a></th>
-                <th width="10%"><a href="realm.php?order_by=address&amp;dir='.$dir.'"'.($order_by=='address' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['address'].'</a></th>
-                <th width="1%"><a href="realm.php?order_by=port&amp;dir='.$dir.'"'.($order_by=='port' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['port'].'</a></th>
-                <th width="1%"><a href="realm.php?order_by=icon&amp;dir='.$dir.'"'.($order_by=='icon' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['icon'].'</a></th>
-                <th width="1%"><a href="realm.php?order_by=color&amp;dir='.$dir.'"'.($order_by=='color' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['color'].'</a></th>
-                <th width="7%"><a href="realm.php?order_by=timezone&amp;dir='.$dir.'"'.($order_by=='timezone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['timezone'].'</a></th>
+                <th width="10%"><a href="realm.php?order_by=sum&amp;dir='.$dir.'"'.($order_by==='sum' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['tot_char'].'</a></th>
+                <th width="10%"><a href="realm.php?order_by=address&amp;dir='.$dir.'"'.($order_by==='address' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['address'].'</a></th>
+                <th width="1%"><a href="realm.php?order_by=port&amp;dir='.$dir.'"'.($order_by==='port' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['port'].'</a></th>
+                <th width="1%"><a href="realm.php?order_by=icon&amp;dir='.$dir.'"'.($order_by==='icon' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['icon'].'</a></th>
+                <th width="1%"><a href="realm.php?order_by=color&amp;dir='.$dir.'"'.($order_by==='color' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['color'].'</a></th>
+                <th width="7%"><a href="realm.php?order_by=timezone&amp;dir='.$dir.'"'.($order_by==='timezone' ? ' class="'.$order_dir.'"' : '').'>'.$lang_realm['timezone'].'</a></th>
               </tr>';
   unset($dir);
   unset($order_dir);
@@ -455,17 +455,17 @@ $output .= '
 
 $action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-if ('edit_realm' == $action)
+if ('edit_realm' === $action)
   edit_realm($sqlr);
-elseif ('doedit_realm' == $action)
+elseif ('doedit_realm' === $action)
   doedit_realm($sqlr);
-elseif ('del_realm' == $action)
+elseif ('del_realm' === $action)
   del_realm($sqlr);
-elseif ('dodel_realm' == $action)
+elseif ('dodel_realm' === $action)
   dodel_realm($sqlr);
-elseif ('add_realm' == $action)
+elseif ('add_realm' === $action)
   add_realm($sqlr);
-elseif ('set_def_realm' == $action)
+elseif ('set_def_realm' === $action)
   set_def_realm($sqlr);
 else
   show_realm($sqlr);
