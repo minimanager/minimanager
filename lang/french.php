@@ -3,7 +3,7 @@
  * Project Name: MiniManager for Project Mangos/Trinity
  * License: GNU General Public License v2(GPL)
  * Language: French
- * Supported Minimanager Revision: r352
+ * Supported Minimanager Revision: r407
  * Translator: fra298
  */
 
@@ -110,7 +110,7 @@ function lang_guild()
     'guild_search_result' => 'Résultats de recherche de guildes',
     'show_guilds' => 'Afficher toutes les guildes',
     'browse_guilds' => 'Parcourir les guildes',
-    'guildbank' => 'Guild Bank',
+    'guildbank' => 'Banque de Guilde',
   );
   return $lang_guild;
 }
@@ -121,10 +121,10 @@ function lang_guildbank()
 {
   $lang_guildbank = array
   (
-    'guild' => 'Guild',
-    'guildbank' => 'Guild Bank',
+    'guild' => 'Guilde',
+    'guildbank' => 'Banque de guilde',
     'tab' => 'Tab',
-    'notfound' => 'Wrong ID, no Guild Bank Found.',
+    'notfound' => 'Mauvais ID, aucune Banque de guilde trouvée.',
   );
   return $lang_guildbank;
 }
@@ -199,7 +199,7 @@ function lang_index()
     'a_latency' => 'Latence moyenne',
     'guild' => 'Guilde',
     'trinity_rev' => 'Trinity Rev',
-    'using_db' => 'using db:',
+    'using_db' => 'utilisant la db:',
     'maxplayers' => 'Joueurs max pour cette session',
   );
   return $lang_index;
@@ -216,7 +216,7 @@ function lang_header()
     'main' => 'Portail',
     'tools' => 'Outils',
     'db' => 'Base de données',
-    'system' => 'System',
+    'system' => 'Systeme',
     'support' => 'Support',
     'my_acc' => 'Mon compte',
 
@@ -249,7 +249,7 @@ function lang_header()
     'add_motd' => 'Ajouter un message du jour',
     'realm' => 'Royaume',
     'spelld' => 'Sort(s) Désactivé(s)',
-    'message' => 'Send Message',
+    'message' => 'envoyer le Message',
     'ssh_line' => 'Commandes SSH',
 
     'forums' => 'Forums',
@@ -394,7 +394,7 @@ function lang_char()
     'melee_crit' => 'Critique de mélée',
     'spell_crit' => 'Critique',
     'ranged_crit' => 'Critique à distance',
-    'spell_haste' => 'Haste Rating',
+    'spell_haste' => 'Score de Hate',
     'days' => 'Jours',
     'hours' => 'Heures',
     'min' => 'Min.',
@@ -415,7 +415,7 @@ function lang_char()
     'quest_id' => 'Quest ID',
     'quest_level' => 'lvl',
     'quest_title' => 'Titre de Quête',
-    'rewarded' => 'Rewarded',
+    'rewarded' => 'Récompensée',
     'classskills' => 'Compétences de classe',
     'professions' => 'Professions',
     'secondaryskills' => 'Compétences secondaires',
@@ -430,10 +430,10 @@ function lang_char()
     'showhide' => 'Montrer/Cacher',
     // ----char_talents.php----
     'talent_rate' => 'Talent Rate',
-    'talent_points' => 'Talent Points',
-    'talent_points_used' => 'Talent Points Used',
-    'talent_points_shown' => 'Talent Points Shown',
-    'talent_points_left' => 'Talent Points Left',
+    'talent_points' => 'Points de Talent',
+    'talent_points_used' => 'Points de Talent utilisés',
+    'talent_points_shown' => 'Points de Talent affichés',
+    'talent_points_left' => 'Points de Talent restants',
     // --- skill_rank_array ---
     'apprentice' => 'Apprenti',
     'journeyman' => 'Compagnon',
@@ -473,12 +473,12 @@ function lang_char()
     'max_acc' => 'Le compte vers lequel vous essayez de déplacer ce personnage a atteint le nombre de personnages maximum autorisé.',
     'no_tp_location' => 'Aucun emplacement de téléport trouvé avec ce nom.',
     // ---- char_achieve.php ----
-    'show' => 'Show',
-    'all' => 'All',
-    'earned' => 'Earned',
-    'incomplete' => 'Incomplete',
-    'summary' => 'Summary',
-    'recent' => 'Recent',
+    'show' => 'Afficher',
+    'all' => 'Tous',
+    'earned' => 'Gagnés',
+    'incomplete' => 'Incomplets',
+    'summary' => 'Sommaire',
+    'recent' => 'Récent(s)',
     'achievements' => 'Hauts Faits',
     'achievement_title' => 'Haut Fait',
     'achievement_points' => 'Points',
@@ -794,7 +794,7 @@ function lang_mail()
 {
   $lang_mail = array
   (
-    'mail_type' => 'Mail Type',
+    'mail_type' => 'Type de Mail',
     'email' => 'Email',
     'ingame_mail' => 'Mail dans le jeu',
     'send' => 'Envoyer',
@@ -820,7 +820,7 @@ function lang_mail()
     'option_unavailable' => 'Vous ne pouvez pas utiliser cette option avec la configuration actuelle.',
     'use_currect_option' => 'Certaines options de l\'envoi de groupe ne peuvent être utilisées que lors d\'envoi dans le jeu ou par mail mais ps les deux en même temps.',
     'send_mail' => 'Envoyer l\'email',
-    'result' => 'InGame Mail Result',
+    'result' => 'Résultat du Mail dans le jeu',
   );
   return $lang_mail;
 }
@@ -923,7 +923,7 @@ function lang_realm()
     'conf_from_file' => '** Ce monde ne semble pas avoir une configuration correcte dans le fichier config.php.<br />Soyez certain de le configurer correctement avant d\'utiliser.',
     'offline' => 'Hors Ligne',
     'status' => 'Status',
-    'notconfigured' => 'Not Configured yet',
+    'notconfigured' => 'Pas encore configuré',
   );
   return $lang_realm;
 }
@@ -1990,45 +1990,45 @@ function lang_top()
   $lang_top = array
   (
   'top100' => 'Top 100',
-  'general' => 'General',
+  'general' => 'Général',
   'stats' => 'Stats',
-  'defense' => 'Defense',
-  'melee' => 'Melee',
-  'ranged' => 'Ranged',
-  'resist' => 'Resist',
-  'pvp' => 'PVP',
-  'health' => 'Health',
+  'defense' => 'Défense',
+  'melee' => 'Melée',
+  'ranged' => 'A distance',
+  'resist' => 'Resistance',
+  'pvp' => 'JCJ',
+  'health' => 'Vie',
   'mana' => 'Mana',
-  'str' => 'Str',
-  'agi' => 'Agi',
-  'sta' => 'Sta',
-  'intel' => 'Int',
-  'spi' => 'Spi',
-  'armor' => 'Armor',
-  'block' => 'Block',
-  'dodge' => 'Dodge',
-  'parry' => 'Parry',
-  'resilience' => 'Resilience',
-  'ap' => 'Attack Power',
+  'str' => 'Force',
+  'agi' => 'Agilité',
+  'sta' => 'Endurance',
+  'intel' => 'Intelligence',
+  'spi' => 'Esprit',
+  'armor' => 'Armure',
+  'block' => 'Blocage',
+  'dodge' => 'Esquive',
+  'parry' => 'Parade',
+  'resilience' => 'Résilience',
+  'ap' => 'Puissance d\'attaque',
   'att_time' => 'Att Time',
   'min_dmg' => 'Min Dmg',
   'max_dmg' => 'Max Dmg',
   'expertise' => 'Main Exp',
   'off_expertise' => 'Off Exp',
-  'crit' => 'Crit',
-  'hit' => 'Hit',
-  'holy' => 'Holy',
-  'fire' => 'Fire',
+  'crit' => 'Critique',
+  'hit' => 'Toucher',
+  'holy' => 'Sacré',
+  'fire' => 'Feu',
   'nature' => 'Nature',
-  'frost' => 'Frost',
-  'shadow' => 'Shadow',
+  'frost' => 'Givre',
+  'shadow' => 'Ombre',
   'arcane' => 'Arcane',
   'name' => 'Nom',
   'race' => 'Race',
   'class' => 'Classe',
   'level' => 'Level',
   'guild' => 'Guilde',
-  'money' => 'Argent',
+  'money' => 'Fortune',
   'rank' => 'Rang',
   'honor_points' => 'Honneur',
   'kills' => 'Kills',
@@ -2082,10 +2082,10 @@ function lang_telnet()
 {
   $lang_telnet = array
   (
-    'unable' => 'Connect failed: Unable to open network connection, please check your config',
-    'unknown_host' => 'Connect failed: Unknown host, please check your config',
-    'login_failed' => 'Connect failed: Login failed, please check your config',
-    'not_supported' => 'Connect failed: Your PHP version does not support PHP Telnet, please check your config',
+    'unable' => 'Connection échouée: Impossible d\'établir la connection, vérifiez votre configuration',
+    'unknown_host' => 'Connection échouée: Hôte inconnu, vérifiez votre configuration',
+    'login_failed' => 'Connection échouée: Echec du Login, vérifiez votre configuration',
+    'not_supported' => 'Connection échouée: Votre version de PHP ne supporte pas le Telnet PHP, vérifiez votre configuration',
   );
   return $lang_telnet;
 }
@@ -2096,17 +2096,17 @@ function lang_message()
 {
   $lang_message  = array
   (
-    'main' => 'Send System Message/Global Notification',
-    'announcement' => 'Announcement',
+    'main' => 'Envoyez un message système / une Notification Globale',
+    'announcement' => 'Annonce',
     'notification' => 'Notification',
-    'both' => 'Both',
-    'send' => 'Send',
-    'empty_fields' => 'Empty Fields',
-    'message_too_long' => 'Message too long',
-    'system_message' => 'System Message',
-    'global_notify' => 'Global Notify',
-    'sent' => 'sent',
-    'message_result' => 'Message Result',
+    'both' => 'Les Deux',
+    'send' => 'Envoyer',
+    'empty_fields' => 'champs vides',
+    'message_too_long' => 'Message trop long',
+    'system_message' => 'Message Systeme',
+    'global_notify' => 'Notification Globale',
+    'sent' => 'Envoyé',
+    'message_result' => 'Résultat du Message',
   );
   return $lang_message;
 }
