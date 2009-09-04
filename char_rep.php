@@ -69,7 +69,7 @@ function char_rep(&$sqlr, &$sqlc)
               <div id="tab">
                 <ul>
                   <li><a href="char.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['char_sheet'].'</a></li>';
-      if( char_get_class_name($char['race']) == 'Hunter' )
+      if( char_get_class_name($char['class']) == 'Hunter' )
         $output .= '
                   <li><a href="char_pets.php?id='.$id.'&amp;realm='.$realmid.'">'.$lang_char['pets'].'</a></li>';
       $output .= '

@@ -8,13 +8,13 @@
 // Do not edit, move or delete this file.
 //
 // Option 1 (recommended)
-//  create blank config.php file,
-//  copy only the settings you want to change into config.php
-//  make changes there.
+//  Copy config.user.php as config.php.
+//  Copy only the settings you want to change into config.php
+//  Make changes there.
 //
 // Option 2
-//  copy this file as config.php,
-//  make changes there.
+//  Copy this file as config.php,
+//  Make changes there.
 
 
 //#############################################################################
