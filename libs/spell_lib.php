@@ -35,9 +35,19 @@ function spell_get_icon($auraid, &$sqlm)
 
       if ($aura)
       {
-        if(file_exists(''.$item_icons.'/'.$aura.'.jpg'))
+        if (file_exists(''.$item_icons.'/'.$aura.'.jpg'))
         {
-          return ''.$item_icons.'/'.$aura.'.jpg';
+          if (filesize(''.$item_icons.'/'.$aura.'.jpg') > 349)
+          {
+            return ''.$item_icons.'/'.$aura.'.jpg';
+          }
+          else
+          {
+            $sqlm->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+            if (file_exists(''.$item_icons.'/'.$aura.'.jpg'))
+              unlink(''.$item_icons.'/'.$aura.'.jpg');
+            $aura = '';
+          }
         }
         else
           $aura = '';
@@ -67,7 +77,7 @@ function spell_get_icon($auraid, &$sqlm)
     if ($aura == '')
     {
       //get the icon name
-      $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
+      $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.5);
       if ($fp);
       else
         return 'img/INV/INV_blank_32.gif';
@@ -94,8 +104,17 @@ function spell_get_icon($auraid, &$sqlm)
 
     if (file_exists(''.$item_icons.'/'.$aura.'.jpg'))
     {
-      $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$aura.'\')');
-      return ''.$item_icons.'/'.$aura.'.jpg';
+      if (filesize(''.$item_icons.'/'.$aura.'.jpg') > 349)
+      {
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$aura.'\')');
+        return ''.$item_icons.'/'.$aura.'.jpg';
+      }
+      else
+      {
+        $sqlm->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+        if (file_exists(''.$item_icons.'/'.$aura.'.jpg'))
+          unlink(''.$item_icons.'/'.$aura.'.jpg');
+      }
     }
 
     //get the icon itself
@@ -104,7 +123,7 @@ function spell_get_icon($auraid, &$sqlm)
       $proxy = 'static.wowhead.com';
       $port = 80;
     }
-    $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
+    $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.5);
     if ($fp);
     else
       return 'img/INV/INV_blank_32.gif';
@@ -126,8 +145,17 @@ function spell_get_icon($auraid, &$sqlm)
 
     if (file_exists(''.$item_icons.'/'.$aura.'.jpg'))
     {
-      $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$aura.'\')');
-      return ''.$item_icons.'/'.$aura.'.jpg';
+      if (filesize(''.$item_icons.'/'.$aura.'.jpg') > 349)
+      {
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$aura.'\')');
+        return ''.$item_icons.'/'.$aura.'.jpg';
+      }
+      else
+      {
+        $sqlm->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+        if (file_exists(''.$item_icons.'/'.$aura.'.jpg'))
+          unlink(''.$item_icons.'/'.$aura.'.jpg');
+      }
     }
 
     $img_file = fopen(''.$item_icons.'/'.$aura.'.jpg', 'wb');
@@ -138,8 +166,17 @@ function spell_get_icon($auraid, &$sqlm)
 
     if (file_exists(''.$item_icons.'/'.$aura.'.jpg'))
     {
-      $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$aura.'\')');
-      return ''.$item_icons.'/'.$aura.'.jpg';
+      if (filesize(''.$item_icons.'/'.$aura.'.jpg') > 349)
+      {
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$aura.'\')');
+        return ''.$item_icons.'/'.$aura.'.jpg';
+      }
+      else
+      {
+        $sqlm->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+        if (file_exists(''.$item_icons.'/'.$aura.'.jpg'))
+          unlink(''.$item_icons.'/'.$aura.'.jpg');
+      }
     }
     else
       return 'img/INV/INV_blank_32.gif';

@@ -119,9 +119,19 @@ function achieve_get_icon($achieveid, &$sqlm)
 
       if ($achieve)
       {
-        if(file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
+        if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
         {
-          return ''.$item_icons.'/'.$achieve.'.jpg';
+          if (filesize(''.$item_icons.'/'.$achieve.'.jpg') > 349)
+          {
+            return ''.$item_icons.'/'.$achieve.'.jpg';
+          }
+          else
+          {
+            $sqlm->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+            if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
+              unlink(''.$item_icons.'/'.$achieve.'.jpg');
+            $achieve = '';
+          }
         }
         else
           $achieve = '';
@@ -151,7 +161,7 @@ function achieve_get_icon($achieveid, &$sqlm)
     if ($achieve == '')
     {
       //get the icon name
-      $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
+      $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.5);
       if ($fp);
       else
         return 'img/INV/INV_blank_32.gif';
@@ -178,8 +188,17 @@ function achieve_get_icon($achieveid, &$sqlm)
 
     if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
     {
-      $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
-      return ''.$item_icons.'/'.$achieve.'.jpg';
+      if (filesize(''.$item_icons.'/'.$achieve.'.jpg') > 349)
+      {
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
+        return ''.$item_icons.'/'.$achieve.'.jpg';
+      }
+      else
+      {
+        $sqlm->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+        if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
+          unlink(''.$item_icons.'/'.$achieve.'.jpg');
+      }
     }
 
     //get the icon itself
@@ -188,7 +207,7 @@ function achieve_get_icon($achieveid, &$sqlm)
       $proxy = 'static.wowhead.com';
       $port = 80;
     }
-    $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
+    $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.5);
     if ($fp);
     else
       return 'img/INV/INV_blank_32.gif';
@@ -210,8 +229,17 @@ function achieve_get_icon($achieveid, &$sqlm)
 
     if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
     {
-      $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
-      return ''.$item_icons.'/'.$achieve.'.jpg';
+      if (filesize(''.$item_icons.'/'.$achieve.'.jpg') > 349)
+      {
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
+        return ''.$item_icons.'/'.$achieve.'.jpg';
+      }
+      else
+      {
+        $sqlm->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+        if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
+          unlink(''.$item_icons.'/'.$achieve.'.jpg');
+      }
     }
 
     $img_file = fopen(''.$item_icons.'/'.$achieve.'.jpg', 'wb');
@@ -222,8 +250,17 @@ function achieve_get_icon($achieveid, &$sqlm)
 
     if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
     {
-      $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
-      return ''.$item_icons.'/'.$achieve.'.jpg';
+      if (filesize(''.$item_icons.'/'.$achieve.'.jpg') > 349)
+      {
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
+        return ''.$item_icons.'/'.$achieve.'.jpg';
+      }
+      else
+      {
+        $sqlm->query('DELETE FROM dbc_spellicon WHERE id = '.$displayid.'');
+        if (file_exists(''.$item_icons.'/'.$achieve.'.jpg'))
+          unlink(''.$item_icons.'/'.$achieve.'.jpg');
+      }
     }
     else
       return 'img/INV/INV_blank_32.gif';

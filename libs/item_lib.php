@@ -104,13 +104,25 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
 
       if ($item)
       {
-        if(file_exists("$item_icons/$item.jpg"))
+        if (file_exists(''.$item_icons.'/'.$item.'.jpg'))
         {
-          return "$item_icons/$item.jpg";
+          if (filesize(''.$item_icons.'/'.$item.'.jpg') > 349)
+          {
+            return ''.$item_icons.'/'.$item.'.jpg';
+          }
+          else
+          {
+            $sqlm->query('DELETE FROM dbc_itemdisplayinfo WHERE id = '.$displayid.'');
+            if (file_exists(''.$item_icons.'/'.$item.'.jpg'))
+              unlink(''.$item_icons.'/'.$item.'.jpg');
+            $item = '';
+          }
         }
+        else
+          $item = '';
       }
       else
-        $item = '';
+       $item = '';
     }
     else
       $item = '';
@@ -134,7 +146,7 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
     if ($item == '')
     {
       //get the icon name
-      $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
+      $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.5);
       if (!$fp)
         return "img/INV/INV_blank_32.gif";
       $out = "GET /$xmlfilepath$itemid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
@@ -158,10 +170,19 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
       $item = $icon_name;
     }
 
-    if (file_exists("$item_icons/$item.jpg"))
+    if (file_exists(''.$item_icons.'/'.$item.'.jpg'))
     {
-      $sqlm->query("REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
-      return "$item_icons/$item.jpg";
+      if (filesize(''.$item_icons.'/'.$item.'.jpg') > 349)
+      {
+        $sqlm->query('REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES (\''.$displayid.'\', \''.$item.'\')');
+        return ''.$item_icons.'/'.$item.'.jpg';
+      }
+      else
+      {
+        $sqlm->query('DELETE FROM dbc_itemdisplayinfo WHERE id = '.$displayid.'');
+        if (file_exists(''.$item_icons.'/'.$item.'.jpg'))
+          unlink(''.$item_icons.'/'.$item.'.jpg');
+      }
     }
 
     //get the icon itself
@@ -170,7 +191,7 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
       $proxy = "static.wowhead.com";
       $port = 80;
     }
-    $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.4);
+    $fp = @fsockopen($proxy, $port, $errno, $errstr, 0.5);
     if (!$fp)
       return "img/INV/INV_blank_32.gif";
     $iconfilename = strtolower($item);
@@ -189,10 +210,19 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
         break;
     }
 
-    if (file_exists("$item_icons/$item.jpg"))
+    if (file_exists(''.$item_icons.'/'.$item.'.jpg'))
     {
-      $sqlm->query("REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
-      return "$item_icons/$item.jpg";
+      if (filesize(''.$item_icons.'/'.$item.'.jpg') > 349)
+      {
+        $sqlm->query('REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES (\''.$displayid.'\', \''.$item.'\')');
+        return ''.$item_icons.'/'.$item.'.jpg';
+      }
+      else
+      {
+        $sqlm->query('DELETE FROM dbc_itemdisplayinfo WHERE id = '.$displayid.'');
+        if (file_exists(''.$item_icons.'/'.$item.'.jpg'))
+          unlink(''.$item_icons.'/'.$item.'.jpg');
+      }
     }
 
     $img_file = fopen("$item_icons/$item.jpg", 'wb');
@@ -201,10 +231,19 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
     fclose($fp);
     fclose($img_file);
 
-    if (file_exists("$item_icons/$item.jpg"))
+    if (file_exists(''.$item_icons.'/'.$item.'.jpg'))
     {
-      $sqlm->query("REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES ('$displayid','$item')");
-      return "$item_icons/$item.jpg";
+      if (filesize(''.$item_icons.'/'.$item.'.jpg') > 349)
+      {
+        $sqlm->query('REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES (\''.$displayid.'\', \''.$item.'\')');
+        return ''.$item_icons.'/'.$item.'.jpg';
+      }
+      else
+      {
+        $sqlm->query('DELETE FROM dbc_itemdisplayinfo WHERE id = '.$displayid.'');
+        if (file_exists(''.$item_icons.'/'.$item.'.jpg'))
+          unlink(''.$item_icons.'/'.$item.'.jpg');
+      }
     }
     else
       return "img/INV/INV_blank_32.gif";

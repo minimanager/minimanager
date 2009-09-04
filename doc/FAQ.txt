@@ -1,0 +1,85 @@
+F.A.Q
+
+First Make sure you have the latest revision of minimanager from https://mmfpm.svn.sourceforge.net/svnroot/mmfpm
+
+
+Q - How to install miniManager?
+A - Follow instructions in /doc/installation.txt
+
+
+Q - Error - Connection to database is not established ! - What am i doing wrong?
+A - 1 - Use 127.0.0.1 or localhost if web server is on same PC as MySQL
+    2 - Use LAN IP if web server is on same network as MySQL
+    3 - Just Use WAN IP if you need to call MySQL over Internet
+
+
+Q - I get error: Error - Can't open the database ! ('mmfpm') - what is the problem?
+A - You didnt create mmfpm database.
+
+
+Q - I get another error - Table 'mmfpm.dbc_*' doesn't exist - whats the problem now?
+A - You didnt import sql files from /SQL/ to mmfpm.
+
+
+Q - Another error - Table 'mmfpm.ip2nationcountries' doesn't exist - whats up?
+A - if you have on your config
+     $showcountryflag =  true;
+     you need to import to mmfpm database /SQL/ip2nation.sql
+
+
+Q - New Error - Table 'mmfpm.forum_posts' doesn't exist - whats wrong?
+A - To use built minimanager forum, you need to import to mmfpm database /SQL/install_forum.sql
+
+
+Q - I have - $enable_captcha = true; Why it doesnt show when i try to register?
+A - It is required that you have instaled GD & FreeType Library and extension is enabled in php configuration.
+
+
+Q - All icons are displayed as ? in any page, how do i make it display real icons?
+A - 1 - set - $get_icons_from_web = true; - in your config
+    2 - Make sure the img/icons directory is set to R/W (chmod 777) permission for webserver
+    3 - If you still have problems, set proxy on /script/config.php
+         $proxy_cfg['addr'] = '';
+         $proxy_cfg['port'] = 80;
+         $proxy_cfg['user'] = '';
+         $proxy_cfg['pass'] = '';
+    4 - Alternatively you can download and extract pre-cached icons (usually posted in our forums), extracting them into /img/icons directory.
+
+
+Q - I cant send ingame mail, how can i fix that?
+A - 1 - You need to set on /script/config.php
+         $server[1]['telnet_port'] =  3443;  // Telnet port - Telnet settins are needed for sending InGame Mail.
+         $server[1]['telnet_user'] = 'USER'; // Telnet username, must be all CAPS
+         $server[1]['telnet_pass'] = 'pass'; // Telnet password
+    2 - you need to enable and config RA in your mangos/trinity config
+         Ra.Enabled = 1
+         Ra.IP = 0.0.0.0
+         Ra.Port = 3443
+         Ra.MinLevel = 3
+         Ra.Secure = 1
+
+
+Q - *.php display just blank page, whats the matter?
+A - 1 - Set debug to higher than 0 on your /script/config.php and you will see error
+         $debug = 0; // 0 - no debug, only fatal errors.
+                     // 1 - show total queries, mem usage, and only fatal errors.
+                     // 2 - show total queries, mem usage, and all errors.
+                     // 3 - show total queries, mem usage, all errors, and list of all global vars.
+                     // 4 - show total queries, mem usage, all errors, list of all global vars, and values of all global vars.
+    2 - go to example: http://adress_to_minimanager/bugreport.php
+    3 - collect all info from 1 and 2 and make a detailed post on our forums.
+
+
+Q - I use TrinityCore and some pages like ticket does not work properly, what should i do?
+A - Set in your /script/config.php
+     $server_type =  1; // 0=MaNGOS, 1=Trinity
+
+
+Q - How do i setup more than one realm?
+A - Follow sample from /script/config.dist.php and duplicate configs
+     but remember $server[1] is to realm ID 1 - set on realmd DB, realmlist table
+     so just check realm ID and set $server[2], $server[5], etc
+
+
+Last Updated
+9/3/2009
