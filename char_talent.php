@@ -57,7 +57,7 @@ function char_talent(&$sqlr, &$sqlc)
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name))
     {
-      $result = $sqlc->query('SELECT spell FROM character_spell WHERE guid = '.$id.' ORDER BY spell DESC');
+      $result = $sqlc->query('SELECT spell FROM character_spell WHERE guid = '.$id.' and active = 1 and disabled = 0 ORDER BY spell DESC');
       $output .= '
           <center>
               <div id="tab">
@@ -92,55 +92,55 @@ function char_talent(&$sqlr, &$sqlc)
 
         while (($talent = $sqlc->fetch_assoc($result)) && ($l < $talent_points_used))
         {
-          if ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank5 = '.$talent['spell'].' LIMIT 1')))
+          if ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn, dependsOnRank from dbc_talent where rank5 = '.$talent['spell'].' LIMIT 1')))
           {
-            if (empty($tabs[$tab['tab']][$tab['row']][$tab['col']]))
-            {
-              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'5');
+              if (isset($tabs[$tab['tab']][$tab['row']][$tab['col']]))
+              $l -=$tabs[$tab['tab']][$tab['row']][$tab['col']][1];
+              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'], '5', '5');
               $l += 5;
+
               if ($tab['dependsOn'])
                 talent_dependencies($tabs, $tab, $l, $sqlm);
-            }
           }
-          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank4 = '.$talent['spell'].' LIMIT 1')))
+          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn, dependsOnRank, rank5 from dbc_talent where rank4 = '.$talent['spell'].' LIMIT 1')))
           {
-            if (empty($tabs[$tab['tab']][$tab['row']][$tab['col']]))
-            {
-              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'4');
+              if (isset($tabs[$tab['tab']][$tab['row']][$tab['col']]))
+              $l -=$tabs[$tab['tab']][$tab['row']][$tab['col']][1];
+
+              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'], '4', ($tab['rank5'] ? '2' : '5'));
               $l += 4;
               if ($tab['dependsOn'])
                 talent_dependencies($tabs, $tab, $l, $sqlm);
-            }
           }
-          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank3 = '.$talent['spell'].' LIMIT 1')))
+          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn, dependsOnRank, rank4 from dbc_talent where rank3 = '.$talent['spell'].' LIMIT 1')))
           {
-            if (empty($tabs[$tab['tab']][$tab['row']][$tab['col']]))
-              {
-              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'3');
+              if (isset($tabs[$tab['tab']][$tab['row']][$tab['col']]))
+              $l -=$tabs[$tab['tab']][$tab['row']][$tab['col']][1];
+
+              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'3', ($tab['rank4'] ? '2' : '5'));
               $l += 3;
               if ($tab['dependsOn'])
                 talent_dependencies($tabs, $tab, $l, $sqlm);
-            }
           }
-          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank2 = '.$talent['spell'].' LIMIT 1')))
+          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn, dependsOnRank, rank3 from dbc_talent where rank2 = '.$talent['spell'].' LIMIT 1')))
           {
-            if (empty($tabs[$tab['tab']][$tab['row']][$tab['col']]))
-            {
-              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'2');
+              if (isset($tabs[$tab['tab']][$tab['row']][$tab['col']]))
+              $l -=$tabs[$tab['tab']][$tab['row']][$tab['col']][1];
+
+              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'2', ($tab['rank3'] ? '2' : '5'));
               $l += 2;
               if ($tab['dependsOn'])
                 talent_dependencies($tabs, $tab, $l, $sqlm);
-            }
           }
-          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn from dbc_talent where rank1 = '.$talent['spell'].' LIMIT 1')))
+          elseif ($tab = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, dependsOn, dependsOnRank, rank2 from dbc_talent where rank1 = '.$talent['spell'].' LIMIT 1')))
           {
-            if (empty($tabs[$tab['tab']][$tab['row']][$tab['col']]))
-            {
-              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'1');
+              if (isset($tabs[$tab['tab']][$tab['row']][$tab['col']]))
+              $l -=$tabs[$tab['tab']][$tab['row']][$tab['col']][1];
+
+              $tabs[$tab['tab']][$tab['row']][$tab['col']] = array($talent['spell'],'1', ($tab['rank2'] ? '2' : '5'));
               $l += 1;
               if ($tab['dependsOn'])
                 talent_dependencies($tabs, $tab, $l, $sqlm);
-            }
           }
         }
         unset($tab);
@@ -165,7 +165,7 @@ function char_talent(&$sqlr, &$sqlc)
                 $output .= '
                         <td valign="bottom" align="center" style="border-top-width: 0px;border-bottom-width: 0px;">
                           <a href="'.$spell_datasite.$data[$i][$j][0].'" target="_blank">
-                            <img src="'.spell_get_icon($data[$i][$j][0], $sqlm).'" width="36" height="36" class="icon_border_0" alt="" />
+                            <img src="'.spell_get_icon($data[$i][$j][0], $sqlm).'" width="36" height="36" class="icon_border_'.$data[$i][$j][2].'" alt="" />
                           </a>
                           <div style="width:0px;margin:-14px 0px 0px 30px;font-size:14px;color:black">'.$data[$i][$j][1].'</div>
                           <div style="width:0px;margin:-14px 0px 0px 29px;font-size:14px;color:white">'.$data[$i][$j][1].'</div>
@@ -302,52 +302,12 @@ function char_talent(&$sqlr, &$sqlc)
 
 function talent_dependencies(&$tabs, &$tab, &$i, &$sqlm)
 {
-  if ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank5, dependsOn from dbc_talent where id = '.$tab['dependsOn'].' and rank5 != 0 LIMIT 1')))
+  if ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank'.($tab['dependsOnRank'] + 1).', dependsOn, dependsOnRank'.(($tab['dependsOnRank'] < 4) ? ', rank'.($tab['dependsOnRank'] + 2).'' : '').' from dbc_talent where id = '.$tab['dependsOn'].' and rank'.($tab['dependsOnRank'] + 1).' != 0 LIMIT 1')))
   {
     if(empty($tabs[$dep['tab']][$dep['row']][$dep['col']]))
     {
-      $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank5'],'5');
-      $i += 5;
-      if ($dep['dependsOn'])
-        talent_dependencies($tabs, $dep, $i, $sqlm);
-    }
-  }
-  elseif ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank4, dependsOn from dbc_talent where id = '.$tab['dependsOn'].' and rank4 != 0 LIMIT 1')))
-  {
-    if(empty($tabs[$dep['tab']][$dep['row']][$dep['col']]))
-    {
-      $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank4'],'4');
-      $i += 4;
-      if ($dep['dependsOn'])
-        talent_dependencies($tabs, $dep, $i, $sqlm);
-    }
-  }
-  elseif ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank3, dependsOn from dbc_talent where id = '.$tab['dependsOn'].' and rank3 != 0 LIMIT 1')))
-  {
-    if(empty($tabs[$dep['tab']][$dep['row']][$dep['col']]))
-    {
-      $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank3'],'3');
-      $i += 3;
-      if ($dep['dependsOn'])
-        talent_dependencies($tabs, $dep, $i, $sqlm);
-    }
-  }
-  elseif ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank2, dependsOn from dbc_talent where id = '.$tab['dependsOn'].' and rank2 != 0 LIMIT 1')))
-  {
-    if(empty($tabs[$dep['tab']][$dep['row']][$dep['col']]))
-    {
-      $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank2'],'2');
-      $i += 2;
-      if ($dep['dependsOn'])
-        talent_dependencies($tabs, $dep, $i, $sqlm);
-    }
-  }
-  elseif ($dep = $sqlm->fetch_assoc($sqlm->query('SELECT tab, row, col, rank1, dependsOn from dbc_talent where id = '.$tab['dependsOn'].' and rank1 != 0 LIMIT 1')))
-  {
-    if(empty($tabs[$dep['tab']][$dep['row']][$dep['col']]))
-    {
-      $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank1'],'1');
-      $i += 1;
+      $tabs[$dep['tab']][$dep['row']][$dep['col']] = array($dep['rank'.($tab['dependsOnRank'] + 1).''], ''.($tab['dependsOnRank'] + 1).'', (($tab['dependsOnRank'] < 4) ? ($dep['rank'.($tab['dependsOnRank'] + 2).''] ? '2' : '5') : '5'));
+      $i += ($tab['dependsOnRank'] + 1);
       if ($dep['dependsOn'])
         talent_dependencies($tabs, $dep, $i, $sqlm);
     }
