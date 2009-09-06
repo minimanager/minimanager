@@ -5,53 +5,6 @@ require_once 'header.php';
 require_once 'libs/char_lib.php';
 valid_login($action_permission['read']);
 
-//########################################################################################################################
-//  COUNT TIME FOR GUILDS
-//########################################################################################################################
-function readable_time($timestamp, $num_times = 2)
-{
-    //this returns human readable time (array in seconds)
-    $times = array(
-        31536000 => ' Year',
-        2592000 => ' Month',
-        604800 => ' Week',
-        86400 => ' Day',
-        3600 => ' Hour',
-        60 => ' Minute',
-        1 => ' Second'
-        );
-    $now = time()+date("Z");
-        $secs = $now - $timestamp;
-        //Fix so that something is always displayed
-        if ($secs == 0) {
-               $secs = 1;
-        }
-    $count = 0;
-    $time = '';
-    foreach ($times AS $key => $value)
-    {
-        if ($secs >= $key)
-        {
-            //time found
-            $s = ' ';
-            $time .= floor($secs / $key);
-
-            if ((floor($secs / $key) != 1))
-                $s = 's';
-            $time .= '' . $value . $s;
-            $count++;
-            $secs = $secs % $key;
-           
-            if ($count > $num_times - 1 || $secs == 0)
-                break;
-            else
-                $time .= ', ';
-        }
-    }
-    return $time;
-} 
-
-
 //#############################################################################
 // BROWSE GUILDS
 //#############################################################################
@@ -118,7 +71,6 @@ function browse_guilds(&$sqlr, &$sqlc)
     {
       $result = $sqlr->query("SELECT gmlevel FROM account WHERE id ='$data[9]'");
       $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
-      $time = readable_time($data[8]);
       $output .= "
               <tr>
                 <td>$data[0]</td>
@@ -128,7 +80,7 @@ function browse_guilds(&$sqlr, &$sqlc)
                 <td><img src=\"img/".($data[4]==0 ? "alliance" : "horde")."_small.gif\" alt=\"\" /></td>
                 <td>$data[5]/$data[6]</td>
                 <td>".htmlentities($data[7])." ...</td>
-                <td class=\"small\">$time</td>
+                <td class=\"small\">".date('o-m-d', $data[8])."</td>
               </tr>";
     }
     unset($data);
@@ -246,7 +198,6 @@ function browse_guilds(&$sqlr, &$sqlc)
   {
     $result = $sqlr->query("SELECT gmlevel FROM account WHERE id ='$data[7]'");
     $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
-    $time = readable_time($data[6]);
     $output .= "
                 <tr>
                   <td>$data[0]</td>";
@@ -255,7 +206,7 @@ function browse_guilds(&$sqlr, &$sqlc)
     $output .= "
                   <td><img src=\"img/".($data[4]==0 ? "alliance" : "horde")."_small.gif\" alt=\"\" /></td>
                   <td>$data[5]</td>
-                  <td class=\"small\">".htmlentities($time)."</td>
+                  <td class=\"small\">".date('o-m-d', $data[6])."</td>
                 </tr>";
   }
   $output .= "
@@ -344,8 +295,6 @@ function view_guild()
     FROM guild WHERE guildid = '$guild_id'");
   $guild_data = $sqlc->fetch_row($query);
 
-  $time = readable_time($guild_data[4]);
-
   $output .= "
         <script type=\"text/javascript\">
           answerbox.btn_ok='{$lang_global['yes']}';
@@ -359,7 +308,7 @@ function view_guild()
                 <td>
                   <table class=\"lined\">
                     <tr>
-                      <td width=\"25%\"><b>{$lang_guild['create_date']}:</b><br />$time</td>
+                      <td width=\"25%\"><b>{$lang_guild['create_date']}:</b><br />".date('o-m-d', $guild_data[4])."</td>
                       <td width=\"50%\" class=\"bold\">$guild_data[1]</td>
                       <td width=\"25%\"><b>{$lang_guild['tot_m_online']}:</b><br />$guild_data[6] / $guild_data[5]</td>
                     </tr>";
