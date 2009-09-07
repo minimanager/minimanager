@@ -1108,7 +1108,7 @@ function doedit_user()
       $sqlr->query("INSERT INTO account_banned (id, bandate, unbandate, bannedby, banreason, active)
                  VALUES ($id, ".time().",".(time()+(365*24*3600)).",'$user_name','$banreason', 1)");
   }
-  $sqlr->query("UPDATE account SET email='$mail', $user_pass_change failed_logins='$failed',locked='$locked',gmlevel='$gmlevel',expansion='$expansion' WHERE id=$id");
+  $sqlr->query("UPDATE account SET email='$mail', $user_pass_change v=0,s=0,failed_logins='$failed',locked='$locked',gmlevel='$gmlevel',expansion='$expansion' WHERE id=$id");
   if (doupdate_referral($referredby, $id) || $sqlr->affected_rows())
     redirect("user.php?action=edit_user&error=13&id=$id");
   else
