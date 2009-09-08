@@ -286,7 +286,7 @@ function doedit_user(&$sqlr, &$sqlc)
   else
     redirect('edit.php?error=2');
 
-  $sqlr->query('UPDATE account SET email = \''.$new_mail.'\', '.$new_pass.' expansion = \''.$new_expansion.'\' WHERE username = \''.$user_name.'\'');
+  $sqlr->query('UPDATE account SET email = \''.$new_mail.'\', '.$new_pass.' v=0, s=0, expansion = \''.$new_expansion.'\' WHERE username = \''.$user_name.'\'');
   if (doupdate_referral($referredby, $sqlr, $sqlc) || $sqlr->affected_rows())
     redirect('edit.php?error=3');
   else
