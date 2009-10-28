@@ -43,7 +43,7 @@ function browse_users(&$sqlr, &$sqlc)
     // injection prevention
     $search_value = $sqlr->quote_smart($_GET['search_value']);
     $search_by = $sqlr->quote_smart($_GET['search_by']);
-    $search_menu = array('username', 'id', 'gmlevel', 'greater_gmlevel', 'email', 'joindate', 'last_ip', 'failed_logins', 'last_login', 'online', 'banned', 'locked', 'expansion');
+    $search_menu = array('username', 'id', 'gmlevel', 'greater_gmlevel', 'email', 'joindate', 'last_ip', 'failed_logins', 'last_login', 'active_realm_id', 'banned', 'locked', 'expansion');
     if (in_array($search_by, $search_menu));
     else $search_by = 'username';
     unset($search_menu);
@@ -52,13 +52,13 @@ function browse_users(&$sqlr, &$sqlc)
     // developer note: 'if else' is always faster then 'switch case'
     if ($search_by === 'greater_gmlevel')
     {
-      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion
         FROM account WHERE gmlevel > "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
       $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE gmlevel > "%'.$search_value.'%"');
     }
     elseif ($search_by === 'banned')
     {
-      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion
         FROM account WHERE id = 0 ';
       $count_query = 'SELECT count(*) FROM account WHERE id = 0 ';
       $que = $sqlr->query('SELECT id FROM account_banned');
@@ -73,14 +73,14 @@ function browse_users(&$sqlr, &$sqlc)
     }
     elseif ($search_by === 'failed_logins')
     {
-      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion
         FROM account WHERE failed_logins > '.$search_value.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
       $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE failed_logins > '.$search_value.'');
     }
     else
     {
       // default search case
-      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion
         FROM account WHERE '.$search_by.' LIKE "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
       $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE '.$search_by.' LIKE "%'.$search_value.'%"');
     }
@@ -90,7 +90,7 @@ function browse_users(&$sqlr, &$sqlc)
   {
     // get total number of items
     $query_1 = $sqlr->query('SELECT count(*) FROM account');
-    $query = $sqlr->query('SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion
+    $query = $sqlr->query('SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion
       FROM account ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
   }
   // this is for multipage support
@@ -154,7 +154,7 @@ function browse_users(&$sqlr, &$sqlc)
                             <option value="last_ip"'.($search_by === 'last_ip' ? ' selected="selected"' : '').'>'.$lang_user['by_ip'].'</option>
                             <option value="failed_logins"'.($search_by === 'failed_logins' ? ' selected="selected"' : '').'>'.$lang_user['by_failed_loggins'].'</option>
                             <option value="last_login"'.($search_by === 'last_login' ? ' selected="selected"' : '').'>'.$lang_user['by_last_login'].'</option>
-                            <option value="online"'.($search_by === 'online' ? ' selected="selected"' : '').'>'.$lang_user['by_online'].'</option>
+                            <option value="active_realm_id"'.($search_by === 'active_realm_id' ? ' selected="selected"' : '').'>'.$lang_user['by_online'].'</option>
                             <option value="locked"'.($search_by === 'locked' ? ' selected="selected"' : '').'>'.$lang_user['by_locked'].'</option>
                             <option value="banned"'.($search_by === 'banned' ? ' selected="selected"' : '').'>'.$lang_user['by_banned'].'</option>
                           </select>
@@ -201,7 +201,7 @@ function browse_users(&$sqlr, &$sqlc)
                   <th width="1%"><a href="user.php?order_by=failed_logins&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='failed_logins' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['failed_logins'].'</a></th>
                   <th width="1%"><a href="user.php?order_by=locked&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='locked' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['locked'].'</a></th>
                   <th width="1%"><a href="user.php?order_by=last_login&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='last_login' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['last_login'].'</a></th>
-                  <th width="1%"><a href="user.php?order_by=online&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='online' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['online'].'</a></th>';
+                  <th width="1%"><a href="user.php?order_by=active_realm_id&amp;start='.$start.( $search_value && $search_by ? '&amp;search_by='.$search_by.'&amp;search_value='.$search_value.'' : '' ).'&amp;dir='.$dir.'"'.($order_by==='active_realm_id' ? ' class="'.$order_dir.'"' : '').'>'.$lang_user['online'].'</a></th>';
   if ($showcountryflag)
   {
     require_once 'libs/misc_lib.php';
@@ -255,7 +255,7 @@ function browse_users(&$sqlr, &$sqlc)
                   <td>'.(($data['failed_logins']) ? $data['failed_logins'] : '-').'</td>
                   <td>'.(($data['locked']) ? $lang_global['yes_low'] : '-').'</td>
                   <td class="small">'.$data['last_login'].'</td>
-                  <td>'.(($data['online']) ? '<img src="img/up.gif" alt="" />' : '-').'</td>';
+                  <td>'.(($data['active_realm_id']) ? '<img src="img/up.gif" alt="" />' : '-').'</td>';
       if ($showcountryflag)
       {
         $country = misc_get_country_by_ip($data['last_ip'], $sqlm);
@@ -719,7 +719,7 @@ function doadd_new()
   $new_mail = (isset($_GET['new_mail'])) ? $sqlc->quote_smart(trim($_GET['new_mail'])) : NULL;
   $locked = (isset($_GET['new_locked'])) ? $sqlc->quote_smart($_GET['new_locked']) : 0;
   $expansion = (isset($_GET['new_expansion'])) ? $sqlc->quote_smart($_GET['new_expansion']) : 0;
-  $result = $sqlc->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,online,expansion)
+  $result = $sqlc->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion)
     VALUES ('$new_user','$pass',0 ,'$new_mail',now() ,'$last_ip',0, $locked ,NULL, 0, $expansion)");
   if ($result)
     redirect("user.php?error=5");
@@ -746,7 +746,7 @@ function edit_user()
 
   $id = $sqlr->quote_smart($_GET['id']);
 
-  $result = $sqlr->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,online,expansion FROM account WHERE id = '$id'");
+  $result = $sqlr->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion FROM account WHERE id = '$id'");
   $data = $sqlr->fetch_assoc($result);
 
   $refguid = $sqlm->fetch_assoc($sqlm->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '.$data['id'].''));
@@ -961,7 +961,7 @@ function edit_user()
               <tr>
                 <td>'.$lang_user['online'].'</td>';
   $output .= "
-                <td>".(( $data['online'] ) ? $lang_global['yes'] : $lang_global['no'])."</td>
+                <td>".(( $data['active_realm_id'] ) ? $lang_global['yes'] : $lang_global['no'])."</td>
               </tr>";
   $query = $sqlr->query("SELECT SUM(numchars) FROM realmcharacters WHERE acctid = '$id'");
   $tot_chars = $sqlr->result($query, 0);

@@ -194,7 +194,7 @@ function front(&$sqlr, &$sqlc)
         $order_side = (in_array($sqlc->result($result, 0),array(2,5,6,8,10))) ? ' AND race IN (2,5,6,8,10) ' : ' AND race IN (1,3,4,7,11) ';
     }
     if($order_by == 'ip')
-      $result = $sqlr->query('select id, last_ip from account where online = 1 order by last_ip '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
+      $result = $sqlr->query('select id, last_ip from account where active_realm_id  != 1 order by last_ip '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
     else
       $result = $sqlc->query('
       SELECT guid, name, race, class, zone, map, level, account, gender,
