@@ -19,14 +19,14 @@ function del_char($guid, $realm)
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
   $sqlc->connect($characters_db[$realm]['addr'], $characters_db[$realm]['user'], $characters_db[$realm]['pass'], $characters_db[$realm]['name']);
 
-  $query = $sqlc->query('SELECT account, active_realm_id FROM characters WHERE guid = '.$guid.' LIMIT 1');
+  $query = $sqlc->query('SELECT account, online FROM characters WHERE guid = '.$guid.' LIMIT 1');
   $owner_acc_id = $sqlc->result($query, 0, 'account');
 
   $owner_gmlvl = $sqlr->result($sqlr->query('SELECT gmlevel FROM account WHERE id = '.$owner_acc_id.''), 0);
 
   if ( ($user_lvl > $owner_gmlvl) || ($owner_acc_id == $user_id) )
   {
-    if ($sqlc->result($query, 0, 'active_realm_id'));
+    if ($sqlc->result($query, 0, 'online'));
     else
     {
       //Delete pet aura ,spells and cooldowns
