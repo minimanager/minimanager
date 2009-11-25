@@ -69,16 +69,6 @@ function login(&$sqlr)
 		  <script type="text/javascript" src="libs/js/jquery.js"></script>
 		  <script type="text/javascript" src="libs/js/login.js"></script>
             <script type="text/javascript" src="libs/js/sha1.js"></script>
-            <script type="text/javascript">
-              // <![CDATA[
-                function dologin1 ()
-                {
-                  document.form.pass.value = hex_sha1(document.form.user.value.toUpperCase()+":"+document.form.login_pass.value.toUpperCase());
-                  document.form.login_pass.value = "0";
-                  do_submit();
-                }
-              // ]]>
-            </script>
             <fieldset class="half_frame">
 			 <table id="message" style="display:none;" width="300" border="0" cellspacing="0" cellpadding="0">
   <tr>
@@ -86,7 +76,6 @@ function login(&$sqlr)
   </tr>
 </table>
               <legend>'.$lang_login['login'].'</legend>
-              <form method="post" action="login.php?action=dologin" name="form" onsubmit="return dologin()">
                 <input type="hidden" name="pass" value="" maxlength="256" />
                 <table class="hidden">
                   <tr>
@@ -95,10 +84,10 @@ function login(&$sqlr)
                     </td>
                   </tr>
                   <tr align="right">
-                    <td>'.$lang_login['username'].' : <input type="text" id="login_user" name="user" size="24" maxlength="16" /></td>
+                    <td>'.$lang_login['username'].' : <input type="text" id="login_user" name="user" size="24" maxlength="16" onKeyPress="checkEnter(event)" /></td>
                   </tr>
                   <tr align="right">
-                    <td>'.$lang_login['password'].' : <input type="password" id="login_pass" name="login_pass" size="24" maxlength="40" /></td>
+                    <td>'.$lang_login['password'].' : <input type="password" id="login_pass" name="login_pass" size="24" maxlength="40" onKeyPress="checkEnter(event)" /></td>
                   </tr>';
 
   $result = $sqlr->query('SELECT id, name FROM realmlist LIMIT 10');
@@ -153,13 +142,7 @@ function login(&$sqlr)
                     </td>
                   </tr>
                 </table>
-                <script type="text/javascript">
-                  // <![CDATA[
-                    document.form.user.focus();
-                  // ]]>
-                </script>
-              </form>
-              <br />
+               <br />
             </fieldset>
             <br /><br />
           </center>';
