@@ -63,10 +63,15 @@ function login(&$sqlr)
 
   $output .= '
           <center>
+		  
+
+		  
+		  <script type="text/javascript" src="libs/js/jquery.js"></script>
+		  <script type="text/javascript" src="libs/js/login.js"></script>
             <script type="text/javascript" src="libs/js/sha1.js"></script>
             <script type="text/javascript">
               // <![CDATA[
-                function dologin ()
+                function dologin1 ()
                 {
                   document.form.pass.value = hex_sha1(document.form.user.value.toUpperCase()+":"+document.form.login_pass.value.toUpperCase());
                   document.form.login_pass.value = "0";
@@ -75,6 +80,11 @@ function login(&$sqlr)
               // ]]>
             </script>
             <fieldset class="half_frame">
+			 <table id="message" style="display:none;" width="300" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><strong>An error occured</strong> </td>
+  </tr>
+</table>
               <legend>'.$lang_login['login'].'</legend>
               <form method="post" action="login.php?action=dologin" name="form" onsubmit="return dologin()">
                 <input type="hidden" name="pass" value="" maxlength="256" />
@@ -85,10 +95,10 @@ function login(&$sqlr)
                     </td>
                   </tr>
                   <tr align="right">
-                    <td>'.$lang_login['username'].' : <input type="text" name="user" size="24" maxlength="16" /></td>
+                    <td>'.$lang_login['username'].' : <input type="text" id="login_user" name="user" size="24" maxlength="16" /></td>
                   </tr>
                   <tr align="right">
-                    <td>'.$lang_login['password'].' : <input type="password" name="login_pass" size="24" maxlength="40" /></td>
+                    <td>'.$lang_login['password'].' : <input type="password" id="login_pass" name="login_pass" size="24" maxlength="40" /></td>
                   </tr>';
 
   $result = $sqlr->query('SELECT id, name FROM realmlist LIMIT 10');
@@ -98,7 +108,7 @@ function login(&$sqlr)
     $output .= '
                   <tr align="right">
                     <td>'.$lang_login['select_realm'].' :
-                      <select name="realm">';
+                      <select name="realm" id="realm">';
     while ($realm = $sqlr->fetch_assoc($result))
       if(isset($server[$realm['id']]))
         $output .= '
@@ -117,7 +127,7 @@ function login(&$sqlr)
                     </td>
                   </tr>
                   <tr align="right">
-                    <td>'.$lang_login['remember_me'].' : <input type="checkbox" name="remember" value="1"';
+                    <td>'.$lang_login['remember_me'].' : <input type="checkbox" id="remember"  name="remember" value="1"';
   if ($remember_me_checked)
     $output .= ' checked="checked"';
   $output .= ' /></td>
@@ -129,8 +139,8 @@ function login(&$sqlr)
                   <tr align="right">
                     <td width="290">
                       <input type="submit" value="" style="display:none" />';
-                        makebutton($lang_login['not_registrated'], 'register.php" type="wrn', 130);
-                        makebutton($lang_login['login'], 'javascript:dologin()" type="def', 130);
+                        makebutton($lang_login['not_registrated'], 'register.php" type="wrn', 130, "btnRegister");
+                        makebutton($lang_login['login'], 'javascript:doLogin()" type="def', 130, "btnLogin");
   $output .= '
                     </td>
                   </tr>

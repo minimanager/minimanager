@@ -107,12 +107,17 @@ function aasort(&$array, $field, $order = false)
 
 //#############################################################################
 //making buttons - just to make them all look the same
-function makebutton($xtext, $xlink, $xwidth)
+function makebutton($xtext, $xlink, $xwidth, $xid = "")
 {
   global $output;
+  
+  if($xid != "")
+  $xid2 = 'id = "'.$xid.'" ';
+  else $xid2 = "";
+  
   $output .= '
               <div>
-                <a class="button" style="width:'.$xwidth.'px;" href="'.$xlink.'">'.$xtext.'</a>
+                <a class="button" '.$xid2.'style="width:'.$xwidth.'px;" href="'.$xlink.'">'.$xtext.'</a>
               </div>';
 }
 
