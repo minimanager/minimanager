@@ -78,7 +78,14 @@ function del_acc($acc_id)
   $sqlr = new SQL;
   $sqlr->connect($realm_db['addr'], $realm_db['user'], $realm_db['pass'], $realm_db['name']);
 
-  $query = $sqlr->query('SELECT gmlevel, active_realm_id FROM account WHERE id ='.$acc_id.'');
+  if ($server_type) {
+	  $query = $sqlr->query('SELECT gmlevel FROM account WHERE id ='.$acc_id.'');
+	  
+  } else {
+	  $query = $sqlr->query('SELECT gmlevel, active_realm_id FROM account WHERE id ='.$acc_id.'');
+  }
+
+
   $gmlevel = $sqlr->result($query, 0, 'gmlevel');
 
   if ( ($user_lvl > $gmlevel)||($acc_id == $user_id) )

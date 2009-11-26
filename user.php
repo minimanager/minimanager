@@ -16,7 +16,10 @@ function browse_users(&$sqlr, &$sqlc)
     $mmfpm_db,
     $action_permission, $user_lvl, $user_name,
     $itemperpage, $showcountryflag, $expansion_select,
-    $gm_level_arr;
+    $gm_level_arr, $server_type;
+
+  $active_realm_id_pq = ($server_type) ? "0 as active_realm_id" : 
+	  			                             "active_realm_id";
 
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
@@ -52,13 +55,13 @@ function browse_users(&$sqlr, &$sqlc)
     // developer note: 'if else' is always faster then 'switch case'
     if ($search_by === 'greater_gmlevel')
     {
-      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,'.$active_realm_id_pq.',expansion
         FROM account WHERE gmlevel > "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
       $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE gmlevel > "%'.$search_value.'%"');
     }
     elseif ($search_by === 'banned')
     {
-      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,'.$active_realm_id_pq.',expansion
         FROM account WHERE id = 0 ';
       $count_query = 'SELECT count(*) FROM account WHERE id = 0 ';
       $que = $sqlr->query('SELECT id FROM account_banned');
@@ -73,14 +76,14 @@ function browse_users(&$sqlr, &$sqlc)
     }
     elseif ($search_by === 'failed_logins')
     {
-      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,'.$active_realm_id_pq.',expansion
         FROM account WHERE failed_logins > '.$search_value.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
       $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE failed_logins > '.$search_value.'');
     }
     else
     {
       // default search case
-      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion
+      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,'.$active_realm_id_pq.',expansion
         FROM account WHERE '.$search_by.' LIKE "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
       $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE '.$search_by.' LIKE "%'.$search_value.'%"');
     }
@@ -90,7 +93,7 @@ function browse_users(&$sqlr, &$sqlc)
   {
     // get total number of items
     $query_1 = $sqlr->query('SELECT count(*) FROM account');
-    $query = $sqlr->query('SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion
+    $query = $sqlr->query('SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,'.$active_realm_id_pq.',expansion
       FROM account ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
   }
   // this is for multipage support
@@ -691,7 +694,7 @@ function add_new()
 //#########################################################################################################
 function doadd_new()
 {
-  global $lang_global, $realm_db, $action_permission;
+  global $lang_global, $realm_db, $action_permission, $server_type;
   valid_login($action_permission['insert']);
 
   if ( empty($_GET['new_user']) || empty($_GET['pass']) )
@@ -719,8 +722,14 @@ function doadd_new()
   $new_mail = (isset($_GET['new_mail'])) ? $sqlc->quote_smart(trim($_GET['new_mail'])) : NULL;
   $locked = (isset($_GET['new_locked'])) ? $sqlc->quote_smart($_GET['new_locked']) : 0;
   $expansion = (isset($_GET['new_expansion'])) ? $sqlc->quote_smart($_GET['new_expansion']) : 0;
-  $result = $sqlc->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion)
-    VALUES ('$new_user','$pass',0 ,'$new_mail',now() ,'$last_ip',0, $locked ,NULL, 0, $expansion)");
+  if ($server_type) {
+	  $result = $sqlc->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,expansion)
+									  VALUES ('$new_user','$pass',0 ,'$new_mail',now() ,'$last_ip',0, $locked ,NULL, $expansion)");
+  } else {
+	  $result = $sqlc->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion)
+									  VALUES ('$new_user','$pass',0 ,'$new_mail',now() ,'$last_ip',0, $locked ,NULL, 0, $expansion)");
+
+  }
   if ($result)
     redirect("user.php?error=5");
 
@@ -733,7 +742,11 @@ function doadd_new()
 function edit_user()
 {
   global $lang_global, $lang_user, $output, $realm_db, $characters_db, $realm_id, $mmfpm_db, $user_lvl, $user_name,
-   $gm_level_arr, $action_permission, $expansion_select, $developer_test_mode, $multi_realm_mode, $server;
+   $gm_level_arr, $action_permission, $expansion_select, $developer_test_mode, $multi_realm_mode, $server, $server_type;
+
+  $active_realm_id_pq = ($server_type) ? "0 as active_realm_id" : 
+													"active_realm_id";
+
 
   if (empty($_GET['id'])) redirect("user.php?error=10");
 
@@ -746,7 +759,7 @@ function edit_user()
 
   $id = $sqlr->quote_smart($_GET['id']);
 
-  $result = $sqlr->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion FROM account WHERE id = '$id'");
+  $result = $sqlr->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,{$active_realm_id_pq},expansion FROM account WHERE id = '$id'");
   $data = $sqlr->fetch_assoc($result);
 
   $refguid = $sqlm->fetch_assoc($sqlm->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '.$data['id'].''));
