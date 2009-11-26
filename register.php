@@ -83,11 +83,19 @@ function doregister(){
     $sql->close();
       redirect("register.php?err=8&usr=$last_ip");
   }
+
   //Email check
-  $result = $sql->query("SELECT username,email FROM account WHERE username='$user_name' OR email='$mail' $per_ip");
+  $result = $sql->query("SELECT email FROM account WHERE email='$mail' $per_ip");
   if ($sql->num_rows($result)){
     $sql->close();
     redirect("register.php?err=14");
+  }
+  
+  //Username check
+  $result = $sql->query("SELECT username FROM account WHERE username='$user_name' $per_ip");
+  if ($sql->num_rows($result)){
+    $sql->close();
+    redirect("register.php?err=3");
   }
 
   //there is already someone with same account name
