@@ -1965,8 +1965,6 @@ function lang_instances()
     'map' => 'Map',
     'level_min' => 'Minimum level',
     'level_max' => 'Maximum level',
-    'max_players' => 'Maximum players',
-    'reset_delay' => 'Reset delay',
   );
   return $lang_instances;
 }

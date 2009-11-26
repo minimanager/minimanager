@@ -38,11 +38,11 @@ function instances()
 
   // main data that we need for this page, instances
   if ($server_type)
-    $result = $sqlw->query('SELECT map, level_min, level_max, maxPlayers as maxplayers, reset_delay
+    $result = $sqlw->query('SELECT map, level_min, level_max
       FROM instance_template JOIN access_requirement ON access_requirement.id = instance_template.access_id
       ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.';');
   else
-    $result = $sqlw->query('SELECT map, levelMin as level_min, levelMax as level_max, maxPlayers as maxplayers, reset_delay
+    $result = $sqlw->query('SELECT map, levelMin as level_min, levelMax as level_max
       FROM instance_template ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.';');
 
   //---------------Page Specific Data Starts Here--------------------------
@@ -69,10 +69,8 @@ function instances()
             <table class="lined">
               <tr>
                 <th width="40%"><a href="instances.php?order_by=map&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='map' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['map'].'</a></th>
-                <th width="15%"><a href="instances.php?order_by=level_min&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='level_min' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['level_min'].'</a></th>
-                <th width="15%"><a href="instances.php?order_by=level_max&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='level_max' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['level_max'].'</a></th>
-                <th width="15%"><a href="instances.php?order_by=maxplayers&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='maxplayers' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['max_players'].'</a></th>
-                <th width="15%"><a href="instances.php?order_by=reset_delay&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='reset_delay' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['reset_delay'].'</a></th>
+                <th width="30%"><a href="instances.php?order_by=level_min&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='level_min' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['level_min'].'</a></th>
+                <th width="30%"><a href="instances.php?order_by=level_max&amp;start='.$start.'&amp;dir='.$dir.'"'.($order_by==='level_max' ? ' class="'.$order_dir.'"' : '').'>'.$lang_instances['level_max'].'</a></th>
               </tr>';
 
   $sqlm = new SQL;
@@ -93,8 +91,6 @@ function instances()
                 <td>'.get_map_name($instances['map'], $sqlm).' ('.$instances['map'].')</td>
                 <td>'.$instances['level_min'].'</td>
                 <td>'.$instances['level_max'].'</td>
-                <td>'.$instances['maxplayers'].'</td>
-                <td>'.$reset.'</td>
               </tr>';
   }
   unset($reset);
@@ -105,7 +101,7 @@ function instances()
 
   $output .= '
               <tr>
-                <td colspan="5" class="hidden" align="right" width="25%">';
+                <td colspan="3" class="hidden" align="right" width="25%">';
   // multi page links
   $output .= generate_pagination('instances.php?order_by='.$order_by.'&amp;dir='.(($dir) ? 0 : 1), $all_record, $itemperpage, $start);
   unset($start);
@@ -113,7 +109,7 @@ function instances()
                 </td>
               </tr>
               <tr>
-                <td colspan="5" class="hidden" align="right">'.$lang_instances['total'].' : '.$all_record.'</td>
+                <td colspan="3" class="hidden" align="right">'.$lang_instances['total'].' : '.$all_record.'</td>
               </tr>
             </table>
           </center>
