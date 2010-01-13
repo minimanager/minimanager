@@ -77,10 +77,10 @@ class telnet_lib
         $r = explode("\n",$r);
         $this->loginprompt = $r[count($r)-1];
 
-        fputs($this->fp, "USER $user\r");
+        fputs($this->fp, "$user\r");
         $this->Sleep();
 
-        fputs($this->fp, "PASS $pass\r");
+        fputs($this->fp, "$pass\r");
         if ($this->use_usleep)
           usleep($this->loginsleeptime);
         else
