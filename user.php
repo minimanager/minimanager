@@ -40,7 +40,81 @@ function browse_users(&$sqlr, &$sqlc)
   //-------------------Search--------------------------------------------------
   $search_by = '';
   $search_value = '';
-  // if we have a search request, if not we just return everything
+
+ 
+  if ($server_type == 1) { //If TrinityCore Server Type
+   $order_by2 = $order_by;
+    if ($order_by == 'gmlevel') { 
+       $order_by = 'account_access.gmlevel';
+    }
+    elseif ($order_by == 'active_realm_id') {
+       $order_by = 'account.online';
+    }
+    else {
+       $order_by = 'account.'.$order_by2;
+       unset($order_by2);
+    } 
+     // if we have a search request, if not we just return everything
+  if(isset($_GET['search_value']) && isset($_GET['search_by']))
+  {
+    // injection prevention
+    $search_value = $sqlr->quote_smart($_GET['search_value']);
+    $search_by = $sqlr->quote_smart($_GET['search_by']);
+    $search_menu = array('username', 'id', 'gmlevel', 'greater_gmlevel', 'email', 'joindate', 'last_ip', 'failed_logins', 'last_login', 'active_realm_id', 'banned', 'locked', 'expansion');
+    
+    if (in_array($search_by, $search_menu));
+    else $search_by = 'username';
+    unset($search_menu);
+
+    if ($search_by == 'active_realm_id') { $search_by = 'online'; }
+    // special search cases
+    // developer note: 'if else' is always faster then 'switch case'
+    if ($search_by === 'gmlevel')
+    {
+      $sql_query = 'SELECT * FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE account_access.gmlevel = '.$search_value.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+      $query_1 = $sqlr->query('SELECT count(*) FROM account_access WHERE gmlevel = "%'.$search_value.'%"');
+    }
+    elseif ($search_by === 'greater_gmlevel')
+    {
+      $sql_query = 'SELECT * FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE account_access.gmlevel < '.$search_value.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+      $query_1 = $sqlr->query('SELECT count(*) FROM account_access WHERE gmlevel < "%'.$search_value.'%"');
+    }
+    elseif ($search_by === 'banned')
+    {
+      $sql_query = 'SELECT * FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE account.id = 0 ';
+      $count_query = 'SELECT count(*) FROM account WHERE id = 0 ';
+      $que = $sqlr->query('SELECT id FROM account_banned');
+      while ($banned = $sqlr->fetch_assoc($que))
+      {
+        $sql_query .= 'OR id = '.$banned['id'].'';
+        $count_query .= 'OR id = '.$banned['id'].'';
+      }
+      $query_1 = $sqlr->query($count_query);
+      unset($count_query);
+    }
+    elseif ($search_by === 'failed_logins')
+    {
+      $sql_query = 'SELECT * FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE failed_logins > '.$search_value.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+      $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE failed_logins > '.$search_value.'');
+    }
+    else
+    {
+      // default search case
+      $sql_query = 'SELECT * FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE '.$search_by.' LIKE "%'.$search_value.'%" ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+      $query_1 = $sqlr->query('SELECT count(*) FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE '.$search_by.' LIKE "%'.$search_value.'%"');
+    }
+    $query = $sqlr->query($sql_query);
+  }
+  else
+  {
+    // get total number of items
+    $query_1 = $sqlr->query('SELECT count(*) FROM account');
+    $query = $sqlr->query('SELECT * FROM account LEFT JOIN account_access ON account.id=account_access.id ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
+  }
+ 
+  }
+  else { //If MaNGOS Server Type
+     // if we have a search request, if not we just return everything
   if(isset($_GET['search_value']) && isset($_GET['search_by']))
   {
     // injection prevention
@@ -76,8 +150,7 @@ function browse_users(&$sqlr, &$sqlc)
     }
     elseif ($search_by === 'failed_logins')
     {
-      $sql_query = 'SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,'.$active_realm_id_pq.',expansion
-        FROM account WHERE failed_logins > '.$search_value.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
+      $sql_query = 'SELECT * FROM account WHERE failed_logins > '.$search_value.' ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'';
       $query_1 = $sqlr->query('SELECT count(*) FROM account WHERE failed_logins > '.$search_value.'');
     }
     else
@@ -93,12 +166,13 @@ function browse_users(&$sqlr, &$sqlc)
   {
     // get total number of items
     $query_1 = $sqlr->query('SELECT count(*) FROM account');
-    $query = $sqlr->query('SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,'.$active_realm_id_pq.',expansion
+    $query = $sqlr->query('SELECT *
       FROM account ORDER BY '.$order_by.' '.$order_dir.' LIMIT '.$start.', '.$itemperpage.'');
+  }
   }
   // this is for multipage support
   $all_record = $sqlr->result($query_1,0);
-  unset($query_1);
+  unset($query_1);	
 
   //==========================top tage navigaion starts here========================
   // we start with a lead of 10 spaces,
@@ -257,8 +331,13 @@ function browse_users(&$sqlr, &$sqlc)
       $output .= '
                   <td>'.(($data['failed_logins']) ? $data['failed_logins'] : '-').'</td>
                   <td>'.(($data['locked']) ? $lang_global['yes_low'] : '-').'</td>
-                  <td class="small">'.$data['last_login'].'</td>
-                  <td>'.(($data['active_realm_id']) ? '<img src="img/up.gif" alt="" />' : '-').'</td>';
+                  <td class="small">'.$data['last_login'].'</td>';
+                  if ($server_type == 1) {
+                     $output .= '<td>'.(($data['online']) ? '<img src="img/up.gif" alt="" />' : '-').'</td>';
+                  }
+                  else {
+                     $output .= '<td>'.(($data['active_realm_id']) ? '<img src="img/up.gif" alt="" />' : '-').'</td>';
+                  }
       if ($showcountryflag)
       {
         $country = misc_get_country_by_ip($data['last_ip'], $sqlm);
@@ -759,7 +838,13 @@ function edit_user()
 
   $id = $sqlr->quote_smart($_GET['id']);
 
-  $result = $sqlr->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,{$active_realm_id_pq},expansion FROM account WHERE id = '$id'");
+  if ($server_type == 1) {
+
+  $result = $sqlr->query("SELECT * FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE account.id = '$id'");
+  }
+  else {
+      $result = $sqlr->query("SELECT id,username,gmlevel,email,joindate,last_ip,failed_logins,locked,last_login,{$active_realm_id_pq},expansion FROM account WHERE id = '$id'");
+  }
   $data = $sqlr->fetch_assoc($result);
 
   $refguid = $sqlm->fetch_assoc($sqlm->query('SELECT InvitedBy FROM point_system_invites WHERE PlayersAccount = '.$data['id'].''));

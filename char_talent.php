@@ -15,7 +15,7 @@ function char_talent(&$sqlr, &$sqlc)
 {
   global $output, $lang_global, $lang_char,
     $realm_id, $realm_db, $characters_db, $mmfpm_db, $server,
-    $action_permission, $user_lvl, $user_name, $spell_datasite;
+    $action_permission, $user_lvl, $user_name, $spell_datasite, $server_type;
   // this page uses wowhead tooltops
   wowhead_tt();
 
@@ -51,9 +51,16 @@ function char_talent(&$sqlr, &$sqlc)
     $char = $sqlc->fetch_assoc($result);
 
     $owner_acc_id = $sqlc->result($result, 0, 'account');
-    $result = $sqlr->query('SELECT gmlevel,username FROM account WHERE id = '.$char['account'].'');
-    $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
-    $owner_name = $sqlr->result($result, 0, 'username');
+    if ($server_type == 1) {
+       $result = $sqlr->query('SELECT * FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE account.id = '.$char['account'].'');
+       $owner_gmlvl = $sqlr->result($result, 0, 'account_access.gmlevel');
+       $owner_name = $sqlr->result($result, 0, 'account.username');
+    }
+    else {
+       $result = $sqlr->query('SELECT gmlevel,username FROM account WHERE id = '.$char['account'].'');
+       $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
+       $owner_name = $sqlr->result($result, 0, 'username');
+    }
 
     if (($user_lvl > $owner_gmlvl)||($owner_name === $user_name))
     {
@@ -322,13 +329,7 @@ function talent_dependencies(&$tabs, &$tab, &$i, &$sqlm)
 // action variable reserved for future use
 //$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
-// load language
 $lang_char = lang_char();
-
-$output .= '
-          <div class="top">
-            <h1>'.$lang_char['character'].'</h1>
-          </div>';
 
 // we getting links to realm database and character database left behind by header
 // header does not need them anymore, might as well reuse the link

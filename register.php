@@ -102,20 +102,19 @@ function doregister(){
   if ($sql->num_rows($result)){
     $sql->close();
       redirect("register.php?err=3&usr=$user_name");
-  }else{
-      if ($expansion_select)
+  }
+  else {
+    if ($expansion_select)
       $expansion = (isset($_POST['expansion'])) ? $sql->quote_smart($_POST['expansion']) : 0;
         else $expansion = $defaultoption;
 
-	if ($server_type) {
-		 $result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,expansion)
-			  VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,$expansion)");
-	 
+    if ($server_type)
+      $result = $sql->query("INSERT INTO account (username,sha_pass_hash,email, joindate,last_ip,failed_logins,locked,last_login,expansion)
+			  VALUES (UPPER('$user_name'),'$pass','$mail',now(),'$last_ip',0,$create_acc_locked,NULL,$expansion)");
+    else
+      $result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion)
+              VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$expansion)");
 
-	} else {
-		 $result = $sql->query("INSERT INTO account (username,sha_pass_hash,gmlevel,email, joindate,last_ip,failed_logins,locked,last_login,active_realm_id,expansion)
-			  VALUES (UPPER('$user_name'),'$pass',0,'$mail',now(),'$last_ip',0,$create_acc_locked,NULL,0,$expansion)");
-	}
     $sql->close();
 
     setcookie ("terms", "", time() - 3600);

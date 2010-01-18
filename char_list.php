@@ -14,7 +14,7 @@ function browse_chars(&$sqlr, &$sqlc)
   global $output, $lang_char_list, $lang_global,
     $realm_db, $mmfpm_db, $characters_db, $realm_id,
     $action_permission, $user_lvl, $user_name,
-    $showcountryflag, $itemperpage;
+    $showcountryflag, $itemperpage, $server_type;
 
   $sqlm = new SQL;
   $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
@@ -296,8 +296,13 @@ function browse_chars(&$sqlr, &$sqlc)
   {
     $char = $sqlr->fetch_row($query) or die(error($lang_global['err_no_user']));
     // to disalow lower lvl gm to  view accounts of other gms
-    $result = $sqlr->query("SELECT gmlevel, username FROM account WHERE id ='$char[2]'");
+    if ($server_type)
+      $result = $sqlr->query("SELECT gmlevel, username FROM account LEFT JOIN account_access ON account.id=account_access.id WHERE account.id ='$char[2]'");
+    else
+      $result = $sqlr->query("SELECT gmlevel, username FROM account WHERE id ='$char[2]'");
     $owner_gmlvl = $sqlr->result($result, 0, 'gmlevel');
+      if ($owner_gmlvl == null)
+        $owner_gmlvl = 0;
     $owner_acc_name = $sqlr->result($result, 0, 'username');
     $lastseen = date('Y-m-d G:i:s', $char[11]);
 
