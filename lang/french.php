@@ -367,6 +367,7 @@ function lang_char()
 {
   $lang_char = array
   (
+    'character' => 'Personnage',
     'online' => 'En ligne',
     'offline' => 'Hors Ligne',
     'username' => 'Nom du compte',

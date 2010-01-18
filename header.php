@@ -7,14 +7,14 @@ if (ini_get('session.auto_start'));
 else session_start();
 
 //---------------------Load Default and User Configuration---------------------
-if (file_exists('scripts/config.php'))
+if (file_exists('./scripts/config.php'))
 {
-  if (file_exists('scripts/config.dist.php'))
-    require_once 'scripts/config.dist.php';
+  if (file_exists('./scripts/config.dist.php'))
+    require_once './scripts/config.dist.php';
   else
     exit('<center><br><code>\'scripts/config.dist.php\'</code> not found,<br>
           please restore <code>\'scripts/config.dist.php\'</code></center>');
-  require_once 'scripts/config.php';
+  require_once './scripts/config.php';
 }
 else
   exit('<center><br><code>\'scripts/config.php\'</code> not found,<br>

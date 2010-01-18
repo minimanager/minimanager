@@ -335,10 +335,19 @@ function char_rep(&$sqlr, &$sqlc)
 // MAIN
 //########################################################################################################################
 
+// action variable reserved for future use
 //$action = (isset($_GET['action'])) ? $_GET['action'] : NULL;
 
+// load language
 $lang_char = lang_char();
 
+$output .= '
+          <div class="top">
+            <h1>'.$lang_char['character'].'</h1>
+          </div>';
+
+// we getting links to realm database and character database left behind by header
+// header does not need them anymore, might as well reuse the link
 char_rep($sqlr, $sqlc);
 
 //unset($action);

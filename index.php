@@ -169,13 +169,13 @@ function front(&$sqlr, &$sqlc)
     $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
     if (is_numeric($start)); else $start = 0;
 
-    $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'name';
-    if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by = 'name';
+    $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'level';
+    if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by = 'level';
 
     $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
     if (preg_match('/^[01]{1}$/', $dir)); else $dir = 1;
 
-    $order_dir = ($dir) ? 'ASC' : 'DESC';
+    $order_dir = ($dir) ? 'DESC' : 'ASC';
     $dir = ($dir) ? 0 : 1;
     //==========================$_GET and SECURE end=============================
 
