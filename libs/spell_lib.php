@@ -6,7 +6,7 @@
 
 function spell_get_name($id, &$sqlm)
 {
-  $spell_name = $sqlm->fetch_assoc($sqlm->query('SELECT spellname_loc0 FROM dbc_spell WHERE spellID='.$id.' LIMIT 1'));
+  $spell_name = $sqlm->fetch_assoc($sqlm->query('SELECT sield_142 FROM dbc_spell WHERE id='.$id.' LIMIT 1'));
   return $spell_name['spellname_loc0'];
 }
 
@@ -18,7 +18,7 @@ function spell_get_icon($auraid, &$sqlm)
 {
   global $proxy_cfg, $get_icons_from_web, $item_icons;
 
-  $result = $sqlm->query('SELECT spellicon FROM dbc_spell WHERE spellID = '.$auraid.' LIMIT 1');
+  $result = $sqlm->query('SELECT field_139 FROM dbc_spell WHERE id = '.$auraid.' LIMIT 1');
 
   if ($result)
     $displayid = $sqlm->result($result, 0);
@@ -27,7 +27,7 @@ function spell_get_icon($auraid, &$sqlm)
 
   if ($displayid)
   {
-    $result = $sqlm->query('SELECT name FROM dbc_spellicon WHERE id = '.$displayid.' LIMIT 1');
+    $result = $sqlm->query('SELECT field_1 FROM dbc_spellicon WHERE id = '.$displayid.' LIMIT 1');
 
     if($result)
     {
@@ -106,7 +106,7 @@ function spell_get_icon($auraid, &$sqlm)
     {
       if (filesize(''.$item_icons.'/'.$aura.'.jpg') > 349)
       {
-        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$aura.'\')');
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, field_1) VALUES (\''.$displayid.'\', \''.$aura.'\')');
         return ''.$item_icons.'/'.$aura.'.jpg';
       }
       else
@@ -147,7 +147,7 @@ function spell_get_icon($auraid, &$sqlm)
     {
       if (filesize(''.$item_icons.'/'.$aura.'.jpg') > 349)
       {
-        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$aura.'\')');
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, field_1) VALUES (\''.$displayid.'\', \''.$aura.'\')');
         return ''.$item_icons.'/'.$aura.'.jpg';
       }
       else

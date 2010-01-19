@@ -13,7 +13,7 @@
     $sqlm = new SQL;
     $sqlm->connect($mmfpm_db['addr'], $mmfpm_db['user'], $mmfpm_db['pass'], $mmfpm_db['name']);
   }
-  $itemset = $sqlm->fetch_row($sqlm->query("SELECT `name_loc0` FROM `dbc_itemset` WHERE `itemsetID`={$id} LIMIT 1"));
+  $itemset = $sqlm->fetch_row($sqlm->query("SELECT `field_1` FROM `dbc_itemset` WHERE `itemsetID`={$id} LIMIT 1"));
   return $itemset[0];
 }
 
@@ -87,7 +87,7 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
     $displayid = $sqlw->result($result, 0);
   else
   {
-    $result = $sqlm->query("SELECT `displayid` FROM `dbc_item` WHERE `entry` = $itemid LIMIT 1");
+    $result = $sqlm->query("SELECT `field_5` FROM `dbc_item` WHERE `entry` = $itemid LIMIT 1");
     if ($result)
       $displayid = $sqlm->result($result, 0);
     else
@@ -96,7 +96,7 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
 
   if ($displayid)
   {
-    $result = $sqlm->query("SELECT `name` FROM `dbc_itemdisplayinfo` WHERE `id`=$displayid LIMIT 1");
+    $result = $sqlm->query("SELECT `field_5` FROM `dbc_itemdisplayinfo` WHERE `id`=$displayid LIMIT 1");
 
     if($result)
     {
@@ -174,7 +174,7 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
     {
       if (filesize(''.$item_icons.'/'.$item.'.jpg') > 349)
       {
-        $sqlm->query('REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES (\''.$displayid.'\', \''.$item.'\')');
+        $sqlm->query('REPLACE INTO dbc_itemdisplayinfo (id, field_5) VALUES (\''.$displayid.'\', \''.$item.'\')');
         return ''.$item_icons.'/'.$item.'.jpg';
       }
       else
@@ -214,7 +214,7 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
     {
       if (filesize(''.$item_icons.'/'.$item.'.jpg') > 349)
       {
-        $sqlm->query('REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES (\''.$displayid.'\', \''.$item.'\')');
+        $sqlm->query('REPLACE INTO dbc_itemdisplayinfo (id, field_5) VALUES (\''.$displayid.'\', \''.$item.'\')');
         return ''.$item_icons.'/'.$item.'.jpg';
       }
       else
@@ -235,7 +235,7 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
     {
       if (filesize(''.$item_icons.'/'.$item.'.jpg') > 349)
       {
-        $sqlm->query('REPLACE INTO dbc_itemdisplayinfo (id, name) VALUES (\''.$displayid.'\', \''.$item.'\')');
+        $sqlm->query('REPLACE INTO dbc_itemdisplayinfo (id, field_5) VALUES (\''.$displayid.'\', \''.$item.'\')');
         return ''.$item_icons.'/'.$item.'.jpg';
       }
       else

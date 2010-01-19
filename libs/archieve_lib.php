@@ -111,7 +111,7 @@ function achieve_get_icon($achieveid, &$sqlm)
 
   if ($displayid)
   {
-    $result = $sqlm->query('SELECT name FROM dbc_spellicon WHERE id = '.$displayid.' LIMIT 1');
+    $result = $sqlm->query('SELECT field_1 FROM dbc_spellicon WHERE id = '.$displayid.' LIMIT 1');
 
     if($result)
     {
@@ -190,7 +190,7 @@ function achieve_get_icon($achieveid, &$sqlm)
     {
       if (filesize(''.$item_icons.'/'.$achieve.'.jpg') > 349)
       {
-        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, field_1) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
         return ''.$item_icons.'/'.$achieve.'.jpg';
       }
       else
@@ -231,7 +231,7 @@ function achieve_get_icon($achieveid, &$sqlm)
     {
       if (filesize(''.$item_icons.'/'.$achieve.'.jpg') > 349)
       {
-        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, field_1) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
         return ''.$item_icons.'/'.$achieve.'.jpg';
       }
       else
@@ -252,7 +252,7 @@ function achieve_get_icon($achieveid, &$sqlm)
     {
       if (filesize(''.$item_icons.'/'.$achieve.'.jpg') > 349)
       {
-        $sqlm->query('REPLACE INTO dbc_spellicon (id, name) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
+        $sqlm->query('REPLACE INTO dbc_spellicon (id, field_1) VALUES (\''.$displayid.'\', \''.$achieve.'\')');
         return ''.$item_icons.'/'.$achieve.'.jpg';
       }
       else
