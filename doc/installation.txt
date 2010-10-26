@@ -1,0 +1,45 @@
+RECOMMENDED REQUIREMENTS:
+
+ WebServer with PHP support.
+ MySQL 5.0.61 and above.     ( http://dev.mysql.com/downloads/mysql/5.0.html#downloads )
+ PHP 5.1.0 and above.        ( http://www.php.net/downloads.php)
+
+ For windows users:
+  If you are using Apache2,  ( http://httpd.apache.org/ )
+   we recommend PHP VC6 TS.
+  If you are not using Apache2,
+   we recommend PHP VC9 NTS.
+
+ Opera Web Browser 10.
+ Java SE 5.0.
+
+
+INSTALLATION:
+
+ Copy miniManager into any of your webserver folders.
+
+ Configuration:
+
+ - Option 1 (recommended)
+    Copy /scripts/config.user.php as /scripts/config.php.
+    Copy only the settings you want to change,
+     from /scripts/config.dist.php into /scripts/config.php
+    Make changes there.
+
+ - Option 2
+    Copy /scripts/config.dist.php as /scripts/config.php,
+    Make changes there.
+
+ - If you are using Trinity, don't forget to set
+    $server_type = 1; 
+   in config.
+
+ Import from /SQL/*.sql to Database set in $mmfpm_db from /script/config.php
+
+
+If some aspect of installation settings are not covered by this guide,
+ check FAQ.txt and our forums for further details.
+
+
+Last Updated
+9/3/2009

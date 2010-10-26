@@ -1,0 +1,11 @@
+miniManager support links:
+
+SVN:
+https://mmfpm.svn.sourceforge.net/svnroot/mmfpm
+
+Official support forum:
+http://mangos.osh.nu/forums/index.php?showforum=19
+
+
+Last Updated
+9/3/2009
