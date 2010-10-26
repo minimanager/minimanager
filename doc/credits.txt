@@ -1,0 +1,44 @@
+THANKS:
+
+- To entire MaNGOS/Trinity team and all related for providing our "community" this great educational tool.
+
+- Everybody who helped with ideas, bugreports, actual code.
+
+
+- ip2nation database by Per Gustafsson from http://www.ip2nation.com/
+
+
+- Captcha Security Images by Simon Jarvis from http://www.white-hat-web-design.co.uk/articles/php-captcha.php
+
+- PHPMailer by codeworxtech from http://phpmailer.sourceforge.net/
+
+- PHPTelnet by Antone Roundy.
+
+- Updated POMM by killdozer (git://git.assembla.com/pomm.git)
+
+- Basic POMM by mirage666 (mirage666@pisem.net).
+
+
+- JavaScript implementation of SHA-1 by Paul Johnston from http://pajhome.org.uk/crypt/md5/
+
+- Javascript tabs based on function by Jonathan Hedley from http://jonathanhedley.com/
+
+- getBrowserWidth javascript based on function by Cameron Adams from http://themaninblue.com/
+
+- changeLayout javascript based on function by Paul Sowdon from http://www.alistapart.com/articles/alternate/
+
+- Dynamic Resolution Dependent Layout based on javascript from http://particletree.com/
+
+- Js-ToolTip based on javascript by Gerd Tentler from http://www.gerd-tentler.de/tools/
+
+
+- SSH/Telnet terminal by Matthias L. Jugel and Marcus Meiﬂner from http://www.javassh.org/
+
+- IRC java applet by Plouf from http://www.pjirc.com/
+
+
+- Initial release of miniManager by Q.SA
+
+
+Last Updated
+9/3/2009
