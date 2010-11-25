@@ -179,7 +179,8 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
 			$fp = @fsockopen($proxy, $port, $errno, $errstr, 0.5);
 			if (!$fp)
 				return 'img/INV/INV_blank_32.gif';
-			$out = "GET /$xmlfilepath$itemid HTTP/1.0\r\nHost: www.wowhead.com\r\n";
+                        $xml = '&xml';
+			$out = "GET /$xmlfilepath$itemid$xml HTTP/1.0\r\nHost: www.wowhead.com\r\n";
 			if (!empty($proxy_cfg['user']))
 				$out .= "Proxy-Authorization: Basic ". base64_encode ("{$proxy_cfg['user']}:{$proxy_cfg['pass']}")."\r\n";
 				$out .= "Connection: Close\r\n\r\n";
@@ -191,11 +192,12 @@ function get_item_icon($itemid, &$sqlm=0, &$sqlw=0)
 			fclose($fp);
 
 			$wowhead_string = $temp;
-			$temp_string1 = strstr($wowhead_string, "Icon.create(");
-			$temp_string2 = substr($temp_string1, 12, 50);
-			$temp_string3 = strtok($temp_string2, ',');
-			$temp_string4 = substr($temp_string3, 1, strlen($temp_string3) - 2);
-			$item_icon_name = $temp_string4;
+                        $temp_string1 = strstr($wowhead_string, '<icon displayId=');
+                        $temp_string2 = substr($temp_string1, 17, 50);
+                        $temp_string3 = strstr($temp_string2, '>');
+                        $temp_string4 = strtok($temp_string3, '<');
+                        $temp_string5 = substr($temp_string4, 1, strlen($temp_string4) - 1);
+                        $item_icon_name = $temp_string5;
 
 			$item_uppercase = $item_icon_name;
 			$item = strtolower($item_uppercase);
