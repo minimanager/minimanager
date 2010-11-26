@@ -5,7 +5,7 @@ require_once 'header.php';
 require_once 'libs/char_lib.php';
 require_once 'libs/mail_lib.php';
 require_once 'libs/item_lib.php';
-require_once 'scripts/get_lib.php';
+require_once 'libs/get_lib.php';
 // minimum permission to view page
 valid_login($action_permission['read']);
 
@@ -27,8 +27,8 @@ function do_search()
   $start = (isset($_GET['start'])) ? $sqlc->quote_smart($_GET['start']) : 0;
   if (is_numeric($start)); else $start = 0;
 
-  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'id';
-  if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by = 'id';
+  $order_by = (isset($_GET['order_by'])) ? $sqlc->quote_smart($_GET['order_by']) : 'a.id';
+  if (preg_match('/^[_[:lower:]]{1,12}$/', $order_by)); else $order_by = 'a.id';
 
   $dir = (isset($_GET['dir'])) ? $sqlc->quote_smart($_GET['dir']) : 1;
   if (preg_match('/^[01]{1}$/', $dir)); else $dir = 1;
@@ -38,7 +38,7 @@ function do_search()
   //==========================$_GET and SECURE end=============================
 
   $query = $sql->query("SELECT a.id, a.messageType, a.sender, a.receiver, a.subject, a.body, a.has_items, a.money, a.cod, a.checked, b.item_template
-    FROM mail a INNER JOIN mail_items b ON a.id = b.mail_id ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
+    FROM mail a LEFT JOIN mail_items b ON a.id = b.mail_id ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
   $total_found = $sql->num_rows($query);
   $this_page = $sql->num_rows($query);
   $query_1 = $sql->query("SELECT count(*) FROM `mail`");
@@ -58,8 +58,8 @@ function do_search()
                         <input type=\"hidden\" name=\"error\" value=\"4\" />
                         <input type=\"text\" size=\"45\" name=\"search_value\" />
                         <select name=\"search_by\">
-                          <option value=\"sender\">Sender</option>
-                          <option value=\"receiver\">Receiver</option>
+                          <option value=\"a.sender\">Sender</option>
+                          <option value=\"a.receiver\">Receiver</option>
                         </select>
                       </form>
                     </td>
@@ -92,14 +92,14 @@ function do_search()
 
   while ($mail = $sql->fetch_array($query))
   {
-    $g = floor($mail[7]/10000);
-    $mail[7] -= $g*10000;
-    $s = floor($mail[7]/100);
-    $mail[7] -= $s*100;
-    $c = $mail[7];
-    $money = "";
-    if ($mail[7] > 0)
-    {  $money = $g."<img src=\"./img/gold.gif\" /> ".$s."<img src=\"./img/silver.gif\" /> ".$c."<img src=\"./img/copper.gif\" /> ";
+    if ($mail[7] > 0){
+      $g = floor($mail[7]/10000);
+      $mail[7] -= $g*10000;
+      $s = floor($mail[7]/100);
+      $mail[7] -= $s*100;
+      $c = $mail[7];
+      $money = "";
+      $money = $g."<img src=\"./img/gold.gif\" /> ".$s."<img src=\"./img/silver.gif\" /> ".$c."<img src=\"./img/copper.gif\" /> ";
     }
 
     $output .= "
@@ -111,13 +111,17 @@ function do_search()
                     <td>$mail[4]</td>
             ";
   $output .= "<td>";
+  if($mail[6])
+  {
+    $money = "";
     $output .= "
                       <a style=\"padding:2px;\" href=\"$item_datasite{$mail[10]}\" target=\"_blank\">
                         <img class=\"bag_icon\" src=\"".get_item_icon($mail[10])."\" alt=\"\" />
                   </a>";
+  }
   //$output .= maketooltip("<img src=\"./img/up.gif\" alt= />", $item_datasite{$mail[10]}, $mail[10], "item_tooltip", "target=_blank");
   $output .= "</td>";
-  $output .= "<td>".$mail[5]."</td>
+  $output .= "<td>".get_mail_text($mail[0])."</td>
         <td>$money</td>
         <td>".get_check_state($mail[9])."</td>
                    </tr>";
@@ -155,15 +159,21 @@ function search() {
  $order_dir = ($dir) ? "ASC" : "DESC";
  $dir = ($dir) ? 0 : 1;
 
- $temp = $sql->query("SELECT guid FROM `characters` WHERE name like '%$search_value%'");
- $search_value = $sql->result($temp, 0, 'guid');
+ if($search_value == '')
+ {
+     $search_by .= ' != 0';
+ }else{
+     $temp = $sql->query("SELECT guid FROM `characters` WHERE name like '%$search_value%'");
+     $search_value = $sql->result($temp, 0, 'guid');
+     $search_by .= ' ='.$search_value;
+ }
 
  $query_1 = $sql->query("SELECT count(*) FROM `mail`");
 
  $query = $sql->query("SELECT a.id, a.messageType, a.sender, a.receiver, a.subject, a.body, a.has_items, a.money, a.cod, a.checked, b.item_template
             FROM mail a
-            INNER JOIN mail_items b ON a.id = b.mail_id
-            WHERE $search_by = $search_value
+            LEFT JOIN mail_items b ON a.id = b.mail_id
+            WHERE $search_by
             ORDER BY $order_by $order_dir LIMIT $start, $itemperpage");
 
  $this_page = $sql->num_rows($query);
@@ -180,8 +190,8 @@ $output .="<center><table class=\"top_hidden\">
             <input type=\"hidden\" name=\"error\" value=\"4\" />
             <input type=\"text\" size=\"45\" name=\"search_value\" />
             <select name=\"search_by\">
-                <option value=\"sender\">Sender</option>
-                <option value=\"receiver\">Receiver</option>
+                <option value=\"a.sender\">Sender</option>
+                <option value=\"a.receiver\">Receiver</option>
             </select></form></td><td>";
         makebutton($lang_global['search'], "javascript:do_submit()",80);
 $output .= "</td></tr></table>
@@ -223,13 +233,17 @@ while ($mail = $sql->fetch_array($query))       {
                     <td>$mail[4]</td>
             ";
   $output .= "<td>";
-  $output .= "
+  if($mail[6])
+  {
+    $money = "";
+    $output .= "
                     <a style=\"padding:2px;\" href=\"$item_datasite{$mail[10]}\" target=\"_blank\">
                       <img class=\"bag_icon\" src=\"".get_item_icon($mail[10])."\" alt=\"\" />
                   </a>";
+  }
   //maketooltip("<img src=\"./img/up.gif\" alt=\"\">", $item_datasite{$mail[10]}, $mail[10], "item_tooltip", "target=\"_blank\"");
   $output .= "</td>";
-  $output .= "<td>".$mail[5]."</td>
+  $output .= "<td>".get_mail_text($mail[0])."</td>
                         <td>$money</td>
         <td>".get_check_state($mail[9])."</td>
                    </tr>";

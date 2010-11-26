@@ -11,7 +11,7 @@ function get_mail_text($id)
     $sqlc = new SQL;
     $sqlc->connect($characters_db[$realm_id]['addr'], $characters_db[$realm_id]['user'], $characters_db[$realm_id]['pass'], $characters_db[$realm_id]['name']);
 
-    $result = $sqlc->query("SELECT `text` FROM `item_text` WHERE `id` = '$id'");
+    $result = $sqlc->query("SELECT `body` FROM `mail` WHERE `id` = '$id'");
     $text_subject = $sqlc->result($result, 0);
 
     return $text_subject;
