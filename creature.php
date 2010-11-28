@@ -1,7 +1,7 @@
 <?php
 
 require_once("header.php");
-include_once("scripts/get_lib.php");
+include_once("libs/get_lib.php");
 valid_login($action_permission['read']);
 
 // return npcflag
@@ -47,7 +47,7 @@ function makeinfocell($text,$tooltip)
 function search() {
 global $locales_search_option, $lang_global, $lang_creature, $output, $world_db, $realm_id, $creature_type;
 
-include_once("./scripts/language_select.php");
+include_once("libs/language_select.php");
 
 $sql = new SQL;
 $sql->connect($world_db[$realm_id]['addr'], $world_db[$realm_id]['user'], $world_db[$realm_id]['pass'], $world_db[$realm_id]['name']);
