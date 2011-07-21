@@ -183,9 +183,20 @@ function browse_auctions(&$sqlr, &$sqlc)
     }
 
     $result = $sqlc->query("
-		SELECT `characters`.`name` AS `seller`, `auction`.`item_template` AS `itemid`, `item_template`.`name` AS `itemname`, `auction`.`buyoutprice` AS `buyout`, `auction`.`time`-unix_timestamp(), `c2`.`name` AS `encherisseur`, `auction`.`lastbid`, `auction`.`startbid`, SUBSTRING_INDEX(SUBSTRING_INDEX(`item_instance`.`data`, ' ',15), ' ',-1) AS qty, `characters`.`race` AS seller_race, `c2`.`race` AS buyer_race 
-		FROM `".$characters_db[$realm_id]['name']."`.`characters` , `".$characters_db[$realm_id]['name']."`.`item_instance` , `".$world_db[$realm_id]['name']."`.`item_template` , `".$characters_db[$realm_id]['name']."`.`auction` LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` c2 ON `c2`.`guid`=`auction`.`buyguid` 
-		WHERE `auction`.`itemowner`=`characters`.`guid` AND `auction`.`item_template`=`item_template`.`entry` AND `auction`.`itemguid`=`item_instance`.`guid` $search_filter $order_side 
+		SELECT
+		(SELECT `characters`.`name` FROM `".$characters_db[$realm_id]['name']."`.`characters` WHERE `auction`.`itemowner`= `characters`.`guid`) AS `seller`,
+		`auction`.`item_template` AS `itemid`,
+		`item_template`.`name` AS `itemname`,
+		`auction`.`buyoutprice` AS `buyout`,
+		IF(`auction`.`time` > unix_timestamp(),`auction`.`time` - unix_timestamp(),0),
+		`c2`.`name` AS `buyer`,
+		`auction`.`lastbid` AS `lastbid`,
+		`auction`.`startbid` AS `firstbid`,
+		SUBSTRING_INDEX(SUBSTRING_INDEX(`item_instance`.`data`, ' ',15), ' ',-1) AS qty,
+		IF(`auction`.`itemowner`,(SELECT `characters`.`race` FROM `".$characters_db[$realm_id]['name']."`.`characters` WHERE `auction`.`itemowner`= `characters`.`guid`), 0 ) AS seller_race,
+		`c2`.`race` AS buyer_race
+		FROM `".$characters_db[$realm_id]['name']."`.`item_instance` , `".$world_db[$realm_id]['name']."`.`item_template` , `".$characters_db[$realm_id]['name']."`.`auction` LEFT JOIN `".$characters_db[$realm_id]['name']."`.`characters` `c2` ON `c2`.`guid`=`auction`.`buyguid`
+		WHERE `auction`.`id` AND `auction`.`item_template`=`item_template`.`entry` AND `auction`.`itemguid`=`item_instance`.`guid` $search_filter $order_side
 		ORDER BY `auction`.`$order_by` $order_dir LIMIT $start, $itemperpage");
     $all_record = $sqlc->result($query_1,0);
 
@@ -286,7 +297,7 @@ function browse_auctions(&$sqlr, &$sqlc)
             switch ($row)
             {
                 case 4:
-                    $value = ($value >= 0)? (floor($value / 86400).$lang_auctionhouse['dayshortcut']." ". floor(($value % 86400)/3600).$lang_auctionhouse['hourshortcut']." ".floor((($value % 86400)%3600)/60).$lang_auctionhouse['mnshortcut']) : $lang_auctionhouse['auction_over'];
+                    $value = ($value > 0) ? (floor($value / 86400).$lang_auctionhouse['dayshortcut']." ". floor(($value % 86400)/3600).$lang_auctionhouse['hourshortcut']." ".floor((($value % 86400) % 3600)/60).$lang_auctionhouse['mnshortcut']) : $lang_auctionhouse['auction_over'];
                     break;
                 case 5:
                     $value = "<b>".((!empty($rows[10])) ? "<font color=".$sidecolor[$rows[10]].">".htmlentities($value)."</font>" : "N/A")."</b>";
@@ -305,7 +316,7 @@ function browse_auctions(&$sqlr, &$sqlc)
                     $value = "<a href=\"$item_datasite$rows[1]\" target=\"_blank\" onmouseover=\"toolTip()\"><img src=\"".get_item_icon($rows[1], $sqlm, $sqlw)."\" class=\"".get_item_border($rows[1], $sqlw)."\" alt=\"$value\" /><br/>$value".(($rows[8]>1) ? " (x$rows[8])" : "")."</a>";
                     break;
                 case 0:
-                    $value = "<b>".((!empty($rows[9])) ? "<font color=".$sidecolor[$rows[9]].">".htmlentities($value)."</font>" : "N/A")."</b>";
+                    $value = "<b>".((!empty($rows[9])) ? "<font color=".$sidecolor[$rows[9]].">".htmlentities($value)."</font>" : "Ahbot")."</b>";
                     break;
             }
             if (!in_array($row,$hiddencols))
